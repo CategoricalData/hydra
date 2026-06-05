@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -68,10 +69,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "v2"},
@@ -82,7 +84,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
                                 "body": {"variable": "t2"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "target"}},
@@ -90,7 +92,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
                             "body": {"variable": "t1"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "source"}},
@@ -98,10 +100,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "isLossy"}}}},
@@ -115,10 +118,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -128,7 +132,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
                       "body": {"variable": "t1"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -138,7 +142,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
                       "body": {"variable": "t2"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -148,10 +152,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
                       "body": {
                         "application": {
                           "argument": {"variable": "v2"},
@@ -180,7 +185,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the isLossy field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the isLossy field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -251,10 +260,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
@@ -266,7 +276,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the source field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the source field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -337,7 +351,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
                     "body": {"variable": "t1"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
@@ -349,7 +363,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the target field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the target field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -420,7 +438,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
                     "body": {"variable": "t2"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [
@@ -432,7 +450,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the coder field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the coder field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -503,10 +525,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
                     "body": {
                       "application": {
                         "argument": {"variable": "v2"},
@@ -521,7 +544,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the isLossy field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the isLossy field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -659,10 +686,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -706,10 +734,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -735,7 +764,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the source field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the source field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -873,7 +906,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
                             "body": {"variable": "t1"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -917,7 +950,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
                       "body": {"variable": "t1"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -943,7 +976,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the target field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the target field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1081,7 +1118,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
                             "body": {"variable": "t2"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1125,7 +1162,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
                       "body": {"variable": "t2"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1151,7 +1188,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the coder field of hydra.coders.Adapter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the coder field of hydra.coders.Adapter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1289,10 +1330,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
                             "body": {
                               "application": {
                                 "argument": {"variable": "v2"},
@@ -1339,10 +1381,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
                       "body": {
                         "application": {
                           "argument": {"variable": "v2"},
@@ -1371,7 +1414,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1425,7 +1472,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
                                 "body": {
                                   "map": {
                                     "keys": {"variable": "hydra.core.Name"},
@@ -1445,7 +1496,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
                             "body": {"variable": "hydra.coders.Language"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "language"}},
@@ -1453,7 +1505,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
                         "body": {"variable": "hydra.graph.Graph"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "graph"}}}},
@@ -1467,7 +1523,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1477,7 +1537,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
                       "body": {"variable": "hydra.coders.Language"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1487,7 +1548,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.core.Name"},
@@ -1510,10 +1575,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the graph field of hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the graph field of hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1562,7 +1628,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
                     "body": {"variable": "hydra.graph.Graph"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1570,10 +1640,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the language field of hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the language field of hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1622,7 +1693,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
                     "body": {"variable": "hydra.coders.Language"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1630,10 +1702,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the adapters field of hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the adapters field of hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1682,7 +1755,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
                     "body": {
                       "map": {
                         "keys": {"variable": "hydra.core.Name"},
@@ -1702,10 +1779,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the graph field of hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the graph field of hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1809,7 +1887,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
                             "body": {"variable": "hydra.graph.Graph"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1831,7 +1913,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
                       "body": {"variable": "hydra.graph.Graph"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1842,10 +1928,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the language field of hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the language field of hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1949,7 +2036,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
                             "body": {"variable": "hydra.coders.Language"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1971,7 +2059,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
                       "body": {"variable": "hydra.coders.Language"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1982,10 +2071,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the adapters field of hydra.coders.AdapterContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the adapters field of hydra.coders.AdapterContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2089,7 +2179,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
                             "body": {
                               "map": {
                                 "keys": {"variable": "hydra.core.Name"},
@@ -2123,7 +2217,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
                       "body": {
                         "map": {
                           "keys": {"variable": "hydra.core.Name"},
@@ -2146,7 +2244,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Bicoder"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.coders.Bicoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2190,7 +2289,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -2210,7 +2310,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
                         "body": {
                           "function": {
                             "codomain": {
@@ -2236,7 +2337,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -2258,7 +2360,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -2296,7 +2399,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the encode field of hydra.coders.Bicoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the encode field of hydra.coders.Bicoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2367,7 +2474,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -2391,7 +2499,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the decode field of hydra.coders.Bicoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the decode field of hydra.coders.Bicoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2462,7 +2574,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -2486,7 +2599,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the encode field of hydra.coders.Bicoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the encode field of hydra.coders.Bicoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2556,7 +2673,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -2612,7 +2730,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -2650,7 +2769,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the decode field of hydra.coders.Bicoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the decode field of hydra.coders.Bicoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2720,7 +2843,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -2776,7 +2900,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -2814,7 +2939,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Coder"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.coders.Coder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2858,12 +2984,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -2877,12 +3004,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                         "body": {
                           "function": {
                             "codomain": {
@@ -2902,12 +3030,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -2923,12 +3052,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -2950,7 +3080,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the encode field of hydra.coders.Coder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the encode field of hydra.coders.Coder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3009,12 +3143,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -3028,7 +3163,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the decode field of hydra.coders.Coder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the decode field of hydra.coders.Coder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3087,12 +3226,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -3106,7 +3246,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the encode field of hydra.coders.Coder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the encode field of hydra.coders.Coder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3176,12 +3320,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -3219,12 +3364,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -3246,7 +3392,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the decode field of hydra.coders.Coder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the decode field of hydra.coders.Coder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3316,12 +3466,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -3359,12 +3510,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -3386,10 +3538,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the encode variant of hydra.coders.CoderDirection"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the encode variant of hydra.coders.CoderDirection"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -3424,10 +3577,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the decode variant of hydra.coders.CoderDirection"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the decode variant of hydra.coders.CoderDirection"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -3462,7 +3616,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.Language"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.coders.Language"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3506,7 +3661,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
                             "body": {"variable": "hydra.coders.LanguageConstraints"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "constraints"}},
@@ -3514,7 +3673,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
                         "body": {"variable": "hydra.coders.LanguageName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -3528,7 +3687,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
                       "body": {"variable": "hydra.coders.LanguageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3538,7 +3697,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
                       "body": {"variable": "hydra.coders.LanguageConstraints"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3548,7 +3711,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.coders.Language"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.coders.Language"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3595,7 +3762,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
                     "body": {"variable": "hydra.coders.LanguageName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3603,10 +3770,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.coders.Language"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.coders.Language"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3653,7 +3821,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
                     "body": {"variable": "hydra.coders.LanguageConstraints"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3661,7 +3833,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.coders.Language"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.coders.Language"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3731,7 +3907,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
                             "body": {"variable": "hydra.coders.LanguageName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3751,7 +3927,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
                       "body": {"variable": "hydra.coders.LanguageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3761,10 +3937,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the constraints field of hydra.coders.Language"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the constraints field of hydra.coders.Language"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3834,7 +4011,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
                             "body": {"variable": "hydra.coders.LanguageConstraints"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3854,7 +4035,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
                       "body": {"variable": "hydra.coders.LanguageConstraints"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3864,7 +4049,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3948,10 +4137,11 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [
-                                              {
-                                                "key": "description",
-                                                "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {
+                                                  "key": {"variable": "description"},
+                                                  "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
                                             "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "types"}},
@@ -3959,7 +4149,7 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
                                         "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "typeVariants"}},
@@ -3967,7 +4157,7 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
                                     "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "termVariants"}},
@@ -3975,7 +4165,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
                                 "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "integerTypes"}},
@@ -3983,7 +4173,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
                             "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "floatTypes"}},
@@ -3991,7 +4181,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
                         "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "literalVariants"}}}},
@@ -4005,7 +4195,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4015,7 +4205,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
                       "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4025,7 +4215,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
                       "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4035,7 +4225,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4045,7 +4235,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4055,10 +4245,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
                       "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4069,10 +4260,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the literalVariants field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the literalVariants field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4123,7 +4315,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
                     "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4131,10 +4323,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the floatTypes field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the floatTypes field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4183,7 +4376,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
                     "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4191,10 +4384,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the integerTypes field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the integerTypes field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4245,7 +4439,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
                     "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4253,10 +4447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the termVariants field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the termVariants field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4307,7 +4502,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
                     "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4315,10 +4510,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeVariants field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeVariants field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4369,7 +4565,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
                     "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4377,10 +4573,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the types field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the types field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4429,10 +4626,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
                     "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4440,10 +4638,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the literalVariants field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the literalVariants field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4655,7 +4854,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
                             "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4677,7 +4876,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
                       "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4688,10 +4887,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the floatTypes field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the floatTypes field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4905,7 +5105,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
                             "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4927,7 +5127,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
                       "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4938,10 +5138,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the integerTypes field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the integerTypes field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5153,7 +5354,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
                             "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5175,7 +5376,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
                       "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5186,10 +5387,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the termVariants field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the termVariants field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5401,7 +5603,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
                             "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5423,7 +5625,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
                       "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5434,10 +5636,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeVariants field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeVariants field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5649,7 +5852,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
                             "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5671,7 +5874,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
                       "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5682,10 +5885,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the types field of hydra.coders.LanguageConstraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the types field of hydra.coders.LanguageConstraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5899,10 +6103,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
                             "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5924,10 +6129,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
                       "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5938,7 +6144,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.coders.LanguageName wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.coders.LanguageName wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5976,7 +6186,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.coders.LanguageName"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.coders.LanguageName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6019,10 +6233,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the pre variant of hydra.coders.TraversalOrder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pre variant of hydra.coders.TraversalOrder"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -6057,10 +6272,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the post variant of hydra.coders.TraversalOrder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the post variant of hydra.coders.TraversalOrder"}}}]},
             "body": {
               "wrap": {
                 "body": {

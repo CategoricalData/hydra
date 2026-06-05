@@ -11,6 +11,7 @@ module Hydra.Dsl.Meta.Types (
 import Hydra.Kernel
 import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import Hydra.Dsl.Meta.Core as Core hiding (name, unName)
 import Hydra.Dsl.Meta.Base
 
@@ -34,10 +35,13 @@ import Prelude hiding (either, map, maybe, product, sum)
 (-->) = function
 
 
--- | Attach an annotation to a term-encoded type
+-- | Attach an annotation map to a term-encoded type, wrapping the map as a
+-- TermMap annotation per Hydra's convention (#386). Each Name key is lifted
+-- to a TermVariable.
 -- Example: annot annotationMap myType
 annot :: TypedTerm (M.Map Name Term) -> TypedTerm Type -> TypedTerm Type
-annot ann typ = typeAnnotated $ annotatedType typ ann
+annot ann typ = typeAnnotated $ annotatedType typ
+  (Core.termMap (Maps.mapKeys (Phantoms.lambda "n" (Core.termVariable (Phantoms.var "n"))) ann))
 
 -- | Apply a term-encoded type to a type argument
 -- Example: apply (var "Maybe") int32

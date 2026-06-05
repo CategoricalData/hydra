@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct CommonProperties from a list of constraints, using defaults for other fields"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct CommonProperties from a list of constraints, using defaults for other fields"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -59,10 +60,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Default CommonProperties with empty constraints and default severity"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Default CommonProperties with empty constraints and default severity"}}}]},
             "body": {
               "application": {
                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}},
@@ -73,7 +75,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a binding's name to an RDF IRI"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a binding's name to an RDF IRI"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -92,7 +95,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a record field as RDF triples with a given subject"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a record field as RDF triples with a given subject"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -252,7 +259,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a FieldType as a SHACL property shape Definition"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a FieldType as a SHACL property shape Definition"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -536,7 +547,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a list of terms as RDF list structure"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a list of terms as RDF list structure"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -913,10 +925,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1084,7 +1097,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra term as a list of RDF Descriptions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra term as a list of RDF Descriptions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2023,7 +2040,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type as SHACL CommonProperties"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra type as SHACL CommonProperties"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2463,7 +2482,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an error result with the given message"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Construct an error result with the given message"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2498,10 +2521,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Fold over a list, accumulating results and threading context through each step"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Fold over a list, accumulating results and threading context through each step"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -2697,10 +2721,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a SHACL node shape from a list of common constraints"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a SHACL node shape from a list of common constraints"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2726,10 +2751,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a default property shape with the given IRI as its path"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a default property shape with the given IRI as its path"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2781,7 +2807,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a module's type elements as a SHACL ShapesGraph"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a module's type elements as a SHACL ShapesGraph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2868,18 +2898,21 @@
                                                                                                                     "term": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
-                                                                                                                          "list": [
-                                                                                                                            {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "list": [
+                                                                                                                                {
                                                                                                                                   "typeApplication": {
-                                                                                                                                    "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
-                                                                                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                "type": {"variable": "hydra.core.Term"}}}]},
-                                                                                                                        "function": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                            "type": {"variable": "hydra.core.Term"}}}}}}],
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
+                                                                                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                    "type": {"variable": "hydra.core.Term"}}}]},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                                                        "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                                                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                           "typeName": "hydra.core.Term"}},
                                                                                                       "function": {"variable": "hydra.annotations.normalizeTermAnnotations"}}},
@@ -3124,10 +3157,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Construct an error for unexpected input, given expected and found descriptions"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Construct an error for unexpected input, given expected and found descriptions"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3160,7 +3194,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Add an rdf:type triple to an RDF Description"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add an rdf:type triple to an RDF Description"}}}]},
             "body": {
               "lambda": {
                 "body": {

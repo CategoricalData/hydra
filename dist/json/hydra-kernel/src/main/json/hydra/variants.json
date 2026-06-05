@@ -5,7 +5,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a literal constructor"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a literal constructor"}}}]},
               "body": {
                 "union": [
                   {"name": "binary", "type": {"unit": {}}},
@@ -21,7 +22,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a term expression constructor"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The identifier of a term expression constructor"}}}]},
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},
@@ -52,7 +57,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The identifier of a type constructor"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a type constructor"}}}]},
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},

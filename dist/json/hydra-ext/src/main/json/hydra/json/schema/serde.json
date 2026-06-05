@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode additional items as a JSON value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode additional items as a JSON value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -39,7 +40,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an array restriction as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an array restriction as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -132,7 +137,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an integer as a JSON number value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an integer as a JSON number value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -155,7 +161,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode items as a key-value pair"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode items as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -213,7 +219,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a keyword as a JSON string value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a keyword as a JSON string value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -233,7 +240,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a keyword-schema-or-array pair as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a keyword-schema-or-array pair as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -287,7 +298,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a multiple restriction as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a multiple restriction as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -430,7 +445,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a numeric restriction as a list of key-value pairs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a numeric restriction as a list of key-value pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -609,7 +628,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an object restriction as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an object restriction as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -848,7 +871,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a pattern property pair as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a pattern property pair as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -903,7 +930,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a property pair as a key-value pair"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a property pair as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -954,7 +982,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a restriction as a list of key-value pairs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a restriction as a list of key-value pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1096,7 +1128,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a schema as a JSON object value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a schema as a JSON object value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1138,7 +1171,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a schema or array as a JSON value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a schema or array as a JSON value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1187,7 +1221,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a schema reference as a JSON string value"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a schema reference as a JSON string value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1207,7 +1245,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a string restriction as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a string restriction as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1297,7 +1339,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type as a JSON value"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type as a JSON value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1346,7 +1388,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type name as a JSON string value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type name as a JSON string value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1422,7 +1465,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the map from a JSON object value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the map from a JSON object value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1450,7 +1494,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a JSON Schema document to a JSON value"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a JSON Schema document to a JSON value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1658,7 +1704,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a JSON Schema document to a JSON string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a JSON Schema document to a JSON string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1842,10 +1892,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values"}}}]},
             "body": {
               "lambda": {
                 "body": {

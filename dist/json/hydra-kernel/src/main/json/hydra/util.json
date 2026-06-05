@@ -5,10 +5,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A naming convention for symbols, such as camelCase or snake_case"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A naming convention for symbols, such as camelCase or snake_case"}}}]},
               "body": {
                 "union": [
                   {"name": "camel", "type": {"unit": {}}},
@@ -22,8 +23,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}]},
               "body": {
                 "union": [
                   {"name": "lessThan", "type": {"unit": {}}},
@@ -36,8 +40,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.util.FileExtension"}},
@@ -46,10 +53,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A mapping from module names to values of type n, with a focus on one module name"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A mapping from module names to values of type n, with a focus on one module name"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -58,14 +66,17 @@
                         "name": "focus",
                         "type": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "The module name in focus, together with its associated value"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The module name in focus, together with its associated value"}}}]},
                             "body": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "n"}}}}}},
                       {
                         "name": "mapping",
                         "type": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of module names to values"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping of module names to values"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "n"}}}}}}]},
                   "parameter": "n"}}}},
           "variables": []},
@@ -75,21 +86,25 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "arbitrary",
                     "type": {
-                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Arbitrary precision"}}}], "body": {"unit": {}}}}},
+                      "annotated": {
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arbitrary precision"}}}]},
+                        "body": {"unit": {}}}}},
                   {
                     "name": "bits",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Precision to a specified number of bits"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.util.Precision"}},
@@ -98,23 +113,24 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The optional module name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
                         "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}}},
                   {
                     "name": "local",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The local name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]},
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []},
         "name": "hydra.util.QualifiedName"}}],

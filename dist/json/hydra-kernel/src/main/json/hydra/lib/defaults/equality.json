@@ -12,7 +12,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly identity function."}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly identity function."}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -55,7 +56,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly max."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly max."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -175,7 +176,7 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly min."}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly min."}}}]},
                         "body": {
                           "lambda": {
                             "body": {

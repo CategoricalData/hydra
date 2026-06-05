@@ -181,8 +181,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
                                       Core.projectionFieldName = (Core.Name "maxWarnings")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.validation.ValidationProfile")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.validation.ValidationProfile")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.validation.validationResult"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -287,5 +289,7 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
                                         Core.projectionFieldName = (Core.Name "warnings")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.validation.ValidationResult")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.validation.ValidationResult")))]))}))}))]}

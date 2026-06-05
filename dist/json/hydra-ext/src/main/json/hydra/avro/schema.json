@@ -13,23 +13,25 @@
                 "name": "symbols",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)"}}}]},
                     "body": {"list": {"literal": {"string": {}}}}}}},
               {
                 "name": "default",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn't defined in the reader's schema. The value provided here must be a JSON string that's a member of the symbols array"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn't defined in the reader's schema. The value provided here must be a JSON string that's a member of the symbols array"}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Enum"}},
@@ -42,54 +44,65 @@
                 "name": "name",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a JSON string providing the name of the field"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON string providing the name of the field"}}}]},
                     "body": {"literal": {"string": {}}}}}},
               {
                 "name": "doc",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a JSON string describing this field for users"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON string describing this field for users"}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}}},
               {
                 "name": "type",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a schema"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a schema"}}}]},
                     "body": {"variable": "hydra.avro.schema.Schema"}}}},
               {
                 "name": "default",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "default value for this field, only used when reading instances that lack the field for schema evolution purposes"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "default value for this field, only used when reading instances that lack the field for schema evolution purposes"}}}]},
                     "body": {"maybe": {"variable": "hydra.json.model.Value"}}}}},
               {
                 "name": "order",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "specifies how this field impacts sort ordering of this record"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "specifies how this field impacts sort ordering of this record"}}}]},
                     "body": {"maybe": {"variable": "hydra.avro.schema.Order"}}}}},
               {
                 "name": "aliases",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "a JSON array of strings, providing alternate names for this field"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "a JSON array of strings, providing alternate names for this field"}}}]},
                     "body": {"maybe": {"list": {"literal": {"string": {}}}}}}}},
               {
                 "name": "annotations",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional key/value pairs attached to the field"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Any additional key/value pairs attached to the field"}}}]},
                     "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Field"}},
@@ -102,7 +115,11 @@
                 "name": "size",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "an integer, specifying the number of bytes per value"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "an integer, specifying the number of bytes per value"}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Fixed"}},
@@ -119,38 +136,44 @@
                 "name": "name",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a string naming this schema"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a string naming this schema"}}}]},
                     "body": {"literal": {"string": {}}}}}},
               {
                 "name": "namespace",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a string that qualifies the name"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a string that qualifies the name"}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}}},
               {
                 "name": "aliases",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "a JSON array of strings, providing alternate names for this schema"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "a JSON array of strings, providing alternate names for this schema"}}}]},
                     "body": {"maybe": {"list": {"literal": {"string": {}}}}}}}},
               {
                 "name": "doc",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "a JSON string providing documentation to the user of this schema"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "a JSON string providing documentation to the user of this schema"}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}}},
               {"name": "type", "type": {"variable": "hydra.avro.schema.NamedType"}},
               {
                 "name": "annotations",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional key/value pairs attached to the type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Any additional key/value pairs attached to the type"}}}]},
                     "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Named"}},
@@ -182,46 +205,58 @@
               {
                 "name": "null",
                 "type": {
-                  "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "no value"}}}], "body": {"unit": {}}}}},
+                  "annotated": {
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "no value"}}}]},
+                    "body": {"unit": {}}}}},
               {
                 "name": "boolean",
                 "type": {
-                  "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "A binary value"}}}], "body": {"unit": {}}}}},
+                  "annotated": {
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary value"}}}]},
+                    "body": {"unit": {}}}}},
               {
                 "name": "int",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "32-bit signed integer"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit signed integer"}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "long",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "64-bit signed integer"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit signed integer"}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "float",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "single precision (32-bit) IEEE 754 floating-point number"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "single precision (32-bit) IEEE 754 floating-point number"}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "double",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "double precision (64-bit) IEEE 754 floating-point number"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "double precision (64-bit) IEEE 754 floating-point number"}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "bytes",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "sequence of 8-bit unsigned bytes"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "sequence of 8-bit unsigned bytes"}}}]},
                     "body": {"unit": {}}}}},
               {
                 "name": "string",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "unicode character sequence"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "unicode character sequence"}}}]},
                     "body": {"unit": {}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Primitive"}},
@@ -234,7 +269,7 @@
                 "name": "fields",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "a JSON array, listing fields"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON array, listing fields"}}}]},
                     "body": {"list": {"variable": "hydra.avro.schema.Field"}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Record"}},
@@ -251,7 +286,11 @@
                 "name": "reference",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A reference by name to a previously defined type"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A reference by name to a previously defined type"}}}]},
                     "body": {"literal": {"string": {}}}}}},
               {"name": "union", "type": {"variable": "hydra.avro.schema.Union"}}]},
           "variables": []},

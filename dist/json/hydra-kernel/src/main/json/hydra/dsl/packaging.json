@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the term variant of hydra.packaging.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the term variant of hydra.packaging.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -39,7 +40,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A term definition"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term definition"}}}]},
                         "body": {"variable": "hydra.packaging.TermDefinition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -53,7 +54,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A term definition"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term definition"}}}]},
                       "body": {"variable": "hydra.packaging.TermDefinition"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -64,10 +65,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -99,7 +101,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A type definition"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]},
                         "body": {"variable": "hydra.packaging.TypeDefinition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -113,7 +115,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A type definition"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]},
                       "body": {"variable": "hydra.packaging.TypeDefinition"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -124,10 +126,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -159,7 +162,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A primitive definition"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]},
                         "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -173,7 +176,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A primitive definition"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]},
                       "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -184,10 +187,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.DefinitionReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.DefinitionReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -219,7 +223,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a type definition, by name"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -233,7 +238,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a type definition, by name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -244,10 +250,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the term variant of hydra.packaging.DefinitionReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the term variant of hydra.packaging.DefinitionReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -279,7 +286,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a term definition, by name"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a term definition, by name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -293,7 +301,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a term definition, by name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a term definition, by name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -304,10 +313,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.DefinitionReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.DefinitionReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -339,7 +349,9 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -353,7 +365,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -364,7 +378,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -428,7 +446,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
                                     "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "lifecycle"}},
@@ -436,10 +458,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}]},
                                 "body": {"list": {"variable": "hydra.packaging.EntityReference"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "seeAlso"}},
@@ -447,12 +470,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}]},
                             "body": {"list": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "comments"}},
@@ -460,10 +484,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
                         "body": {"maybe": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "description"}}}},
@@ -477,10 +502,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
                       "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -490,12 +516,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}]},
                       "body": {"list": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -505,10 +532,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}]},
                       "body": {"list": {"variable": "hydra.packaging.EntityReference"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -518,7 +546,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -529,10 +561,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the description field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the description field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -581,10 +614,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
                     "body": {"maybe": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -592,10 +626,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the comments field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the comments field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -644,12 +679,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}]},
                     "body": {"list": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -657,10 +693,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the seeAlso field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the seeAlso field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -709,10 +746,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}]},
                     "body": {"list": {"variable": "hydra.packaging.EntityReference"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -720,10 +758,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the lifecycle field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the lifecycle field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -772,7 +811,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -780,10 +823,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the description field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the description field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -921,10 +965,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
                             "body": {"maybe": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -946,10 +991,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
                       "body": {"maybe": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -960,10 +1006,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the comments field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the comments field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1101,12 +1148,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}]},
                             "body": {"list": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1128,12 +1176,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}]},
                       "body": {"list": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1144,10 +1193,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the seeAlso field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the seeAlso field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1285,10 +1335,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}]},
                             "body": {"list": {"variable": "hydra.packaging.EntityReference"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1310,10 +1361,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}]},
                       "body": {"list": {"variable": "hydra.packaging.EntityReference"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1324,10 +1376,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the lifecycle field of hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the lifecycle field of hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1465,7 +1518,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1487,7 +1544,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1498,10 +1559,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the package variant of hydra.packaging.EntityReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the package variant of hydra.packaging.EntityReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1533,7 +1595,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a package, by name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]},
                         "body": {"variable": "hydra.packaging.PackageName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1547,7 +1609,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a package, by name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1558,10 +1620,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the module variant of hydra.packaging.EntityReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the module variant of hydra.packaging.EntityReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1593,7 +1656,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a module, by name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a module, by name"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1607,7 +1670,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a module, by name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a module, by name"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1618,10 +1681,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the definition variant of hydra.packaging.EntityReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the definition variant of hydra.packaging.EntityReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1653,7 +1717,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}]},
                         "body": {"variable": "hydra.packaging.DefinitionReference"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1667,7 +1735,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}]},
                       "body": {"variable": "hydra.packaging.DefinitionReference"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1678,7 +1750,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.LifecycleInfo"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.LifecycleInfo"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1722,10 +1798,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "deprecatedSince"}},
@@ -1733,7 +1810,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
                         "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "availableSince"}}}},
@@ -1747,7 +1828,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1757,10 +1842,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1771,10 +1857,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the availableSince field of hydra.packaging.LifecycleInfo"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the availableSince field of hydra.packaging.LifecycleInfo"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1825,7 +1912,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1833,10 +1924,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the deprecatedSince field of hydra.packaging.LifecycleInfo"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the deprecatedSince field of hydra.packaging.LifecycleInfo"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1887,10 +1979,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1898,10 +1991,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the availableSince field of hydra.packaging.LifecycleInfo"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the availableSince field of hydra.packaging.LifecycleInfo"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1973,7 +2067,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1995,7 +2093,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2006,10 +2108,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the deprecatedSince field of hydra.packaging.LifecycleInfo"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the deprecatedSince field of hydra.packaging.LifecycleInfo"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2081,10 +2184,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2106,10 +2210,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2120,7 +2225,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2184,7 +2290,7 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "The definitions in this module"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The definitions in this module"}}}]},
                                     "body": {"list": {"variable": "hydra.packaging.Definition"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "definitions"}},
@@ -2192,7 +2298,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "Any modules which this module directly depends on"}}}]},
                                 "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "dependencies"}},
@@ -2200,8 +2310,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
@@ -2209,10 +2322,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -2226,10 +2340,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2239,8 +2354,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2250,7 +2368,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any modules which this module directly depends on"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2260,7 +2382,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definitions in this module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The definitions in this module"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.Definition"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2270,7 +2392,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2317,10 +2443,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2328,10 +2455,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2378,8 +2506,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2387,10 +2518,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2439,7 +2571,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Any modules which this module directly depends on"}}}]},
                     "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2447,10 +2583,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the definitions field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the definitions field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2497,7 +2634,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The definitions in this module"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The definitions in this module"}}}]},
                     "body": {"list": {"variable": "hydra.packaging.Definition"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2505,7 +2642,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2645,10 +2786,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2668,10 +2810,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2681,8 +2824,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2822,8 +2968,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2843,8 +2992,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2854,10 +3006,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2995,7 +3148,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Any modules which this module directly depends on"}}}]},
                             "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3015,7 +3172,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any modules which this module directly depends on"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3025,10 +3186,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the definitions field of hydra.packaging.Module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the definitions field of hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3168,7 +3330,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definitions in this module"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The definitions in this module"}}}]},
                             "body": {"list": {"variable": "hydra.packaging.Definition"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3188,7 +3350,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definitions in this module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The definitions in this module"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.Definition"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3198,7 +3360,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.ModuleDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.ModuleDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3242,10 +3408,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "package"}},
@@ -3253,7 +3420,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on module"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on module"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "module"}}}},
@@ -3267,7 +3434,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on module"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3277,10 +3444,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3291,10 +3459,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the module field of hydra.packaging.ModuleDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the module field of hydra.packaging.ModuleDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3343,7 +3512,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on module"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on module"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3351,10 +3520,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the package field of hydra.packaging.ModuleDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the package field of hydra.packaging.ModuleDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3403,10 +3573,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3414,10 +3585,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the module field of hydra.packaging.ModuleDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the module field of hydra.packaging.ModuleDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3487,7 +3659,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on module"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on module"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3509,7 +3681,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on module"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3520,10 +3692,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the package field of hydra.packaging.ModuleDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the package field of hydra.packaging.ModuleDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3593,10 +3766,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3618,10 +3792,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3632,7 +3807,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.packaging.ModuleName wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.packaging.ModuleName wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3670,7 +3849,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.ModuleName"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.ModuleName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3713,7 +3896,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3777,7 +3961,7 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules in this package"}}}]},
                                     "body": {"list": {"variable": "hydra.packaging.Module"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "modules"}},
@@ -3785,7 +3969,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The packages which this package depends on"}}}]},
                                 "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "dependencies"}},
@@ -3793,10 +3978,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
@@ -3804,7 +3990,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the package"}}}]},
                         "body": {"variable": "hydra.packaging.PackageName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -3818,7 +4004,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the package"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3828,10 +4014,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3841,7 +4028,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The packages which this package depends on"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3851,7 +4039,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules in this package"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.Module"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3862,7 +4050,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3911,7 +4103,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the package"}}}]},
                     "body": {"variable": "hydra.packaging.PackageName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3919,10 +4111,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3971,10 +4164,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3982,10 +4176,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the dependencies field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4036,7 +4231,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The packages which this package depends on"}}}]},
                     "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4044,10 +4240,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the modules field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the modules field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4096,7 +4293,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules in this package"}}}]},
                     "body": {"list": {"variable": "hydra.packaging.Module"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4104,7 +4301,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4244,7 +4445,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the package"}}}]},
                             "body": {"variable": "hydra.packaging.PackageName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4266,7 +4467,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the package"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the package"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4277,10 +4478,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4420,10 +4622,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4445,10 +4648,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4459,10 +4663,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the dependencies field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4600,7 +4805,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The packages which this package depends on"}}}]},
                             "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4622,7 +4828,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The packages which this package depends on"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4633,8 +4840,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the modules field of hydra.packaging.Package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the modules field of hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4774,7 +4984,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules in this package"}}}]},
                             "body": {"list": {"variable": "hydra.packaging.Module"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4796,7 +5006,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The modules in this package"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules in this package"}}}]},
                       "body": {"list": {"variable": "hydra.packaging.Module"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4807,7 +5017,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.PackageDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.PackageDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4851,7 +5065,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]},
                             "body": {"variable": "hydra.packaging.VersionSpecifier"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "version"}},
@@ -4859,7 +5077,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on package"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on package"}}}]},
                         "body": {"variable": "hydra.packaging.PackageName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -4873,7 +5091,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on package"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on package"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4883,7 +5101,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]},
                       "body": {"variable": "hydra.packaging.VersionSpecifier"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4894,10 +5116,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.PackageDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.PackageDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4946,7 +5169,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on package"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on package"}}}]},
                     "body": {"variable": "hydra.packaging.PackageName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4954,10 +5177,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the version field of hydra.packaging.PackageDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the version field of hydra.packaging.PackageDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5006,7 +5230,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]},
                     "body": {"variable": "hydra.packaging.VersionSpecifier"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5014,10 +5242,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.PackageDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.PackageDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5087,7 +5316,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on package"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on package"}}}]},
                             "body": {"variable": "hydra.packaging.PackageName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5109,7 +5338,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on package"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on package"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5120,10 +5349,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the version field of hydra.packaging.PackageDependency"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the version field of hydra.packaging.PackageDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5193,7 +5423,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]},
                             "body": {"variable": "hydra.packaging.VersionSpecifier"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5215,7 +5449,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]},
                       "body": {"variable": "hydra.packaging.VersionSpecifier"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5226,8 +5464,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.packaging.PackageName wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.packaging.PackageName wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5265,7 +5506,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.PackageName"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.PackageName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5308,7 +5553,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5394,12 +5643,13 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [
-                                              {
-                                                "key": "description",
-                                                "value": {
-                                                  "literal": {
-                                                    "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {
+                                                  "key": {"variable": "description"},
+                                                  "value": {
+                                                    "literal": {
+                                                      "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
                                             "body": {"maybe": {"variable": "hydra.core.Term"}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "defaultImplementation"}},
@@ -5407,11 +5657,12 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [
-                                          {
-                                            "key": "description",
-                                            "value": {
-                                              "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {
+                                                "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}]},
                                         "body": {"literal": {"boolean": {}}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "isTotal"}},
@@ -5419,11 +5670,12 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {
-                                          "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {
+                                            "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}]},
                                     "body": {"literal": {"boolean": {}}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "isPure"}},
@@ -5431,10 +5683,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}]},
                                 "body": {"variable": "hydra.typing.TermSignature"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "signature"}},
@@ -5442,10 +5695,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
@@ -5453,7 +5707,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primitive"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -5467,7 +5721,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primitive"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5477,10 +5731,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5490,10 +5745,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}]},
                       "body": {"variable": "hydra.typing.TermSignature"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5503,11 +5759,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5517,11 +5774,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5531,12 +5789,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5547,10 +5806,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5599,7 +5859,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primitive"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5607,10 +5867,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5659,10 +5920,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5670,10 +5932,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the signature field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the signature field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5722,10 +5985,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}]},
                     "body": {"variable": "hydra.typing.TermSignature"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5733,10 +5997,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the isPure field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the isPure field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5785,11 +6050,12 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5797,10 +6063,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the isTotal field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the isTotal field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5849,11 +6116,12 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}]},
                     "body": {"literal": {"boolean": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5861,10 +6129,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the defaultImplementation field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the defaultImplementation field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5915,12 +6184,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
                     "body": {"maybe": {"variable": "hydra.core.Term"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5928,10 +6198,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6141,7 +6412,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primitive"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6163,7 +6434,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the primitive"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primitive"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6174,10 +6445,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6387,10 +6659,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6412,10 +6685,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6426,10 +6700,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the signature field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the signature field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6639,10 +6914,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}]},
                             "body": {"variable": "hydra.typing.TermSignature"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6664,10 +6940,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}]},
                       "body": {"variable": "hydra.typing.TermSignature"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6678,10 +6955,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the isPure field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the isPure field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6891,11 +7169,12 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -6917,11 +7196,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -6932,10 +7212,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the isTotal field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the isTotal field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7145,11 +7426,12 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}]},
                             "body": {"literal": {"boolean": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7171,11 +7453,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7186,10 +7469,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the defaultImplementation field of hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the defaultImplementation field of hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7397,12 +7681,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
                             "body": {"maybe": {"variable": "hydra.core.Term"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7424,12 +7709,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
                       "body": {"maybe": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7440,7 +7726,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7504,7 +7794,7 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term being defined"}}}]},
                                     "body": {"variable": "hydra.core.Term"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "body"}},
@@ -7512,10 +7802,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
                                 "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "signature"}},
@@ -7523,10 +7814,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
@@ -7534,7 +7826,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -7548,7 +7840,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7558,10 +7850,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7571,10 +7864,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
                       "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -7584,7 +7878,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term being defined"}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7595,10 +7889,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7647,7 +7942,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7655,10 +7950,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7707,10 +8003,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7718,10 +8015,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the signature field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the signature field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7770,10 +8068,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
                     "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7781,10 +8080,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the body field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7833,7 +8133,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term being defined"}}}]},
                     "body": {"variable": "hydra.core.Term"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -7841,10 +8141,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7982,7 +8283,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8004,7 +8305,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the term"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8015,10 +8316,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8156,10 +8458,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8181,10 +8484,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8195,10 +8499,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the signature field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the signature field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8336,10 +8641,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
                             "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8361,10 +8667,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
                       "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8375,10 +8682,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the body field of hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the body field of hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8516,7 +8824,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term being defined"}}}]},
                             "body": {"variable": "hydra.core.Term"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8538,7 +8846,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The term being defined"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term being defined"}}}]},
                       "body": {"variable": "hydra.core.Term"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8549,7 +8857,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8603,7 +8915,7 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type scheme being defined"}}}]},
                                 "body": {"variable": "hydra.core.TypeScheme"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "body"}},
@@ -8611,10 +8923,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
@@ -8622,7 +8935,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type"}}}]},
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -8636,7 +8949,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -8646,10 +8959,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -8659,7 +8973,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type scheme being defined"}}}]},
                       "body": {"variable": "hydra.core.TypeScheme"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8670,10 +8984,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8722,7 +9037,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8730,10 +9045,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8782,10 +9098,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
                     "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8793,10 +9110,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the body field of hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body field of hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8845,7 +9163,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type scheme being defined"}}}]},
                     "body": {"variable": "hydra.core.TypeScheme"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -8853,10 +9171,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8960,7 +9279,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8982,7 +9301,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8993,10 +9312,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9100,10 +9420,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
                             "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -9125,10 +9446,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
                       "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9139,10 +9461,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the body field of hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the body field of hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9246,7 +9569,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type scheme being defined"}}}]},
                             "body": {"variable": "hydra.core.TypeScheme"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -9268,7 +9591,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type scheme being defined"}}}]},
                       "body": {"variable": "hydra.core.TypeScheme"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9279,7 +9602,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for the hydra.packaging.Version wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.packaging.Version wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9317,7 +9644,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.Version"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.Version"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9360,10 +9691,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the any variant of hydra.packaging.VersionSpecifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the any variant of hydra.packaging.VersionSpecifier"}}}]},
             "body": {
               "wrap": {
                 "body": {

@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert PDL annotations to an optional expression (doc comment)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert PDL annotations to an optional expression (doc comment)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -48,7 +49,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a PDL enum field to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a PDL enum field to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -86,7 +88,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a qualified name to an import expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a qualified name to an import expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -107,7 +113,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a named schema to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a named schema to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -255,7 +262,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a primitive type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a primitive type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -300,7 +308,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a qualified name to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a qualified name to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -367,7 +376,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a record field to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a record field to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -453,7 +463,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a schema to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a schema to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -566,7 +576,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a schema file to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a schema file to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -720,7 +731,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a union member to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a union member to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -796,7 +808,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Prepend annotations (doc comment) to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Prepend annotations (doc comment) to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {

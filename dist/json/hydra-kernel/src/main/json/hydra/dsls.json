@@ -4,7 +4,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect forall type variable names from a type"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Collect forall type variable names from a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -57,10 +59,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Deduplicate bindings by appending numeric suffixes to duplicate names"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Deduplicate bindings by appending numeric suffixes to duplicate names"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -151,8 +154,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Generate a binding name for a DSL function from a type name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a binding name for a DSL function from a type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -290,10 +296,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a qualified DSL element name from a type name and local element name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a qualified DSL element name from a type name and local element name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -422,7 +429,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Transform a type module into a DSL module"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Transform a type module into a DSL module"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -794,18 +802,21 @@
                                                                                                                         "term": {
                                                                                                                           "application": {
                                                                                                                             "argument": {
-                                                                                                                              "list": [
-                                                                                                                                {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "list": [
+                                                                                                                                    {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
-                                                                                                                                        "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                    "type": {"variable": "hydra.core.Term"}}}]},
-                                                                                                                            "function": {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}],
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
+                                                                                                                                            "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                        "type": {"variable": "hydra.core.Term"}}}]},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                    "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                                                            "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                                                                                                     "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                               "typeName": "hydra.core.Term"}},
                                                                                                           "function": {"variable": "hydra.annotations.normalizeTermAnnotations"}}},
@@ -894,7 +905,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a DSL module name from a source module name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a DSL module name from a source module name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -995,10 +1010,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a TypeScheme with TypedTerm-wrapped parameter and result types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a TypeScheme with TypedTerm-wrapped parameter and result types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1128,7 +1144,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Filter bindings to only DSL-eligible type definitions"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Filter bindings to only DSL-eligible type definitions"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1202,7 +1222,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate all DSL bindings for a type binding"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate all DSL bindings for a type binding"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1364,7 +1385,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a record field accessor function"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a record field accessor function"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1731,7 +1753,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a record constructor function"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a record constructor function"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2167,7 +2190,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a withXxx record field updater function"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a withXxx record field updater function"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2794,7 +2821,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a union injection helper"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a union injection helper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3239,7 +3266,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate wrap/unwrap accessors for a wrapped type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate wrap/unwrap accessors for a wrapped type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3745,7 +3776,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a binding is eligible for DSL generation"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Check if a binding is eligible for DSL generation"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -3824,10 +3859,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build the nominal result type with type applications for forall variables"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build the nominal result type with type applications for forall variables"}}}]},
             "body": {
               "lambda": {
                 "body": {

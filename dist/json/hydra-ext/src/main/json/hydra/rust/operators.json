@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Assignment operator (=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Assignment operator (=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -18,7 +18,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Add-assign operator (+=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add-assign operator (+=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -32,7 +32,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Sub-assign operator (-=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Sub-assign operator (-=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -46,7 +46,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Mul-assign operator (*=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Mul-assign operator (*=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -60,7 +60,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Div-assign operator (/=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Div-assign operator (/=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -74,7 +74,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Rem-assign operator (%=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Rem-assign operator (%=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -88,7 +88,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise and-assign operator (&=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise and-assign operator (&=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -102,7 +102,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise or-assign operator (|=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise or-assign operator (|=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -116,7 +116,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise xor-assign operator (^=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise xor-assign operator (^=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -130,7 +130,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Shift-left assign operator (<<=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-left assign operator (<<=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -144,7 +144,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Shift-right assign operator (>>=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-right assign operator (>>=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -158,7 +158,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Range operator (..)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range operator (..)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -172,7 +172,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Inclusive range operator (..=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Inclusive range operator (..=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -186,7 +186,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical OR operator (||)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical OR operator (||)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -200,7 +200,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical AND operator (&&)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical AND operator (&&)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -214,7 +214,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Equality operator (==)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Equality operator (==)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -228,7 +228,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Not-equal operator (!=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Not-equal operator (!=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -242,7 +242,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Less-than operator (<)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Less-than operator (<)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -256,7 +256,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Less-than-or-equal operator (<=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Less-than-or-equal operator (<=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -270,7 +270,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Greater-than operator (>)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Greater-than operator (>)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -284,7 +284,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Greater-than-or-equal operator (>=)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Greater-than-or-equal operator (>=)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -298,7 +298,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise OR operator (|)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise OR operator (|)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -312,7 +312,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise XOR operator (^)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise XOR operator (^)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -326,7 +326,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise AND operator (&)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise AND operator (&)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -340,7 +340,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Shift-left operator (<<)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-left operator (<<)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -354,7 +354,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Shift-right operator (>>)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-right operator (>>)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -368,7 +368,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Addition operator (+)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Addition operator (+)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -382,7 +382,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Subtraction operator (-)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Subtraction operator (-)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -396,7 +396,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Multiplication operator (*)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Multiplication operator (*)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -410,7 +410,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Division operator (/)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Division operator (/)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -424,7 +424,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Remainder operator (%)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Remainder operator (%)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -438,7 +438,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Type cast operator (as)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type cast operator (as)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -452,7 +452,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Type ascription operator (:)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type ascription operator (:)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "left", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -466,7 +466,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Unary negation operator (-)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Unary negation operator (-)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -492,7 +492,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Unary logical not operator (!)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Unary logical not operator (!)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -518,7 +518,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Dereference operator (*)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Dereference operator (*)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -544,7 +544,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference operator (&)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference operator (&)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -570,7 +570,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Function application operator (whitespace)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function application operator (whitespace)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -596,7 +597,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Field access operator (.)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Field access operator (.)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -622,7 +623,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Method call operator (.)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Method call operator (.)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -648,7 +649,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Return type arrow (->)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Return type arrow (->)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "right", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -662,7 +663,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Match arm arrow (=>)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Match arm arrow (=>)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},
@@ -676,7 +677,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Path separator (::)"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path separator (::)"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -702,7 +703,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Type annotation (::) for let statements"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type annotation (::) for let statements"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "none", "term": {"unit": {}}}, "typeName": "hydra.ast.Associativity"}},

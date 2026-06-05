@@ -8,7 +8,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Construct JSON Schema documents from type definitions"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Construct JSON Schema documents from type definitions"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -160,10 +164,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a single-property record Schema for one branch of an Either oneOf"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a single-property record Schema for one branch of an Either oneOf"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -245,7 +250,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a field type as a JSON Schema keyword-schema pair"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a field type as a JSON Schema keyword-schema pair"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -330,11 +339,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Encode a Hydra name as a safe identifier string, replacing non-alphanumeric characters with underscores"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Encode a Hydra name as a safe identifier string, replacing non-alphanumeric characters with underscores"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -354,10 +364,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a named type as a list of JSON Schema restrictions with a title"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a named type as a list of JSON Schema restrictions with a title"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -436,11 +447,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Encode a record or union as a list of JSON Schema object restrictions; isUnion adds min/maxProperties=1"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Encode a record or union as a list of JSON Schema object restrictions; isUnion adds min/maxProperties=1"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -697,10 +709,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a union type, splitting unit-typed (simple) variants into a string-enum branch"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a union type, splitting unit-typed (simple) variants into a string-enum branch"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -931,10 +944,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Determine whether a field is required (i.e., not optional/Maybe)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Determine whether a field is required (i.e., not optional/Maybe)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -967,11 +981,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Build the JSON Schema type-restriction list for a type name, optionally widening to allow null"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Build the JSON Schema type-restriction list for a type name, optionally widening to allow null"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1016,7 +1031,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Map a Hydra literal type to a JSON Schema type name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a Hydra literal type to a JSON Schema type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1077,10 +1096,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Convert a Hydra module to a map from file path to JSON Schema document string"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert a Hydra module to a map from file path to JSON Schema document string"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1191,7 +1211,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Compute the JSON Schema output file path for a named type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Compute the JSON Schema output file path for a named type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1268,7 +1292,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build the JSON Schema restriction list for a pair type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build the JSON Schema restriction list for a pair type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1374,8 +1402,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Create a JSON Schema reference restriction for a named type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a JSON Schema reference restriction for a named type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1404,12 +1435,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Walk the transitive named-type dependency closure of a root type through typeMap; the visited set guards against cycles in self-/mutually-recursive types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Walk the transitive named-type dependency closure of a root type through typeMap; the visited set guards against cycles in self-/mutually-recursive types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1543,12 +1575,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Build a JSON Schema document for a single named type, with $defs covering its transitive dependencies and short-name substitution applied"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Build a JSON Schema document for a single named type, with $defs covering its transitive dependencies and short-name substitution applied"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1866,7 +1899,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type as a list of JSON Schema restrictions"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra type as a list of JSON Schema restrictions"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2594,10 +2631,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Build a (Keyword, Schema) pair for a named type, used as a $defs entry"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Build a (Keyword, Schema) pair for a named type, used as a $defs entry"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

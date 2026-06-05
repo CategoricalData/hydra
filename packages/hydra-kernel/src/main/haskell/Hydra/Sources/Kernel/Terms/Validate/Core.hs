@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
@@ -258,7 +259,7 @@ checkTerm = define "checkTerm" $
     -- T16/T20/T21: TermAnnotated — check for nested or empty annotations
     _Term_annotated>>: "ann" ~>
       "body" <~ Core.annotatedTermBody (var "ann") $
-      "annMap" <~ Core.annotatedTermAnnotation (var "ann") $
+      "annMap" <~ KernelAnnotations.getAnnotationMap @@ (Core.annotatedTermAnnotation (var "ann")) $
       firstFinding @@ list [
         -- T21. EmptyTermAnnotationError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTermAnnotation
@@ -959,7 +960,7 @@ validateTypeNode = define "validateTypeNode" $
     -- Y8/Y9: TypeAnnotated — nested or empty annotations
     _Type_annotated>>: "ann" ~>
       "body" <~ Core.annotatedTypeBody (var "ann") $
-      "annMap" <~ Core.annotatedTypeAnnotation (var "ann") $
+      "annMap" <~ KernelAnnotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation (var "ann")) $
       firstFindingType @@ list [
         -- Y9. EmptyTypeAnnotationError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation

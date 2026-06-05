@@ -1,6 +1,6 @@
 {
   "name": "hydra-wasm",
-  "description": "WebAssembly coder for Hydra",
+  "description": "WebAssembly support for Hydra",
   "sourceLanguage": "haskell",
   "targetLanguages": ["haskell"],
   "dependencies": ["hydra-kernel"]

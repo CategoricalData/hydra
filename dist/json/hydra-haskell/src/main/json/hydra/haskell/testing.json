@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Add namespaces from a set of names to existing namespaces"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Add namespaces from a set of names to existing namespaces"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -159,10 +163,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build namespaces for a test group including encoded term references"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build namespaces for a test group including encoded term references"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -423,7 +428,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build the complete test module for Haskell HSpec"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build the complete test module for Haskell HSpec"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -568,10 +577,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect variable names from encoded terms within a single term node"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect variable names from encoded terms within a single term node"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -667,7 +677,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect all test cases from a test group recursively"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect all test cases from a test group recursively"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -706,10 +720,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract all variable names from term-encoded terms in a given term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract all variable names from term-encoded terms in a given term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -747,7 +762,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract input and output terms from a test case"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Extract input and output terms from a test case"}}}]},
                     "body": {
                       "lambda": {
                         "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t1"}}},
@@ -766,8 +785,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Find necessary imports for Haskell based on referenced names"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find necessary imports for Haskell based on referenced names"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -921,10 +943,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a Haskell test file for a test group, with type inference and namespace building"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a Haskell test file for a test group, with type inference and namespace building"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -993,8 +1016,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "Generate a single HSpec test case from a universal test case"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Generate a single HSpec test case from a universal test case"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1094,7 +1120,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a complete Haskell test file"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a complete Haskell test file"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1211,10 +1238,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Generate test hierarchy preserving the structure with H.describe blocks for subgroups"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate test hierarchy preserving the structure with H.describe blocks for subgroups"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1490,7 +1518,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert namespace to Haskell module name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert namespace to Haskell module name"}}}]},
             "body": {
               "lambda": {
                 "body": {

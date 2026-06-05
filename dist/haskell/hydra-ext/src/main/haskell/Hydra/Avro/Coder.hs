@@ -2,6 +2,7 @@
 -- | Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms
 
 module Hydra.Avro.Coder where
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Avro.Environment as Environment
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
@@ -35,7 +36,7 @@ annotateAdapter ann ad =
       Coders.adapterSource = (Coders.adapterSource ad),
       Coders.adapterTarget = (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Coders.adapterTarget ad),
-        Core.annotatedTypeAnnotation = n})),
+        Core.annotatedTypeAnnotation = Annotations.wrapAnnotationMap n})),
       Coders.adapterCoder = (Coders.adapterCoder ad)}) ann
 -- | Create an adapter between Avro schemas and Hydra types/terms
 avroHydraAdapter :: t0 -> Schema.Schema -> Environment.AvroEnvironment -> Either Errors.Error (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)

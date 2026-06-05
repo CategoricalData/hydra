@@ -34,15 +34,23 @@ infixr 0 >:
 (>:) :: String -> Term -> Field
 name>: term = field name term
 
--- | Attach an annotation to a term
+-- | Attach an annotation map to a term, wrapping the map as a TermMap per
+-- Hydra's convention (#386 — annotation is now a Term, not a Map<Name, Term>).
+-- Each Name key is lifted to a TermVariable.
 -- Example: annot (M.fromList [(Name "comment", string "A User ID")]) (var "userId")
 annot :: M.Map Name Term -> Term -> Term
-annot ann term = TermAnnotated $ AnnotatedTerm term ann
+annot ann term = TermAnnotated $ AnnotatedTerm term (annotationMapAsTerm ann)
 
--- | Attach an annotation to a term
+-- | Attach an annotation map to a term (alternative argument order).
 -- Example: annotated (var "userId") (M.fromList [(Name "comment", string "A User ID")])
 annotated :: Term -> M.Map Name Term -> Term
-annotated term ann = TermAnnotated $ AnnotatedTerm term ann
+annotated term ann = TermAnnotated $ AnnotatedTerm term (annotationMapAsTerm ann)
+
+-- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a
+-- TermVariable key. The canonical encoding for Hydra's annotation map
+-- convention (#386).
+annotationMapAsTerm :: M.Map Name Term -> Term
+annotationMapAsTerm = TermMap . M.mapKeys TermVariable
 
 -- | Apply a function term to an argument
 -- Example: apply (var "capitalize") (string "arthur")
