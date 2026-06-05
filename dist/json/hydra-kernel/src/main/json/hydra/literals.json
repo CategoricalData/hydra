@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a bigint to an integer value of a given type (note: lossy)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a bigint to an integer value of a given type (note: lossy)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -137,7 +138,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an integer value of any precision to a bigint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an integer value of any precision to a bigint"}}}]},
             "body": {
               "cases": {
                 "cases": [

@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -124,10 +125,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Apply a Coq term to a list of argument terms, parenthesising each"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Apply a Coq term to a list of argument terms, parenthesising each"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -217,10 +219,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Coq Term expressing `(t : T)` with the normal cast operator"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq Term expressing `(t : T)` with the normal cast operator"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -276,10 +279,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Coq Term that references a (possibly qualified) identifier"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq Term that references a (possibly qualified) identifier"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -335,8 +339,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Produce `Axiom name : type.` from a (name, Hydra type) pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Produce `Axiom name : type.` from a (name, Hydra type) pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -404,10 +411,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Map a Haskell-`show`n Double/Scientific to a Coq term, routing NaN/Inf to base-lib axioms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a Haskell-`show`n Double/Scientific to a Coq term, routing NaN/Inf to base-lib axioms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -476,10 +484,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -585,10 +594,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Translate a Hydra literal into its Coq stdlib form, with disambiguating parentheses"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Translate a Hydra literal into its Coq stdlib form, with disambiguating parentheses"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -871,7 +881,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Map a Hydra LiteralType to its Coq stdlib counterpart"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a Hydra LiteralType to its Coq stdlib counterpart"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1006,10 +1020,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Translate a Hydra record projection into a Coq lambda that pulls out the field"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Translate a Hydra record projection into a Coq lambda that pulls out the field"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1137,12 +1152,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a match is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a match is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2148,10 +2164,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Coq `Definition name := body.` sentence from a Hydra term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq `Definition name := body.` sentence from a Hydra term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2201,10 +2218,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap encodeTermDefinition in a Coq Sentence with no leading comment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap encodeTermDefinition in a Coq Sentence with no leading comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2255,12 +2273,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2671,10 +2690,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Coq `Definition name : Type := body.` sentence from a Hydra type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq `Definition name : Type := body.` sentence from a Hydra type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2731,10 +2751,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Wrap encodeTypeDefinition in a Coq Sentence with no leading comment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap encodeTypeDefinition in a Coq Sentence with no leading comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2785,10 +2806,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a Coq Inductive Constructor line `Name_Tag : body -> Name` for a union variant"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a Coq Inductive Constructor line `Name_Tag : body -> Name` for a union variant"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2866,12 +2888,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Build a Coq match expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the match is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Build a Coq match expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the match is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3374,10 +3397,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "A Hydra wrap eliminator is just the identity on the wrapped object in Coq"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "A Hydra wrap eliminator is just the identity on the wrapped object in Coq"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3424,10 +3448,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Escape a string for Coq string literals: double any embedded quotes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Escape a string for Coq string literals: double any embedded quotes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3449,10 +3474,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect a chain of leading lambdas as Coq binders, converting type annotations as well"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect a chain of leading lambdas as Coq binders, converting type annotations as well"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3574,10 +3600,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "True if the Maybe Type is the unit type, looking through annotations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True if the Maybe Type is the unit type, looking through annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3640,10 +3667,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Detect a lambda over the unit type whose parameter is not referenced in the body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Detect a lambda over the unit type whose parameter is not referenced in the body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3711,10 +3739,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3752,10 +3781,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a Coq Document from lists of type definitions and term definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq Document from lists of type definitions and term definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3849,10 +3879,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Rewrite a stripped hydra.lib.<mod>.<func> name to avoid Coq keyword collisions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Rewrite a stripped hydra.lib.<mod>.<func> name to avoid Coq keyword collisions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3897,10 +3928,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Emit a Coq `Require Import m1 m2 ...` sentence with a `Standard library imports` comment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit a Coq `Require Import m1 m2 ...` sentence with a `Standard library imports` comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3957,10 +3989,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4258,10 +4291,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Append an underscore if a stripped-local-name reference collides with a Coq reserved word"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Append an underscore if a stripped-local-name reference collides with a Coq reserved word"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4282,10 +4316,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Append an underscore if the name collides with a Coq reserved word"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Append an underscore if the name collides with a Coq reserved word"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4306,10 +4341,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The Coq stdlib modules plus the hand-written hydra.lib.base axioms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The Coq stdlib modules plus the hand-written hydra.lib.base axioms"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -4326,10 +4362,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Peel off leading lambdas and annotations, returning the first non-lambda body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Peel off leading lambdas and annotations, returning the first non-lambda body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4373,10 +4410,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Syntactic free-variable check over the shapes encodeTerm walks through"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Syntactic free-variable check over the shapes encodeTerm walks through"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4747,11 +4785,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Combine a type name and field name into a constructor identifier, preserving the namespace prefix"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Combine a type name and field name into a constructor identifier, preserving the namespace prefix"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4845,7 +4884,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Peel the outer unit lambda off a term, returning the body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Peel the outer unit lambda off a term, returning the body"}}}]},
             "body": {
               "lambda": {
                 "body": {

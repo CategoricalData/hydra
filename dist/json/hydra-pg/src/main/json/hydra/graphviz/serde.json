@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an attribute list to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an attribute list to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -59,7 +60,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an attribute statement to an expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an attribute statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -97,7 +102,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an attribute type to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an attribute type to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -139,7 +145,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a compass point to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a compass point to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -230,7 +237,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an edge statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an edge statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -353,7 +361,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an equality pair to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an equality pair to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -392,7 +401,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a graph to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a graph to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -492,7 +501,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an identifier to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an identifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -517,7 +527,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a node identifier to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node identifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -568,7 +579,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a node or subgraph to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node or subgraph to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -612,7 +624,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a node statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -665,7 +678,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a port to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a port to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -747,7 +760,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a statement to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -815,7 +829,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subgraph to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -898,7 +912,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a subgraph identifier to an expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph identifier to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {

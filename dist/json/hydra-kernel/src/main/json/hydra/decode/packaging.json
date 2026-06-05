@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.Definition"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -285,7 +286,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.DefinitionReference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decoder for hydra.packaging.DefinitionReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -574,7 +579,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.EntityMetadata"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.EntityMetadata"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1006,7 +1012,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.EntityReference"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.EntityReference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1297,7 +1304,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.LifecycleInfo"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.LifecycleInfo"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1475,7 +1483,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.Module"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.Module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1731,7 +1739,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.ModuleDependency"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.ModuleDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1905,7 +1914,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.ModuleName"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.ModuleName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2090,7 +2100,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.Package"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.Package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2346,7 +2356,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.PackageDependency"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.PackageDependency"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2516,7 +2528,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.PackageName"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.PackageName"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2701,7 +2714,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.PrimitiveDefinition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decoder for hydra.packaging.PrimitiveDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3200,7 +3217,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.TermDefinition"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.TermDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3454,7 +3472,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.TypeDefinition"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.TypeDefinition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3667,7 +3686,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.Version"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.Version"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3852,7 +3871,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.packaging.VersionSpecifier"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.packaging.VersionSpecifier"}}}]},
             "body": {
               "lambda": {
                 "body": {

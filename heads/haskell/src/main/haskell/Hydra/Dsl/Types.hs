@@ -6,6 +6,7 @@ import Prelude hiding (maybe, product)
 import Hydra.Core
 import Hydra.Dsl.AsType
 import Hydra.Dsl.Meta.Common
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -39,10 +40,11 @@ infixr 0 >:
 name>: typ = field name (asType typ)
 
 
--- | Attach an annotation to a type
+-- | Attach an annotation map to a type, wrapping the map as a TermMap per
+-- Hydra's convention (#386 — annotation is now a Term, not a Map<Name, Term>).
 -- Example: annot (M.fromList [(Name "min", int32 0), (Name "max", int32 100)]) int32
 annot :: AsType a => M.Map Name Term -> a -> Type
-annot ann typ = TypeAnnotated $ AnnotatedType (asType typ) ann
+annot ann typ = TypeAnnotated $ AnnotatedType (asType typ) (Terms.annotationMapAsTerm ann)
 
 -- | Apply a type to a type argument
 -- Example: apply (var "f") int32

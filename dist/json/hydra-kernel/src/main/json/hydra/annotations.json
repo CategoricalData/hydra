@@ -12,7 +12,8 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Aggregate annotations from nested structures"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aggregate annotations from nested structures"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -143,7 +144,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract comments/description from a Binding"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract comments/description from a Binding"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -182,7 +184,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract comments/description from a FieldType"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Extract comments/description from a FieldType"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -218,10 +222,203 @@
     {
       "term": {
         "body": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Project a Map<Name, Term> out of an annotation Term. For a TermMap with TermVariable-shaped keys (or, transitionally, TermWrap-encoded Name keys), returns those (Name, value) entries; for any other shape, returns the empty map."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "extractName",
+                        "term": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "k"},
+                                "function": {
+                                  "cases": {
+                                    "cases": [
+                                      {
+                                        "handler": {"lambda": {"body": {"maybe": {"variable": "n"}}, "domain": {"variable": "hydra.core.Name"}, "parameter": "n"}},
+                                        "name": "variable"},
+                                      {
+                                        "handler": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {"argument": {"variable": "w"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                "function": {
+                                                  "cases": {
+                                                    "cases": [
+                                                      {
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "l"},
+                                                                "function": {
+                                                                  "cases": {
+                                                                    "cases": [
+                                                                      {
+                                                                        "handler": {
+                                                                          "lambda": {
+                                                                            "body": {"maybe": {"wrap": {"body": {"variable": "s"}, "typeName": "hydra.core.Name"}}},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "s"}},
+                                                                        "name": "string"}],
+                                                                    "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Name"}}},
+                                                                    "typeName": "hydra.core.Literal"}}}},
+                                                            "domain": {"variable": "hydra.core.Literal"},
+                                                            "parameter": "l"}},
+                                                        "name": "literal"}],
+                                                    "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Name"}}},
+                                                    "typeName": "hydra.core.Term"}}}},
+                                            "domain": {"variable": "hydra.core.WrappedTerm"},
+                                            "parameter": "w"}},
+                                        "name": "wrap"}],
+                                    "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Name"}}},
+                                    "typeName": "hydra.core.Term"}}}},
+                            "domain": {"variable": "hydra.core.Term"},
+                            "parameter": "k"}},
+                        "typeScheme": {
+                          "body": {"function": {"codomain": {"maybe": {"variable": "hydra.core.Name"}}, "domain": {"variable": "hydra.core.Term"}}},
+                          "variables": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "fromEntry",
+                            "term": {
+                              "typeLambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "k",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "p"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Term"}}},
+                                                    "type": {"variable": "t0"}}}}},
+                                            "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "v",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "p"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Term"}}},
+                                                        "type": {"variable": "t0"}}}}},
+                                                "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {"application": {"argument": {"variable": "k"}, "function": {"variable": "extractName"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {"body": {"pair": {"first": {"variable": "n"}, "second": {"variable": "v"}}}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "type": {"variable": "t0"}}},
+                                                        "domain": {"variable": "hydra.core.Name"},
+                                                        "parameter": "n"}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}}}}}}}}},
+                                    "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "t0"}}},
+                                    "parameter": "p"}},
+                                "parameter": "t0"}},
+                            "typeScheme": {
+                              "body": {
+                                "function": {
+                                  "codomain": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}},
+                                  "domain": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "t0"}}}}},
+                              "variables": ["t0"]}}],
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "handler": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "m"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.core.Term"}}},
+                                                            "type": {"variable": "hydra.core.Term"}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"typeApplication": {"body": {"variable": "fromEntry"}, "type": {"variable": "hydra.core.Term"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                                "type": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}}}},
+                                                            "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}}}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.cat"},
+                                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                        "domain": {"map": {"keys": {"variable": "hydra.core.Term"}, "values": {"variable": "hydra.core.Term"}}},
+                                        "parameter": "m"}},
+                                    "name": "map"}],
+                                "default": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                    "type": {"variable": "hydra.core.Term"}}},
+                                "typeName": "hydra.core.Term"}}}}}}}},
+                "domain": {"variable": "hydra.core.Term"},
+                "parameter": "t"}}}},
+        "name": "hydra.annotations.getAnnotationMap",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Term"}}],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Get description from annotations map (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Get description from annotations map (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -300,7 +497,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get a term annotation"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get a term annotation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -333,7 +530,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Get term description (Either version)"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get term description (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -416,7 +614,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get type from annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get type from annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -490,7 +688,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get a type annotation"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get a type annotation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -522,10 +720,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Get type classes from term. Each Set Name contains bare class identifiers (#275)."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Get type classes from term. Each Set Name contains bare class identifiers (#275)."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -660,7 +859,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Get type description (Either version)"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get type description (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -698,7 +898,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Check if annotations contain description"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if annotations contain description"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -730,7 +931,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if type has description"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if type has description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -748,12 +949,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -845,7 +1047,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Normalize term annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Normalize term annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -871,7 +1073,11 @@
                                   "name": "annotated",
                                   "term": {
                                     "record": {
-                                      "fields": [{"name": "body", "term": {"variable": "stripped"}}, {"name": "annotation", "term": {"variable": "anns"}}],
+                                      "fields": [
+                                        {"name": "body", "term": {"variable": "stripped"}},
+                                        {
+                                          "name": "annotation",
+                                          "term": {"application": {"argument": {"variable": "anns"}, "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                       "typeName": "hydra.core.AnnotatedTerm"}}},
                                 "typeName": "hydra.core.Term"}},
                             "function": {
@@ -898,7 +1104,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Normalize type annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Normalize type annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -923,7 +1129,11 @@
                                   "name": "annotated",
                                   "term": {
                                     "record": {
-                                      "fields": [{"name": "body", "term": {"variable": "stripped"}}, {"name": "annotation", "term": {"variable": "anns"}}],
+                                      "fields": [
+                                        {"name": "body", "term": {"variable": "stripped"}},
+                                        {
+                                          "name": "annotation",
+                                          "term": {"application": {"argument": {"variable": "anns"}, "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                       "typeName": "hydra.core.AnnotatedType"}}},
                                 "typeName": "hydra.core.Type"}},
                             "function": {
@@ -954,7 +1164,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Set annotation in map"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set annotation in map"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -994,7 +1204,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set description in annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set description in annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1050,7 +1260,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set term annotation"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set term annotation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1092,7 +1302,11 @@
                                           "name": "annotated",
                                           "term": {
                                             "record": {
-                                              "fields": [{"name": "body", "term": {"variable": "term'"}}, {"name": "annotation", "term": {"variable": "anns"}}],
+                                              "fields": [
+                                                {"name": "body", "term": {"variable": "term'"}},
+                                                {
+                                                  "name": "annotation",
+                                                  "term": {"application": {"argument": {"variable": "anns"}, "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                         "typeName": "hydra.core.Term"}},
                                     "function": {
@@ -1126,7 +1340,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set term description"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set term description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1167,7 +1381,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set type in annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set type in annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1205,7 +1419,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set type annotation"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set type annotation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1246,7 +1460,11 @@
                                           "name": "annotated",
                                           "term": {
                                             "record": {
-                                              "fields": [{"name": "body", "term": {"variable": "typ'"}}, {"name": "annotation", "term": {"variable": "anns"}}],
+                                              "fields": [
+                                                {"name": "body", "term": {"variable": "typ'"}},
+                                                {
+                                                  "name": "annotation",
+                                                  "term": {"application": {"argument": {"variable": "anns"}, "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                               "typeName": "hydra.core.AnnotatedType"}}},
                                         "typeName": "hydra.core.Type"}},
                                     "function": {
@@ -1280,10 +1498,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Set type classes on term. The Set Name carries bare class identifiers (#275)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set type classes on term. The Set Name carries bare class identifiers (#275)."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1440,7 +1659,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set type description"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set type description"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1490,7 +1709,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get internal term annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get internal term annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1526,8 +1745,11 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "at"},
-                                    "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "at"},
+                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                    "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                 "domain": {"variable": "hydra.core.AnnotatedTerm"},
                                 "parameter": "at"}},
                             "function": {
@@ -1563,7 +1785,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get internal type annotations"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get internal type annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1599,8 +1821,11 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "at"},
-                                    "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "at"},
+                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                    "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                 "domain": {"variable": "hydra.core.AnnotatedType"},
                                 "parameter": "at"}},
                             "function": {
@@ -1631,6 +1856,88 @@
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Type"}}],
           "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}},
+          "typeParameters": []}}},
+    {
+      "term": {
+        "body": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a TermVariable."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "map",
+                      "term": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "m"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.core.Name"}}},
+                                      "type": {"variable": "hydra.core.Term"}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "first": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "variable",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "p"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.core.Term"}}}}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "second": {
+                                                    "application": {
+                                                      "argument": {"variable": "p"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
+                                                          "type": {"variable": "hydra.core.Term"}}}}}}},
+                                              "type": {"variable": "hydra.core.Term"}}},
+                                          "type": {"variable": "hydra.core.Term"}}},
+                                      "domain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}},
+                                      "parameter": "p"}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.lib.lists.map"},
+                                          "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}}}},
+                                      "type": {"pair": {"first": {"variable": "hydra.core.Term"}, "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                          "function": {
+                            "typeApplication": {
+                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Term"}}},
+                              "type": {"variable": "hydra.core.Term"}}}}}},
+                    "typeName": "hydra.core.Term"}},
+                "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                "parameter": "m"}}}},
+        "name": "hydra.annotations.wrapAnnotationMap",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
           "typeParameters": []}}}],
   "dependencies": [
     {"module": "hydra.constants"},

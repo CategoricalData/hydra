@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a definition to a typed term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a definition to a typed term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -82,7 +83,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert bindings and a body to a let expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert bindings and a body to a let expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -106,10 +111,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert bindings and a body to a term, using let-term duality"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert bindings and a body to a term, using let-term duality"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -138,10 +144,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Decode a list of type-encoding bindings into a map of named types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decode a list of type-encoding bindings into a map of named types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -245,10 +252,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Partition a list of definitions into type definitions and term definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Partition a list of definitions into type definitions and term definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -382,11 +390,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -629,10 +638,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a schema graph to a typing environment (Either version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a schema graph to a typing environment (Either version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1211,10 +1221,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extract the bindings from a let term, or return an empty list for other terms"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the bindings from a let term, or return an empty list for other terms"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1244,7 +1255,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a map of named types to a list of bindings"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a map of named types to a list of bindings"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1335,12 +1350,13 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1416,11 +1432,12 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Execute a computation in the context of a let body, extending the type context with the let bindings"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Execute a computation in the context of a let body, extending the type context with the let bindings"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1510,12 +1527,13 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Execute a computation in the context of a type lambda body, extending the type context with the type parameter"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Execute a computation in the context of a type lambda body, extending the type context with the type parameter"}}}]},
                         "body": {
                           "lambda": {
                             "body": {

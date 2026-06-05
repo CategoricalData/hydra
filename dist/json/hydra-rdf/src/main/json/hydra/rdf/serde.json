@@ -4,7 +4,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape a single IRI character code to a string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Escape a single IRI character code to a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -142,11 +144,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -173,7 +176,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape a single literal character code to a string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Escape a single literal character code to a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -248,7 +255,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape a string for use in an N-Triples literal"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Escape a string for use in an N-Triples literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -275,7 +286,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a value 0-15 to an uppercase hex digit code point"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a value 0-15 to an uppercase hex digit code point"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -317,7 +332,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an RDF graph to an N-Triples string"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an RDF graph to an N-Triples string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -335,7 +351,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Format a code point as a 4-digit UCHAR escape sequence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Format a code point as a 4-digit UCHAR escape sequence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -463,7 +483,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a blank node to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a blank node to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -487,7 +508,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an RDF graph to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an RDF graph to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -517,7 +539,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an IRI to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an IRI to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -545,7 +567,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a language tag to an expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a language tag to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -569,7 +592,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a literal to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -647,7 +670,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a node to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -689,7 +712,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a resource to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a resource to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -724,7 +747,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a triple to an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a triple to an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {

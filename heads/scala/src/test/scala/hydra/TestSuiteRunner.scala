@@ -203,6 +203,47 @@ object TestSuiteRunner {
    * These are hand-written because the generated source modules exceed method size limits.
    */
   private def addAnnotationsBindings(boundTerms: _root_.scala.collection.mutable.Map[String, Term]): Unit = {
+    // hydra.annotations.getAnnotationMap (#386):
+    //   getAnnotationMap :: Term -> Map<Name, Term>
+    //   Project the (Name, value) entries from a TermMap-with-TermVariable-keys
+    //   annotation; return Maps.empty for any other shape.
+    boundTerms += ("hydra.annotations.getAnnotationMap" ->
+      lambda("t",
+        apply(
+          matchTerm("hydra.core.Term", Some(apply(primitive("hydra.lib.maps.empty"), variable("t"))),
+            field("map", lambda("m",
+              apply(primitive("hydra.lib.maps.fromList"),
+                apply(apply(primitive("hydra.lib.lists.foldl"),
+                  lambda("acc", "pair",
+                    apply(
+                      matchTerm("hydra.core.Term",
+                        Some(variable("acc")),
+                        field("variable", lambda("n",
+                          apply(apply(primitive("hydra.lib.lists.cons"),
+                            apply(apply(primitive("hydra.lib.tuples.pair"),
+                              variable("n")),
+                              apply(primitive("hydra.lib.tuples.snd"), variable("pair")))),
+                            variable("acc"))))),
+                      apply(primitive("hydra.lib.tuples.fst"), variable("pair")))),
+                  list()),
+                  apply(primitive("hydra.lib.maps.toList"), variable("m"))))))),
+          variable("t"))))
+
+    // hydra.annotations.wrapAnnotationMap (#386):
+    //   wrapAnnotationMap :: Map<Name, Term> -> Term
+    //   Encode each Name key as a TermVariable, then wrap as a TermMap.
+    boundTerms += ("hydra.annotations.wrapAnnotationMap" ->
+      lambda("m",
+        inject("hydra.core.Term", "map",
+          apply(primitive("hydra.lib.maps.fromList"),
+            apply(apply(primitive("hydra.lib.lists.map"),
+              lambda("pair",
+                apply(apply(primitive("hydra.lib.tuples.pair"),
+                  inject("hydra.core.Term", "variable",
+                    apply(primitive("hydra.lib.tuples.fst"), variable("pair")))),
+                  apply(primitive("hydra.lib.tuples.snd"), variable("pair"))))),
+              apply(primitive("hydra.lib.maps.toList"), variable("m")))))))
+
     // hydra.rewriting.deannotateTerm
     boundTerms += ("hydra.rewriting.deannotateTerm" ->
       lambda("t",
@@ -214,6 +255,10 @@ object TestSuiteRunner {
           variable("t"))))
 
     // hydra.annotations.termAnnotationInternal
+    // After #386: the annotation field is a Term, not a Map. We project the
+    // map payload out via Annotations.getAnnotationMap (which unwraps TermMap
+    // entries whose keys are TermVariable into a Map<Name, Term>; non-map
+    // annotations contribute the empty map).
     boundTerms += ("hydra.annotations.termAnnotationInternal" ->
       lambda("term",
         let_("toPairs",
@@ -225,7 +270,8 @@ object TestSuiteRunner {
                   apply(apply(variable("toPairs"),
                     apply(apply(primitive("hydra.lib.lists.cons"),
                       apply(primitive("hydra.lib.maps.toList"),
-                        apply(project("hydra.core.AnnotatedTerm", "annotation"), variable("at")))),
+                        apply(variable("hydra.annotations.getAnnotationMap"),
+                          apply(project("hydra.core.AnnotatedTerm", "annotation"), variable("at"))))),
                       variable("rest"))),
                     apply(project("hydra.core.AnnotatedTerm", "body"), variable("at")))))),
               variable("t"))),
@@ -246,6 +292,9 @@ object TestSuiteRunner {
               variable("val"))))))
 
     // hydra.annotations.setTermAnnotation
+    // After #386: the annotation field is a Term. The map produced by
+    // setAnnotation is wrapped via Annotations.wrapAnnotationMap before being
+    // stored in AnnotatedTerm.
     boundTerms += ("hydra.annotations.setTermAnnotation" ->
       lambda("key",
         lambda("val",
@@ -260,7 +309,8 @@ object TestSuiteRunner {
                   inject("hydra.core.Term", "annotated",
                     record("hydra.core.AnnotatedTerm",
                       field("body", variable("stripped")),
-                      field("annotation", variable("anns")))))))))))
+                      field("annotation",
+                        apply(variable("hydra.annotations.wrapAnnotationMap"), variable("anns"))))))))))))
 
     // hydra.annotations.setTermDescription
     boundTerms += ("hydra.annotations.setTermDescription" ->

@@ -1,6 +1,6 @@
 {
   "name": "hydra-go",
-  "description": "Go coder for Hydra: generates idiomatic Go code from Hydra type and term modules",
+  "description": "Go support for Hydra",
   "sourceLanguage": "haskell",
   "dependencies": ["hydra-kernel"]
 }

@@ -1,6 +1,6 @@
 {
   "name": "hydra-ext",
-  "description": "Extension coders for Hydra: Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go, etc.",
+  "description": "Various extensions to Hydra",
   "sourceLanguage": "haskell",
   "targetLanguages": ["python"],
   "dependencies": ["hydra-kernel", "hydra-rdf"]

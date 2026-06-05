@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -108,10 +109,11 @@
                                               "application": {
                                                 "argument": {
                                                   "annotated": {
-                                                    "annotation": [
-                                                      {
-                                                        "key": "description",
-                                                        "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                                                    "annotation": {
+                                                      "map": [
+                                                        {
+                                                          "key": {"variable": "description"},
+                                                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}]},
                                                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                                             "parameter": "typeVariables"}},
@@ -119,7 +121,8 @@
                                           "application": {
                                             "argument": {
                                               "annotated": {
-                                                "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                                                "annotation": {
+                                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}]},
                                                 "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                                         "parameter": "schemaTypes"}},
@@ -127,7 +130,9 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                                            "annotation": {
+                                              "map": [
+                                                {"key": {"variable": "description"}, "value": {"literal": {"string": "All primitive functions and constants by name"}}}]},
                                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "primitives"}},
@@ -135,7 +140,11 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}]},
                                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "metadata"}},
@@ -143,10 +152,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}]},
                                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "lambdaVariables"}},
@@ -154,12 +164,13 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}]},
                                 "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "classConstraints"}},
@@ -167,7 +178,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "boundTypes"}},
@@ -175,7 +190,9 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}]},
                         "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "boundTerms"}}}},
@@ -189,7 +206,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -199,7 +218,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -209,12 +232,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -224,10 +248,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -237,7 +262,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -247,7 +276,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "All primitive functions and constants by name"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -257,7 +288,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -267,10 +299,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -280,7 +313,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the boundTerms field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the boundTerms field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -327,7 +364,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -335,7 +374,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the boundTypes field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the boundTypes field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -382,7 +425,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -390,10 +437,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the classConstraints field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the classConstraints field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -442,12 +490,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -455,10 +504,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the lambdaVariables field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the lambdaVariables field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -507,10 +557,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -518,7 +569,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the metadata field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -565,7 +620,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -573,7 +632,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the primitives field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the primitives field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -620,7 +683,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "All primitive functions and constants by name"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -628,8 +693,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the schemaTypes field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the schemaTypes field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -676,7 +744,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}]},
                     "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -684,10 +753,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeVariables field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeVariables field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -736,10 +806,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -747,7 +818,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the boundTerms field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the boundTerms field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1027,7 +1102,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1047,7 +1124,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1057,7 +1136,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the boundTypes field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the boundTypes field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1337,7 +1420,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1357,7 +1444,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1367,10 +1458,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the classConstraints field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the classConstraints field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1648,12 +1740,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1673,12 +1766,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1688,10 +1782,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the lambdaVariables field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the lambdaVariables field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1969,10 +2064,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1992,10 +2088,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2005,7 +2102,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the metadata field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the metadata field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2285,7 +2386,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2305,7 +2410,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2315,7 +2424,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the primitives field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the primitives field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2595,7 +2708,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "All primitive functions and constants by name"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2615,7 +2730,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All primitive functions and constants by name"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "All primitive functions and constants by name"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.graph.Primitive"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2625,7 +2742,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the schemaTypes field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the schemaTypes field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2905,7 +3026,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}]},
                             "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2925,7 +3047,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}]},
                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeScheme"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2935,8 +3058,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the typeVariables field of hydra.graph.Graph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeVariables field of hydra.graph.Graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3214,10 +3340,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3237,10 +3364,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3250,7 +3378,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3304,7 +3433,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]},
                                 "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "primitives"}},
@@ -3312,10 +3442,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "prefix"}},
@@ -3323,10 +3454,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
@@ -3340,10 +3472,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3353,10 +3486,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3366,7 +3500,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]},
                       "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3376,7 +3511,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the name field of hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3423,10 +3562,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3434,7 +3574,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the prefix field of hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the prefix field of hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3481,10 +3625,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}]},
                     "body": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3492,8 +3637,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL accessor for the primitives field of hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the primitives field of hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3540,7 +3688,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]},
                     "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3548,7 +3697,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the name field of hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3652,10 +3805,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3675,10 +3829,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3688,7 +3843,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the prefix field of hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the prefix field of hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3792,10 +3951,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}]},
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3815,10 +3975,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}]},
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3828,8 +3989,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the primitives field of hydra.graph.Library"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the primitives field of hydra.graph.Library"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3933,7 +4097,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]},
                             "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3953,7 +4118,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]},
                       "body": {"list": {"variable": "hydra.graph.Primitive"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3963,7 +4129,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.Primitive"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.graph.Primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4007,12 +4174,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -4029,12 +4197,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}]},
                         "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "definition"}}}},
@@ -4048,12 +4217,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}]},
                       "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4063,12 +4233,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -4087,10 +4258,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the definition field of hydra.graph.Primitive"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the definition field of hydra.graph.Primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4137,12 +4309,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}]},
                     "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4150,10 +4323,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the implementation field of hydra.graph.Primitive"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the implementation field of hydra.graph.Primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4202,12 +4376,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -4224,10 +4399,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the definition field of hydra.graph.Primitive"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the definition field of hydra.graph.Primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4299,12 +4475,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}]},
                             "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4324,12 +4501,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}]},
                       "body": {"variable": "hydra.packaging.PrimitiveDefinition"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4339,10 +4517,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the implementation field of hydra.graph.Primitive"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the implementation field of hydra.graph.Primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4412,12 +4591,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -4446,12 +4626,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting."}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -4470,7 +4651,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4524,7 +4706,9 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {"key": {"variable": "description"}, "value": {"literal": {"string": "A decode function from native values to terms"}}}]},
                                 "body": {
                                   "function": {
                                     "codomain": {
@@ -4538,7 +4722,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "An encode function from terms to native values"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -4555,7 +4741,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra type of encoded terms"}}}]},
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "type"}}}},
@@ -4569,7 +4755,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra type of encoded terms"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -4579,7 +4765,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "An encode function from terms to native values"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -4598,7 +4786,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A decode function from native values to terms"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -4617,7 +4807,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the type field of hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the type field of hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4670,7 +4864,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra type of encoded terms"}}}]},
                     "body": {"variable": "hydra.core.Type"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "a"}]}}},
@@ -4678,7 +4872,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the encode field of hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the encode field of hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4731,7 +4929,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "An encode function from terms to native values"}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -4748,7 +4948,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the decode field of hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the decode field of hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4801,7 +5005,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "A decode function from native values to terms"}}}]},
                     "body": {
                       "function": {
                         "codomain": {
@@ -4815,7 +5021,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the type field of hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the type field of hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4919,7 +5129,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra type of encoded terms"}}}]},
                             "body": {"variable": "hydra.core.Type"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4945,7 +5155,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The Hydra type of encoded terms"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra type of encoded terms"}}}]},
                       "body": {"variable": "hydra.core.Type"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4958,7 +5168,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the encode field of hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the encode field of hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5062,7 +5276,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "An encode function from terms to native values"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -5097,7 +5313,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An encode function from terms to native values"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "An encode function from terms to native values"}}}]},
                       "body": {
                         "function": {
                           "codomain": {
@@ -5119,7 +5337,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the decode field of hydra.graph.TermCoder"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the decode field of hydra.graph.TermCoder"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5223,7 +5445,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "A decode function from native values to terms"}}}]},
                             "body": {
                               "function": {
                                 "codomain": {
@@ -5255,7 +5479,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A decode function from native values to terms"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A decode function from native values to terms"}}}]},
                       "body": {
                         "function": {
                           "codomain": {

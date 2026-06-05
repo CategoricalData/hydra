@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Whether to include type definitions in generated Haskell modules"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether to include type definitions in generated Haskell modules"}}}]},
             "body": {"literal": {"boolean": false}}}},
         "name": "hydra.haskell.coder.includeTypeDefinitions",
         "signature": {"parameters": [], "result": {"type": {"literal": {"boolean": {}}}}, "typeParameters": []}}},
@@ -15,7 +16,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Whether to use the Hydra core import in generated modules"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether to use the Hydra core import in generated modules"}}}]},
             "body": {"literal": {"boolean": true}}}},
         "name": "hydra.haskell.coder.useCoreImport",
         "signature": {"parameters": [], "result": {"type": {"literal": {"boolean": {}}}}, "typeParameters": []}}},
@@ -23,8 +28,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "The key used to track Haskell variable depth in annotations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The key used to track Haskell variable depth in annotations"}}}]},
             "body": {"wrap": {"body": {"literal": {"string": "haskellVar"}}, "typeName": "hydra.core.Name"}}}},
         "name": "hydra.haskell.coder.keyHaskellVar",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}, "typeParameters": []}}},
@@ -36,7 +44,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Adapt a Hydra type to Haskell's type system and encode it"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Adapt a Hydra type to Haskell's type system and encode it"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -141,10 +153,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a constant name for a field (e.g., '_TypeName_fieldName')"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a constant name for a field (e.g., '_TypeName_fieldName')"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -173,7 +186,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a constant name for a type (e.g., '_TypeName')"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a constant name for a type (e.g., '_TypeName')"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -193,10 +210,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Construct a Haskell module from a Hydra module and its definitions"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Construct a Haskell module from a Hydra module and its definitions"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1085,10 +1103,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Create an initial empty metadata record with all flags set to false"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an initial empty metadata record with all flags set to false"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -1108,10 +1127,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a Hydra case statement as a Haskell case expression with a given scrutinee"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra case statement as a Haskell case expression with a given scrutinee"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1746,7 +1766,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra lambda as a Haskell expression"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra lambda as a Haskell expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1853,7 +1875,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra literal as a Haskell expression"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra literal as a Haskell expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2274,7 +2298,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a record projection as a Haskell expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a record projection as a Haskell expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2340,10 +2368,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2422,7 +2451,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra term as a Haskell expression"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra term as a Haskell expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3977,7 +4007,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an unwrap term as a Haskell expression"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an unwrap term as a Haskell expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4038,7 +4070,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type as a Haskell type"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra type as a Haskell type"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5061,10 +5094,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Encode a Hydra type as a Haskell type with typeclass assertions"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Encode a Hydra type as a Haskell type with typeclass assertions"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -5462,10 +5496,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extend metadata by analyzing a term for standard import usage (bottom-up step function)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend metadata by analyzing a term for standard import usage (bottom-up step function)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5515,10 +5550,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Extend metadata by analyzing a type for standard import usage (bottom-up step function)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend metadata by analyzing a type for standard import usage (bottom-up step function)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5640,10 +5676,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find type variables that require an Ord constraint (used in maps or sets)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find type variables that require an Ord constraint (used in maps or sets)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5786,10 +5823,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Gather metadata from definitions by bottom-up traversal of all terms and types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Gather metadata from definitions by bottom-up traversal of all terms and types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6000,10 +6038,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Get implicit typeclass constraints for type variables that need Ord"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Get implicit typeclass constraints for type variables that need Ord"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6069,10 +6108,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a Hydra module and definitions to a Haskell module AST"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra module and definitions to a Haskell module AST"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6148,10 +6188,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a Hydra module to Haskell source code as a filepath-to-content map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra module to Haskell source code as a filepath-to-content map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6259,10 +6300,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate Haskell declarations for type and field name constants"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate Haskell declarations for type and field name constants"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6667,10 +6709,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Convert a Hydra term definition to a Haskell declaration with comments"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra term definition to a Haskell declaration with comments"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -7392,7 +7435,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra type definition to Haskell declarations"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra type definition to Haskell declarations"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8550,10 +8597,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Generate a Haskell declaration for a type definition constant"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate a Haskell declaration for a type definition constant"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9014,10 +9062,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Project type scheme constraints to a map of type variables to typeclass names"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Project type scheme constraints to a map of type variables to typeclass names"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

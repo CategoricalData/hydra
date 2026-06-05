@@ -6,7 +6,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.FunctionStructure"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.FunctionStructure"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -406,7 +407,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.InferenceContext"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -680,7 +682,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.InferenceResult"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.InferenceResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -970,7 +973,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.Parameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.Parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1389,7 +1392,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.Result"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.Result"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1647,7 +1650,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.TermSignature"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.TermSignature"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1862,7 +1866,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.TermSubst"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.TermSubst"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1973,7 +1977,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.TypeClass"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.TypeClass"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2189,7 +2193,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.TypeConstraint"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.TypeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2482,7 +2487,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.TypeParameter"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2656,7 +2662,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decoder for hydra.typing.TypeSubst"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.typing.TypeSubst"}}}]},
             "body": {
               "lambda": {
                 "body": {

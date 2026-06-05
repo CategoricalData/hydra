@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Closed"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Closed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -75,10 +76,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the isClosed field of hydra.shacl.model.Closed"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the isClosed field of hydra.shacl.model.Closed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -128,10 +130,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the ignoredProperties field of hydra.shacl.model.Closed"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the ignoredProperties field of hydra.shacl.model.Closed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -187,10 +190,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the isClosed field of hydra.shacl.model.Closed"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the isClosed field of hydra.shacl.model.Closed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -285,10 +289,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the ignoredProperties field of hydra.shacl.model.Closed"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the ignoredProperties field of hydra.shacl.model.Closed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -387,10 +392,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the and variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the and variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -422,7 +428,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}]},
                         "body": {
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -438,7 +448,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}]},
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -451,10 +465,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the closed variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the closed variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -486,7 +501,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}]},
                         "body": {"variable": "hydra.shacl.model.Closed"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -500,7 +519,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}]},
                       "body": {"variable": "hydra.shacl.model.Closed"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -511,10 +534,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the class variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the class variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -546,7 +570,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -560,7 +588,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -571,10 +603,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the datatype variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the datatype variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -606,8 +639,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}]},
                         "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -621,8 +657,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Iri"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -633,10 +672,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the disjoint variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the disjoint variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -668,8 +708,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -683,8 +726,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -695,10 +741,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the equals variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the equals variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -730,7 +777,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -744,7 +795,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -755,10 +810,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the hasValue variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the hasValue variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -790,12 +846,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.Node"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -809,12 +866,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -825,10 +883,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the in variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the in variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -860,12 +919,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}]},
                         "body": {"list": {"variable": "hydra.rdf.syntax.Node"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -879,12 +939,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}]},
                       "body": {"list": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -895,10 +956,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the languageIn variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the languageIn variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -930,10 +992,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -947,10 +1010,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -961,10 +1025,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the nodeKind variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the nodeKind variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -996,8 +1061,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}]},
                         "body": {"variable": "hydra.shacl.model.NodeKind"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1011,8 +1079,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}]},
                       "body": {"variable": "hydra.shacl.model.NodeKind"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1023,10 +1094,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the node variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the node variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1058,7 +1130,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}]},
                         "body": {
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1074,7 +1150,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}]},
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.NodeShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1087,10 +1167,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the not variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the not variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1122,7 +1203,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}]},
                         "body": {
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1138,7 +1223,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}]},
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1151,10 +1240,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maxExclusive variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maxExclusive variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1186,10 +1276,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}]},
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1203,10 +1294,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1217,10 +1309,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maxInclusive variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maxInclusive variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1252,10 +1345,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}]},
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1269,10 +1363,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1283,10 +1378,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maxLength variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maxLength variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1318,10 +1414,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}]},
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1335,10 +1432,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}]},
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1349,10 +1447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the minExclusive variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the minExclusive variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1384,10 +1483,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}]},
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1401,10 +1501,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1415,10 +1516,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the minInclusive variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the minInclusive variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1450,10 +1552,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}]},
                         "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1467,10 +1570,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.Literal"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1481,10 +1585,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the minLength variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the minLength variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1516,10 +1621,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}]},
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1533,10 +1639,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}]},
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1547,10 +1654,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the pattern variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pattern variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1582,8 +1690,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}]},
                         "body": {"variable": "hydra.shacl.model.Pattern"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -1597,8 +1708,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}]},
                       "body": {"variable": "hydra.shacl.model.Pattern"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1609,10 +1723,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the property variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the property variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1644,8 +1759,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}]},
                         "body": {
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1661,8 +1779,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}]},
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1675,10 +1796,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the or variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the or variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1710,7 +1832,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}]},
                         "body": {
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1726,7 +1852,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}]},
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1739,10 +1869,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the xone variant of hydra.shacl.model.CommonConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the xone variant of hydra.shacl.model.CommonConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1774,7 +1905,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}]},
                         "body": {
                           "set": {
                             "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1790,7 +1925,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}]},
                       "body": {
                         "set": {
                           "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}}}},
@@ -1803,7 +1942,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1907,7 +2050,11 @@
                                               "application": {
                                                 "argument": {
                                                   "annotated": {
-                                                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                                                    "annotation": {
+                                                      "map": [
+                                                        {
+                                                          "key": {"variable": "description"},
+                                                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}]},
                                                     "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                                             "parameter": "targetSubjectsOf"}},
@@ -1915,7 +2062,11 @@
                                           "application": {
                                             "argument": {
                                               "annotated": {
-                                                "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                                                "annotation": {
+                                                  "map": [
+                                                    {
+                                                      "key": {"variable": "description"},
+                                                      "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}]},
                                                 "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                                         "parameter": "targetObjectsOf"}},
@@ -1923,7 +2074,8 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                                            "annotation": {
+                                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}]},
                                             "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "targetNode"}},
@@ -1931,7 +2083,8 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}]},
                                         "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "targetClass"}},
@@ -1939,7 +2092,8 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                                    "annotation": {
+                                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}]},
                                     "body": {"variable": "hydra.shacl.model.Severity"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "severity"}},
@@ -1947,7 +2101,8 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}]},
                                 "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "message"}},
@@ -1955,7 +2110,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]},
                             "body": {"maybe": {"literal": {"boolean": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "deactivated"}},
@@ -1963,7 +2119,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}]},
                         "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "constraints"}}}},
@@ -1977,7 +2137,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}]},
                       "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1987,7 +2151,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]},
                       "body": {"maybe": {"literal": {"boolean": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1997,7 +2162,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2007,7 +2173,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}]},
                       "body": {"variable": "hydra.shacl.model.Severity"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2017,7 +2184,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2027,7 +2195,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2037,7 +2206,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2047,7 +2220,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2058,10 +2235,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2110,7 +2288,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}]},
                     "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2118,10 +2300,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the deactivated field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the deactivated field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2170,7 +2353,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]},
                     "body": {"maybe": {"literal": {"boolean": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2178,10 +2362,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the message field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the message field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2230,7 +2415,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}]},
                     "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2238,10 +2424,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the severity field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the severity field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2290,7 +2477,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}]},
                     "body": {"variable": "hydra.shacl.model.Severity"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2298,10 +2486,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the targetClass field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the targetClass field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2350,7 +2539,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}]},
                     "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2358,10 +2548,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the targetNode field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the targetNode field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2410,7 +2601,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}]},
                     "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2418,10 +2610,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the targetObjectsOf field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the targetObjectsOf field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2472,7 +2665,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}]},
                     "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2480,10 +2677,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the targetSubjectsOf field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the targetSubjectsOf field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2534,7 +2732,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}]},
                     "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2542,10 +2744,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the constraints field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the constraints field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2823,7 +3026,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}]},
                             "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2845,7 +3052,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Common constraint parameters attached to this shape"}}}]},
                       "body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2856,10 +3067,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the deactivated field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the deactivated field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3137,7 +3349,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]},
                             "body": {"maybe": {"literal": {"boolean": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3159,7 +3372,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]},
                       "body": {"maybe": {"literal": {"boolean": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3170,10 +3384,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the message field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the message field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3451,7 +3666,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}]},
                             "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3473,7 +3689,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3484,10 +3701,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the severity field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the severity field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3765,7 +3983,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}]},
                             "body": {"variable": "hydra.shacl.model.Severity"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3787,7 +4006,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}]},
                       "body": {"variable": "hydra.shacl.model.Severity"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3798,10 +4018,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the targetClass field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the targetClass field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4079,7 +4300,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4101,7 +4323,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4112,10 +4335,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the targetNode field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the targetNode field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4393,7 +4617,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4415,7 +4640,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4426,10 +4652,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the targetObjectsOf field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the targetObjectsOf field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4705,7 +4932,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4727,7 +4958,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4738,10 +4973,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the targetSubjectsOf field of hydra.shacl.model.CommonProperties"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the targetSubjectsOf field of hydra.shacl.model.CommonProperties"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5017,7 +5253,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}]},
                             "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5039,7 +5279,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5050,7 +5294,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5115,10 +5363,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the iri field of hydra.shacl.model.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the iri field of hydra.shacl.model.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5173,10 +5422,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the target field of hydra.shacl.model.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the target field of hydra.shacl.model.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5230,10 +5480,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the iri field of hydra.shacl.model.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the iri field of hydra.shacl.model.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5330,10 +5581,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the target field of hydra.shacl.model.Definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the target field of hydra.shacl.model.Definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5430,10 +5682,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the blankNode variant of hydra.shacl.model.NodeKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the blankNode variant of hydra.shacl.model.NodeKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5468,10 +5721,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the iri variant of hydra.shacl.model.NodeKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the iri variant of hydra.shacl.model.NodeKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5506,10 +5760,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the literal variant of hydra.shacl.model.NodeKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.shacl.model.NodeKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5544,10 +5799,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the blankNodeOrIri variant of hydra.shacl.model.NodeKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the blankNodeOrIri variant of hydra.shacl.model.NodeKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5582,10 +5838,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the blankNodeOrLiteral variant of hydra.shacl.model.NodeKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the blankNodeOrLiteral variant of hydra.shacl.model.NodeKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5622,10 +5879,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the iriOrLiteral variant of hydra.shacl.model.NodeKind"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the iriOrLiteral variant of hydra.shacl.model.NodeKind"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5660,7 +5918,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.NodeShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.NodeShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5709,10 +5971,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the common field of hydra.shacl.model.NodeShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the common field of hydra.shacl.model.NodeShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5764,10 +6027,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the common field of hydra.shacl.model.NodeShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the common field of hydra.shacl.model.NodeShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5826,7 +6090,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5889,10 +6155,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the regex field of hydra.shacl.model.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the regex field of hydra.shacl.model.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5942,10 +6209,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the flags field of hydra.shacl.model.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the flags field of hydra.shacl.model.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5996,8 +6264,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the regex field of hydra.shacl.model.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the regex field of hydra.shacl.model.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6088,8 +6359,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "DSL updater for the flags field of hydra.shacl.model.Pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the flags field of hydra.shacl.model.Pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6180,7 +6454,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6276,7 +6554,8 @@
                                       "application": {
                                         "argument": {
                                           "annotated": {
-                                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                                            "annotation": {
+                                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]},
                                             "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "order"}},
@@ -6284,7 +6563,8 @@
                                   "application": {
                                     "argument": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                                         "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                                 "parameter": "name"}},
@@ -6292,7 +6572,8 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                                    "annotation": {
+                                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                                     "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "description"}},
@@ -6300,7 +6581,9 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}]},
                                 "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "defaultValue"}},
@@ -6308,7 +6591,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}]},
                             "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "constraints"}},
@@ -6330,7 +6617,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}]},
                       "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6340,7 +6631,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}]},
                       "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6350,7 +6643,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6360,7 +6654,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6370,7 +6665,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]},
                       "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -6385,10 +6681,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the common field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the common field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6440,10 +6737,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the constraints field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6492,7 +6790,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}]},
                     "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6500,10 +6802,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the defaultValue field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the defaultValue field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6554,7 +6857,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}]},
                     "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6562,10 +6867,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the description field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the description field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6614,7 +6920,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                     "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6622,10 +6929,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6674,7 +6982,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                     "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6682,10 +6991,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the order field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the order field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6734,7 +7044,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]},
                     "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -6742,10 +7053,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the path field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the path field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6796,10 +7108,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the common field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the common field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7064,10 +7377,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the constraints field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the constraints field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7309,7 +7623,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}]},
                             "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7331,7 +7649,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any property shape -specific constraint parameters"}}}]},
                       "body": {"set": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7342,10 +7664,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the defaultValue field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the defaultValue field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7585,7 +7908,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}]},
                             "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7607,7 +7932,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}]},
                       "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7618,10 +7945,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the description field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the description field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7863,7 +8191,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                             "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -7885,7 +8214,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -7896,10 +8226,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8141,7 +8472,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                             "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8163,7 +8495,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}]},
                       "body": {"variable": "hydra.rdf.syntax.LangStrings"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8174,10 +8507,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the order field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the order field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8419,7 +8753,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]},
                             "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -8441,7 +8776,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]},
                       "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8452,10 +8788,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the path field of hydra.shacl.model.PropertyShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the path field of hydra.shacl.model.PropertyShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8718,10 +9055,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the lessThan variant of hydra.shacl.model.PropertyShapeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lessThan variant of hydra.shacl.model.PropertyShapeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8753,8 +9091,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -8768,8 +9109,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8782,10 +9126,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the lessThanOrEquals variant of hydra.shacl.model.PropertyShapeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lessThanOrEquals variant of hydra.shacl.model.PropertyShapeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8817,10 +9162,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}]},
                         "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -8834,10 +9180,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}]},
                       "body": {"set": {"variable": "hydra.rdf.syntax.Property"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8850,10 +9197,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the maxCount variant of hydra.shacl.model.PropertyShapeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the maxCount variant of hydra.shacl.model.PropertyShapeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8885,12 +9233,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}]},
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -8904,12 +9253,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}]},
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8922,10 +9272,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the minCount variant of hydra.shacl.model.PropertyShapeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the minCount variant of hydra.shacl.model.PropertyShapeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8957,12 +9308,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}]},
                         "body": {"literal": {"integer": {"bigint": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -8976,12 +9328,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}]},
                       "body": {"literal": {"integer": {"bigint": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -8994,10 +9347,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the uniqueLang variant of hydra.shacl.model.PropertyShapeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the uniqueLang variant of hydra.shacl.model.PropertyShapeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9029,10 +9383,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}]},
                         "body": {"literal": {"boolean": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -9046,10 +9401,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}]},
                       "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9062,11 +9418,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the qualifiedValueShape variant of hydra.shacl.model.PropertyShapeConstraint"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the qualifiedValueShape variant of hydra.shacl.model.PropertyShapeConstraint"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9100,10 +9457,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}]},
                         "body": {"variable": "hydra.shacl.model.QualifiedValueShape"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -9117,10 +9475,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}]},
                       "body": {"variable": "hydra.shacl.model.QualifiedValueShape"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -9133,7 +9492,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9251,10 +9614,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the qualifiedValueShape field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the qualifiedValueShape field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9311,10 +9675,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the qualifiedMaxCount field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the qualifiedMaxCount field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9368,10 +9733,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the qualifiedMinCount field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the qualifiedMinCount field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9425,11 +9791,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL accessor for the qualifiedValueShapesDisjoint field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL accessor for the qualifiedValueShapesDisjoint field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9483,10 +9850,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the qualifiedValueShape field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the qualifiedValueShape field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9667,10 +10035,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the qualifiedMaxCount field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the qualifiedMaxCount field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9845,10 +10214,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the qualifiedMinCount field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the qualifiedMinCount field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10023,11 +10393,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL updater for the qualifiedValueShapesDisjoint field of hydra.shacl.model.QualifiedValueShape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL updater for the qualifiedValueShapesDisjoint field of hydra.shacl.model.QualifiedValueShape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10202,10 +10573,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the named variant of hydra.shacl.model.Reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the named variant of hydra.shacl.model.Reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10252,10 +10624,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the anonymous variant of hydra.shacl.model.Reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the anonymous variant of hydra.shacl.model.Reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10287,7 +10660,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An anonymous instance"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An anonymous instance"}}}]},
                         "body": {"variable": "a"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -10301,7 +10674,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An anonymous instance"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An anonymous instance"}}}]},
                       "body": {"variable": "a"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -10314,10 +10687,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the definition variant of hydra.shacl.model.Reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the definition variant of hydra.shacl.model.Reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10349,7 +10723,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An inline definition"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline definition"}}}]},
                         "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -10363,7 +10737,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An inline definition"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline definition"}}}]},
                       "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -10376,10 +10750,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the info variant of hydra.shacl.model.Severity"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the info variant of hydra.shacl.model.Severity"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -10414,10 +10789,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the warning variant of hydra.shacl.model.Severity"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the warning variant of hydra.shacl.model.Severity"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -10452,10 +10828,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the violation variant of hydra.shacl.model.Severity"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the violation variant of hydra.shacl.model.Severity"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -10490,10 +10867,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the node variant of hydra.shacl.model.Shape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the node variant of hydra.shacl.model.Shape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10540,10 +10918,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the property variant of hydra.shacl.model.Shape"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the property variant of hydra.shacl.model.Shape"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10590,10 +10969,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for the hydra.shacl.model.ShapesGraph wrapper"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.shacl.model.ShapesGraph wrapper"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10641,7 +11021,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the body of hydra.shacl.model.ShapesGraph"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.shacl.model.ShapesGraph"}}}]},
             "body": {
               "lambda": {
                 "body": {

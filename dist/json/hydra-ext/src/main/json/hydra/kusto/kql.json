@@ -103,10 +103,11 @@
                 "name": "distinct",
                 "type": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator"}}}]},
                     "body": {"list": {"variable": "hydra.kusto.kql.ColumnName"}}}}},
               {"name": "extend", "type": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}}},
               {"name": "join", "type": {"variable": "hydra.kusto.kql.JoinCommand"}},
@@ -126,7 +127,11 @@
                 "name": "take",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Limit a search to a specified number of results"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Limit a search to a specified number of results"}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}}},
               {"name": "top", "type": {"variable": "hydra.kusto.kql.TopCommand"}},
               {"name": "union", "type": {"variable": "hydra.kusto.kql.UnionCommand"}},
@@ -334,10 +339,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Search across all datasets and columns or, if provided, specific datasets and/or columns"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Search across all datasets and columns or, if provided, specific datasets and/or columns"}}}]},
               "body": {
                 "record": [
                   {"name": "datasets", "type": {"list": {"variable": "hydra.kusto.kql.TableName"}}},

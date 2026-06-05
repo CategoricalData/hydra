@@ -705,76 +705,127 @@ See the [full style guide](https://github.com/CategoricalData/hydra/wiki/Coding-
 
 ## Verifying primitive consistency
 
-Primitives are defined in Haskell and reimplemented in each target language.
-Several kinds of inconsistency can creep in:
+Primitive metadata is single-sourced per the `PrimitiveDefinition` model (#156): each
+primitive's name, signature, description, comments, purity / totality flags, and
+optional default implementation are declared once in a kernel-side registry, and every
+host's native code consumes the same canonical metadata. The classes of drift that
+remain are around the host-side bindings — pairing each canonical name with its native
+implementation — and around the native implementations themselves:
 
-- A primitive exists in one language but is missing from another.
-- A primitive is implemented but not registered (invisible at runtime).
-- Type schemes differ subtly — especially the **order of `forall` type variables**,
-  which causes hard-to-diagnose inference and type-checking errors.
-- Documentation comments differ across languages.
+- A primitive's canonical metadata exists but a host's native implementation is missing
+  or unregistered (invisible at runtime in that host).
+- A host implementation exists but is not registered in the host's binding registry.
+- Native behavior diverges from the canonical signature or comments (e.g. a host
+  returns a different type, or its native behavior contradicts the documented
+  semantics).
 
-### Registration files
+### Canonical registries (single source of truth)
 
-Each implementation has a registration file that maps primitive names to implementations:
+Each `hydra.lib.<sub>` module has a registry under
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`:
 
-| Implementation | Registration file |
-|---------------|-------------------|
-| Haskell | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Java | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` |
-| Python | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` |
-| Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
+| Namespace | Registry |
+|-----------|----------|
+| `hydra.lib.chars`     | `Hydra/Sources/Kernel/Lib/Chars.hs`     |
+| `hydra.lib.eithers`   | `Hydra/Sources/Kernel/Lib/Eithers.hs`   |
+| `hydra.lib.equality`  | `Hydra/Sources/Kernel/Lib/Equality.hs`  |
+| `hydra.lib.lists`     | `Hydra/Sources/Kernel/Lib/Lists.hs`     |
+| `hydra.lib.literals`  | `Hydra/Sources/Kernel/Lib/Literals.hs`  |
+| `hydra.lib.logic`     | `Hydra/Sources/Kernel/Lib/Logic.hs`     |
+| `hydra.lib.maps`      | `Hydra/Sources/Kernel/Lib/Maps.hs`      |
+| `hydra.lib.math`      | `Hydra/Sources/Kernel/Lib/Math.hs`      |
+| `hydra.lib.maybes`    | `Hydra/Sources/Kernel/Lib/Maybes.hs`    |
+| `hydra.lib.pairs`     | `Hydra/Sources/Kernel/Lib/Pairs.hs`     |
+| `hydra.lib.regex`     | `Hydra/Sources/Kernel/Lib/Regex.hs`     |
+| `hydra.lib.sets`      | `Hydra/Sources/Kernel/Lib/Sets.hs`      |
+| `hydra.lib.strings`   | `Hydra/Sources/Kernel/Lib/Strings.hs`   |
+
+Each registry calls `primDef` or `primNoDef` to declare a `PrimitiveDefinition`:
+local name, description, `TermSignature`, optional comments, and either a default
+Hydra-term implementation (`primDef`) or nothing (`primNoDef`). Each `TermSignature`
+is built from a `TypeScheme` whose `forall` variable order is significant.
+
+### Host-side binding registries
+
+Each host pairs canonical primitive names with native implementations in a registry:
+
+| Host | Binding registry |
+|------|------------------|
+| Haskell    | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Java       | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
+| Python     | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418) |
+| Scala      | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
 | TypeScript | `heads/typescript/src/test/typescript/hydra/test/libraries.ts` |
-| Clojure | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
+| Clojure    | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
-### Checking primitive coverage
+These registries call host-side helpers (`prim0`/`prim1`/`prim2` in Haskell's
+`Hydra.Dsl.Prims`, equivalents in each other host) to pair a name with a native
+function. The host helper re-derives a `PrimitiveDefinition` from the host-side
+argument types via `defaultPrimitiveDefinition`; the canonical kernel-side
+registry is the authority, and the host re-derivation must agree. On the Haskell
+side this is what keeps the bootstrap graph aligned with the JSON kernel; other
+hosts consume the JSON kernel directly and therefore inherit the canonical
+metadata automatically (subject to their own audit of the native implementation
+matching).
 
-1. **Extract the canonical list** from the Haskell registration
-   (`Libraries.hs`), which defines all primitive names and their types
-   via `prim1`, `prim2`, `prim2Eval`, `prim3` calls.
+### Checking host coverage
 
-2. **Compare against each implementation's registration.**
-   Each implementation registers primitives differently,
-   but the set of fully qualified primitive names should match.
+The set of canonical primitive names must be matched by each host's binding registry.
+
+1. **Extract the canonical name list** from the per-namespace kernel registries:
    ```bash
-   # Extract Haskell primitive names
-   grep -E 'prim[0-3]' packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs \
-     | grep -oE '_[a-z]+_[a-zA-Z]+' | sort -u
-
-   # Compare against Java class files
-   find overlay/java/hydra-kernel/src/main/java/hydra/lib -name '*.java' \
-     ! -name 'Libraries.java' | sort
+   grep -hE 'primDef|primNoDef' \
+     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/*.hs \
+     | grep -oE '"[a-zA-Z]+"' | sort -u
    ```
+   (Combined with the namespace from each file's `ns = ModuleName "hydra.lib.<sub>"`
+   to recover fully qualified names.)
 
-3. **Verify registration completeness.**
-   A primitive class can exist but be invisible if it's not listed in the registration file.
-   For each implementation, check that every primitive implementation file
-   has a corresponding entry in the registration.
+2. **Compare against each host's binding registry.**
+   The set of qualified names registered should match the canonical set.
 
-### Checking type signature consistency
+3. **Verify native implementation completeness.**
+   A native implementation file may exist but be invisible if not registered.
+   Cross-reference the registry against the implementation files in each
+   `heads/<lang>/.../lib/` tree.
 
-This is the most error-prone area.
-The canonical type signatures are in `Libraries.hs`, specified as arguments to `prim1`/`prim2`/etc.
-Each Java primitive class has a `type()` method returning a `TypeScheme`;
-Python and Clojure registrations specify types inline.
+### Checking signature consistency
 
-**Critical: `forall` variable ordering must match.**
-For example, if `Libraries.hs` defines `foldl` with type variables `[_y, _x]`,
-every implementation must use the same order (`y` before `x`).
-A mismatch causes the type checker to assign the wrong type to each variable,
-leading to inference failures that don't point back to the primitive as the root cause.
+The kernel-side `TermSignature` (built from a `TypeScheme`) is authoritative,
+but the Haskell-host `Libraries.hs` re-declares each primitive's argument types
+through `prim0`/`prim1`/`prim2`. If the two sides drift — different argument
+types, or different `forall` variable orders — the bootstrap graph and the JSON
+kernel disagree, which surfaces as confusing inference failures downstream.
+
+**Critical: `forall` variable ordering must match between the two declarations.**
+For example, `Hydra/Sources/Kernel/Lib/Lists.hs` defines
+`foldlSig = sig $ TypeScheme [Name "y", Name "x"] ...`; the Haskell-host
+`Libraries.hs` registration for `foldl` must also pass `[_y, _x]` (in that
+order) to its `prim*` helper. A mismatch causes the type checker to assign the
+wrong type to each variable, producing inference failures that do not point
+back to the primitive as the root cause.
 
 To check:
-1. Extract the type variable lists from `Libraries.hs` (the `[_x]`, `[_y, _x]`, etc. arguments).
-2. Compare against the `TypeScheme` in each Java primitive's `type()` method.
-3. Compare against the type variable lists in Python and Clojure registrations.
+1. Locate the canonical `<Name>Sig` in the kernel registry (e.g.
+   `Hydra/Sources/Kernel/Lib/Lists.hs`).
+2. Compare against the Haskell-host registration in `Libraries.hs` — same
+   `forall` variables in the same order; same argument and result types.
+3. For other hosts, verify the native implementation respects the canonical
+   argument and result types after the standard `host ↔ kernel` type mapping.
+
+Native implementations should also respect the canonical purity and totality flags:
+a primitive declared `isPure = true` must not have observable side effects in any
+host; one declared `isTotal = true` must not partially fail on inputs of its
+declared type.
 
 ### Checking documentation consistency
 
-Primitive documentation comments should be the same across all languages.
-The canonical descriptions are in `Libraries.hs` (as `doc` strings on the Source definitions)
-or in the Haskell implementation files (`heads/haskell/src/main/haskell/Hydra/Lib/*.hs`).
-Check that the Javadoc, Python docstrings, and Clojure docstrings match.
+The `description`, `comments`, `availableSince`, and `deprecatedSince` fields on
+each `PrimitiveDefinition` are the canonical user-facing documentation. Host
+native code may add language-idiomatic doc-comments (Javadoc, Python docstrings,
+Clojure docstrings) as a convenience, but these must not contradict the canonical
+text. When in doubt, the kernel registry wins; host doc-comments are a mirror,
+not an additional source of truth.
 
 ### See also
 

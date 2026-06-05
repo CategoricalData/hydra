@@ -6,10 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Try the first parser; if it fails without consuming input, try the second"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Try the first parser; if it fails without consuming input, try the second"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -116,7 +117,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse any single character (codepoint)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse any single character (codepoint)"}}}]},
             "body": {
               "application": {
                 "argument": {
@@ -136,10 +138,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Apply a parser containing a function to a parser containing a value"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Apply a parser containing a function to a parser containing a value"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -310,7 +313,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Parse something between an opening and closing parser"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Parse something between an opening and closing parser"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -394,10 +401,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Sequence two parsers, passing the result of the first to a function that produces the second"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Sequence two parsers, passing the result of the first to a function that produces the second"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -498,7 +506,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a specific character (codepoint)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a specific character (codepoint)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -529,7 +538,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Try each parser in the list until one succeeds"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Try each parser in the list until one succeeds"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -567,7 +578,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A parser that succeeds only at the end of input"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A parser that succeeds only at the end of input"}}}]},
             "body": {
               "typeApplication": {
                 "body": {
@@ -635,7 +650,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "A parser that always fails with the given error message"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "A parser that always fails with the given error message"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -674,12 +693,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Create a parser that defers construction of another parser until parsing time. This is essential for breaking recursive parser definitions."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Create a parser that defers construction of another parser until parsing time. This is essential for breaking recursive parser definitions."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -723,7 +743,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Parse zero or more occurrences of the given parser"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Parse zero or more occurrences of the given parser"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -759,7 +783,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Apply a function to the result of a parser"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Apply a function to the result of a parser"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -867,7 +892,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Optionally parse something, returning Nothing if it fails"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Optionally parse something, returning Nothing if it fails"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -907,10 +936,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "A parser that always succeeds with the given value without consuming input"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "A parser that always succeeds with the given value without consuming input"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -952,7 +982,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Run a parser on the given input string"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Run a parser on the given input string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -983,10 +1014,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Parse a character (codepoint) that satisfies the given predicate"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a character (codepoint) that satisfies the given predicate"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1130,7 +1162,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Parse zero or more occurrences separated by a separator"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Parse zero or more occurrences separated by a separator"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1181,7 +1217,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Parse one or more occurrences separated by a separator"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Parse one or more occurrences separated by a separator"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1259,7 +1299,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Parse one or more occurrences of the given parser"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Parse one or more occurrences of the given parser"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1317,7 +1361,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a specific string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a specific string"}}}]},
             "body": {
               "lambda": {
                 "body": {

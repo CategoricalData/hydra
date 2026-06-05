@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Default Tinkerpop annotation schema"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Default Tinkerpop annotation schema"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -32,7 +32,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Example property graph schema with string values"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Example property graph schema with string values"}}}]},
                 "body": {
                   "typeApplication": {
                     "body": {
@@ -359,7 +363,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a string from a term using the empty graph"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract a string from a term using the empty graph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -434,7 +442,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Get all elements from a lazy graph"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get all elements from a lazy graph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -516,7 +524,8 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a property graph element to JSON"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a property graph element to JSON"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1400,7 +1409,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a list of property graph elements to JSON"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convert a list of property graph elements to JSON"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1500,7 +1513,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Get all elements from a property graph"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get all elements from a property graph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1594,7 +1608,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type-annotated term to property graph elements"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convert a type-annotated term to property graph elements"}}}]},
                         "body": {
                           "lambda": {
                             "body": {

@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Apply a variable to a term, performing substitution for lambdas"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Apply a variable to a term, performing substitution for lambdas"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -95,10 +96,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Construct a Scala package from a Hydra module and its definitions"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Construct a Scala package from a Hydra module and its definitions"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -326,10 +328,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Drop N domain types from a function type, returning the remaining type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Drop N domain types from a function type, returning the remaining type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -404,7 +407,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a case branch"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a case branch"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -857,10 +860,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a complex term definition with proper parameter types from the type signature"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a complex term definition with proper parameter types from the type signature"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1343,10 +1347,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a Hydra function-valued term (lambda, project, cases, or unwrap) as a Scala expression"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra function-valued term (lambda, project, cases, or unwrap) as a Scala expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2325,11 +2330,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2733,7 +2739,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a literal value as a Scala literal"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a literal value as a Scala literal"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -3101,10 +3108,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a local def. outerTypeVars are type params already in scope (don't redeclare them)."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a local def. outerTypeVars are type params already in scope (don't redeclare them)."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3614,7 +3622,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra term as a Scala expression"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra term as a Scala expression"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5953,7 +5962,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a term definition as a Scala statement"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a term definition as a Scala statement"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6203,7 +6214,7 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type as a Scala type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra type as a Scala type"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -7736,7 +7747,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type definition as a Scala statement"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type definition as a Scala statement"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -8732,7 +8745,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a parameter with its type annotation"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a parameter with its type annotation"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -8840,8 +8854,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Encode an untyped application term by first inferring types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an untyped application term by first inferring types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8902,7 +8919,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the innermost body from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the innermost body from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8970,7 +8988,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the final return type from a function type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract the final return type from a function type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9016,7 +9038,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract domain types from a function type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract domain types from a function type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9071,7 +9094,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract let bindings from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract let bindings from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9146,7 +9169,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract parameter names from a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract parameter names from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -9225,7 +9248,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field type to a Scala enum case"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a field type to a Scala enum case"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -9493,7 +9517,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field type to a Scala parameter"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a field type to a Scala parameter"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -9590,7 +9615,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find the domain type from annotations"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the domain type from annotations"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9742,7 +9768,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find import statements for the module"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find import statements for the module"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9884,7 +9911,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find the Scala domain type for a function from annotations"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find the Scala domain type for a function from annotations"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -10153,7 +10184,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra module to Scala source code"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra module to Scala source code"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -10257,10 +10289,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Strip wrap eliminations from terms (newtypes are erased in Scala)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Strip wrap eliminations from terms (newtypes are erased in Scala)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10370,7 +10403,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an element import statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create an element import statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10432,7 +10465,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a primitive import statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a primitive import statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -10494,7 +10527,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type parameter to a type variable reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a type parameter to a type variable reference"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Hydra Core, i.e. no constraints."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Language constraints for Hydra Core, i.e. no constraints."}}}]},
             "body": {
               "let": {
                 "bindings": [
