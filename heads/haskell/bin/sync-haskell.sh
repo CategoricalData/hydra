@@ -239,10 +239,11 @@ echo "  (No post-processing needed — all patches eliminated, see #307.)"
 # packages like hydra-ext, which import Hydra.Haskell.Lib.{Pairs,Strings,...})
 # fail with "Could not find module 'Hydra.Haskell.Lib.Pairs'". The overlay
 # script is idempotent. (#418)
+echo ""
 "$SCRIPT_DIR/overlay-kernel-runtime.sh"
 
 # Rebuild so subsequent steps (test, lexicon) pick up step 4's regenerated
-# Haskell dist.
+# Haskell dist plus the freshly-re-overlaid runtime.
 echo ""
 echo "  Rebuilding..."
 stack build

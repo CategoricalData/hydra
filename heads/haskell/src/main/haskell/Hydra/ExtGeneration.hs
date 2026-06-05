@@ -61,82 +61,52 @@ import qualified System.IO as SIO
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeCpp = generateSources moduleToCpp cppLanguage True False False False
+writeCpp = generateSources moduleToCpp cppLanguage True
 
 -- | Generate GraphQL source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeGraphql = generateSources moduleToGraphql graphqlLanguage True False False False
+writeGraphql = generateSources moduleToGraphql graphqlLanguage True
 
 -- | Generate GraphQL source files without type adaptation.
 -- Useful when the source types include constructs (like forall) that the adapter doesn't handle,
 -- but the coder can encode directly.
 writeGraphqlRaw :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeGraphqlRaw = generateSources moduleToGraphql graphqlLanguage False False False False
+writeGraphqlRaw = generateSources moduleToGraphql graphqlLanguage False
 
 -- | Generate Java source files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
--- Note: Java uses doHoistPolymorphicLetBindings=True to hoist polymorphic let bindings to class level
+-- Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
+-- come from javaLanguage's supportedFeatures.
 writeJava :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeJava = generateSources moduleToJava javaLanguage True True False True
+writeJava = generateSources moduleToJava javaLanguage True
 
 -- | Generate JSON Schema files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
 writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeJsonSchema = generateSources moduleToJsonSchema jsonSchemaLanguage True False False False
+writeJsonSchema = generateSources moduleToJsonSchema jsonSchemaLanguage True
 
 -- | Generate PDL (Pegasus) source files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
 writePdl :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writePdl = generateSources moduleToPdl pdlLanguage True False False False
+writePdl = generateSources moduleToPdl pdlLanguage True
 
 -- | Generate Protocol Buffers source files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
 writeProtobuf :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeProtobuf = generateSources moduleToProtobuf protobufLanguage True False False False
+writeProtobuf = generateSources moduleToProtobuf protobufLanguage True
 
 -- | Generate Python source files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
--- Note: Python uses doHoistCaseStatements=True to hoist case statements to let bindings
+-- Emission flags come from pythonLanguage's supportedFeatures.
 writePython :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writePython = generateSources moduleToPython pythonLanguage True True True False
+writePython = generateSources moduleToPython pythonLanguage True
 
 -- | Generate Rust source files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeRust = generateSources moduleToRust rustLanguage True False False False
+writeRust = generateSources moduleToRust rustLanguage True
 
 -- | Generate TypeScript source files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
--- doExpand=True so the kernel's adapt step eta-expands partially-applied
--- top-level terms (e.g. `capitalize = mapFirstLetter toUpper`) up to their
--- declared scheme arity. Matches Python's behavior. Without this, the TS
--- coder emits `export const capitalize = mapFirstLetter(toUpper)` which
--- calls a 2-arg function with 1 arg and crashes at runtime.
--- doHoistCaseStatements=True: matches the per-target dispatch in
--- heads/typescript/.../bootstrap.ts. Hoisting pulls cases out of inline
--- IIFEs into top-level helper functions, saving ~2 JS frames per cases
--- dispatch. Without hoisting, the TS-implemented kernel exhausts V8's
--- stack on deeply-nested terms (e.g. when TS hosts the Java coder).
--- See feature_126_typescript-plan.md for measurements.
+-- Emission flags come from typeScriptLanguage's supportedFeatures.
 writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage False True True False
+writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage False
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory
@@ -156,7 +126,7 @@ writeCoq basePath universeModules modulesToGenerate =
       -- non-lib source (`hydra.show.core.maybe`) stay fully qualified.
       an = Set.union (globalAmbiguousNames allMods) coqLibPrimitiveNames
       sa = globalSanitizedAccessors allMods
-  in generateSources (moduleToCoq fm cc an sa) coqLanguage True False False False basePath universeModules modulesToGenerate
+  in generateSources (moduleToCoq fm cc an sa) coqLanguage True basePath universeModules modulesToGenerate
 
 -- | Names of Hydra primitive library functions exported by `hydra.lib.*`
 -- Coq modules. These are invisible to `globalAmbiguousNames` (which walks
@@ -218,16 +188,16 @@ moduleToLispDialect dialect ext mod defs cx g =
       in Right (M.singleton filePath code)
 
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeClojure = generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj") lispLanguage True False False False
+writeClojure = generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj") lispLanguage True
 
 writeScheme :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeScheme = generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm") lispLanguage True False False False
+writeScheme = generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm") lispLanguage True
 
 writeCommonLisp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeCommonLisp = generateSources (moduleToLispDialect LispSyntax.DialectCommonLisp "lisp") lispLanguage True False False False
+writeCommonLisp = generateSources (moduleToLispDialect LispSyntax.DialectCommonLisp "lisp") lispLanguage True
 
 writeEmacsLisp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el") lispLanguage True False False False
+writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el") lispLanguage True
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
@@ -242,14 +212,11 @@ writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLis
 -- post-pass on disk.
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeScala = generateSourcesWithTransform wrapLongScalaText
-  moduleToScala scalaLanguage True True False False
+  moduleToScala scalaLanguage True
 
 -- | Generate WebAssembly text format (WAT) files from modules.
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
 writeWasm :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeWasm = generateSources moduleToWasm wasmLanguage True False False False
+writeWasm = generateSources moduleToWasm wasmLanguage True
 
 -- | Soft maximum line length for generated source files in any target
 --   language. Lines longer than this are broken at the first eligible break
