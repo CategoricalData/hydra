@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build the complete Java test module content"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Build the complete Java test module content"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -135,7 +136,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Standard imports for Java JUnit test files"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Standard imports for Java JUnit test files"}}}]},
             "body": {
               "list": [
                 {"literal": {"string": "import org.junit.jupiter.api.Test;"}},
@@ -147,10 +149,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Format a test name for Java (PascalCase method name with 'test' prefix)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Format a test name for Java (PascalCase method name with 'test' prefix)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -236,10 +239,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Generate a single JUnit test case from a test case with metadata"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate a single JUnit test case from a test case with metadata"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -372,7 +376,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a Java test file for a test group"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a Java test file for a test group"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -413,7 +418,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate test hierarchy for Java with nested subgroups"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate test hierarchy for Java with nested subgroups"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -653,7 +662,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a complete test file for Java"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a complete test file for Java"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -798,7 +808,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert namespace to Java class name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert namespace to Java class name"}}}]},
             "body": {
               "lambda": {
                 "body": {

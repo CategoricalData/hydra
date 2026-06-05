@@ -6,7 +6,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Build the complete Python test module content"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Build the complete Python test module content"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -64,8 +66,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Format a test name for Python (snake_case with test_ prefix)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Format a test name for Python (snake_case with test_ prefix)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -110,10 +115,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Generate a single pytest test case from a test case with metadata"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate a single pytest test case from a test case with metadata"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -245,7 +251,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a Python test file for a test group"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a Python test file for a test group"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -286,7 +293,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate test hierarchy for Python with nested subgroups"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate test hierarchy for Python with nested subgroups"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -512,7 +523,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a complete test file for Python"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a complete test file for Python"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

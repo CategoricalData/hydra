@@ -87,7 +87,7 @@ public interface Terms {
         // Term.Map's key type is Term, so lift each Name to a Term.Variable.
         PersistentMap<Term, Term> entries = PersistentMap.empty();
         for (Map.Entry<Name, Term> e : ann.entrySet()) {
-            entries = entries.put(new Term.Variable(e.getKey()), e.getValue());
+            entries = entries.insert(new Term.Variable(e.getKey()), e.getValue());
         }
         return new Term.Map(entries);
     }
