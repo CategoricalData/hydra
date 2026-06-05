@@ -63,11 +63,45 @@ public class Language {
     private static TypedTerm<?> integerType(String which) {
         return variant("hydra.core.IntegerType", which);
     }
-    /** {@code Coders.language(name, constraints)} expands to a Record term. */
-    private static TypedTerm<?> codersLanguage(TypedTerm<?> name, TypedTerm<?> constraints) {
+    /** {@code Coders.language(name, constraints, features, caseConv, ext)} expands to a Record term. */
+    private static TypedTerm<?> codersLanguage(TypedTerm<?> name, TypedTerm<?> constraints,
+            TypedTerm<?> supportedFeatures, TypedTerm<?> caseConventions, TypedTerm<?> defaultFileExtension) {
         return record("hydra.coders.Language",
             field("name", name),
-            field("constraints", constraints));
+            field("constraints", constraints),
+            field("supportedFeatures", supportedFeatures),
+            field("caseConventions", caseConventions),
+            field("defaultFileExtension", defaultFileExtension));
+    }
+    /** Construct a CaseConventions record (10 case-convention fields). */
+    private static TypedTerm<?> codersCaseConventions(
+            TypedTerm<?> constant, TypedTerm<?> directory, TypedTerm<?> enumValue,
+            TypedTerm<?> field_, TypedTerm<?> file, TypedTerm<?> module,
+            TypedTerm<?> term, TypedTerm<?> termVariable, TypedTerm<?> type_,
+            TypedTerm<?> typeVariable) {
+        return record("hydra.coders.CaseConventions",
+            field("constant", constant),
+            field("directory", directory),
+            field("enumValue", enumValue),
+            field("field", field_),
+            field("file", file),
+            field("module", module),
+            field("term", term),
+            field("termVariable", termVariable),
+            field("type", type_),
+            field("typeVariable", typeVariable));
+    }
+    /** Inject the named LanguageFeature variant (unit-tagged). */
+    private static TypedTerm<?> codersLanguageFeature(String variant) {
+        return injectUnit("hydra.coders.LanguageFeature", variant);
+    }
+    /** Inject the named CaseConvention variant (unit-tagged). */
+    private static TypedTerm<?> codersCaseConvention(String variant) {
+        return injectUnit("hydra.util.CaseConvention", variant);
+    }
+    /** Wrap a string as a FileExtension. */
+    private static TypedTerm<?> codersFileExtension(String ext) {
+        return wrap("hydra.util.FileExtension", string(ext));
     }
     /** {@code Coders.languageName2(x)} expands to a Wrap term. */
     private static TypedTerm<?> codersLanguageName2(TypedTerm<?> x) {
@@ -188,7 +222,16 @@ public class Language {
                         var("integerTypes"),
                         var("termVariants"),
                         var("typeVariants"),
-                        var("typePredicate")))));
+                        var("typePredicate")),
+                    setsFromList("hydra.coders.LanguageFeature",
+                        list(codersLanguageFeature("nestedCaseStatements"))),
+                    codersCaseConventions(
+                        codersCaseConvention("upperSnake"), codersCaseConvention("camel"),
+                        codersCaseConvention("upperSnake"), codersCaseConvention("camel"),
+                        codersCaseConvention("pascal"),     codersCaseConvention("camel"),
+                        codersCaseConvention("camel"),     codersCaseConvention("camel"),
+                        codersCaseConvention("pascal"),    codersCaseConvention("pascal")),
+                    codersFileExtension("java"))));
         return termDef(NS, "javaLanguage", body.value);
     }
 
