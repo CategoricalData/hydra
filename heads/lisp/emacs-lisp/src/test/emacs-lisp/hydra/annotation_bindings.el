@@ -112,12 +112,12 @@
           (hydra--t-lam "key"
             (hydra--t-lam "val"
               (hydra--t-lam "m"
-                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.maybe")
+                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.cases")
+                  (hydra--t-var "val"))
                   (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.delete") (hydra--t-var "key")) (hydra--t-var "m")))
                   (hydra--t-lam "v"
                     (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.insert")
-                      (hydra--t-var "key")) (hydra--t-var "v")) (hydra--t-var "m"))))
-                  (hydra--t-var "val"))))))
+                      (hydra--t-var "key")) (hydra--t-var "v")) (hydra--t-var "m"))))))))
 
     ;; hydra.annotations.setTermAnnotation = \key -> \val -> \term ->
     ;;   let stripped = deannotateTerm(term)
@@ -171,7 +171,11 @@
           (hydra--t-lam "cx"
             (hydra--t-lam "g"
               (hydra--t-lam "anns"
-                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.maybe")
+                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.cases")
+                  ;; scrutinee: maps.lookup(keyDescription, anns)
+                  (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.lookup")
+                    (hydra--t-var "hydra.constants.keyDescription"))
+                    (hydra--t-var "anns")))
                   ;; default: right(nothing)
                   (hydra--t-right (list :maybe (list :nothing nil))))
                   ;; \descTerm -> case match to extract string
@@ -188,11 +192,7 @@
                                   (hydra--t-lam "s"
                                     (hydra--t-right (list :maybe (hydra--t-var "s"))))))
                               (hydra--t-var "lit")))))
-                      (hydra--t-var "descTerm"))))
-                  ;; maps.lookup(keyDescription, anns)
-                  (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.lookup")
-                    (hydra--t-var "hydra.constants.keyDescription"))
-                    (hydra--t-var "anns")))))))
+                      (hydra--t-var "descTerm"))))))))
 
     ;; hydra.annotations.getTermDescription = \cx -> \g -> \term ->
     ;;   let peel = \t -> case t of

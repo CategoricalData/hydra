@@ -119,12 +119,12 @@
               (t-lam "key"
                 (t-lam "val"
                   (t-lam "m"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.maybe")
+                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.cases")
+                      (t-var "val"))
                       (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
                       (t-lam "v"
                         (t-app (t-app (t-app (t-prim "hydra.lib.maps.insert")
-                          (t-var "key")) (t-var "v")) (t-var "m"))))
-                      (t-var "val"))))))
+                          (t-var "key")) (t-var "v")) (t-var "m"))))))))
 
         (list "hydra.annotations.setTermAnnotation"
               (t-lam "key"
@@ -165,7 +165,10 @@
               (t-lam "cx"
                 (t-lam "g"
                   (t-lam "anns"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.maybe")
+                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.cases")
+                      (t-app (t-app (t-prim "hydra.lib.maps.lookup")
+                        (t-var "hydra.constants.keyDescription"))
+                        (t-var "anns")))
                       (t-right (list 'maybe (list 'nothing '()))))
                       (t-lam "descTerm"
                         (t-app
@@ -180,10 +183,7 @@
                                       (t-lam "s"
                                         (t-right (list 'maybe (t-var "s"))))))
                                   (t-var "lit")))))
-                          (t-var "descTerm"))))
-                      (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                        (t-var "hydra.constants.keyDescription"))
-                        (t-var "anns")))))))
+                          (t-var "descTerm"))))))))
 
         (list "hydra.annotations.getTermDescription"
               (t-lam "cx"

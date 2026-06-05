@@ -99,15 +99,6 @@ def map_maybe(f: Callable[[A], Maybe[B]], xs: Sequence[A]) -> frozenlist[B]:
     return tuple(result)
 
 
-def maybe(default: B | Callable[[], B], f: Callable[[A], B], x: Maybe[A]) -> B:
-    """Eliminate an optional value with a default and a function."""
-    match x:
-        case Nothing():
-            return default() if callable(default) else default  # type: ignore[return-value]
-        case Just(val):
-            return f(val)
-
-
 def pure(x: A) -> Maybe[A]:
     """Lift a value into the Maybe type."""
     return Just(x)
