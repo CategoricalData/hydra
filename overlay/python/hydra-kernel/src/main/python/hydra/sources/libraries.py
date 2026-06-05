@@ -764,13 +764,6 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
         qname(namespace, "mapMaybe"), maybes.map_maybe, [_a, _b],
         fun(a, prims.optional(b)), prims.list_(a), prims.list_(b)
     )
-    # maybe: b -> (a -> b) -> Maybe a -> b
-    # Note: type variables are ordered [b, a] to match Haskell's [_y, _x] order
-    primitives[qname(namespace, "maybe")] = prims.prim3(
-        qname(namespace, "maybe"), maybes.maybe, [_b, _a],
-        b, fun(a, b), prims.optional(a), b,
-        lazy_args=[0]
-    )
     primitives[qname(namespace, "pure")] = prims.prim1(
         qname(namespace, "pure"), maybes.pure, [_a],
         a, prims.optional(a)

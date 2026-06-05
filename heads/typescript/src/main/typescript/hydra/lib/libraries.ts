@@ -1051,8 +1051,9 @@ const listsPrimitives = (): readonly Primitive[] => {
       (_cx, _g, args) =>
         bind(need(args, 0, "singleton"), (x) => right(mkList([x])))),
     // HOF: foldl f init xs = reduce-left.
-    // Vars in declaration order (body's first appearance: b, then a).
-    // Mirrors Haskell `[_y, _x]`. See note on maybes.maybe below.
+    // Vars in declaration order (body's first appearance: b, then a), NOT
+    // alphabetical. Mirrors Haskell `[_y, _x]`. Getting this wrong silently
+    // swaps domain/codomain in inferred Function types of callback args.
     prim("hydra.lib.lists.foldl", scheme(tyFnCurried(tyFn(tyVar("b"), tyFn(tyVar("a"), tyVar("b"))), tyVar("b"), tyList(tyVar("a")), tyVar("b")), ["b", "a"]),
       (cx, g, args) =>
         bind(need(args, 0, "foldl"), (fn) =>
@@ -1738,28 +1739,6 @@ const maybesPrimitives = (): readonly Primitive[] => {
     return null;
   };
   return [
-    // `maybe default fn m` — applies fn to m's value, else returns default.
-    // The default position is lazy in our wrap; receives either a value
-    // or a thunk. Here we get a Term (the unforced value) since the
-    // primitive args go through reduceArg.
-    // Vars list MUST be in declaration order matching the type body's first
-    // appearance order, NOT alphabetical. Body's first var is `b` (the return
-    // type), then `a` (the maybe payload type). Mirrors Haskell's
-    // `[_y, _x]` for this primitive in packages/hydra-kernel/Sources/Libraries.hs.
-    // Getting this wrong silently swaps domain/codomain in inferred Function
-    // types of callback args — visible in TS-emitted Java as wrong Function<X,Y>
-    // casts on lambdas. See feature_126_typescript-plan.md.
-    prim("hydra.lib.maybes.maybe", scheme(tyFnCurried(tyVar("b"), tyFn(tyVar("a"), tyVar("b")), tyMaybe(tyVar("a")), tyVar("b")), ["b", "a"]),
-      (cx, g, args) =>
-        bind(need(args, 0, "maybe-default"), (def) =>
-          bind(need(args, 1, "maybe-fn"), (fn) =>
-            bind(need(args, 2, "maybe-m"), (m) => {
-              const mv = asMaybe(m);
-              if (!mv) return left({ tag: "other", value: "expected a maybe" } as never);
-              if (mv.tag === "nothing") return right(def);
-              const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
-              return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(cx, g, true, app);
-            })))),
     prim("hydra.lib.maybes.fromMaybe", scheme(tyFnCurried(tyVar("a"), tyMaybe(tyVar("a")), tyVar("a")), ["a"]),
       (_cx, _g, args) =>
         bind(need(args, 0, "fromMaybe-default"), (def) =>
@@ -1884,7 +1863,8 @@ const eithersPrimitives = (): readonly Primitive[] => {
             })))),
     // Vars in declaration order matching body's first appearance:
     // b (fn-in), c (fn-out), a (left-side). Mirrors Haskell `[_x, _y, _z]`.
-    // See note on maybes.maybe.
+    // Vars in body-first-appearance order, NOT alphabetical, to avoid swapping
+    // domain/codomain in inferred Function types of callback args.
     prim("hydra.lib.eithers.map", scheme(tyFnCurried(tyFn(tyVar("b"), tyVar("c")), tyEither(tyVar("a"), tyVar("b")), tyEither(tyVar("a"), tyVar("c"))), ["b", "c", "a"]),
       (cx, g, args) =>
         bind(need(args, 0, "map-fn"), (fn) =>

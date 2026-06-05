@@ -94,16 +94,6 @@
             unless (maybe-nothing-p result)
             collect (maybe-value result)))))
 
-;; maybe :: b -> (a -> b) -> Maybe a -> b
-;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
-(defvar hydra_lib_maybes_maybe
-  (lambda (def)
-    (lambda (f)
-      (lambda (m)
-        (if (maybe-nothing-p m)
-            (if (functionp def) (funcall def) def)
-            (funcall f (maybe-value m)))))))
-
 ;; pure :: a -> Maybe a
 (defvar hydra_lib_maybes_pure
   (lambda (x)

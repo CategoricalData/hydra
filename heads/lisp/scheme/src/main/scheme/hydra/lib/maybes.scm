@@ -10,7 +10,6 @@
           hydra_lib_maybes_is_nothing
           hydra_lib_maybes_map
           hydra_lib_maybes_map_maybe
-          hydra_lib_maybes_maybe
           hydra_lib_maybes_pure
           hydra_lib_maybes_to_list
           maybe-nothing?
@@ -116,16 +115,6 @@
                   (if (not (maybe-nothing? result))
                       (loop (cdr rest) (cons (maybe-value result) acc))
                       (loop (cdr rest) acc))))))))
-
-    ;; maybe :: b -> (a -> b) -> Maybe a -> b
-    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
-    (define hydra_lib_maybes_maybe
-      (lambda (def)
-        (lambda (f)
-          (lambda (m)
-            (if (maybe-nothing? m)
-                (if (procedure? def) (def) def)
-                (f (maybe-value m)))))))
 
     ;; pure :: a -> Maybe a
     (define hydra_lib_maybes_pure
