@@ -2,5 +2,6 @@
   "defaultLibModules": [],
   "dslModules": [],
   "mainModules": ["hydra.bench.fanOut", "hydra.bench.linearChain", "hydra.bench.polymorphicChain"],
+  "manifestFormatVersion": 1,
   "package": "hydra-bench",
   "testModules": []}
