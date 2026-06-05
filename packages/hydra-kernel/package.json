@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-kernel",
   "description": "The Hydra kernel: core types, terms, DSL, eval, primitives",
   "sourceLanguage": "haskell",
