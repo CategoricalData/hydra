@@ -365,32 +365,32 @@
                                                                                                                                   {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "td"},
-                                                                                                                                              "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                                                                              "function": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
+                                                                                                                                          "domain": {"variable": "hydra.core.TypeScheme"},
+                                                                                                                                          "parameter": "ts"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                                                                                              "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                              "parameter": "ts"}},
+                                                                                                                                          "argument": {"literal": {"string": "<no scheme>"}},
                                                                                                                                           "function": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"literal": {"string": "<no scheme>"}},
+                                                                                                                                              "argument": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "td"},
+                                                                                                                                                      "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                               "function": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
@@ -776,32 +776,32 @@
                                                                                                                                   {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "td"},
-                                                                                                                                              "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                                                                              "function": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
+                                                                                                                                          "domain": {"variable": "hydra.core.TypeScheme"},
+                                                                                                                                          "parameter": "ts"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                                                                                              "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                              "parameter": "ts"}},
+                                                                                                                                          "argument": {"literal": {"string": "<no scheme>"}},
                                                                                                                                           "function": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"literal": {"string": "<no scheme>"}},
+                                                                                                                                              "argument": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "td"},
+                                                                                                                                                      "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                               "function": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
@@ -1300,32 +1300,32 @@
                                                                                                                                   {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "td"},
-                                                                                                                                              "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                                                                              "function": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
+                                                                                                                                          "domain": {"variable": "hydra.core.TypeScheme"},
+                                                                                                                                          "parameter": "ts"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                                                                                              "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                              "parameter": "ts"}},
+                                                                                                                                          "argument": {"literal": {"string": "<no scheme>"}},
                                                                                                                                           "function": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"literal": {"string": "<no scheme>"}},
+                                                                                                                                              "argument": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "td"},
+                                                                                                                                                      "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                               "function": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
@@ -1804,32 +1804,32 @@
                                                                                                                                   {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "td"},
-                                                                                                                                              "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                                                                              "function": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
+                                                                                                                                          "domain": {"variable": "hydra.core.TypeScheme"},
+                                                                                                                                          "parameter": "ts"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                                                                                              "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                              "parameter": "ts"}},
+                                                                                                                                          "argument": {"literal": {"string": "<no scheme>"}},
                                                                                                                                           "function": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"literal": {"string": "<no scheme>"}},
+                                                                                                                                              "argument": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "td"},
+                                                                                                                                                      "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                               "function": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
@@ -2389,32 +2389,32 @@
                                                                                                                                   {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "td"},
-                                                                                                                                              "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
-                                                                                                                                              "function": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
+                                                                                                                                          "domain": {"variable": "hydra.core.TypeScheme"},
+                                                                                                                                          "parameter": "ts"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {"application": {"argument": {"variable": "ts"}, "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                                                                                              "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                              "parameter": "ts"}},
+                                                                                                                                          "argument": {"literal": {"string": "<no scheme>"}},
                                                                                                                                           "function": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"literal": {"string": "<no scheme>"}},
+                                                                                                                                              "argument": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "td"},
+                                                                                                                                                      "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                                                                               "function": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                                  "type": {"literal": {"string": {}}}}}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {

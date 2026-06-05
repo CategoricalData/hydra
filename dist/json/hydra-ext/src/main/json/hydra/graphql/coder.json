@@ -2378,42 +2378,43 @@
                         "name": "prefix",
                         "term": {
                           "application": {
-                            "argument": {"variable": "mns"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"lambda": {"body": {"variable": "p"}, "domain": {"literal": {"string": {}}}, "parameter": "p"}},
+                                    "function": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "prefixes"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "ns_"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                        "argument": {"literal": {"string": ""}},
                                         "function": {
                                           "application": {
-                                            "argument": {"lambda": {"body": {"variable": "p"}, "domain": {"literal": {"string": {}}}, "parameter": "p"}},
-                                            "function": {
+                                            "argument": {
                                               "application": {
-                                                "argument": {"literal": {"string": ""}},
+                                                "argument": {"variable": "prefixes"},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}}}},
-                                    "domain": {"variable": "hydra.packaging.ModuleName"},
-                                    "parameter": "ns_"}},
+                                                  "application": {
+                                                    "argument": {"variable": "ns_"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
+                                "parameter": "ns_"}},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": ""}},
                                 "function": {
                                   "application": {
-                                    "argument": {"literal": {"string": ""}},
+                                    "argument": {"variable": "mns"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                        "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                        "type": {"literal": {"string": {}}}}}}}}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "wrap": {

@@ -44,10 +44,10 @@ binding el =
       let name = Core.unName (Core.bindingName el)
           t = Core.bindingTerm el
           typeStr =
-                  Maybes.maybe "" (\ts -> Strings.cat [
+                  Maybes.cases (Core.bindingTypeScheme el) "" (\ts -> Strings.cat [
                     ":(",
                     (typeScheme ts),
-                    ")"]) (Core.bindingTypeScheme el)
+                    ")"])
       in (Strings.cat [
         name,
         typeStr,
@@ -65,10 +65,10 @@ caseStatement cs =
                     Core.fieldName = (Core.caseAlternativeName alt),
                     Core.fieldTerm = (Core.caseAlternativeHandler alt)}) csCases
           defaultField =
-                  Maybes.maybe [] (\d -> [
+                  Maybes.cases mdef [] (\d -> [
                     Core.Field {
                       Core.fieldName = (Core.Name "[default]"),
-                      Core.fieldTerm = d}]) mdef
+                      Core.fieldTerm = d}])
           allFields =
                   Lists.concat [
                     caseFields,
@@ -168,7 +168,7 @@ lambda l =
       let v = Core.unName (Core.lambdaParameter l)
           mt = Core.lambdaDomain l
           body = Core.lambdaBody l
-          typeStr = Maybes.maybe "" (\t -> Strings.cat2 ":" (type_ t)) mt
+          typeStr = Maybes.cases mt "" (\t -> Strings.cat2 ":" (type_ t))
       in (Strings.cat [
         "\955",
         v,
@@ -231,7 +231,7 @@ map showK showV m =
         "}"])
 -- | Show a Maybe value using a given function to show the element
 maybe :: (t0 -> String) -> Maybe t0 -> String
-maybe f mx = Maybes.maybe "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")")) mx
+maybe f mx = Maybes.cases mx "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")"))
 -- | Show a pair using given functions to show each element
 pair :: (t0 -> String) -> (t1 -> String) -> (t0, t1) -> String
 pair showA showB p =
@@ -312,10 +312,10 @@ term t =
             "{",
             (Strings.intercalate ", " (Lists.map entry (Maps.toList v0))),
             "}"])
-        Core.TermMaybe v0 -> Maybes.maybe "nothing" (\t2 -> Strings.cat [
+        Core.TermMaybe v0 -> Maybes.cases v0 "nothing" (\t2 -> Strings.cat [
           "just(",
           (term t2),
-          ")"]) v0
+          ")"])
         Core.TermPair v0 -> Strings.cat [
           "(",
           (term (Pairs.first v0)),
@@ -486,7 +486,7 @@ typeScheme ts =
                     (Core.unName v)]
           toConstraintPairs =
                   \p -> Lists.map (toConstraintPair (Pairs.first p)) (Core.typeVariableConstraintsClasses (Pairs.second p))
-          tc = Maybes.maybe [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m))) (Core.typeSchemeConstraints ts)
+          tc = Maybes.cases (Core.typeSchemeConstraints ts) [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m)))
       in (Strings.cat [
         "(",
         fa,

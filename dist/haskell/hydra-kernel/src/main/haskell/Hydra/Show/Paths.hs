@@ -111,14 +111,14 @@ termToSubtermGraph namespaces term =
                             nodeBindingPairs = Lists.zip nodes1 bindings
                             stateAfterBindings = Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs
                         in (helper ids1 mroot nextPath stateAfterBindings (Paths.SubtermStepLetBody, env))
-                      Core.TermVariable v0 -> Maybes.maybe state (\root -> Maybes.maybe state (\node ->
+                      Core.TermVariable v0 -> Maybes.cases mroot state (\root -> Maybes.cases (Maps.lookup v0 ids) state (\node ->
                         let edge =
                                 Paths.SubtermEdge {
                                   Paths.subtermEdgeSource = root,
                                   Paths.subtermEdgePath = (Paths.SubtermPath (Lists.reverse nextPath)),
                                   Paths.subtermEdgeTarget = node}
                             newEdges = Lists.cons edge edges
-                        in ((nodes, newEdges), visited)) (Maps.lookup v0 ids)) mroot
+                        in ((nodes, newEdges), visited)))
                       _ -> Lists.foldl (helper ids mroot nextPath) state (Rewriting.subtermsWithSteps currentTerm)
           initialState = (([], []), Sets.empty)
           result = helper Maps.empty Nothing [] initialState (dontCareStep, term)

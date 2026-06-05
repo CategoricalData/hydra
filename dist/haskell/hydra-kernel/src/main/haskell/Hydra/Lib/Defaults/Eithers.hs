@@ -173,7 +173,7 @@ mapList cx g funTerm listTerm =
 mapMaybe :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 mapMaybe cx g funTerm maybeTerm =
     case maybeTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe (Core.TermEither (Right (Core.TermMaybe Nothing))) (\val -> Core.TermApplication (Core.Application {
+      Core.TermMaybe v0 -> Right (Maybes.cases v0 (Core.TermEither (Right (Core.TermMaybe Nothing))) (\val -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.either")),
@@ -187,7 +187,7 @@ mapMaybe cx g funTerm maybeTerm =
             Core.lambdaBody = (Core.TermEither (Right (Core.TermMaybe (Just (Core.TermVariable (Core.Name "y"))))))}))})),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = funTerm,
-          Core.applicationArgument = val}))})) v0)
+          Core.applicationArgument = val}))})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "maybe value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term maybeTerm)})))

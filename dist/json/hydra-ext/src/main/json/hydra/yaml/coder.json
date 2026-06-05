@@ -2249,72 +2249,69 @@
                                                                                   "lambda": {
                                                                                     "body": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "maybeContents"},
+                                                                                        "argument": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {"body": {"either": {"right": {"variable": "encodedInner"}}}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                        "type": {"variable": "hydra.yaml.model.Node"}}},
+                                                                                                    "domain": {"variable": "hydra.yaml.model.Node"},
+                                                                                                    "parameter": "encodedInner"}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "innerTerm"},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "cx"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "maybeElementCoder"},
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                    "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                            "type": {"variable": "hydra.yaml.model.Node"}}},
+                                                                                                        "type": {"variable": "hydra.yaml.model.Node"}}}}}}},
+                                                                                            "domain": {"variable": "hydra.core.Term"},
+                                                                                            "parameter": "innerTerm"}},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "lambda": {
+                                                                                              "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "lambda": {
-                                                                                                        "body": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {"body": {"either": {"right": {"variable": "encodedInner"}}}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                            "type": {"variable": "hydra.yaml.model.Node"}}},
-                                                                                                        "domain": {"variable": "hydra.yaml.model.Node"},
-                                                                                                        "parameter": "encodedInner"}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "innerTerm"},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "cx"},
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "maybeElementCoder"},
-                                                                                                                    "function": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
-                                                                                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                                                                                        "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                                "type": {"variable": "hydra.yaml.model.Node"}}},
-                                                                                                            "type": {"variable": "hydra.yaml.model.Node"}}}}}}},
-                                                                                                "domain": {"variable": "hydra.core.Term"},
-                                                                                                "parameter": "innerTerm"}},
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "either": {
+                                                                                                        "right": {
+                                                                                                          "inject": {
+                                                                                                            "field": {
+                                                                                                              "name": "scalar",
+                                                                                                              "term": {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.yaml.model.Scalar"}}},
+                                                                                                            "typeName": "hydra.yaml.model.Node"}}}},
+                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                "type": {"variable": "hydra.yaml.model.Node"}}},
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "argument": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
-                                                                                                          "either": {
-                                                                                                            "right": {
-                                                                                                              "inject": {
-                                                                                                                "field": {
-                                                                                                                  "name": "scalar",
-                                                                                                                  "term": {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.yaml.model.Scalar"}}},
-                                                                                                                "typeName": "hydra.yaml.model.Node"}}}},
-                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                    "type": {"variable": "hydra.yaml.model.Node"}}},
+                                                                                                "argument": {"variable": "maybeContents"},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                                                        "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.yaml.model.Node"}}}}},
-                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                    "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.yaml.model.Node"}}}}}}}}}}},
                                                                                     "domain": {"maybe": {"variable": "hydra.core.Term"}},
                                                                                     "parameter": "maybeContents"}},
                                                                                 "name": "maybe"}],

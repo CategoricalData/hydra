@@ -64,14 +64,14 @@ jsonEscapeChar =
 -- | Parse the optional exponent part of a JSON number
 jsonExponentPart :: Parsing.Parser (Maybe String)
 jsonExponentPart =
-    Parsers.optional (Parsers.bind (Parsers.satisfy (\c -> Logic.or (Equality.equal c 101) (Equality.equal c 69))) (\_ -> Parsers.bind (Parsers.optional (Parsers.satisfy (\c -> Logic.or (Equality.equal c 43) (Equality.equal c 45)))) (\sign -> Parsers.map (\digits -> Strings.cat2 (Strings.cat2 "e" (Maybes.maybe "" (\arg_ -> Strings.fromList (Lists.pure arg_)) sign)) digits) digits)))
+    Parsers.optional (Parsers.bind (Parsers.satisfy (\c -> Logic.or (Equality.equal c 101) (Equality.equal c 69))) (\_ -> Parsers.bind (Parsers.optional (Parsers.satisfy (\c -> Logic.or (Equality.equal c 43) (Equality.equal c 45)))) (\sign -> Parsers.map (\digits -> Strings.cat2 (Strings.cat2 "e" (Maybes.cases sign "" (\arg_ -> Strings.fromList (Lists.pure arg_)))) digits) digits)))
 -- | Parse the optional fractional part of a JSON number
 jsonFractionPart :: Parsing.Parser (Maybe String)
 jsonFractionPart = Parsers.optional (Parsers.bind (Parsers.char 46) (\_ -> Parsers.map (\d -> Strings.cat2 "." d) digits))
 -- | Parse the integer part of a JSON number (optional minus, then digits)
 jsonIntegerPart :: Parsing.Parser String
 jsonIntegerPart =
-    Parsers.bind (Parsers.optional (Parsers.char 45)) (\sign -> Parsers.bind digits (\digits -> Parsers.pure (Maybes.maybe digits (\_ -> Strings.cat2 "-" digits) sign)))
+    Parsers.bind (Parsers.optional (Parsers.char 45)) (\sign -> Parsers.bind digits (\digits -> Parsers.pure (Maybes.cases sign digits (\_ -> Strings.cat2 "-" digits))))
 -- | Parse a JSON object key-value pair
 jsonKeyValue :: Parsing.Parser (String, Model.Value)
 jsonKeyValue =
@@ -84,8 +84,8 @@ jsonNumber :: Parsing.Parser Model.Value
 jsonNumber =
     token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind jsonFractionPart (\fracPart -> Parsers.bind jsonExponentPart (\expPart ->
       let numStr =
-              Strings.cat2 (Strings.cat2 intPart (Maybes.maybe "" Equality.identity fracPart)) (Maybes.maybe "" Equality.identity expPart)
-      in (Parsers.pure (Model.ValueNumber (Maybes.maybe (Literals.stringToDecimal "0.0") Equality.identity (Literals.readDecimal numStr))))))))
+              Strings.cat2 (Strings.cat2 intPart (Maybes.cases fracPart "" Equality.identity)) (Maybes.cases expPart "" Equality.identity)
+      in (Parsers.pure (Model.ValueNumber (Maybes.cases (Literals.readDecimal numStr) (Literals.stringToDecimal "0.0") Equality.identity)))))))
 -- | Parse a JSON object
 jsonObject :: Parsing.Parser Model.Value
 jsonObject =

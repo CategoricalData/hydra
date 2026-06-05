@@ -532,7 +532,7 @@ gatherMetadata defs =
                 Packaging.DefinitionTerm v0 ->
                   let term = Packaging.termDefinitionBody v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)))
+                  in (Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)))
                 Packaging.DefinitionType v0 ->
                   let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
@@ -654,16 +654,16 @@ toDataDeclaration namespaces def cx g =
                           terms = Lists.map Core.bindingTerm lbindings
                       in (Eithers.bind (Eithers.mapList (\t -> encodeTerm 0 namespaces t cx g) terms) (\hterms ->
                         let hbindings = Lists.zipWith toTermDefinition hnames hterms
-                            prevBindings = Maybes.maybe [] (\lb -> Syntax.unLocalBindings lb) bindings
+                            prevBindings = Maybes.cases bindings [] (\lb -> Syntax.unLocalBindings lb)
                             allBindings = Lists.concat2 prevBindings hbindings
                         in (toDecl comments hname_ env (Just (Syntax.LocalBindings allBindings)))))
                     _ -> Eithers.bind (encodeTerm 0 namespaces term_ cx g) (\hterm ->
                       let vb = Utils.simpleValueBinding hname_ hterm bindings
-                          schemeConstraints = Maybes.maybe Nothing (\ts -> Core.typeSchemeConstraints ts) typ
+                          schemeConstraints = Maybes.cases typ Nothing (\ts -> Core.typeSchemeConstraints ts)
                           schemeClasses = typeSchemeConstraintsToClassMap schemeConstraints
                       in (Eithers.bind (Annotations.getTypeClasses cx g (Strip.removeTypesFromTerm term)) (\explicitClasses ->
                         let combinedClasses = Maps.union schemeClasses explicitClasses
-                            schemeType = Maybes.maybe Core.TypeUnit (\ts -> Core.typeSchemeBody ts) typ
+                            schemeType = Maybes.cases typ Core.TypeUnit (\ts -> Core.typeSchemeBody ts)
                         in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses schemeType cx g) (\htype ->
                           let decl =
                                   Syntax.DeclarationTypedBinding (Syntax.TypedBinding {
@@ -846,7 +846,7 @@ typeSchemeConstraintsToClassMap maybeConstraints =
       let constraintToName =
               \tcc -> case tcc of
                 Core.TypeClassConstraintSimple v0 -> Just v0
-      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableConstraintsClasses meta)))) constraints) maybeConstraints)
+      in (Maybes.cases maybeConstraints Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableConstraintsClasses meta)))) constraints))
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

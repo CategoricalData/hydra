@@ -929,25 +929,25 @@
                                                             "name": "labstyle",
                                                             "term": {
                                                               "application": {
-                                                                "argument": {"variable": "mlabstyle"},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {"variable": "ls"},
+                                                                    "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}},
+                                                                    "parameter": "ls"}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "lambda": {
-                                                                        "body": {"variable": "ls"},
-                                                                        "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}},
-                                                                        "parameter": "ls"}},
+                                                                      "application": {
+                                                                        "argument": {"variable": "currentTerm"},
+                                                                        "function": {"application": {"argument": {"variable": "visited"}, "function": {"variable": "labelOf"}}}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "currentTerm"},
-                                                                            "function": {"application": {"argument": {"variable": "visited"}, "function": {"variable": "labelOf"}}}}},
+                                                                        "argument": {"variable": "mlabstyle"},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                                "body": {"variable": "hydra.lib.maybes.cases"},
                                                                                 "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}},
                                                                             "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}}}}}}},
                                                             "typeScheme": {"body": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}, "variables": []}},
@@ -1099,33 +1099,32 @@
                                                             "name": "parentStmt",
                                                             "term": {
                                                               "application": {
-                                                                "argument": {"variable": "mparent"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "list": [
-                                                                            {
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "list": [
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"variable": "selfId"},
+                                                                            "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "selfId"},
+                                                                                "argument": {"variable": "parent"},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "parent"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "style"},
-                                                                                        "function": {"application": {"argument": {"variable": "accessor"}, "function": {"variable": "toAccessorEdgeStmt"}}}}}}}}}]},
-                                                                        "domain": {"variable": "hydra.graphviz.dot.Id"},
-                                                                        "parameter": "parent"}},
+                                                                                    "argument": {"variable": "style"},
+                                                                                    "function": {"application": {"argument": {"variable": "accessor"}, "function": {"variable": "toAccessorEdgeStmt"}}}}}}}}}]},
+                                                                    "domain": {"variable": "hydra.graphviz.dot.Id"},
+                                                                    "parameter": "parent"}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}},
+                                                                        "argument": {"variable": "mparent"},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
-                                                                            "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                                                            "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}}}}}}}},
                                                             "typeScheme": {"body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "variables": []}},
                                                           {
                                                             "name": "selfStmts",
@@ -1670,64 +1669,61 @@
                                                                         "body": {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "ids"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "name"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                        "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "lambda": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "pair": {
-                                                                                                "first": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "list": [
-                                                                                                        {
+                                                                                          "pair": {
+                                                                                            "first": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "list": [
+                                                                                                    {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "i"},
+                                                                                                        "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "i"},
-                                                                                                            "function": {
+                                                                                                            "argument": {
                                                                                                               "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "mparent"},
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "selfId"},
-                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}},
+                                                                                                                "argument": {"variable": "mparent"},
                                                                                                                 "function": {
                                                                                                                   "application": {
-                                                                                                                    "argument": {"variable": "style"},
-                                                                                                                    "function": {"application": {"argument": {"variable": "accessor"}, "function": {"variable": "toAccessorEdgeStmt"}}}}}}}}}]},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "stmts"},
-                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}}}}}},
-                                                                                                "second": {"variable": "visited"}}},
-                                                                                            "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
-                                                                                        "type": {"set": {"literal": {"string": {}}}}}},
-                                                                                    "domain": {"variable": "hydra.graphviz.dot.Id"},
-                                                                                    "parameter": "i"}},
+                                                                                                                    "argument": {"variable": "selfId"},
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "style"},
+                                                                                                                "function": {"application": {"argument": {"variable": "accessor"}, "function": {"variable": "toAccessorEdgeStmt"}}}}}}}}}]},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "stmts"},
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}}}}}},
+                                                                                            "second": {"variable": "visited"}}},
+                                                                                        "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
+                                                                                    "type": {"set": {"literal": {"string": {}}}}}},
+                                                                                "domain": {"variable": "hydra.graphviz.dot.Id"},
+                                                                                "parameter": "i"}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "dflt"},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "dflt"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "ids"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "name"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                                            "type": {"pair": {"first": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "second": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                        "type": {"variable": "hydra.graphviz.dot.Id"}}}}}}}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                                                                        "type": {"pair": {"first": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "second": {"set": {"literal": {"string": {}}}}}}}}}}}}}},
                                                                         "domain": {"variable": "hydra.core.Name"},
                                                                         "parameter": "name"}},
                                                                     "name": "variable"}],

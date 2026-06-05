@@ -124,7 +124,7 @@ satisfy pred =
       let parse =
               \input ->
                 let codes = Strings.toList input
-                in (Maybes.maybe (Parsing.ParseResultFailure (Parsing.ParseError {
+                in (Maybes.cases (Lists.maybeHead codes) (Parsing.ParseResultFailure (Parsing.ParseError {
                   Parsing.parseErrorMessage = "unexpected end of input",
                   Parsing.parseErrorRemainder = input})) (\c ->
                   let rest = Strings.fromList (Lists.drop 1 codes)
@@ -132,7 +132,7 @@ satisfy pred =
                     Parsing.parseSuccessValue = c,
                     Parsing.parseSuccessRemainder = rest})) (Parsing.ParseResultFailure (Parsing.ParseError {
                     Parsing.parseErrorMessage = "character did not satisfy predicate",
-                    Parsing.parseErrorRemainder = input})))) (Lists.maybeHead codes))
+                    Parsing.parseErrorRemainder = input})))))
       in (Parsing.Parser parse)
 -- | Parse zero or more occurrences separated by a separator
 sepBy :: Parsing.Parser t0 -> Parsing.Parser t1 -> Parsing.Parser [t0]

@@ -106,10 +106,10 @@ toJson types tname typ term =
                         Core.TypeMaybe _ -> True
                         _ -> False
           in case strippedTerm of
-            Core.TermMaybe v1 -> Maybes.maybe (Right Model.ValueNull) (\v ->
+            Core.TermMaybe v1 -> Maybes.cases v1 (Right Model.ValueNull) (\v ->
               let encoded = toJson types tname v0 v
               in (Logic.ifElse isNestedMaybe (Eithers.map (\ev -> Model.ValueArray [
-                ev]) encoded) encoded)) v1
+                ev]) encoded) encoded))
             _ -> Left "expected maybe term"
         Core.TypeRecord v0 -> case strippedTerm of
           Core.TermRecord v1 ->
@@ -125,13 +125,13 @@ toJson types tname typ term =
                               fterm = Core.fieldTerm f
                               ftype = Core.fieldTypeType ft
                           in (Logic.ifElse (isSimpleMaybe ftype) (case (Strip.deannotateTerm fterm) of
-                            Core.TermMaybe v2 -> Maybes.maybe (Right Nothing) (\v ->
+                            Core.TermMaybe v2 -> Maybes.cases v2 (Right Nothing) (\v ->
                               let innerType =
                                       case (Strip.deannotateType ftype) of
                                         Core.TypeMaybe v3 -> v3
                                         _ -> ftype
                                   encoded = toJson types tname innerType v
-                              in (Eithers.map (\ev -> Just (fname, ev)) encoded)) v2
+                              in (Eithers.map (\ev -> Just (fname, ev)) encoded))
                             _ -> Left "expected maybe term for optional field") (
                             let encoded = toJson types tname ftype fterm
                             in (Eithers.map (\ev -> Just (fname, ev)) encoded)))
@@ -147,9 +147,9 @@ toJson types tname typ term =
                 fname = Core.unName (Core.fieldName field)
                 fterm = Core.fieldTerm field
                 ftypeResult =
-                        Maybes.maybe (Left (Strings.cat [
+                        Maybes.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0) (Left (Strings.cat [
                           "unknown variant: ",
-                          fname])) (\ft -> Right (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0)
+                          fname])) (\ft -> Right (Core.fieldTypeType ft))
             in (Eithers.either (\err -> Left err) (\ftype ->
               let encodedUnion = toJson types tname ftype fterm
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
@@ -203,7 +203,7 @@ toJson types tname typ term =
             _ -> Left "expected either term"
         Core.TypeVariable v0 ->
           let lookedUp = Maps.lookup v0 types
-          in (Maybes.maybe (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term) lookedUp)
+          in (Maybes.cases lookedUp (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term))
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
           (ShowCore.type_ typ)])
@@ -221,10 +221,10 @@ toJsonUntyped term =
           let terms = Sets.toList v0
               results = Eithers.mapList (\t -> toJsonUntyped t) terms
           in (Eithers.map (\vs -> Model.ValueArray vs) results)
-        Core.TermMaybe v0 -> Maybes.maybe (Right Model.ValueNull) (\v ->
+        Core.TermMaybe v0 -> Maybes.cases v0 (Right Model.ValueNull) (\v ->
           let encodedMaybe = toJsonUntyped v
           in (Eithers.map (\encoded -> Model.ValueArray [
-            encoded]) encodedMaybe)) v0
+            encoded]) encodedMaybe))
         Core.TermRecord v0 ->
           let encodeField =
                   \f ->

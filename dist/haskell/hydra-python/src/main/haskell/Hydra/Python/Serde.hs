@@ -3,7 +3,6 @@
 
 module Hydra.Python.Serde where
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
@@ -408,10 +407,10 @@ importFromAsNameToExpr ifan =
 
       let name = Syntax.importFromAsNameName ifan
           alias = Syntax.importFromAsNameAs ifan
-      in (Maybes.maybe (nameToExpr name) (\a -> Serialization.spaceSep [
+      in (Maybes.cases alias (nameToExpr name) (\a -> Serialization.spaceSep [
         nameToExpr name,
         (Serialization.cst "as"),
-        (nameToExpr a)]) alias)
+        (nameToExpr a)]))
 -- | Serialize import from targets
 importFromTargetsToExpr :: Syntax.ImportFromTargets -> Ast.Expr
 importFromTargetsToExpr t =
@@ -818,7 +817,7 @@ stringToExpr :: Syntax.String_ -> Ast.Expr
 stringToExpr s =
 
       let content = Syntax.stringValue s
-          prefix = Maybes.maybe "" stringPrefixToText (Syntax.stringPrefix s)
+          prefix = Maybes.cases (Syntax.stringPrefix s) "" stringPrefixToText
           style = Syntax.stringQuoteStyle s
       in case style of
         Syntax.QuoteStyleSingle -> Serialization.cst (Strings.cat2 prefix (escapePythonString False content))

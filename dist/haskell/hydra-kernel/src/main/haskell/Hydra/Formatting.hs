@@ -124,7 +124,7 @@ normalizeComment s =
       in (Logic.ifElse (Strings.null stripped) "" (
         let lastIdx = Math.sub (Strings.length stripped) 1
             appended = Strings.cat2 stripped "."
-        in (Maybes.maybe appended (\lastChar -> Logic.ifElse (Equality.equal lastChar 46) stripped appended) (Strings.maybeCharAt lastIdx stripped))))
+        in (Maybes.cases (Strings.maybeCharAt lastIdx stripped) appended (\lastChar -> Logic.ifElse (Equality.equal lastChar 46) stripped appended))))
 -- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: S.Set String -> String -> String
 sanitizeWithUnderscores reserved s = escapeWithUnderscore reserved (nonAlnumToUnderscores s)

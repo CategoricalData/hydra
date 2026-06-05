@@ -69,7 +69,7 @@ dslBindingName n =
       let parts = Strings.splitOn "." (Core.unName n)
           localPart = Formatting.decapitalize (Names.localNameOf n)
           localResult = Core.Name localPart
-      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsHeadTail ->
+      in (Maybes.cases (Lists.maybeInit parts) localResult (\nsParts -> Maybes.cases (Lists.uncons nsParts) localResult (\nsHeadTail ->
         let dslNsParts =
                 Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
                   "hydra",
@@ -77,23 +77,23 @@ dslBindingName n =
                   "hydra",
                   "dsl"] nsParts)
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-          localPart])))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
+          localPart]))))))
 -- | Generate a qualified DSL element name from a type name and local element name
 dslDefinitionName :: Core.Name -> String -> Core.Name
 dslDefinitionName typeName localName =
 
       let parts = Strings.splitOn "." (Core.unName typeName)
-      in (Maybes.maybe (Core.Name localName) (\nsParts ->
+      in (Maybes.cases (Lists.maybeInit parts) (Core.Name localName) (\nsParts ->
         let dslNsParts =
-                Maybes.maybe [
+                Maybes.cases (Lists.uncons nsParts) [
                   "hydra",
                   "dsl"] (\nsHeadTail -> Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
                   "hydra",
                   "dsl"] (Pairs.second nsHeadTail)) (Lists.concat2 [
                   "hydra",
-                  "dsl"] nsParts)) (Lists.uncons nsParts)
+                  "dsl"] nsParts))
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-          localName])))) (Lists.maybeInit parts))
+          localName])))))
 -- | Transform a type module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 dslModule cx graph mod =
@@ -140,9 +140,9 @@ dslModuleName ns =
                   Packaging.ModuleName (Strings.cat [
                     "hydra.dsl.",
                     (Packaging.unModuleName ns)])
-      in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
+      in (Maybes.cases (Lists.uncons parts) prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
         "hydra.dsl.",
-        (Strings.intercalate "." (Pairs.second ht))])) prefixFull) (Lists.uncons parts))
+        (Strings.intercalate "." (Pairs.second ht))])) prefixFull))
 -- | Build a TypeScheme with TypedTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
 dslTypeScheme origType paramTypes resultType =
@@ -581,7 +581,7 @@ isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Bindin
 isDslEligibleBinding cx graph b =
 
       let ns = Names.moduleNameOf (Core.bindingName b)
-      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unModuleName ns) "hydra.typed") (Right Nothing) (Right (Just b)))
+      in (Logic.ifElse (Equality.equal (Maybes.cases ns "" Packaging.unModuleName) "hydra.typed") (Right Nothing) (Right (Just b)))
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
 nominalResultType typeName origType =

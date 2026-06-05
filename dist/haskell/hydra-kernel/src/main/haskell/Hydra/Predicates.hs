@@ -71,9 +71,9 @@ isComplexVariable tc name =
       let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
       in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
-        in (Maybes.maybe (
+        in (Maybes.cases typeLookup (
           let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
-          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+          in (Maybes.cases primLookup True (\prim -> Equality.gt (Arity.typeSchemeArity (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))) 0))) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0)))))
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =
@@ -146,7 +146,7 @@ isTrivialTerm t =
           Core.TermProject _ -> isTrivialTerm arg
           Core.TermUnwrap _ -> isTrivialTerm arg
           _ -> False
-      Core.TermMaybe v0 -> Maybes.maybe True (\inner -> isTrivialTerm inner) v0
+      Core.TermMaybe v0 -> Maybes.cases v0 True (\inner -> isTrivialTerm inner)
       Core.TermRecord v0 -> Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0)
       Core.TermWrap v0 -> isTrivialTerm (Core.wrappedTermBody v0)
       Core.TermTypeApplication v0 -> isTrivialTerm (Core.typeApplicationTermBody v0)

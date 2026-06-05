@@ -43,7 +43,7 @@ adjacencyListToMap pairs =
     Lists.foldl (\mp -> \p ->
       let k = Pairs.first p
           vs = Pairs.second p
-          existing = Maybes.maybe [] Equality.identity (Maps.lookup k mp)
+          existing = Maybes.cases (Maps.lookup k mp) [] Equality.identity
       in (Maps.insert k (Lists.concat2 existing vs) mp)) Maps.empty pairs
 -- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key (Nothing for unknown vertices).
 adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> Maybe t0)))
@@ -110,7 +110,7 @@ popStackUntil :: Int -> Topology.TarjanState -> ([Int], Topology.TarjanState)
 popStackUntil v st0 =
 
       let go =
-              \acc -> \st -> Maybes.maybe (Lists.reverse acc, st) (\uc ->
+              \acc -> \st -> Maybes.cases (Lists.uncons (Topology.tarjanStateStack st)) (Lists.reverse acc, st) (\uc ->
                 let x = Pairs.first uc
                     xs = Pairs.second uc
                     newSt =
@@ -130,7 +130,7 @@ popStackUntil v st0 =
                               Topology.tarjanStateOnStack = (Sets.delete x (Topology.tarjanStateOnStack st)),
                               Topology.tarjanStateSccs = (Topology.tarjanStateSccs newSt)}
                     acc_ = Lists.cons x acc
-                in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2))) (Lists.uncons (Topology.tarjanStateStack st))
+                in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2)))
       in (go [] st0)
 -- | Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered.
 propagateTags :: (Ord t0, Ord t1) => ([(t0, [t0])] -> [(t0, [t1])] -> [(t0, (S.Set t1))])
@@ -141,8 +141,8 @@ propagateTags edges nodeTags =
           allNodes = Sets.toList (Sets.fromList (Lists.concat2 (Lists.map Pairs.first edges) (Lists.map Pairs.first nodeTags)))
           getTagsForNode =
                   \node ->
-                    let reachable = findReachableNodes (\n -> Sets.fromList (Maybes.maybe [] Equality.identity (Maps.lookup n adjMap))) node
-                    in (Sets.unions (Lists.map (\n -> Maybes.maybe Sets.empty Equality.identity (Maps.lookup n tagMap)) (Sets.toList reachable)))
+                    let reachable = findReachableNodes (\n -> Sets.fromList (Maybes.cases (Maps.lookup n adjMap) [] Equality.identity)) node
+                    in (Sets.unions (Lists.map (\n -> Maybes.cases (Maps.lookup n tagMap) Sets.empty Equality.identity) (Sets.toList reachable)))
       in (Lists.map (\n -> (n, (getTagsForNode n))) allNodes)
 -- | Visit a vertex and recursively explore its successors
 strongConnect :: M.Map Int [Int] -> Int -> Topology.TarjanState -> Topology.TarjanState

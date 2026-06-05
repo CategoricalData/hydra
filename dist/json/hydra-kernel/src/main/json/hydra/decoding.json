@@ -695,73 +695,76 @@
                             "body": {
                               "application": {
                                 "argument": {
-                                  "application": {
-                                    "argument": {"variable": "parts"},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": {"string": {}}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "lambda": {
-                                        "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "tail",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "nsUc"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"string": {}}}}},
+                                                            "type": {"list": {"literal": {"string": {}}}}}}}},
+                                                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                                "body": {
+                                                  "wrap": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"list": [{"variable": "localPart"}]},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "tail"},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "decode"}}]},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                                    "typeName": "hydra.core.Name"}}}},
+                                            "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}},
+                                            "parameter": "nsUc"}},
+                                        "function": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "nsParts"},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"literal": {"string": {}}}}}}},
+                                            "argument": {"variable": "localResult"},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "let": {
-                                                        "bindings": [
-                                                          {
-                                                            "name": "tail",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {"variable": "nsUc"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"string": {}}}}},
-                                                                    "type": {"list": {"literal": {"string": {}}}}}}}},
-                                                            "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
-                                                        "body": {
-                                                          "wrap": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"list": [{"variable": "localPart"}]},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "tail"},
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "decode"}}]},
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                                            "typeName": "hydra.core.Name"}}}},
-                                                    "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}},
-                                                    "parameter": "nsUc"}},
-                                                "function": {
                                                   "application": {
-                                                    "argument": {"variable": "localResult"},
-                                                    "function": {
+                                                    "argument": {"variable": "nsParts"},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"literal": {"string": {}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}}}}}}}}}},
-                                        "domain": {"list": {"literal": {"string": {}}}},
-                                        "parameter": "nsParts"}},
+                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}}}},
+                                                    "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                    "domain": {"list": {"literal": {"string": {}}}},
+                                    "parameter": "nsParts"}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "localResult"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "localResult"},
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "parts"},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": {"string": {}}}}}}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.core.Name"}}},
-                                            "type": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"list": {"literal": {"string": {}}}}}},
+                                            "type": {"variable": "hydra.core.Name"}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "n"}}}},
         "name": "hydra.decoding.decodeBindingName",
@@ -7736,42 +7739,44 @@
                         "body": {
                           "application": {
                             "argument": {
-                              "application": {
-                                "argument": {"variable": "parts"},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"literal": {"string": {}}}}}}},
+                              "lambda": {
+                                "body": {
+                                  "wrap": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "list": [
+                                            {"literal": {"string": "hydra.decode."}},
+                                            {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "uc"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"string": {}}}}},
+                                                        "type": {"list": {"literal": {"string": {}}}}}}}},
+                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}}]},
+                                        "function": {"variable": "hydra.lib.strings.cat"}}},
+                                    "typeName": "hydra.packaging.ModuleName"}},
+                                "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}},
+                                "parameter": "uc"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "wrap": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {
-                                              "list": [
-                                                {"literal": {"string": "hydra.decode."}},
-                                                {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "uc"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"string": {}}}}},
-                                                            "type": {"list": {"literal": {"string": {}}}}}}}},
-                                                    "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}}]},
-                                            "function": {"variable": "hydra.lib.strings.cat"}}},
-                                        "typeName": "hydra.packaging.ModuleName"}},
-                                    "domain": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}},
-                                    "parameter": "uc"}},
+                                "argument": {"variable": "fallback"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "fallback"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "parts"},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"literal": {"string": {}}}}}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}}}}}}}}}}}}}},
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                            "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"literal": {"string": {}}}}}}}},
+                                        "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.ModuleName"},
                 "parameter": "ns"}}}},
         "name": "hydra.decoding.decodeModuleName",
@@ -9621,115 +9626,10 @@
                                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                                 "field": {
                                                                                                                                                                                                                   "name": "variable",
-                                                                                                                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                           {
                                                                                                                                                                                                             "name": "argument",
-                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                              "inject": {
-                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                  "name": "either",
-                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                    "typeApplication": {
-                                                                                                                                                                                                                      "body": {
-                                                                                                                                                                                                                        "typeApplication": {
-                                                                                                                                                                                                                          "body": {
-                                                                                                                                                                                                                            "either": {
-                                                                                                                                                                                                                              "left": {
-                                                                                                                                                                                                                                "inject": {
-                                                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                                                    "name": "wrap",
-                                                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                                                      "record": {
-                                                                                                                                                                                                                                        "fields": [
-                                                                                                                                                                                                                                          {
-                                                                                                                                                                                                                                            "name": "typeName",
-                                                                                                                                                                                                                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.DecodingError"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                          {
-                                                                                                                                                                                                                                            "name": "body",
-                                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                                              "inject": {
-                                                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                                                  "name": "application",
-                                                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                                                    "record": {
-                                                                                                                                                                                                                                                      "fields": [
-                                                                                                                                                                                                                                                        {
-                                                                                                                                                                                                                                                          "name": "function",
-                                                                                                                                                                                                                                                          "term": {
-                                                                                                                                                                                                                                                            "inject": {
-                                                                                                                                                                                                                                                              "field": {
-                                                                                                                                                                                                                                                                "name": "variable",
-                                                                                                                                                                                                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.strings.cat"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                                              "typeName": "hydra.core.Term"}}},
-                                                                                                                                                                                                                                                        {
-                                                                                                                                                                                                                                                          "name": "argument",
-                                                                                                                                                                                                                                                          "term": {
-                                                                                                                                                                                                                                                            "inject": {
-                                                                                                                                                                                                                                                              "field": {
-                                                                                                                                                                                                                                                                "name": "list",
-                                                                                                                                                                                                                                                                "term": {
-                                                                                                                                                                                                                                                                  "list": [
-                                                                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                                                                      "inject": {
-                                                                                                                                                                                                                                                                        "field": {
-                                                                                                                                                                                                                                                                          "name": "literal",
-                                                                                                                                                                                                                                                                          "term": {
-                                                                                                                                                                                                                                                                            "inject": {"field": {"name": "string", "term": {"literal": {"string": "no such field "}}}, "typeName": "hydra.core.Literal"}}},
-                                                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                                                                      "inject": {
-                                                                                                                                                                                                                                                                        "field": {
-                                                                                                                                                                                                                                                                          "name": "application",
-                                                                                                                                                                                                                                                                          "term": {
-                                                                                                                                                                                                                                                                            "record": {
-                                                                                                                                                                                                                                                                              "fields": [
-                                                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                                                  "name": "function",
-                                                                                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                                                                                    "inject": {
-                                                                                                                                                                                                                                                                                      "field": {
-                                                                                                                                                                                                                                                                                        "name": "unwrap",
-                                                                                                                                                                                                                                                                                        "term": {"wrap": {"body": {"literal": {"string": "hydra.core.Name"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                                                                      "typeName": "hydra.core.Term"}}},
-                                                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                                                  "name": "argument",
-                                                                                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                                                                                    "inject": {
-                                                                                                                                                                                                                                                                                      "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "fname"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                                                                      "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                                                                                                              "typeName": "hydra.core.Application"}}},
-                                                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                                                                      "inject": {
-                                                                                                                                                                                                                                                                        "field": {
-                                                                                                                                                                                                                                                                          "name": "literal",
-                                                                                                                                                                                                                                                                          "term": {
-                                                                                                                                                                                                                                                                            "inject": {"field": {"name": "string", "term": {"literal": {"string": " in union"}}}, "typeName": "hydra.core.Literal"}}},
-                                                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}}]}},
-                                                                                                                                                                                                                                                              "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                                                                                      "typeName": "hydra.core.Application"}}},
-                                                                                                                                                                                                                                                "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                                                                        "typeName": "hydra.core.WrappedTerm"}}},
-                                                                                                                                                                                                                                  "typeName": "hydra.core.Term"}}}},
-                                                                                                                                                                                                                          "type": {"variable": "hydra.core.Term"}}},
-                                                                                                                                                                                                                      "type": {"variable": "hydra.core.Term"}}}},
-                                                                                                                                                                                                                "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                                        "typeName": "hydra.core.Application"}}},
-                                                                                                                                                                                                  "typeName": "hydra.core.Term"}}},
-                                                                                                                                                                                            {
-                                                                                                                                                                                              "name": "argument",
-                                                                                                                                                                                              "term": {
-                                                                                                                                                                                                "inject": {
-                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                    "name": "lambda",
-                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                      "record": {
-                                                                                                                                                                                                        "fields": [
-                                                                                                                                                                                                          {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                          {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                                                                                                                                                          {
-                                                                                                                                                                                                            "name": "body",
                                                                                                                                                                                                             "term": {
                                                                                                                                                                                                               "inject": {
                                                                                                                                                                                                                 "field": {
@@ -9741,17 +9641,128 @@
                                                                                                                                                                                                                           "name": "function",
                                                                                                                                                                                                                           "term": {
                                                                                                                                                                                                                             "inject": {
-                                                                                                                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                              "field": {
+                                                                                                                                                                                                                                "name": "application",
+                                                                                                                                                                                                                                "term": {
+                                                                                                                                                                                                                                  "record": {
+                                                                                                                                                                                                                                    "fields": [
+                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                        "name": "function",
+                                                                                                                                                                                                                                        "term": {
+                                                                                                                                                                                                                                          "inject": {
+                                                                                                                                                                                                                                            "field": {
+                                                                                                                                                                                                                                              "name": "variable",
+                                                                                                                                                                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maps.lookup"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                            "typeName": "hydra.core.Term"}}},
+                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                        "name": "argument",
+                                                                                                                                                                                                                                        "term": {
+                                                                                                                                                                                                                                          "inject": {
+                                                                                                                                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "fname"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                            "typeName": "hydra.core.Term"}}}],
+                                                                                                                                                                                                                                    "typeName": "hydra.core.Application"}}},
                                                                                                                                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                                         {
                                                                                                                                                                                                                           "name": "argument",
                                                                                                                                                                                                                           "term": {
                                                                                                                                                                                                                             "inject": {
-                                                                                                                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "fterm"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "variantMap"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                                                                                                       "typeName": "hydra.core.Application"}}},
                                                                                                                                                                                                                 "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                                        "typeName": "hydra.core.Lambda"}}},
+                                                                                                                                                                                                        "typeName": "hydra.core.Application"}}},
+                                                                                                                                                                                                  "typeName": "hydra.core.Term"}}},
+                                                                                                                                                                                            {
+                                                                                                                                                                                              "name": "argument",
+                                                                                                                                                                                              "term": {
+                                                                                                                                                                                                "inject": {
+                                                                                                                                                                                                  "field": {
+                                                                                                                                                                                                    "name": "either",
+                                                                                                                                                                                                    "term": {
+                                                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                                                        "body": {
+                                                                                                                                                                                                          "typeApplication": {
+                                                                                                                                                                                                            "body": {
+                                                                                                                                                                                                              "either": {
+                                                                                                                                                                                                                "left": {
+                                                                                                                                                                                                                  "inject": {
+                                                                                                                                                                                                                    "field": {
+                                                                                                                                                                                                                      "name": "wrap",
+                                                                                                                                                                                                                      "term": {
+                                                                                                                                                                                                                        "record": {
+                                                                                                                                                                                                                          "fields": [
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                              "name": "typeName",
+                                                                                                                                                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.DecodingError"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                              "name": "body",
+                                                                                                                                                                                                                              "term": {
+                                                                                                                                                                                                                                "inject": {
+                                                                                                                                                                                                                                  "field": {
+                                                                                                                                                                                                                                    "name": "application",
+                                                                                                                                                                                                                                    "term": {
+                                                                                                                                                                                                                                      "record": {
+                                                                                                                                                                                                                                        "fields": [
+                                                                                                                                                                                                                                          {
+                                                                                                                                                                                                                                            "name": "function",
+                                                                                                                                                                                                                                            "term": {
+                                                                                                                                                                                                                                              "inject": {
+                                                                                                                                                                                                                                                "field": {
+                                                                                                                                                                                                                                                  "name": "variable",
+                                                                                                                                                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.strings.cat"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                                "typeName": "hydra.core.Term"}}},
+                                                                                                                                                                                                                                          {
+                                                                                                                                                                                                                                            "name": "argument",
+                                                                                                                                                                                                                                            "term": {
+                                                                                                                                                                                                                                              "inject": {
+                                                                                                                                                                                                                                                "field": {
+                                                                                                                                                                                                                                                  "name": "list",
+                                                                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                                                                    "list": [
+                                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                                        "inject": {
+                                                                                                                                                                                                                                                          "field": {
+                                                                                                                                                                                                                                                            "name": "literal",
+                                                                                                                                                                                                                                                            "term": {
+                                                                                                                                                                                                                                                              "inject": {"field": {"name": "string", "term": {"literal": {"string": "no such field "}}}, "typeName": "hydra.core.Literal"}}},
+                                                                                                                                                                                                                                                          "typeName": "hydra.core.Term"}},
+                                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                                        "inject": {
+                                                                                                                                                                                                                                                          "field": {
+                                                                                                                                                                                                                                                            "name": "application",
+                                                                                                                                                                                                                                                            "term": {
+                                                                                                                                                                                                                                                              "record": {
+                                                                                                                                                                                                                                                                "fields": [
+                                                                                                                                                                                                                                                                  {
+                                                                                                                                                                                                                                                                    "name": "function",
+                                                                                                                                                                                                                                                                    "term": {
+                                                                                                                                                                                                                                                                      "inject": {
+                                                                                                                                                                                                                                                                        "field": {
+                                                                                                                                                                                                                                                                          "name": "unwrap",
+                                                                                                                                                                                                                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.core.Name"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                                                                                                                                                                                                  {
+                                                                                                                                                                                                                                                                    "name": "argument",
+                                                                                                                                                                                                                                                                    "term": {
+                                                                                                                                                                                                                                                                      "inject": {
+                                                                                                                                                                                                                                                                        "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "fname"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                                                                                                                                                                                                "typeName": "hydra.core.Application"}}},
+                                                                                                                                                                                                                                                          "typeName": "hydra.core.Term"}},
+                                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                                        "inject": {
+                                                                                                                                                                                                                                                          "field": {
+                                                                                                                                                                                                                                                            "name": "literal",
+                                                                                                                                                                                                                                                            "term": {
+                                                                                                                                                                                                                                                              "inject": {"field": {"name": "string", "term": {"literal": {"string": " in union"}}}, "typeName": "hydra.core.Literal"}}},
+                                                                                                                                                                                                                                                          "typeName": "hydra.core.Term"}}]}},
+                                                                                                                                                                                                                                                "typeName": "hydra.core.Term"}}}],
+                                                                                                                                                                                                                                        "typeName": "hydra.core.Application"}}},
+                                                                                                                                                                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                                                                                                                                                                          "typeName": "hydra.core.WrappedTerm"}}},
+                                                                                                                                                                                                                    "typeName": "hydra.core.Term"}}}},
+                                                                                                                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                                                        "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                                                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                                                                                                                     "typeName": "hydra.core.Term"}}},
@@ -9760,12 +9771,14 @@
                                                                                                                                                                                 "term": {
                                                                                                                                                                                   "inject": {
                                                                                                                                                                                     "field": {
-                                                                                                                                                                                      "name": "application",
+                                                                                                                                                                                      "name": "lambda",
                                                                                                                                                                                       "term": {
                                                                                                                                                                                         "record": {
                                                                                                                                                                                           "fields": [
+                                                                                                                                                                                            {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                                                                                                                             {
-                                                                                                                                                                                              "name": "function",
+                                                                                                                                                                                              "name": "body",
                                                                                                                                                                                               "term": {
                                                                                                                                                                                                 "inject": {
                                                                                                                                                                                                   "field": {
@@ -9777,25 +9790,17 @@
                                                                                                                                                                                                             "name": "function",
                                                                                                                                                                                                             "term": {
                                                                                                                                                                                                               "inject": {
-                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                  "name": "variable",
-                                                                                                                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maps.lookup"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                           {
                                                                                                                                                                                                             "name": "argument",
                                                                                                                                                                                                             "term": {
                                                                                                                                                                                                               "inject": {
-                                                                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "fname"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "fterm"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                                                                                                                         "typeName": "hydra.core.Application"}}},
-                                                                                                                                                                                                  "typeName": "hydra.core.Term"}}},
-                                                                                                                                                                                            {
-                                                                                                                                                                                              "name": "argument",
-                                                                                                                                                                                              "term": {
-                                                                                                                                                                                                "inject": {
-                                                                                                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "variantMap"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                   "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                                          "typeName": "hydra.core.Application"}}},
+                                                                                                                                                                                          "typeName": "hydra.core.Lambda"}}},
                                                                                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                                                                                                       "typeName": "hydra.core.Term"}}}],

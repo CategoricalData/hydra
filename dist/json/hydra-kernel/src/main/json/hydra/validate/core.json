@@ -3342,26 +3342,26 @@
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "undefined"},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}}}},
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                  "lambda": {
+                                                    "body": {"application": {"argument": {"variable": "firstUndefined"}, "function": {"variable": "mkError"}}},
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "parameter": "firstUndefined"}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "lambda": {
-                                                        "body": {"application": {"argument": {"variable": "firstUndefined"}, "function": {"variable": "mkError"}}},
-                                                        "domain": {"variable": "hydra.core.Name"},
-                                                        "parameter": "firstUndefined"}},
+                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "undefined"},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}}}},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"maybe": {"variable": "t1"}}}},
-                                                            "type": {"variable": "hydra.core.Name"}}}}}}}}}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "type": {"maybe": {"variable": "t1"}}}}}}}}}}}}}},
                                     "domain": {"function": {"codomain": {"maybe": {"variable": "t1"}}, "domain": {"variable": "hydra.core.Name"}}},
                                     "parameter": "mkError"}},
                                 "domain": {"variable": "hydra.core.Type"},
@@ -3431,26 +3431,26 @@
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "undefined"},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}}}},
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                  "lambda": {
+                                                    "body": {"application": {"argument": {"variable": "firstUndefined"}, "function": {"variable": "mkError"}}},
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "parameter": "firstUndefined"}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "lambda": {
-                                                        "body": {"application": {"argument": {"variable": "firstUndefined"}, "function": {"variable": "mkError"}}},
-                                                        "domain": {"variable": "hydra.core.Name"},
-                                                        "parameter": "firstUndefined"}},
+                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "undefined"},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}}}},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"maybe": {"variable": "t1"}}}},
-                                                            "type": {"variable": "hydra.core.Name"}}}}}}}}}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "type": {"maybe": {"variable": "t1"}}}}}}}}}}}}}},
                                     "domain": {"function": {"codomain": {"maybe": {"variable": "t1"}}, "domain": {"variable": "hydra.core.Name"}}},
                                     "parameter": "mkError"}},
                                 "domain": {"variable": "hydra.core.TypeScheme"},
@@ -6464,45 +6464,44 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "fields"},
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.FieldType"}}}}},
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "maybe": {
+                                                                                "inject": {
+                                                                                  "field": {
+                                                                                    "name": "singleVariantUnion",
+                                                                                    "term": {
+                                                                                      "record": {
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "location",
+                                                                                            "term": {
+                                                                                              "wrap": {
+                                                                                                "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                                "typeName": "hydra.paths.SubtermPath"}}},
+                                                                                          {
+                                                                                            "name": "fieldName",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "singleField"},
+                                                                                                "function": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}}}}}],
+                                                                                        "typeName": "hydra.error.core.SingleVariantUnionError"}}},
+                                                                                  "typeName": "hydra.error.core.InvalidTypeError"}}},
+                                                                            "domain": {"variable": "hydra.core.FieldType"},
+                                                                            "parameter": "singleField"}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "maybe": {
-                                                                                    "inject": {
-                                                                                      "field": {
-                                                                                        "name": "singleVariantUnion",
-                                                                                        "term": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "location",
-                                                                                                "term": {
-                                                                                                  "wrap": {
-                                                                                                    "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.paths.SubtermStep"}}},
-                                                                                                    "typeName": "hydra.paths.SubtermPath"}}},
-                                                                                              {
-                                                                                                "name": "fieldName",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "singleField"},
-                                                                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}}}}}],
-                                                                                            "typeName": "hydra.error.core.SingleVariantUnionError"}}},
-                                                                                      "typeName": "hydra.error.core.InvalidTypeError"}}},
-                                                                                "domain": {"variable": "hydra.core.FieldType"},
-                                                                                "parameter": "singleField"}},
+                                                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.core.InvalidTypeError"}}},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.core.InvalidTypeError"}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "fields"},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.FieldType"}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"maybe": {"variable": "hydra.error.core.InvalidTypeError"}}}},
-                                                                                    "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                    "type": {"maybe": {"variable": "hydra.error.core.InvalidTypeError"}}}}}}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {

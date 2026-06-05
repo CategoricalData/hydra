@@ -126,22 +126,22 @@ etaExpandTerm tx0 term0 =
                     Core.TermLet v0 -> termArityWithContext (Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0) (Core.letBody v0)
                     Core.TermTypeLambda v0 -> termArityWithContext (Scoping.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                     Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
-                    Core.TermVariable v0 -> Maybes.maybe (Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v0 primTypes)) Arity.typeArity (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
+                    Core.TermVariable v0 -> Maybes.cases (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx))) (Maybes.cases (Maps.lookup v0 primTypes) 0 Arity.typeSchemeArity) Arity.typeArity
                     _ -> 0
           domainTypes =
-                  \n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> case typ of
+                  \n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.cases mt (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> case typ of
                     Core.TypeFunction v0 -> Lists.cons (Just (Core.functionTypeDomain v0)) (domainTypes (Math.sub n 1) (Just (Core.functionTypeCodomain v0)))
                     Core.TypeAnnotated v0 -> domainTypes n (Just (Core.annotatedTypeBody v0))
                     Core.TypeApplication v0 -> domainTypes n (Just (Core.applicationTypeFunction v0))
                     Core.TypeForall _ -> Lists.map (\_2 -> Nothing) (Math.range 1 n)
-                    _ -> Lists.map (\_ -> Nothing) (Math.range 1 n)) mt)
+                    _ -> Lists.map (\_ -> Nothing) (Math.range 1 n)))
           peelFunctionDomains =
-                  \mtyp -> \n -> Logic.ifElse (Equality.lte n 0) mtyp (Maybes.maybe Nothing (\typ -> case typ of
+                  \mtyp -> \n -> Logic.ifElse (Equality.lte n 0) mtyp (Maybes.cases mtyp Nothing (\typ -> case typ of
                     Core.TypeFunction v0 -> peelFunctionDomains (Just (Core.functionTypeCodomain v0)) (Math.sub n 1)
                     Core.TypeAnnotated v0 -> peelFunctionDomains (Just (Core.annotatedTypeBody v0)) n
                     Core.TypeApplication v0 -> peelFunctionDomains (Just (Core.applicationTypeFunction v0)) n
                     Core.TypeForall _ -> Nothing
-                    _ -> Nothing) mtyp)
+                    _ -> Nothing))
           expand =
                   \alwaysPad -> \args -> \arity -> \headTyp -> \head ->
                     let applied =
@@ -162,9 +162,9 @@ etaExpandTerm tx0 term0 =
                                       Core.applicationFunction = body,
                                       Core.applicationArgument = (Core.TermVariable vn)}))) applied indices
                           fullyApplied =
-                                  Maybes.maybe fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
+                                  Maybes.cases codomainType fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = fullyAppliedRaw,
-                                    Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct)))})) codomainType
+                                    Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct)))}))
                           indexedDomains = Lists.zip indices domains
                       in (Lists.foldl (\body -> \idPair ->
                         let i = Pairs.first idPair
@@ -355,11 +355,11 @@ etaExpandTypedTerm cx tx0 term0 =
                                 Core.TermTypeLambda v0 ->
                                   let txt = Scoping.extendGraphForTypeLambda tx2 v0
                                   in (arityOf txt (Core.typeLambdaBody v0))
-                                Core.TermVariable v0 -> Maybes.maybe (Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx2 [] (Core.TermVariable v0))) (\t -> Right (Arity.typeArity t)) (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx2)))
+                                Core.TermVariable v0 -> Maybes.cases (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx2))) (Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx2 [] (Core.TermVariable v0))) (\t -> Right (Arity.typeArity t))
                                 _ -> dflt
                     extraVariables = \n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n)
                     pad =
-                            \vars -> \body -> Maybes.maybe body (\uc ->
+                            \vars -> \body -> Maybes.cases (Lists.uncons vars) body (\uc ->
                               let v0 = Pairs.first uc
                                   vrest = Pairs.second uc
                               in (Core.TermLambda (Core.Lambda {
@@ -367,7 +367,7 @@ etaExpandTypedTerm cx tx0 term0 =
                                 Core.lambdaDomain = Nothing,
                                 Core.lambdaBody = (pad vrest (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = body,
-                                  Core.applicationArgument = (Core.TermVariable v0)})))}))) (Lists.uncons vars)
+                                  Core.applicationArgument = (Core.TermVariable v0)})))})))
                     padn = \n -> \body -> pad (extraVariables n) body
                     unwind =
                             \term2 -> Lists.foldl (\e -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -434,7 +434,7 @@ etaExpansionArity graph term =
       Core.TermUnwrap _ -> 1
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingTypeScheme b))
+      Core.TermVariable v0 -> Maybes.cases (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingTypeScheme b)) 0 (\ts -> Arity.typeArity (Core.typeSchemeBody ts))
       _ -> 0
 -- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: Core.Term -> Core.Term
@@ -485,49 +485,49 @@ reduceTerm cx graph eager term =
                     in (Logic.and eager2 isNonLambdaTerm)
           reduceArg = \eager2 -> \arg -> Logic.ifElse eager2 (Right arg) (reduce False arg)
           applyToArguments =
-                  \fun -> \args -> Maybes.maybe fun (\uc -> applyToArguments (Core.TermApplication (Core.Application {
+                  \fun -> \args -> Maybes.cases (Lists.uncons args) fun (\uc -> applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
-                    Core.applicationArgument = (Pairs.first uc)})) (Pairs.second uc)) (Lists.uncons args)
+                    Core.applicationArgument = (Pairs.first uc)})) (Pairs.second uc))
           mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (ShowErrors.error e))
           applyProjection =
                   \proj -> \reducedArg -> Eithers.bind (ExtractCore.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
                     let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.projectionFieldName proj)) fields
-                    in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.projectionFieldName proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
+                    in (Maybes.cases matching (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = (Core.projectionFieldName proj)})))) (\mf -> Right (Core.fieldTerm mf))))
           applyCases =
                   \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
                     let matching =
                             Lists.find (\f -> Equality.equal (Core.caseAlternativeName f) (Core.fieldName field)) (Core.caseStatementCases cs)
-                    in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (\mf -> Right (Core.TermApplication (Core.Application {
+                    in (Maybes.cases matching (Maybes.cases (Core.caseStatementDefault cs) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x)) (\mf -> Right (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.caseAlternativeHandler mf),
-                      Core.applicationArgument = (Core.fieldTerm field)}))) matching))
+                      Core.applicationArgument = (Core.fieldTerm field)})))))
           applyIfNullary =
                   \eager2 -> \original -> \args ->
                     let stripped = Strip.deannotateTerm original
                         forProjection =
-                                \proj -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                \proj -> \args2 -> Maybes.cases (Lists.uncons args2) (Right original) (\uc ->
                                   let arg = Pairs.first uc
                                       remainingArgs = Pairs.second uc
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyProjection proj reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyProjection proj reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs))))
                         forCases =
-                                \cs -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                \cs -> \args2 -> Maybes.cases (Lists.uncons args2) (Right original) (\uc ->
                                   let arg = Pairs.first uc
                                       remainingArgs = Pairs.second uc
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyCases cs reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyCases cs reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs))))
                         forUnwrap =
-                                \name -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                \name -> \args2 -> Maybes.cases (Lists.uncons args2) (Right original) (\uc ->
                                   let arg = Pairs.first uc
                                       remainingArgs = Pairs.second uc
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (ExtractCore.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (ExtractCore.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs))))
                         forLambda =
                                 \l -> \args2 ->
                                   let param = Core.lambdaParameter l
                                       body = Core.lambdaBody l
-                                  in (Maybes.maybe (Right original) (\uc ->
+                                  in (Maybes.cases (Lists.uncons args2) (Right original) (\uc ->
                                     let arg = Pairs.first uc
                                         remainingArgs = Pairs.second uc
-                                    in (Eithers.bind (reduce eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Variables.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2))
+                                    in (Eithers.bind (reduce eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Variables.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))))
                         forPrimitive =
                                 \prim -> \arity -> \args2 ->
                                   let argList = Lists.take arity args2
@@ -543,11 +543,11 @@ reduceTerm cx graph eager term =
                       Core.TermLambda v0 -> Logic.ifElse (Lists.null args) (Right original) (forLambda v0 args)
                       Core.TermVariable v0 ->
                         let mBinding = Lexical.lookupBinding graph v0
-                        in (Maybes.maybe (
+                        in (Maybes.cases mBinding (
                           let mPrim = Lexical.lookupPrimitive graph v0
-                          in (Maybes.maybe (Right (applyToArguments original args)) (\prim ->
+                          in (Maybes.cases mPrim (Right (applyToArguments original args)) (\prim ->
                             let arity = Arity.primitiveArity prim
-                            in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args))) mPrim)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
+                            in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args))))) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args))
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0
                             body = Core.letBody v0
@@ -584,7 +584,7 @@ termIsValue term =
                   \alts -> Lists.foldl (\b -> \a -> Logic.and b (termIsValue (Core.caseAlternativeHandler a))) True alts
       in case (Strip.deannotateTerm term) of
         Core.TermApplication _ -> False
-        Core.TermCases v0 -> Logic.and (checkCaseAlternatives (Core.caseStatementCases v0)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v0))
+        Core.TermCases v0 -> Logic.and (checkCaseAlternatives (Core.caseStatementCases v0)) (Maybes.cases (Core.caseStatementDefault v0) True termIsValue)
         Core.TermEither v0 -> Eithers.either (\l -> termIsValue l) (\r -> termIsValue r) v0
         Core.TermLambda v0 -> termIsValue (Core.lambdaBody v0)
         Core.TermLiteral _ -> True
@@ -592,7 +592,7 @@ termIsValue term =
         Core.TermUnwrap _ -> True
         Core.TermList v0 -> forList v0
         Core.TermMap v0 -> Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue (Pairs.first kv)) (termIsValue (Pairs.second kv)))) True (Maps.toList v0)
-        Core.TermMaybe v0 -> Maybes.maybe True termIsValue v0
+        Core.TermMaybe v0 -> Maybes.cases v0 True termIsValue
         Core.TermRecord v0 -> checkFields (Core.recordFields v0)
         Core.TermSet v0 -> forList (Sets.toList v0)
         Core.TermInject v0 -> checkField (Core.injectionField v0)
