@@ -5,12 +5,13 @@ It covers the rules of the JSON coder itself, independent of the shape of the `M
 or any other particular kernel type being encoded.
 
 The encoding is intended to be stable for the lifetime of the v1 series.
-A `formatVersion` field on the per-package `build/<set>/digest.json` advertises the version
-a consumer is reading; see [Format versioning](#format-versioning) below.
+A `moduleFormatVersion` field on the per-package `build/<set>/digest.json` records the encoding version,
+but that digest is gitignored and not shipped, so external consumers cannot read it today;
+see [Format versioning](#format-versioning) below.
 
 ## Status
 
-This document describes **`formatVersion: 1`**.
+This document describes **`moduleFormatVersion: 1`**.
 
 The encoding is implemented by the JSON coder in
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/{Encode,Decode}.hs`.
@@ -275,22 +276,30 @@ exceed an internal soft-wrap budget.
 
 ## Format versioning
 
-Encoding changes are gated by a `formatVersion` integer carried at the top level of each
+Encoding changes are gated by a `moduleFormatVersion` integer carried at the top level of each
 package's per-source-set `digest.json` (`dist/json/<pkg>/build/<set>/digest.json`):
 
 ```json
 {
-  "formatVersion": 1,
-  "version": 1,
+  "digestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "hashes": {...}
 }
 ```
 
-Bump rules:
+The digest sidecar carries two distinct version descriptors, both reset to `1` for the 0.16.0 release:
 
-- `formatVersion` **increments by 1** when a parser written for version *N* would mis-parse
+- `moduleFormatVersion` versions the JSON encoding of the sibling module files
+  (`dist/json/<pkg>/.../*.json`) — the wire format this document specifies.
+- `digestFormatVersion` versions the digest file's *own* internal schema
+  (the simple hash map vs. the inputs/outputs/generator layout). It is not meant for consumers
+  gating on the module-JSON encoding.
+
+Bump rules for `moduleFormatVersion`:
+
+- It **increments by 1** when a parser written for version *N* would mis-parse
   version *N+1*. This is the load-bearing definition: a consumer who keys their parser
-  selection off `formatVersion` is guaranteed correct results.
+  selection off `moduleFormatVersion` is guaranteed correct results.
 - Adding a new optional field, a new `Term` or `Type` variant, or a new module is **not** a
   bump: existing parsers will see an unknown variant and can fail loudly, but they will
   not silently mis-parse anything that was valid in the prior version.
@@ -298,13 +307,20 @@ Bump rules:
   any existing variant **is** a bump.
 - Bumps are expected to be rare — measured in years, not releases.
 
-The other `version` field in `digest.json` describes the digest file's own internal schema
-and is not meant for consumers gating on the encoding format.
-Consumers should read `formatVersion` only.
+Caveat on consumer visibility: `digest.json` is gitignored and regenerated every sync, so it is
+**not** part of a published package. An external consumer reading shipped artifacts therefore cannot
+currently read `moduleFormatVersion` at all. Surfacing the format version in shipped data is tracked
+under #370 / the post-#370 issue. Until then, `moduleFormatVersion` is an internal build-cache
+descriptor, not a consumer contract.
 
 Module files themselves carry no version field;
 the package's `build/<set>/digest.json` is the single source of truth for the format
 version of all JSON files in the same package's source set.
+
+Two sibling metadata files carry their own schema-version fields, also reset to `1` for 0.16.0:
+`manifest.json` (the per-package module listing) carries `manifestFormatVersion`, and the
+hand-authored `packages/<pkg>/package.json` descriptor carries `packageFormatVersion`.
+These version those files' own schemas and are independent of `moduleFormatVersion`.
 
 ## Conformance
 

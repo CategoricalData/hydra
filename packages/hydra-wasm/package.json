@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-wasm",
   "description": "WebAssembly coder for Hydra",
   "sourceLanguage": "haskell",

@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-ext",
   "description": "Extension coders for Hydra: Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go, etc.",
   "sourceLanguage": "haskell",

@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-typescript",
   "description": "TypeScript coder for Hydra: generates TypeScript code from Hydra type and term modules (generation-only target)",
   "sourceLanguage": "haskell",
