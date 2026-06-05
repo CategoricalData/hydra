@@ -6,10 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Populate language constraints based on TinkerPop Graph.Features"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Populate language constraints based on TinkerPop Graph.Features"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

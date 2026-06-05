@@ -682,8 +682,9 @@ Per host, two things are needed beyond the kernel metadata:
      ...]
    ```
 
-   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the
-   universal `PrimitiveDefinition` (looked up by name) with the host's native
+   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by re-deriving a
+   `PrimitiveDefinition` from the host-side argument types (via
+   `defaultPrimitiveDefinition`) and pairing it with the host's native
    `implementation` function.
 
    The Java and Python heads have analogous host-side registries
@@ -691,10 +692,13 @@ Per host, two things are needed beyond the kernel metadata:
    that wrap each native impl in a `Primitive`.
 
 The type information passed to `prim1`/`prim2`/`prim3` at host registration is
-a sanity-check repetition of the canonical signature — it's expected to match,
-and divergence is a bug. Future work (see follow-ups) may have host registries
-derive their signatures directly from the kernel metadata to eliminate this
-duplication.
+a sanity-check repetition of the canonical signature in the kernel-side
+registry (`Hydra/Sources/Kernel/Lib/<Sub>.hs`) — it's expected to match, and
+divergence is a bug. On the Haskell side this keeps the bootstrap graph aligned
+with the JSON kernel; other hosts consume the JSON kernel directly and so
+inherit the canonical metadata. Future work (see follow-ups) may have host
+registries derive their signatures directly from the kernel metadata to
+eliminate this duplication.
 
 ### Default implementations
 
@@ -828,18 +832,22 @@ prim2 _equality_equal Equality.equal ["x"] x x boolean
 
 The same primitive works with any type supporting equality.
 
-#### Pattern 2: Interpreted vs. Compiled Forms
+#### Pattern 2: Default implementations
 
-- **Interpreted**: Can be evaluated directly within Hydra (provided as `Just interpreter`)
-- **Compiled**: Only work in compiled code (marked with `Nothing`)
+A `PrimitiveDefinition` carries an optional `defaultImplementation : Maybe Term`
+— a declarative reference implementation in pure Hydra terms. The kernel
+registry declares each primitive with one of two helpers:
 
-```haskell
--- Has interpreted form
-prim2Interp _lists_map (Just mapInterp) ...
+- **`primDef`** — supplies a default Hydra-term implementation; usable as a
+  fallback by minimal interpreters that lack a native implementation, and as a
+  proof-friendly reference.
+- **`primNoDef`** — no default; used for primitives that are fundamental (e.g.
+  `logic.ifElse`, `pairs.first`) or whose meaning is host-native (e.g.
+  arithmetic, char predicates, regex matching).
 
--- Compiled only
-prim1 _strings_toUpper Strings.toUpper [] string string
-```
+On the Haskell host, the `prim*` family in `Hydra.Dsl.Prims` pairs each name
+with its native implementation regardless of which kernel helper declared the
+primitive.
 
 #### Pattern 3: Either for Error Handling
 

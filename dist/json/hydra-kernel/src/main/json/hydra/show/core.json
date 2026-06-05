@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a binding as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a binding as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -77,7 +77,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a case statement as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a case statement as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -213,10 +213,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Show an Either value using given functions for left and right"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Show an Either value using given functions for left and right"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -291,7 +292,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a field as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a field as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -332,7 +333,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a field type as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a field type as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -373,7 +374,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a list of fields as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a list of fields as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -414,7 +415,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a float value as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a float value as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -461,7 +462,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a float type as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a float type as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -488,7 +489,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an injection as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an injection as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -529,7 +530,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an integer value as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an integer value as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -667,7 +668,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show an integer type as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an integer type as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -715,7 +716,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a lambda as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a lambda as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -792,7 +793,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a let expression as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a let expression as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -852,7 +853,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show a list using a given function to show each element"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a list using a given function to show each element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -903,7 +908,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a literal as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a literal as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -971,7 +976,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a literal type as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a literal type as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1022,7 +1027,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Show a map using given functions to show keys and values"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Show a map using given functions to show keys and values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1122,10 +1131,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Show a Maybe value using a given function to show the element"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a Maybe value using a given function to show the element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1179,7 +1189,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Show a pair using given functions to show each element"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Show a pair using given functions to show each element"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1240,7 +1254,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a projection as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a projection as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1290,10 +1304,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "A placeholder for reading terms from their serialized form. Not implemented."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A placeholder for reading terms from their serialized form. Not implemented."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1316,7 +1331,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Show a set using a given function to show each element"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a set using a given function to show each element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1370,7 +1389,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a term as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a term as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1956,7 +1975,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2502,7 +2521,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Show a type scheme as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type scheme as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

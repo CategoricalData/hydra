@@ -5,11 +5,12 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {
-                    "literal": {"string": "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas"}}}]},
               "body": {
                 "record": [
                   {"name": "doc", "type": {"maybe": {"literal": {"string": {}}}}},
@@ -99,10 +100,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Note: the default value for an enum-valued must be one of the enumerated string symbols"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: the default value for an enum-valued must be one of the enumerated string symbols"}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.pegasus.pdl.FieldName"}},
@@ -117,7 +119,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Note: all included schemas must be record schemas"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: all included schemas must be record schemas"}}}]},
               "body": {
                 "record": [
                   {"name": "fields", "type": {"list": {"variable": "hydra.pegasus.pdl.RecordField"}}},
@@ -155,7 +161,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Note: annotations are only available for aliased members"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: annotations are only available for aliased members"}}}]},
               "body": {
                 "record": [
                   {"name": "alias", "type": {"maybe": {"variable": "hydra.pegasus.pdl.FieldName"}}},
@@ -168,8 +178,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "Note: unions are not allowed as member types of other unions"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: unions are not allowed as member types of other unions"}}}]},
               "body": {"wrap": {"list": {"variable": "hydra.pegasus.pdl.UnionMember"}}}}},
           "variables": []},
         "name": "hydra.pegasus.pdl.UnionSchema"}}],

@@ -98,10 +98,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNameError"),
                                       Core.projectionFieldName = (Core.Name "second")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingModuleNameError")))])}))}),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingModuleNameError")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingVariantNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -203,10 +203,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
                                       Core.projectionFieldName = (Core.Name "conflictingName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingVariantNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingVariantNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -274,10 +274,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError"),
                                       Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionNotInModuleNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionNotInModuleNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionsOutOfOrderError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -362,10 +362,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
                                       Core.projectionFieldName = (Core.Name "followingName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionsOutOfOrderError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionsOutOfOrderError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateDefinitionNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -433,10 +433,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
                                       Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateDefinitionNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateDefinitionNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateModuleNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -487,10 +487,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateModuleNameError"),
                                       Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateModuleNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateModuleNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidDefinitionNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -575,10 +575,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
                                       Core.projectionFieldName = (Core.Name "expectedConvention")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidDefinitionNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidDefinitionNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -822,8 +822,10 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.missingDocumentationError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleNameConventionError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -874,10 +876,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidModuleNameConventionError"),
                                       Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleNameConventionError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleNameConventionError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidPackageError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1025,8 +1027,10 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidPackageNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidPackageNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1077,10 +1081,10 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageNameError"),
                                       Core.projectionFieldName = (Core.Name "packageName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidPackageNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.missingDocumentationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1148,7 +1152,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
                                       Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.MissingDocumentationError")))])}))}))]}
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.MissingDocumentationError")))]))}))}))]}

@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Go 1.22+"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Go 1.22+"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -139,7 +139,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Go"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in Go"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -147,10 +147,11 @@
                     "name": "goKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Go keywords, as enumerated at https://go.dev/ref/spec#Keywords"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Go keywords, as enumerated at https://go.dev/ref/spec#Keywords"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "break"}},
@@ -183,11 +184,12 @@
                     "name": "goPredeclaredIdentifiers",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Predeclared identifiers in Go, as enumerated at https://go.dev/ref/spec#Predeclared_identifiers"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Predeclared identifiers in Go, as enumerated at https://go.dev/ref/spec#Predeclared_identifiers"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "any"}},
@@ -239,7 +241,9 @@
                     "name": "hydraGoKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words which are specific to Hydra-Go"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Reserved words which are specific to Hydra-Go"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "Node"}},

@@ -22,7 +22,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -130,7 +134,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -188,10 +196,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Map a function over a set, defined in terms of toList, lists.map and fromList."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a function over a set, defined in terms of toList, lists.map and fromList."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -307,7 +316,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -353,10 +366,11 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Union of a list of sets, defined in terms of foldl and union."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Union of a list of sets, defined in terms of foldl and union."}}}]},
             "body": {
               "lambda": {
                 "body": {

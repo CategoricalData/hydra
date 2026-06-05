@@ -10,10 +10,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Render an axiom-only Coq module: imports + dependency imports + Axiom declarations"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Render an axiom-only Coq module: imports + dependency imports + Axiom declarations"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -371,7 +372,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Assemble the full (non-axiom) Coq source for a module"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Assemble the full (non-axiom) Coq source for a module"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1756,11 +1761,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Emit a Require Import sentence for the given dependency namespaces; empty list yields no sentence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Emit a Require Import sentence for the given dependency namespaces; empty list yields no sentence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1831,10 +1837,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Render a mutually recursive term group as a hydra_fix bundle plus projection Definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a mutually recursive term group as a hydra_fix bundle plus projection Definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2929,10 +2936,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Encode a non-cyclic term definition as a Coq Definition sentence"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a non-cyclic term definition as a Coq Definition sentence"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3212,11 +3220,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Produce Arguments {p} declarations for every parameterized type's constructor and field accessors"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Produce Arguments {p} declarations for every parameterized type's constructor and field accessors"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3662,10 +3671,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Emit Coq sentences for a type-definition SCC group, handling mutual recursion and positivity"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit Coq sentences for a type-definition SCC group, handling mutual recursion and positivity"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4013,10 +4023,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate the Coq sentence(s) for a non-cyclic type definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate the Coq sentence(s) for a non-cyclic type definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4404,10 +4415,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect local names that occur in more than one module's type or term definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect local names that occur in more than one module's type or term definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4714,10 +4726,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect all type definitions from every module and run buildConstructorCounts over them"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect all type definitions from every module and run buildConstructorCounts over them"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4828,10 +4841,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Delegate to CoqUtils.buildFieldMapping across all supplied modules"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Delegate to CoqUtils.buildFieldMapping across all supplied modules"}}}]},
             "body": {
               "lambda": {
                 "body": {"application": {"argument": {"variable": "modules"}, "function": {"variable": "hydra.coq.utils.buildFieldMapping"}}},
@@ -4850,12 +4864,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Collect sanitized accessor names by SCC-sorting every module's type defs and folding collectSanitizedAccessors"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Collect sanitized accessor names by SCC-sorting every module's type defs and folding collectSanitizedAccessors"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4986,10 +5001,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Emit an Arguments line marking every type parameter of a definition as implicit"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit an Arguments line marking every type parameter of a definition as implicit"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5050,10 +5066,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build one Definition per record field, pattern-matching on Build_T"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build one Definition per record field, pattern-matching on Build_T"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5293,11 +5310,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Build a Coq Constructor from a union field (prepended with the type name and capitalized field name)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Build a Coq Constructor from a union field (prepended with the type name and capitalized field name)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5400,10 +5418,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build an Inductive body for a union or record type in a mutual group"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build an Inductive body for a union or record type in a mutual group"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5703,10 +5722,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Emit a Definition for a record field accessor, keyed by the Build_T pattern"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit a Definition for a record field accessor, keyed by the Build_T pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5975,7 +5995,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Emit nested `prod (T1) (prod ...)` textual type expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit nested `prod (T1) (prod ...)` textual type expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6063,7 +6087,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Emit a nested `(pair (b1) (...))` textual value expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit a nested `(pair (b1) (...))` textual value expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6151,10 +6179,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Emit the n projection expressions extracting each member of a nested pair bundle"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Emit the n projection expressions extracting each member of a nested pair bundle"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6353,7 +6382,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Return-type Coq term: `TypeName` or `TypeName p1 p2 ...`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return-type Coq term: `TypeName` or `TypeName p1 p2 ...`"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6405,7 +6438,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build a Coq `(p : Type)` binder for a type parameter"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq `(p : Type)` binder for a type parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6438,10 +6475,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect type-variable names and the Coq binders needed for a term definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect type-variable names and the Coq binders needed for a term definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -6596,12 +6634,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Top-level driver: dispatch a module to either full-emission or axiom-only emission, producing (path, content) pairs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Top-level driver: dispatch a module to either full-emission or axiom-only emission, producing (path, content) pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7176,10 +7215,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7258,10 +7298,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Pretty-print the standard-imports sentence followed by additional dependency imports"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Pretty-print the standard-imports sentence followed by additional dependency imports"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7285,7 +7326,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Pretty-print a Document containing the given Coq sentences"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Pretty-print a Document containing the given Coq sentences"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7310,8 +7355,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Replace literal `bundle_` with the given replacement string"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Replace literal `bundle_` with the given replacement string"}}}]},
             "body": {
               "lambda": {
                 "body": {

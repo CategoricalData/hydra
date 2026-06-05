@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extend a graph by descending into a lambda body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend a graph by descending into a lambda body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -122,7 +126,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extend a graph by descending into a let body"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extend a graph by descending into a let body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -469,7 +474,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extend a graph by descending into a type lambda body"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extend a graph by descending into a type lambda body"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -547,7 +556,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Add bindings to an existing graph"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add bindings to an existing graph"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -722,7 +731,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a forall type to a type scheme"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a forall type to a type scheme"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -840,11 +850,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Convert a TermSignature to a TypeScheme, erasing parameter names, descriptions, and laziness flags."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Convert a TermSignature to a TypeScheme, erasing parameter names, descriptions, and laziness flags."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1069,7 +1080,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type scheme to a forall type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a type scheme to a forall type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1133,12 +1145,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly. Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing and isLazy defaults to false."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly. Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing and isLazy defaults to false."}}}]},
             "body": {
               "lambda": {
                 "body": {

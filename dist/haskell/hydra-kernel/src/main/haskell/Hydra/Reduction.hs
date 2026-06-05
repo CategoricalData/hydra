@@ -2,6 +2,7 @@
 -- | Functions for reducing terms and types, i.e. performing computations.
 
 module Hydra.Reduction where
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
@@ -163,7 +164,7 @@ etaExpandTerm tx0 term0 =
                           fullyApplied =
                                   Maybes.maybe fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = fullyAppliedRaw,
-                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct))})) codomainType
+                                    Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct)))})) codomainType
                           indexedDomains = Lists.zip indices domains
                       in (Lists.foldl (\body -> \idPair ->
                         let i = Pairs.first idPair

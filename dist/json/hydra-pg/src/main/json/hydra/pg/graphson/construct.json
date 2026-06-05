@@ -8,10 +8,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Convert a property graph adjacent edge to a GraphSON adjacent edge"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert a property graph adjacent edge to a GraphSON adjacent edge"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -240,10 +241,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Aggregate a list of key-value pairs into a map where each key maps to a list of values"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Aggregate a list of key-value pairs into a map where each key maps to a list of values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -375,10 +377,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Convert a property graph edge property to a GraphSON property"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convert a property graph edge property to a GraphSON property"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -461,10 +464,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "A coder that converts GraphSON vertices to JSON. Decoding is not supported."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "A coder that converts GraphSON vertices to JSON. Decoding is not supported."}}}]},
             "body": {
               "typeApplication": {
                 "body": {
@@ -539,10 +543,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Convert a property graph vertex with adjacent edges to a GraphSON vertex"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert a property graph vertex with adjacent edges to a GraphSON vertex"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -883,8 +888,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "Convert a property graph vertex with adjacent edges to JSON"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert a property graph vertex with adjacent edges to JSON"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -959,10 +967,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Convert a property graph vertex property to a GraphSON vertex property"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert a property graph vertex property to a GraphSON vertex property"}}}]},
                     "body": {
                       "lambda": {
                         "body": {

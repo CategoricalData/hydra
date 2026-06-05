@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an annotated RHS"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an annotated RHS"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -59,8 +59,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Serialize an annotated statement (with optional doc comment)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize an annotated statement (with optional doc comment)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -101,7 +104,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type annotation"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a type annotation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -125,7 +128,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize function arguments"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize function arguments"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -203,7 +206,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an assignment"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an assignment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -246,7 +249,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an assignment expression (walrus operator)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize an assignment expression (walrus operator)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -285,7 +292,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python atom (literal or basic expression)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a Python atom (literal or basic expression)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -418,7 +429,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an attribute access"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an attribute access"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -445,7 +456,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an await primary expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an await primary expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -492,7 +504,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a bitwise AND expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a bitwise AND expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -554,7 +566,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a bitwise OR expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a bitwise OR expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -616,7 +628,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a bitwise XOR expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a bitwise XOR expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -678,7 +690,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a block"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a block"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -756,7 +768,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a capture pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a capture pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -774,7 +786,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a case block"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a case block"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -846,7 +858,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a class definition"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a class definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -956,7 +968,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a class pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a class pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1030,7 +1042,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a closed pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a closed pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1107,7 +1119,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1143,8 +1159,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Render a Python comparison operator to its source-code form"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a Python comparison operator to its source-code form"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1185,12 +1204,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1254,7 +1274,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a compound (multi-line) Python statement"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a compound (multi-line) Python statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1332,7 +1356,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a conditional expression (ternary)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a conditional expression (ternary)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1380,7 +1405,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a conjunction (and expression)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a conjunction (and expression)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1411,7 +1437,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize decorators"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize decorators"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1449,7 +1475,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python dictionary"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python dictionary"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1483,7 +1509,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a disjunction (or expression)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a disjunction (or expression)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1514,7 +1541,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a dotted as name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a dotted as name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1575,7 +1602,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a dotted name (e.g., module.submodule)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a dotted name (e.g., module.submodule)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1609,7 +1640,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a double-starred key-value pair"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a double-starred key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1650,7 +1682,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1692,7 +1724,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a factor expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a factor expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1759,7 +1791,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a raw function definition"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a raw function definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1945,7 +1977,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a function definition"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a function definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1997,7 +2029,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a parenthesized group"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a parenthesized group"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2033,7 +2065,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a guard clause"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a guard clause"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2057,7 +2089,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import from statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an import from statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2149,7 +2181,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import from as name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an import from as name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2204,7 +2236,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize import from targets"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize import from targets"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2281,7 +2313,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an import name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2316,7 +2348,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an import statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an import statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2351,7 +2383,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an inversion (not expression)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an inversion (not expression)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2392,7 +2425,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a keyword pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a keyword pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2431,7 +2464,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize keyword patterns"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize keyword patterns"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2460,7 +2493,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a key-value pair"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2504,7 +2537,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a keyword argument"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a keyword argument"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2541,7 +2574,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a kwarg or double starred"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a kwarg or double starred"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2582,7 +2615,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a kwarg or starred"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a kwarg or starred"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2618,7 +2651,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a lambda expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a lambda expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2667,7 +2700,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a lambda parameter without default"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a lambda parameter without default"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2685,7 +2719,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize lambda parameters"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize lambda parameters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2724,7 +2758,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize lambda star etc"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize lambda star etc"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2774,7 +2808,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python list"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python list"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2802,7 +2836,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a match statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a match statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2866,7 +2900,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python module to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python module to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2934,7 +2970,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python name/identifier"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python name/identifier"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2952,7 +2988,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a name or attribute"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a name or attribute"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2979,7 +3015,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a named expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a named expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3015,7 +3051,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python number literal"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python number literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3078,7 +3114,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an or pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an or pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3109,7 +3145,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a parameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3159,7 +3195,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a parameter without default"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a parameter without default"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3180,7 +3217,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize parameters without defaults"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize parameters without defaults"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3218,7 +3256,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize function parameters"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize function parameters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3261,7 +3299,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3297,7 +3335,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a pattern capture target"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a pattern capture target"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3315,7 +3353,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize patterns"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize patterns"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3350,7 +3388,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a positional argument"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a positional argument"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3394,7 +3432,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize positional patterns"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize positional patterns"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3422,7 +3460,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a power expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a power expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3479,7 +3517,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a primary expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a primary expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3514,7 +3552,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a primary RHS"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a primary RHS"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3583,7 +3621,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a primary with RHS"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a primary with RHS"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3621,7 +3659,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a raise expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a raise expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3683,7 +3721,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a raise statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a raise statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3718,7 +3756,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a relative import prefix"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a relative import prefix"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3753,7 +3791,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a return statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a return statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3788,7 +3826,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python set"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python set"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3816,7 +3854,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a shift expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a shift expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3837,7 +3875,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a simple (single-line) Python statement"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a simple (single-line) Python statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3965,7 +4007,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a simple type parameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a simple type parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3986,7 +4028,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a single target"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a single target"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4028,7 +4070,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a slice"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a slice"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4063,7 +4105,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a slice or starred expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a slice or starred expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4099,7 +4142,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize slices"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize slices"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4151,7 +4194,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star atom"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a star atom"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4200,7 +4243,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a star expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4241,7 +4284,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star named expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a star named expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4282,7 +4325,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a star target"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a star target"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4324,7 +4367,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a starred expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a starred expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4348,7 +4391,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4404,10 +4447,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Serialize a Python string prefix to its source-form characters"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a Python string prefix to its source-form characters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4438,7 +4482,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python string literal"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python string literal"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4569,7 +4613,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a subject expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a subject expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4604,7 +4648,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a sum expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a sum expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4623,7 +4667,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a target-side primary expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a target-side primary expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4679,7 +4724,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a TPrimaryAndName as primary.name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a TPrimaryAndName as primary.name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4718,7 +4764,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a target with star atom"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a target with star atom"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4760,7 +4806,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a term expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a term expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4779,7 +4825,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a Python tuple"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python tuple"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4880,7 +4926,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type alias"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a type alias"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4971,7 +5017,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a type parameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a type parameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5014,7 +5060,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a typed assignment"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a typed assignment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5081,7 +5127,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize an untyped assignment"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize an untyped assignment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5133,7 +5179,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a value pattern"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a value pattern"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5151,7 +5197,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a while statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a while statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5238,10 +5284,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Escape special characters in a Python string and wrap in quotes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Escape special characters in a Python string and wrap in quotes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5446,12 +5493,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Convert a doc string to Python comment format. Empty source lines emit `#` (no trailing space) so blank comment lines don't carry trailing whitespace into the generated file."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a doc string to Python comment format. Empty source lines emit `#` (no trailing space) so blank comment lines don't carry trailing whitespace into the generated file."}}}]},
             "body": {
               "lambda": {
                 "body": {

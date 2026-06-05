@@ -71,8 +71,10 @@ and =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Logical AND, defined in terms of ifElse.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Logical AND, defined in terms of ifElse.")))]))})))}
 ifElse :: Packaging.PrimitiveDefinition
 ifElse =
     Packaging.PrimitiveDefinition {
@@ -147,8 +149,10 @@ not =
                 Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
             Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Logical NOT, defined in terms of ifElse.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Logical NOT, defined in terms of ifElse.")))]))})))}
 or :: Packaging.PrimitiveDefinition
 or =
     Packaging.PrimitiveDefinition {
@@ -193,5 +197,7 @@ or =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Logical OR, defined in terms of ifElse.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Logical OR, defined in terms of ifElse.")))]))})))}

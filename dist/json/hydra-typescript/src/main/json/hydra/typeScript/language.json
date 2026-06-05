@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for TypeScript 5.x"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for TypeScript 5.x"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -129,7 +130,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in TypeScript"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in TypeScript"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -137,10 +139,11 @@
                     "name": "keywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "TypeScript 5.x keywords (ECMAScript 2024 base + TypeScript-only keywords)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "TypeScript 5.x keywords (ECMAScript 2024 base + TypeScript-only keywords)"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "await"}},
@@ -188,7 +191,7 @@
                     "name": "futureReserved",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Future reserved words (strict mode)"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Future reserved words (strict mode)"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "implements"}},
@@ -202,7 +205,8 @@
                     "name": "strictModeReserved",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Additional words reserved in strict mode"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Additional words reserved in strict mode"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "arguments"}},
@@ -214,7 +218,11 @@
                     "name": "typeScriptKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "TypeScript-only keywords and contextual keywords (TS 5.x)"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "TypeScript-only keywords and contextual keywords (TS 5.x)"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "abstract"}},
@@ -254,7 +262,8 @@
                     "name": "builtIns",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Common built-in identifiers we should avoid"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Common built-in identifiers we should avoid"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "Array"}},
@@ -310,7 +319,8 @@
                     "name": "hydraTypeScriptKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words specific to Hydra-TypeScript"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reserved words specific to Hydra-TypeScript"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "Name"}},

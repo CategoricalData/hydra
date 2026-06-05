@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -68,12 +72,13 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {
-                                          "literal": {
-                                            "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {
+                                            "literal": {
+                                              "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}]},
                                     "body": {"literal": {"integer": {"int32": {}}}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "maxWarnings"}},
@@ -81,12 +86,13 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}]},
                                 "body": {"literal": {"integer": {"int32": {}}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "maxErrors"}},
@@ -94,12 +100,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "warningRules"}},
@@ -107,12 +114,13 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}]},
                         "body": {"set": {"variable": "hydra.core.Name"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "errorRules"}}}},
@@ -126,12 +134,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -141,12 +150,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -156,12 +166,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -171,12 +182,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -187,10 +199,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the errorRules field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the errorRules field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -239,12 +252,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -252,10 +266,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the warningRules field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the warningRules field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -306,12 +321,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}]},
                     "body": {"set": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -319,10 +335,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the maxErrors field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the maxErrors field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -371,12 +388,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -384,10 +402,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the maxWarnings field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the maxWarnings field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -436,12 +455,13 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}]},
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -449,10 +469,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the errorRules field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the errorRules field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -592,12 +613,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -619,12 +641,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'."}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -635,10 +658,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the warningRules field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the warningRules field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -776,12 +800,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}]},
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -803,12 +828,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules."}}}]},
                       "body": {"set": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -819,10 +845,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the maxErrors field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the maxErrors field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -962,12 +989,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -989,12 +1017,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour."}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1005,10 +1034,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the maxWarnings field of hydra.validation.ValidationProfile"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the maxWarnings field of hydra.validation.ValidationProfile"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1148,12 +1178,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {
-                                    "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}]},
                             "body": {"literal": {"integer": {"int32": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1175,12 +1206,13 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {
-                              "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes."}}}]},
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1191,7 +1223,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.validation.ValidationResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.validation.ValidationResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1235,10 +1271,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}]},
                             "body": {"list": {"variable": "e"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "warnings"}},
@@ -1246,10 +1283,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}]},
                         "body": {"list": {"variable": "e"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "errors"}}}},
@@ -1263,10 +1301,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}]},
                       "body": {"list": {"variable": "e"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1276,10 +1315,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}]},
                       "body": {"list": {"variable": "e"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1292,10 +1332,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the errors field of hydra.validation.ValidationResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the errors field of hydra.validation.ValidationResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1348,10 +1389,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}]},
                     "body": {"list": {"variable": "e"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "e"}]}}},
@@ -1359,10 +1401,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the warnings field of hydra.validation.ValidationResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the warnings field of hydra.validation.ValidationResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1415,10 +1458,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}]},
                     "body": {"list": {"variable": "e"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": [{"constraints": [], "name": "e"}]}}},
@@ -1426,10 +1470,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the errors field of hydra.validation.ValidationResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the errors field of hydra.validation.ValidationResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1499,10 +1544,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}]},
                             "body": {"list": {"variable": "e"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1528,10 +1574,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Findings classified as errors, in traversal order, bounded by the profile's maxErrors."}}}]},
                       "body": {"list": {"variable": "e"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1544,10 +1591,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the warnings field of hydra.validation.ValidationResult"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the warnings field of hydra.validation.ValidationResult"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1617,10 +1665,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}]},
                             "body": {"list": {"variable": "e"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1646,10 +1695,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings."}}}]},
                       "body": {"list": {"variable": "e"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

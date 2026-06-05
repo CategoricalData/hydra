@@ -6,7 +6,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Add names to existing module names mapping"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add names to existing module names mapping"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -142,10 +143,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -251,7 +253,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Analyze a function term with configurable binding metadata"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Analyze a function term with configurable binding metadata"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -362,10 +368,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Final step of the function-term walk: type-apply the body and assemble the FunctionStructure"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Final step of the function-term walk: type-apply the body and assemble the FunctionStructure"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -537,12 +544,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1086,7 +1094,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Get dependency module names from definitions"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get dependency module names from definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1218,10 +1227,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Find dependency module names in all of a set of terms (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find dependency module names in all of a set of terms (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1553,8 +1563,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Gather applications from a term, returning (args, baseTerm)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Gather applications from a term, returning (args, baseTerm)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1650,7 +1663,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Gather term arguments, stripping type-level constructs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Gather term arguments, stripping type-level constructs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1758,7 +1775,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Gather term and type arguments from a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Gather term and type arguments from a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1909,10 +1927,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check if a term body is self-tail-recursive with respect to a function name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a term body is self-tail-recursive with respect to a function name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1960,7 +1979,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a term can be encoded as a simple assignment"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if a term can be encoded as a simple assignment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2042,7 +2065,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check that all self-references are in tail position"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that all self-references are in tail position"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2480,7 +2507,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a module contains any binary literal values"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a module contains any binary literal values"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2634,7 +2665,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a module contains any decimal literal values"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a module contains any decimal literal values"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2790,12 +2825,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Find dependency module names in all elements of a module, excluding the module's own module name (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Find dependency module names in all elements of a module, excluding the module's own module name (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2890,18 +2926,21 @@
                                                                                                                                     "term": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {
-                                                                                                                                          "list": [
-                                                                                                                                            {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {
+                                                                                                                                              "list": [
+                                                                                                                                                {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
-                                                                                                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                                "type": {"variable": "hydra.core.Term"}}}]},
-                                                                                                                                        "function": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                            "type": {"variable": "hydra.core.Term"}}}}}}],
+                                                                                                                                                    "body": {
+                                                                                                                                                      "typeApplication": {
+                                                                                                                                                        "body": {"pair": {"first": {"variable": "hydra.constants.keyType"}, "second": {"variable": "schemaTerm"}}},
+                                                                                                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                    "type": {"variable": "hydra.core.Term"}}}]},
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                                                                        "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                                                                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                                           "typeName": "hydra.core.Term"}},
                                                                                                                       "function": {"variable": "hydra.annotations.normalizeTermAnnotations"}}},
@@ -3069,7 +3108,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create module names mapping for definitions"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create module names mapping for definitions"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

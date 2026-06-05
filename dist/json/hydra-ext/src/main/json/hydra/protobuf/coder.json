@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Collect all structural type references (Either, Pair) from a list of types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect all structural type references (Either, Pair) from a list of types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -54,7 +55,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Collect structural type references from a single type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect structural type references from a single type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -167,10 +172,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Construct a Protobuf file from a Hydra module and its type definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a Protobuf file from a Hydra module and its type definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -952,7 +958,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type as a Protobuf definition"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra type as a Protobuf definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1263,7 +1270,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra union type as a Protobuf enum definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra union type as a Protobuf enum definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1493,7 +1504,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an enum value name from type name and field name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an enum value name from type name and field name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1543,8 +1558,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Encode a field name, optionally preserving the original case"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a field name, optionally preserving the original case"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1580,7 +1598,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra field type as a Protobuf field"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra field type as a Protobuf field"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2616,8 +2636,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Encode a Hydra record type as a Protobuf message definition"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra record type as a Protobuf message definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2752,7 +2775,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra literal type as a Protobuf scalar type"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra literal type as a Protobuf scalar type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2982,10 +3009,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3209,7 +3237,9 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a simple type for helper message fields"}}}],
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a simple type for helper message fields"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3393,7 +3423,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra type name as a Protobuf type name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra type name as a Protobuf type name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3411,7 +3445,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra name as a Protobuf type reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a Hydra name as a Protobuf type reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3563,10 +3601,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find Protobuf options for a type (description and deprecated)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find Protobuf options for a type (description and deprecated)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3716,10 +3755,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Eliminate type lambdas and type applications, replacing type variables with the string type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Eliminate type lambdas and type applications, replacing type variables with the string type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3850,7 +3890,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a helper message definition for a structural type"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate a helper message definition for a structural type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -4494,7 +4538,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if a type is an enum definition"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Check if a type is an enum definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4523,7 +4568,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check if all fields are unit types (i.e., this is an enum)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check if all fields are unit types (i.e., this is an enum)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4591,7 +4640,11 @@
                       "typeLambda": {
                         "body": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "Thread context through a list, accumulating results"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Thread context through a list, accumulating results"}}}]},
                             "body": {
                               "lambda": {
                                 "body": {
@@ -4772,7 +4825,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra module to Protocol Buffers v3 source files"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra module to Protocol Buffers v3 source files"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4907,7 +4964,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra namespace to a Protobuf file reference"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra namespace to a Protobuf file reference"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4955,7 +5016,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Hydra namespace to a Protobuf package name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Hydra namespace to a Protobuf package name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5004,7 +5069,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Read a boolean annotation from a type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Read a boolean annotation from a type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -5071,10 +5137,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Simplify a type by removing annotations and unwrapping newtypes"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Simplify a type by removing annotations and unwrapping newtypes"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5105,7 +5172,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a message name for a structural type reference"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Generate a message name for a structural type reference"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

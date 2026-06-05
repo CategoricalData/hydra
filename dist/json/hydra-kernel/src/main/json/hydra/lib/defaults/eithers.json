@@ -8,7 +8,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly bimap for Either terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly bimap for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -162,7 +163,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly bind for Either terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly bind for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -285,7 +287,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly case analysis for Either terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly case analysis for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -411,7 +417,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly foldl for Either."}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly foldl for Either."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -621,7 +628,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly fromLeft for Either terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly fromLeft for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -720,7 +731,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly fromRight for Either terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly fromRight for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -819,7 +834,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly isLeft for Either terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly isLeft for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -931,7 +948,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly isRight for Either terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly isRight for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1041,7 +1060,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly lefts for list of Either terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly lefts for list of Either terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1166,7 +1189,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly map for Either terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly map for Either terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1300,7 +1324,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly mapList for Either (traverse)."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly mapList for Either (traverse)."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1638,10 +1666,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Interpreter-friendly mapMaybe for Either (traverse over Maybe)."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly mapMaybe for Either (traverse over Maybe)."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1874,8 +1903,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Interpreter-friendly mapSet for Either (traverse over Set)."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly mapSet for Either (traverse over Set)."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2216,10 +2248,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Interpreter-friendly partitionEithers for list of Either terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly partitionEithers for list of Either terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2410,7 +2443,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly rights for list of Either terms."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Interpreter-friendly rights for list of Either terms."}}}]},
                 "body": {
                   "lambda": {
                     "body": {

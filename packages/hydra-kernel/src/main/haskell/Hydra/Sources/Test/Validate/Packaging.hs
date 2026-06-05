@@ -18,6 +18,8 @@ import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Packaging          as Packaging
 import qualified Hydra.Dsl.Util               as Util
 import qualified Hydra.Dsl.Validation         as Validation
+import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
+import qualified Data.Map as M
 
 import Hydra.Testing
 import Hydra.Sources.Libraries
@@ -308,9 +310,9 @@ definitionsOutOfOrderErr nsStr precedingNm followingNm = justModuleError $
 documentedPlaceholderTerm :: TypedTerm Term
 documentedPlaceholderTerm = Core.termAnnotated $ Core.annotatedTerm
   placeholderTerm
-  (Maps.fromList $ Phantoms.list [
+  (Annotations.wrapAnnotationMap @@ (Maps.fromList (Phantoms.list [
     Phantoms.pair (Core.name $ Phantoms.string "description")
-      (Core.termLiteral $ Core.literalString $ Phantoms.string "test description")])
+      (Core.termLiteral $ Core.literalString $ Phantoms.string "test description")])))
 
 -- | Bare InvalidModuleError for a duplicate-definition-name finding.
 duplicateDefErrAt :: String -> String -> TypedTerm InvalidModuleError
