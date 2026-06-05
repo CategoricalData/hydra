@@ -49,7 +49,7 @@ aggregateAnnotations :: Ord t2 => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Ma
 aggregateAnnotations getValue getX getAnns t =
 
       let toPairs =
-              \rest -> \t2 -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t2)
+              \rest -> \t2 -> Maybes.cases (getValue t2) rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy))
       in (Maps.fromList (Lists.concat (toPairs [] t)))
 -- | Extract comments/description from a Binding
 commentsFromBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe String)
@@ -81,7 +81,7 @@ getAnnotationMap t =
 -- | Get description from annotations map (Either version)
 getDescription :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe String)
 getDescription cx graph anns =
-    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (ExtractCore.string graph term)) (Maps.lookup (Core.Name "description") anns)
+    Maybes.cases (Maps.lookup (Core.Name "description") anns) (Right Nothing) (\term -> Eithers.map Maybes.pure (ExtractCore.string graph term))
 -- | Get a term annotation
 getTermAnnotation :: Core.Name -> Core.Term -> Maybe Core.Term
 getTermAnnotation key term = Maps.lookup key (termAnnotationInternal term)
@@ -98,7 +98,7 @@ getTermDescription cx graph term =
 -- | Get type from annotations
 getType :: Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.DecodingError (Maybe Core.Type)
 getType graph anns =
-    Maybes.maybe (Right Nothing) (\dat -> Eithers.map Maybes.pure (DecodeCore.type_ graph dat)) (Maps.lookup Constants.keyType anns)
+    Maybes.cases (Maps.lookup Constants.keyType anns) (Right Nothing) (\dat -> Eithers.map Maybes.pure (DecodeCore.type_ graph dat))
 -- | Get a type annotation
 getTypeAnnotation :: Core.Name -> Core.Type -> Maybe Core.Term
 getTypeAnnotation key typ = Maps.lookup key (typeAnnotationInternal typ)
@@ -107,7 +107,7 @@ getTypeClasses :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error (M.Map C
 getTypeClasses cx graph term =
 
       let decodeName = \term2 -> Eithers.bimap (\de -> Errors.ErrorDecoding de) (\x -> x) (DecodeCore.name graph term2)
-      in (Maybes.maybe (Right Maps.empty) (\term2 -> ExtractCore.map decodeName (ExtractCore.setOf decodeName graph) graph term2) (getTermAnnotation Constants.keyClasses term))
+      in (Maybes.cases (getTermAnnotation Constants.keyClasses term) (Right Maps.empty) (\term2 -> ExtractCore.map decodeName (ExtractCore.setOf decodeName graph) graph term2))
 -- | Get type description (Either version)
 getTypeDescription :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Maybe String)
 getTypeDescription cx graph typ = getDescription cx graph (typeAnnotationInternal typ)
@@ -123,10 +123,10 @@ isNativeType el =
 
       let isFlaggedAsFirstClassType =
               Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.keyFirstClassType (Core.bindingTerm el)))
-      in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
+      in (Maybes.cases (Core.bindingTypeScheme el) False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingTypeScheme el))
+        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)))
 -- | Normalize term annotations
 normalizeTermAnnotations :: Core.Term -> Core.Term
 normalizeTermAnnotations term =

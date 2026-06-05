@@ -101,9 +101,9 @@ instantiateTemplate cx minimal schema tname t =
             Core.recordFields = dfields}))))
         Core.TypeSet v0 -> Logic.ifElse minimal (Right (Core.TermSet Sets.empty)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermSet (Sets.fromList [
           e]))))
-        Core.TypeVariable v0 -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 schema) (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "bound type variable",
-          Errors.unexpectedShapeErrorActual = (Strings.cat2 "unbound variable " (Core.unName v0))})))) (inst v0) (Maps.lookup v0 schema)
+          Errors.unexpectedShapeErrorActual = (Strings.cat2 "unbound variable " (Core.unName v0))})))) (inst v0)
         Core.TypeWrap v0 -> Eithers.bind (inst tname v0) (\e -> Right (Core.TermWrap (Core.WrappedTerm {
           Core.wrappedTermTypeName = tname,
           Core.wrappedTermBody = e})))

@@ -42,7 +42,7 @@ extendGraphForLambda g lam =
       let var = Core.lambdaParameter lam
       in Graph.Graph {
         Graph.graphBoundTerms = (Graph.graphBoundTerms g),
-        Graph.graphBoundTypes = (Maybes.maybe (Graph.graphBoundTypes g) (\dom -> Maps.insert var (fTypeToTypeScheme dom) (Graph.graphBoundTypes g)) (Core.lambdaDomain lam)),
+        Graph.graphBoundTypes = (Maybes.cases (Core.lambdaDomain lam) (Graph.graphBoundTypes g) (\dom -> Maps.insert var (fTypeToTypeScheme dom) (Graph.graphBoundTypes g))),
         Graph.graphClassConstraints = (Graph.graphClassConstraints g),
         Graph.graphLambdaVariables = (Sets.insert var (Graph.graphLambdaVariables g)),
         Graph.graphMetadata = (Maps.delete var (Graph.graphMetadata g)),
@@ -62,7 +62,7 @@ extendGraphForLet forBinding g letrec =
         Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
         Graph.graphMetadata = (Graph.graphMetadata (Lists.foldl (\gAcc -> \b ->
           let m = Graph.graphMetadata gAcc
-              newMeta = Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding gAcc b)
+              newMeta = Maybes.cases (forBinding gAcc b) (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m)
           in Graph.Graph {
             Graph.graphBoundTerms = (Graph.graphBoundTerms gAcc),
             Graph.graphBoundTypes = (Graph.graphBoundTypes gAcc),
@@ -163,7 +163,7 @@ typeSchemeToTermSignature ts =
           typeParams =
                   Lists.map (\v -> Typing.TypeParameter {
                     Typing.typeParameterName = v,
-                    Typing.typeParameterConstraints = (Maybes.maybe [] (\tvm -> Core.typeVariableConstraintsClasses tvm) (Maps.lookup v constraintsMap))}) variables
+                    Typing.typeParameterConstraints = (Maybes.cases (Maps.lookup v constraintsMap) [] (\tvm -> Core.typeVariableConstraintsClasses tvm))}) variables
           peel =
                   \acc -> \t -> case t of
                     Core.TypeFunction v0 -> peel (Lists.cons (Core.functionTypeDomain v0) acc) (Core.functionTypeCodomain v0)

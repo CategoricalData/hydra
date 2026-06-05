@@ -3,7 +3,6 @@
 
 module Hydra.Java.Serde where
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
@@ -211,9 +210,9 @@ classInstanceCreationExpressionToExpr cice =
 
       let mqual = Syntax.classInstanceCreationExpressionQualifier cice
           e = Syntax.classInstanceCreationExpressionExpression cice
-      in (Maybes.maybe (unqualifiedClassInstanceCreationExpressionToExpr e) (\q -> Serialization.dotSep [
+      in (Maybes.cases mqual (unqualifiedClassInstanceCreationExpressionToExpr e) (\q -> Serialization.dotSep [
         classInstanceCreationExpressionQualifierToExpr q,
-        (unqualifiedClassInstanceCreationExpressionToExpr e)]) mqual)
+        (unqualifiedClassInstanceCreationExpressionToExpr e)]))
 classLiteralToExpr :: t0 -> Ast.Expr
 classLiteralToExpr _ = Serialization.cst "STUB:ClassLiteral"
 classMemberDeclarationToExpr :: Syntax.ClassMemberDeclaration -> Ast.Expr
@@ -932,10 +931,10 @@ singleElementAnnotationToExpr sea =
 
       let tname = Syntax.singleElementAnnotationName sea
           mv = Syntax.singleElementAnnotationValue sea
-      in (Maybes.maybe (markerAnnotationToExpr (Syntax.MarkerAnnotation tname)) (\v -> Serialization.prefix "@" (Serialization.noSep [
+      in (Maybes.cases mv (markerAnnotationToExpr (Syntax.MarkerAnnotation tname)) (\v -> Serialization.prefix "@" (Serialization.noSep [
         typeNameToExpr tname,
         (Serialization.parenList False [
-          elementValueToExpr v])])) mv)
+          elementValueToExpr v])])))
 -- | Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace.
 singleLineComment :: String -> Ast.Expr
 singleLineComment c =
@@ -1119,7 +1118,7 @@ variableDeclaratorToExpr vd =
       let id = Syntax.variableDeclaratorId vd
           minit = Syntax.variableDeclaratorInitializer vd
           idSec = variableDeclaratorIdToExpr id
-      in (Maybes.maybe idSec (\init -> Serialization.infixWs "=" idSec (variableInitializerToExpr init)) minit)
+      in (Maybes.cases minit idSec (\init -> Serialization.infixWs "=" idSec (variableInitializerToExpr init)))
 variableInitializerToExpr :: Syntax.VariableInitializer -> Ast.Expr
 variableInitializerToExpr i =
     case i of
@@ -1135,7 +1134,7 @@ whileStatementToExpr ws =
 
       let mcond = Syntax.whileStatementCond ws
           body = Syntax.whileStatementBody ws
-          condSer = Maybes.maybe (Serialization.cst "true") (\c -> expressionToExpr c) mcond
+          condSer = Maybes.cases mcond (Serialization.cst "true") (\c -> expressionToExpr c)
       in (Serialization.spaceSep [
         Serialization.cst "while",
         (Serialization.parenList False [
@@ -1162,6 +1161,6 @@ wildcardToExpr w =
 -- | Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `.
 withComments :: Maybe String -> Ast.Expr -> Ast.Expr
 withComments mc expr =
-    Maybes.maybe expr (\c -> Serialization.newlineSep [
+    Maybes.cases mc expr (\c -> Serialization.newlineSep [
       Serialization.cst (Strings.cat2 "/**\n" (Strings.cat2 (Strings.intercalate "\n" (Lists.map (\l -> Logic.ifElse (Equality.equal l "") " *" (Strings.cat2 " * " l)) (Strings.lines (sanitizeJavaComment c)))) "\n */")),
-      expr]) mc
+      expr])

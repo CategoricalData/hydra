@@ -126,7 +126,7 @@ checkDefinitionDocumentation mod =
                         in case typ of
                           Core.TypeAnnotated v1 -> Annotations.hasDescription (Annotations.getAnnotationMap (Core.annotatedTypeAnnotation v1))
                           _ -> False
-                      Packaging.DefinitionPrimitive v0 -> Maybes.maybe False (\em -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Packaging.entityMetadataDescription em)) "")) (Packaging.primitiveDefinitionMetadata v0)
+                      Packaging.DefinitionPrimitive v0 -> Maybes.cases (Packaging.primitiveDefinitionMetadata v0) False (\em -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Packaging.entityMetadataDescription em)) ""))
                       _ -> False
         in (Logic.ifElse documented Nothing (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
           ErrorPackaging.missingDocumentationErrorModuleName = ns,

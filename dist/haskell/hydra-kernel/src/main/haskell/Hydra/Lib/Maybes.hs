@@ -141,14 +141,14 @@ bind =
             Core.lambdaBody = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                  Core.applicationArgument = (Core.TermMaybe Nothing)})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+                Core.applicationArgument = (Core.TermMaybe Nothing)})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Monadic bind for optionals, defined in terms of maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Monadic bind for optionals, defined in terms of cases.")))]))})))}
 cases :: Packaging.PrimitiveDefinition
 cases =
     Packaging.PrimitiveDefinition {
@@ -157,8 +157,8 @@ cases =
         Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, with cases-style argument order."),
         Packaging.entityMetadataComments = [
           "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
-          "Identical in behavior to the maybe primitive but with the maybe value as the first argument (matching the convention for case-statement-like elimination).",
-          "Total. Argument order is (m, def, f) rather than Haskell's (def, f, m)."],
+          "The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it. The maybe value is the first argument, matching the convention for case-statement-like elimination.",
+          "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
       Packaging.primitiveDefinitionSignature = Typing.TermSignature {
@@ -237,17 +237,17 @@ cat =
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})),
-                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "v"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))})),
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})),
+                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "v"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))}))}))})),
               Core.applicationArgument = (Core.TermList [])})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
@@ -365,17 +365,17 @@ fromMaybe =
             Core.lambdaBody = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
-                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
+              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Return the contained value or a default, defined in terms of maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Return the contained value or a default, defined in terms of cases.")))]))})))}
 isJust :: Packaging.PrimitiveDefinition
 isJust =
     Packaging.PrimitiveDefinition {
@@ -410,17 +410,17 @@ isJust =
           Core.lambdaBody = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
-              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "_"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "_"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Test for presence, defined in terms of maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Test for presence, defined in terms of cases.")))]))})))}
 isNothing :: Packaging.PrimitiveDefinition
 isNothing =
     Packaging.PrimitiveDefinition {
@@ -455,17 +455,17 @@ isNothing =
           Core.lambdaBody = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
-              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "_"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "_"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Test for absence, defined in terms of maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Test for absence, defined in terms of cases.")))]))})))}
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -514,19 +514,19 @@ map =
             Core.lambdaBody = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                  Core.applicationArgument = (Core.TermMaybe Nothing)})),
-                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermMaybe (Just (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+                Core.applicationArgument = (Core.TermMaybe Nothing)})),
+              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermMaybe (Just (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Map a function over an optional, defined in terms of maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Map a function over an optional, defined in terms of cases.")))]))})))}
 mapMaybe :: Packaging.PrimitiveDefinition
 mapMaybe =
     Packaging.PrimitiveDefinition {
@@ -582,50 +582,6 @@ mapMaybe =
           (
             Core.TermVariable (Core.Name "description"),
             (Core.TermLiteral (Core.LiteralString "Map a partial function and keep only the present results, defined in terms of lists.map and cat.")))]))})))}
-maybe :: Packaging.PrimitiveDefinition
-maybe =
-    Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.maybes.maybe"),
-      Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Case analysis on a maybe, applying a function if present or returning a default if absent."),
-        Packaging.entityMetadataComments = [
-          "maybe(def, f, m) returns f(x) when m is Just(x), and def when m is Nothing.",
-          "The fundamental eliminator for the maybe type; every other primitive in this namespace can be derived from it.",
-          "Total. Corresponds to Haskell's maybe :: b -> (a -> b) -> Maybe a -> b."],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.primitiveDefinitionSignature = Typing.TermSignature {
-        Typing.termSignatureTypeParameters = [
-          Typing.TypeParameter {
-            Typing.typeParameterName = (Core.Name "y"),
-            Typing.typeParameterConstraints = []},
-          Typing.TypeParameter {
-            Typing.typeParameterName = (Core.Name "x"),
-            Typing.typeParameterConstraints = []}],
-        Typing.termSignatureParameters = [
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg0"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeVariable (Core.Name "y")),
-            Typing.parameterIsLazy = True},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg1"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "x")),
-              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "y"))})),
-            Typing.parameterIsLazy = False},
-          Typing.Parameter {
-            Typing.parameterName = (Core.Name "arg2"),
-            Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "x"))),
-            Typing.parameterIsLazy = False}],
-        Typing.termSignatureResult = Typing.Result {
-          Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeVariable (Core.Name "y"))}},
-      Packaging.primitiveDefinitionIsPure = True,
-      Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = Nothing}
 pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {
@@ -694,15 +650,15 @@ toList =
           Core.lambdaBody = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                Core.applicationArgument = (Core.TermList [])})),
-              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "x"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermList [
-                  Core.TermVariable (Core.Name "x")])}))})),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.applicationArgument = (Core.TermList [])})),
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermList [
+                Core.TermVariable (Core.Name "x")])}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Convert an optional to a list, defined in terms of maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Convert an optional to a list, defined in terms of cases.")))]))})))}

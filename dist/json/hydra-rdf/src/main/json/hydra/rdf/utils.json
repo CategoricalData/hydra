@@ -644,17 +644,18 @@
                                     {"literal": {"string": "urn:"}},
                                     {
                                       "application": {
-                                        "argument": {"variable": "gname"},
+                                        "argument": {"unwrap": "hydra.packaging.ModuleName"},
                                         "function": {
                                           "application": {
-                                            "argument": {"unwrap": "hydra.packaging.ModuleName"},
+                                            "argument": {"literal": {"string": ""}},
                                             "function": {
                                               "application": {
-                                                "argument": {"literal": {"string": ""}},
+                                                "argument": {"variable": "gname"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                    "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                    "type": {"literal": {"string": {}}}}}}}}}}},
                                     {"literal": {"string": "#"}},
                                     {"application": {"argument": {"variable": "local_"}, "function": {"variable": "hydra.formatting.decapitalize"}}},
                                     {

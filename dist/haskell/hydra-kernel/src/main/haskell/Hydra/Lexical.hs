@@ -96,8 +96,8 @@ dereferenceSchemaType name types =
 -- | Look up a binding by name in a graph, returning Either an error or the binding
 dereferenceVariable :: Graph.Graph -> Core.Name -> Either Errors.Error Core.Binding
 dereferenceVariable graph name =
-    Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
-      Errors.noSuchBindingErrorName = name})))) (\right_ -> Right right_) (lookupBinding graph name)
+    Maybes.cases (lookupBinding graph name) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+      Errors.noSuchBindingErrorName = name})))) (\right_ -> Right right_)
 -- | Create a graph from a parent graph, schema types, and list of element bindings
 elementsToGraph :: Graph.Graph -> M.Map Core.Name Core.TypeScheme -> [Core.Binding] -> Graph.Graph
 elementsToGraph parent schemaTypes elements =
@@ -144,8 +144,8 @@ fieldsOf t =
 -- | Look up a field by name in a record's field map and decode its value, failing if the field is missing
 getField :: M.Map Core.Name t0 -> Core.Name -> (t0 -> Either Errors.Error t1) -> Either Errors.Error t1
 getField m fname decode =
-    Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-      Errors.noMatchingFieldErrorFieldName = fname})))) decode (Maps.lookup fname m)
+    Maybes.cases (Maps.lookup fname m) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+      Errors.noMatchingFieldErrorFieldName = fname})))) decode
 -- | Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes
 graphToBindings :: Graph.Graph -> [Core.Binding]
 graphToBindings g =
@@ -203,8 +203,8 @@ matchUnion graph tname pairs term =
 
                     let fname = Core.fieldName (Core.injectionField v0)
                         val = Core.fieldTerm (Core.injectionField v0)
-                    in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = fname})))) (\f -> f val) (Maps.lookup fname mapping))
+                    in (Maybes.cases (Maps.lookup fname mapping) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = fname})))) (\f -> f val))
           in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v0)) (Core.unName tname)) exp (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
             Errors.unexpectedShapeErrorExpected = (Strings.cat2 "injection for type " (Core.unName tname)),
             Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))))
@@ -224,25 +224,25 @@ requireBinding graph name =
                     "..."]) strings
           errMsg =
                   Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map Core.unName (Maps.keys (Graph.graphBoundTerms graph)))))) "}"
-      in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorOther (Errors.OtherResolutionError errMsg)))) (\x -> Right x) (lookupBinding graph name))
+      in (Maybes.cases (lookupBinding graph name) (Left (Errors.ErrorResolution (Errors.ResolutionErrorOther (Errors.OtherResolutionError errMsg)))) (\x -> Right x))
 -- | Look up a primitive in a graph by name, failing if it is not registered
 requirePrimitive :: Graph.Graph -> Core.Name -> Either Errors.Error Graph.Primitive
 requirePrimitive graph name =
-    Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
-      Errors.noSuchPrimitiveErrorName = name})))) (\x -> Right x) (lookupPrimitive graph name)
+    Maybes.cases (lookupPrimitive graph name) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
+      Errors.noSuchPrimitiveErrorName = name})))) (\x -> Right x)
 -- | Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered
 requirePrimitiveType :: Graph.Graph -> Core.Name -> Either Errors.Error Core.TypeScheme
 requirePrimitiveType tx name =
 
       let mts =
               Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
-      in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
-        Errors.noSuchPrimitiveErrorName = name})))) (\ts -> Right ts) mts)
+      in (Maybes.cases mts (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
+        Errors.noSuchPrimitiveErrorName = name})))) (\ts -> Right ts))
 -- | Resolve a name to a term in the graph, following variable references, and fail if the name is not bound
 requireTerm :: Graph.Graph -> Core.Name -> Either Errors.Error Core.Term
 requireTerm graph name =
-    Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
-      Errors.noSuchBindingErrorName = name})))) (\x -> Right x) (resolveTerm graph name)
+    Maybes.cases (resolveTerm graph name) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+      Errors.noSuchBindingErrorName = name})))) (\x -> Right x)
 -- | TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: Graph.Graph -> Core.Name -> Maybe Core.Term
 resolveTerm graph name =
@@ -253,7 +253,7 @@ resolveTerm graph name =
                 in case stripped of
                   Core.TermVariable v0 -> resolveTerm graph v0
                   _ -> Just term
-      in (Maybes.maybe Nothing recurse (lookupTerm graph name))
+      in (Maybes.cases (lookupTerm graph name) Nothing recurse)
 -- | Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached
 stripAndDereferenceTerm :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 stripAndDereferenceTerm graph term =

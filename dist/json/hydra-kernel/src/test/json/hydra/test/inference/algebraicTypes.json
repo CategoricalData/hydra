@@ -5943,12 +5943,14 @@
                                                                   "argument": {
                                                                     "inject": {
                                                                       "field": {
-                                                                        "name": "application",
+                                                                        "name": "lambda",
                                                                         "term": {
                                                                           "record": {
                                                                             "fields": [
+                                                                              {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "m"}}, "typeName": "hydra.core.Name"}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
-                                                                                "name": "function",
+                                                                                "name": "body",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -5961,34 +5963,62 @@
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
-                                                                                                    "name": "variable",
-                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "name": "application",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "function",
+                                                                                                            "term": {
+                                                                                                              "inject": {
+                                                                                                                "field": {
+                                                                                                                  "name": "application",
+                                                                                                                  "term": {
+                                                                                                                    "record": {
+                                                                                                                      "fields": [
+                                                                                                                        {
+                                                                                                                          "name": "function",
+                                                                                                                          "term": {
+                                                                                                                            "inject": {
+                                                                                                                              "field": {
+                                                                                                                                "name": "variable",
+                                                                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                              "typeName": "hydra.core.Term"}}},
+                                                                                                                        {
+                                                                                                                          "name": "argument",
+                                                                                                                          "term": {
+                                                                                                                            "inject": {
+                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "m"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                              "typeName": "hydra.core.Term"}}}],
+                                                                                                                      "typeName": "hydra.core.Application"}}},
+                                                                                                                "typeName": "hydra.core.Term"}}},
+                                                                                                          {
+                                                                                                            "name": "argument",
+                                                                                                            "term": {
+                                                                                                              "inject": {
+                                                                                                                "field": {
+                                                                                                                  "name": "literal",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "field": {
+                                                                                                                        "name": "integer",
+                                                                                                                        "term": {
+                                                                                                                          "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                                      "typeName": "hydra.core.Literal"}}},
+                                                                                                                "typeName": "hydra.core.Term"}}}],
+                                                                                                        "typeName": "hydra.core.Application"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
-                                                                                                    "name": "literal",
-                                                                                                    "term": {
-                                                                                                      "inject": {
-                                                                                                        "field": {
-                                                                                                          "name": "integer",
-                                                                                                          "term": {
-                                                                                                            "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}, "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                                                    "name": "variable",
+                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.negate"}}, "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Application"}}},
-                                                                                    "typeName": "hydra.core.Term"}}},
-                                                                              {
-                                                                                "name": "argument",
-                                                                                "term": {
-                                                                                  "inject": {
-                                                                                    "field": {
-                                                                                      "name": "variable",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.negate"}}, "typeName": "hydra.core.Name"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Application"}}},
+                                                                            "typeName": "hydra.core.Lambda"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {
                                                                     "application": {
@@ -6167,21 +6197,27 @@
                                                                                                               "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "variable",
-                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
                                                                                                             "name": "argument",
                                                                                                             "term": {
                                                                                                               "inject": {
                                                                                                                 "field": {
-                                                                                                                  "name": "literal",
+                                                                                                                  "name": "maybe",
                                                                                                                   "term": {
-                                                                                                                    "inject": {
-                                                                                                                      "field": {
-                                                                                                                        "name": "integer",
-                                                                                                                        "term": {
-                                                                                                                          "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}, "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                                      "typeName": "hydra.core.Literal"}}},
+                                                                                                                    "maybe": {
+                                                                                                                      "inject": {
+                                                                                                                        "field": {
+                                                                                                                          "name": "literal",
+                                                                                                                          "term": {
+                                                                                                                            "inject": {
+                                                                                                                              "field": {
+                                                                                                                                "name": "integer",
+                                                                                                                                "term": {
+                                                                                                                                  "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 137}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                                                        "typeName": "hydra.core.Term"}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Application"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
@@ -6190,8 +6226,14 @@
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
-                                                                                                    "name": "variable",
-                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.negate"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "name": "literal",
+                                                                                                    "term": {
+                                                                                                      "inject": {
+                                                                                                        "field": {
+                                                                                                          "name": "integer",
+                                                                                                          "term": {
+                                                                                                            "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                        "typeName": "hydra.core.Literal"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
@@ -6200,20 +6242,8 @@
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
-                                                                                      "name": "maybe",
-                                                                                      "term": {
-                                                                                        "maybe": {
-                                                                                          "inject": {
-                                                                                            "field": {
-                                                                                              "name": "literal",
-                                                                                              "term": {
-                                                                                                "inject": {
-                                                                                                  "field": {
-                                                                                                    "name": "integer",
-                                                                                                    "term": {
-                                                                                                      "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 137}}}}, "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                  "typeName": "hydra.core.Literal"}}},
-                                                                                            "typeName": "hydra.core.Term"}}}},
+                                                                                      "name": "variable",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.negate"}}, "typeName": "hydra.core.Name"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
@@ -6365,21 +6395,13 @@
                                                                                                               "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "variable",
-                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
                                                                                                             "name": "argument",
                                                                                                             "term": {
                                                                                                               "inject": {
-                                                                                                                "field": {
-                                                                                                                  "name": "literal",
-                                                                                                                  "term": {
-                                                                                                                    "inject": {
-                                                                                                                      "field": {
-                                                                                                                        "name": "integer",
-                                                                                                                        "term": {
-                                                                                                                          "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}, "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                                      "typeName": "hydra.core.Literal"}}},
+                                                                                                                "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Application"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
@@ -6388,8 +6410,14 @@
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
-                                                                                                    "name": "variable",
-                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.negate"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "name": "literal",
+                                                                                                    "term": {
+                                                                                                      "inject": {
+                                                                                                        "field": {
+                                                                                                          "name": "integer",
+                                                                                                          "term": {
+                                                                                                            "inject": {"field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                        "typeName": "hydra.core.Literal"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
@@ -6397,7 +6425,9 @@
                                                                                 "name": "argument",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                    "field": {
+                                                                                      "name": "variable",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.math.negate"}}, "typeName": "hydra.core.Name"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Application"}}},
                                                                       "typeName": "hydra.core.Term"}},
@@ -6560,7 +6590,7 @@
                                                                                                                             "inject": {
                                                                                                                               "field": {
                                                                                                                                 "name": "variable",
-                                                                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                                         {
                                                                                                                           "name": "argument",
@@ -6574,9 +6604,7 @@
                                                                                                             "name": "argument",
                                                                                                             "term": {
                                                                                                               "inject": {
-                                                                                                                "field": {
-                                                                                                                  "name": "variable",
-                                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.pure"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                         "typeName": "hydra.core.Application"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
@@ -6584,7 +6612,9 @@
                                                                                               "name": "argument",
                                                                                               "term": {
                                                                                                 "inject": {
-                                                                                                  "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  "field": {
+                                                                                                    "name": "variable",
+                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.pure"}}, "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Application"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -6732,12 +6762,14 @@
                                                                   "argument": {
                                                                     "inject": {
                                                                       "field": {
-                                                                        "name": "application",
+                                                                        "name": "lambda",
                                                                         "term": {
                                                                           "record": {
                                                                             "fields": [
+                                                                              {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "m"}}, "typeName": "hydra.core.Name"}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
-                                                                                "name": "function",
+                                                                                "name": "body",
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
@@ -6750,44 +6782,72 @@
                                                                                               "term": {
                                                                                                 "inject": {
                                                                                                   "field": {
-                                                                                                    "name": "variable",
-                                                                                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.maybe"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "name": "application",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "function",
+                                                                                                            "term": {
+                                                                                                              "inject": {
+                                                                                                                "field": {
+                                                                                                                  "name": "application",
+                                                                                                                  "term": {
+                                                                                                                    "record": {
+                                                                                                                      "fields": [
+                                                                                                                        {
+                                                                                                                          "name": "function",
+                                                                                                                          "term": {
+                                                                                                                            "inject": {
+                                                                                                                              "field": {
+                                                                                                                                "name": "variable",
+                                                                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.lib.maybes.cases"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                              "typeName": "hydra.core.Term"}}},
+                                                                                                                        {
+                                                                                                                          "name": "argument",
+                                                                                                                          "term": {
+                                                                                                                            "inject": {
+                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "m"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                              "typeName": "hydra.core.Term"}}}],
+                                                                                                                      "typeName": "hydra.core.Application"}}},
+                                                                                                                "typeName": "hydra.core.Term"}}},
+                                                                                                          {
+                                                                                                            "name": "argument",
+                                                                                                            "term": {
+                                                                                                              "inject": {
+                                                                                                                "field": {"name": "list", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                "typeName": "hydra.core.Term"}}}],
+                                                                                                        "typeName": "hydra.core.Application"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
                                                                                                 "inject": {
-                                                                                                  "field": {"name": "list", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                  "field": {
+                                                                                                    "name": "lambda",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                          {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                          {
+                                                                                                            "name": "body",
+                                                                                                            "term": {
+                                                                                                              "inject": {
+                                                                                                                "field": {
+                                                                                                                  "name": "list",
+                                                                                                                  "term": {
+                                                                                                                    "list": [
+                                                                                                                      {
+                                                                                                                        "inject": {
+                                                                                                                          "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                          "typeName": "hydra.core.Term"}}]}},
+                                                                                                                "typeName": "hydra.core.Term"}}}],
+                                                                                                        "typeName": "hydra.core.Lambda"}}},
                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.Application"}}},
-                                                                                    "typeName": "hydra.core.Term"}}},
-                                                                              {
-                                                                                "name": "argument",
-                                                                                "term": {
-                                                                                  "inject": {
-                                                                                    "field": {
-                                                                                      "name": "lambda",
-                                                                                      "term": {
-                                                                                        "record": {
-                                                                                          "fields": [
-                                                                                            {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                                            {
-                                                                                              "name": "body",
-                                                                                              "term": {
-                                                                                                "inject": {
-                                                                                                  "field": {
-                                                                                                    "name": "list",
-                                                                                                    "term": {
-                                                                                                      "list": [
-                                                                                                        {
-                                                                                                          "inject": {
-                                                                                                            "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                            "typeName": "hydra.core.Term"}}]}},
-                                                                                                  "typeName": "hydra.core.Term"}}}],
-                                                                                          "typeName": "hydra.core.Lambda"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
-                                                                            "typeName": "hydra.core.Application"}}},
+                                                                            "typeName": "hydra.core.Lambda"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {
                                                                     "application": {

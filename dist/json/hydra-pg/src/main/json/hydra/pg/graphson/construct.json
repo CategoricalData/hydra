@@ -312,29 +312,29 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
-                                                                    "argument": {"variable": "existing"},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "vs"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "v"},
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "t1"}}}}}}},
+                                                                        "domain": {"list": {"variable": "t1"}},
+                                                                        "parameter": "vs"}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "vs"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "v"},
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "t1"}}}}}}},
-                                                                            "domain": {"list": {"variable": "t1"}},
-                                                                            "parameter": "vs"}},
+                                                                          "application": {
+                                                                            "argument": {"variable": "v"},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"variable": "t1"}}}}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "v"},
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"variable": "t1"}}}}},
+                                                                            "argument": {"variable": "existing"},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "t1"}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"list": {"variable": "t1"}}}},
                                                                                 "type": {"list": {"variable": "t1"}}}}}}}}}},
                                                                 "function": {
                                                                   "application": {

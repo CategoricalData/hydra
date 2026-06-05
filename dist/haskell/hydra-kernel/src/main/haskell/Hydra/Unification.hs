@@ -156,7 +156,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                       Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")})) (bind v1 sleft)) (bind v0 sright))
                     _ -> tryBinding v0 sright
                   _ -> dflt
-      in (Maybes.maybe (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)) (Lists.uncons constraints))
+      in (Maybes.cases (Lists.uncons constraints) (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)))
 -- | Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics.
 unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =

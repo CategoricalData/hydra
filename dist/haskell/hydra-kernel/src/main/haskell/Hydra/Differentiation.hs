@@ -190,7 +190,7 @@ differentiateTerm dx term =
         let func = Core.applicationFunction v0
             arg = Core.applicationArgument v0
         in case func of
-          Core.TermVariable v1 -> Maybes.maybe (differentiateTerm dx (Core.TermApplication (Core.Application {
+          Core.TermVariable v1 -> Maybes.cases (primitiveDerivative v1) (differentiateTerm dx (Core.TermApplication (Core.Application {
             Core.applicationFunction = func,
             Core.applicationArgument = arg}))) (\derivTerm -> Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -198,7 +198,7 @@ differentiateTerm dx term =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = derivTerm,
                 Core.applicationArgument = arg}))})),
-            Core.applicationArgument = (differentiateTerm dx arg)})) (primitiveDerivative v1)
+            Core.applicationArgument = (differentiateTerm dx arg)}))
           Core.TermApplication v1 ->
             let innerFunc = Core.applicationFunction v1
                 innerArg = Core.applicationArgument v1

@@ -54,7 +54,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -115,7 +115,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -181,7 +181,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -261,7 +261,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -346,7 +346,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]

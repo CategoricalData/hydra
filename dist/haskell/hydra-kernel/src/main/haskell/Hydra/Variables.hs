@@ -52,14 +52,14 @@ freeTypeVariablesInTerm term0 =
                         dflt = allOf (Lists.map recurse (Rewriting.subterms term))
                     in case term of
                       Core.TermLambda v0 ->
-                        let domt = Maybes.maybe Sets.empty (tryType vars) (Core.lambdaDomain v0)
+                        let domt = Maybes.cases (Core.lambdaDomain v0) Sets.empty (tryType vars)
                         in (Sets.union domt (recurse (Core.lambdaBody v0)))
                       Core.TermLet v0 ->
                         let forBinding =
                                 \b ->
                                   let newVars =
-                                          Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingTypeScheme b)
-                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeBody ts)) (Core.bindingTypeScheme b)))
+                                          Maybes.cases (Core.bindingTypeScheme b) vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts)))
+                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.cases (Core.bindingTypeScheme b) Sets.empty (\ts -> tryType newVars (Core.typeSchemeBody ts))))
                         in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v0))) (recurse (Core.letBody v0)))
                       Core.TermTypeApplication v0 -> Sets.union (tryType vars (Core.typeApplicationTermType v0)) (recurse (Core.typeApplicationTermBody v0))
                       Core.TermTypeLambda v0 -> Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v0))) (recurse (Core.typeLambdaBody v0))
@@ -151,7 +151,7 @@ normalizeTypeVariablesInTerm term =
                                     let bindings0 = Core.letBindings v0
                                         body0 = Core.letBody v0
                                         step =
-                                                \acc -> \bs -> Maybes.maybe (Lists.reverse acc) (\uc ->
+                                                \acc -> \bs -> Maybes.cases (Lists.uncons bs) (Lists.reverse acc) (\uc ->
                                                   let b = Pairs.first uc
                                                       tl = Pairs.second uc
                                                       noType =
@@ -193,7 +193,7 @@ normalizeTypeVariablesInTerm term =
                                                                                 Core.typeSchemeBody = (substType newSubst typ),
                                                                                 Core.typeSchemeConstraints = newConstraints}))}
                                                                 in (step (Lists.cons b1 acc) tl)
-                                                  in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingTypeScheme b))) (Lists.uncons bs)
+                                                  in (Maybes.cases (Core.bindingTypeScheme b) noType (\ts -> withType ts)))
                                         bindings1 = step [] bindings0
                                     in (Core.TermLet (Core.Let {
                                       Core.letBindings = bindings1,
@@ -257,7 +257,7 @@ substituteVariables subst term =
       let replace =
               \recurse -> \term2 -> case term2 of
                 Core.TermVariable v0 -> Core.TermVariable (Maybes.fromMaybe v0 (Maps.lookup v0 subst))
-                Core.TermLambda v0 -> Maybes.maybe (recurse term2) (\_ -> term2) (Maps.lookup (Core.lambdaParameter v0) subst)
+                Core.TermLambda v0 -> Maybes.cases (Maps.lookup (Core.lambdaParameter v0) subst) (recurse term2) (\_ -> term2)
                 _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
 -- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
@@ -290,6 +290,6 @@ unshadowVariables term0 =
                                 let bname = Core.bindingName b
                                 in (Logic.ifElse (Maps.member bname acc) acc (Maps.insert bname bname acc))) m (Core.letBindings v0)
                       in (recurse m2 term)
-                    Core.TermVariable v0 -> Core.TermVariable (Maybes.maybe v0 (\renamed -> renamed) (Maps.lookup v0 m))
+                    Core.TermVariable v0 -> Core.TermVariable (Maybes.cases (Maps.lookup v0 m) v0 (\renamed -> renamed))
                     _ -> recurse m term
       in (Rewriting.rewriteTermWithContext f Maps.empty term0)

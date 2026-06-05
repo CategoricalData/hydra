@@ -31,10 +31,10 @@ definition cx raw =
                       (Core.Name "term", (\input -> Eithers.map (\t -> Packaging.DefinitionTerm t) (termDefinition cx input))),
                       (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionType t) (typeDefinition cx input))),
                       (Core.Name "primitive", (\input -> Eithers.map (\t -> Packaging.DefinitionPrimitive t) (primitiveDefinition cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.DefinitionReference
 definitionReference :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.DefinitionReference
@@ -51,10 +51,10 @@ definitionReference cx raw =
                       (
                         Core.Name "primitive",
                         (\input -> Eithers.map (\t -> Packaging.DefinitionReferencePrimitive t) (DecodeCore.name cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.EntityMetadata
 entityMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.EntityMetadata
@@ -91,10 +91,10 @@ entityReference cx raw =
                       (
                         Core.Name "definition",
                         (\input -> Eithers.map (\t -> Packaging.EntityReferenceDefinition t) (definitionReference cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.LifecycleInfo
 lifecycleInfo :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.LifecycleInfo
@@ -236,8 +236,8 @@ versionSpecifier cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "any", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAny) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

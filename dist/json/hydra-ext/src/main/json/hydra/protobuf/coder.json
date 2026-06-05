@@ -410,23 +410,23 @@
                                                         "application": {
                                                           "argument": {
                                                             "application": {
-                                                              "argument": {"variable": "desc"},
+                                                              "argument": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"literal": {"string": "\n\n"}},
+                                                                      "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "d"}},
                                                               "function": {
                                                                 "application": {
-                                                                  "argument": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "argument": {"literal": {"string": "\n\n"}},
-                                                                          "function": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                      "domain": {"literal": {"string": {}}},
-                                                                      "parameter": "d"}},
+                                                                  "argument": {"literal": {"string": ""}},
                                                                   "function": {
                                                                     "application": {
-                                                                      "argument": {"literal": {"string": ""}},
+                                                                      "argument": {"variable": "desc"},
                                                                       "function": {
                                                                         "typeApplication": {
-                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"literal": {"string": {}}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}},
                                                           "function": {"variable": "hydra.lib.strings.cat2"}}}}}},
                                                 "typeName": "hydra.protobuf.proto3.Value"}}}],
@@ -521,97 +521,97 @@
                                                                                                         "typeScheme": {"body": {"maybe": {"literal": {"boolean": {}}}}, "variables": []}}],
                                                                                                     "body": {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "checkResult"},
+                                                                                                        "argument": {"lambda": {"body": {"variable": "b3"}, "domain": {"literal": {"boolean": {}}}, "parameter": "b3"}},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"lambda": {"body": {"variable": "b3"}, "domain": {"literal": {"boolean": {}}}, "parameter": "b3"}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "t2"},
+                                                                                                                "function": {
+                                                                                                                  "cases": {
+                                                                                                                    "cases": [
+                                                                                                                      {
+                                                                                                                        "handler": {
+                                                                                                                          "lambda": {
+                                                                                                                            "body": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "fts"},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"literal": {"boolean": false}},
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
+                                                                                                                                          "lambda": {
+                                                                                                                                            "body": {
+                                                                                                                                              "lambda": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {
+                                                                                                                                                              "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}}}},
+                                                                                                                                                            "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                                                                                                                        "function": {"variable": "checkFieldType"}}},
+                                                                                                                                                    "function": {"application": {"argument": {"variable": "b3"}, "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                                                                                                                                "domain": {"variable": "hydra.core.FieldType"},
+                                                                                                                                                "parameter": "f"}},
+                                                                                                                                            "domain": {"literal": {"boolean": {}}},
+                                                                                                                                            "parameter": "b3"}},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
+                                                                                                                                            "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
+                                                                                                                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                                                                                                            "parameter": "fts"}},
+                                                                                                                        "name": "record"},
+                                                                                                                      {
+                                                                                                                        "handler": {
+                                                                                                                          "lambda": {
+                                                                                                                            "body": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "fts"},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"literal": {"boolean": false}},
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
+                                                                                                                                          "lambda": {
+                                                                                                                                            "body": {
+                                                                                                                                              "lambda": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {
+                                                                                                                                                              "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}}}},
+                                                                                                                                                            "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                                                                                                                        "function": {"variable": "checkFieldType"}}},
+                                                                                                                                                    "function": {"application": {"argument": {"variable": "b3"}, "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                                                                                                                                "domain": {"variable": "hydra.core.FieldType"},
+                                                                                                                                                "parameter": "f"}},
+                                                                                                                                            "domain": {"literal": {"boolean": {}}},
+                                                                                                                                            "parameter": "b3"}},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
+                                                                                                                                            "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
+                                                                                                                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                                                                                                            "parameter": "fts"}},
+                                                                                                                        "name": "union"}],
+                                                                                                                    "default": {"literal": {"boolean": false}},
+                                                                                                                    "typeName": "hydra.core.Type"}}}},
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "t2"},
-                                                                                                                    "function": {
-                                                                                                                      "cases": {
-                                                                                                                        "cases": [
-                                                                                                                          {
-                                                                                                                            "handler": {
-                                                                                                                              "lambda": {
-                                                                                                                                "body": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "fts"},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"literal": {"boolean": false}},
-                                                                                                                                        "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "argument": {
-                                                                                                                                              "lambda": {
-                                                                                                                                                "body": {
-                                                                                                                                                  "lambda": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {
-                                                                                                                                                          "application": {
-                                                                                                                                                            "argument": {
-                                                                                                                                                              "application": {
-                                                                                                                                                                "argument": {
-                                                                                                                                                                  "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}}}},
-                                                                                                                                                                "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                                                                                                                            "function": {"variable": "checkFieldType"}}},
-                                                                                                                                                        "function": {"application": {"argument": {"variable": "b3"}, "function": {"variable": "hydra.lib.logic.or"}}}}},
-                                                                                                                                                    "domain": {"variable": "hydra.core.FieldType"},
-                                                                                                                                                    "parameter": "f"}},
-                                                                                                                                                "domain": {"literal": {"boolean": {}}},
-                                                                                                                                                "parameter": "b3"}},
-                                                                                                                                            "function": {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
-                                                                                                                                                "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
-                                                                                                                                "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                                                                                                "parameter": "fts"}},
-                                                                                                                            "name": "record"},
-                                                                                                                          {
-                                                                                                                            "handler": {
-                                                                                                                              "lambda": {
-                                                                                                                                "body": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "fts"},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"literal": {"boolean": false}},
-                                                                                                                                        "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "argument": {
-                                                                                                                                              "lambda": {
-                                                                                                                                                "body": {
-                                                                                                                                                  "lambda": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {
-                                                                                                                                                          "application": {
-                                                                                                                                                            "argument": {
-                                                                                                                                                              "application": {
-                                                                                                                                                                "argument": {
-                                                                                                                                                                  "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}}}},
-                                                                                                                                                                "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                                                                                                                            "function": {"variable": "checkFieldType"}}},
-                                                                                                                                                        "function": {"application": {"argument": {"variable": "b3"}, "function": {"variable": "hydra.lib.logic.or"}}}}},
-                                                                                                                                                    "domain": {"variable": "hydra.core.FieldType"},
-                                                                                                                                                    "parameter": "f"}},
-                                                                                                                                                "domain": {"literal": {"boolean": {}}},
-                                                                                                                                                "parameter": "b3"}},
-                                                                                                                                            "function": {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
-                                                                                                                                                "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
-                                                                                                                                "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                                                                                                "parameter": "fts"}},
-                                                                                                                            "name": "union"}],
-                                                                                                                        "default": {"literal": {"boolean": false}},
-                                                                                                                        "typeName": "hydra.core.Type"}}}},
+                                                                                                                "argument": {"variable": "checkResult"},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"boolean": {}}}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"literal": {"boolean": {}}}}},
                                                                                                                     "type": {"literal": {"boolean": {}}}}}}}}}}}}},
                                                                                                 "function": {"application": {"argument": {"variable": "b2"}, "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                                                             "domain": {"variable": "hydra.core.Type"},
@@ -3495,61 +3495,62 @@
                           "wrap": {
                             "body": {
                               "application": {
-                                "argument": {"variable": "ns_"},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "lambda": {
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "nsParts",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
-                                                            "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": {"string": {}}}}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
-                                                "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
-                                            "body": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "nsParts",
+                                            "term": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"list": [{"variable": "nsParts"}, {"list": [{"variable": "local"}]}]},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
-                                                    "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                                        "argument": {"application": {"argument": {"variable": "nsVal"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
+                                                        "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": {"string": {}}}}}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "local"},
-                                                    "function": {
+                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
+                                            "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"list": [{"variable": "nsParts"}, {"list": [{"variable": "local"}]}]},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
+                                                "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "local"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
                                                       "application": {
-                                                        "argument": {
+                                                        "argument": {"variable": "localNsParts"},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"variable": "localNsParts"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "nsParts"},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
-                                        "domain": {"variable": "hydra.packaging.ModuleName"},
-                                        "parameter": "nsVal"}},
+                                                            "argument": {"variable": "nsParts"},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
+                                    "domain": {"variable": "hydra.packaging.ModuleName"},
+                                    "parameter": "nsVal"}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "local"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "local"},
+                                        "argument": {"variable": "ns_"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                            "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                            "type": {"literal": {"string": {}}}}}}}}}}},
                             "typeName": "hydra.protobuf.proto3.TypeName"}}}},
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "name"}},
@@ -5082,39 +5083,36 @@
                                 "body": {
                                   "application": {
                                     "argument": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.annotations.typeAnnotationInternal"}}},
-                                        "function": {
+                                      "lambda": {
+                                        "body": {
                                           "application": {
-                                            "argument": {"variable": "key"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
-                                                "type": {"variable": "hydra.core.Term"}}}}}}},
+                                            "argument": {"variable": "term"},
+                                            "function": {"application": {"argument": {"variable": "g"}, "function": {"variable": "hydra.extract.core.boolean"}}}}},
+                                        "domain": {"variable": "hydra.core.Term"},
+                                        "parameter": "term"}},
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "lambda": {
+                                          "typeApplication": {
                                             "body": {
-                                              "application": {
-                                                "argument": {"variable": "term"},
-                                                "function": {"application": {"argument": {"variable": "g"}, "function": {"variable": "hydra.extract.core.boolean"}}}}},
-                                            "domain": {"variable": "hydra.core.Term"},
-                                            "parameter": "term"}},
+                                              "typeApplication": {"body": {"either": {"right": {"literal": {"boolean": false}}}}, "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"literal": {"boolean": {}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"either": {"right": {"literal": {"boolean": false}}}}, "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {"literal": {"boolean": {}}}}},
+                                              "application": {
+                                                "argument": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.annotations.typeAnnotationInternal"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "key"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "type": {"variable": "hydra.core.Term"}}}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                    "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"literal": {"boolean": {}}}}}}},
-                                                "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Term"}}},
+                                                "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"literal": {"boolean": {}}}}}}}}}}}}},
                                 "domain": {"variable": "hydra.core.Type"},
                                 "parameter": "typ"}},
                             "domain": {"variable": "hydra.core.Name"},

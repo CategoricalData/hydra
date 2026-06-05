@@ -855,113 +855,107 @@
                                                                   "lambda": {
                                                                     "body": {
                                                                       "application": {
-                                                                        "argument": {"variable": "mroot"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "ids"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "name"},
-                                                                                            "function": {
+                                                                        "argument": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "edge",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "fields": [
+                                                                                                  {"name": "source", "term": {"variable": "root"}},
+                                                                                                  {
+                                                                                                    "name": "path",
+                                                                                                    "term": {
+                                                                                                      "wrap": {
+                                                                                                        "body": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "nextPath"},
+                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"variable": "hydra.paths.SubtermStep"}}}}},
+                                                                                                        "typeName": "hydra.paths.SubtermPath"}}},
+                                                                                                  {"name": "target", "term": {"variable": "node"}}],
+                                                                                                "typeName": "hydra.paths.SubtermEdge"}},
+                                                                                            "typeScheme": {"body": {"variable": "hydra.paths.SubtermEdge"}, "variables": []}},
+                                                                                          {
+                                                                                            "name": "newEdges",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "edges"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "edge"},
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.paths.SubtermEdge"}}}}}}},
+                                                                                            "typeScheme": {"body": {"list": {"variable": "hydra.paths.SubtermEdge"}}, "variables": []}}],
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                "type": {"variable": "hydra.paths.SubtermNode"}}}}}}},
+                                                                                                "body": {
+                                                                                                  "pair": {
+                                                                                                    "first": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"pair": {"first": {"variable": "nodes"}, "second": {"variable": "newEdges"}}},
+                                                                                                            "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
+                                                                                                        "type": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                    "second": {"variable": "visited"}}},
+                                                                                                "type": {
+                                                                                                  "pair": {
+                                                                                                    "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                    "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
+                                                                                            "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                    "domain": {"variable": "hydra.paths.SubtermNode"},
+                                                                                    "parameter": "node"}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "state"},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "let": {
-                                                                                                "bindings": [
-                                                                                                  {
-                                                                                                    "name": "edge",
-                                                                                                    "term": {
-                                                                                                      "record": {
-                                                                                                        "fields": [
-                                                                                                          {"name": "source", "term": {"variable": "root"}},
-                                                                                                          {
-                                                                                                            "name": "path",
-                                                                                                            "term": {
-                                                                                                              "wrap": {
-                                                                                                                "body": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "nextPath"},
-                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                                                                                                "typeName": "hydra.paths.SubtermPath"}}},
-                                                                                                          {"name": "target", "term": {"variable": "node"}}],
-                                                                                                        "typeName": "hydra.paths.SubtermEdge"}},
-                                                                                                    "typeScheme": {"body": {"variable": "hydra.paths.SubtermEdge"}, "variables": []}},
-                                                                                                  {
-                                                                                                    "name": "newEdges",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "edges"},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "edge"},
-                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.paths.SubtermEdge"}}}}}}},
-                                                                                                    "typeScheme": {"body": {"list": {"variable": "hydra.paths.SubtermEdge"}}, "variables": []}}],
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
-                                                                                                          "pair": {
-                                                                                                            "first": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"pair": {"first": {"variable": "nodes"}, "second": {"variable": "newEdges"}}},
-                                                                                                                    "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
-                                                                                                                "type": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                            "second": {"variable": "visited"}}},
-                                                                                                        "type": {
-                                                                                                          "pair": {
-                                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
-                                                                                                    "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                            "domain": {"variable": "hydra.paths.SubtermNode"},
-                                                                                            "parameter": "node"}},
-                                                                                        "function": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "state"},
+                                                                                            "argument": {"variable": "ids"},
                                                                                             "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "name"},
+                                                                                                "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                                                    "type": {
-                                                                                                      "pair": {
-                                                                                                        "first": {
-                                                                                                          "pair": {
-                                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                        "second": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                "type": {"variable": "hydra.paths.SubtermNode"}}}}}}}}},
-                                                                                "domain": {"variable": "hydra.paths.SubtermNode"},
-                                                                                "parameter": "root"}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                    "type": {"variable": "hydra.paths.SubtermNode"}}}}}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.paths.SubtermNode"}}},
+                                                                                            "type": {
+                                                                                              "pair": {
+                                                                                                "first": {
+                                                                                                  "pair": {
+                                                                                                    "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                    "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                "second": {"set": {"literal": {"string": {}}}}}}}}}}}}}},
+                                                                            "domain": {"variable": "hydra.paths.SubtermNode"},
+                                                                            "parameter": "root"}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "state"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "state"},
+                                                                                "argument": {"variable": "mroot"},
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                                        "type": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.paths.SubtermNode"}}},
+                                                                                    "type": {
+                                                                                      "pair": {
+                                                                                        "first": {
                                                                                           "pair": {
-                                                                                            "first": {
-                                                                                              "pair": {
-                                                                                                "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                            "second": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                    "type": {"variable": "hydra.paths.SubtermNode"}}}}}}}}},
+                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                        "second": {"set": {"literal": {"string": {}}}}}}}}}}}}}},
                                                                     "domain": {"variable": "hydra.core.Name"},
                                                                     "parameter": "name"}},
                                                                 "name": "variable"}],
