@@ -580,14 +580,14 @@ main = do
   -- Hydra.Codegen). No expansion, no prune.
   let genForDir :: FilePath -> [Module] -> IO [FilePath]
       genForDir dir mods = case target of
-        "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False False False False dir allModsFinal' mods
-        "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  dir allModsFinal' mods
-        "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allModsFinal' mods
-        "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
-        "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allModsFinal' mods
-        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False dir allModsFinal' mods
+        "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False dir allModsFinal' mods
+        "java"       -> generateSources moduleToJava       javaLanguage       False dir allModsFinal' mods
+        "python"     -> generateSources moduleToPython     pythonLanguage     False dir allModsFinal' mods
+        "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False dir allModsFinal' mods
+        "go"         -> generateSources moduleToGo  goLanguage         False dir allModsFinal' mods
+        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
-              generateSources g lispLanguage True False False False dir allModsFinal' mods
+              generateSources g lispLanguage True dir allModsFinal' mods
         _ -> do
           putStrLn $ "Unknown target: " ++ target
           exitFailure
@@ -712,12 +712,12 @@ main = do
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
           case target of
-            "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False False False False outMain allUniverse extModsForTests >> return ()
-            "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  outMain allUniverse extModsForTests >> return ()
-            "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False outMain allUniverse extModsForTests >> return ()
-            "go"         -> generateSources moduleToGo  goLanguage         False False False False outMain allUniverse extModsForTests >> return ()
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False outMain allUniverse extModsForTests >> return ()
-            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outMain allUniverse extModsForTests >> return ()
+            "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False outMain allUniverse extModsForTests >> return ()
+            "java"       -> generateSources moduleToJava       javaLanguage       False outMain allUniverse extModsForTests >> return ()
+            "python"     -> generateSources moduleToPython     pythonLanguage     False outMain allUniverse extModsForTests >> return ()
+            "go"         -> generateSources moduleToGo  goLanguage         False outMain allUniverse extModsForTests >> return ()
+            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False outMain allUniverse extModsForTests >> return ()
+            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
 
@@ -741,13 +741,13 @@ main = do
       -- Dispatch helper for the test source set.
       let genTestForDir :: FilePath -> [Module] -> IO [FilePath]
           genTestForDir dir mods = case target of
-            "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False False False False dir allUniverse mods
-            "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  dir allUniverse mods
-            "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allUniverse mods
-            "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
-            "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allUniverse mods
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False True  True  False dir allUniverse mods
-            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
+            "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False dir allUniverse mods
+            "java"       -> generateSources moduleToJava       javaLanguage       False dir allUniverse mods
+            "python"     -> generateSources moduleToPython     pythonLanguage     False dir allUniverse mods
+            "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False dir allUniverse mods
+            "go"         -> generateSources moduleToGo  goLanguage         False dir allUniverse mods
+            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False dir allUniverse mods
+            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False dir allUniverse mods
             _ -> return []
 
       testStart <- getCurrentTime
