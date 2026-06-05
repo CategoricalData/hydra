@@ -620,6 +620,62 @@ When adding a new primitive function:
   - [ ] Test group registered in `allTests`
 - [ ] **Tests pass** in all three languages
 
+## Renaming or removing a primitive
+
+Modifying an existing primitive — renaming, removing, or changing its signature — is a
+**rare task**, on a par with
+[revising Hydra Core](extending-hydra-core.md): the kernel's primitive set is a stable
+interface that downstream code, generated artifacts, and every host runtime depend on,
+so changes ripple widely. Treat it deliberately rather than as a routine edit.
+
+Renaming or removing a primitive is the inverse of the recipe above: undo every site
+in the [Checklist](#checklist) (name constant, kernel `definitions` entry, default
+implementation, each host's native impl + registration + DSL wrapper, and the common
+test group). Two things deserve special care.
+
+**Flip every call site, not just the definition.** Removing a primitive in favour of
+another (e.g. replacing the value-first `maybes.maybe` eliminator with the
+scrutinee-first `maybes.cases`) means rewriting every reference, including ones that
+do not match a simple text search: DSL call sites (`Maybes.maybe`), name-binding
+references (`_maybes_maybe`), hardcoded `Name "hydra.lib.maybes.maybe"` literals in
+phantom helpers, and the per-host runtime registries (Java `Libraries.java`, Python
+`hydra.sources.libraries`, the four Lisp `lib/libraries.*`, the TypeScript
+`lib/libraries.ts`, and the per-host test runners). When the replacement has a
+different argument order, each call site must be reordered, not just renamed.
+
+**Manually invalidate the synthesis cache.** This is the non-obvious step. The
+synthesized decoder/encoder modules (`Hydra.Sources.Decode.*` / `Encode.*`, written to
+`dist/haskell/.../Sources/Decode/*.hs` and to `dist/json/<pkg>/.../hydra/decode/*.json`)
+embed the *names* of the primitives their generated terms reference. Their freshness
+check keys on the source module's *type shape*, not on the emitted content — so a
+primitive rename, which leaves the type shape unchanged, is **not** detected, and the
+sync leaves these artifacts stale. (Primitives change rarely enough that automatic
+invalidation is not worth building; invalidate by hand on the rare occasion.)
+
+The symptom of skipping this is a sync that fails one stale-artifact layer deeper each
+run, with `no such binding: <prim>` during Haskell per-package inference, or
+`untyped term variable: <prim>` during Java/Python generation. To force a clean
+regeneration:
+
+```bash
+# 1. Delete the stale synthesized artifacts that still reference the old name:
+#    - the decode/encode JSON the target generators read
+#    - the decode/encode Haskell Source modules the head compiles
+grep -rl "hydra.lib.<old.prim.name>" dist/json/*/src/main/json/hydra/{decode,encode} | xargs rm -f
+grep -rl "hydra.lib.<old.prim.name>" dist/haskell/*/src/main/haskell/Hydra/Sources/{Decode,Encode} | xargs rm -f
+# 2. Clear the Phase-1 / bootstrap-from-json caches:
+rm -f heads/haskell/.stack-work/{phase1-input-cache,bootstrap-from-json-cache}.txt
+# 3. Re-export, including the cold-start java/python coder JSON (which also caches):
+HYDRA_INCLUDE_JAVA_PYTHON=1 ./bin/sync.sh
+```
+
+Note that the `Sources/Decode/*.hs` files are cabal-exposed modules the Haskell head
+*compiles*, so do not delete them while expecting the very next build to succeed — the
+synthesizer must rewrite them (which it does once the old references are gone from the
+inference universe). For the cache layers involved see
+[the build system](../build-system.md); for the matching "untyped bindings" / stale-JSON
+failure mode see [troubleshooting](../troubleshooting.md).
+
 ## Common pitfalls
 
 1. **Out-of-order definitions.** The kernel validator requires alphabetical
