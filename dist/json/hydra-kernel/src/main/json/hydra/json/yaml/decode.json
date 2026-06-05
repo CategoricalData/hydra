@@ -4,7 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a YAML node to a Hydra term via JSON decoding."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decode a YAML node to a Hydra term via JSON decoding."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -82,11 +86,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Convert a YAML node to a JSON value. Fails for non-JSON YAML features (e.g. non-string mapping keys)."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Convert a YAML node to a JSON value. Fails for non-JSON YAML features (e.g. non-string mapping keys)."}}}]},
             "body": {
               "lambda": {
                 "body": {

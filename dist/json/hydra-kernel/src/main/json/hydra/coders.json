@@ -5,10 +5,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -23,31 +24,33 @@
                                     "name": "isLossy",
                                     "type": {
                                       "annotated": {
-                                        "annotation": [
-                                          {
-                                            "key": "description",
-                                            "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
                                         "body": {"literal": {"boolean": {}}}}}},
                                   {
                                     "name": "source",
                                     "type": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "The source type"}}}],
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
                                         "body": {"variable": "t1"}}}},
                                   {
                                     "name": "target",
                                     "type": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
                                         "body": {"variable": "t2"}}}},
                                   {
                                     "name": "coder",
                                     "type": {
                                       "annotated": {
-                                        "annotation": [
-                                          {
-                                            "key": "description",
-                                            "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}],
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "v2"},
@@ -63,29 +66,39 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An evaluation context together with a source language and a target language"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An evaluation context together with a source language and a target language"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "graph",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
                         "body": {"variable": "hydra.graph.Graph"}}}},
                   {
                     "name": "language",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
                         "body": {"variable": "hydra.coders.Language"}}}},
                   {
                     "name": "adapters",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A map of type names to adapters for those types"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.core.Name"},
@@ -106,10 +119,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -124,7 +138,8 @@
                                     "name": "encode",
                                     "type": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "A function from source types to adapters"}}}],
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
                                         "body": {
                                           "function": {
                                             "codomain": {
@@ -142,7 +157,8 @@
                                     "name": "decode",
                                     "type": {
                                       "annotated": {
-                                        "annotation": [{"key": "description", "value": {"literal": {"string": "A function from target types to adapters"}}}],
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
                                         "body": {
                                           "function": {
                                             "codomain": {
@@ -167,10 +183,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "An encoder and decoder; a bidirectional transformation between two types"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An encoder and decoder; a bidirectional transformation between two types"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -181,12 +198,13 @@
                             "name": "encode",
                             "type": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                                 "body": {
                                   "function": {
                                     "codomain": {
@@ -198,12 +216,13 @@
                             "name": "decode",
                             "type": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {
-                                        "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
                                 "body": {
                                   "function": {
                                     "codomain": {
@@ -220,8 +239,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}]},
               "body": {"union": [{"name": "encode", "type": {"unit": {}}}, {"name": "decode", "type": {"unit": {}}}]}}},
           "variables": []},
         "name": "hydra.coders.CoderDirection"}},
@@ -230,21 +252,28 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {"key": "description", "value": {"literal": {"string": "A named language together with language-specific constraints"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A named language together with language-specific constraints"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of the language"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
                         "body": {"variable": "hydra.coders.LanguageName"}}}},
                   {
                     "name": "constraints",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The constraints which characterize the language"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The constraints which characterize the language"}}}]},
                         "body": {"variable": "hydra.coders.LanguageConstraints"}}}}]}}},
           "variables": []},
         "name": "hydra.coders.Language"}},
@@ -253,50 +282,52 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A set of constraints on valid type and term expressions, characterizing a language"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A set of constraints on valid type and term expressions, characterizing a language"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "literalVariants",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported literal variants"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
                         "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}}},
                   {
                     "name": "floatTypes",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
                         "body": {"set": {"variable": "hydra.core.FloatType"}}}}},
                   {
                     "name": "integerTypes",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported integer types"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
                         "body": {"set": {"variable": "hydra.core.IntegerType"}}}}},
                   {
                     "name": "termVariants",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported term variants"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
                         "body": {"set": {"variable": "hydra.variants.TermVariant"}}}}},
                   {
                     "name": "typeVariants",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported type variants"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
                         "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}}},
                   {
                     "name": "types",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
                         "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}}}]}}},
           "variables": []},
         "name": "hydra.coders.LanguageConstraints"}},
@@ -305,7 +336,7 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "The unique name of a language"}}}],
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of a language"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.coders.LanguageName"}},
@@ -314,10 +345,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}]},
               "body": {
                 "forall": {
                   "body": {
@@ -341,17 +373,25 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "pre",
                     "type": {
-                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Pre-order traversal"}}}], "body": {"unit": {}}}}},
+                      "annotated": {
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pre-order traversal"}}}]},
+                        "body": {"unit": {}}}}},
                   {
                     "name": "post",
                     "type": {
-                      "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Post-order traversal"}}}], "body": {"unit": {}}}}}]}}},
+                      "annotated": {
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Post-order traversal"}}}]},
+                        "body": {"unit": {}}}}}]}}},
           "variables": []},
         "name": "hydra.coders.TraversalOrder"}},
     {
@@ -359,10 +399,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}]},
               "body": {
                 "function": {
                   "codomain": {

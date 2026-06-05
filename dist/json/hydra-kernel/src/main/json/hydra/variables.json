@@ -4,12 +4,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -340,10 +341,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the free variables (i.e. variables not bound by a lambda or let) in a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the free variables (i.e. variables not bound by a lambda or let) in a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -463,10 +465,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the free variables (i.e. variables not bound by a lambda or let) in a type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the free variables (i.e. variables not bound by a lambda or let) in a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -551,10 +554,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find the free variables in a type in deterministic left-to-right order"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the free variables in a type in deterministic left-to-right order"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -662,7 +666,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find free variables in a type scheme"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find free variables in a type scheme"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -704,7 +709,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find free variables in a type scheme (simple version)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find free variables in a type scheme (simple version)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -746,10 +755,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Same as freeVariablesInType, but ignores the binding action of lambda types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Same as freeVariablesInType, but ignores the binding action of lambda types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -817,7 +827,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check whether a variable is free (not bound) in a term"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a variable is free (not bound) in a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -847,11 +861,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1948,7 +1963,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Replace a free variable in a term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Replace a free variable in a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2056,7 +2071,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Replace free occurrences of a name in a type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Replace free occurrences of a name in a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2180,7 +2196,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Substitute type variables in a type"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Substitute type variables in a type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2261,7 +2277,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Substitute one variable for another in a term"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Substitute one variable for another in a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2367,7 +2385,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Substitute multiple variables in a term"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Substitute multiple variables in a term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2477,12 +2496,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term."}}}]},
             "body": {
               "lambda": {
                 "body": {

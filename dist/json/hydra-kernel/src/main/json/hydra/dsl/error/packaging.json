@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.ConflictingModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.ConflictingModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -52,7 +53,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The second module name that conflicts with the first"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "second"}},
@@ -60,7 +65,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first module name"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "first"}}}},
@@ -74,7 +79,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first module name"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -84,7 +89,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The second module name that conflicts with the first"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -97,10 +106,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the first field of hydra.error.packaging.ConflictingModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the first field of hydra.error.packaging.ConflictingModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -154,7 +164,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first module name"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -162,10 +172,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -219,7 +230,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The second module name that conflicts with the first"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -227,10 +242,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the first field of hydra.error.packaging.ConflictingModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the first field of hydra.error.packaging.ConflictingModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -302,7 +318,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first module name"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -328,7 +344,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first module name"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -341,10 +357,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -416,7 +433,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The second module name that conflicts with the first"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -442,7 +463,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The second module name that conflicts with the first"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -455,10 +480,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -523,10 +549,11 @@
                               "application": {
                                 "argument": {
                                   "annotated": {
-                                    "annotation": [
-                                      {
-                                        "key": "description",
-                                        "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}]},
                                     "body": {"variable": "hydra.core.Name"}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "conflictingName"}},
@@ -534,7 +561,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}]},
                                 "body": {"variable": "hydra.core.Name"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "variantName"}},
@@ -542,7 +573,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "typeName"}},
@@ -550,7 +581,9 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module containing the conflict"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -564,7 +597,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module containing the conflict"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -574,7 +609,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -584,7 +619,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -594,10 +633,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -610,10 +650,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -667,7 +708,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module containing the conflict"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -675,10 +718,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the typeName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -732,7 +776,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -740,10 +784,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the variantName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the variantName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -797,7 +842,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -805,11 +854,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL accessor for the conflictingName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL accessor for the conflictingName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -865,10 +915,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -876,10 +927,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1023,7 +1075,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module containing the conflict"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1049,7 +1103,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module containing the conflict"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1062,10 +1118,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the typeName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1209,7 +1266,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1235,7 +1292,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the union type"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1248,10 +1305,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the variantName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the variantName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1395,7 +1453,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1421,7 +1483,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the variant field causing the conflict"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1434,11 +1500,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL updater for the conflictingName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL updater for the conflictingName field of hydra.error.packaging.ConflictingVariantNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1580,10 +1647,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1609,10 +1677,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the other type definition that conflicts with the generated constructor name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1625,10 +1694,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DefinitionNotInModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1673,7 +1743,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The definition name that does not match the module name"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "name"}},
@@ -1681,7 +1755,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -1695,7 +1769,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -1705,7 +1779,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The definition name that does not match the module name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1718,10 +1796,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1775,7 +1854,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1783,10 +1862,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1840,7 +1920,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The definition name that does not match the module name"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -1848,10 +1932,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1923,7 +2008,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -1949,7 +2034,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the module"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -1962,10 +2047,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2037,7 +2123,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The definition name that does not match the module name"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2063,7 +2153,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The definition name that does not match the module name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2076,10 +2170,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2134,10 +2229,11 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}]},
                                 "body": {"variable": "hydra.core.Name"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "followingName"}},
@@ -2145,7 +2241,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "The definition that appears first in the list"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "precedingName"}},
@@ -2153,8 +2251,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -2168,8 +2269,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2179,7 +2283,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The definition that appears first in the list"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2189,10 +2295,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2205,10 +2312,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2262,8 +2370,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2271,10 +2382,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the precedingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the precedingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2330,7 +2442,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "The definition that appears first in the list"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2338,10 +2452,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2397,10 +2512,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -2408,10 +2524,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2522,8 +2639,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2549,8 +2669,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2563,10 +2686,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the precedingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the precedingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2675,7 +2799,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "The definition that appears first in the list"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2701,7 +2827,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition that appears first in the list"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The definition that appears first in the list"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2714,10 +2842,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2826,10 +2955,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -2855,10 +2985,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The definition that appears next, but should sort earlier than precedingName"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2871,10 +3002,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DuplicateDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2919,7 +3051,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated definition name"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated definition name"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "name"}},
@@ -2927,7 +3059,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the duplicates"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -2941,7 +3077,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the duplicates"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -2951,7 +3091,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated definition name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated definition name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -2964,10 +3104,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3021,7 +3162,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the module containing the duplicates"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3029,10 +3174,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.DuplicateDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3086,7 +3232,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated definition name"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated definition name"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3094,10 +3240,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3169,7 +3316,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the module containing the duplicates"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3195,7 +3346,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the duplicates"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3208,10 +3363,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DuplicateDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3283,7 +3439,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated definition name"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated definition name"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3309,7 +3465,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated definition name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated definition name"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3322,10 +3478,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DuplicateModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DuplicateModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3360,7 +3517,7 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated module name"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -3374,7 +3531,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated module name"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3387,10 +3544,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3444,7 +3602,7 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated module name"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3452,10 +3610,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3492,7 +3651,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated module name"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -3518,7 +3677,7 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The duplicated module name"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3531,10 +3690,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3591,11 +3751,12 @@
                           "application": {
                             "argument": {
                               "annotated": {
-                                "annotation": [
-                                  {
-                                    "key": "description",
-                                    "value": {
-                                      "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}]},
                                 "body": {"variable": "hydra.util.CaseConvention"}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "expectedConvention"}},
@@ -3603,7 +3764,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The definition name that violates the naming convention"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "name"}},
@@ -3611,7 +3776,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the definition"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -3625,7 +3794,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the definition"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3635,7 +3808,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The definition name that violates the naming convention"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -3645,11 +3822,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}]},
                       "body": {"variable": "hydra.util.CaseConvention"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -3662,10 +3840,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3719,7 +3898,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the module containing the definition"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3727,10 +3910,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3784,7 +3968,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The definition name that violates the naming convention"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3792,11 +3980,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL accessor for the expectedConvention field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL accessor for the expectedConvention field of hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3852,11 +4041,12 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}]},
                     "body": {"variable": "hydra.util.CaseConvention"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3864,10 +4054,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3978,7 +4169,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the module containing the definition"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4004,7 +4199,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the definition"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4017,10 +4216,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4131,7 +4331,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The definition name that violates the naming convention"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4157,7 +4361,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that violates the naming convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The definition name that violates the naming convention"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4170,11 +4378,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL updater for the expectedConvention field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL updater for the expectedConvention field of hydra.error.packaging.InvalidDefinitionNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4283,11 +4492,12 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {
-                                  "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}]},
                             "body": {"variable": "hydra.util.CaseConvention"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -4313,11 +4523,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "The case convention the name should have followed (camel for term-level, pascal for type-level)"}}}]},
                       "body": {"variable": "hydra.util.CaseConvention"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4330,11 +4541,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the conflictingVariantName variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the conflictingVariantName variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4368,11 +4580,12 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}]},
                         "body": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4386,11 +4599,12 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {
-                            "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}]},
                       "body": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4403,11 +4617,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the definitionNotInModuleName variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the definitionNotInModuleName variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4441,10 +4656,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}]},
                         "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4458,10 +4674,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}]},
                       "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4474,11 +4691,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the definitionsOutOfOrder variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the definitionsOutOfOrder variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4512,10 +4730,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}]},
                         "body": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4529,10 +4748,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Two consecutive definitions in the definitions list that are not in alphabetical order"}}}]},
                       "body": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4545,11 +4765,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the duplicateDefinitionName variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the duplicateDefinitionName variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4583,10 +4804,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}]},
                         "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4600,10 +4822,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Two or more definitions in the same module share the same name"}}}]},
                       "body": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4616,11 +4839,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the invalidDefinitionName variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the invalidDefinitionName variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4654,10 +4878,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4671,10 +4896,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}]},
                       "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4687,11 +4913,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the invalidModuleNameConvention variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the invalidModuleNameConvention variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4725,10 +4952,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4742,10 +4970,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}]},
                       "body": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4758,11 +4987,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the missingDocumentation variant of hydra.error.packaging.InvalidModuleError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the missingDocumentation variant of hydra.error.packaging.InvalidModuleError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4796,7 +5026,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}]},
                         "body": {"variable": "hydra.error.packaging.MissingDocumentationError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -4810,7 +5044,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A top-level definition lacking a description annotation"}}}]},
                       "body": {"variable": "hydra.error.packaging.MissingDocumentationError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4823,10 +5061,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidModuleNameConventionError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidModuleNameConventionError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4863,7 +5102,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name that violates the convention"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -4877,7 +5117,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name that violates the convention"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -4890,11 +5131,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -4950,7 +5192,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name that violates the convention"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -4958,11 +5201,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5001,7 +5245,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name that violates the convention"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5027,7 +5272,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name that violates the convention"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5040,11 +5286,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the conflictingModuleName variant of hydra.error.packaging.InvalidPackageError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the conflictingModuleName variant of hydra.error.packaging.InvalidPackageError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5078,10 +5325,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}]},
                         "body": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -5095,10 +5343,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}]},
                       "body": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5111,11 +5360,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "DSL injection for the duplicateModuleName variant of hydra.error.packaging.InvalidPackageError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "DSL injection for the duplicateModuleName variant of hydra.error.packaging.InvalidPackageError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5149,8 +5399,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}]},
                         "body": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -5164,8 +5417,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}]},
                       "body": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5178,10 +5434,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the invalidModule variant of hydra.error.packaging.InvalidPackageError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the invalidModule variant of hydra.error.packaging.InvalidPackageError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5213,7 +5470,8 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A module within the package is invalid"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A module within the package is invalid"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -5227,7 +5485,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "A module within the package is invalid"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A module within the package is invalid"}}}]},
                       "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5240,10 +5499,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the invalidPackageName variant of hydra.error.packaging.InvalidPackageError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the invalidPackageName variant of hydra.error.packaging.InvalidPackageError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5277,10 +5537,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}]},
                         "body": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
@@ -5294,10 +5555,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}]},
                       "body": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5310,10 +5572,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidPackageNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidPackageNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5348,7 +5611,9 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The package name that violates the convention"}}}]},
                         "body": {"variable": "hydra.packaging.PackageName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "packageName"}}}},
@@ -5362,7 +5627,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The package name that violates the convention"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5375,10 +5642,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the packageName field of hydra.error.packaging.InvalidPackageNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the packageName field of hydra.error.packaging.InvalidPackageNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5432,7 +5700,9 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "The package name that violates the convention"}}}]},
                     "body": {"variable": "hydra.packaging.PackageName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5440,10 +5710,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the packageName field of hydra.error.packaging.InvalidPackageNameError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the packageName field of hydra.error.packaging.InvalidPackageNameError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5480,7 +5751,9 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "The package name that violates the convention"}}}]},
                             "body": {"variable": "hydra.packaging.PackageName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5506,7 +5779,9 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The package name that violates the convention"}}}],
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "The package name that violates the convention"}}}]},
                       "body": {"variable": "hydra.packaging.PackageName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5519,10 +5794,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.MissingDocumentationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.MissingDocumentationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5567,7 +5843,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the undocumented definition"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "name"}},
@@ -5575,10 +5852,11 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}]},
                         "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
@@ -5592,10 +5870,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
@@ -5605,7 +5884,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the undocumented definition"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5618,10 +5898,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.MissingDocumentationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.MissingDocumentationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5675,10 +5956,11 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}]},
                     "body": {"variable": "hydra.packaging.ModuleName"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5686,10 +5968,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.MissingDocumentationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.MissingDocumentationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5743,7 +6026,8 @@
               "application": {
                 "argument": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the undocumented definition"}}}]},
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -5751,10 +6035,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.MissingDocumentationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.MissingDocumentationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5826,10 +6111,11 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}]},
                             "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5855,10 +6141,11 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}]},
                       "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
@@ -5871,10 +6158,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.MissingDocumentationError"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.MissingDocumentationError"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -5946,7 +6234,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the undocumented definition"}}}]},
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
@@ -5972,7 +6261,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the undocumented definition"}}}]},
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {

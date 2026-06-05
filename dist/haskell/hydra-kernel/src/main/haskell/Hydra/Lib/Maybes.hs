@@ -89,10 +89,10 @@ apply =
                         Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "mx"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Applicative apply for optionals, defined in terms of bind and map.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Applicative apply for optionals, defined in terms of bind and map.")))]))})))}
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -145,8 +145,10 @@ bind =
                   Core.applicationArgument = (Core.TermMaybe Nothing)})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Monadic bind for optionals, defined in terms of maybe.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Monadic bind for optionals, defined in terms of maybe.")))]))})))}
 cases :: Packaging.PrimitiveDefinition
 cases =
     Packaging.PrimitiveDefinition {
@@ -248,10 +250,10 @@ cat =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))})),
               Core.applicationArgument = (Core.TermList [])})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Catenate a list of optionals, keeping only the present values.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Catenate a list of optionals, keeping only the present values.")))]))})))}
 compose :: Packaging.PrimitiveDefinition
 compose =
     Packaging.PrimitiveDefinition {
@@ -317,10 +319,10 @@ compose =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Kleisli composition for optionals, defined in terms of bind.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Kleisli composition for optionals, defined in terms of bind.")))]))})))}
 fromMaybe :: Packaging.PrimitiveDefinition
 fromMaybe =
     Packaging.PrimitiveDefinition {
@@ -370,10 +372,10 @@ fromMaybe =
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Return the contained value or a default, defined in terms of maybe.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Return the contained value or a default, defined in terms of maybe.")))]))})))}
 isJust :: Packaging.PrimitiveDefinition
 isJust =
     Packaging.PrimitiveDefinition {
@@ -415,8 +417,10 @@ isJust =
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Test for presence, defined in terms of maybe.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Test for presence, defined in terms of maybe.")))]))})))}
 isNothing :: Packaging.PrimitiveDefinition
 isNothing =
     Packaging.PrimitiveDefinition {
@@ -458,8 +462,10 @@ isNothing =
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Test for absence, defined in terms of maybe.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Test for absence, defined in terms of maybe.")))]))})))}
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -517,10 +523,10 @@ map =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Map a function over an optional, defined in terms of maybe.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Map a function over an optional, defined in terms of maybe.")))]))})))}
 mapMaybe :: Packaging.PrimitiveDefinition
 mapMaybe =
     Packaging.PrimitiveDefinition {
@@ -572,10 +578,10 @@ mapMaybe =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Map a partial function and keep only the present results, defined in terms of lists.map and cat.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Map a partial function and keep only the present results, defined in terms of lists.map and cat.")))]))})))}
 maybe :: Packaging.PrimitiveDefinition
 maybe =
     Packaging.PrimitiveDefinition {
@@ -652,8 +658,8 @@ pure =
           Core.lambdaParameter = (Core.Name "x"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermMaybe (Just (Core.TermVariable (Core.Name "x"))))})),
-        Core.annotatedTermAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Wrap a value in Just.")))])})))}
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+          (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Wrap a value in Just.")))]))})))}
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
@@ -696,7 +702,7 @@ toList =
                 Core.lambdaBody = (Core.TermList [
                   Core.TermVariable (Core.Name "x")])}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
-        Core.annotatedTermAnnotation = (M.fromList [
+        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
-            Core.Name "description",
-            (Core.TermLiteral (Core.LiteralString "Convert an optional to a list, defined in terms of maybe.")))])})))}
+            Core.TermVariable (Core.Name "description"),
+            (Core.TermLiteral (Core.LiteralString "Convert an optional to a list, defined in terms of maybe.")))]))})))}

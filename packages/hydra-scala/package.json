@@ -1,6 +1,6 @@
 {
   "name": "hydra-scala",
-  "description": "Scala coder for Hydra: generates idiomatic Scala code from Hydra type and term modules",
+  "description": "Scala support for Hydra",
   "sourceLanguage": "haskell",
   "dependencies": ["hydra-kernel"]
 }

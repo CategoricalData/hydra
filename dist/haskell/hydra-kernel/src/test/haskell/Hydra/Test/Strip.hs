@@ -11,6 +11,7 @@ import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -74,7 +75,7 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> ShowCore.term (Strip.deannotateTerm (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                  Core.annotatedTermAnnotation = M.empty})))),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -84,8 +85,8 @@ allTests =
                 Testing.universalTestCaseActual = (\_ -> ShowCore.term (Strip.deannotateTerm (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-                    Core.annotatedTermAnnotation = M.empty})),
-                  Core.annotatedTermAnnotation = M.empty})))),
+                    Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -97,7 +98,7 @@ allTests =
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-                  Core.annotatedTermAnnotation = M.empty})))),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
@@ -111,7 +112,7 @@ allTests =
                   Core.annotatedTermBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                  Core.annotatedTermAnnotation = M.empty})))),
+                  Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})))})),
@@ -152,7 +153,7 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Strip.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.annotatedTypeAnnotation = M.empty})))),
+                  Core.annotatedTypeAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -162,8 +163,8 @@ allTests =
                 Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Strip.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeAnnotated (Core.AnnotatedType {
                     Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
-                    Core.annotatedTypeAnnotation = M.empty})),
-                  Core.annotatedTypeAnnotation = M.empty})))),
+                    Core.annotatedTypeAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})),
+                  Core.annotatedTypeAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -172,7 +173,7 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Strip.deannotateType (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                  Core.annotatedTypeAnnotation = M.empty})))),
+                  Core.annotatedTypeAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -183,7 +184,7 @@ allTests =
                   Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
-                  Core.annotatedTypeAnnotation = M.empty})))),
+                  Core.annotatedTypeAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) M.empty))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),

@@ -119,12 +119,12 @@ checkDefinitionDocumentation mod =
                       Packaging.DefinitionTerm v0 ->
                         let term = Packaging.termDefinitionBody v0
                         in case term of
-                          Core.TermAnnotated v1 -> Annotations.hasDescription (Core.annotatedTermAnnotation v1)
+                          Core.TermAnnotated v1 -> Annotations.hasDescription (Annotations.getAnnotationMap (Core.annotatedTermAnnotation v1))
                           _ -> False
                       Packaging.DefinitionType v0 ->
                         let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
                         in case typ of
-                          Core.TypeAnnotated v1 -> Annotations.hasDescription (Core.annotatedTypeAnnotation v1)
+                          Core.TypeAnnotated v1 -> Annotations.hasDescription (Annotations.getAnnotationMap (Core.annotatedTypeAnnotation v1))
                           _ -> False
                       Packaging.DefinitionPrimitive v0 -> Maybes.maybe False (\em -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Packaging.entityMetadataDescription em)) "")) (Packaging.primitiveDefinitionMetadata v0)
                       _ -> False

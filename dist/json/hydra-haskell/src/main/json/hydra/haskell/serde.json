@@ -4,8 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert a pattern-matching alternative to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a pattern-matching alternative to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -39,10 +42,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a function application expression to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a function application expression to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -76,7 +80,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an application pattern to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an application pattern to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -126,7 +134,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type class constraint to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a type class constraint to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -176,7 +188,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case expression to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a case expression to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -265,7 +279,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a case right-hand side to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a case right-hand side to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -283,7 +301,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a class constraint to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a class constraint to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -341,10 +363,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a record construction expression to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a record construction expression to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -448,7 +471,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data constructor to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a data constructor to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -634,7 +661,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a data/newtype keyword to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a data/newtype keyword to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -669,7 +700,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a declaration head to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a declaration head to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -732,7 +767,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a declaration to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a declaration to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1106,7 +1142,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell expression to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a Haskell expression to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1342,7 +1382,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a field declaration to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a field declaration to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1429,7 +1473,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an if-then-else expression to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an if-then-else expression to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1543,8 +1591,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Convert an import/export specification to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an import/export specification to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1565,7 +1616,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an import statement to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an import statement to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1720,7 +1775,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a lambda expression to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a lambda expression to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1782,7 +1841,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a literal value to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a literal value to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2025,7 +2085,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a local binding to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a local binding to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2060,7 +2121,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a module head to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a module head to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2150,7 +2212,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell module to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Haskell module to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2272,7 +2336,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell name to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Haskell name to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2313,7 +2378,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a pattern to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a pattern to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2404,7 +2470,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a right-hand side to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a right-hand side to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2422,7 +2490,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a statement to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2440,12 +2509,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2494,12 +2564,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Convert a string to simple line comments. Empty source lines emit `--` (no trailing space) for the same reason as toHaskellComments."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a string to simple line comments. Empty source lines emit `--` (no trailing space) for the same reason as toHaskellComments."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2548,7 +2619,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type signature to an AST expression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a type signature to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2620,7 +2693,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Haskell type to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Haskell type to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2774,7 +2848,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a value binding to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a value binding to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2924,7 +2999,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a type variable to an AST expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a type variable to an AST expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2942,7 +3018,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Write a qualified name as a string"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Write a qualified name as a string"}}}]},
             "body": {
               "lambda": {
                 "body": {

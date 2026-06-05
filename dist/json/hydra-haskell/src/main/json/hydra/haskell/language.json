@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Haskell"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Haskell"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -136,12 +136,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Created on 2025-02-28 using GHCi 9.6.6\n\nYou can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n/tmp/browse_Prelude.txt, and then running the Bash command provided with each list.\n\nSee also https://www.haskell.org/onlinereport/standard-prelude.html"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Created on 2025-02-28 using GHCi 9.6.6\n\nYou can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n/tmp/browse_Prelude.txt, and then running the Bash command provided with each list.\n\nSee also https://www.haskell.org/onlinereport/standard-prelude.html"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -149,10 +150,11 @@
                     "name": "keywordSymbols",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Haskell's strictly reserved keywords; they cannot be used as identifiers."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Haskell's strictly reserved keywords; they cannot be used as identifiers."}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "case"}},
@@ -183,10 +185,11 @@
                     "name": "reservedSymbols",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Hydra uses these symbols in generated code, so we reserve them to avoid conflicts."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Hydra uses these symbols in generated code, so we reserve them to avoid conflicts."}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "Bool"}},
