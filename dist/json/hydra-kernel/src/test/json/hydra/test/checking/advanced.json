@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Advanced type checking test cases"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Advanced type checking test cases"}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -96,9 +96,30 @@
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}],
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "lambda": {
+                                                                                      "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                      "domain": {"variable": "hydra.core.Name"},
+                                                                                      "parameter": "n"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                        "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -230,9 +251,30 @@
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}],
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "lambda": {
+                                                                                      "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                      "domain": {"variable": "hydra.core.Name"},
+                                                                                      "parameter": "n"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                        "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -404,9 +446,30 @@
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}],
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "lambda": {
+                                                                                      "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                      "domain": {"variable": "hydra.core.Name"},
+                                                                                      "parameter": "n"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                        "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -529,9 +592,30 @@
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}],
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "lambda": {
+                                                                                      "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                      "domain": {"variable": "hydra.core.Name"},
+                                                                                      "parameter": "n"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                        "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -704,17 +788,59 @@
                                                                                 {
                                                                                   "name": "annotation",
                                                                                   "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                      "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "map",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                                                    "parameter": "n"}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}],
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "lambda": {
+                                                                                      "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                      "domain": {"variable": "hydra.core.Name"},
+                                                                                      "parameter": "n"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                        "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.AnnotatedTerm"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -849,9 +975,30 @@
                                                                                     {
                                                                                       "name": "annotation",
                                                                                       "term": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                          "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                        "inject": {
+                                                                                          "field": {
+                                                                                            "name": "map",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "lambda": {
+                                                                                                        "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                        "domain": {"variable": "hydra.core.Name"},
+                                                                                                        "parameter": "n"}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                          "typeName": "hydra.core.Term"}}}],
                                                                                   "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                             "typeName": "hydra.core.Term"}},
                                                                         "second": {
@@ -872,9 +1019,30 @@
                                                                                     {
                                                                                       "name": "annotation",
                                                                                       "term": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                          "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                        "inject": {
+                                                                                          "field": {
+                                                                                            "name": "map",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "lambda": {
+                                                                                                        "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                        "domain": {"variable": "hydra.core.Name"},
+                                                                                                        "parameter": "n"}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                          "typeName": "hydra.core.Term"}}}],
                                                                                   "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                             "typeName": "hydra.core.Term"}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
@@ -1035,9 +1203,30 @@
                                                                                 {
                                                                                   "name": "annotation",
                                                                                   "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                      "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "map",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                                                    "parameter": "n"}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -1066,9 +1255,30 @@
                                                                                 {
                                                                                   "name": "annotation",
                                                                                   "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                      "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "map",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                                                    "parameter": "n"}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                         "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.Application"}}},
@@ -1229,9 +1439,30 @@
                                                                                             {
                                                                                               "name": "annotation",
                                                                                               "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                "inject": {
+                                                                                                  "field": {
+                                                                                                    "name": "map",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                "parameter": "n"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -1262,9 +1493,30 @@
                                                                                             {
                                                                                               "name": "annotation",
                                                                                               "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                "inject": {
+                                                                                                  "field": {
+                                                                                                    "name": "map",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                "parameter": "n"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -1306,9 +1558,30 @@
                                                                                 {
                                                                                   "name": "annotation",
                                                                                   "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                      "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "map",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                                                    "parameter": "n"}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                         "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.Let"}}},
@@ -1466,9 +1739,30 @@
                                                                                             {
                                                                                               "name": "annotation",
                                                                                               "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                "inject": {
+                                                                                                  "field": {
+                                                                                                    "name": "map",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                "parameter": "n"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Field"}},
@@ -1496,9 +1790,30 @@
                                                                                             {
                                                                                               "name": "annotation",
                                                                                               "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                "inject": {
+                                                                                                  "field": {
+                                                                                                    "name": "map",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                "parameter": "n"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Field"}},
@@ -1532,9 +1847,30 @@
                                                                                             {
                                                                                               "name": "annotation",
                                                                                               "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                "inject": {
+                                                                                                  "field": {
+                                                                                                    "name": "map",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                "parameter": "n"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                             "typeName": "hydra.core.Field"}}]}}],
@@ -1666,9 +2002,30 @@
                                                                                             {
                                                                                               "name": "annotation",
                                                                                               "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                "inject": {
+                                                                                                  "field": {
+                                                                                                    "name": "map",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                "parameter": "n"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -1725,9 +2082,30 @@
                                                                                                             {
                                                                                                               "name": "annotation",
                                                                                                               "term": {
-                                                                                                                "typeApplication": {
-                                                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                                "inject": {
+                                                                                                                  "field": {
+                                                                                                                    "name": "map",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "lambda": {
+                                                                                                                                "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                                                "parameter": "n"}},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                                  "typeName": "hydra.core.Term"}}}],
                                                                                                           "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                             "typeName": "hydra.core.Application"}}},
@@ -1758,9 +2136,30 @@
                                                                                               {
                                                                                                 "name": "annotation",
                                                                                                 "term": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "map",
+                                                                                                      "term": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                              "type": {"variable": "hydra.core.Term"}}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "argument": {
+                                                                                                                "lambda": {
+                                                                                                                  "body": {"inject": {"field": {"name": "variable", "term": {"variable": "n"}}, "typeName": "hydra.core.Term"}},
+                                                                                                                  "domain": {"variable": "hydra.core.Name"},
+                                                                                                                  "parameter": "n"}},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.mapKeys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                      "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                                                    "typeName": "hydra.core.Term"}}}],
                                                                                             "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.Application"}}},

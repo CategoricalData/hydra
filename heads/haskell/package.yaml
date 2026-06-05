@@ -4,10 +4,11 @@ author:       Joshua Shinavier <josh@fortytwo.net>
 license:      Apache-2.0
 license-file: LICENSE
 category:     Data
-synopsis:     "The Hydra Haskell head: primitives, DSL infrastructure, generation driver"
+synopsis:     "A strongly typed intermediate language for data, schemas, and code"
 description:  >
-  Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
-  between labeled hypergraphs and typed lambda calculus: in Hydra, "graphs are programs, and programs are graphs".
+  Hydra is a strongly typed intermediate language for data, schemas, and code, based on the LambdaGraph
+  data model, which takes advantage of an isomorphism between labeled hypergraphs and typed lambda calculus:
+  in Hydra, "graphs are programs, and programs are graphs".
   The Haskell head provides the hand-written Haskell runtime Hydra needs in order to build and
   regenerate itself: primitive libraries (Hydra.Haskell.Lib.*), the embedded DSL infrastructure
   (Hydra.Dsl.*), the generation driver (Hydra.Generation), the kernel entry point (Hydra.Kernel),

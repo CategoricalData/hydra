@@ -4,7 +4,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.variants.LiteralVariant"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.variants.LiteralVariant"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -228,7 +229,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.variants.TermVariant"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.variants.TermVariant"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -977,7 +979,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.variants.TypeVariant"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.variants.TypeVariant"}}}]},
             "body": {
               "cases": {
                 "cases": [

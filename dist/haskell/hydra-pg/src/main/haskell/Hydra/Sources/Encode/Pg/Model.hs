@@ -124,8 +124,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
                                         Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.AdjacentEdge")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.AdjacentEdge")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -303,8 +303,8 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Direction")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Direction")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -434,8 +434,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
                                         Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Edge")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Edge")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -486,8 +486,8 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.model.EdgeLabel")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.EdgeLabel")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.EdgeLabel")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -617,8 +617,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
                                         Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.EdgeType")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.EdgeType")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
@@ -711,8 +711,8 @@ module_ =
                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.edge")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Element")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Element")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -812,8 +812,8 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementKind")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementKind")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -894,8 +894,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
                                         Core.projectionFieldName = (Core.Name "dependencies")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementTree")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementTree")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -988,8 +988,8 @@ module_ =
                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.edgeType")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "t"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementType")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementType")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
@@ -1077,8 +1077,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
                                         Core.projectionFieldName = (Core.Name "dependencies")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementTypeTree")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementTypeTree")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
@@ -1181,8 +1181,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
                                         Core.projectionFieldName = (Core.Name "edges")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Graph")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Graph")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -1288,8 +1288,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
                                         Core.projectionFieldName = (Core.Name "edges")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.GraphSchema")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.GraphSchema")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
@@ -1375,8 +1375,8 @@ module_ =
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.pg.model.edgeLabel")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Label")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Label")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -1468,8 +1468,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
                                         Core.projectionFieldName = (Core.Name "edges")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.LazyGraph")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.LazyGraph")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -1542,8 +1542,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
                                         Core.projectionFieldName = (Core.Name "value")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Property")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Property")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -1594,8 +1594,8 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.model.PropertyKey")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.PropertyKey")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.PropertyKey")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -1689,8 +1689,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
                                         Core.projectionFieldName = (Core.Name "required")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.PropertyType")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.PropertyType")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
@@ -1793,8 +1793,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
                                         Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Vertex")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Vertex")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],
@@ -1845,8 +1845,8 @@ module_ =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.model.VertexLabel")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexLabel")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexLabel")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
@@ -1942,8 +1942,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
                                         Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexType")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexType")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "t"],
@@ -2061,8 +2061,8 @@ module_ =
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
                                         Core.projectionFieldName = (Core.Name "outs")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexWithAdjacentEdges")))])})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexWithAdjacentEdges")))]))})),
           Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "v"],

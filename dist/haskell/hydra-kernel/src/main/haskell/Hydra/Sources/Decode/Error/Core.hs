@@ -195,8 +195,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.ConstantConditionError")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.ConstantConditionError")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.duplicateBindingError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -301,8 +303,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateBindingError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateBindingError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.duplicateFieldError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -407,8 +411,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateFieldError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateFieldError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.duplicateRecordTypeFieldNamesError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -513,10 +519,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateRecordTypeFieldNamesError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateRecordTypeFieldNamesError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.duplicateUnionTypeFieldNamesError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -621,10 +627,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateUnionTypeFieldNamesError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.DuplicateUnionTypeFieldNamesError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyCaseStatementError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -729,8 +735,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyCaseStatementError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyCaseStatementError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyLetBindingsError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -817,8 +825,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyLetBindingsError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyLetBindingsError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyRecordTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -905,8 +915,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyRecordTypeError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyRecordTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyTermAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -993,8 +1005,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyTermAnnotationError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyTermAnnotationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyTypeAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1081,8 +1095,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyTypeAnnotationError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyTypeAnnotationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyTypeNameInTermError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1169,8 +1185,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyTypeNameInTermError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyTypeNameInTermError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.emptyUnionTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1257,8 +1275,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyUnionTypeError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.EmptyUnionTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidForallParameterNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1363,10 +1383,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidForallParameterNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidForallParameterNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidLambdaParameterNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1471,10 +1491,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidLambdaParameterNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidLambdaParameterNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidLetBindingNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1579,8 +1599,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidLetBindingNameError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidLetBindingNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidLiteralError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1718,8 +1740,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidLiteralError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidLiteralError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidTermError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -2340,8 +2364,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTermError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTermError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -2778,8 +2804,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTypeError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidTypeLambdaParameterNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -2884,10 +2912,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTypeLambdaParameterNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTypeLambdaParameterNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.invalidTypeSchemeVariableNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -2992,10 +3020,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTypeSchemeVariableNameError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.InvalidTypeSchemeVariableNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.literalTypeMismatchError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3100,8 +3128,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.LiteralTypeMismatchError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.LiteralTypeMismatchError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.nestedTermAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3188,8 +3218,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NestedTermAnnotationError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NestedTermAnnotationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.nestedTypeAnnotationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3276,8 +3308,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NestedTypeAnnotationError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NestedTypeAnnotationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.nonComparableMapKeyTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3382,10 +3416,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NonComparableMapKeyTypeError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NonComparableMapKeyTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.nonComparableSetElementTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3490,10 +3524,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NonComparableSetElementTypeError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.NonComparableSetElementTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.redundantWrapUnwrapError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3598,8 +3632,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.RedundantWrapUnwrapError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.RedundantWrapUnwrapError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.selfApplicationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3704,8 +3740,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.SelfApplicationError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.SelfApplicationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.singleVariantUnionError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3810,8 +3848,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.SingleVariantUnionError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.SingleVariantUnionError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.termVariableShadowingError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -3916,8 +3956,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.TermVariableShadowingError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.TermVariableShadowingError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.typeVariableShadowingInForallError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4022,10 +4064,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.TypeVariableShadowingInForallError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.TypeVariableShadowingInForallError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.typeVariableShadowingInTypeLambdaError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4130,10 +4172,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.TypeVariableShadowingInTypeLambdaError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.TypeVariableShadowingInTypeLambdaError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.undefinedFieldError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4238,8 +4280,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedFieldError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedFieldError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.undefinedTermVariableError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4344,8 +4388,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTermVariableError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTermVariableError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.undefinedTypeVariableError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4450,8 +4496,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.undefinedTypeVariableInBindingTypeError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4556,10 +4604,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableInBindingTypeError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableInBindingTypeError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.undefinedTypeVariableInLambdaDomainError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4664,10 +4712,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableInLambdaDomainError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableInLambdaDomainError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.undefinedTypeVariableInTypeApplicationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4772,10 +4820,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableInTypeApplicationError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UndefinedTypeVariableInTypeApplicationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.unexpectedTermVariantError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4880,8 +4928,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnexpectedTermVariantError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnexpectedTermVariantError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.unexpectedTypeVariantError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -4986,8 +5036,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnexpectedTypeVariantError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnexpectedTypeVariantError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.unknownPrimitiveNameError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -5092,8 +5144,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnknownPrimitiveNameError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnknownPrimitiveNameError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.unnecessaryIdentityApplicationError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -5180,10 +5234,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnnecessaryIdentityApplicationError")))])}))})),
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UnnecessaryIdentityApplicationError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.untypedTermVariableError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -5288,8 +5342,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UntypedTermVariableError")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.UntypedTermVariableError")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.core.voidInNonBottomPositionError"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -5376,7 +5432,7 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
               (
-                Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.VoidInNonBottomPositionError")))])}))}))]}
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.core.VoidInNonBottomPositionError")))]))}))}))]}

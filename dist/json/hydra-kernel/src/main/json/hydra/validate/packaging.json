@@ -6,12 +6,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -246,12 +247,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -484,10 +486,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check for module namespaces that conflict when mapped to target language paths"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check for module namespaces that conflict when mapped to target language paths"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -711,11 +714,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Check for union variant names that, when mapped to constructor names, conflict with other type definitions"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Check for union variant names that, when mapped to constructor names, conflict with other type definitions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -975,10 +979,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check that every top-level definition is wrapped in a description annotation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that every top-level definition is wrapped in a description annotation"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1054,8 +1059,11 @@
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "at"},
-                                                                                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "at"},
+                                                                                                            "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                                                        "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.annotations.hasDescription"}, "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                 "domain": {"variable": "hydra.core.AnnotatedTerm"},
                                                                                                 "parameter": "at"}},
@@ -1094,8 +1102,11 @@
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "at"},
-                                                                                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "at"},
+                                                                                                            "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                                                                        "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.annotations.hasDescription"}, "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                 "domain": {"variable": "hydra.core.AnnotatedType"},
                                                                                                 "parameter": "at"}},
@@ -1204,10 +1215,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check that all definition names in a module have the module's name as a prefix"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that all definition names in a module have the module's name as a prefix"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1344,11 +1356,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Check that term definitions have camelCase local names and type definitions have PascalCase local names"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Check that term definitions have camelCase local names and type definitions have PascalCase local names"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1522,11 +1535,12 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {"string": "Check that a module's definitions list is sorted in ascending lexicographic order by local name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Check that a module's definitions list is sorted in ascending lexicographic order by local name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1753,7 +1767,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check for duplicate definition names in a module"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check for duplicate definition names in a module"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1939,7 +1957,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Check for duplicate module namespaces in a package"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check for duplicate module namespaces in a package"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2121,10 +2143,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check that the module's namespace matches the dotted-lowercase naming convention"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that the module's namespace matches the dotted-lowercase naming convention"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2172,10 +2195,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Check that the package's name matches the hyphen-separated lowercase naming convention"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check that the package's name matches the hyphen-separated lowercase naming convention"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2223,7 +2247,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Extract the name from a definition"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract the name from a definition"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2274,10 +2298,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "True iff the given rule name appears in the profile's errorRules or warningRules."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True iff the given rule name appears in the profile's errorRules or warningRules."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2322,12 +2347,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "The default validation profile for module/package validation. Every kernel-shipped check classified as an error; no warnings; maxErrors=1, maxWarnings=20."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "The default validation profile for module/package validation. Every kernel-shipped check classified as an error; no warnings; maxErrors=1, maxWarnings=20."}}}]},
             "body": {
               "record": {
                 "fields": [
@@ -2390,12 +2416,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2441,12 +2468,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2492,12 +2520,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Validate a module against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop the rule sequence once maxErrors is reached."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Validate a module against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop the rule sequence once maxErrors is reached."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2964,12 +2993,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached."}}}]},
             "body": {
               "lambda": {
                 "body": {

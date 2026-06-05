@@ -60,17 +60,30 @@ from hydra.util import Comparison
 # (>:) :: String -> Term -> Field  -- field definition operator
 
 
-def annot(ann: Mapping[str, Term], t: Term) -> Term:
-    """Attach an annotation to a term.
-
-    Example: annot({"comment": string("A User ID")}, var("userId"))
+def annotation_map_as_term(ann: Mapping[str, Term]) -> Term:
+    """Wrap a {str -> Term} mapping as a TermMap annotation, the conventional
+    annotation shape (#386 — annotation is now a Term, not a Map<Name, Term>).
+    Each str key becomes a TermVariable with that Name.
     """
-    return TermAnnotated(
-        AnnotatedTerm(t, FrozenDict({Name(k): v for k, v in ann.items()}))
+    return TermMap(
+        FrozenDict({TermVariable(Name(k)): v for k, v in ann.items()})
     )
 
 
-def annotated(t: Term, ann: Mapping[str, Term]) -> Term:
+def annot(ann, t: Term) -> Term:
+    """Attach an annotation to a term.
+
+    The ``ann`` argument may be either a ``Mapping[str, Term]`` (wrapped via
+    ``annotation_map_as_term`` per Hydra's map convention) or an arbitrary
+    ``Term`` if the application wants a non-map annotation shape.
+
+    Example: annot({"comment": string("A User ID")}, var("userId"))
+    """
+    ann_term = ann if isinstance(ann, Term) else annotation_map_as_term(ann)
+    return TermAnnotated(AnnotatedTerm(t, ann_term))
+
+
+def annotated(t: Term, ann) -> Term:
     """Attach an annotation to a term (alternative argument order).
 
     Example: annotated(var("userId"), {"comment": string("A User ID")})

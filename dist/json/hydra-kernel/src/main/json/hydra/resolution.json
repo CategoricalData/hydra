@@ -6,10 +6,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Dereference a type name to get the actual type (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Dereference a type name to get the actual type (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -127,10 +128,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Test whether a given System F type is polymorphic (i.e., a forall type)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Test whether a given System F type is polymorphic (i.e., a forall type)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -166,10 +168,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a map from field name to field term, given a list of fields"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a map from field name to field term, given a list of fields"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -226,10 +229,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Build a map from field name to field type, given a list of field types"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a map from field name to field type, given a list of field types"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -288,8 +292,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Get field types from a record or union type (Either version)"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Get field types from a record or union type (Either version)"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -582,7 +589,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Find a field type by name in a list of field types"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Find a field type by name in a list of field types"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -751,12 +762,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -929,7 +941,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Fully strip a type of forall quantifiers"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Fully strip a type of forall quantifiers"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -962,12 +975,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1024,10 +1038,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Instantiate a type scheme with fresh variables, threading InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Instantiate a type scheme with fresh variables, threading InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1285,7 +1300,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Apply type arguments to a nominal type"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Apply type arguments to a nominal type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1336,7 +1352,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Require a name to resolve to a record type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Require a name to resolve to a record type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1411,7 +1428,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Require a name to resolve to a row type"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Require a name to resolve to a row type"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1583,10 +1601,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Look up a schema type and instantiate it, threading InferenceContext"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Look up a schema type and instantiate it, threading InferenceContext"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1681,7 +1700,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Require a type by name"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Require a type by name"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1806,7 +1825,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Require a field type from a union type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Require a field type from a union type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1951,7 +1971,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Require a name to resolve to a union type"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Require a name to resolve to a union type"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2022,7 +2043,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Resolve a type, dereferencing type variables"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Resolve a type, dereferencing type variables"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2112,7 +2134,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a (System F -style) type to a type scheme"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a (System F -style) type to a type scheme"}}}]},
             "body": {
               "lambda": {
                 "body": {

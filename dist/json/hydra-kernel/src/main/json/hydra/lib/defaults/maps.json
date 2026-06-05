@@ -8,7 +8,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly alter for Map terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly alter for Map terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -265,7 +266,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly bimap for Map terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly bimap for Map terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -447,7 +449,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly filter for Map terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly filter for Map terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -704,7 +707,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly filterWithKey for Map terms."}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Interpreter-friendly filterWithKey for Map terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -977,7 +984,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly findWithDefault for Map terms."}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Interpreter-friendly findWithDefault for Map terms."}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -1088,7 +1099,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly map for Map terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly map for Map terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -1257,7 +1269,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Interpreter-friendly mapKeys for Map terms."}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Interpreter-friendly mapKeys for Map terms."}}}]},
                     "body": {
                       "lambda": {
                         "body": {

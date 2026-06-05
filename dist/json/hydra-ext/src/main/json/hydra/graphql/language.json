@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for GraphQL"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for GraphQL"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -132,7 +132,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in GraphQL"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in GraphQL"}}}]},
             "body": {
               "application": {
                 "argument": {"list": [{"literal": {"string": "true"}}, {"literal": {"string": "false"}}]},

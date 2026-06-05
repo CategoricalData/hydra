@@ -21,7 +21,7 @@ annotatedTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "annotation" (ExtractCore.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedTerm {
+        in (Eithers.bind (ExtractCore.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "annotation" term fieldMap cx) (\field_annotation -> Right (Core.AnnotatedTerm {
           Core.annotatedTermBody = field_body,
           Core.annotatedTermAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.AnnotatedTerm")) (ExtractCore.stripWithDecodingError cx raw)
@@ -31,7 +31,7 @@ annotatedType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "annotation" (ExtractCore.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedType {
+        in (Eithers.bind (ExtractCore.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (ExtractCore.requireField "annotation" term fieldMap cx) (\field_annotation -> Right (Core.AnnotatedType {
           Core.annotatedTypeBody = field_body,
           Core.annotatedTypeAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.AnnotatedType")) (ExtractCore.stripWithDecodingError cx raw)

@@ -4,7 +4,8 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical AND, defined in terms of ifElse."}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical AND, defined in terms of ifElse."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -57,7 +58,8 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical NOT, defined in terms of ifElse."}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical NOT, defined in terms of ifElse."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -83,7 +85,8 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Logical OR, defined in terms of ifElse."}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical OR, defined in terms of ifElse."}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -8,10 +8,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {"literal": {"string": "Convert edge types into property shape constraints for a given vertex label"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert edge types into property shape constraints for a given vertex label"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -195,7 +196,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a property graph edge as an RDF description"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a property graph edge as an RDF description"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -322,7 +327,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a lazy property graph as an RDF graph"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a lazy property graph as an RDF graph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -409,7 +415,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a property graph vertex as an RDF description"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode a property graph vertex as an RDF description"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -626,7 +636,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a property graph schema to a SHACL shapes graph"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a property graph schema to a SHACL shapes graph"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -960,7 +974,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a property type to a SHACL property shape"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a property type to a SHACL property shape"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1103,7 +1121,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a vertex type to a SHACL node shape definition"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a vertex type to a SHACL node shape definition"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

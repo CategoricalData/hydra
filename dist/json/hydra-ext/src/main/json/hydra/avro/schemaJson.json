@@ -148,7 +148,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an error result with a message in context"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Construct an error result with a message in context"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -186,7 +190,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Construct an error for unexpected values"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an error for unexpected values"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -235,7 +240,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON array or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON array or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -278,7 +284,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON number or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON number or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -321,7 +328,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON object or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON object or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -368,7 +376,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Extract a JSON string or return an error"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract a JSON string or return an error"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -411,7 +420,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required attribute in a JSON object map"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Look up a required attribute in a JSON object map"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -488,7 +501,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required array attribute in a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required array attribute in a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -558,7 +575,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required number attribute in a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required number attribute in a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -627,7 +648,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Look up a required string attribute in a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Look up a required string attribute in a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -698,7 +723,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional attribute in a JSON object map"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Look up an optional attribute in a JSON object map"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -736,7 +765,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional array attribute in a JSON object map"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Look up an optional array attribute in a JSON object map"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -842,7 +875,11 @@
                   "typeLambda": {
                     "body": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Look up an optional string attribute in a JSON object map"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Look up an optional string attribute in a JSON object map"}}}]},
                         "body": {
                           "lambda": {
                             "body": {
@@ -939,7 +976,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a JSON value to its string representation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a JSON value to its string representation"}}}]},
             "body": {
               "lambda": {
                 "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.json.writer.printJson"}}},
@@ -954,7 +995,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Parse a JSON string, returning Either for compatibility"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a JSON string, returning Either for compatibility"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1018,7 +1063,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro schema to a JSON value"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro schema to a JSON value"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1081,7 +1127,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro primitive type as a JSON string"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro primitive type as a JSON string"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1131,7 +1179,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro array schema to a JSON object"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro array schema to a JSON object"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1185,7 +1234,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro map schema to a JSON object"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro map schema to a JSON object"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1236,7 +1286,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro named type to a JSON object"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro named type to a JSON object"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1427,7 +1478,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode the specific variant of a named Avro type"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode the specific variant of a named Avro type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1469,7 +1524,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro enum type as key-value pairs"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro enum type as key-value pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1569,7 +1625,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro fixed type as key-value pairs"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro fixed type as key-value pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1618,7 +1675,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro record type as key-value pairs"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro record type as key-value pairs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1672,7 +1731,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro field to a JSON object"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Avro field to a JSON object"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1896,7 +1956,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro field ordering as a key-value pair"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an Avro field ordering as a key-value pair"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1940,7 +2004,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode an Avro union as a JSON array of schemas"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode an Avro union as a JSON array of schemas"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1971,8 +2039,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Encode annotations as key-value pairs with @ prefix on keys"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Encode annotations as key-value pairs with @ prefix on keys"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2037,7 +2108,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a coder between Avro schemas and JSON values"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Create a coder between Avro schemas and JSON values"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2105,7 +2180,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Create a coder between Avro schemas and JSON strings"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Create a coder between Avro schemas and JSON strings"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2230,7 +2309,8 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Decode aliases from a JSON object map"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode aliases from a JSON object map"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -2351,7 +2431,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro array schema from a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode an Avro array schema from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2433,7 +2517,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro enum type from a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode an Avro enum type from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2566,7 +2654,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro field from a JSON object map"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an Avro field from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2821,7 +2910,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro fixed type from a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode an Avro fixed type from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2896,7 +2989,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro map schema from a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode an Avro map schema from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2978,10 +3075,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Decode a named Avro schema from a JSON object map and a decoded named type result"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode a named Avro schema from a JSON object map and a decoded named type result"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3172,8 +3270,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {"key": "description", "value": {"literal": {"string": "Decode an Avro schema from a JSON object given the type name"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode an Avro schema from a JSON object given the type name"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3392,7 +3493,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro field ordering from a string"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an Avro field ordering from a string"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3501,10 +3603,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Decode a primitive type name string to a Primitive, or Nothing if not a primitive"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Decode a primitive type name string to a Primitive, or Nothing if not a primitive"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3649,7 +3752,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro record type from a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Decode an Avro record type from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3777,7 +3884,8 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Avro schema from a JSON value"}}}],
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an Avro schema from a JSON value"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3948,10 +4056,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Extract annotation entries (keys starting with @) from a JSON object map"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Extract annotation entries (keys starting with @) from a JSON object map"}}}]},
                 "body": {
                   "lambda": {
                     "body": {

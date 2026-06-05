@@ -13,6 +13,7 @@ import Hydra.Kernel hiding (
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
@@ -701,13 +702,17 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ann" ~> Core.binding
         (Core.bindingName $ var "b")
         (cases _Term (Core.bindingTerm $ var "b")
-          -- If already annotated, merge annotations (post-adaptation annotation wins on conflict).
+          -- If already annotated, merge annotations under the map convention
+          -- (post-adaptation annotation wins on conflict). Annotations that
+          -- aren't map-shaped contribute the empty map to the union.
           (Just $ Core.termAnnotated $ Core.annotatedTerm
             (Core.bindingTerm $ var "b")
             (var "ann")) [
           _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
             (Core.annotatedTermBody $ var "at")
-            (Maps.union (Core.annotatedTermAnnotation $ var "at") (var "ann"))])
+            (KernelAnnotations.wrapAnnotationMap @@ Maps.union
+              (KernelAnnotations.getAnnotationMap @@ (Core.annotatedTermAnnotation $ var "at"))
+              (KernelAnnotations.getAnnotationMap @@ (var "ann")))])
         (Core.bindingTypeScheme $ var "b"))) $
   "bins5" <~ Lists.map (var "reattachAnnotation") (var "bins5Raw") $
 

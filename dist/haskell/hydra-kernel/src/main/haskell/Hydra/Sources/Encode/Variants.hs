@@ -278,8 +278,10 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.variants.LiteralVariant")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.variants.LiteralVariant")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.variants.termVariant"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1118,8 +1120,10 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.variants.TermVariant")))])}))})),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.variants.TermVariant")))]))}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.variants.typeVariant"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -1802,5 +1806,7 @@ module_ =
                                             Core.fieldName = (Core.Name "unit"),
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))}]})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.variants.TypeVariant")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.variants.TypeVariant")))]))}))}))]}

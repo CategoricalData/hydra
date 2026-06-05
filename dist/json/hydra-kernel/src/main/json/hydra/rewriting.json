@@ -4,8 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Apply a term-level function inside any leading type lambdas"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Apply a term-level function inside any leading type lambdas"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -96,10 +99,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Fold over a term, traversing its subterms in the specified order"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Fold over a term, traversing its subterms in the specified order"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -207,10 +211,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Fold over a type, traversing its subtypes in the specified order"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Fold over a type, traversing its subtypes in the specified order"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -318,12 +323,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -530,10 +536,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Apply a transformation to the first type beneath a chain of annotations"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Apply a transformation to the first type beneath a chain of annotations"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -594,10 +601,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Rewrite a term, and at the same time, fold a function over it, accumulating a value"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Rewrite a term, and at the same time, fold a function over it, accumulating a value"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2437,12 +2445,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph. The user function f receives a recurse function that handles subterm traversal and Graph management."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph. The user function f receives a recurse function that handles subterm traversal and Graph management."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -2838,12 +2847,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3265,12 +3275,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position."}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position."}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -6323,12 +6334,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7103,10 +7115,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Either-based term rewriting with custom transformation function"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Either-based term rewriting with custom transformation function"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -8559,12 +8572,13 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {
-                        "string": "A variant of rewriteTerm which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "A variant of rewriteTerm which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -9407,12 +9421,13 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [
-                      {
-                        "key": "description",
-                        "value": {
-                          "literal": {
-                            "string": "Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -10936,10 +10951,11 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {"literal": {"string": "Rewrite a term with the help of a Graph which is updated as we descend into subterms"}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Rewrite a term with the help of a Graph which is updated as we descend into subterms"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -11195,12 +11211,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -11616,7 +11633,7 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [{"key": "description", "value": {"literal": {"string": "Either-based type rewriting"}}}],
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Either-based type rewriting"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -12498,7 +12515,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the children of a given term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the children of a given term"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -12832,7 +12849,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the children of a given term"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the children of a given term"}}}]},
             "body": {
               "cases": {
                 "cases": [
@@ -13428,7 +13445,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Find the children of a given type expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the children of a given type expression"}}}]},
             "body": {
               "cases": {
                 "cases": [

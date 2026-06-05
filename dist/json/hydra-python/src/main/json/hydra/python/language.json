@@ -4,7 +4,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Python 3"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Python 3"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -127,7 +127,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Python"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in Python"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -135,11 +135,12 @@
                     "name": "pythonKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {"string": "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "False"}},
@@ -182,17 +183,22 @@
                     "name": "pythonBuiltInFunctions",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Some additional keywords we reserve in order to avoid collision with built-in functions"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Some additional keywords we reserve in order to avoid collision with built-in functions"}}}]},
                         "body": {"list": [{"literal": {"string": "range"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraPythonKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words which are specific to Hydra-Python"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Reserved words which are specific to Hydra-Python"}}}]},
                         "body": {"list": [{"literal": {"string": "Node"}}, {"literal": {"string": "FrozenDict"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {

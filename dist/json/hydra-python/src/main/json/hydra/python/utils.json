@@ -4,10 +4,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Annotate an expression with an optional comment using Annotated[]"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Annotate an expression with an optional comment using Annotated[]"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -60,7 +61,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Annotate a statement with an optional comment"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Annotate a statement with an optional comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -106,7 +109,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an assignment statement from name and annotated rhs"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an assignment statement from name and annotated rhs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -147,7 +154,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an assignment statement from name and expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create an assignment statement from name and expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -172,7 +183,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a cast expression: cast(type, expr)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a cast expression: cast(type, expr)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -202,7 +214,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a comment statement (triple-quoted string)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a comment statement (triple-quoted string)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -220,7 +236,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Comparison to a Primary if possible"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a Comparison to a Primary if possible"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -452,7 +469,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Conjunction to a Primary if possible"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a Conjunction to a Primary if possible"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -513,7 +532,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Expression to a Primary if possible"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an Expression to a Primary if possible"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -588,7 +609,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode an Inversion to a Primary if possible"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode an Inversion to a Primary if possible"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -620,7 +642,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Decode a Power to a Primary if possible"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decode a Power to a Primary if possible"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -667,7 +690,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a dotted assignment statement: obj.attr = expr"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a dotted assignment statement: obj.attr = expr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -741,7 +768,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a double-quoted string expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a double-quoted string expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -762,10 +790,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Find all namespaces referenced by a list of definitions, plus the core namespace"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find all namespaces referenced by a list of definitions, plus the core namespace"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -884,7 +913,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a function call expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a function call expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -974,7 +1003,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create an indented block with optional comment"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create an indented block with optional comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1084,7 +1115,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a name with parameters"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a name with parameters"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1111,7 +1142,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a NewType statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a NewType statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1164,7 +1195,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Build an or-expression from multiple primaries"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Build an or-expression from multiple primaries"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1317,7 +1350,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a primary with parameters (subscript)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a primary with parameters (subscript)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1345,7 +1379,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Primary with expression slices"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Primary with expression slices"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1441,7 +1476,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Combine a Primary with a PrimaryRhs"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Combine a Primary with a PrimaryRhs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1470,7 +1505,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Primary with slices"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Primary with slices"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1507,7 +1542,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Project a field from an expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Project a field from an expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1566,7 +1601,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Assignment to a Statement"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Assignment to a Statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1585,7 +1621,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Atom to an Expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Atom to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1603,7 +1639,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a BitwiseOr to a Conjunction"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a BitwiseOr to a Conjunction"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1635,7 +1672,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a BitwiseOr to an Expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a BitwiseOr to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1654,7 +1692,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a ClassDefinition to a Statement"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a ClassDefinition to a Statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1675,7 +1714,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a ClosedPattern to Patterns"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a ClosedPattern to Patterns"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1698,7 +1737,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Conjunction to an Expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Conjunction to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1718,10 +1758,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert an Expression to a BitwiseOr, wrapping in parens if needed"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an Expression to a BitwiseOr, wrapping in parens if needed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1826,10 +1867,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert an Expression to a Disjunction, wrapping in parens if needed"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an Expression to a Disjunction, wrapping in parens if needed"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1878,7 +1920,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Expression to an AnnotatedRhs"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Expression to an AnnotatedRhs"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1901,12 +1944,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1950,10 +1994,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert an Expression to a SimpleStatement (as star expressions)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an Expression to a SimpleStatement (as star expressions)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1976,7 +2021,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Expression to a Slice"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Expression to a Slice"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1997,7 +2042,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Expression to a StarNamedExpression"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Expression to a StarNamedExpression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2018,7 +2065,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert an Expression to a Statement"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Expression to a Statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2037,7 +2085,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a list of Expressions to Args"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a list of Expressions to Args"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2078,7 +2127,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a Python list from expressions"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a Python list from expressions"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2106,7 +2156,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Name to an Expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Name to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2124,7 +2174,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Name to a NamedExpression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Name to a NamedExpression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2144,7 +2194,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Name to a Primary (simple atom)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Name to a Primary (simple atom)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2164,7 +2215,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Name to a StarTarget"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Name to a StarTarget"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2189,7 +2240,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Name to a TypeParameter"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Name to a TypeParameter"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2219,7 +2270,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The Python None value as a Name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Python None value as a Name"}}}]},
             "body": {"wrap": {"body": {"literal": {"string": "None"}}, "typeName": "hydra.python.syntax.Name"}}}},
         "name": "hydra.python.utils.pyNone",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.python.syntax.Name"}}, "typeParameters": []}}},
@@ -2227,7 +2278,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Primary to a BitwiseOr"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Primary to a BitwiseOr"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2313,7 +2364,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Primary to a BitwiseXor"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Primary to a BitwiseXor"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2390,7 +2441,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Primary to a Conjunction"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Primary to a Conjunction"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2409,7 +2460,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Primary to an Expression"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Primary to an Expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2428,7 +2479,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a Primary to a Slice"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Primary to a Slice"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2447,7 +2498,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a SimpleStatement to a Statement"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a SimpleStatement to a Statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2463,7 +2515,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a raise AssertionError statement"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a raise AssertionError statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2516,7 +2569,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a raise TypeError statement"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a raise TypeError statement"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2569,7 +2622,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a return statement with a single expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a return statement with a single expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2695,7 +2752,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a single-quoted string expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a single-quoted string expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2716,7 +2774,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Create a string expression with a given quote style"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create a string expression with a given quote style"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2753,7 +2815,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Current target Python version for code generation"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Current target Python version for code generation"}}}]},
             "body": {"inject": {"field": {"name": "python310", "term": {"unit": {}}}, "typeName": "hydra.python.environment.PythonVersion"}}}},
         "name": "hydra.python.utils.targetPythonVersion",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.python.environment.PythonVersion"}}, "typeParameters": []}}},
@@ -2761,12 +2827,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Create a raw triple-double-quoted string expression (Python docstring convention). Raw-prefixed so embedded backslashes (e.g. lambda notation `\\x.e`) aren't interpreted as escape sequences by Python's string parser."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Create a raw triple-double-quoted string expression (Python docstring convention). Raw-prefixed so embedded backslashes (e.g. lambda notation `\\x.e`) aren't interpreted as escape sequences by Python's string parser."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2799,10 +2866,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate a type alias statement using PEP 695 syntax (Python 3.12+)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a type alias statement using PEP 695 syntax (Python 3.12+)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -2853,11 +2921,12 @@
           "typeLambda": {
             "body": {
               "annotated": {
-                "annotation": [
-                  {
-                    "key": "description",
-                    "value": {
-                      "literal": {"string": "Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = \"TypeExpression\""}}}],
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = \"TypeExpression\""}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -3042,7 +3111,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a subscriptable union class for Python 3.10"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a subscriptable union class for Python 3.10"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -3669,10 +3742,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants"}}}]},
             "body": {
               "lambda": {
                 "body": {

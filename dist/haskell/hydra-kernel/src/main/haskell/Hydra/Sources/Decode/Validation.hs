@@ -296,8 +296,10 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.validation.ValidationProfile")))])}))}),
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.validation.ValidationProfile")))]))}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.validation.validationResult"),
           Packaging.termDefinitionMetadata = Nothing,
@@ -425,5 +427,7 @@ module_ =
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
-            Core.annotatedTermAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.validation.ValidationResult")))])}))}))]}
+            Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
+              (
+                Core.TermVariable (Core.Name "description"),
+                (Core.TermLiteral (Core.LiteralString "Decoder for hydra.validation.ValidationResult")))]))}))}))]}
