@@ -187,11 +187,11 @@ public class TestSuiteRunner {
                                                 Maybe.just(var("acc")),
                                                 field("variable", lambda("n",
                                                     apply(apply(primitive("hydra.lib.lists.cons"),
-                                                        apply(apply(primitive("hydra.lib.tuples.pair"),
-                                                            var("n")),
-                                                            apply(primitive("hydra.lib.tuples.snd"), var("pair")))),
+                                                        pair(
+                                                            var("n"),
+                                                            apply(primitive("hydra.lib.pairs.second"), var("pair")))),
                                                         var("acc"))))),
-                                            apply(primitive("hydra.lib.tuples.fst"), var("pair")))),
+                                            apply(primitive("hydra.lib.pairs.first"), var("pair")))),
                                     list()),
                                     apply(primitive("hydra.lib.maps.toList"), var("m"))))))),
                     var("t"))));
@@ -205,10 +205,10 @@ public class TestSuiteRunner {
                     apply(primitive("hydra.lib.maps.fromList"),
                         apply(apply(primitive("hydra.lib.lists.map"),
                             lambda("pair",
-                                apply(apply(primitive("hydra.lib.tuples.pair"),
+                                pair(
                                     inject("hydra.core.Term", field("variable",
-                                        apply(primitive("hydra.lib.tuples.fst"), var("pair"))))),
-                                    apply(primitive("hydra.lib.tuples.snd"), var("pair"))))),
+                                        apply(primitive("hydra.lib.pairs.first"), var("pair")))),
+                                    apply(primitive("hydra.lib.pairs.second"), var("pair"))))),
                             apply(primitive("hydra.lib.maps.toList"), var("m"))))))));
 
         addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
