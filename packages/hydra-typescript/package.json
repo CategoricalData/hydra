@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-typescript",
   "description": "TypeScript support for Hydra",
   "sourceLanguage": "haskell",

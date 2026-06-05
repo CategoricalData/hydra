@@ -2,5 +2,6 @@
   "defaultLibModules": [],
   "dslModules": ["hydra.dsl.lisp.syntax"],
   "mainModules": ["hydra.lisp.coder", "hydra.lisp.language", "hydra.lisp.serde", "hydra.lisp.syntax"],
+  "manifestFormatVersion": 1,
   "package": "hydra-lisp",
   "testModules": []}
