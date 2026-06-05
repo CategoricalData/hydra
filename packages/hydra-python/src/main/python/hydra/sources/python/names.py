@@ -161,8 +161,7 @@ def _encode_name():
         ],
         Logic.if_else(
             var("isQualified"),
-            Maybes.maybe(
-                # Not a bound type variable
+            Maybes.cases(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
                 Logic.if_else(
                     Equality.equal(
                         var("mns"),
@@ -178,9 +177,7 @@ def _encode_name():
                         ),
                     ),
                     # Different or no namespace
-                    Maybes.maybe(
-                        wrap(_PY_NAME, var("pyLocal")),
-                        lam(
+                    Maybes.cases(var("mns"), wrap(_PY_NAME, var("pyLocal")), lam(
                             "nsVal",
                             wrap(
                                 _PY_NAME,
@@ -192,14 +189,9 @@ def _encode_name():
                                     ),
                                 ),
                             ),
-                        ),
-                        var("mns"),
-                    ),
-                ),
-                # Bound type variable
-                lam("n", var("n")),
-                Maps.lookup(var("name"), var("boundVars")),
-            ),
+                        ),),
+                ), # Bound type variable
+                lam("n", var("n")),),
             # Not qualified
             wrap(_PY_NAME, var("pyLocal")),
         ),
@@ -256,8 +248,7 @@ def _encode_name_qualified():
                 ),
             ),
         ],
-        Maybes.maybe(
-            # Not a bound type variable
+        Maybes.cases(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
             Logic.if_else(
                 Equality.equal(
                     var("mns"),
@@ -273,9 +264,7 @@ def _encode_name_qualified():
                     ),
                 ),
                 # Different namespace - snake-cased namespace + sanitized local
-                Maybes.maybe(
-                    wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))),
-                    lam(
+                Maybes.cases(var("mns"), wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))), lam(
                         "nsVal",
                         wrap(
                             _PY_NAME,
@@ -287,14 +276,9 @@ def _encode_name_qualified():
                                 ),
                             ),
                         ),
-                    ),
-                    var("mns"),
-                ),
-            ),
-            # Bound type variable
-            lam("n", var("n")),
-            Maps.lookup(var("name"), var("boundVars")),
-        ),
+                    ),),
+            ), # Bound type variable
+            lam("n", var("n")),),
     )
     return _def(
         "encodeNameQualified",
@@ -436,14 +420,10 @@ def _variable_reference():
                 names_module_name_of(var("name")),
             ),
             field("sameNamespace",
-                Maybes.maybe(
-                    false(),
-                    lam(
+                Maybes.cases(var("mns"), false(), lam(
                         "ns",
                         Equality.equal(var("ns"), var("focusNs")),
-                    ),
-                    var("mns"),
-                ),
+                    ),),
             ),
         ],
         Logic.if_else(

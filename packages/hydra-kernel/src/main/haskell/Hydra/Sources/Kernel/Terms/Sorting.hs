@@ -97,7 +97,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
     ("mp" ~> "p" ~>
       "k" <~ Pairs.first (var "p") $
       "vs" <~ Pairs.second (var "p") $
-      "existing" <~ Maybes.maybe (list ([] :: [TypedTerm a])) (reify Equality.identity) (Maps.lookup (var "k") (var "mp")) $
+      "existing" <~ Maybes.cases (Maps.lookup (var "k") (var "mp")) (list ([] :: [TypedTerm a])) (reify Equality.identity) $
       Maps.insert (var "k") (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
     Maps.empty
     (var "pairs")
@@ -172,9 +172,7 @@ popStackUntil = define "popStackUntil" $
   "go" <~ ("acc" ~> "st" ~>
     -- Empty stack: return whatever we've collected (unreachable when Tarjan's
     -- state invariants hold, since v is always on the stack when this is called).
-    Maybes.maybe
-      (pair (Lists.reverse (var "acc")) (var "st"))
-      ("uc" ~>
+    Maybes.cases (Lists.uncons $ Topology.tarjanStateStack (var "st")) (pair (Lists.reverse (var "acc")) (var "st")) ("uc" ~>
         "x" <~ Pairs.first (var "uc") $
         "xs" <~ Pairs.second (var "uc") $
         "newSt" <~ Topology.tarjanStateWithStack (var "st") (var "xs") $
@@ -182,8 +180,7 @@ popStackUntil = define "popStackUntil" $
         "acc'" <~ Lists.cons (var "x") (var "acc") $
         Logic.ifElse (Equality.equal (var "x") (var "v"))
           (pair (Lists.reverse (var "acc'")) (var "newSt2"))
-          (var "go" @@ var "acc'" @@ var "newSt2"))
-      (Lists.uncons $ Topology.tarjanStateStack (var "st"))) $
+          (var "go" @@ var "acc'" @@ var "newSt2"))) $
   var "go" @@ list ([] :: [TypedTerm Topo.Vertex]) @@ var "st0"
 
 propagateTags :: TypedTermDefinition ([(a, [a])] -> [(a, [t])] -> [(a, S.Set t)])
@@ -204,10 +201,10 @@ propagateTags = define "propagateTags" $
   -- For each node, find all reachable nodes and collect their tags
   "getTagsForNode" <~ ("node" ~>
     "reachable" <~ findReachableNodes
-      @@ ("n" ~> Sets.fromList $ Maybes.maybe (list ([] :: [TypedTerm a])) (reify Equality.identity) (Maps.lookup (var "n") (var "adjMap")))
+      @@ ("n" ~> Sets.fromList $ Maybes.cases (Maps.lookup (var "n") (var "adjMap")) (list ([] :: [TypedTerm a])) (reify Equality.identity))
       @@ var "node" $
     Sets.unions $ Lists.map
-      ("n" ~> Maybes.maybe Sets.empty (reify Equality.identity) (Maps.lookup (var "n") (var "tagMap")))
+      ("n" ~> Maybes.cases (Maps.lookup (var "n") (var "tagMap")) Sets.empty (reify Equality.identity))
       (Sets.toList $ var "reachable")) $
   Lists.map ("n" ~> pair (var "n") (var "getTagsForNode" @@ var "n")) (var "allNodes")
 

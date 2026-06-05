@@ -213,10 +213,7 @@ literalToExpr = define "literalToExpr" $
     "lang">: project Rdf._Literal Rdf._Literal_languageTag @@ var "lit",
     "lexExpr">: Serialization.cst @@
       (Strings.cat $ list [string "\"", escapeLiteralString @@ var "lex", string "\""]),
-    "suffix">: Maybes.maybe
-      (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"])
-      languageTagToExpr
-      (var "lang")] $
+    "suffix">: Maybes.cases (var "lang") (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"]) languageTagToExpr] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
 nodeToExpr :: TypedTermDefinition (Rdf.Node -> Expr)

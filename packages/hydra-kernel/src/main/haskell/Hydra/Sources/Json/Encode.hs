@@ -280,12 +280,9 @@ toJson = define "toJson" $
           "fterm" <~ (Core.fieldTerm $ var "field") $
           -- Find the field type that matches this variant
           "ftypeResult" <~ (
-            Maybes.maybe
-              (left $ Strings.cat $ list [string "unknown variant: ", var "fname"])
-              ("ft" ~> right $ Core.fieldTypeType $ var "ft")
-              (Lists.find
+            Maybes.cases (Lists.find
                 ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
-                (var "rt"))) $
+                (var "rt")) (left $ Strings.cat $ list [string "unknown variant: ", var "fname"]) ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
           Eithers.either_
             ("err" ~> left $ var "err")
             ("ftype" ~>
@@ -372,10 +369,7 @@ toJson = define "toJson" $
     -- Type variables (look up in type table and recurse; fall back to untyped encoding)
     _Type_variable>>: "name" ~>
       "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
-      Maybes.maybe
-        (toJsonUntyped @@ var "term")
-        ("resolvedType" ~> toJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "term")
-        (var "lookedUp")]
+      Maybes.cases (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "term")]
 
 -- | Encode a Term to a JSON Value without type information.
 -- This is a structural fallback used when type information is unavailable (e.g. unresolved

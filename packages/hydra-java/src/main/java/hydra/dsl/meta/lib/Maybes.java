@@ -74,11 +74,6 @@ public final class Maybes {
         return Phantoms.apply(prim("mapMaybe"), f, xs);
     }
 
-    /** {@code Maybes.maybe default f x} — handle Maybe with transformation. */
-    public static <A> TypedTerm<A> maybe(TypedTerm<?> defaultVal, TypedTerm<?> f, TypedTerm<?> x) {
-        return Phantoms.apply(prim("maybe"), defaultVal, f, x);
-    }
-
     /** {@code Maybes.pure x} — wrap in Just. */
     public static <A> TypedTerm<A> pure(TypedTerm<?> x) {
         return Phantoms.apply(prim("pure"), x);

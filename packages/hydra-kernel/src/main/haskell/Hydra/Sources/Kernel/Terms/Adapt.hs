@@ -406,14 +406,11 @@ adaptTerm = define "adaptTerm" $
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
       "tryAlts">: ("alts" ~>
-        Maybes.maybe
-          (right nothing)
-          ("uc" ~>
+        Maybes.cases (Lists.uncons $ var "alts") (right nothing) ("uc" ~>
             "mterm" <<~ var "tryTerm" @@ (Pairs.first $ var "uc") $
             optCases (var "mterm")
               (var "tryAlts" @@ (Pairs.second $ var "uc"))
-              ("t" ~> right $ just $ var "t"))
-          (Lists.uncons $ var "alts"))] $
+              ("t" ~> right $ just $ var "t")))] $
       "alts0" <<~ termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
       var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
@@ -737,14 +734,14 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
-          "existing" <~ Maybes.maybe (list ([] :: [TypedTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "acc")) $
+          "existing" <~ Maybes.cases (Maps.lookup (var "ns") (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
           Maps.insert (var "ns") (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
     Maps.empty
     (var "selectedElements") $
   -- Produce definitions in the order of the input namespaces
   "defsGrouped" <~ Lists.map
     ("ns" ~>
-      "elsForNs" <~ Maybes.maybe (list ([] :: [TypedTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "elementsByNamespace")) $
+      "elsForNs" <~ Maybes.cases (Maps.lookup (var "ns") (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
       Maybes.cat (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 

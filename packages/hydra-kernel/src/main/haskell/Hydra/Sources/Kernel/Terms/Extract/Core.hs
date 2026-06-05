@@ -212,10 +212,7 @@ caseField = define "caseField" $
   "matching" <~ (Lists.find
     ("f" ~> Core.equalName_ (Core.caseAlternativeName (var "f")) (var "fieldName"))
     (Core.caseStatementCases (var "cs"))) $
-  Maybes.maybe
-    (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case")))
-    ("mf" ~> right $ var "mf")
-    (var "matching")
+  Maybes.cases (var "matching") (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case"))) ("mf" ~> right $ var "mf")
 
 formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
@@ -417,12 +414,9 @@ field = define "field" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatchErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
-      (Maybes.maybe
-        (var "noMatchErr")
-        ("mf" ~>
+      (Maybes.cases (Lists.maybeHead $ var "matchingFields") (var "noMatchErr") ("mf" ~>
           "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ (Core.fieldTerm $ var "mf") $
-          var "mapping" @@ var "stripped")
-        (Lists.maybeHead $ var "matchingFields"))
+          var "mapping" @@ var "stripped"))
       (unexpected(Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
 
 float32 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Float)
@@ -598,10 +592,7 @@ letBinding = define "letBinding" $
   Logic.ifElse (Lists.null (var "matchingBindings"))
     (var "noBindingErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
-      (Maybes.maybe
-        (var "noBindingErr")
-        ("b" ~> right (Core.bindingTerm $ var "b"))
-        (Lists.maybeHead $ var "matchingBindings"))
+      (Maybes.cases (Lists.maybeHead $ var "matchingBindings") (var "noBindingErr") ("b" ~> right (Core.bindingTerm $ var "b")))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleBindings $ Error.multipleBindingsError (var "name"))))
 
 let_ :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Let)
@@ -626,10 +617,7 @@ listHead = define "listHead" $
   doc "Extract the first element of a list term" $
   "graph" ~> "term" ~>
   "l" <<~ list @@ var "graph" @@ var "term" $
-  Maybes.maybe
-    (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "non-empty list") (Phantoms.string "empty list")))
-    ("h" ~> right $ var "h")
-    (Lists.maybeHead $ var "l")
+  Maybes.cases (Lists.maybeHead $ var "l") (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "non-empty list") (Phantoms.string "empty list"))) ("h" ~> right $ var "h")
 
 listOf :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error [x])
 listOf = define "listOf" $
@@ -691,10 +679,7 @@ maybeTerm = define "maybeTerm" $
     (Just (unexpected
       (Phantoms.string "maybe value")
       (ShowCore.term @@ var "term"))) [
-    _Term_maybe>>: "mt" ~> Maybes.maybe
-      (right nothing)
-      ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))
-      (var "mt")]
+    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (right nothing) ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))]
 
 maybeType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 maybeType = define "maybeType" $
@@ -763,10 +748,7 @@ requireField :: TypedTermDefinition (String -> (Graph -> Term -> Either Decoding
 requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
-  Maybes.maybe
-    (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"])
-    ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
-    (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap")
+  Maybes.cases (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap") (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"]) ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
 
 -- | Convert a Record to a Map from field Name to Term
 

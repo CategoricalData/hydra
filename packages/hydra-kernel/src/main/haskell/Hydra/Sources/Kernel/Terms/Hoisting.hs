@@ -307,7 +307,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "termWithTypeLambdas" <~ Lists.foldl
       ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
       (var "termWithLambdas")
-      (Lists.reverse $ Maybes.maybe (list ([] :: [TypedTerm Name])) (reify Core.typeSchemeVariables) $ var "newTypeScheme") $
+      (Lists.reverse $ Maybes.cases (var "newTypeScheme") (list ([] :: [TypedTerm Name])) (reify Core.typeSchemeVariables)) $
 
     -- Build the replacement: first apply type variables for captured type vars,
     -- then apply term variables for captured term vars.
@@ -668,7 +668,7 @@ hoistSubterms = define "hoistSubterms" $
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
-    "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.maybeHead (var "bindings")) $
+    "firstBindingName" <~ Maybes.cases (Lists.maybeHead (var "bindings")) (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
     "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $
     "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
@@ -741,12 +741,11 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
   "path" ~>
   -- Helper: process pairs of adjacent accessors
   "go" <~ ("remaining" ~>
-    Maybes.maybe
-      (var "remaining")
-      ("uc1" ~>
+    Maybes.cases (Lists.uncons $ var "remaining") (var "remaining") ("uc1" ~>
         "first" <~ Pairs.first (var "uc1") $
         "afterFirst" <~ Pairs.second (var "uc1") $
-        Maybes.maybe
+        Maybes.cases
+          (Lists.uncons $ var "afterFirst")
           -- Only one element: return as-is (no pair to inspect)
           (var "remaining")
           ("uc2" ~>
@@ -758,9 +757,7 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
               (Lists.cons (inject _SubtermStep _SubtermStep_letBody unit)
                           (var "go" @@ var "rest"))
               -- Keep first element and continue
-              (Lists.cons (var "first") (var "go" @@ var "afterFirst")))
-          (Lists.uncons $ var "afterFirst"))
-      (Lists.uncons $ var "remaining")) $
+              (Lists.cons (var "first") (var "go" @@ var "afterFirst"))))) $
   var "go" @@ var "path"
 
 -- | Predicate for hoisting all bindings unconditionally.

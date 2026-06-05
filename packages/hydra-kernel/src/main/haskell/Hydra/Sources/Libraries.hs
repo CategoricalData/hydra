@@ -265,7 +265,6 @@ _maybes_isJust    = LibNames.maybesIsJust
 _maybes_isNothing = LibNames.maybesIsNothing
 _maybes_map       = LibNames.maybesMap
 _maybes_mapMaybe  = LibNames.maybesMapMaybe
-_maybes_maybe     = LibNames.maybesMaybe
 _maybes_pure      = LibNames.maybesPure
 _maybes_toList    = LibNames.maybesToList
 
@@ -606,7 +605,6 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim1     _maybes_isNothing Maybes.isNothing    [_x]         (optional x_) boolean,
     prim2     _maybes_map       Maybes.map          [_x, _y]     (fun x_ y_) (optional x_) (optional y_),
     prim2     _maybes_mapMaybe  Maybes.mapMaybe     [_x, _y]     (fun x_ $ optional y_) (list x_) (list y_),
-    Prims.lazyArgs [0] $ prim3 _maybes_maybe     Maybes.maybe        [_y, _x]     y_ (fun x_ y_) (optional x_) y_,
     prim1     _maybes_pure      Maybes.pure         [_x]         x_ (optional x_),
     prim1     _maybes_toList    Maybes.toList       [_x]         (optional x_) (list x_)]
 

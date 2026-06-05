@@ -119,11 +119,9 @@ aggregateAnnotations :: TypedTermDefinition ((x -> Maybe y) -> (y -> x) -> (y ->
 aggregateAnnotations = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
   "getValue" ~> "getX" ~> "getAnns" ~> "t" ~>
-  "toPairs" <~ ("rest" ~> "t" ~> Maybes.maybe (var "rest")
-    (lambda "yy" (var "toPairs"
+  "toPairs" <~ ("rest" ~> "t" ~> Maybes.cases (var "getValue" @@ var "t") (var "rest") (lambda "yy" (var "toPairs"
       @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy")) (var "rest")
-      @@ (var "getX" @@ var "yy")))
-    (var "getValue" @@ var "t")) $
+      @@ (var "getX" @@ var "yy")))) $
   Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TypedTerm [(Name, Term)]]) @@ var "t"))
 
 commentsFromBinding :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Either Error (Maybe String))
@@ -145,10 +143,7 @@ getDescription :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name T
 getDescription = define "getDescription" $
   doc "Get description from annotations map (Either version)" $
   "cx" ~> "graph" ~> "anns" ~>
-  Maybes.maybe
-    (right nothing)
-    ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ var "graph" @@ var "term"))
-    (Maps.lookup (Core.nameLift keyDescription) (var "anns"))
+  Maybes.cases (Maps.lookup (Core.nameLift keyDescription) (var "anns")) (right nothing) ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ var "graph" @@ var "term"))
 
 getTermAnnotation :: TypedTermDefinition (Name -> Term -> Maybe Term)
 getTermAnnotation = define "getTermAnnotation" $
@@ -169,10 +164,7 @@ getType :: TypedTermDefinition (Graph -> M.Map Name Term -> Prelude.Either Decod
 getType = define "getType" $
   doc "Get type from annotations" $
   "graph" ~> "anns" ~>
-  Maybes.maybe
-    (right nothing)
-    ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
-    (Maps.lookup (Constants.keyType) (var "anns"))
+  Maybes.cases (Maps.lookup (Constants.keyType) (var "anns")) (right nothing) ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
 
 getTypeAnnotation :: TypedTermDefinition (Name -> Type -> Maybe Term)
 getTypeAnnotation = define "getTypeAnnotation" $
@@ -187,15 +179,12 @@ getTypeClasses = define "getTypeClasses" $
     ("de" ~> Error.errorDecoding $ var "de")
     ("x" ~> var "x")
     (decoderFor _Name @@ var "graph" @@ var "term")) $
-  Maybes.maybe
-    (right Maps.empty)
-    ("term" ~>
+  Maybes.cases (getTermAnnotation @@ Constants.keyClasses @@ var "term") (right Maps.empty) ("term" ~>
       ExtractCore.map
         @@ var "decodeName"
         @@ (ExtractCore.setOf @@ var "decodeName" @@ var "graph")
         @@ var "graph"
         @@ (var "term"))
-    (getTermAnnotation @@ Constants.keyClasses @@ var "term")
 
 getTypeDescription :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error (Maybe String))
 getTypeDescription = define "getTypeDescription" $
@@ -222,11 +211,9 @@ isNativeType = define "isNativeType" $
     Maybes.map
       (constant true)
       (getTermAnnotation @@ Constants.keyFirstClassType @@ (Core.bindingTerm (var "el")))) $
-  Maybes.maybe false
-    ("ts" ~> Logic.and
+  Maybes.cases (Core.bindingTypeScheme (var "el")) false ("ts" ~> Logic.and
       (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
       (Logic.not (var "isFlaggedAsFirstClassType")))
-    (Core.bindingTypeScheme (var "el"))
 
 normalizeTermAnnotations :: TypedTermDefinition (Term -> Term)
 normalizeTermAnnotations = define "normalizeTermAnnotations" $

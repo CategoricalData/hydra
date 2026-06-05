@@ -278,10 +278,7 @@ termToDotStmts = define "termToDotStmts" $
         "s">: Pairs.second $ var "tls"]
         $ pair (Names.uniqueLabel @@ var "vis" @@ var "l") (var "s"),
       -- Determine actual label and style
-      "labstyle">: Maybes.maybe
-        (var "labelOf" @@ var "visited" @@ var "currentTerm")
-        ("ls" ~> var "ls")
-        (var "mlabstyle"),
+      "labstyle">: Maybes.cases (var "mlabstyle") (var "labelOf" @@ var "visited" @@ var "currentTerm") ("ls" ~> var "ls"),
       "label">: Pairs.first $ var "labstyle",
       "style">: Pairs.second $ var "labstyle",
       "nodeStyle">: Logic.ifElse (var "isElement") nodeStyleElement (var "termNodeStyle"),
@@ -297,10 +294,7 @@ termToDotStmts = define "termToDotStmts" $
           (Maybes.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (ShowPaths.subtermStep @@ var "acc")),
       "edgeAttrs">: "lab" ~>
         wrap Dot._AttrList (list [list [record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "label"), Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]]]),
-      "parentStmt">: Maybes.maybe
-        (list ([] :: [TypedTerm Dot.Stmt]))
-        ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"])
-        (var "mparent"),
+      "parentStmt">: Maybes.cases (var "mparent") (list ([] :: [TypedTerm Dot.Stmt])) ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"]),
       "selfStmts">: Lists.concat (list [var "stmts", list [var "nodeStmt"], var "parentStmt"]),
       -- Default case: fold over subterms
       "dflt">: Lists.foldl
@@ -357,12 +351,9 @@ termToDotStmts = define "termToDotStmts" $
                 @@ var "stmts1"
                 @@ pair Paths.subtermStepLetBody (var "env"),
           _Term_variable>>: "name" ~>
-            Maybes.maybe
-              (var "dflt")
-              ("i" ~> pair
+            Maybes.cases (Maps.lookup (var "name") (var "ids")) (var "dflt") ("i" ~> pair
                 (Lists.concat2 (var "stmts") (list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ (Maybes.fromMaybe (var "selfId") (var "mparent")) @@ var "i"]))
-                (var "visited"))
-              (Maps.lookup (var "name") (var "ids"))]
+                (var "visited"))]
         @@ var "currentTerm"]
     $ Pairs.first $ var "encode"
         @@ nothing @@ false @@ Maps.empty @@ nothing

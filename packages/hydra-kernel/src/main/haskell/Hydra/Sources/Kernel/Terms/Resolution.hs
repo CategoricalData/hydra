@@ -160,14 +160,11 @@ fieldTypes = define "fieldTypes" $
     _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_variable>>: "name" ~>
       -- Try graphSchemaTypes first (type definitions), then fall back to graphBoundTerms (legacy)
-      Maybes.maybe
-        (Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
+      Maybes.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph")) (Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
           "el" ~>
           Eithers.bind (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
               (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
-            "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType")))
-        ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeBody (var "ts"))
-        (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
+            "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType"))) ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeBody (var "ts"))]
   @@ (Strip.deannotateType @@ var "t")
 
 findFieldType :: TypedTermDefinition (InferenceContext -> Name -> [FieldType] -> Either Error Type)
@@ -181,7 +178,7 @@ findFieldType = define "findFieldType" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
-      (Maybes.maybe (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")) (Lists.maybeHead $ var "matchingFields"))
+      (Maybes.cases (Lists.maybeHead $ var "matchingFields") (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname"))))
 
 fullyStripAndNormalizeType :: TypedTermDefinition (Type -> Type)
@@ -270,35 +267,23 @@ requireRowType = define "requireRowType" $
     _Type_forall>>: "ft" ~> var "rawType" @@ Core.forallTypeBody (var "ft")]) $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
     "t" ~>
-    Maybes.maybe
-      (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
+    Maybes.cases (var "getter" @@ (var "rawType" @@ var "t")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
         (Strings.cat2 (var "label") (string " type"))
-        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t")))))
-      (reify right)
-      (var "getter" @@ (var "rawType" @@ var "t")))
+        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t"))))) (reify right))
 
 requireSchemaType :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, InferenceContext))
 requireSchemaType = define "requireSchemaType" $
   doc "Look up a schema type and instantiate it, threading InferenceContext" $
   "cx" ~> "types" ~> "tname" ~>
-  Maybes.maybe
-    (left $
-      Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "tname"))
-    ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Strip.deannotateTypeSchemeRecursive @@ var "ts"))
-    (Maps.lookup (var "tname") (var "types"))
+  Maybes.cases (Maps.lookup (var "tname") (var "types")) (left $
+      Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "tname")) ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Strip.deannotateTypeSchemeRecursive @@ var "ts"))
 
 requireType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error Type)
 requireType = define "requireType" $
   doc "Require a type by name" $
   "cx" ~> "graph" ~> "name" ~>
   -- Look up in schema types first, then fall back to bound types
-  Maybes.maybe
-    (Maybes.maybe
-      (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")))
-      ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
-      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
-    ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
-    (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))
+  Maybes.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Maybes.cases (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))) (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))) ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
 
 requireUnionField_ :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Name -> Either Error Type)
 requireUnionField_ = define "requireUnionField" $
@@ -306,12 +291,9 @@ requireUnionField_ = define "requireUnionField" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
   "withRowType" <~ ("rt" ~>
     "noMatchErr" <~ (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) $
-    Maybes.maybe
-      (var "noMatchErr")
-      ("ft" ~> right $ Core.fieldTypeType $ var "ft")
-      (Lists.find
+    Maybes.cases (Lists.find
         ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
-        (var "rt"))) $
+        (var "rt")) (var "noMatchErr") ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
 requireUnionType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error [FieldType])
@@ -330,10 +312,7 @@ resolveType = define "resolveType" $
   match _Type (Just (just (var "typ"))) [
     _Type_variable>>: "name" ~>
       -- Look up in schema types first, then fall back to bound types
-      Maybes.maybe
-        (Maybes.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
-        ("ts" ~> just (Scoping.typeSchemeToFType @@ var "ts"))
-        (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))]
+      Maybes.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Maybes.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph")))) ("ts" ~> just (Scoping.typeSchemeToFType @@ var "ts"))]
   @@ (Strip.deannotateType @@ var "typ")
 
 typeToTypeScheme :: TypedTermDefinition (Type -> TypeScheme)

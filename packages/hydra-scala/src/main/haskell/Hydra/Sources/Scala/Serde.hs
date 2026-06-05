@@ -251,12 +251,9 @@ defnToExpr = define "defnToExpr" $
               Scala._Pat_var>>: lambda "pv" $ project Scala._VarPat Scala._VarPat_name @@ var "pv"]) $
             unwrap Scala._PredefString @@ (project Scala._NameData Scala._NameData_value @@ var "patName"))
           (Lists.maybeHead (var "pats"))),
-        "nameAndType">: Maybes.maybe
-          (Serialization.cst @@ var "nameStr")
-          (lambda "t" $ Serialization.spaceSep @@ list [
+        "nameAndType">: Maybes.cases (var "typ") (Serialization.cst @@ var "nameStr") (lambda "t" $ Serialization.spaceSep @@ list [
             Serialization.cst @@ (Strings.cat2 (var "nameStr") (string ":")),
-            typeToExpr @@ var "t"])
-          (var "typ"),
+            typeToExpr @@ var "t"]),
         "valKeyword">: Logic.ifElse (Lists.null (var "mods")) (string "val") (string "lazy val")] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ var "valKeyword",

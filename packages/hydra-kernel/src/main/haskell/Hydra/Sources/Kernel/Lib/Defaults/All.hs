@@ -71,7 +71,7 @@ define = definitionInModuleName ns
 -- when a host does not supply a native primitive).
 -- Note: Eithers, Lists, Maps, Maybes, and Sets modules cannot currently be code-generated
 -- due to DSL type inference limitations. The interpreter-level implementations in those modules
--- use meta-level DSL functions (Maybes.maybe, Eithers.either_, etc.) applied to Term-level
+-- use meta-level DSL functions (Maybes.cases, Eithers.either_, etc.) applied to Term-level
 -- values, which causes unification errors. These modules still work at runtime via the
 -- native Haskell implementations registered via DefaultsPrimitives.
 defaultLibModules :: [Module]

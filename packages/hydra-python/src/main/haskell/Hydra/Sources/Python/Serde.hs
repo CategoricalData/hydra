@@ -658,13 +658,10 @@ importFromAsNameToExpr = def "importFromAsNameToExpr" $
   lambda "ifan" $ lets [
     "name">: project Py._ImportFromAsName Py._ImportFromAsName_name @@ var "ifan",
     "alias">: project Py._ImportFromAsName Py._ImportFromAsName_as @@ var "ifan"] $
-    Maybes.maybe
-      (nameToExpr @@ var "name")
-      (lambda "a" $ Serialization.spaceSep @@ list [
+    Maybes.cases (var "alias") (nameToExpr @@ var "name") (lambda "a" $ Serialization.spaceSep @@ list [
         nameToExpr @@ var "name",
         Serialization.cst @@ string "as",
         nameToExpr @@ var "a"])
-      (var "alias")
 
 importFromTargetsToExpr :: TypedTermDefinition (Py.ImportFromTargets -> Expr)
 importFromTargetsToExpr = def "importFromTargetsToExpr" $
@@ -1183,7 +1180,7 @@ stringToExpr = def "stringToExpr" $
   doc "Serialize a Python string literal" $
   lambda "s" $ lets [
     "content">: project Py._String Py._String_value @@ var "s",
-    "prefix">: Maybes.maybe (string "") stringPrefixToText (project Py._String Py._String_prefix @@ var "s"),
+    "prefix">: Maybes.cases (project Py._String Py._String_prefix @@ var "s") (string "") stringPrefixToText,
     "style">: project Py._String Py._String_quoteStyle @@ var "s"] $
     cases Py._QuoteStyle (var "style") Nothing [
       Py._QuoteStyle_single>>: constant $ Serialization.cst @@ (Strings.cat2 (var "prefix") (escapePythonString @@ false @@ var "content")),

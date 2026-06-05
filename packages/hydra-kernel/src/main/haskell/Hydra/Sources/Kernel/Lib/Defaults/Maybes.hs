@@ -80,7 +80,6 @@ module_ = Module {
       toDefinition isNothing_,
       toDefinition map_,
       toDefinition mapMaybe_,
-      toDefinition maybe_,
       toDefinition pure_,
       toDefinition toList_]
 
@@ -113,10 +112,7 @@ bind_ = define "bind" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (Core.termMaybe nothing)
-        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "m")]
+      right $ Maybes.cases (var "m") (Core.termMaybe nothing) ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))]
 
 -- | Interpreter-friendly case analysis for Maybe terms (cases variant).
 -- Takes optTerm, defaultTerm, funTerm - returns defaultTerm if Nothing,
@@ -128,10 +124,7 @@ cases_ = define "cases" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (var "defaultTerm")
-        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "m")]
+      right $ Maybes.cases (var "m") (var "defaultTerm") ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))]
 
 -- | Interpreter-friendly cat (catMaybes) for list of Maybe terms.
 -- Filters out Nothings and unwraps Justs.
@@ -147,10 +140,7 @@ cat_ = define "cat" $
       cases _Term (var "el")
         (Just (var "acc")) [
         _Term_maybe>>: "m" ~>
-          Maybes.maybe
-            (var "acc")
-            ("v" ~> Lists.concat2 (var "acc") (Lists.pure (var "v")))
-            (var "m")])
+          Maybes.cases (var "m") (var "acc") ("v" ~> Lists.concat2 (var "acc") (Lists.pure (var "v")))])
     (list ([] :: [TypedTerm Term]))
     (var "elements")
 
@@ -178,10 +168,7 @@ fromJust_ = define "fromJust" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      Maybes.maybe
-        (ExtractCore.unexpected (string "Just value") (ShowCore.term @@ var "optTerm"))
-        ("val" ~> right $ var "val")
-        (var "m")]
+      Maybes.cases (var "m") (ExtractCore.unexpected (string "Just value") (ShowCore.term @@ var "optTerm")) ("val" ~> right $ var "val")]
 
 -- | Interpreter-friendly fromMaybe for Maybe terms.
 -- Returns the contained value or a default.
@@ -193,10 +180,7 @@ fromMaybe_ = define "fromMaybe" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (var "defaultTerm")
-        ("val" ~> var "val")
-        (var "m")]
+      right $ Maybes.cases (var "m") (var "defaultTerm") ("val" ~> var "val")]
 
 -- | Interpreter-friendly isJust for Maybe terms.
 isJust_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
@@ -207,10 +191,7 @@ isJust_ = define "isJust" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
-        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
-        (var "m")]
+      right $ Maybes.cases (var "m") (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False) ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)]
 
 -- | Interpreter-friendly isNothing for Maybe terms.
 isNothing_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
@@ -221,10 +202,7 @@ isNothing_ = define "isNothing" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
-        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
-        (var "m")]
+      right $ Maybes.cases (var "m") (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True) ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)]
 
 -- | Interpreter-friendly mapMaybe for List terms.
 -- Applies funTerm to each element, keeping only Just results.
@@ -253,21 +231,6 @@ map_ = define "map" $
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
         (var "m")]
 
--- | Interpreter-friendly case analysis for Maybe terms.
--- Takes defaultTerm, funTerm, optTerm - returns defaultTerm if Nothing,
--- or applies funTerm to the value if Just.
-maybe_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
-maybe_ = define "maybe" $
-  doc "Interpreter-friendly case analysis for Maybe terms." $
-  "cx" ~> "g" ~> "defaultTerm" ~> "funTerm" ~> "optTerm" ~>
-  cases _Term (var "optTerm")
-    (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
-    _Term_maybe>>: "m" ~>
-      right $ Maybes.maybe
-        (var "defaultTerm")
-        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "m")]
-
 -- | Interpreter-friendly pure for Maybe terms.
 -- Wraps a value in Just.
 pure_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
@@ -287,7 +250,4 @@ toList_ = define "toList" $
   cases _Term (var "optTerm")
     (Just (ExtractCore.unexpected (string "optional value") (ShowCore.term @@ var "optTerm"))) [
     _Term_maybe>>: "m" ~>
-      right $ Core.termList $ Maybes.maybe
-        (list ([] :: [TypedTerm Term]))
-        ("val" ~> Lists.pure (var "val"))
-        (var "m")]
+      right $ Core.termList $ Maybes.cases (var "m") (list ([] :: [TypedTerm Term])) ("val" ~> Lists.pure (var "val"))]
