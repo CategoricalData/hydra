@@ -54,7 +54,7 @@ arrayExpressionToExpr arr = Serialization.bracketList Serialization.inlineStyle 
 -- | Convert an array pattern to an AST expression
 arrayPatternToExpr :: [Maybe Syntax.Pattern] -> Ast.Expr
 arrayPatternToExpr arr =
-    Serialization.bracketList Serialization.inlineStyle (Lists.map (\maybeP -> Maybes.maybe (Serialization.cst "") patternToExpr maybeP) arr)
+    Serialization.bracketList Serialization.inlineStyle (Lists.map (\maybeP -> Maybes.cases maybeP (Serialization.cst "") patternToExpr) arr)
 -- | Convert an arrow function expression to an AST expression
 arrowFunctionExpressionToExpr :: Syntax.ArrowFunctionExpression -> Ast.Expr
 arrowFunctionExpressionToExpr arrow =
@@ -159,9 +159,9 @@ blockStatementToExpr block =
 -- | Convert a break statement to an AST expression
 breakStatementToExpr :: Maybe Syntax.Identifier -> Ast.Expr
 breakStatementToExpr b =
-    Maybes.maybe (Serialization.cst "break;") (\label -> Serialization.suffix ";" (Serialization.spaceSep [
+    Maybes.cases b (Serialization.cst "break;") (\label -> Serialization.suffix ";" (Serialization.spaceSep [
       Serialization.cst "break",
-      (identifierToExpr label)])) b
+      (identifierToExpr label)]))
 -- | Convert a call expression to an AST expression
 callExpressionToExpr :: Syntax.CallExpression -> Ast.Expr
 callExpressionToExpr call =
@@ -193,9 +193,9 @@ catchClauseToExpr c =
       let param = Syntax.catchClauseParam c
           body = Syntax.catchClauseBody c
           catchKw =
-                  Maybes.maybe (Serialization.cst "catch") (\p -> Serialization.spaceSep [
+                  Maybes.cases param (Serialization.cst "catch") (\p -> Serialization.spaceSep [
                     Serialization.cst "catch",
-                    (Serialization.parens (patternToExpr p))]) param
+                    (Serialization.parens (patternToExpr p))])
       in (Serialization.spaceSep [
         catchKw,
         (blockStatementToExpr body)])
@@ -207,9 +207,9 @@ classDeclarationToExpr cls =
           superClass = Syntax.classDeclarationSuperClass cls
           body = Syntax.classDeclarationBody cls
           extendsClause =
-                  Maybes.maybe [] (\s -> [
+                  Maybes.cases superClass [] (\s -> [
                     Serialization.cst "extends",
-                    (expressionToExpr s)]) superClass
+                    (expressionToExpr s)])
           bodyExpr =
                   Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map methodDefinitionToExpr body))
       in (Serialization.spaceSep (Lists.concat [
@@ -225,9 +225,9 @@ classDeclarationWithCommentsToExpr cdwc =
 
       let body = Syntax.classDeclarationWithCommentsBody cdwc
           mc = Syntax.classDeclarationWithCommentsComments cdwc
-      in (Maybes.maybe (classDeclarationToExpr body) (\c -> Serialization.newlineSep [
+      in (Maybes.cases mc (classDeclarationToExpr body) (\c -> Serialization.newlineSep [
         documentationCommentToExpr c,
-        (classDeclarationToExpr body)]) mc)
+        (classDeclarationToExpr body)]))
 -- | Convert a conditional expression to an AST expression
 conditionalExpressionToExpr :: Syntax.ConditionalExpression -> Ast.Expr
 conditionalExpressionToExpr cond =
@@ -254,9 +254,9 @@ conditionalExpressionToExpr cond =
 -- | Convert a continue statement to an AST expression
 continueStatementToExpr :: Maybe Syntax.Identifier -> Ast.Expr
 continueStatementToExpr c =
-    Maybes.maybe (Serialization.cst "continue;") (\label -> Serialization.suffix ";" (Serialization.spaceSep [
+    Maybes.cases c (Serialization.cst "continue;") (\label -> Serialization.suffix ";" (Serialization.spaceSep [
       Serialization.cst "continue",
-      (identifierToExpr label)])) c
+      (identifierToExpr label)]))
 -- | Convert a do-while statement to an AST expression
 doWhileStatementToExpr :: Syntax.DoWhileStatement -> Ast.Expr
 doWhileStatementToExpr d =
@@ -284,11 +284,11 @@ documentationTagToLine tag =
           mparamName = Syntax.documentationTagParamName tag
           description = Syntax.documentationTagDescription tag
           typePart =
-                  Maybes.maybe "" (\t -> Strings.cat [
+                  Maybes.cases mtype "" (\t -> Strings.cat [
                     "{",
                     (typeExpressionToString t),
-                    "}"]) mtype
-          paramPart = Maybes.maybe "" (\p -> Syntax.unIdentifier p) mparamName
+                    "}"])
+          paramPart = Maybes.cases mparamName "" (\p -> Syntax.unIdentifier p)
           parts =
                   [
                     Strings.cat2 "@" name,
@@ -314,10 +314,10 @@ exportAllToExpr a =
       let exported = Syntax.exportAllDeclarationExported a
           source = Syntax.exportAllDeclarationSource a
           exportedClause =
-                  Maybes.maybe (Serialization.cst "*") (\e -> Serialization.spaceSep [
+                  Maybes.cases exported (Serialization.cst "*") (\e -> Serialization.spaceSep [
                     Serialization.cst "*",
                     (Serialization.cst "as"),
-                    (identifierToExpr e)]) exported
+                    (identifierToExpr e)])
       in (Serialization.suffix ";" (Serialization.spaceSep [
         Serialization.cst "export",
         exportedClause,
@@ -367,9 +367,9 @@ expressionToExpr expr =
       Syntax.ExpressionNew v0 -> Serialization.spaceSep [
         Serialization.cst "new",
         (callExpressionToExpr v0)]
-      Syntax.ExpressionYield v0 -> Maybes.maybe (Serialization.cst "yield") (\e -> Serialization.spaceSep [
+      Syntax.ExpressionYield v0 -> Maybes.cases v0 (Serialization.cst "yield") (\e -> Serialization.spaceSep [
         Serialization.cst "yield",
-        (expressionToExpr e)]) v0
+        (expressionToExpr e)])
       Syntax.ExpressionAwait v0 -> Serialization.spaceSep [
         Serialization.cst "await",
         (expressionToExpr v0)]
@@ -429,11 +429,11 @@ forStatementToExpr f =
           update = Syntax.forStatementUpdate f
           body = Syntax.forStatementBody f
           initExpr =
-                  Maybes.maybe (Serialization.cst "") (\i -> case i of
+                  Maybes.cases init (Serialization.cst "") (\i -> case i of
                     Syntax.ForInitVariable v0 -> variableDeclarationToExpr v0
-                    Syntax.ForInitExpression v0 -> expressionToExpr v0) init
-          testExpr = Maybes.maybe (Serialization.cst "") expressionToExpr test
-          updateExpr = Maybes.maybe (Serialization.cst "") expressionToExpr update
+                    Syntax.ForInitExpression v0 -> expressionToExpr v0)
+          testExpr = Maybes.cases test (Serialization.cst "") expressionToExpr
+          updateExpr = Maybes.cases update (Serialization.cst "") expressionToExpr
       in (Serialization.spaceSep [
         Serialization.cst "for",
         (Serialization.parenListAdaptive [
@@ -472,9 +472,9 @@ functionDeclarationWithCommentsToExpr fdwc =
 
       let body = Syntax.functionDeclarationWithCommentsBody fdwc
           mc = Syntax.functionDeclarationWithCommentsComments fdwc
-      in (Maybes.maybe (functionDeclarationToExpr body) (\c -> Serialization.newlineSep [
+      in (Maybes.cases mc (functionDeclarationToExpr body) (\c -> Serialization.newlineSep [
         documentationCommentToExpr c,
-        (functionDeclarationToExpr body)]) mc)
+        (functionDeclarationToExpr body)]))
 -- | Convert a function expression to an AST expression
 functionExpressionToExpr :: Syntax.FunctionExpression -> Ast.Expr
 functionExpressionToExpr fn =
@@ -487,8 +487,8 @@ functionExpressionToExpr fn =
           asyncKw = Logic.ifElse async [
                 Serialization.cst "async"] []
           funcKw = Logic.ifElse generator (Serialization.cst "function*") (Serialization.cst "function")
-          nameExpr = Maybes.maybe [] (\id -> [
-                identifierToExpr id]) mid
+          nameExpr = Maybes.cases mid [] (\id -> [
+                identifierToExpr id])
           paramsExpr = Serialization.parenListAdaptive (Lists.map patternToExpr params)
       in (Serialization.spaceSep (Lists.concat [
         asyncKw,
@@ -513,10 +513,10 @@ ifStatementToExpr ifStmt =
                     Serialization.cst "if",
                     (Serialization.parens (expressionToExpr test)),
                     (statementToExpr consequent)]
-      in (Maybes.maybe ifPart (\alt -> Serialization.spaceSep [
+      in (Maybes.cases alternate ifPart (\alt -> Serialization.spaceSep [
         ifPart,
         (Serialization.cst "else"),
-        (statementToExpr alt)]) alternate)
+        (statementToExpr alt)]))
 -- | Convert an import declaration to an AST expression
 importDeclarationToExpr :: Syntax.ImportDeclaration -> Ast.Expr
 importDeclarationToExpr imp =
@@ -644,9 +644,9 @@ moduleItemWithCommentsToExpr miwc =
 
       let body = Syntax.moduleItemWithCommentsBody miwc
           mc = Syntax.moduleItemWithCommentsComments miwc
-      in (Maybes.maybe (moduleItemToExpr body) (\c -> Serialization.newlineSep [
+      in (Maybes.cases mc (moduleItemToExpr body) (\c -> Serialization.newlineSep [
         documentationCommentToExpr c,
-        (moduleItemToExpr body)]) mc)
+        (moduleItemToExpr body)]))
 -- | Convert a named export to an AST expression
 namedExportToExpr :: Syntax.NamedExport -> Ast.Expr
 namedExportToExpr n =
@@ -655,9 +655,9 @@ namedExportToExpr n =
           source = Syntax.namedExportSource n
           specExprs = Lists.map exportSpecifierToExpr specifiers
           fromClause =
-                  Maybes.maybe [] (\s -> [
+                  Maybes.cases source [] (\s -> [
                     Serialization.cst "from",
-                    (stringLiteralToExpr s)]) source
+                    (stringLiteralToExpr s)])
       in (Serialization.suffix ";" (Serialization.spaceSep (Lists.concat [
         [
           Serialization.cst "export"],
@@ -732,9 +732,9 @@ propertyToExpr prop =
 -- | Convert a return statement to an AST expression
 returnStatementToExpr :: Maybe Syntax.Expression -> Ast.Expr
 returnStatementToExpr r =
-    Maybes.maybe (Serialization.cst "return;") (\e -> Serialization.suffix ";" (Serialization.spaceSep [
+    Maybes.cases r (Serialization.cst "return;") (\e -> Serialization.suffix ";" (Serialization.spaceSep [
       Serialization.cst "return",
-      (expressionToExpr e)])) r
+      (expressionToExpr e)]))
 -- | Convert a statement to an AST expression
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr stmt =
@@ -778,10 +778,10 @@ switchCaseToExpr c =
       let test = Syntax.switchCaseTest c
           consequent = Syntax.switchCaseConsequent c
           caseLabel =
-                  Maybes.maybe (Serialization.cst "default:") (\t -> Serialization.spaceSep [
+                  Maybes.cases test (Serialization.cst "default:") (\t -> Serialization.spaceSep [
                     Serialization.cst "case",
                     (expressionToExpr t),
-                    (Serialization.cst ":")]) test
+                    (Serialization.cst ":")])
       in (Serialization.newlineSep (Lists.cons caseLabel (Lists.map statementToExpr consequent)))
 -- | Convert a switch statement to an AST expression
 switchStatementToExpr :: Syntax.SwitchStatement -> Ast.Expr
@@ -841,13 +841,13 @@ tryStatementToExpr t =
                   Serialization.spaceSep [
                     Serialization.cst "try",
                     (blockStatementToExpr block)]
-          catchPart = Maybes.maybe [] (\c -> [
-                catchClauseToExpr c]) handler
+          catchPart = Maybes.cases handler [] (\c -> [
+                catchClauseToExpr c])
           finallyPart =
-                  Maybes.maybe [] (\f -> [
+                  Maybes.cases finalizer [] (\f -> [
                     Serialization.spaceSep [
                       Serialization.cst "finally",
-                      (blockStatementToExpr f)]]) finalizer
+                      (blockStatementToExpr f)]])
       in (Serialization.spaceSep (Lists.concat [
         [
           tryPart],
@@ -975,7 +975,7 @@ variableDeclaratorToExpr decl =
 
       let id = Syntax.variableDeclaratorId decl
           init = Syntax.variableDeclaratorInit decl
-      in (Maybes.maybe (patternToExpr id) (\e -> Serialization.ifx Operators.defineOp (patternToExpr id) (expressionToExpr e)) init)
+      in (Maybes.cases init (patternToExpr id) (\e -> Serialization.ifx Operators.defineOp (patternToExpr id) (expressionToExpr e)))
 -- | Convert a variable kind to an AST expression
 variableKindToExpr :: Syntax.VariableKind -> Ast.Expr
 variableKindToExpr kind =
