@@ -30,13 +30,16 @@ git tag 0.16.0 -m '0.16.0 release' HEAD
 git push && git push --tags
 
 # 5. Publish per-platform (see wiki for Hackage / Maven Central / PyPI / conda-forge / npm steps)
+
+# 6. After published artifacts are visible, update wiki Releases.md
 ```
 
 ## Reference
 
 For each step's detail — what `bin/bump-version.sh` patches, which phases
 `bin/sync.sh` runs in what order, what `bin/prepare-release.sh` verifies,
-per-language publish commands — see the corresponding sections in
+per-language publish commands, and the post-publication update to
+[wiki/Releases](https://github.com/CategoricalData/hydra/wiki/Releases) — see the corresponding sections in
 [wiki/Release-process](https://github.com/CategoricalData/hydra/wiki/Release-process).
 
 The procedural-content migration from wiki to `docs/` is in progress
