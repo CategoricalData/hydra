@@ -76,6 +76,13 @@ and primitive-metadata reification.
 
 ### Improvements
 
+- Disambiguated format-version field naming across JSON sidecar/metadata files (#412):
+  the digest's `version` / `formatVersion` pair became `digestFormatVersion` (the digest's own
+  schema) / `moduleFormatVersion` (the module-JSON wire format); both digest serializers now carry
+  both. Added `manifestFormatVersion` to generated `manifest.json` files and `packageFormatVersion`
+  to the hand-authored `packages/<pkg>/package.json` descriptors. All four reset to `1` for 0.16.0.
+  Corrected `docs/json-format.md`, which had told consumers to read a field that lives only in the
+  gitignored, non-shipped digest.
 - Homogenized writer conventions across all target languages (#339):
   `*ToExpr` writer renames, adaptive layout for 120-width compaction.
 - Merged `Module.termDependencies` and `Module.typeDependencies`

@@ -11,5 +11,6 @@
     "hydra.shacl.model",
     "hydra.shex.syntax",
     "hydra.xml.schema"],
+  "manifestFormatVersion": 1,
   "package": "hydra-rdf",
   "testModules": []}
