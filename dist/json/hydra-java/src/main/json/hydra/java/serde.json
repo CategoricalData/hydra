@@ -6904,7 +6904,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Sanitize a string for use in a Java comment"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Sanitize a string for use in a Java comment"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7110,12 +7111,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -7471,10 +7473,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Serialize a Java string literal with proper Unicode escaping."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Serialize a Java string literal with proper Unicode escaping."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -8747,12 +8750,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `."}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `."}}}]},
             "body": {
               "lambda": {
                 "body": {

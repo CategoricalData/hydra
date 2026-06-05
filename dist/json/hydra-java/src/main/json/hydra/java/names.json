@@ -34,7 +34,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The hydra.core package name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core package name"}}}]},
             "body": {
               "maybe": {
                 "application": {
@@ -46,7 +46,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The hydra.util package name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.util package name"}}}]},
             "body": {
               "maybe": {
                 "application": {
@@ -63,7 +63,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The java.lang package name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The java.lang package name"}}}]},
             "body": {
               "maybe": {
                 "application": {
@@ -75,7 +75,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Construct a Java package name from a list of string parts"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a Java package name from a list of string parts"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -106,7 +110,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The java.util.function package name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The java.util.function package name"}}}]},
             "body": {
               "maybe": {
                 "application": {
@@ -118,7 +122,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "The java.util package name"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The java.util package name"}}}]},
             "body": {
               "maybe": {
                 "application": {
