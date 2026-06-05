@@ -9,5 +9,6 @@
     "hydra.coq.serde",
     "hydra.coq.syntax",
     "hydra.coq.utils"],
+  "manifestFormatVersion": 1,
   "package": "hydra-coq",
   "testModules": []}
