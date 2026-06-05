@@ -455,7 +455,9 @@ public class Coder {
                                 field("inner",
                                     proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at")),
                                 field("ann",
-                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
+                                    apply(
+                                        var("hydra.annotations.getAnnotationMap"),
+                                        proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"))),
                                 field("ann'",
                                     Maybes.cases(
                                         Maps.lookup(var("hydra.constants.keyType"), var("ann")),
@@ -489,7 +491,10 @@ public class Coder {
                                                 var("subst"),
                                                 var("cx"),
                                                 var("inner"))),
-                                        field(AnnotatedTerm.ANNOTATION, var("ann'"))))))),
+                                        field(AnnotatedTerm.ANNOTATION,
+                                            apply(
+                                                var("hydra.annotations.wrapAnnotationMap"),
+                                                var("ann'")))))))),
                     field(
                         Term.APPLICATION,
                         lambda("app",
@@ -1348,7 +1353,9 @@ public class Coder {
                                 field("body",
                                     proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at")),
                                 field("anns",
-                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
+                                    apply(
+                                        var("hydra.annotations.getAnnotationMap"),
+                                        proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"))),
                                 field("bodySubst",
                                     apply(
                                         ref(Coder.buildSubstFromAnnotations_go),
@@ -6865,7 +6872,9 @@ public class Coder {
                                     ref(Coder.encodeTermInternal),
                                     var("env"),
                                     Lists.cons(
-                                        proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"),
+                                        apply(
+                                            var("hydra.annotations.getAnnotationMap"),
+                                            proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
                                         var("anns")),
                                     var("tyapps"),
                                     proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at"),
@@ -13269,7 +13278,9 @@ public class Coder {
                                                     Maybes.bind(
                                                         Maps.lookup(
                                                             var("hydra.constants.keyType"),
-                                                            proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
+                                                            apply(
+                                                                var("hydra.annotations.getAnnotationMap"),
+                                                                proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"))),
                                                         lambda("typeTerm",
                                                             apply(
                                                                 ref(Coder.decodeTypeFromTerm),
