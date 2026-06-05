@@ -25,7 +25,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}]},
               "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}},
           "variables": []},
         "name": "hydra.java.syntax.IntegerLiteral"}},
@@ -34,7 +38,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}]},
               "body": {"wrap": {"literal": {"float": {"float64": {}}}}}}},
           "variables": []},
         "name": "hydra.java.syntax.FloatingPointLiteral"}},
@@ -43,7 +51,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: this is an approximation which ignores encoding"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.java.syntax.StringLiteral"}},
@@ -52,10 +64,11 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Note: this is an approximation which ignores encoding and incidental whitespace stripping"}}}],
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Note: this is an approximation which ignores encoding and incidental whitespace stripping"}}}]},
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []},
         "name": "hydra.java.syntax.TextBlock"}},
@@ -427,7 +440,7 @@
                 "name": "modules",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "At least one module"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "At least one module"}}}]},
                     "body": {"list": {"variable": "hydra.java.syntax.ModuleName"}}}}}]},
           "variables": []},
         "name": "hydra.java.syntax.ModuleDirective_ExportsOrOpens"}},
@@ -441,7 +454,7 @@
                 "name": "with",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "At least one type"}}}],
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "At least one type"}}}]},
                     "body": {"list": {"variable": "hydra.java.syntax.TypeName"}}}}}]},
           "variables": []},
         "name": "hydra.java.syntax.ModuleDirective_Provides"}},
@@ -585,7 +598,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A Type which does not allow annotations"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Type which does not allow annotations"}}}]},
               "body": {"wrap": {"variable": "hydra.java.syntax.Type"}}}},
           "variables": []},
         "name": "hydra.java.syntax.UnannType"}},
@@ -594,7 +608,8 @@
         "body": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A ClassType which does not allow annotations"}}}],
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A ClassType which does not allow annotations"}}}]},
               "body": {"wrap": {"variable": "hydra.java.syntax.ClassType"}}}},
           "variables": []},
         "name": "hydra.java.syntax.UnannClassType"}},
@@ -607,7 +622,8 @@
                 "name": "annotations",
                 "type": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Note: simple methods cannot have annotations"}}}],
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Note: simple methods cannot have annotations"}}}]},
                     "body": {"list": {"variable": "hydra.java.syntax.Annotation"}}}}},
               {"name": "modifiers", "type": {"list": {"variable": "hydra.java.syntax.MethodModifier"}}},
               {"name": "header", "type": {"variable": "hydra.java.syntax.MethodHeader"}},

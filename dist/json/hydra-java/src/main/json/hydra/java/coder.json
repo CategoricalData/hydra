@@ -912,8 +912,11 @@
                                             "name": "ann",
                                             "term": {
                                               "application": {
-                                                "argument": {"variable": "at"},
-                                                "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "at"},
+                                                    "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                             "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}},
                                           {
                                             "name": "ann'",
@@ -1007,7 +1010,9 @@
                                                               "argument": {"variable": "cx"},
                                                               "function": {
                                                                 "application": {"argument": {"variable": "subst"}, "function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}}}}}}}},
-                                                    {"name": "annotation", "term": {"variable": "ann'"}}],
+                                                    {
+                                                      "name": "annotation",
+                                                      "term": {"application": {"argument": {"variable": "ann'"}, "function": {"variable": "hydra.annotations.wrapAnnotationMap"}}}}],
                                                   "typeName": "hydra.core.AnnotatedTerm"}}},
                                             "typeName": "hydra.core.Term"}}}},
                                     "domain": {"variable": "hydra.core.AnnotatedTerm"},
@@ -3242,8 +3247,11 @@
                                             "name": "anns",
                                             "term": {
                                               "application": {
-                                                "argument": {"variable": "at"},
-                                                "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "at"},
+                                                    "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                             "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}},
                                           {
                                             "name": "bodySubst",
@@ -19269,8 +19277,11 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "at"},
-                                                                                    "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "at"},
+                                                                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                                    "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.lib.lists.cons"},
@@ -37302,8 +37313,11 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"variable": "at"},
-                                                                            "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "at"},
+                                                                                "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                            "function": {"variable": "hydra.annotations.getAnnotationMap"}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "hydra.constants.keyType"},

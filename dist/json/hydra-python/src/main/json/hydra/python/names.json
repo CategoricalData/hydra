@@ -8,7 +8,11 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a constant name for a field definition"}}}],
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Generate a constant name for a field definition"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -52,7 +56,9 @@
               "typeLambda": {
                 "body": {
                   "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a constant name for a type definition"}}}],
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a constant name for a type definition"}}}]},
                     "body": {
                       "lambda": {
                         "body": {
@@ -75,7 +81,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a Python enum value (UPPER_SNAKE case)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a name as a Python enum value (UPPER_SNAKE case)"}}}]},
             "body": {
               "application": {
                 "argument": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}},
@@ -92,7 +102,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a Python field name (lower_snake case)"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a name as a Python field name (lower_snake case)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -123,7 +137,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra name as a Python name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra name as a Python name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -360,7 +375,9 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a name as a fully qualified Python name"}}}],
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a name as a fully qualified Python name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -565,7 +582,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a namespace as a Python dotted name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a namespace as a Python dotted name"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -611,7 +629,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a type variable name (capitalized)"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type variable name (capitalized)"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -632,7 +651,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Sanitize a string to be a valid Python name"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Sanitize a string to be a valid Python name"}}}]},
             "body": {
               "application": {
                 "argument": {"variable": "hydra.python.language.pythonReservedWords"},
@@ -646,7 +666,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a term variable as a Python expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reference a term variable as a Python expression"}}}]},
             "body": {
               "application": {
                 "argument": {"literal": {"boolean": false}},
@@ -665,7 +689,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a type variable as a Python expression"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reference a type variable as a Python expression"}}}]},
             "body": {
               "application": {
                 "argument": {"literal": {"boolean": false}},
@@ -684,8 +712,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {"key": "description", "value": {"literal": {"string": "Whether to use __future__ annotations for forward references"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether to use __future__ annotations for forward references"}}}]},
             "body": {"literal": {"boolean": true}}}},
         "name": "hydra.python.names.useFutureAnnotations",
         "signature": {"parameters": [], "result": {"type": {"literal": {"boolean": {}}}}, "typeParameters": []}}},
@@ -693,7 +724,8 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Reference a variable as a Python expression"}}}],
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference a variable as a Python expression"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -1056,7 +1088,11 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Generate a variant name from type name and field name"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate a variant name from type name and field name"}}}]},
             "body": {
               "lambda": {
                 "body": {

@@ -130,7 +130,7 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
                       in (Maps.insert Constants.keyType (EncodeCore.type_ t_) ann)) (DecodeCore.type_ cx typeTerm))
         in (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (applyOvergenSubstToTermAnnotations_go subst cx inner),
-          Core.annotatedTermAnnotation = Annotations.wrapAnnotationMap ann_}))
+          Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap ann_)}))
       Core.TermApplication v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationFunction v0)),
         Core.applicationArgument = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationArgument v0))})
