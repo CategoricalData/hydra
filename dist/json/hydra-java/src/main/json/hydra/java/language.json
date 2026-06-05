@@ -4,12 +4,13 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {
-                  "literal": {
-                    "string": "The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly"}}}],
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly"}}}]},
             "body": {"literal": {"integer": {"int32": 9}}}}},
         "name": "hydra.java.language.javaMaxTupleLength",
         "signature": {"parameters": [], "result": {"type": {"literal": {"integer": {"int32": {}}}}}, "typeParameters": []}}},
@@ -17,7 +18,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for Java"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Java"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -149,7 +150,7 @@
       "term": {
         "body": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in Java"}}}],
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in Java"}}}]},
             "body": {
               "let": {
                 "bindings": [
@@ -157,19 +158,21 @@
                     "name": "specialNames",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Special names reserved for use by Hydra"}}}],
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Special names reserved for use by Hydra"}}}]},
                         "body": {"list": [{"literal": {"string": "Elements"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "classNames",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "java.lang classes as of JDK 7\nSee: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "java.lang classes as of JDK 7\nSee: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "AbstractMethodError"}},
@@ -273,12 +276,13 @@
                     "name": "keywords",
                     "term": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {
-                              "literal": {
-                                "string": "Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\nSee: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html"}}}],
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\nSee: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html"}}}]},
                         "body": {
                           "list": [
                             {"literal": {"string": "abstract"}},
