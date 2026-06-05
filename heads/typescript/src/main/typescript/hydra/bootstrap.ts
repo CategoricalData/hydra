@@ -438,7 +438,7 @@ const main = async (): Promise<void> => {
       try {
         const result = generateSourceFiles(
           printDefinitions, language,
-          dispatch.doInfer, dispatch.doExpand, dispatch.doHoistCase, dispatch.doHoistPoly,
+          dispatch.doInfer,
           bsGraph, allModules, [m], cx);
         if (result.tag === "left") {
           console.error(`  warning: codegen failed for module ${modName}: ${JSON.stringify(result.value).slice(0, 200)}`);

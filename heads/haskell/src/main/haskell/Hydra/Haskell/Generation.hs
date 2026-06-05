@@ -22,7 +22,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeHaskell :: FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeHaskell = generateSources moduleToHaskell haskellLanguage True False False False
+writeHaskell = generateSources moduleToHaskell haskellLanguage True
 
 ----------------------------------------
 
@@ -86,7 +86,7 @@ writeDslHaskell basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     let withCoreDeps = fmap addCoreDep nonEmpty
-    _ <- generateSources moduleToHaskell haskellLanguage False False False False basePath universeModules withCoreDeps
+    _ <- generateSources moduleToHaskell haskellLanguage False basePath universeModules withCoreDeps
     return ()
   where
     addCoreDep m = m { moduleDependencies = unqualifiedDep CoreTypes.ns : moduleDependencies m }
