@@ -71,6 +71,19 @@ TOTAL_STEPS=6
 banner2 "Synchronizing Hydra-Haskell (via DSL → JSON → Haskell)"
 echo ""
 
+# Overlay hand-written distribution-package source onto the dist tree (#418) so
+# each dist/haskell/<pkg>/ is a COMPLETE distribution package before stack build.
+# MUST run before step 1: hydra-ext (a transitive dep of bootstrap-from-json)
+# imports Hydra.Haskell.Lib.{Pairs,Strings,...} which live ONLY in
+# overlay/haskell/hydra-kernel/...Hydra/Haskell/Lib/. On a cold worktree where
+# the overlay has not yet been applied, step 1's stack build fails with
+# "Could not find module 'Hydra.Haskell.Lib.Pairs'". bin/sync.sh's Phase 0
+# follows the same overlay→build sequence; this aligns the standalone wrapper
+# with it.
+echo ""
+"$SCRIPT_DIR/overlay-kernel-runtime.sh"
+echo ""
+
 step 1 $TOTAL_STEPS "Building required executables"
 echo ""
 stack build \
@@ -219,28 +232,8 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
-# Overlay hand-written distribution-package source onto the dist tree (#418) so
-# each dist/haskell/<pkg>/ is a COMPLETE, self-contained distribution package (the
-# source-package -> complete-target-distribution model; see docs/build-system.md).
-# This is the Haskell analog of Java/Python's copy-kernel-runtime.sh. The overlay
-# trees are copies, not patches: they add package source under dist/, they do not
-# edit any generated file. Canonical homes are the uncompiled trees under the
-# top-level overlay/haskell/ directory (a sibling of dist/, packages/, heads/).
-#
-# IMPORTANT: the head compiles dist/haskell/hydra-kernel/ (a source-dir in
-# package.yaml) but does NOT compile overlay/haskell/hydra-kernel/. So overlaying
-# the runtime onto dist/haskell/hydra-kernel/ here is what puts those modules on
-# the head's compile path — exactly once, from the dist copy. (Adding the overlay
-# to the head's source-dirs as well would double-compile them; package.yaml does
-# not.)
-echo ""
-# Overlay hand-written runtime from overlay/haskell/ onto dist/haskell/. Extracted
-# into a standalone script (#418 fix) so bin/sync.sh can run the same overlay BEFORE
-# its Phase 0 stack build — sync-haskell.sh's own invocation here was too late for
-# that earlier build. Idempotent (cp -R), so calling it in both places is safe.
-"$SCRIPT_DIR/overlay-kernel-runtime.sh"
-
-# Rebuild so subsequent steps (test, lexicon) pick up the new Haskell dist.
+# Rebuild so subsequent steps (test, lexicon) pick up step 4's regenerated
+# Haskell dist. The overlay was applied before step 1 (see top of script).
 echo ""
 echo "  Rebuilding..."
 stack build
