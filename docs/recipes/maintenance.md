@@ -89,6 +89,16 @@ renaming a single type leaves an orphan class file on the classpath.
 | Type renamed (within a module) | Old `.java` file in Java |
 | Type deleted (within a module) | Old `.java` file in Java |
 | Module split (`hydra.error` → `hydra.error.core` + `hydra.error.checking` + ...) | Old unsplit files in every implementation |
+| Kernel **schema** change (a kernel record/field rename, e.g. `typeScheme` → `signature`) | Opt-in packages' dist frozen in the *old* schema |
+
+The last row is a different kind of staleness: not orphaned files, but *content* that drifts.
+Packages outside the standard `/sync` matrix — notably `hydra-bench` (regenerated only by the
+opt-in `bin/sync-bench.sh`) — are not touched by a kernel-schema ripple, so their committed
+`dist/json` and `dist/haskell` keep the pre-change field shapes until someone runs their dedicated
+sync. The drift is invisible until that sync runs, then surfaces as a large, surprising regen diff
+(`term`/`typeScheme` → `body`/`signature`, etc.). When a kernel schema changes, also run
+`bin/sync-bench.sh` (and any other opt-in package sync) and commit the result, or it will reappear
+later attributed to whoever next runs that sync.
 
 ### Where to look
 
