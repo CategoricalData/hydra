@@ -9,7 +9,7 @@
    Options:
      --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
      --include-tests        Also load and generate kernel test modules
-     --kernel-only          Only generate kernel modules (exclude hydra.*)
+     --kernel-only          Only generate kernel modules (those listed in the kernel JSON manifest)
      --types-only           Only generate type-defining modules"
   (:require [hydra.lib.preload :as preload])
   (:gen-class))
@@ -50,18 +50,26 @@
       (throw (RuntimeException. (str "Cannot resolve: " sym)))))
 
 (defn- load-coder-modules!
-  "Load a list of coder namespaces in dependency order.
-   Pre-declares all symbols across all modules first, then loads each module."
-  [ns-names]
-  ;; Phase 1: Pre-declare all symbols and create all namespaces
-  (doseq [ns-name ns-names]
-    (preload/pre-declare-ns-symbols! ns-name)
-    (let [ns-sym (symbol ns-name)
-          the-ns (or (find-ns ns-sym) (create-ns ns-sym))]
-      (preload/refer-clojure-into-ns! the-ns)))
-  ;; Phase 2: Load and globalize each module in order
-  (doseq [ns-name ns-names]
-    (preload/require-and-globalize! ns-name)))
+  "Load a coder root namespace plus all of its transitive :require deps in
+   topological order. Pre-declares all symbols across all modules first, then
+   loads each module. Already-loaded nses (e.g. anything from the main kernel
+   preload pass) are skipped automatically by the topo walk."
+  [root-ns-names]
+  (let [ns-names (preload/coder-load-order root-ns-names)
+        already-loaded? (fn [n] (some? (find-ns (symbol n))))
+        ;; Skip nses already loaded by the main preload pass — re-running their
+        ;; defs would re-evaluate and risk clobbering globalized state. The
+        ;; coder-specific nses (e.g. hydra.haskell.coder) are loaded fresh.
+        new-ns-names (vec (remove already-loaded? ns-names))]
+    ;; Phase 1: Pre-declare all symbols and create all namespaces
+    (doseq [ns-name new-ns-names]
+      (preload/pre-declare-ns-symbols! ns-name)
+      (let [ns-sym (symbol ns-name)
+            the-ns (or (find-ns ns-sym) (create-ns ns-sym))]
+        (preload/refer-clojure-into-ns! the-ns)))
+    ;; Phase 2: Load and globalize each module in order
+    (doseq [ns-name new-ns-names]
+      (preload/require-and-globalize! ns-name))))
 
 (defn- resolve-coder
   "Resolve the coder function and language for a given target.
@@ -69,37 +77,29 @@
   [target]
   (case target
     "haskell"
-    (do (load-coder-modules!
-          ["hydra.haskell.ast" "hydra.haskell.language"
-           "hydra.haskell.operators" "hydra.haskell.utils"
-           "hydra.haskell.serde" "hydra.haskell.coder"])
+    (do (load-coder-modules! ["hydra.haskell.coder"])
         {:coder @(rc 'hydra_haskell_coder_module_to_haskell)
          :language @(rc 'hydra_haskell_language_haskell_language)
          :flags [false false false false]
          :subdir "haskell"})
     "java"
-    (do (load-coder-modules!
-          ["hydra.java.syntax" "hydra.java.language" "hydra.java.names"
-           "hydra.java.environment" "hydra.java.utils"
-           "hydra.java.serde" "hydra.java.coder"])
+    (do (load-coder-modules! ["hydra.java.coder"])
         {:coder @(rc 'hydra_java_coder_module_to_java)
          :language @(rc 'hydra_java_language_java_language)
          :flags [false true false true]
          :subdir "java"})
     "python"
-    (do (load-coder-modules!
-          ["hydra.python.syntax" "hydra.python.language" "hydra.python.names"
-           "hydra.python.environment" "hydra.python.utils"
-           "hydra.python.serde" "hydra.python.coder"])
+    (do (load-coder-modules! ["hydra.python.coder"])
         (preload/install-coder-performance-patches!)
         {:coder @(rc 'hydra_python_coder_module_to_python)
          :language @(rc 'hydra_python_language_python_language)
          :flags [false true true false]
          :subdir "python"})
     ("clojure" "scheme" "common-lisp" "emacs-lisp")
-    (do (load-coder-modules!
-          ["hydra.lisp.syntax" "hydra.lisp.language"
-           "hydra.lisp.serde" "hydra.lisp.coder"])
+    ;; hydra.lisp.serde is *not* reachable from hydra.lisp.coder's :require graph
+    ;; (the coder builds a program; serde converts the program to printable expr).
+    ;; Pass both as roots so the transitive walk pulls in serde's own deps too.
+    (do (load-coder-modules! ["hydra.lisp.coder" "hydra.lisp.serde"])
         (let [module-to-lisp @(rc 'hydra_lisp_coder_module_to_lisp)
               program-to-expr @(rc 'hydra_lisp_serde_program_to_expr)
               lang @(rc 'hydra_lisp_language_lisp_language)
@@ -126,7 +126,7 @@
                                 code (@(rc 'hydra_serialization_print_expr)
                                        (@(rc 'hydra_serialization_parenthesize)
                                          (program-to-expr program)))
-                                ns-val (let [ns (:namespace mod)]
+                                ns-val (let [ns (:name mod)]
                                          (if (string? ns) ns (:value ns)))
                                 case-conv (if (= target "clojure")
                                            (list :camel nil)
@@ -160,7 +160,7 @@
       (println "Options:")
       (println "  --output <dir>         Output base directory")
       (println "  --include-tests        Also load and generate kernel test modules")
-      (println "  --kernel-only          Only generate kernel modules (exclude hydra.*)")
+      (println "  --kernel-only          Only generate kernel modules (those listed in the kernel JSON manifest)")
       (println "  --types-only           Only generate type-defining modules")
       (System/exit 1))
 
@@ -198,6 +198,7 @@
               main-ns (read-manifest json-dir "mainModules")
               default-ns (read-manifest json-dir "defaultLibModules")
               all-kernel-ns (into (vec main-ns) default-ns)
+              kernel-ns-set (set all-kernel-ns)
               main-mods (load-mods json-dir all-kernel-ns)
               step-time (- (System/currentTimeMillis) step-start)
               total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]
@@ -208,16 +209,18 @@
 
           (let [;; Apply filters
                 all-main-mods main-mods
-                ;; Namespace may be a string or a record with :value
-                ns-str-of (fn [m] (let [ns (:namespace m)]
+                ;; Module name may be a bare string or a ModuleName record with :value
+                ns-str-of (fn [m] (let [ns (:name m)]
                                     (if (string? ns) ns (:value ns))))
+                ;; kernel-only keeps modules whose namespace is in the kernel
+                ;; manifest (mainModules ∪ defaultLibModules). When the source
+                ;; dir is already hydra-kernel/, this is an identity filter; it
+                ;; becomes useful when called against a mixed JSON source.
                 mods-to-generate (cond->> all-main-mods
                                    (:kernel-only opts) (filterv (fn [m]
-                                     (let [ns-str (ns-str-of m)]
-                                       (and (not (.startsWith ^String ns-str "hydra."))
-                                            (not (.startsWith ^String ns-str "hydra.json.yaml."))))))
+                                     (contains? kernel-ns-set (ns-str-of m))))
                                    (:types-only opts) (filterv (fn [m]
-                                     (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:elements m)))))]
+                                     (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:definitions m)))))]
 
             (when (:kernel-only opts)
               (println (str "Filtering to kernel modules: " (count mods-to-generate) " of " (count all-main-mods)))
@@ -258,7 +261,7 @@
                               ;; testSkipEmitModuleNames in
                               ;; Hydra.Sources.Test.All and the equivalent
                               ;; filter in heads/python/.../bootstrap.py.
-                              ns-of (fn [m] (let [n (:namespace m)] (if (string? n) n (:value n))))
+                              ns-of (fn [m] (let [n (:name m)] (if (string? n) n (:value n))))
                               test-skip-emit #{"hydra.test.testEnv"}
                               test-mods-to-emit (filterv (fn [m] (not (contains? test-skip-emit (ns-of m)))) test-mods)
                               out-test (str out-dir "/src/test/" (:subdir coder-info))]

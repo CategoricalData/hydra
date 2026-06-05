@@ -23,7 +23,7 @@ import _root_.java.io.File
 @main def bootstrap(args: String*): Unit =
   // Coder packages loaded on top of the kernel + Haskell baseline when
   // --include-coders is set.
-  val coderPackages = Seq("hydra-java", "hydra-python", "hydra-scala", "hydra-lisp")
+  val coderPackages = Seq("hydra-java", "hydra-python", "hydra-scala", "hydra-typescript", "hydra-lisp")
 
   var target: Option[String] = None
   var jsonDirArg: Option[String] = None
@@ -103,7 +103,11 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
-  val kernelNsSet = kernelMods.map(_.name).toSet
+  // Both hydra-kernel and hydra-haskell are part of the bootstrap baseline:
+  // hydra-haskell provides the runtime AST modules (Hydra.Haskell.Syntax etc.)
+  // that the hand-written DSL Source files copied into the target tree by
+  // setup-haskell-target.sh import, so it must pass --kernel-only filtering.
+  val kernelNsSet = baselineMods.map(_.name).toSet
 
   // Step 3: Optionally load coder packages.
   var coderMods: Seq[hydra.packaging.Module] = Seq.empty
@@ -144,6 +148,11 @@ import _root_.java.io.File
     case "java" => Generation.writeJava(outMain + "/java", allMainMods, modsToGenerate)
     case "python" => Generation.writePython(outMain + "/python", allMainMods, modsToGenerate)
     case "scala" => Generation.writeScala(outMain + "/scala", allMainMods, modsToGenerate)
+    // "typescript" dispatch intentionally omitted; see Generation.scala.
+    case "clojure" => Generation.writeLispDialect(outMain + "/clojure", "clojure", "clj", allMainMods, modsToGenerate)
+    case "scheme" => Generation.writeLispDialect(outMain + "/scheme", "scheme", "scm", allMainMods, modsToGenerate)
+    case "common-lisp" => Generation.writeLispDialect(outMain + "/common-lisp", "commonLisp", "lisp", allMainMods, modsToGenerate)
+    case "emacs-lisp" => Generation.writeLispDialect(outMain + "/emacs-lisp", "emacsLisp", "el", allMainMods, modsToGenerate)
     case other =>
       println(s"Unknown target: $other")
       System.exit(1)
@@ -198,6 +207,11 @@ import _root_.java.io.File
       case "java" => Generation.writeJava(outTest + "/java", allUniverse, testModsToEmit)
       case "python" => Generation.writePython(outTest + "/python", allUniverse, testModsToEmit)
       case "scala" => Generation.writeScala(outTest + "/scala", allUniverse, testModsToEmit)
+      // "typescript" dispatch intentionally omitted; see Generation.scala.
+      case "clojure" => Generation.writeLispDialect(outTest + "/clojure", "clojure", "clj", allUniverse, testModsToEmit)
+      case "scheme" => Generation.writeLispDialect(outTest + "/scheme", "scheme", "scm", allUniverse, testModsToEmit)
+      case "common-lisp" => Generation.writeLispDialect(outTest + "/common-lisp", "commonLisp", "lisp", allUniverse, testModsToEmit)
+      case "emacs-lisp" => Generation.writeLispDialect(outTest + "/emacs-lisp", "emacsLisp", "el", allUniverse, testModsToEmit)
       case _ => 0
 
     stepTime = System.currentTimeMillis() - stepStart
