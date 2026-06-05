@@ -10,6 +10,7 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
+import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
@@ -23,17 +24,19 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = unqualifiedDep <$> [Error.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns],
+            moduleDependencies = unqualifiedDep <$> [Error.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns, Util.ns],
             moduleMetadata = descriptionMetadata (Just "Abstractions for paired transformations between languages")}
   where
     definitions = [
       adapter,
       adapterContext,
       bicoder,
+      caseConventions,
       coder,
       coderDirection,
       language,
       languageConstraints,
+      languageFeature,
       languageName,
       symmetricAdapter,
       traversalOrder,
@@ -83,6 +86,41 @@ bicoder = define "Bicoder" $
       doc "A function from target types to adapters" $
       "t2" ~> adapter @@ "t2" @@ "t1" @@ "v2" @@ "v1"]
 
+caseConventions :: TypeDefinition
+caseConventions = define "CaseConventions" $
+  doc "Per-target case conventions for name forms that vary across emission targets" $
+  T.record [
+    "constant">:
+      doc "Convention for compile-time constant names"
+      Util.caseConvention,
+    "directory">:
+      doc "Convention for each directory level in the emitted source tree"
+      Util.caseConvention,
+    "enumValue">:
+      doc "Convention for enum-variant value names"
+      Util.caseConvention,
+    "field">:
+      doc "Convention for record field names"
+      Util.caseConvention,
+    "file">:
+      doc "Convention for the source-file basename"
+      Util.caseConvention,
+    "module">:
+      doc "Convention for a single segment of a module name"
+      Util.caseConvention,
+    "term">:
+      doc "Convention for top-level term definitions (functions, module-level values)"
+      Util.caseConvention,
+    "termVariable">:
+      doc "Convention for locally-bound term names (lambda parameters, let-bindings)"
+      Util.caseConvention,
+    "type">:
+      doc "Convention for type names"
+      Util.caseConvention,
+    "typeVariable">:
+      doc "Convention for type-level variable names"
+      Util.caseConvention]
+
 coder :: TypeDefinition
 coder = define "Coder" $
   doc "An encoder and decoder; a bidirectional transformation between two types" $
@@ -103,14 +141,23 @@ coderDirection = define "CoderDirection" $
 
 language :: TypeDefinition
 language = define "Language" $
-  doc "A named language together with language-specific constraints" $
+  doc "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension" $
   T.record [
     "name">:
       doc "The unique name of the language"
       languageName,
     "constraints">:
-      doc "The constraints which characterize the language"
-      languageConstraints]
+      doc "Constraints which characterize the language's type and term grammars"
+      languageConstraints,
+    "supportedFeatures">:
+      doc "Target-language or target-runtime capabilities the emitter may assume are available"
+      (T.set languageFeature),
+    "caseConventions">:
+      doc "Per-target case conventions for the various kinds of identifiers emitted by the coder"
+      caseConventions,
+    "defaultFileExtension">:
+      doc "Conventional file extension for emitted source files, without the leading dot (e.g. \"scala\", \"py\")"
+      Util.fileExtension]
 
 languageConstraints :: TypeDefinition
 languageConstraints = define "LanguageConstraints" $
@@ -134,6 +181,20 @@ languageConstraints = define "LanguageConstraints" $
     "types">:
       doc "A logical set of types, as a predicate which tests a type for inclusion" $
       Core.type_ ~> T.boolean]
+
+languageFeature :: TypeDefinition
+languageFeature = define "LanguageFeature" $
+  doc "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability." $
+  T.union [
+    "partialApplication">:
+      doc "The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms."
+      T.unit,
+    "nestedCaseStatements">:
+      doc "The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers."
+      T.unit,
+    "nestedPolymorphicLetBindings">:
+      doc "The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level."
+      T.unit]
 
 languageName :: TypeDefinition
 languageName = define "LanguageName" $
