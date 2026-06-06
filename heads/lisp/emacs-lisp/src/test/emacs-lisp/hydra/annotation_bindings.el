@@ -9,8 +9,12 @@
   (list :lambda (make-hydra_core_lambda :parameter param :domain nil :body body)))
 (defun hydra--t-var (name)
   (list :variable name))
-(defun hydra--t-app (fun arg)
-  (list :application (make-hydra_core_application :function fun :argument arg)))
+;; Variadic for left-associative curried application (#443).
+(defun hydra--t-app (fun &rest args)
+  (cl-reduce (lambda (acc x)
+               (list :application
+                     (make-hydra_core_application :function acc :argument x)))
+             args :initial-value fun))
 (defun hydra--t-prim (name)
   (list :variable name))
 (defun hydra--t-let (name val body)
@@ -42,6 +46,8 @@
 (defun hydra--t-just (v) (list :maybe (hydra--t-inject "hydra.core.Term" "literal"
                      (hydra--t-inject "hydra.core.Literal" "string" v))))
 (defun hydra--t-nothing () (list :maybe (list :nothing nil)))
+;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
+(defun hydra--t-pair (a b) (list :pair (list a b)))
 
 ;; Annotation term-level bindings (mirrors Java TestSuiteRunner.addAnnotationsBindings)
 (defun hydra-annotation-bindings ()
@@ -77,11 +83,54 @@
                         (hydra--t-var "at"))))))
               (hydra--t-var "t"))))
 
+    ;; hydra.annotations.getAnnotationMap (#386):
+    ;;   getAnnotationMap :: Term -> Map<Name, Term>
+    (list "hydra.annotations.getAnnotationMap"
+          (hydra--t-lam "t"
+            (hydra--t-app
+              (hydra--t-match "hydra.core.Term" (list :just (hydra--t-app (hydra--t-prim "hydra.lib.maps.empty") (hydra--t-var "t")))
+                (hydra--t-field "map"
+                  (hydra--t-lam "m"
+                    (hydra--t-app (hydra--t-prim "hydra.lib.maps.fromList")
+                      (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.lists.foldl")
+                        (hydra--t-lam "acc"
+                          (hydra--t-lam "pair"
+                            (hydra--t-app
+                              (hydra--t-match "hydra.core.Term"
+                                (list :just (hydra--t-var "acc"))
+                                (hydra--t-field "variable"
+                                  (hydra--t-lam "n"
+                                    (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.lists.cons")
+                                      (hydra--t-pair
+                                        (hydra--t-var "n")
+                                        (hydra--t-app (hydra--t-prim "hydra.lib.pairs.second") (hydra--t-var "pair"))))
+                                      (hydra--t-var "acc")))))
+                              (hydra--t-app (hydra--t-prim "hydra.lib.pairs.first") (hydra--t-var "pair")))))
+                        (list :list nil))
+                        (hydra--t-app (hydra--t-prim "hydra.lib.maps.toList") (hydra--t-var "m")))))))
+              (hydra--t-var "t"))))
+
+    ;; hydra.annotations.wrapAnnotationMap (#386):
+    ;;   wrapAnnotationMap :: Map<Name, Term> -> Term
+    (list "hydra.annotations.wrapAnnotationMap"
+          (hydra--t-lam "m"
+            (hydra--t-inject "hydra.core.Term" "map"
+              (hydra--t-app (hydra--t-prim "hydra.lib.maps.fromList")
+                (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.lists.map")
+                  (hydra--t-lam "pair"
+                    (hydra--t-pair
+                      (hydra--t-inject "hydra.core.Term" "variable"
+                        (hydra--t-app (hydra--t-prim "hydra.lib.pairs.first") (hydra--t-var "pair")))
+                      (hydra--t-app (hydra--t-prim "hydra.lib.pairs.second") (hydra--t-var "pair")))))
+                  (hydra--t-app (hydra--t-prim "hydra.lib.maps.toList") (hydra--t-var "m")))))))
+
     ;; hydra.annotations.termAnnotationInternal = \term ->
     ;;   let toPairs = \rest -> \t -> case t of
-    ;;     annotated(at) -> toPairs(cons(toList(at.annotation), rest), at.body)
+    ;;     annotated(at) -> toPairs(cons(toList(getAnnotationMap(at.annotation)), rest), at.body)
     ;;     _ -> rest
     ;;   in fromList(concat(toPairs([], term)))
+    ;; After #386: at.annotation is a Term; project the map payload via
+    ;; hydra.annotations.getAnnotationMap before calling maps.toList.
     (list "hydra.annotations.termAnnotationInternal"
           (hydra--t-lam "term"
             (hydra--t-let "toPairs"
@@ -95,8 +144,9 @@
                             (hydra--t-app (hydra--t-var "toPairs")
                               (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.lists.cons")
                                 (hydra--t-app (hydra--t-prim "hydra.lib.maps.toList")
-                                  (hydra--t-app (hydra--t-project "hydra.core.AnnotatedTerm" "annotation")
-                                    (hydra--t-var "at"))))
+                                  (hydra--t-app (hydra--t-var "hydra.annotations.getAnnotationMap")
+                                    (hydra--t-app (hydra--t-project "hydra.core.AnnotatedTerm" "annotation")
+                                      (hydra--t-var "at")))))
                                 (hydra--t-var "rest")))
                             (hydra--t-app (hydra--t-project "hydra.core.AnnotatedTerm" "body")
                               (hydra--t-var "at"))))))
@@ -123,7 +173,10 @@
     ;;   let stripped = deannotateTerm(term)
     ;;       anns = setAnnotation(key, val, termAnnotationInternal(term))
     ;;   in if null(anns) then stripped
-    ;;      else inject(Term){annotated=record(AnnotatedTerm){body=stripped, annotation=anns}}
+    ;;      else inject(Term){annotated=record(AnnotatedTerm){body=stripped,
+    ;;                                              annotation=wrapAnnotationMap(anns)}}
+    ;; After #386: wrap the resulting Map<Name, Term> via wrapAnnotationMap
+    ;; before storing it in AnnotatedTerm.annotation (which is now a Term).
     (list "hydra.annotations.setTermAnnotation"
           (hydra--t-lam "key"
             (hydra--t-lam "val"
@@ -140,7 +193,9 @@
                       (hydra--t-inject "hydra.core.Term" "annotated"
                         (hydra--t-record "hydra.core.AnnotatedTerm"
                           (list (hydra--t-field "body" (hydra--t-var "stripped"))
-                                (hydra--t-field "annotation" (hydra--t-var "anns"))))))))))))
+                                (hydra--t-field "annotation"
+                                  (hydra--t-app (hydra--t-var "hydra.annotations.wrapAnnotationMap")
+                                    (hydra--t-var "anns")))))))))))))
 
     ;; hydra.annotations.setTermDescription = \d ->
     ;;   setTermAnnotation(keyDescription, maybes.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
