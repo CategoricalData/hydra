@@ -54,12 +54,13 @@
     {(qname ns_ "bind")    (p/prim2 (qname ns_ "bind")
                                      (fn [e f] ((eithers/hydra_lib_eithers_bind e) f))
                                      [] (p/tc-either x y) (fun y (p/tc-either x z)) (p/tc-either x z))
+     ;; BUG #438: explicit variable order (see mapList comment below).
      (qname ns_ "bimap")   (p/prim3 (qname ns_ "bimap")
                                      (fn [f g e] (((eithers/hydra_lib_eithers_bimap f) g) e))
-                                     [] (fun x z) (fun y w) (p/tc-either x y) (p/tc-either z w))
+                                     ["x" "y" "z" "w"] (fun x z) (fun y w) (p/tc-either x y) (p/tc-either z w))
      (qname ns_ "either")  (p/prim3 (qname ns_ "either")
                                      (fn [f g e] (((eithers/hydra_lib_eithers_either f) g) e))
-                                     [] (fun x z) (fun y z) (p/tc-either x y) z)
+                                     ["x" "y" "z"] (fun x z) (fun y z) (p/tc-either x y) z)
      (qname ns_ "foldl")   (p/prim3 (qname ns_ "foldl")
                                      (fn [f init xs] (((eithers/hydra_lib_eithers_foldl f) init) xs))
                                      [] (fun x (fun y (p/tc-either z x))) x (p/tc-list y) (p/tc-either z x))
@@ -68,22 +69,35 @@
                                        [] x (p/tc-either x y) x))
      (qname ns_ "fromRight") (p/lazy-args [0] (p/prim2 (qname ns_ "fromRight")
                                        (fn [dflt e] ((eithers/hydra_lib_eithers_from_right dflt) e))
-                                       [] y (p/tc-either x y) y))
+                                       ["x" "y"] y (p/tc-either x y) y))
      (qname ns_ "isLeft")  (p/prim1 (qname ns_ "isLeft")  eithers/hydra_lib_eithers_is_left  [] (p/tc-either x y) (p/tc-boolean))
      (qname ns_ "isRight") (p/prim1 (qname ns_ "isRight") eithers/hydra_lib_eithers_is_right [] (p/tc-either x y) (p/tc-boolean))
      (qname ns_ "lefts")   (p/prim1 (qname ns_ "lefts")   eithers/hydra_lib_eithers_lefts   [] (p/tc-list (p/tc-either x y)) (p/tc-list x))
      (qname ns_ "map")     (p/prim2 (qname ns_ "map")
                                      (fn [f e] ((eithers/hydra_lib_eithers_map f) e))
                                      [] (fun x y) (p/tc-either z x) (p/tc-either z y))
+     ;; BUG #438: explicit ["x" "y" "z"] order. With auto-detect (empty []),
+     ;; build-type-scheme would walk (x -> Either z y) and produce [x, z, y]
+     ;; — the order in which type variables first appear in the body. The
+     ;; kernel's hand-written sig forces [x, y, z] (see hydra-kernel/Sources/
+     ;; Kernel/Lib/Eithers.hs mapListSig). The two are isomorphic as type
+     ;; schemes but applyTypeArgumentsToType peels foralls left-to-right, so
+     ;; the variable ORDER determines which fresh type argument lands in
+     ;; which body position. Without the explicit list, instantiation puts
+     ;; the error-type fresh var where the success-type fresh var should go
+     ;; — visible as a (Binding -> Either<Unit, Error>) vs
+     ;; (Binding -> Either<Error, Unit>) swap in type-check errors during
+     ;; clojure-to-java codegen of mapList/mapMaybe/mapSet over forBinding
+     ;; (`Binding -> Either Error ()`). Mirrors the TS host fix e8a0abf254.
      (qname ns_ "mapList") (p/prim2 (qname ns_ "mapList")
                                      (fn [f xs] ((eithers/hydra_lib_eithers_map_list f) xs))
-                                     [] (fun x (p/tc-either z y)) (p/tc-list x) (p/tc-either z (p/tc-list y)))
+                                     ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-list x) (p/tc-either z (p/tc-list y)))
      (qname ns_ "mapOptional") (p/prim2 (qname ns_ "mapOptional")
                                       (fn [f mx] ((eithers/hydra_lib_eithers_map_optional f) mx))
-                                      [] (fun x (p/tc-either z y)) (p/tc-optional x) (p/tc-either z (p/tc-optional y)))
+                                      ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-optional x) (p/tc-either z (p/tc-optional y)))
      (qname ns_ "mapSet")  (p/prim2 (qname ns_ "mapSet")
                                      (fn [f s] ((eithers/hydra_lib_eithers_map_set f) s))
-                                     [] (fun x (p/tc-either z y)) (p/tc-set x) (p/tc-either z (p/tc-set y)))
+                                     ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-set x) (p/tc-either z (p/tc-set y)))
      (qname ns_ "partitionEithers") (p/prim1 (qname ns_ "partitionEithers")
                                               eithers/hydra_lib_eithers_partition_eithers
                                               [] (p/tc-list (p/tc-either x y)) (p/tc-pair (p/tc-list x) (p/tc-list y)))
@@ -391,9 +405,13 @@
         b (p/tc-variable "b")
         c (p/tc-variable "c")
         d (p/tc-variable "d")]
-    {(qname ns_ "bimap")  (p/prim3 (qname ns_ "bimap")
+    {;; BUG #438: explicit ["a" "b" "c" "d"] order (kernel's
+     ;; Pairs.bimapSig declares it that way, but auto-detect from body
+     ;; (a -> c) -> (b -> d) -> ... yields [a, c, b, d] which swaps
+     ;; arguments in inferred Function<A,B> casts at call sites.
+     (qname ns_ "bimap")  (p/prim3 (qname ns_ "bimap")
                                     (fn [f g p] (((pairs/hydra_lib_pairs_bimap f) g) p))
-                                    [] (fun a c) (fun b d) (p/tc-pair a b) (p/tc-pair c d))
+                                    ["a" "b" "c" "d"] (fun a c) (fun b d) (p/tc-pair a b) (p/tc-pair c d))
      (qname ns_ "first")  (p/prim1 (qname ns_ "first")  pairs/hydra_lib_pairs_first  [] (p/tc-pair a b) a)
      (qname ns_ "second") (p/prim1 (qname ns_ "second") pairs/hydra_lib_pairs_second [] (p/tc-pair a b) b)}))
 
