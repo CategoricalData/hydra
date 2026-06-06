@@ -15,6 +15,7 @@ from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 import hydra.dsl.variants as Variants
 import hydra.dsl.coders as Coders
+import hydra.dsl.util as Util
 
 
 # Namespaces we depend on. Hardcoded here to mirror the Haskell:
@@ -111,6 +112,16 @@ def _python_language_term():
                     var("typeVariants"),
                     var("typePredicate"),
                 ),
+                Sets.from_list(list_([
+                    Coders.language_feature_nested_polymorphic_let_bindings,
+                ])),
+                Coders.case_conventions(
+                    Util.case_convention_upper_snake, Util.case_convention_lower_snake, Util.case_convention_upper_snake,
+                    Util.case_convention_lower_snake, Util.case_convention_lower_snake, Util.case_convention_lower_snake,
+                    Util.case_convention_lower_snake, Util.case_convention_lower_snake, Util.case_convention_pascal,
+                    Util.case_convention_pascal,
+                ),
+                wrap("hydra.util.FileExtension", string("py")),
             ),
         ),
     )
