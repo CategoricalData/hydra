@@ -31,6 +31,7 @@ import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Json.Encode as EncodeModule
 import qualified Hydra.Sources.Json.Decode as JsonDecode
+import qualified Hydra.Sources.Json.Writer as JsonWriter
 
 
 ns :: ModuleName
@@ -40,7 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode", ModuleName "hydra.json.writer"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for JSON encoding and decoding"))}
   where
     definitions = [
@@ -59,7 +60,8 @@ allTests = define "allTests" $
       decimalRoundtripGroup,
       collectionRoundtripGroup,
       optionalRoundtripGroup,
-      recordRoundtripGroup]
+      recordRoundtripGroup,
+      wireShapeGroup]
 
 -- Helper for creating JSON round-trip test cases (universal)
 -- Encodes term to JSON, decodes back, shows both and compares.
@@ -75,6 +77,18 @@ roundtripTest testName typ term = universalCase testName
     (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
   (ShowCore.term @@ term)
 
+-- Helper that pins the encoder's exact wire shape: encodes a term to JSON, serializes
+-- the resulting Value to a JSON string, and compares against the literal expected text.
+-- Unlike roundtripTest (which compares decoded terms), this catches encoding asymmetries
+-- such as a small integer being quoted as a string.
+wireShapeTest :: String -> TypedTerm Type -> TypedTerm Term -> String -> TypedTerm TestCaseWithMetadata
+wireShapeTest testName typ term expectedJson = universalCase testName
+  (Eithers.either_
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
+    (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+  (Phantoms.string expectedJson)
+
 ----------------------------------------
 -- Literal types
 ----------------------------------------
@@ -85,17 +99,17 @@ literalRoundtripGroup = subgroup "literal types" [
     roundtripTest "boolean true" T.boolean (boolean True),
     roundtripTest "boolean false" T.boolean (boolean False),
 
-    -- Integers (native JSON numbers - fit within JSON precision)
+    -- Integers (native JSON numbers - fit within JSON's 2^53-1 safe-integer range)
     roundtripTest "int8 positive" T.int8 (int8 42),
     roundtripTest "int8 negative" T.int8 (int8 (-17)),
     roundtripTest "int16" T.int16 (int16 1000),
     roundtripTest "int32" T.int32 (int32 100000),
     roundtripTest "uint8" T.uint8 (uint8 200),
     roundtripTest "uint16" T.uint16 (uint16 50000),
-
-    -- Larger integers (within JSON safe integer range ~2^53)
-    roundtripTest "int64" T.int64 (int64 1000000000000),
     roundtripTest "uint32" T.uint32 (uint32 4000000000),
+
+    -- Large integers (may exceed 2^53-1; encoded as JSON strings to preserve precision)
+    roundtripTest "int64" T.int64 (int64 1000000000000),
 
     -- Floats
     roundtripTest "float32" T.float32 (float32 1.5),
@@ -235,3 +249,28 @@ recordRoundtripGroup = subgroup "record types" [
       (record (name "test") [
         "name">: string "test",
         "value">: optional (just $ optional (just $ int32 42))])]
+
+----------------------------------------
+-- Wire shape (encoder output)
+----------------------------------------
+
+-- | Pins the exact JSON the encoder emits for each integer precision class.
+-- Small integers (including uint32, whose maximum 2^32-1 is well below JS's 2^53-1
+-- safe-integer boundary) are emitted as JSON numbers; large integers that may exceed
+-- 2^53-1 (int64, uint64, bigint) are emitted as quoted strings to preserve precision.
+-- Numeric literals are chosen to avoid the writer's shorter-form scientific notation
+-- (e.g. 4000000000 would serialize as "4.0e9"), so the unquoted-number shape is explicit.
+wireShapeGroup :: TypedTerm TestGroup
+wireShapeGroup = subgroup "wire shape" [
+    -- Small integers: JSON numbers (unquoted)
+    wireShapeTest "int8" T.int8 (int8 42) "42",
+    wireShapeTest "int16" T.int16 (int16 1000) "1000",
+    wireShapeTest "int32" T.int32 (int32 100003) "100003",
+    wireShapeTest "uint8" T.uint8 (uint8 200) "200",
+    wireShapeTest "uint16" T.uint16 (uint16 50003) "50003",
+    wireShapeTest "uint32" T.uint32 (uint32 4000000001) "4000000001",
+
+    -- Large integers: quoted strings
+    wireShapeTest "int64" T.int64 (int64 1000000000007) "\"1000000000007\"",
+    wireShapeTest "uint64" T.uint64 (uint64 1000000000007) "\"1000000000007\"",
+    wireShapeTest "bigint" T.bigint (bigint 1000000000007) "\"1000000000007\""]

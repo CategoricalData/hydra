@@ -209,9 +209,6 @@ public class Bootstrap {
             case "python":
                 Generation.writePython(outMain + "/python", allMainMods, modsToGenerate);
                 break;
-            case "scala":
-                Generation.writeScala(outMain + "/scala", allMainMods, modsToGenerate);
-                break;
             case "typescript":
                 Generation.writeTypeScript(outMain + "/typescript", allMainMods, modsToGenerate);
                 break;
@@ -236,7 +233,6 @@ public class Bootstrap {
 
         Map<String, String> extMap = new java.util.HashMap<>();
         extMap.put("haskell", ".hs"); extMap.put("java", ".java"); extMap.put("python", ".py");
-        extMap.put("scala", ".scala");
         extMap.put("typescript", ".ts");
         extMap.put("clojure", ".clj"); extMap.put("scheme", ".scm");
         extMap.put("common-lisp", ".lisp"); extMap.put("emacs-lisp", ".el");
@@ -313,9 +309,6 @@ public class Bootstrap {
                         break;
                     case "python":
                         Generation.writePython(outTest + "/python", allUniverse, testMods);
-                        break;
-                    case "scala":
-                        Generation.writeScala(outTest + "/scala", allUniverse, testMods);
                         break;
                     case "typescript":
                         Generation.writeTypeScript(outTest + "/typescript", allUniverse, testMods);

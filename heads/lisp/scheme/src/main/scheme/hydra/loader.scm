@@ -1032,7 +1032,6 @@
            "show/error/core.scm"
            "show/errors.scm"
            "show/error/packaging.scm"
-           "validation.scm"
            "validate/core.scm"
            "validate/packaging.scm"
            "encode/core.scm"

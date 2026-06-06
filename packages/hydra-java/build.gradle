@@ -113,9 +113,10 @@ tasks.register('printHeadsExtrasRuntimeClasspath') {
 }
 
 // hydra/scala/** and hydra/dsl/scala/** used to be excluded here because the
-// Scala-coder-in-Java generator had warts that produced source javac rejected.
-// The wart is fixed — both packages now compile cleanly — so the excludes were
-// removed (#421). This mirrors the earlier hydra/lisp/Coder.java cleanup (#409).
+// Scala coder's generated Java didn't type-check standalone (and hydra/lisp/Coder.java
+// as a generator wart). The wart is fixed — both packages now compile cleanly, and
+// Generation.java#writeScala dispatches Java->Scala via hydra.scala.Coder — so the
+// excludes were removed. For #409 / #421.
 compileJava {
     options.fork = true
     options.forkOptions.memoryMaximumSize = '6g'

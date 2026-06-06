@@ -65,8 +65,8 @@ echo "hand-written runtime content" > "$OUT_DIR/hydra/dsl/Runtime.txt"
 # Minimal but valid input digest (per Hydra.Digest serializePerPackageDigest).
 cat > "$INPUT_DIGEST" <<'EOF'
 {
-  "formatVersion": 1,
-  "version": 1,
+  "digestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "selfHash": "deadbeef",
   "hashes": {
     "hydra.lib.defaults.lists": "aaaa1111"

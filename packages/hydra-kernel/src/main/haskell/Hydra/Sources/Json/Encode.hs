@@ -126,8 +126,9 @@ encodeFloat = define "encodeFloat" $
 -- | Check whether a float's string form is an IEEE value that the JSON number grammar or
 -- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
 -- | Encode an integer value to JSON
--- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
--- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
+-- Small integers (int8, int16, int32, uint8, uint16, uint32) use native JSON numbers; every
+-- value fits within JavaScript's 2^53-1 safe-integer range.
+-- Large integers (int64, uint64, bigint) use strings to preserve precision beyond 2^53-1.
 encodeInteger :: TypedTermDefinition (IntegerValue -> Either String Value)
 encodeInteger = define "encodeInteger" $
   doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
@@ -135,14 +136,14 @@ encodeInteger = define "encodeInteger" $
     -- Large integers: use strings to preserve precision
     _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
     _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
-    _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
     _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
     -- Small integers: use native JSON numbers (convert to decimal for JSON)
     _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int8ToBigint $ var "i",
     _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i",
     _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i",
     _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "i",
-    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i"]
+    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i",
+    _IntegerValue_uint32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint32ToBigint $ var "i"]
 -- | Encode a literal value to JSON
 encodeLiteral :: TypedTermDefinition (Literal -> Either String Value)
 encodeLiteral = define "encodeLiteral" $
@@ -169,9 +170,6 @@ requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
          Logic.or (Equality.equal (var "s") (string "-Infinity"))
                   (Equality.equal (var "s") (string "-0.0"))
 
--- | Encode an integer value to JSON
--- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
--- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
 -- | Encode a Term to a JSON Value, given a type and type lookup table.
 -- Returns Left with an error message for unsupported term constructs.
 -- The type is used to determine idiomatic encoding for optional (Maybe) fields:

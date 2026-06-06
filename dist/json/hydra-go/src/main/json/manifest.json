@@ -2,5 +2,6 @@
   "defaultLibModules": [],
   "dslModules": ["hydra.dsl.go.syntax"],
   "mainModules": ["hydra.go.language", "hydra.go.syntax"],
+  "manifestFormatVersion": 1,
   "package": "hydra-go",
   "testModules": []}

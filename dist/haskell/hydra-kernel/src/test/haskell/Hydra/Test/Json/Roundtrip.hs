@@ -13,6 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Decode as Decode
 import qualified Hydra.Json.Encode as Encode
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Packaging as Packaging
@@ -102,17 +103,17 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "int64",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 1000000000000))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 1000000000000))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "uint32",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 4000000000))))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 4000000000))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "int64",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 1000000000000))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 1000000000000))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -554,6 +555,74 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "value"),
                       Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))}]})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "wire shape",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "int8",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 42))))),
+                Testing.universalTestCaseExpected = (\_ -> "42")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "int16",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 1000))))),
+                Testing.universalTestCaseExpected = (\_ -> "1000")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "int32",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100003))))),
+                Testing.universalTestCaseExpected = (\_ -> "100003")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "uint8",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 200))))),
+                Testing.universalTestCaseExpected = (\_ -> "200")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "uint16",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 50003))))),
+                Testing.universalTestCaseExpected = (\_ -> "50003")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "uint32",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 4000000001))))),
+                Testing.universalTestCaseExpected = (\_ -> "4000000001")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "int64",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 1000000000007))))),
+                Testing.universalTestCaseExpected = (\_ -> "\"1000000000007\"")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "uint64",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1000000000007))))),
+                Testing.universalTestCaseExpected = (\_ -> "\"1000000000007\"")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "bigint",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 1000000000007))))),
+                Testing.universalTestCaseExpected = (\_ -> "\"1000000000007\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

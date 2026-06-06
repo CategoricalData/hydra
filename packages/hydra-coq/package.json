@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-coq",
   "description": "Coq support for Hydra",
   "sourceLanguage": "haskell",

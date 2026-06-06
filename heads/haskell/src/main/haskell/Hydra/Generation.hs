@@ -1339,6 +1339,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     dslMods <- generateDslModules mainModules kernelTypesModules
     let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
     let jsonVal = Json.ValueObject $ M.fromList [
+            ("manifestFormatVersion", Json.ValueNumber 1),
             ("dslModules", namespacesJson nonEmptyDsls),
             ("defaultLibModules", namespacesJson DefaultAll.defaultLibModules),
             ("kernelModules", namespacesJson kernelModules),
@@ -1391,6 +1392,7 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
           testForPkg   = M.findWithDefault [] pkg testByPkg
           defaultForPkg   = M.findWithDefault [] pkg defaultLibSet
           jsonVal = Json.ValueObject $ M.fromList [
+              ("manifestFormatVersion", Json.ValueNumber 1),
               ("package",        Json.ValueString pkg),
               ("dslModules",     namespacesJson dslForPkg),
               ("defaultLibModules", namespacesJson defaultForPkg),

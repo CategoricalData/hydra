@@ -806,7 +806,7 @@
   "Convert a TypeScheme back to a Type by wrapping forall binders around the body."
   [ts]
   (let [vars (:variables ts)
-        body (:body ts)]
+        body (:type ts)]
     (reduce (fn [t v] (list :forall {:parameter v :body t}))
             body
             (reverse vars))))

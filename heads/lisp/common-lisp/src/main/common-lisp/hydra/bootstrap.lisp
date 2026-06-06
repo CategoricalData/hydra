@@ -7,7 +7,7 @@
 ;;;   --target <lang>       Target language (haskell|java|python|clojure)
 ;;;   --json-dir <path>     Path to kernel JSON modules
 ;;;   --output <dir>        Output base directory (default: /tmp/hydra-bootstrapping-demo)
-;;;   --kernel-only         Only generate kernel modules (those listed in the kernel JSON manifest)
+;;;   --kernel-only         Only generate kernel modules
 ;;;   --include-tests       Also generate test modules
 (in-package :cl-user)
 
@@ -194,7 +194,7 @@
                                   (code (funcall 'hydra_serialization_print_expr
                                           (funcall 'hydra_serialization_parenthesize
                                             (funcall pte program))))
-                                  (ns-val (let ((ns (cdr (assoc :name mod))))
+                                  (ns-val (let ((ns (cdr (assoc :namespace mod))))
                                             (if (stringp ns) ns (cdr (assoc :value ns)))))
                                   (case-conv (if (string= target "clojure")
                                                  (list :camel nil)
@@ -280,7 +280,6 @@
     (let* ((main-ns (coerce (read-manifest-field *json-dir* "mainModules") 'list))
            (default-ns (coerce (read-manifest-field *json-dir* "defaultLibModules") 'list))
            (all-ns (append main-ns default-ns))
-           (kernel-ns-set all-ns)
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (reduce #'+ (mapcar (lambda (m)
                                                  (length (cdr (assoc :definitions m))))
@@ -288,20 +287,15 @@
       (format t "  Loaded ~A modules (~A bindings).~%" (length all-mods) total-bindings)
       (force-output)
 
-      ;; Filter if needed.
-      ;; kernel-only keeps modules whose namespace is in the kernel manifest
-      ;; (mainModules ∪ defaultLibModules). When the source dir is already
-      ;; hydra-kernel/, this is an identity filter; it becomes useful when
-      ;; called against a mixed JSON source.
-      (let* ((ns-str-of (lambda (m)
-                          (let ((ns (cdr (assoc :name m))))
-                            (if (stringp ns) ns (cdr (assoc :value ns))))))
-             (mods-to-generate
+      ;; Filter if needed
+      (let* ((mods-to-generate
                (if *kernel-only*
-                   (remove-if-not (lambda (m)
-                                    (member (funcall ns-str-of m) kernel-ns-set
-                                            :test #'string=))
-                                  all-mods)
+                   (remove-if (lambda (m)
+                                (let ((ns (cdr (assoc :namespace m))))
+                                  (let ((ns-str (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                    (or (search "hydra." ns-str)
+                                        (search "hydra.json.yaml." ns-str)))))
+                              all-mods)
                    all-mods))
              (out-main (format nil "~A/common-lisp-to-~A/src/main/~A"
                                *output-base* *target* subdir)))

@@ -461,19 +461,13 @@ encodeProjectionElim = def "encodeProjectionElim" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
         Maybes.cases (var "marg")
-          -- Unapplied: (lambda (__rec) (record-type-field __rec))
-          -- The eta-wrapper param must not collide with names commonly bound
-          -- in kernel code (e.g., `v` in sorting's strong_connect). Under EL
-          -- byte-compilation, this eta-wrapper at deep closure nesting
-          -- shadowed kernel `v` and the byte-compiler emitted a free `v`
-          -- reference that triggered `(void-variable v)` at run time across
-          -- ~100 inference tests. See issue #428.
-          (right (lispLambdaExpr @@ list [string "__rec"] @@
+          -- Unapplied: (lambda (v) (record-type-field v))
+          (right (lispLambdaExpr @@ list [string "v"] @@
             (inject L._Expression L._Expression_fieldAccess $
               record L._FieldAccess [
                 L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
                 L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
-                L._FieldAccess_target>>: lispVar @@ string "__rec"])))
+                L._FieldAccess_target>>: lispVar @@ string "v"])))
           (lambda "arg" $
             "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
               right (inject L._Expression L._Expression_fieldAccess $
@@ -829,9 +823,8 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
         Maybes.cases (var "marg")
-          -- Unapplied: identity function. Param name must not collide with
-          -- kernel-bound names like `v` (see #428 and encodeProjectionElim).
-          (right (lispLambdaExpr @@ list [string "__rec"] @@ (lispVar @@ string "__rec")))
+          -- Unapplied: identity function
+          (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
           (lambda "arg" $
             encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 

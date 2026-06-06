@@ -900,7 +900,8 @@ public class Generation {
                 hydra.errors.Error_ err =
                     ((Either.Left<hydra.errors.Error_, List<Module>>) result).value;
                 throw new RuntimeException(
-                    "inferAndWriteByPackage: inference failed for " + pkg + ": " + err);
+                    "inferAndWriteByPackage: inference failed for " + pkg + ": "
+                        + hydra.show.Errors.error(err));
             }
             List<Module> toWrite = new ArrayList<>();
             for (Module m : inferred) {
