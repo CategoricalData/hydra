@@ -3,6 +3,7 @@
 
 module Hydra.Java.Testing where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
