@@ -42,7 +42,8 @@
                                         "function": {
                                           "application": {
                                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                     "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
@@ -63,7 +64,7 @@
                                                 "function": {
                                                   "application": {
                                                     "argument": {"literal": {"string": ""}},
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
                                             "function": {"variable": "hydra.formatting.capitalize"}}},
                                         "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
@@ -723,7 +724,8 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"literal": {"integer": {"int32": 1}}},
@@ -747,7 +749,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"literal": {"string": ""}},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
                                                         "function": {"variable": "hydra.formatting.capitalize"}}},
                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},

@@ -3,14 +3,18 @@
 
 module Hydra.Decode.Pg.Model where
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Pg.Model as Model
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.pg.model.AdjacentEdge
@@ -39,10 +43,10 @@ direction cx raw =
                       (Core.Name "in", (\input -> Eithers.map (\t -> Model.DirectionIn) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "both", (\input -> Eithers.map (\t -> Model.DirectionBoth) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "undirected", (\input -> Eithers.map (\t -> Model.DirectionUndirected) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Edge
 edge :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Edge t0)
@@ -92,10 +96,10 @@ element v cx raw =
                     Maps.fromList [
                       (Core.Name "vertex", (\input -> Eithers.map (\t -> Model.ElementVertex t) (vertex v cx input))),
                       (Core.Name "edge", (\input -> Eithers.map (\t -> Model.ElementEdge t) (edge v cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.ElementKind
 elementKind :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.ElementKind
@@ -109,10 +113,10 @@ elementKind cx raw =
                     Maps.fromList [
                       (Core.Name "vertex", (\input -> Eithers.map (\t -> Model.ElementKindVertex) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "edge", (\input -> Eithers.map (\t -> Model.ElementKindEdge) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.ElementTree
 elementTree :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementTree t0)
@@ -136,10 +140,10 @@ elementType t cx raw =
                     Maps.fromList [
                       (Core.Name "vertex", (\input -> Eithers.map (\t2 -> Model.ElementTypeVertex t2) (vertexType t cx input))),
                       (Core.Name "edge", (\input -> Eithers.map (\t2 -> Model.ElementTypeEdge t2) (edgeType t cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.ElementTypeTree
 elementTypeTree :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementTypeTree t0)
@@ -183,10 +187,10 @@ label cx raw =
                     Maps.fromList [
                       (Core.Name "vertex", (\input -> Eithers.map (\t -> Model.LabelVertex t) (vertexLabel cx input))),
                       (Core.Name "edge", (\input -> Eithers.map (\t -> Model.LabelEdge t) (edgeLabel cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.LazyGraph
 lazyGraph :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.LazyGraph t0)

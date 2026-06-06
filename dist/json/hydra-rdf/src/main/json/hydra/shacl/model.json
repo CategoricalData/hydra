@@ -13,7 +13,7 @@
               "body": {
                 "record": [
                   {"name": "isClosed", "type": {"literal": {"boolean": {}}}},
-                  {"name": "ignoredProperties", "type": {"maybe": {"set": {"variable": "hydra.rdf.syntax.Property"}}}}]}}},
+                  {"name": "ignoredProperties", "type": {"optional": {"set": {"variable": "hydra.rdf.syntax.Property"}}}}]}}},
           "variables": []},
         "name": "hydra.shacl.model.Closed"}},
     {
@@ -295,7 +295,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]},
-                        "body": {"maybe": {"literal": {"boolean": {}}}}}}},
+                        "body": {"optional": {"literal": {"boolean": {}}}}}}},
                   {
                     "name": "message",
                     "type": {
@@ -433,7 +433,7 @@
               "body": {
                 "record": [
                   {"name": "regex", "type": {"literal": {"string": {}}}},
-                  {"name": "flags", "type": {"maybe": {"literal": {"string": {}}}}}]}}},
+                  {"name": "flags", "type": {"optional": {"literal": {"string": {}}}}}]}}},
           "variables": []},
         "name": "hydra.shacl.model.Pattern"}},
     {
@@ -466,7 +466,7 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rdf.syntax.Node"}}}}},
+                        "body": {"optional": {"variable": "hydra.rdf.syntax.Node"}}}}},
                   {
                     "name": "description",
                     "type": {
@@ -487,7 +487,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]},
-                        "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}}},
+                        "body": {"optional": {"literal": {"integer": {"bigint": {}}}}}}}},
                   {"name": "path", "type": {"variable": "hydra.rdf.syntax.Iri"}}]}}},
           "variables": []},
         "name": "hydra.shacl.model.PropertyShape"}},
@@ -589,7 +589,7 @@
                       "application": {"argument": {"variable": "hydra.shacl.model.Shape"}, "function": {"variable": "hydra.shacl.model.Reference"}}}},
                   {"name": "qualifiedMaxCount", "type": {"literal": {"integer": {"bigint": {}}}}},
                   {"name": "qualifiedMinCount", "type": {"literal": {"integer": {"bigint": {}}}}},
-                  {"name": "qualifiedValueShapesDisjoint", "type": {"maybe": {"literal": {"boolean": {}}}}}]}}},
+                  {"name": "qualifiedValueShapesDisjoint", "type": {"optional": {"literal": {"boolean": {}}}}}]}}},
           "variables": []},
         "name": "hydra.shacl.model.QualifiedValueShape"}},
     {

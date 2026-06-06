@@ -14,7 +14,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -72,7 +72,7 @@ dropWhile cx g predTerm listTerm =
 elem :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 elem cx g x listTerm =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.isJust")),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.isGiven")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
@@ -162,7 +162,7 @@ group cx g listTerm =
                 Core.lambdaBody = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")),
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -226,7 +226,7 @@ intercalate cx g sep listsTerm =
 -- | Interpreter-friendly intersperse for List terms.
 intersperse :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 intersperse cx g sep listTerm =
-    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermList (Maybes.cases (Lists.uncons elements) [] (\p -> Lists.cons (Pairs.first p) (Lists.concat (Lists.map (\el -> [
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermList (Optionals.cases (Lists.uncons elements) [] (\p -> Lists.cons (Pairs.first p) (Lists.concat (Lists.map (\el -> [
       sep,
       el]) (Pairs.second p)))))))
 -- | Interpreter-friendly map for List terms.
@@ -238,7 +238,7 @@ map cx g funTerm listTerm =
 -- | Interpreter-friendly maybeHead for List terms.
 maybeHead :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 maybeHead cx g listTerm =
-    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermMaybe (Maybes.cases (Lists.uncons elements) Nothing (\p -> Just (Pairs.first p)))))
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermOptional (Optionals.cases (Lists.uncons elements) Nothing (\p -> Just (Pairs.first p)))))
 -- | Interpreter-friendly nub for List terms.
 nub :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 nub cx g listTerm =
@@ -443,7 +443,7 @@ span cx g predTerm listTerm =
 -- | Interpreter-friendly uncons for List terms.
 uncons :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 uncons cx g listTerm =
-    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermMaybe (Maybes.cases (Lists.maybeAt 0 elements) Nothing (\h -> Just (Core.TermPair (h, (Core.TermList (Lists.drop 1 elements))))))))
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermOptional (Optionals.cases (Lists.maybeAt 0 elements) Nothing (\h -> Just (Core.TermPair (h, (Core.TermList (Lists.drop 1 elements))))))))
 -- | Interpreter-friendly zipWith for List terms.
 zipWith :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 zipWith cx g funTerm listTerm1 listTerm2 =

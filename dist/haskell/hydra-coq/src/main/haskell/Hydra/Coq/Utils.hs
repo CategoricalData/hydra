@@ -2,23 +2,43 @@
 -- | Pure helpers for the Coq code generator
 
 module Hydra.Coq.Utils where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Coq.Language as Language
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -63,21 +83,21 @@ collectFreeTypeVars tm =
     case tm of
       Core.TermAnnotated v0 -> collectFreeTypeVars (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Sets.union (collectFreeTypeVars (Core.applicationFunction v0)) (collectFreeTypeVars (Core.applicationArgument v0))
-      Core.TermCases v0 -> Sets.union (Maybes.maybe Sets.empty (\d -> collectFreeTypeVars d) (Core.caseStatementDefault v0)) (Sets.unions (Lists.map (\f -> collectFreeTypeVars (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0)))
+      Core.TermCases v0 -> Sets.union (Optionals.cases (Core.caseStatementDefault v0) Sets.empty (\d -> collectFreeTypeVars d)) (Sets.unions (Lists.map (\f -> collectFreeTypeVars (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0)))
       Core.TermEither v0 -> Eithers.either (\l -> collectFreeTypeVars l) (\r -> collectFreeTypeVars r) v0
       Core.TermInject v0 -> collectFreeTypeVars (Core.fieldTerm (Core.injectionField v0))
       Core.TermLambda v0 ->
         let paramName = Core.unName (Core.lambdaParameter v0)
-            domVars = Maybes.maybe Sets.empty (\dty -> collectFreeTypeVarsInType dty) (Core.lambdaDomain v0)
+            domVars = Optionals.cases (Core.lambdaDomain v0) Sets.empty (\dty -> collectFreeTypeVarsInType dty)
             bodyVars = collectFreeTypeVars (Core.lambdaBody v0)
             allVars = Sets.union domVars bodyVars
         in (Logic.ifElse (isTypeVarLike paramName) (Sets.delete paramName allVars) allVars)
       Core.TermLet v0 ->
         let bindVars =
-                Sets.unions (Lists.map (\b -> Sets.union (collectFreeTypeVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\sch -> collectFreeTypeVarsInTypeScheme sch) (Core.bindingTypeScheme b))) (Core.letBindings v0))
+                Sets.unions (Lists.map (\b -> Sets.union (collectFreeTypeVars (Core.bindingTerm b)) (Optionals.cases (Core.bindingTypeScheme b) Sets.empty (\sch -> collectFreeTypeVarsInTypeScheme sch))) (Core.letBindings v0))
         in (Sets.union bindVars (collectFreeTypeVars (Core.letBody v0)))
       Core.TermList v0 -> Sets.unions (Lists.map (\el -> collectFreeTypeVars el) v0)
-      Core.TermMaybe v0 -> Maybes.maybe Sets.empty (\el -> collectFreeTypeVars el) v0
+      Core.TermOptional v0 -> Optionals.cases v0 Sets.empty (\el -> collectFreeTypeVars el)
       Core.TermPair v0 -> Sets.union (collectFreeTypeVars (Pairs.first v0)) (collectFreeTypeVars (Pairs.second v0))
       Core.TermRecord v0 -> Sets.unions (Lists.map (\f -> collectFreeTypeVars (Core.fieldTerm f)) (Core.recordFields v0))
       Core.TermSet v0 -> Sets.unions (Lists.map (\el -> collectFreeTypeVars el) (Sets.toList v0))
@@ -95,7 +115,7 @@ collectFreeTypeVarsInType ty =
       Core.TypeFunction v0 -> Sets.union (collectFreeTypeVarsInType (Core.functionTypeDomain v0)) (collectFreeTypeVarsInType (Core.functionTypeCodomain v0))
       Core.TypeList v0 -> collectFreeTypeVarsInType v0
       Core.TypeMap v0 -> Sets.union (collectFreeTypeVarsInType (Core.mapTypeKeys v0)) (collectFreeTypeVarsInType (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> collectFreeTypeVarsInType v0
+      Core.TypeOptional v0 -> collectFreeTypeVarsInType v0
       Core.TypePair v0 -> Sets.union (collectFreeTypeVarsInType (Core.pairTypeFirst v0)) (collectFreeTypeVarsInType (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Sets.unions (Lists.map (\f -> collectFreeTypeVarsInType (Core.fieldTypeType f)) v0)
       Core.TypeSet v0 -> collectFreeTypeVarsInType v0
@@ -126,13 +146,13 @@ collectQualifiedNamesInTerm tm =
     case tm of
       Core.TermAnnotated v0 -> collectQualifiedNamesInTerm (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Sets.union (collectQualifiedNamesInTerm (Core.applicationFunction v0)) (collectQualifiedNamesInTerm (Core.applicationArgument v0))
-      Core.TermCases v0 -> Sets.union (qualifiedFromName (Core.caseStatementTypeName v0)) (Sets.union (Sets.unions (Lists.map (\f -> collectQualifiedNamesInTerm (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Maybes.maybe Sets.empty (\d -> collectQualifiedNamesInTerm d) (Core.caseStatementDefault v0)))
+      Core.TermCases v0 -> Sets.union (qualifiedFromName (Core.caseStatementTypeName v0)) (Sets.union (Sets.unions (Lists.map (\f -> collectQualifiedNamesInTerm (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Optionals.cases (Core.caseStatementDefault v0) Sets.empty (\d -> collectQualifiedNamesInTerm d)))
       Core.TermEither v0 -> Eithers.either (\l -> collectQualifiedNamesInTerm l) (\r -> collectQualifiedNamesInTerm r) v0
       Core.TermInject v0 -> Sets.union (qualifiedFromName (Core.injectionTypeName v0)) (collectQualifiedNamesInTerm (Core.fieldTerm (Core.injectionField v0)))
-      Core.TermLambda v0 -> Sets.union (Maybes.maybe Sets.empty (\domTy -> collectQualifiedNamesInType domTy) (Core.lambdaDomain v0)) (collectQualifiedNamesInTerm (Core.lambdaBody v0))
+      Core.TermLambda v0 -> Sets.union (Optionals.cases (Core.lambdaDomain v0) Sets.empty (\domTy -> collectQualifiedNamesInType domTy)) (collectQualifiedNamesInTerm (Core.lambdaBody v0))
       Core.TermLet v0 -> Sets.union (Sets.unions (Lists.map (\b -> collectQualifiedNamesInTerm (Core.bindingTerm b)) (Core.letBindings v0))) (collectQualifiedNamesInTerm (Core.letBody v0))
       Core.TermList v0 -> Sets.unions (Lists.map (\el -> collectQualifiedNamesInTerm el) v0)
-      Core.TermMaybe v0 -> Maybes.maybe Sets.empty (\el -> collectQualifiedNamesInTerm el) v0
+      Core.TermOptional v0 -> Optionals.cases v0 Sets.empty (\el -> collectQualifiedNamesInTerm el)
       Core.TermPair v0 -> Sets.union (collectQualifiedNamesInTerm (Pairs.first v0)) (collectQualifiedNamesInTerm (Pairs.second v0))
       Core.TermRecord v0 -> Sets.union (qualifiedFromName (Core.recordTypeName v0)) (Sets.unions (Lists.map (\f -> collectQualifiedNamesInTerm (Core.fieldTerm f)) (Core.recordFields v0)))
       Core.TermTypeApplication v0 -> Sets.union (collectQualifiedNamesInTerm (Core.typeApplicationTermBody v0)) (collectQualifiedNamesInType (Core.typeApplicationTermType v0))
@@ -151,7 +171,7 @@ collectQualifiedNamesInType ty =
       Core.TypeFunction v0 -> Sets.union (collectQualifiedNamesInType (Core.functionTypeDomain v0)) (collectQualifiedNamesInType (Core.functionTypeCodomain v0))
       Core.TypeList v0 -> collectQualifiedNamesInType v0
       Core.TypeMap v0 -> Sets.union (collectQualifiedNamesInType (Core.mapTypeKeys v0)) (collectQualifiedNamesInType (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> collectQualifiedNamesInType v0
+      Core.TypeOptional v0 -> collectQualifiedNamesInType v0
       Core.TypePair v0 -> Sets.union (collectQualifiedNamesInType (Core.pairTypeFirst v0)) (collectQualifiedNamesInType (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Sets.unions (Lists.map (\f -> collectQualifiedNamesInType (Core.fieldTypeType f)) v0)
       Core.TypeSet v0 -> collectQualifiedNamesInType v0
@@ -178,7 +198,7 @@ collectSanitizedAccessors typeGroups =
             extracted = extractTypeParams ty
             bodyTy = Pairs.second extracted
         in case bodyTy of
-          Core.TypeRecord v0 -> Maybes.cat (Lists.map (\f -> Logic.ifElse (fieldCausesPositivityIssue groupNames (Core.fieldTypeType f)) (Just (Strings.cat [
+          Core.TypeRecord v0 -> Optionals.cat (Lists.map (\f -> Logic.ifElse (fieldCausesPositivityIssue groupNames (Core.fieldTypeType f)) (Just (Strings.cat [
             Formatting.decapitalize typeName,
             "_",
             (sanitize (localName (Core.unName (Core.fieldTypeName f))))])) Nothing) v0)
@@ -215,7 +235,7 @@ encodeMutualLetGroup grp body =
                     Core.bindingTerm = (stripHydraFix (Core.bindingName b) (Core.bindingTerm b)),
                     Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) grp
           mkPair =
-                  \ts -> Maybes.fromMaybe (Core.TermVariable (Core.Name "tt")) (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Core.TermPair (Pairs.first p, (mkPair (Pairs.second p))))) (Lists.uncons ts))
+                  \ts -> Optionals.fromOptional (Core.TermVariable (Core.Name "tt")) (Optionals.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Core.TermPair (Pairs.first p, (mkPair (Pairs.second p))))) (Lists.uncons ts))
           pairExpr = mkPair (Lists.map (\b -> Core.bindingTerm b) strippedBindings)
           fixBody = rebuildLets innerProjBindings pairExpr
           fixTerm =
@@ -239,16 +259,16 @@ eraseUnboundTypeVarDomains :: S.Set String -> Core.Term -> Core.Term
 eraseUnboundTypeVarDomains initialBound term0 =
 
       let eraseIfUnbound =
-              \bound -> \mdom -> Maybes.maybe Nothing (\ty -> Logic.ifElse (hasUnboundTypeVar bound ty) Nothing (Just ty)) mdom
+              \bound -> \mdom -> Optionals.cases mdom Nothing (\ty -> Logic.ifElse (hasUnboundTypeVar bound ty) Nothing (Just ty))
           f =
                   \recurse -> \bound -> \term -> case term of
                     Core.TermLambda v0 ->
                       let paramName = Core.unName (Core.lambdaParameter v0)
                           dom = Core.lambdaDomain v0
                           isTypeParam =
-                                  Maybes.maybe False (\d -> case d of
+                                  Optionals.cases dom False (\d -> case d of
                                     Core.TypeVariable v1 -> Equality.equal (Core.unName v1) "Type"
-                                    _ -> False) dom
+                                    _ -> False)
                           bound2 = Logic.ifElse (Logic.and isTypeParam (isTypeVarLike paramName)) (Sets.insert paramName bound) bound
                       in (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.lambdaParameter v0),
@@ -261,7 +281,7 @@ extractQualifiedNamespace :: String -> String
 extractQualifiedNamespace s =
 
       let parts = Strings.splitOn "." s
-      in (Logic.ifElse (Equality.gte (Lists.length parts) 2) (Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))) s)
+      in (Logic.ifElse (Equality.gte (Lists.length parts) 2) (Strings.intercalate "." (Optionals.fromOptional [] (Lists.maybeInit parts))) s)
 -- | Peel off leading forall binders, returning the list of parameter names and the inner body type
 extractTypeParams :: Core.Type -> ([String], Core.Type)
 extractTypeParams ty =
@@ -301,7 +321,7 @@ hasUnboundTypeVar bound ty =
       Core.TypeFunction v0 -> Logic.or (hasUnboundTypeVar bound (Core.functionTypeDomain v0)) (hasUnboundTypeVar bound (Core.functionTypeCodomain v0))
       Core.TypeList v0 -> hasUnboundTypeVar bound v0
       Core.TypeMap v0 -> Logic.or (hasUnboundTypeVar bound (Core.mapTypeKeys v0)) (hasUnboundTypeVar bound (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> hasUnboundTypeVar bound v0
+      Core.TypeOptional v0 -> hasUnboundTypeVar bound v0
       Core.TypePair v0 -> Logic.or (hasUnboundTypeVar bound (Core.pairTypeFirst v0)) (hasUnboundTypeVar bound (Core.pairTypeSecond v0))
       Core.TypeSet v0 -> hasUnboundTypeVar bound v0
       Core.TypeVariable v0 ->
@@ -320,7 +340,7 @@ isTypeVarLike :: String -> Bool
 isTypeVarLike s =
 
       let chars = Strings.toList s
-      in (Maybes.fromMaybe False (Maybes.map (\p ->
+      in (Optionals.fromOptional False (Optionals.map (\p ->
         let firstCh = Pairs.first p
             rest = Pairs.second p
         in (Logic.ifElse (Logic.not (Equality.equal firstCh 116)) False (Logic.and (Logic.not (Lists.null rest)) (Lists.foldl (\acc -> \c -> Logic.and acc (Logic.and (Equality.gte c 48) (Equality.lte c 57))) True rest)))) (Lists.uncons chars)))
@@ -329,14 +349,14 @@ localName :: String -> String
 localName s =
 
       let parts = Strings.splitOn "." s
-          raw = Maybes.fromMaybe s (Lists.maybeLast parts)
+          raw = Optionals.fromOptional s (Lists.maybeLast parts)
       in (sanitize raw)
 -- | Return the last dot-separated segment of a qualified Hydra name, unsanitized
 localNameRaw :: String -> String
 localNameRaw s =
 
       let parts = Strings.splitOn "." s
-      in (Maybes.fromMaybe s (Lists.maybeLast parts))
+      in (Optionals.fromOptional s (Lists.maybeLast parts))
 -- | Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace
 moduleDependencyNames :: Packaging.Module -> [String]
 moduleDependencyNames m =
@@ -363,7 +383,7 @@ normalizeInnerTypeLambdas term =
                   \recurse -> \polyNames -> \tm -> case tm of
                     Core.TermLet v0 ->
                       let newPoly =
-                              Sets.fromList (Maybes.cat (Lists.map (\b -> Logic.ifElse (isTypeLambdaTerm (Core.bindingTerm b)) (Just (Core.unName (Core.bindingName b))) Nothing) (Core.letBindings v0)))
+                              Sets.fromList (Optionals.cat (Lists.map (\b -> Logic.ifElse (isTypeLambdaTerm (Core.bindingTerm b)) (Just (Core.unName (Core.bindingName b))) Nothing) (Core.letBindings v0)))
                           polyNames2 = Sets.union polyNames newPoly
                       in (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map (\b -> Core.Binding {
@@ -407,7 +427,7 @@ qualifiedFromName n =
 
       let raw = Core.unName n
           parts = Strings.splitOn "." raw
-      in (Logic.ifElse (Logic.and (Equality.gte (Lists.length parts) 2) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead parts)) "hydra")) (Sets.singleton raw) Sets.empty)
+      in (Logic.ifElse (Logic.and (Equality.gte (Lists.length parts) 2) (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead parts)) "hydra")) (Sets.singleton raw) Sets.empty)
 -- | Build a chain of single-binding TermLet wrappers around the given body
 rebuildLets :: [Core.Binding] -> Core.Term -> Core.Term
 rebuildLets bindings body =
@@ -450,7 +470,7 @@ rewriteTermFields fm term0 =
                   let tname = Core.unName (Core.projectionTypeName v0)
                       rawFn = localNameRaw (Core.unName (Core.projectionFieldName v0))
                       key = (tname, rawFn)
-                      newFname = Maybes.fromMaybe (Core.projectionFieldName v0) (Maybes.map (\s -> Core.Name s) (Maps.lookup key fm))
+                      newFname = Optionals.fromOptional (Core.projectionFieldName v0) (Optionals.map (\s -> Core.Name s) (Maps.lookup key fm))
                   in (Core.TermProject (Core.Projection {
                     Core.projectionTypeName = (Core.projectionTypeName v0),
                     Core.projectionFieldName = newFname}))
@@ -485,7 +505,7 @@ sortTermDefsSCC defs =
       let localNames = Sets.fromList (Lists.map (\d -> Pairs.first d) defs)
           depsOf = \d -> Sets.toList (termRefs localNames (Pairs.second d))
           comps = Sorting.topologicalSortNodes (\d -> Pairs.first d) depsOf defs
-      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (Maybes.fromMaybe (False, grp) (Maybes.map (\d ->
+      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (Optionals.fromOptional (False, grp) (Optionals.map (\d ->
         let name = Pairs.first d
             deps = termRefs localNames (Pairs.second d)
         in (Sets.member name deps, grp)) (Lists.maybeHead grp)))) comps)
@@ -496,7 +516,7 @@ sortTypeDefsSCC defs =
       let localNames = Sets.fromList (Lists.map (\d -> Pairs.first d) defs)
           depsOf = \d -> Sets.toList (typeRefs localNames (Pairs.second d))
           comps = Sorting.topologicalSortNodes (\d -> Pairs.first d) depsOf defs
-      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (Maybes.fromMaybe (False, grp) (Maybes.map (\d ->
+      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (Optionals.fromOptional (False, grp) (Optionals.map (\d ->
         let name = Pairs.first d
             deps = typeRefs localNames (Pairs.second d)
         in (Sets.member name deps, grp)) (Lists.maybeHead grp)))) comps)
@@ -527,13 +547,13 @@ termRefs locals tm =
     case tm of
       Core.TermAnnotated v0 -> termRefs locals (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Sets.union (termRefs locals (Core.applicationFunction v0)) (termRefs locals (Core.applicationArgument v0))
-      Core.TermCases v0 -> Sets.union (Sets.unions (Lists.map (\f -> termRefs locals (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Maybes.maybe Sets.empty (\d -> termRefs locals d) (Core.caseStatementDefault v0))
+      Core.TermCases v0 -> Sets.union (Sets.unions (Lists.map (\f -> termRefs locals (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Optionals.cases (Core.caseStatementDefault v0) Sets.empty (\d -> termRefs locals d))
       Core.TermEither v0 -> Eithers.either (\l -> termRefs locals l) (\r -> termRefs locals r) v0
       Core.TermInject v0 -> termRefs locals (Core.fieldTerm (Core.injectionField v0))
       Core.TermLambda v0 -> termRefs locals (Core.lambdaBody v0)
       Core.TermLet v0 -> Sets.union (Sets.unions (Lists.map (\b -> termRefs locals (Core.bindingTerm b)) (Core.letBindings v0))) (termRefs locals (Core.letBody v0))
       Core.TermList v0 -> Sets.unions (Lists.map (\el -> termRefs locals el) v0)
-      Core.TermMaybe v0 -> Maybes.maybe Sets.empty (\el -> termRefs locals el) v0
+      Core.TermOptional v0 -> Optionals.cases v0 Sets.empty (\el -> termRefs locals el)
       Core.TermPair v0 -> Sets.union (termRefs locals (Pairs.first v0)) (termRefs locals (Pairs.second v0))
       Core.TermRecord v0 -> Sets.unions (Lists.map (\f -> termRefs locals (Core.fieldTerm f)) (Core.recordFields v0))
       Core.TermTypeApplication v0 -> termRefs locals (Core.typeApplicationTermBody v0)
@@ -554,7 +574,7 @@ typeContainsGroupRef groupNames ty =
       Core.TypeFunction v0 -> Logic.or (typeContainsGroupRef groupNames (Core.functionTypeDomain v0)) (typeContainsGroupRef groupNames (Core.functionTypeCodomain v0))
       Core.TypeList v0 -> typeContainsGroupRef groupNames v0
       Core.TypeMap v0 -> Logic.or (typeContainsGroupRef groupNames (Core.mapTypeKeys v0)) (typeContainsGroupRef groupNames (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> typeContainsGroupRef groupNames v0
+      Core.TypeOptional v0 -> typeContainsGroupRef groupNames v0
       Core.TypePair v0 -> Logic.or (typeContainsGroupRef groupNames (Core.pairTypeFirst v0)) (typeContainsGroupRef groupNames (Core.pairTypeSecond v0))
       Core.TypeSet v0 -> typeContainsGroupRef groupNames v0
       Core.TypeVariable v0 -> Sets.member (localName (Core.unName v0)) groupNames
@@ -571,7 +591,7 @@ typeRefs locals ty =
       Core.TypeFunction v0 -> Sets.union (typeRefs locals (Core.functionTypeDomain v0)) (typeRefs locals (Core.functionTypeCodomain v0))
       Core.TypeList v0 -> typeRefs locals v0
       Core.TypeMap v0 -> Sets.union (typeRefs locals (Core.mapTypeKeys v0)) (typeRefs locals (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> typeRefs locals v0
+      Core.TypeOptional v0 -> typeRefs locals v0
       Core.TypePair v0 -> Sets.union (typeRefs locals (Core.pairTypeFirst v0)) (typeRefs locals (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Sets.unions (Lists.map (\f -> typeRefs locals (Core.fieldTypeType f)) v0)
       Core.TypeSet v0 -> typeRefs locals v0
@@ -589,7 +609,7 @@ typeToTerm ty =
       Core.TypeList v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.list")),
         Core.applicationArgument = (typeToTerm v0)})
-      Core.TypeMaybe v0 -> Core.TermApplication (Core.Application {
+      Core.TypeOptional v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.option")),
         Core.applicationArgument = (typeToTerm v0)})
       Core.TypeSet v0 -> Core.TermApplication (Core.Application {

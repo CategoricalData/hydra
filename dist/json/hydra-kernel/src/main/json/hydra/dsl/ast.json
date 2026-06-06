@@ -239,7 +239,7 @@
                     "argument": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "indent"}}}},
         "name": "hydra.dsl.ast.blockStyle",
@@ -253,7 +253,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -337,7 +337,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -586,7 +586,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -606,7 +606,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.ast.BlockStyle"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},

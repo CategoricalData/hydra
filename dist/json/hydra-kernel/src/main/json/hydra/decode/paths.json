@@ -2388,7 +2388,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.paths.SubtermStep"}}},
@@ -4296,7 +4296,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.paths.SubtypeStep"}}},

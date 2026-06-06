@@ -453,7 +453,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "typeScheme"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -499,7 +499,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "default"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Term"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.core.Term"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -819,7 +819,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "domain"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Type"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.core.Type"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -1109,9 +1109,9 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "A map of keys to values")))]))}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "maybe"),
+              Core.fieldTypeName = (Core.Name "optional"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Term"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.core.Term"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "An optional value")))]))}))},
             Core.FieldType {
@@ -1237,7 +1237,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "A map type")))]))}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "maybe"),
+              Core.fieldTypeName = (Core.Name "optional"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
@@ -1371,7 +1371,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "constraints"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeMap (Core.MapType {
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
                   Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableConstraints"))}))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
@@ -2127,7 +2127,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "description"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2151,7 +2151,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "lifecycle"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.LifecycleInfo"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.LifecycleInfo"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2195,7 +2195,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "availableSince"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2203,7 +2203,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "deprecatedSince"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2227,7 +2227,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "metadata"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2263,7 +2263,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "package"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.PackageName"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.PackageName"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2293,7 +2293,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "metadata"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2359,7 +2359,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "metadata"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2391,7 +2391,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "defaultImplementation"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Term"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.core.Term"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2413,7 +2413,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "metadata"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2421,7 +2421,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "signature"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.typing.TermSignature"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.typing.TermSignature"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2449,7 +2449,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "metadata"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.EntityMetadata"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2529,7 +2529,7 @@ typesByName =
               Core.FieldType {
                 Core.fieldTypeName = (Core.Name "codomain"),
                 Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                  Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Type"))),
+                  Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.core.Type"))),
                   Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                     (
                       Core.TermVariable (Core.Name "description"),
@@ -2629,7 +2629,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "description"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2659,7 +2659,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "description"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2892,7 +2892,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "moduleName"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName"))),
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName"))),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "The optional module name")))]))}))},
             Core.FieldType {

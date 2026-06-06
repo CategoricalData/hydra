@@ -20,7 +20,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -50,7 +50,7 @@ dereferenceType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error (Maybe 
 dereferenceType cx graph name =
 
       let mel = Lexical.lookupBinding graph name
-      in (Maybes.cases mel (Right Nothing) (\el -> Eithers.map Maybes.pure (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+      in (Optionals.cases mel (Right Nothing) (\el -> Eithers.map Optionals.pure (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "type",
         Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el)))))
 -- | Test whether a given System F type is polymorphic (i.e., a forall type)
@@ -81,7 +81,7 @@ fieldTypes cx graph t =
         Core.TypeForall v0 -> fieldTypes cx graph (Core.forallTypeBody v0)
         Core.TypeRecord v0 -> Right (toMap v0)
         Core.TypeUnion v0 -> Right (toMap v0)
-        Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 (Graph.graphSchemaTypes graph)) (Eithers.bind (Lexical.requireBinding graph v0) (\el -> Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 (Graph.graphSchemaTypes graph)) (Eithers.bind (Lexical.requireBinding graph v0) (\el -> Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "type",
           Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeBody ts))
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
@@ -95,7 +95,7 @@ findFieldType cx fname fields =
           noMatch =
                   Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                     Errors.noMatchingFieldErrorFieldName = fname})))
-      in (Logic.ifElse (Lists.null matchingFields) noMatch (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Maybes.cases (Lists.maybeHead matchingFields) noMatch (\ft -> Right (Core.fieldTypeType ft))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleFields (Errors.MultipleFieldsError {
+      in (Logic.ifElse (Lists.null matchingFields) noMatch (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Optionals.cases (Lists.maybeHead matchingFields) noMatch (\ft -> Right (Core.fieldTypeType ft))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleFields (Errors.MultipleFieldsError {
         Errors.multipleFieldsErrorFieldName = fname}))))))
 -- | Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
 fullyStripAndNormalizeType :: Core.Type -> Core.Type
@@ -135,7 +135,7 @@ instantiateTypeScheme cx scheme =
           subst = Typing.TypeSubst (Maps.fromList (Lists.zip oldVars (Lists.map (\x -> Core.TypeVariable x) newVars)))
           nameSubst = Maps.fromList (Lists.zip oldVars newVars)
           renamedConstraints =
-                  Maybes.map (\oldConstraints -> Maps.fromList (Lists.map (\kv -> (Maybes.fromMaybe (Pairs.first kv) (Maps.lookup (Pairs.first kv) nameSubst), (Pairs.second kv))) (Maps.toList oldConstraints))) (Core.typeSchemeConstraints scheme)
+                  Optionals.map (\oldConstraints -> Maps.fromList (Lists.map (\kv -> (Optionals.fromOptional (Pairs.first kv) (Maps.lookup (Pairs.first kv) nameSubst), (Pairs.second kv))) (Maps.toList oldConstraints))) (Core.typeSchemeConstraints scheme)
       in (
         Core.TypeScheme {
           Core.typeSchemeVariables = newVars,
@@ -166,18 +166,18 @@ requireRowType cx label getter graph name =
                 Core.TypeAnnotated v0 -> rawType (Core.annotatedTypeBody v0)
                 Core.TypeForall v0 -> rawType (Core.forallTypeBody v0)
                 _ -> t
-      in (Eithers.bind (requireType cx graph name) (\t -> Maybes.cases (getter (rawType t)) (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+      in (Eithers.bind (requireType cx graph name) (\t -> Optionals.cases (getter (rawType t)) (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 label " type"),
         Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (ShowCore.type_ t)))})))) (\x -> Right x)))
 -- | Look up a schema type and instantiate it, threading InferenceContext
 requireSchemaType :: Typing.InferenceContext -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Typing.InferenceContext)
 requireSchemaType cx types tname =
-    Maybes.cases (Maps.lookup tname types) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+    Optionals.cases (Maps.lookup tname types) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = tname})))) (\ts -> Right (instantiateTypeScheme cx (Strip.deannotateTypeSchemeRecursive ts)))
 -- | Require a type by name
 requireType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error Core.Type
 requireType cx graph name =
-    Maybes.cases (Maps.lookup name (Graph.graphSchemaTypes graph)) (Maybes.cases (Maps.lookup name (Graph.graphBoundTypes graph)) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+    Optionals.cases (Maps.lookup name (Graph.graphSchemaTypes graph)) (Optionals.cases (Maps.lookup name (Graph.graphBoundTypes graph)) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = name})))) (\ts -> Right (Scoping.typeSchemeToFType ts))) (\ts -> Right (Scoping.typeSchemeToFType ts))
 -- | Require a field type from a union type
 requireUnionField :: t0 -> Graph.Graph -> Core.Name -> Core.Name -> Either Errors.Error Core.Type
@@ -188,7 +188,7 @@ requireUnionField cx graph tname fname =
                 let noMatchErr =
                         Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                           Errors.noMatchingFieldErrorFieldName = fname})))
-                in (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt) noMatchErr (\ft -> Right (Core.fieldTypeType ft)))
+                in (Optionals.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt) noMatchErr (\ft -> Right (Core.fieldTypeType ft)))
       in (Eithers.bind (requireUnionType cx graph tname) withRowType)
 -- | Require a name to resolve to a union type
 requireUnionType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error [Core.FieldType]
@@ -203,7 +203,7 @@ requireUnionType cx graph name =
 resolveType :: Graph.Graph -> Core.Type -> Maybe Core.Type
 resolveType graph typ =
     case (Strip.deannotateType typ) of
-      Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 (Graph.graphSchemaTypes graph)) (Maybes.map (\ts -> Scoping.typeSchemeToFType ts) (Maps.lookup v0 (Graph.graphBoundTypes graph))) (\ts -> Just (Scoping.typeSchemeToFType ts))
+      Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 (Graph.graphSchemaTypes graph)) (Optionals.map (\ts -> Scoping.typeSchemeToFType ts) (Maps.lookup v0 (Graph.graphBoundTypes graph))) (\ts -> Just (Scoping.typeSchemeToFType ts))
       _ -> Just typ
 -- | Convert a (System F -style) type to a type scheme
 typeToTypeScheme :: Core.Type -> Core.TypeScheme

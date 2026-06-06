@@ -25,7 +25,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -106,11 +106,11 @@ encodeCase cx g ftypes sn f =
       let fname = Core.caseAlternativeName f
           fterm = Core.caseAlternativeHandler f
           isUnit =
-                  Maybes.cases (Maps.lookup fname ftypes) (case (Strip.deannotateAndDetypeTerm fterm) of
+                  Optionals.cases (Maps.lookup fname ftypes) (case (Strip.deannotateAndDetypeTerm fterm) of
                     Core.TermLambda v0 ->
                       let lamParam = Core.lambdaParameter v0
                           lamBody = Core.lambdaBody v0
-                          domIsUnit = Maybes.cases (Core.lambdaDomain v0) False (\dom -> Equality.equal dom Core.TypeUnit)
+                          domIsUnit = Optionals.cases (Core.lambdaDomain v0) False (\dom -> Equality.equal dom Core.TypeUnit)
                           bodyIgnoresParam = Variables.isFreeVariableInTerm lamParam lamBody
                       in (Logic.or domIsUnit bodyIgnoresParam)
                     Core.TermRecord v0 -> Equality.equal (Lists.length (Core.recordFields v0)) 0
@@ -119,7 +119,7 @@ encodeCase cx g ftypes sn f =
                     Core.TypeUnit -> True
                     Core.TypeRecord v0 -> Equality.equal (Lists.length v0) 0
                     _ -> False)
-          shortTypeName = Maybes.fromMaybe "x" (Lists.maybeLast (Strings.splitOn "." (Maybes.cases sn "x" (\n -> Core.unName n))))
+          shortTypeName = Optionals.fromOptional "x" (Lists.maybeLast (Strings.splitOn "." (Optionals.cases sn "x" (\n -> Core.unName n))))
           lamParamSuffix =
                   case (Strip.deannotateAndDetypeTerm fterm) of
                     Core.TermLambda v0 ->
@@ -136,7 +136,7 @@ encodeCase cx g ftypes sn f =
                     lamParamSuffix])
           domainIsUnit =
                   case (Strip.deannotateAndDetypeTerm fterm) of
-                    Core.TermLambda v0 -> Maybes.cases (Core.lambdaDomain v0) True (\dom -> Equality.equal dom Core.TypeUnit)
+                    Core.TermLambda v0 -> Optionals.cases (Core.lambdaDomain v0) True (\dom -> Equality.equal dom Core.TypeUnit)
                     _ -> True
           patArgs = Logic.ifElse isUnit (Logic.ifElse domainIsUnit [] [
                 Syntax.PatWildcard]) [
@@ -202,19 +202,19 @@ encodeFunction cx g meta funTerm arg =
             body = Core.lambdaBody v0
             rawMdom = Core.lambdaDomain v0
             mdom =
-                    Maybes.bind rawMdom (\dom ->
+                    Optionals.bind rawMdom (\dom ->
                       let freeVars = Variables.freeVariablesInType dom
                           unqualifiedFreeVars =
                                   Sets.fromList (Lists.filter (\n -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName n)))) (Sets.toList freeVars))
                           unresolvedVars = Sets.difference unqualifiedFreeVars (Graph.graphTypeVariables g)
                       in (Logic.ifElse (Sets.null unresolvedVars) (Just dom) Nothing))
-        in (Eithers.bind (encodeTerm cx g body) (\sbody -> Eithers.bind (Maybes.cases mdom (findSdom cx g meta) (\dom -> Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom)))) (\sdom -> Right (Utils.slambda v sbody sdom))))
-      Core.TermUnwrap _ -> Maybes.cases arg (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda "x" (Utils.sname "x") sdom))) (\a -> encodeTerm cx g a)
+        in (Eithers.bind (encodeTerm cx g body) (\sbody -> Eithers.bind (Optionals.cases mdom (findSdom cx g meta) (\dom -> Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom)))) (\sdom -> Right (Utils.slambda v sbody sdom))))
+      Core.TermUnwrap _ -> Optionals.cases arg (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda "x" (Utils.sname "x") sdom))) (\a -> encodeTerm cx g a)
       Core.TermProject v0 ->
         let fname = Utils.scalaEscapeName (Core.unName (Core.projectionFieldName v0))
             typeName = Core.projectionTypeName v0
             pv = "x"
-        in (Maybes.cases arg (Eithers.bind (Eithers.either (\_ -> Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\msdom -> Maybes.cases msdom (Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\sdom -> Right (Just sdom))) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
+        in (Optionals.cases arg (Eithers.bind (Eithers.either (\_ -> Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\msdom -> Optionals.cases msdom (Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\sdom -> Right (Just sdom))) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
           Syntax.selectDataQual = (Utils.sname pv),
           Syntax.selectDataName = Syntax.NameData {
             Syntax.nameDataValue = (Syntax.PredefString fname)}}))) msdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
@@ -229,11 +229,11 @@ encodeFunction cx g meta funTerm arg =
             cases = Core.caseStatementCases v0
             dflt = Core.caseStatementDefault v0
             ftypes = Eithers.either (\_ -> Maps.empty) (\x_ -> x_) (Resolution.fieldTypes cx g dom)
-        in (Eithers.bind (Eithers.mapList (\f -> encodeCase cx g ftypes sn f) cases) (\fieldCases -> Eithers.bind (Maybes.cases dflt (Right fieldCases) (\dfltTerm -> Eithers.bind (encodeTerm cx g dfltTerm) (\sdflt -> Right (Lists.concat2 fieldCases [
+        in (Eithers.bind (Eithers.mapList (\f -> encodeCase cx g ftypes sn f) cases) (\fieldCases -> Eithers.bind (Optionals.cases dflt (Right fieldCases) (\dfltTerm -> Eithers.bind (encodeTerm cx g dfltTerm) (\sdflt -> Right (Lists.concat2 fieldCases [
           Syntax.Case {
             Syntax.casePat = Syntax.PatWildcard,
             Syntax.caseCond = Nothing,
-            Syntax.caseBody = sdflt}])))) (\scases -> Maybes.cases arg (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda v (Syntax.DataMatch (Syntax.MatchData {
+            Syntax.caseBody = sdflt}])))) (\scases -> Optionals.cases arg (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda v (Syntax.DataMatch (Syntax.MatchData {
           Syntax.matchDataExpr = (Utils.sname v),
           Syntax.matchDataCases = scases})) sdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataMatch (Syntax.MatchData {
           Syntax.matchDataExpr = sa,
@@ -245,15 +245,15 @@ encodeLetBinding cx g outerTypeVars b =
 
       let bname = Utils.scalaEscapeName (Core.unName (Core.bindingName b))
           bterm = Core.bindingTerm b
-          mts = Maybes.cases (Core.bindingTypeScheme b) (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts)
+          mts = Optionals.cases (Core.bindingTypeScheme b) (Maps.lookup (Core.bindingName b) (Graph.graphBoundTypes g)) (\ts -> Just ts)
           isFn =
-                  Maybes.cases mts False (\ts -> case (Strip.deannotateType (Core.typeSchemeBody ts)) of
+                  Optionals.cases mts False (\ts -> case (Strip.deannotateType (Core.typeSchemeBody ts)) of
                     Core.TypeFunction _ -> True
                     Core.TypeForall v0 -> case (Strip.deannotateType (Core.forallTypeBody v0)) of
                       Core.TypeFunction _ -> True
                       _ -> False
                     _ -> False)
-      in (Maybes.cases mts (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.ValDefn {
+      in (Optionals.cases mts (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.ValDefn {
         Syntax.valDefnMods = [
           Syntax.ModLazy],
         Syntax.valDefnPats = [
@@ -367,7 +367,7 @@ encodeTerm cx g term0 =
             Core.TermProject _ -> encodeTerm cx g substitutedBody
             Core.TermCases _ -> encodeTerm cx g substitutedBody
             Core.TermUnwrap _ -> encodeTerm cx g substitutedBody
-            Core.TermVariable v1 -> Maybes.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (encodeTerm cx g substitutedBody) (\_prim -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs ->
+            Core.TermVariable v1 -> Optionals.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (encodeTerm cx g substitutedBody) (\_prim -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs ->
               let inScopeTypeVarNames =
                       Sets.fromList (Lists.map (\n -> Formatting.capitalize (Core.unName n)) (Sets.toList (Graph.graphTypeVariables g)))
                   hasForallResidual =
@@ -422,7 +422,7 @@ encodeTerm cx g term0 =
             _ -> Right litData)
         Core.TermMap v0 -> Eithers.bind (Eithers.mapList (\kv -> Eithers.bind (encodeTerm cx g (Pairs.first kv)) (\sk -> Eithers.bind (encodeTerm cx g (Pairs.second kv)) (\sv -> Right (Utils.sassign sk sv)))) (Maps.toList v0)) (\spairs -> Right (Utils.sapply (Utils.sname "Map") spairs))
         Core.TermWrap v0 -> encodeTerm cx g (Core.wrappedTermBody v0)
-        Core.TermMaybe v0 -> Maybes.cases v0 (Right (Utils.sname "None")) (\t -> Eithers.bind (encodeTerm cx g t) (\s -> Right (Utils.sapply (Utils.sname "Some") [
+        Core.TermOptional v0 -> Optionals.cases v0 (Right (Utils.sname "None")) (\t -> Eithers.bind (encodeTerm cx g t) (\s -> Right (Utils.sapply (Utils.sname "Some") [
           s])))
         Core.TermRecord v0 ->
           let rname = Core.recordTypeName v0
@@ -436,7 +436,7 @@ encodeTerm cx g term0 =
               ft = Core.fieldTerm (Core.injectionField v0)
               lhs = Utils.sname (Utils.qualifyUnionFieldName "UNION." (Just sn) fn)
               unionFtypes = Eithers.either (\_ -> Maps.empty) (\x_ -> x_) (Resolution.fieldTypes cx g (Core.TypeVariable sn))
-          in (Logic.ifElse (Maybes.cases (Maps.lookup fn unionFtypes) (case (Strip.deannotateAndDetypeTerm ft) of
+          in (Logic.ifElse (Optionals.cases (Maps.lookup fn unionFtypes) (case (Strip.deannotateAndDetypeTerm ft) of
             Core.TermUnit -> True
             Core.TermRecord v1 -> Equality.equal (Lists.length (Core.recordFields v1)) 0
             _ -> False) (\dom -> case (Strip.deannotateType dom) of
@@ -450,7 +450,7 @@ encodeTerm cx g term0 =
               parts = Strings.splitOn "." fullName
               numParts = Lists.length parts
               escaped =
-                      Logic.ifElse (Equality.lte numParts 1) (Utils.scalaEscapeName fullName) (Logic.ifElse (Equality.equal numParts 2) (Strings.cat2 (Maybes.fromMaybe fullName (Lists.maybeHead parts)) (Strings.cat2 "." (Utils.scalaEscapeName localName))) (Strings.intercalate "." (Lists.concat2 (Lists.take (Math.sub numParts 1) parts) [
+                      Logic.ifElse (Equality.lte numParts 1) (Utils.scalaEscapeName fullName) (Logic.ifElse (Equality.equal numParts 2) (Strings.cat2 (Optionals.fromOptional fullName (Lists.maybeHead parts)) (Strings.cat2 "." (Utils.scalaEscapeName localName))) (Strings.intercalate "." (Lists.concat2 (Lists.take (Math.sub numParts 1) parts) [
                         Utils.scalaEscapeName localName])))
           in (Right (Utils.sname escaped))
         Core.TermAnnotated v0 -> encodeTerm cx g (Core.annotatedTermBody v0)
@@ -478,7 +478,7 @@ encodeTermDefinition cx g td =
           term = Packaging.termDefinitionBody td
           lname = Utils.scalaEscapeName (Names.localNameOf name)
           typ_ =
-                  Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td)) (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody
+                  Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td)) (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody
           isFunctionType =
                   case (Strip.deannotateType typ_) of
                     Core.TypeFunction _ -> True
@@ -570,7 +570,7 @@ encodeType cx g t =
             vt = Core.mapTypeValues v0
         in (Eithers.bind (encodeType cx g kt) (\skt -> Eithers.bind (encodeType cx g vt) (\svt -> Right (Utils.stapply2 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
           Syntax.nameTypeValue = "Map"}))) skt svt))))
-      Core.TypeMaybe v0 -> Eithers.bind (encodeType cx g v0) (\sot -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
+      Core.TypeOptional v0 -> Eithers.bind (encodeType cx g v0) (\sot -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
         Syntax.nameTypeValue = "Option"}))) sot))
       Core.TypePair v0 ->
         let ft = Core.pairTypeFirst v0
@@ -834,7 +834,7 @@ fieldToParam cx g ft =
 -- | Find the domain type from annotations
 findDomain :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error Core.Type
 findDomain cx g meta =
-    Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\r -> Maybes.cases r (Left (Errors.ErrorOther (Errors.OtherError "expected a typed term"))) (\t -> case (Strip.deannotateType t) of
+    Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\r -> Optionals.cases r (Left (Errors.ErrorOther (Errors.OtherError "expected a typed term"))) (\t -> case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Right (Core.functionTypeDomain v0)
       _ -> Left (Errors.ErrorOther (Errors.OtherError "expected a function type"))))
 -- | Find import statements for the module
@@ -846,7 +846,7 @@ findImports cx g mod =
 -- | Find the Scala domain type for a function from annotations
 findSdom :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe Syntax.Type)
 findSdom cx g meta =
-    Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\mtyp -> Maybes.cases mtyp (Right Nothing) (\t -> case (Strip.deannotateType t) of
+    Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\mtyp -> Optionals.cases mtyp (Right Nothing) (\t -> case (Strip.deannotateType t) of
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
         in (Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom)))

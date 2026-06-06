@@ -9,7 +9,7 @@
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "Nominal terms"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                   {
                     "name": "subgroups",
                     "term": {
@@ -31,7 +31,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Case statements"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -68,7 +68,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeSimpleNumberName"}},
-                                                                  {"name": "default", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                  {"name": "default", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                   {
                                                                     "name": "cases",
                                                                     "term": {
@@ -87,7 +87,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -111,7 +111,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -231,7 +231,7 @@
                                                           "name": "constraints",
                                                           "term": {
                                                             "typeApplication": {
-                                                              "body": {"maybe": null},
+                                                              "body": {"optional": null},
                                                               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -239,7 +239,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "tags",
                             "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -273,7 +273,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeUnionMonomorphicName"}},
-                                                                  {"name": "default", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                  {"name": "default", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                   {
                                                                     "name": "cases",
                                                                     "term": {
@@ -292,7 +292,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "_"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -318,7 +318,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "_"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -344,7 +344,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "_"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -453,7 +453,7 @@
                                                           "name": "constraints",
                                                           "term": {
                                                             "typeApplication": {
-                                                              "body": {"maybe": null},
+                                                              "body": {"optional": null},
                                                               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                       "typeName": "hydra.core.TypeScheme"}},
                                                   "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -461,7 +461,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "tags",
                             "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -475,7 +475,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Projections"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -484,7 +484,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Record eliminations"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -619,7 +619,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -627,7 +627,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -637,7 +637,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Pair projections"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -787,7 +787,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -795,7 +795,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -949,7 +949,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -957,7 +957,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -975,7 +975,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Records"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -984,7 +984,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Simple records"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -1145,7 +1145,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1153,7 +1153,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -1335,7 +1335,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1343,7 +1343,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -1377,7 +1377,7 @@
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}},
-                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
                                                                                 "name": "body",
                                                                                 "term": {
@@ -1552,7 +1552,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1560,7 +1560,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -1594,7 +1594,7 @@
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "latlon"}}, "typeName": "hydra.core.Name"}}},
-                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
                                                                                 "name": "body",
                                                                                 "term": {
@@ -1747,7 +1747,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1755,7 +1755,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -1858,7 +1858,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1866,7 +1866,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -1876,7 +1876,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Record instances of simply recursive record types"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -1945,9 +1945,9 @@
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
-                                                                                                  "name": "maybe",
+                                                                                                  "name": "optional",
                                                                                                   "term": {
-                                                                                                    "maybe": {
+                                                                                                    "optional": {
                                                                                                       "inject": {
                                                                                                         "field": {
                                                                                                           "name": "record",
@@ -1986,7 +1986,7 @@
                                                                                                                               "name": "term",
                                                                                                                               "term": {
                                                                                                                                 "inject": {
-                                                                                                                                  "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                  "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                                                           "typeName": "hydra.core.Field"}}]}}],
                                                                                                               "typeName": "hydra.core.Record"}}},
@@ -2071,7 +2071,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2079,7 +2079,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -2122,7 +2122,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -2157,9 +2157,9 @@
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
-                                                                                                                              "name": "maybe",
+                                                                                                                              "name": "optional",
                                                                                                                               "term": {
-                                                                                                                                "maybe": {
+                                                                                                                                "optional": {
                                                                                                                                   "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "record",
@@ -2190,7 +2190,7 @@
                                                                                                                                                           "name": "term",
                                                                                                                                                           "term": {
                                                                                                                                                             "inject": {
-                                                                                                                                                              "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                              "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                                       "typeName": "hydra.core.Field"}}]}}],
                                                                                                                                           "typeName": "hydra.core.Record"}}},
@@ -2293,7 +2293,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2301,7 +2301,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -2367,9 +2367,9 @@
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
-                                                                                                  "name": "maybe",
+                                                                                                  "name": "optional",
                                                                                                   "term": {
-                                                                                                    "maybe": {
+                                                                                                    "optional": {
                                                                                                       "inject": {
                                                                                                         "field": {
                                                                                                           "name": "record",
@@ -2408,7 +2408,7 @@
                                                                                                                               "name": "term",
                                                                                                                               "term": {
                                                                                                                                 "inject": {
-                                                                                                                                  "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                  "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                                                           "typeName": "hydra.core.Field"}}]}}],
                                                                                                               "typeName": "hydra.core.Record"}}},
@@ -2517,7 +2517,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2525,7 +2525,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -2568,7 +2568,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -2603,9 +2603,9 @@
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
-                                                                                                                              "name": "maybe",
+                                                                                                                              "name": "optional",
                                                                                                                               "term": {
-                                                                                                                                "maybe": {
+                                                                                                                                "optional": {
                                                                                                                                   "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "record",
@@ -2636,7 +2636,7 @@
                                                                                                                                                           "name": "term",
                                                                                                                                                           "term": {
                                                                                                                                                             "inject": {
-                                                                                                                                                              "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                              "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                                       "typeName": "hydra.core.Field"}}]}}],
                                                                                                                                           "typeName": "hydra.core.Record"}}},
@@ -2763,7 +2763,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2771,7 +2771,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -2805,7 +2805,7 @@
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
                                                                                 "name": "body",
                                                                                 "term": {
@@ -2840,9 +2840,9 @@
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
-                                                                                                                "name": "maybe",
+                                                                                                                "name": "optional",
                                                                                                                 "term": {
-                                                                                                                  "maybe": {
+                                                                                                                  "optional": {
                                                                                                                     "inject": {
                                                                                                                       "field": {
                                                                                                                         "name": "record",
@@ -2873,7 +2873,7 @@
                                                                                                                                             "name": "term",
                                                                                                                                             "term": {
                                                                                                                                               "inject": {
-                                                                                                                                                "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                                                         "typeName": "hydra.core.Field"}}]}}],
                                                                                                                             "typeName": "hydra.core.Record"}}},
@@ -2996,7 +2996,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3004,7 +3004,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -3014,7 +3014,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Record instances of mutually recursive record types"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -3060,7 +3060,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                             {
                                                                                               "name": "body",
                                                                                               "term": {
@@ -3095,9 +3095,9 @@
                                                                                                                         "term": {
                                                                                                                           "inject": {
                                                                                                                             "field": {
-                                                                                                                              "name": "maybe",
+                                                                                                                              "name": "optional",
                                                                                                                               "term": {
-                                                                                                                                "maybe": {
+                                                                                                                                "optional": {
                                                                                                                                   "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "record",
@@ -3128,7 +3128,7 @@
                                                                                                                                                           "name": "term",
                                                                                                                                                           "term": {
                                                                                                                                                             "inject": {
-                                                                                                                                                              "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                              "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                                       "typeName": "hydra.core.Field"}}]}}],
                                                                                                                                           "typeName": "hydra.core.Record"}}},
@@ -3255,7 +3255,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3263,7 +3263,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -3297,7 +3297,7 @@
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
                                                                                 "name": "body",
                                                                                 "term": {
@@ -3332,9 +3332,9 @@
                                                                                                           "term": {
                                                                                                             "inject": {
                                                                                                               "field": {
-                                                                                                                "name": "maybe",
+                                                                                                                "name": "optional",
                                                                                                                 "term": {
-                                                                                                                  "maybe": {
+                                                                                                                  "optional": {
                                                                                                                     "inject": {
                                                                                                                       "field": {
                                                                                                                         "name": "record",
@@ -3365,7 +3365,7 @@
                                                                                                                                             "name": "term",
                                                                                                                                             "term": {
                                                                                                                                               "inject": {
-                                                                                                                                                "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                                                 "typeName": "hydra.core.Term"}}}],
                                                                                                                                         "typeName": "hydra.core.Field"}}]}}],
                                                                                                                             "typeName": "hydra.core.Record"}}},
@@ -3488,7 +3488,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3496,7 +3496,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -3514,7 +3514,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Variant terms"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -3523,7 +3523,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Variants"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -3661,7 +3661,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3669,7 +3669,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -3796,7 +3796,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3804,7 +3804,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -3814,7 +3814,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Polymorphic and recursive variants"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -3963,7 +3963,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3971,7 +3971,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -4117,7 +4117,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4125,7 +4125,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -4201,7 +4201,7 @@
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
                                                                                             "name": "typeScheme",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                                         "typeName": "hydra.core.Binding"}}]}},
                                                                               {
                                                                                 "name": "body",
@@ -4330,7 +4330,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4338,7 +4338,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -4356,7 +4356,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Wrapper introductions and eliminations"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -4365,7 +4365,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Wrapper introductions"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -4488,7 +4488,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4496,7 +4496,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -4530,7 +4530,7 @@
                                                                           "record": {
                                                                             "fields": [
                                                                               {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
-                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                               {
                                                                                 "name": "body",
                                                                                 "term": {
@@ -4646,7 +4646,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4654,7 +4654,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -4664,7 +4664,7 @@
                       "record": {
                         "fields": [
                           {"name": "name", "term": {"literal": {"string": "Wrapper eliminations"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {
                             "name": "subgroups",
                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -4792,7 +4792,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4800,7 +4800,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],
@@ -4939,7 +4939,7 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"maybe": null},
+                                                                          "body": {"optional": null},
                                                                           "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                                                                   "typeName": "hydra.core.TypeScheme"}},
                                                               "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4947,7 +4947,7 @@
                                                           "parameter": "_"}}}],
                                                   "typeName": "hydra.testing.UniversalTestCase"}}},
                                             "typeName": "hydra.testing.TestCase"}}},
-                                      {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                                       {
                                         "name": "tags",
                                         "term": {"list": [{"wrap": {"body": {"literal": {"string": "disabledForMinimalInference"}}, "typeName": "hydra.testing.Tag"}}]}}],

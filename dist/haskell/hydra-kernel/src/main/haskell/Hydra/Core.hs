@@ -381,7 +381,7 @@ data Term =
   -- | A map of keys to values
   TermMap (M.Map Term Term) |
   -- | An optional value
-  TermMaybe (Maybe Term) |
+  TermOptional (Maybe Term) |
   -- | A pair (2-tuple)
   TermPair (Term, Term) |
   -- | A record elimination; a projection
@@ -414,7 +414,7 @@ _Term_let = Name "let"
 _Term_list = Name "list"
 _Term_literal = Name "literal"
 _Term_map = Name "map"
-_Term_maybe = Name "maybe"
+_Term_optional = Name "optional"
 _Term_pair = Name "pair"
 _Term_project = Name "project"
 _Term_record = Name "record"
@@ -444,7 +444,7 @@ data Type =
   -- | A map type
   TypeMap MapType |
   -- | An optional type
-  TypeMaybe Type |
+  TypeOptional Type |
   -- | A pair (2-tuple) type
   TypePair PairType |
   -- | A record type
@@ -471,7 +471,7 @@ _Type_function = Name "function"
 _Type_list = Name "list"
 _Type_literal = Name "literal"
 _Type_map = Name "map"
-_Type_maybe = Name "maybe"
+_Type_optional = Name "optional"
 _Type_pair = Name "pair"
 _Type_record = Name "record"
 _Type_set = Name "set"

@@ -3,15 +3,36 @@
 
 module Hydra.Rdf.Serde where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
 import qualified Hydra.Rdf.Syntax as Syntax
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Convert a blank node to an expression
@@ -68,9 +89,9 @@ literalToExpr lit =
                     (escapeLiteralString lex),
                     "\""])
           suffix =
-                  Maybes.maybe (Serialization.noSep [
+                  Optionals.cases lang (Serialization.noSep [
                     Serialization.cst "^^",
-                    (iriToExpr dt)]) languageTagToExpr lang
+                    (iriToExpr dt)]) languageTagToExpr
       in (Serialization.noSep [
         lexExpr,
         suffix])
@@ -106,12 +127,12 @@ tripleToExpr t =
 uchar4 :: Int -> String
 uchar4 c =
 
-      let d3 = Maybes.fromMaybe 0 (Math.maybeDiv c 4096)
-          r3 = Maybes.fromMaybe 0 (Math.maybeMod c 4096)
-          d2 = Maybes.fromMaybe 0 (Math.maybeDiv r3 256)
-          r2 = Maybes.fromMaybe 0 (Math.maybeMod r3 256)
-          d1 = Maybes.fromMaybe 0 (Math.maybeDiv r2 16)
-          d0 = Maybes.fromMaybe 0 (Math.maybeMod r2 16)
+      let d3 = Optionals.fromOptional 0 (Math.maybeDiv c 4096)
+          r3 = Optionals.fromOptional 0 (Math.maybeMod c 4096)
+          d2 = Optionals.fromOptional 0 (Math.maybeDiv r3 256)
+          r2 = Optionals.fromOptional 0 (Math.maybeMod r3 256)
+          d1 = Optionals.fromOptional 0 (Math.maybeDiv r2 16)
+          d0 = Optionals.fromOptional 0 (Math.maybeMod r2 16)
       in (Strings.cat2 "\\u" (Strings.fromList [
         hexDigit d3,
         (hexDigit d2),

@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -73,7 +73,7 @@ binding x =
           Core.fieldTerm = (term (Core.bindingTerm x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map typeScheme opt)) (Core.bindingTypeScheme x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map typeScheme opt)) (Core.bindingTypeScheme x))}]})
 -- | Encoder for hydra.core.CaseAlternative
 caseAlternative :: Core.CaseAlternative -> Core.Term
 caseAlternative x =
@@ -97,7 +97,7 @@ caseStatement x =
           Core.fieldTerm = (name (Core.caseStatementTypeName x))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map term opt)) (Core.caseStatementDefault x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map term opt)) (Core.caseStatementDefault x))},
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map caseAlternative xs)) (Core.caseStatementCases x))}]})
@@ -310,7 +310,7 @@ lambda x =
           Core.fieldTerm = (name (Core.lambdaParameter x))},
         Core.Field {
           Core.fieldName = (Core.Name "domain"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map type_ opt)) (Core.lambdaDomain x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map type_ opt)) (Core.lambdaDomain x))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.lambdaBody x))}]})
@@ -502,11 +502,11 @@ term x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = (Core.TermMap (Maps.bimap term term v0))}})
-      Core.TermMaybe v0 -> Core.TermInject (Core.Injection {
+      Core.TermOptional v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybe"),
-          Core.fieldTerm = (Core.TermMaybe (Maybes.map term v0))}})
+          Core.fieldName = (Core.Name "optional"),
+          Core.fieldTerm = (Core.TermOptional (Optionals.map term v0))}})
       Core.TermPair v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -601,10 +601,10 @@ type_ x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = (mapType v0)}})
-      Core.TypeMaybe v0 -> Core.TermInject (Core.Injection {
+      Core.TypeOptional v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybe"),
+          Core.fieldName = (Core.Name "optional"),
           Core.fieldTerm = (type_ v0)}})
       Core.TypePair v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
@@ -693,7 +693,7 @@ typeScheme x =
           Core.fieldTerm = (type_ (Core.typeSchemeBody x))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableConstraints m)) opt)) (Core.typeSchemeConstraints x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\m -> Core.TermMap (Maps.bimap name typeVariableConstraints m)) opt)) (Core.typeSchemeConstraints x))}]})
 -- | Encoder for hydra.core.TypeVariableConstraints
 typeVariableConstraints :: Core.TypeVariableConstraints -> Core.Term
 typeVariableConstraints x =

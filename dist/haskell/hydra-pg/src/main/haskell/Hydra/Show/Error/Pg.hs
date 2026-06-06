@@ -2,9 +2,31 @@
 -- | String representations of hydra.error.pg types
 
 module Hydra.Show.Error.Pg where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Error.Pg as Pg
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Haskell.Lib.Strings as Strings
-import qualified Hydra.Pg.Model as Model
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Pg.Model as PgModel
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Show an invalid edge error as a string
@@ -23,7 +45,7 @@ invalidElementPropertyError :: Pg.InvalidElementPropertyError -> String
 invalidElementPropertyError e =
     Strings.cat [
       "property ",
-      (Model.unPropertyKey (Pg.invalidElementPropertyErrorKey e)),
+      (PgModel.unPropertyKey (Pg.invalidElementPropertyErrorKey e)),
       ": ",
       (invalidPropertyError (Pg.invalidElementPropertyErrorError e))]
 -- | Show an invalid graph edge error as a string, given a value printer
@@ -53,8 +75,8 @@ invalidPropertyError :: Pg.InvalidPropertyError -> String
 invalidPropertyError e =
     case e of
       Pg.InvalidPropertyErrorInvalidValue v0 -> Strings.cat2 "invalid value: " (invalidValueError v0)
-      Pg.InvalidPropertyErrorMissingRequired v0 -> Strings.cat2 "missing required property: " (Model.unPropertyKey v0)
-      Pg.InvalidPropertyErrorUnexpectedKey v0 -> Strings.cat2 "unexpected property key: " (Model.unPropertyKey v0)
+      Pg.InvalidPropertyErrorMissingRequired v0 -> Strings.cat2 "missing required property: " (PgModel.unPropertyKey v0)
+      Pg.InvalidPropertyErrorUnexpectedKey v0 -> Strings.cat2 "unexpected property key: " (PgModel.unPropertyKey v0)
 -- | Show an invalid value error as a string
 invalidValueError :: Pg.InvalidValueError -> String
 invalidValueError e =
@@ -75,18 +97,18 @@ noSuchEdgeLabelError :: Pg.NoSuchEdgeLabelError -> String
 noSuchEdgeLabelError e =
     Strings.cat [
       "no such edge label: ",
-      (Model.unEdgeLabel (Pg.noSuchEdgeLabelErrorLabel e))]
+      (PgModel.unEdgeLabel (Pg.noSuchEdgeLabelErrorLabel e))]
 -- | Show a no-such-vertex-label error as a string
 noSuchVertexLabelError :: Pg.NoSuchVertexLabelError -> String
 noSuchVertexLabelError e =
     Strings.cat [
       "no such vertex label: ",
-      (Model.unVertexLabel (Pg.noSuchVertexLabelErrorLabel e))]
+      (PgModel.unVertexLabel (Pg.noSuchVertexLabelErrorLabel e))]
 -- | Show a wrong-vertex-label error as a string
 wrongVertexLabelError :: Pg.WrongVertexLabelError -> String
 wrongVertexLabelError e =
     Strings.cat [
       "expected vertex label ",
-      (Model.unVertexLabel (Pg.wrongVertexLabelErrorExpected e)),
+      (PgModel.unVertexLabel (Pg.wrongVertexLabelErrorExpected e)),
       ", got ",
-      (Model.unVertexLabel (Pg.wrongVertexLabelErrorActual e))]
+      (PgModel.unVertexLabel (Pg.wrongVertexLabelErrorActual e))]

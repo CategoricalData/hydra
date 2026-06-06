@@ -18,7 +18,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as LibLiterals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals
@@ -46,13 +46,13 @@ decodeFloat ft value =
     case ft of
       Core.FloatTypeFloat32 -> case value of
         Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (LibLiterals.decimalToFloat32 v1))))
-        Model.ValueString v1 -> Maybes.cases (parseSpecialFloat32 v1) (Left (Strings.cat [
+        Model.ValueString v1 -> Optionals.cases (parseSpecialFloat32 v1) (Left (Strings.cat [
           "invalid float32 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v))))
         _ -> Left "expected number or special float string for float32"
       Core.FloatTypeFloat64 -> case value of
         Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v1))))
-        Model.ValueString v1 -> Maybes.cases (parseSpecialFloat v1) (Left (Strings.cat [
+        Model.ValueString v1 -> Optionals.cases (parseSpecialFloat v1) (Left (Strings.cat [
           "invalid float64 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v))))
         _ -> Left "expected number or special float string for float64"
@@ -64,28 +64,28 @@ decodeInteger it value =
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
           let parsed = LibLiterals.readBigint s
-          in (Maybes.cases parsed (Left (Strings.cat [
+          in (Optionals.cases parsed (Left (Strings.cat [
             "invalid bigint: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint v)))))) strResult)
       Core.IntegerTypeInt64 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
           let parsed = LibLiterals.readInt64 s
-          in (Maybes.cases parsed (Left (Strings.cat [
+          in (Optionals.cases parsed (Left (Strings.cat [
             "invalid int64: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 v)))))) strResult)
       Core.IntegerTypeUint32 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
           let parsed = LibLiterals.readUint32 s
-          in (Maybes.cases parsed (Left (Strings.cat [
+          in (Optionals.cases parsed (Left (Strings.cat [
             "invalid uint32: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))))) strResult)
       Core.IntegerTypeUint64 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
           let parsed = LibLiterals.readUint64 s
-          in (Maybes.cases parsed (Left (Strings.cat [
+          in (Optionals.cases parsed (Left (Strings.cat [
             "invalid uint64: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v)))))) strResult)
       Core.IntegerTypeInt8 ->
@@ -164,25 +164,25 @@ fromJson types tname typ value =
           in (Eithers.either (\err -> Left err) (\arr ->
             let decoded = Eithers.mapList decodeElem arr
             in (Eithers.map (\elems -> Core.TermSet (Sets.fromList elems)) decoded)) arrResult)
-        Core.TypeMaybe v0 ->
+        Core.TypeOptional v0 ->
           let innerStripped = Strip.deannotateType v0
               isNestedMaybe =
                       case innerStripped of
-                        Core.TypeMaybe _ -> True
+                        Core.TypeOptional _ -> True
                         _ -> False
           in (Logic.ifElse isNestedMaybe (
             let decodeJust =
-                    \arr -> Maybes.cases (Lists.maybeHead arr) (Left "expected single-element array for Just") (\firstVal -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 firstVal))
+                    \arr -> Optionals.cases (Lists.maybeHead arr) (Left "expected single-element array for Just") (\firstVal -> Eithers.map (\v -> Core.TermOptional (Just v)) (fromJson types tname v0 firstVal))
                 decodeMaybeArray =
                         \arr ->
                           let len = Lists.length arr
-                          in (Logic.ifElse (Equality.equal len 0) (Right (Core.TermMaybe Nothing)) (Logic.ifElse (Equality.equal len 1) (decodeJust arr) (Left "expected single-element array for Just")))
+                          in (Logic.ifElse (Equality.equal len 0) (Right (Core.TermOptional Nothing)) (Logic.ifElse (Equality.equal len 1) (decodeJust arr) (Left "expected single-element array for Just")))
             in case value of
-              Model.ValueNull -> Right (Core.TermMaybe Nothing)
+              Model.ValueNull -> Right (Core.TermOptional Nothing)
               Model.ValueArray v1 -> decodeMaybeArray v1
               _ -> Left "expected null or single-element array for nested Maybe") (case value of
-            Model.ValueNull -> Right (Core.TermMaybe Nothing)
-            _ -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 value)))
+            Model.ValueNull -> Right (Core.TermOptional Nothing)
+            _ -> Eithers.map (\v -> Core.TermOptional (Just v)) (fromJson types tname v0 value)))
         Core.TypeRecord v0 ->
           let objResult = expectObject value
           in (Eithers.either (\err -> Left err) (\obj ->
@@ -192,7 +192,7 @@ fromJson types tname typ value =
                           ftype = Core.fieldTypeType ft
                           mval = Maps.lookup (Core.unName fname) obj
                           defaultVal = Model.ValueNull
-                          jsonVal = Maybes.fromMaybe defaultVal mval
+                          jsonVal = Optionals.fromOptional defaultVal mval
                           decoded = fromJson types tname ftype jsonVal
                       in (Eithers.map (\v -> Core.Field {
                         Core.fieldName = fname,
@@ -204,7 +204,7 @@ fromJson types tname typ value =
         Core.TypeUnion v0 ->
           let decodeVariant =
                   \key -> \val -> \ftype ->
-                    let jsonVal = Maybes.fromMaybe Model.ValueNull val
+                    let jsonVal = Optionals.fromOptional Model.ValueNull val
                         decoded = fromJson types tname ftype jsonVal
                     in (Eithers.map (\v -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = tname,
@@ -212,11 +212,11 @@ fromJson types tname typ value =
                         Core.fieldName = (Core.Name key),
                         Core.fieldTerm = v}})) decoded)
               findAndDecode =
-                      \key -> \val -> \fts -> Maybes.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) key) fts) (Left (Strings.cat [
+                      \key -> \val -> \fts -> Optionals.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) key) fts) (Left (Strings.cat [
                         "unknown variant: ",
                         key])) (\ft -> decodeVariant key val (Core.fieldTypeType ft))
               decodeSingleKey =
-                      \obj -> Maybes.cases (Lists.maybeHead (Maps.keys obj)) (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0)
+                      \obj -> Optionals.cases (Lists.maybeHead (Maps.keys obj)) (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0)
               processUnion =
                       \obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union")
               objResult = expectObject value
@@ -240,7 +240,7 @@ fromJson types tname typ value =
                       in (Eithers.either (\err -> Left err) (\entryObj ->
                         let keyJson = Maps.lookup "key" entryObj
                             valJson = Maps.lookup "value" entryObj
-                        in (Maybes.cases keyJson (Left "missing key in map entry") (\kj -> Maybes.cases valJson (Left "missing value in map entry") (\vj ->
+                        in (Optionals.cases keyJson (Left "missing key in map entry") (\kj -> Optionals.cases valJson (Left "missing value in map entry") (\vj ->
                           let decodedKey = fromJson types tname keyType kj
                               decodedVal = fromJson types tname valType vj
                           in (Eithers.either (\err -> Left err) (\k -> Eithers.map (\v -> (k, v)) decodedVal) decodedKey))))) objResult)
@@ -253,7 +253,7 @@ fromJson types tname typ value =
           in (Eithers.either (\err -> Left err) (\obj ->
             let firstJson = Maps.lookup "first" obj
                 secondJson = Maps.lookup "second" obj
-            in (Maybes.cases firstJson (Left "missing first in pair") (\fj -> Maybes.cases secondJson (Left "missing second in pair") (\sj ->
+            in (Optionals.cases firstJson (Left "missing first in pair") (\fj -> Optionals.cases secondJson (Left "missing second in pair") (\sj ->
               let decodedFirst = fromJson types tname firstType fj
                   decodedSecond = fromJson types tname secondType sj
               in (Eithers.either (\err -> Left err) (\f -> Eithers.map (\s -> Core.TermPair (f, s)) decodedSecond) decodedFirst))))) objResult)
@@ -264,14 +264,14 @@ fromJson types tname typ value =
           in (Eithers.either (\err -> Left err) (\obj ->
             let leftJson = Maps.lookup "left" obj
                 rightJson = Maps.lookup "right" obj
-            in (Maybes.cases leftJson (Maybes.cases rightJson (Left "expected left or right in Either") (\rj ->
+            in (Optionals.cases leftJson (Optionals.cases rightJson (Left "expected left or right in Either") (\rj ->
               let decoded = fromJson types tname rightType rj
               in (Eithers.map (\v -> Core.TermEither (Right v)) decoded))) (\lj ->
               let decoded = fromJson types tname leftType lj
               in (Eithers.map (\v -> Core.TermEither (Left v)) decoded)))) objResult)
         Core.TypeVariable v0 ->
           let lookedUp = Maps.lookup v0 types
-          in (Maybes.cases lookedUp (Left (Strings.cat [
+          in (Optionals.cases lookedUp (Left (Strings.cat [
             "unknown type variable: ",
             (Core.unName v0)])) (\resolvedType -> fromJson types v0 resolvedType value))
         _ -> Left (Strings.cat [

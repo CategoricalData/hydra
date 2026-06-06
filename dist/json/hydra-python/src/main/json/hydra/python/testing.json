@@ -585,7 +585,8 @@
                                                 "function": {
                                                   "application": {
                                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                             "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                           {
                                             "name": "fileName",
@@ -603,7 +604,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {"literal": {"string": ""}},
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
                                                     {"literal": {"string": ".py"}}]},
                                                 "function": {"variable": "hydra.lib.strings.cat"}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},

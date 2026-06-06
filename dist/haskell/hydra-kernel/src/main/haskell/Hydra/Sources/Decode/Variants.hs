@@ -321,7 +321,7 @@ module_ =
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
@@ -768,7 +768,7 @@ module_ =
                                           (Core.TermPair (
                                             Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "maybe"))}),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "optional"))}),
                                             (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "input"),
                                               Core.lambdaDomain = Nothing,
@@ -781,7 +781,7 @@ module_ =
                                                     Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
                                                       Core.injectionField = Core.Field {
-                                                        Core.fieldName = (Core.Name "maybe"),
+                                                        Core.fieldName = (Core.Name "optional"),
                                                         Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
                                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1132,7 +1132,7 @@ module_ =
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
@@ -1513,7 +1513,7 @@ module_ =
                                           (Core.TermPair (
                                             Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "maybe"))}),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "optional"))}),
                                             (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "input"),
                                               Core.lambdaDomain = Nothing,
@@ -1526,7 +1526,7 @@ module_ =
                                                     Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
                                                       Core.injectionField = Core.Field {
-                                                        Core.fieldName = (Core.Name "maybe"),
+                                                        Core.fieldName = (Core.Name "optional"),
                                                         Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
                                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1811,7 +1811,7 @@ module_ =
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),

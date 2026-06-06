@@ -221,7 +221,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.AdjacentEdge"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -602,7 +606,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.Direction"}}},
@@ -910,7 +914,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.Edge"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Edge"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -1414,7 +1422,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.EdgeType"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -1712,7 +1724,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                 "type": {
                                                                                   "function": {
                                                                                     "codomain": {
@@ -2013,7 +2025,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.ElementKind"}}},
@@ -2213,7 +2225,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.ElementTree"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.ElementTree"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -2512,7 +2528,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                 "type": {
                                                                                   "function": {
                                                                                     "codomain": {
@@ -2743,7 +2759,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.ElementTypeTree"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -2981,7 +3001,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.Graph"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Graph"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -3222,7 +3246,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.GraphSchema"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.GraphSchema"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -3474,7 +3502,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.Label"}}},
@@ -3678,7 +3706,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.LazyGraph"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.LazyGraph"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -3874,7 +3906,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.Property"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Property"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -4382,7 +4418,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.PropertyType"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -4627,7 +4667,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.Vertex"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -5058,7 +5102,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.VertexType"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexType"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},
@@ -5318,7 +5366,11 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {"left": {"wrap": {"body": {"literal": {"string": "expected record"}}, "typeName": "hydra.errors.DecodingError"}}}},
+                                                          "either": {
+                                                            "left": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "expected a record of type hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                "typeName": "hydra.errors.DecodingError"}}}},
                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                     "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
                                                 "typeName": "hydra.core.Term"}}}},

@@ -25,7 +25,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -55,9 +55,9 @@ import qualified Data.Set as S
 addNamespacesToNamespaces :: Util.ModuleNames Syntax.ModuleName -> S.Set Core.Name -> Util.ModuleNames Syntax.ModuleName
 addNamespacesToNamespaces ns0 names =
 
-      let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
+      let newNamespaces = Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
           toModuleName =
-                  \namespace -> Syntax.ModuleName (Formatting.capitalize (Maybes.fromMaybe (Packaging.unModuleName namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unModuleName namespace)))))
+                  \namespace -> Syntax.ModuleName (Formatting.capitalize (Optionals.fromOptional (Packaging.unModuleName namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unModuleName namespace)))))
           newMappings = Maps.fromList (Lists.map (\ns_ -> (ns_, (toModuleName ns_))) (Sets.toList newNamespaces))
       in Util.ModuleNames {
         Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
@@ -81,7 +81,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
                       Packaging.termDefinitionMetadata = Nothing,
-                      Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+                      Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
                       Packaging.termDefinitionBody = (Core.bindingTerm b)})) testBindings)}
       in (Eithers.bind (Eithers.bimap (\e -> ShowErrors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyInferenceContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
@@ -150,7 +150,7 @@ findHaskellImports namespaces names_ =
 
       let mapping_ = Util.moduleNamesMapping namespaces
           filtered =
-                  Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unModuleName ns_)))) "")) mapping_
+                  Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unModuleName ns_)))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat [
         "import qualified ",
         (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unModuleName (Pairs.first entry))))),

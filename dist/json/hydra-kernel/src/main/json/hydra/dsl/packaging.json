@@ -451,7 +451,7 @@
                                         {
                                           "key": {"variable": "description"},
                                           "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
-                                    "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                    "body": {"optional": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "lifecycle"}},
                         "domain": {
@@ -489,7 +489,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "description"}}}},
         "name": "hydra.dsl.packaging.entityMetadata",
@@ -507,7 +507,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -551,7 +551,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -619,7 +619,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -816,7 +816,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -970,7 +970,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -996,7 +996,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1523,7 +1523,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -1549,7 +1549,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.LifecycleInfo"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1803,7 +1803,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "deprecatedSince"}},
                 "domain": {
@@ -1815,7 +1815,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
-                        "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                        "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "availableSince"}}}},
         "name": "hydra.dsl.packaging.lifecycleInfo",
@@ -1833,7 +1833,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1847,7 +1847,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1917,7 +1917,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -1984,7 +1984,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -2072,7 +2072,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2098,7 +2098,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2189,7 +2189,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2215,7 +2215,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.Version"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.Version"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2315,7 +2315,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
                 "domain": {
@@ -2359,7 +2359,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -2511,7 +2511,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -2973,7 +2973,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.packaging.Module"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -2997,7 +2997,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.packaging.Module"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -3413,7 +3413,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.PackageName"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "package"}},
                 "domain": {
@@ -3449,7 +3449,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.PackageName"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -3578,7 +3578,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.PackageName"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -3771,7 +3771,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.PackageName"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -3797,7 +3797,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.PackageName"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -3983,7 +3983,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
                 "domain": {
@@ -4019,7 +4019,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -4169,7 +4169,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -4627,7 +4627,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -4653,7 +4653,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -5650,7 +5650,7 @@
                                                   "value": {
                                                     "literal": {
                                                       "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
-                                            "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                                            "body": {"optional": {"variable": "hydra.core.Term"}}}},
                                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                                     "parameter": "defaultImplementation"}},
                                 "domain": {
@@ -5700,7 +5700,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
                 "domain": {
@@ -5736,7 +5736,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -5796,7 +5796,7 @@
                             "value": {
                               "literal": {
                                 "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -5925,7 +5925,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -6191,7 +6191,7 @@
                           "value": {
                             "literal": {
                               "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                    "body": {"optional": {"variable": "hydra.core.Term"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -6664,7 +6664,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -6690,7 +6690,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -7688,7 +7688,7 @@
                                   "value": {
                                     "literal": {
                                       "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Term"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -7716,7 +7716,7 @@
                             "value": {
                               "literal": {
                                 "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -7807,7 +7807,7 @@
                                     {
                                       "key": {"variable": "description"},
                                       "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
-                                "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
+                                "body": {"optional": {"variable": "hydra.typing.TermSignature"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "signature"}},
                     "domain": {
@@ -7819,7 +7819,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
                 "domain": {
@@ -7855,7 +7855,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -7869,7 +7869,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
-                      "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
+                      "body": {"optional": {"variable": "hydra.typing.TermSignature"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -8008,7 +8008,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -8073,7 +8073,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
-                    "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
+                    "body": {"optional": {"variable": "hydra.typing.TermSignature"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -8463,7 +8463,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -8489,7 +8489,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -8646,7 +8646,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
-                            "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
+                            "body": {"optional": {"variable": "hydra.typing.TermSignature"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -8672,7 +8672,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]},
-                      "body": {"maybe": {"variable": "hydra.typing.TermSignature"}}}},
+                      "body": {"optional": {"variable": "hydra.typing.TermSignature"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -8928,7 +8928,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "metadata"}},
                 "domain": {
@@ -8964,7 +8964,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -9103,7 +9103,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -9425,7 +9425,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -9451,7 +9451,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.EntityMetadata"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {

@@ -10,7 +10,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
@@ -149,7 +149,7 @@ subtermStep cx raw =
                         Core.Name "injectionTerm",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepInjectionTerm) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "wrappedTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepWrappedTerm) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
@@ -240,7 +240,7 @@ subtypeStep cx raw =
                       (Core.Name "setElement", (\input -> Eithers.map (\t -> Paths.SubtypeStepSetElement) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "unionField", (\input -> Eithers.map (\t -> Paths.SubtypeStepUnionField t) (DecodeCore.name cx input))),
                       (Core.Name "wrappedType", (\input -> Eithers.map (\t -> Paths.SubtypeStepWrappedType) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
