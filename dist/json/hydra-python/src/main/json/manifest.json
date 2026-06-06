@@ -10,5 +10,6 @@
     "hydra.python.syntax",
     "hydra.python.testing",
     "hydra.python.utils"],
+  "manifestFormatVersion": 1,
   "package": "hydra-python",
   "testModules": []}

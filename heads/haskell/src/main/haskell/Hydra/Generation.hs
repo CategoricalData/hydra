@@ -61,9 +61,6 @@ generateSources
   :: (Module -> [Definition] -> InferenceContext -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doInfer
-  -> Bool  -- ^ doExpand
-  -> Bool  -- ^ doHoistCaseStatements
-  -> Bool  -- ^ doHoistPolymorphicLetBindings
   -> FilePath
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
@@ -76,21 +73,22 @@ generateSources = generateSourcesWithTransform id
 -- which is the appropriate place for whole-file textual passes such as
 -- the Scala line-wrap that 'writeScala' uses to keep individual lines
 -- within scalac's stack-friendly threshold.
+--
+-- Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
+-- are now read from @lang@'s @supportedFeatures@ inside
+-- @generateSourceFiles@; the caller only supplies @doInfer@.
 generateSourcesWithTransform
   :: (String -> String)  -- ^ Per-file content transform (id for no-op)
   -> (Module -> [Definition] -> InferenceContext -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool
-  -> Bool
-  -> Bool
-  -> Bool
   -> FilePath
   -> [Module]
   -> [Module]
   -> IO [FilePath]
-generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
+generateSourcesWithTransform transform printDefinitions lang doInfer basePath universeModules modulesToGenerate = do
     let cx = emptyInferenceContext
-    case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
+    case CodeGeneration.generateSourceFiles printDefinitions lang doInfer bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
         mapM_ writePair files
@@ -1341,6 +1339,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     dslMods <- generateDslModules mainModules kernelTypesModules
     let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
     let jsonVal = Json.ValueObject $ M.fromList [
+            ("manifestFormatVersion", Json.ValueNumber 1),
             ("dslModules", namespacesJson nonEmptyDsls),
             ("defaultLibModules", namespacesJson DefaultAll.defaultLibModules),
             ("kernelModules", namespacesJson kernelModules),
@@ -1393,6 +1392,7 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
           testForPkg   = M.findWithDefault [] pkg testByPkg
           defaultForPkg   = M.findWithDefault [] pkg defaultLibSet
           jsonVal = Json.ValueObject $ M.fromList [
+              ("manifestFormatVersion", Json.ValueNumber 1),
               ("package",        Json.ValueString pkg),
               ("dslModules",     namespacesJson dslForPkg),
               ("defaultLibModules", namespacesJson defaultForPkg),

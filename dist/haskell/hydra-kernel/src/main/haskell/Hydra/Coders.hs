@@ -6,6 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -50,6 +51,41 @@ data Bicoder t1 t2 v1 v2 =
 _Bicoder = Core.Name "hydra.coders.Bicoder"
 _Bicoder_encode = Core.Name "encode"
 _Bicoder_decode = Core.Name "decode"
+-- | Per-target case conventions for name forms that vary across emission targets
+data CaseConventions =
+  CaseConventions {
+    -- | Convention for compile-time constant names
+    caseConventionsConstant :: Util.CaseConvention,
+    -- | Convention for each directory level in the emitted source tree
+    caseConventionsDirectory :: Util.CaseConvention,
+    -- | Convention for enum-variant value names
+    caseConventionsEnumValue :: Util.CaseConvention,
+    -- | Convention for record field names
+    caseConventionsField :: Util.CaseConvention,
+    -- | Convention for the source-file basename
+    caseConventionsFile :: Util.CaseConvention,
+    -- | Convention for a single segment of a module name
+    caseConventionsModule :: Util.CaseConvention,
+    -- | Convention for top-level term definitions (functions, module-level values)
+    caseConventionsTerm :: Util.CaseConvention,
+    -- | Convention for locally-bound term names (lambda parameters, let-bindings)
+    caseConventionsTermVariable :: Util.CaseConvention,
+    -- | Convention for type names
+    caseConventionsType :: Util.CaseConvention,
+    -- | Convention for type-level variable names
+    caseConventionsTypeVariable :: Util.CaseConvention}
+  deriving (Eq, Ord, Read, Show)
+_CaseConventions = Core.Name "hydra.coders.CaseConventions"
+_CaseConventions_constant = Core.Name "constant"
+_CaseConventions_directory = Core.Name "directory"
+_CaseConventions_enumValue = Core.Name "enumValue"
+_CaseConventions_field = Core.Name "field"
+_CaseConventions_file = Core.Name "file"
+_CaseConventions_module = Core.Name "module"
+_CaseConventions_term = Core.Name "term"
+_CaseConventions_termVariable = Core.Name "termVariable"
+_CaseConventions_type = Core.Name "type"
+_CaseConventions_typeVariable = Core.Name "typeVariable"
 -- | An encoder and decoder; a bidirectional transformation between two types
 data Coder v1 v2 =
   Coder {
@@ -68,16 +104,25 @@ data CoderDirection =
 _CoderDirection = Core.Name "hydra.coders.CoderDirection"
 _CoderDirection_encode = Core.Name "encode"
 _CoderDirection_decode = Core.Name "decode"
--- | A named language together with language-specific constraints
+-- | A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension
 data Language =
   Language {
     -- | The unique name of the language
     languageName :: LanguageName,
-    -- | The constraints which characterize the language
-    languageConstraints :: LanguageConstraints}
+    -- | Constraints which characterize the language's type and term grammars
+    languageConstraints :: LanguageConstraints,
+    -- | Target-language or target-runtime capabilities the emitter may assume are available
+    languageSupportedFeatures :: (S.Set LanguageFeature),
+    -- | Per-target case conventions for the various kinds of identifiers emitted by the coder
+    languageCaseConventions :: CaseConventions,
+    -- | Conventional file extension for emitted source files, without the leading dot (e.g. "scala", "py")
+    languageDefaultFileExtension :: Util.FileExtension}
 _Language = Core.Name "hydra.coders.Language"
 _Language_name = Core.Name "name"
 _Language_constraints = Core.Name "constraints"
+_Language_supportedFeatures = Core.Name "supportedFeatures"
+_Language_caseConventions = Core.Name "caseConventions"
+_Language_defaultFileExtension = Core.Name "defaultFileExtension"
 -- | A set of constraints on valid type and term expressions, characterizing a language
 data LanguageConstraints =
   LanguageConstraints {
@@ -100,6 +145,19 @@ _LanguageConstraints_integerTypes = Core.Name "integerTypes"
 _LanguageConstraints_termVariants = Core.Name "termVariants"
 _LanguageConstraints_typeVariants = Core.Name "typeVariants"
 _LanguageConstraints_types = Core.Name "types"
+-- | A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability.
+data LanguageFeature =
+  -- | The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms.
+  LanguageFeaturePartialApplication |
+  -- | The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers.
+  LanguageFeatureNestedCaseStatements |
+  -- | The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level.
+  LanguageFeatureNestedPolymorphicLetBindings
+  deriving (Eq, Ord, Read, Show)
+_LanguageFeature = Core.Name "hydra.coders.LanguageFeature"
+_LanguageFeature_partialApplication = Core.Name "partialApplication"
+_LanguageFeature_nestedCaseStatements = Core.Name "nestedCaseStatements"
+_LanguageFeature_nestedPolymorphicLetBindings = Core.Name "nestedPolymorphicLetBindings"
 -- | The unique name of a language
 newtype LanguageName =
   LanguageName {

@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-pg",
   "description": "Property graph support for Hydra",
   "sourceLanguage": "haskell",

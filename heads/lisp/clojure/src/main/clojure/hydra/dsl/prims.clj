@@ -100,6 +100,27 @@
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
     (->hydra_packaging_primitive_definition pname (list :nothing) sig true true (list :nothing))))
 
+(defn lazy-args
+  "Mirror of Hydra.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
+   positions of `prim`'s signature as lazy. Used at registration sites to
+   record which arguments coders must thunk in hosts that distinguish strict
+   from lazy evaluation (#391). Without this, Lisp-coder emission for
+   maybes_maybe / eithers_fromLeft / etc. inlines the default expression
+   eagerly, which infinite-recurses for tail-recursive defaults (e.g. the
+   primitive_derivative lookup in differentiation.clj)."
+  [idxs prim]
+  (let [idx-set (set idxs)
+        def_ (:definition prim)
+        sig (:signature def_)
+        params (:parameters sig)
+        new-params (vec (map-indexed
+                          (fn [i p]
+                            (if (idx-set i) (assoc p :is_lazy true) p))
+                          params))
+        new-sig (assoc sig :parameters new-params)
+        new-def (assoc def_ :signature new-sig)]
+    (assoc prim :definition new-def)))
+
 ;; Error helpers
 
 (defn- other-err [msg]

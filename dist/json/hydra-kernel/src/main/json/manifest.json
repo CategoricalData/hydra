@@ -175,6 +175,7 @@
     "hydra.variables",
     "hydra.variants",
     "hydra.yaml.model"],
+  "manifestFormatVersion": 1,
   "package": "hydra-kernel",
   "testModules": [
     "hydra.test.annotations",

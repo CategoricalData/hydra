@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-haskell",
   "description": "Haskell support for Hydra",
   "sourceLanguage": "haskell",

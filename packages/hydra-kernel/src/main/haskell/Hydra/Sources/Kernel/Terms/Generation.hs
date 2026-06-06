@@ -285,10 +285,13 @@ generateLexicon = define "generateLexicon" $
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.
 -- The schema map is used to resolve type variables during type-directed encoding.
 generateSourceFiles = define "generateSourceFiles" $
-  doc ("Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,"
-    <> " and modules to generate, produce a list of (filePath, content) pairs.") $
+  doc ("Pure core of code generation: given a coder, language, infer flag, bootstrap graph, universe,"
+    <> " and modules to generate, produce a list of (filePath, content) pairs."
+    <> " Emission flags doExpand/doHoistCaseStatements/doHoistPolymorphicLetBindings are derived"
+    <> " from the absence of the matching LanguageFeature in lang.supportedFeatures: a target that"
+    <> " lacks partialApplication needs eta expansion (doExpand=true), and so on.") $
   "printDefinitions" ~> "lang" ~>
-  "doInfer" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
+  "doInfer" ~>
   "bsGraph" ~> "universeModules" ~> "modsToGenerate" ~> "cx" ~>
 
   "namespaceMap" <~ Maps.fromList (Lists.map
@@ -296,6 +299,14 @@ generateSourceFiles = define "generateSourceFiles" $
     (Lists.concat2 (var "universeModules") (var "modsToGenerate"))) $
 
   "constraints" <~ Coders.languageConstraints (var "lang") $
+  -- Derive emission flags from the language's supportedFeatures set. Absence
+  -- of a feature means the emitter must work around it (e.g. eta-expand for
+  -- targets that lack partialApplication; hoist cases for targets that lack
+  -- nestedCaseStatements).
+  "features" <~ Coders.languageSupportedFeatures (var "lang") $
+  "doExpand" <~ Logic.not (Sets.member Coders.languageFeaturePartialApplication (var "features")) $
+  "doHoistCaseStatements" <~ Logic.not (Sets.member Coders.languageFeatureNestedCaseStatements (var "features")) $
+  "doHoistPolymorphicLetBindings" <~ Logic.not (Sets.member Coders.languageFeatureNestedPolymorphicLetBindings (var "features")) $
 
   -- Filter modules into type and term categories (a module can appear in both)
   "typeModulesToGenerate" <~ Lists.filter ("mod" ~> hasTypeDefinitions (var "mod")) (var "modsToGenerate") $

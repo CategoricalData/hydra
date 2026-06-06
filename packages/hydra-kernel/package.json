@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-kernel",
   "description": "Hydra programming language kernel",
   "sourceLanguage": "haskell",

@@ -97,7 +97,8 @@ public class TypesTest {
         String desc = type.accept(new Type.PartialVisitor<>() {
             @Override
             public String visit(Type.Annotated instance) {
-                Term desc = instance.value.annotation.get(new Name("description"));
+                // #386: annotation is now a Term (TermMap), not a Map<Name, Term>.
+                Term desc = hydra.Annotations.getAnnotationMap(instance.value.annotation).get(new Name("description"));
                 return ((hydra.util.Either.Right<?, String>) hydra.extract.Core.string(null, desc)).value;
             }
 

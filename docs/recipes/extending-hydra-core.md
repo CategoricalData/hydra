@@ -1439,7 +1439,7 @@ one wire-format name per record field. There is no room for an alias at that
 layer. Implementing one would require either:
 - a fork in the encode/decode logic that emits both old and new keys and
   accepts either on read, or
-- a wholesale schema-versioning mechanism (bumping `formatVersion` from
+- a wholesale schema-versioning mechanism (bumping `moduleFormatVersion` from
   `docs/json-format.md` and producing both wire formats during a transition).
 
 Both are larger changes than the rename itself. For an in-place schema rename,

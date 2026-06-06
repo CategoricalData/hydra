@@ -1,4 +1,5 @@
 {
+  "packageFormatVersion": 1,
   "name": "hydra-rdf",
   "description": "RDF support for Hydra",
   "sourceLanguage": "haskell",

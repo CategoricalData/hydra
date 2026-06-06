@@ -158,12 +158,16 @@ generateLexicon graph =
         let termLines = Lists.map (\b -> formatTermBinding b) sortedTerms
             primitiveLines = Lists.map (\p -> formatPrimitive p) sortedPrimitives
         in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
--- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Typing.InferenceContext -> Either Errors.Error [(t0, t1)])
-generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate cx =
+-- | Pure core of code generation: given a coder, language, infer flag, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs. Emission flags doExpand/doHoistCaseStatements/doHoistPolymorphicLetBindings are derived from the absence of the matching LanguageFeature in lang.supportedFeatures: a target that lacks partialApplication needs eta expansion (doExpand=true), and so on.
+generateSourceFiles :: Ord t0 => ((Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map t0 t1)) -> Coders.Language -> Bool -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Typing.InferenceContext -> Either Errors.Error [(t0, t1)])
+generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsToGenerate cx =
 
       let namespaceMap = Maps.fromList (Lists.map (\m -> (Packaging.moduleName m, m)) (Lists.concat2 universeModules modsToGenerate))
           constraints = Coders.languageConstraints lang
+          features = Coders.languageSupportedFeatures lang
+          doExpand = Logic.not (Sets.member Coders.LanguageFeaturePartialApplication features)
+          doHoistCaseStatements = Logic.not (Sets.member Coders.LanguageFeatureNestedCaseStatements features)
+          doHoistPolymorphicLetBindings = Logic.not (Sets.member Coders.LanguageFeatureNestedPolymorphicLetBindings features)
           typeModulesToGenerate =
                   Lists.filter (\mod -> Logic.not (Lists.null (Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->

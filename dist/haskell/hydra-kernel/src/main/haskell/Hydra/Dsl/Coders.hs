@@ -8,11 +8,13 @@ import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Errors as DslErrors
 import qualified Hydra.Dsl.Graph as DslGraph
 import qualified Hydra.Dsl.Typing as DslTyping
+import qualified Hydra.Dsl.Util as DslUtil
 import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -356,6 +358,842 @@ bicoderWithEncode original newVal =
               Core.projectionTypeName = (Core.Name "hydra.coders.Bicoder"),
               Core.projectionFieldName = (Core.Name "decode")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL constructor for hydra.coders.CaseConventions
+caseConventions :: Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventions constant directory enumValue field file module_ term termVariable type_ typeVariable =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Typed.unTypedTerm constant)},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Typed.unTypedTerm directory)},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Typed.unTypedTerm enumValue)},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Typed.unTypedTerm field)},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Typed.unTypedTerm file)},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Typed.unTypedTerm module_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Typed.unTypedTerm term)},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Typed.unTypedTerm termVariable)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Typed.unTypedTerm type_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Typed.unTypedTerm typeVariable)}]}))
+-- | DSL accessor for the constant field of hydra.coders.CaseConventions
+caseConventionsConstant :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsConstant x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "constant")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the directory field of hydra.coders.CaseConventions
+caseConventionsDirectory :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsDirectory x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "directory")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the enumValue field of hydra.coders.CaseConventions
+caseConventionsEnumValue :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsEnumValue x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "enumValue")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the field field of hydra.coders.CaseConventions
+caseConventionsField :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsField x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "field")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the file field of hydra.coders.CaseConventions
+caseConventionsFile :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsFile x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "file")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the module field of hydra.coders.CaseConventions
+caseConventionsModule :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsModule x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "module")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the term field of hydra.coders.CaseConventions
+caseConventionsTerm :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsTerm x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "term")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the termVariable field of hydra.coders.CaseConventions
+caseConventionsTermVariable :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsTermVariable x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "termVariable")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the type field of hydra.coders.CaseConventions
+caseConventionsType :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsType x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "type")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the typeVariable field of hydra.coders.CaseConventions
+caseConventionsTypeVariable :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
+caseConventionsTypeVariable x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+        Core.projectionFieldName = (Core.Name "typeVariable")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the constant field of hydra.coders.CaseConventions
+caseConventionsWithConstant :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithConstant original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the directory field of hydra.coders.CaseConventions
+caseConventionsWithDirectory :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithDirectory original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the enumValue field of hydra.coders.CaseConventions
+caseConventionsWithEnumValue :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithEnumValue original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the field field of hydra.coders.CaseConventions
+caseConventionsWithField :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithField original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the file field of hydra.coders.CaseConventions
+caseConventionsWithFile :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithFile original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the module field of hydra.coders.CaseConventions
+caseConventionsWithModule :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithModule original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the term field of hydra.coders.CaseConventions
+caseConventionsWithTerm :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithTerm original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the termVariable field of hydra.coders.CaseConventions
+caseConventionsWithTermVariable :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithTermVariable original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.coders.CaseConventions
+caseConventionsWithType :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithType original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "typeVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the typeVariable field of hydra.coders.CaseConventions
+caseConventionsWithTypeVariable :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention -> Typed.TypedTerm Coders.CaseConventions
+caseConventionsWithTypeVariable original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.CaseConventions"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "constant"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "constant")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "directory"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "directory")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "enumValue"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "enumValue")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "field"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "field")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "file"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "file")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "module")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "term")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termVariable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "termVariable")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.CaseConventions"),
+              Core.projectionFieldName = (Core.Name "type")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariable"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.coders.Coder
 coder :: Typed.TypedTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2) -> Typed.TypedTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1) -> Typed.TypedTerm (Coders.Coder v1 v2)
 coder encode decode =
@@ -433,8 +1271,8 @@ coderWithEncode original newVal =
               Core.projectionFieldName = (Core.Name "decode")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.coders.Language
-language :: Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm Coders.Language
-language name constraints =
+language :: Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm (S.Set Coders.LanguageFeature) -> Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm Coders.Language
+language name constraints supportedFeatures caseConventions defaultFileExtension =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Language"),
       Core.recordFields = [
@@ -443,7 +1281,24 @@ language name constraints =
           Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
-          Core.fieldTerm = (Typed.unTypedTerm constraints)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm constraints)},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportedFeatures"),
+          Core.fieldTerm = (Typed.unTypedTerm supportedFeatures)},
+        Core.Field {
+          Core.fieldName = (Core.Name "caseConventions"),
+          Core.fieldTerm = (Typed.unTypedTerm caseConventions)},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultFileExtension"),
+          Core.fieldTerm = (Typed.unTypedTerm defaultFileExtension)}]}))
+-- | DSL accessor for the caseConventions field of hydra.coders.Language
+languageCaseConventions :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.CaseConventions
+languageCaseConventions x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+        Core.projectionFieldName = (Core.Name "caseConventions")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the constraints field of hydra.coders.Language
 languageConstraints :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.LanguageConstraints
 languageConstraints x =
@@ -788,6 +1643,38 @@ languageConstraintsWithTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+-- | DSL accessor for the defaultFileExtension field of hydra.coders.Language
+languageDefaultFileExtension :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Util.FileExtension
+languageDefaultFileExtension x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+        Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL injection for the nestedCaseStatements variant of hydra.coders.LanguageFeature
+languageFeatureNestedCaseStatements :: Typed.TypedTerm Coders.LanguageFeature
+languageFeatureNestedCaseStatements =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.coders.LanguageFeature"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "nestedCaseStatements"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the nestedPolymorphicLetBindings variant of hydra.coders.LanguageFeature
+languageFeatureNestedPolymorphicLetBindings :: Typed.TypedTerm Coders.LanguageFeature
+languageFeatureNestedPolymorphicLetBindings =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.coders.LanguageFeature"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "nestedPolymorphicLetBindings"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the partialApplication variant of hydra.coders.LanguageFeature
+languageFeaturePartialApplication :: Typed.TypedTerm Coders.LanguageFeature
+languageFeaturePartialApplication =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.coders.LanguageFeature"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "partialApplication"),
+        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL accessor for the name field of hydra.coders.Language
 languageName :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.LanguageName
 languageName x =
@@ -802,6 +1689,51 @@ languageName2 x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.coders.LanguageName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the supportedFeatures field of hydra.coders.Language
+languageSupportedFeatures :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm (S.Set Coders.LanguageFeature)
+languageSupportedFeatures x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+        Core.projectionFieldName = (Core.Name "supportedFeatures")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the caseConventions field of hydra.coders.Language
+languageWithCaseConventions :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Coders.Language
+languageWithCaseConventions original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.Language"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "constraints")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportedFeatures"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "supportedFeatures")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "caseConventions"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultFileExtension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the constraints field of hydra.coders.Language
 languageWithConstraints :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm Coders.Language
 languageWithConstraints original newVal =
@@ -817,6 +1749,64 @@ languageWithConstraints original newVal =
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportedFeatures"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "supportedFeatures")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "caseConventions"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "caseConventions")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultFileExtension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the defaultFileExtension field of hydra.coders.Language
+languageWithDefaultFileExtension :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm Coders.Language
+languageWithDefaultFileExtension original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.Language"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "constraints")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportedFeatures"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "supportedFeatures")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "caseConventions"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "caseConventions")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultFileExtension"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the name field of hydra.coders.Language
 languageWithName :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm Coders.Language
@@ -833,6 +1823,64 @@ languageWithName original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
               Core.projectionFieldName = (Core.Name "constraints")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportedFeatures"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "supportedFeatures")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "caseConventions"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "caseConventions")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultFileExtension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the supportedFeatures field of hydra.coders.Language
+languageWithSupportedFeatures :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm (S.Set Coders.LanguageFeature) -> Typed.TypedTerm Coders.Language
+languageWithSupportedFeatures original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coders.Language"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "constraints")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "supportedFeatures"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "caseConventions"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "caseConventions")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "defaultFileExtension"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
+              Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL injection for the post variant of hydra.coders.TraversalOrder
 traversalOrderPost :: Typed.TypedTerm Coders.TraversalOrder

@@ -7,5 +7,6 @@
     "hydra.typeScript.operators",
     "hydra.typeScript.serde",
     "hydra.typeScript.syntax"],
+  "manifestFormatVersion": 1,
   "package": "hydra-typescript",
   "testModules": []}

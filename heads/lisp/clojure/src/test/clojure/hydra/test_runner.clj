@@ -51,9 +51,57 @@
                                       pair)) m))
     :else {}))
 
+(defn- unwrap-term-variable-key [k]
+  "After #386, annotation map keys are wrapped as TermVariable terms.
+   Two encodings appear:
+     (:inject {:type_name \"hydra.core.Term\" :field {:name \"variable\" :term Name}})
+     (:variable Name)  ;; struct-compat short form
+   Peel one level to return the underlying Name term."
+  (cond
+    (and (sequential? k) (= (first k) :inject)
+         (= (:type_name (second k)) "hydra.core.Term")
+         (= (:name (:field (second k))) "variable"))
+    (:term (:field (second k)))
+    (and (sequential? k) (= (first k) :variable))
+    (second k)
+    :else k))
+
+(defn- unwrap-term-annotation [ann-term]
+  "Project the annotation Term (#386: a TermMap whose keys are TermVariables
+   wrapping Names) to a seq of (NameTerm value) pairs. Falls back to legacy
+   map-shaped inputs."
+  (cond
+    ;; Inject {Term, map = (:map contents)}
+    (and (sequential? ann-term) (= (first ann-term) :inject)
+         (= (:type_name (second ann-term)) "hydra.core.Term")
+         (= (:name (:field (second ann-term))) "map"))
+    (let [inner (:term (:field (second ann-term)))]
+      (if (and (sequential? inner) (= (first inner) :map))
+        (map (fn [pair]
+               (let [p (if (sequential? pair) [(first pair) (second pair)] pair)]
+                 [(unwrap-term-variable-key (first p)) (second p)]))
+             (let [m (second inner)]
+               (cond
+                 (map? m) (seq m)
+                 (sequential? m) m
+                 :else nil)))
+        nil))
+    ;; Legacy: (:map contents)
+    (and (sequential? ann-term) (= (first ann-term) :map))
+    (map (fn [pair]
+           (let [p (if (sequential? pair) [(first pair) (second pair)] pair)]
+             [(unwrap-term-variable-key (first p)) (second p)]))
+         (let [m (second ann-term)]
+           (cond
+             (map? m) (seq m)
+             (sequential? m) m
+             :else nil)))
+    :else nil))
+
 (defn- term-annotation-internal [term]
   "Extract annotation map from a meta-encoded annotated term.
-   Returns the annotation map (map of key->value terms)."
+   Returns the annotation map (map of NameTerm -> ValueTerm).
+   #386: at.annotation is a Term; project the map payload via unwrap-term-annotation."
   (loop [t term pairs ()]
     (if (is-meta-annotated? t)
       (let [rec (meta-annotated-record t)]
@@ -61,12 +109,10 @@
           (let [fields (:fields (second rec))
                 body-field (first (filter #(= (:name %) "body") fields))
                 ann-field (first (filter #(= (:name %) "annotation") fields))
-                ann-term (:term ann-field)]
-            ;; ann-term is (:map contents)
-            (if (and (sequential? ann-term) (= (first ann-term) :map))
-              (recur (:term body-field)
-                     (cons (seq (map-term-to-clj-map (second ann-term))) pairs))
-              (recur (:term body-field) pairs)))
+                ann-term (:term ann-field)
+                ann-pairs (unwrap-term-annotation ann-term)]
+            (recur (:term body-field)
+                   (if (seq ann-pairs) (cons ann-pairs pairs) pairs)))
           (into {} (apply concat pairs))))
       (into {} (apply concat pairs)))))
 
@@ -110,15 +156,36 @@
     (assoc (into {} (remove (fn [[k _]] (deep-equal? k key)) m))
            key (maybe-value val))))
 
+(defn- wrap-key-as-term-variable [k]
+  "Lift a Name term to TermVariable form: Inject{Term, variable = k}.
+   Keys already in TermVariable form pass through."
+  (cond
+    (and (sequential? k) (= (first k) :inject)
+         (= (:type_name (second k)) "hydra.core.Term")
+         (= (:name (:field (second k))) "variable"))
+    k
+    :else
+    (list :inject {:type_name "hydra.core.Term"
+                   :field {:name "variable" :term k}})))
+
+(defn- wrap-annotation-map-as-term [anns-map]
+  "Wrap a (NameTerm -> ValueTerm) map as a Term-encoded annotation map per
+   #386: Inject{Term, map = (:map ((TermVariable ValueTerm) ...))}."
+  (let [wrapped (mapv (fn [[k v]] [(wrap-key-as-term-variable k) v]) anns-map)]
+    (list :inject {:type_name "hydra.core.Term"
+                   :field {:name "map" :term (list :map wrapped)}})))
+
 (defn- make-meta-annotated [body anns-map]
   "Build a meta-encoded annotated term:
    (:union {:type_name \"hydra.core.Term\" :field {:name \"annotated\" :term
-     (:record {:type_name \"hydra.core.AnnotatedTerm\" :fields [...]})}})"
+     (:record {:type_name \"hydra.core.AnnotatedTerm\" :fields [...]})}})
+   #386: AnnotatedTerm.annotation is a Term, wrapped via wrap-annotation-map-as-term."
   (list :union {:type_name "hydra.core.Term"
                 :field {:name "annotated"
                         :term (list :record {:type_name "hydra.core.AnnotatedTerm"
                                              :fields [{:name "body" :term body}
-                                                      {:name "annotation" :term (list :map anns-map)}]})}}))
+                                                      {:name "annotation"
+                                                       :term (wrap-annotation-map-as-term anns-map)}]})}}))
 
 (defn- make-type-scheme [arity]
   (let [make-type (fn make-type [n]

@@ -164,6 +164,15 @@ scalaLanguage = define "scalaLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "typePredicate"))
+    (Sets.fromList $ list [
+      Coders.languageFeatureNestedCaseStatements,
+      Coders.languageFeatureNestedPolymorphicLetBindings])
+    (Coders.caseConventions
+      Util.caseConventionUpperSnake Util.caseConventionCamel Util.caseConventionPascal
+      Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionCamel
+      Util.caseConventionCamel Util.caseConventionCamel Util.caseConventionPascal
+      Util.caseConventionPascal)
+    (wrap _FileExtension (string "scala"))
 
 scalaReservedWords :: TypedTermDefinition (S.Set String)
 scalaReservedWords = define "scalaReservedWords" $

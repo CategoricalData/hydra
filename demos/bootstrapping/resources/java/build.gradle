@@ -10,13 +10,11 @@ repositories {
     mavenCentral()
 }
 
-// Exclude generated files with stale visitor patterns pending full regeneration.
-// (hydra/lisp/Coder.java was previously excluded as a generator wart; that wart
-// was fixed and Java->Lisp emission re-enabled, so the exclude is removed here to
-// match packages/hydra-java/build.gradle. For #409.)
-compileJava {
-    exclude '**/hydra/scala/**'
-}
+// hydra/lisp/Coder.java and hydra/scala/** were previously excluded as generator
+// warts. Both warts are fixed: Java->Lisp and Java->Scala emission compile cleanly,
+// and Generation.java#writeScala dispatches Java->Scala via hydra.scala.Coder, so
+// the excludes are removed here to match packages/hydra-java/build.gradle.
+// For #409 / #421.
 
 sourceSets {
     main {

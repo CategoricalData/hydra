@@ -361,6 +361,14 @@ a flat single-tree build, so they must overlay the runtime from `overlay/<lang>/
 (not from `heads/<lang>/src`, which no longer holds it for the big three). Forgetting this is a
 silent "Could not find module Hydra.Settings / hydra.lib.* not found" at bootstrap compile time.
 
+Corollary for a **bare `stack build`**: because the overlaid `dist/haskell/.../Hydra/Haskell/Lib/*`
+copies are *gitignored*, a freshly-checked-out (or freshly-synced-elsewhere) worktree may not have
+them on disk yet. A direct `stack build` then fails with `Could not find module
+'Hydra.Haskell.Lib.Strings'` (often surfacing first in a downstream consumer like
+`dist/haskell/hydra-ext/.../Yaml/Serde.hs`, not the kernel). This is **not** a code error — run
+`heads/haskell/bin/overlay-kernel-runtime.sh` first (the sync scripts run it for you; a bare
+`stack build` does not). Prefer `/sync-haskell` over a raw `stack build` when in doubt.
+
 ### `moduleFilePaths` is target-specific; Java is not 1-to-1
 
 `Hydra.TargetFilePaths.moduleFilePaths target m` returns the paths a coder

@@ -376,14 +376,15 @@ public class Generation {
 
     /**
      * Generate source files and write them to disk.
+     *
+     * Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
+     * are now read from {@code language.supportedFeatures} inside
+     * {@code generateSourceFiles}; the caller only supplies {@code doInfer}.
      */
     public static void generateSources(
             Function<Module, Function<List<Definition>, Function<hydra.typing.InferenceContext, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
-            boolean doExpand,
-            boolean doHoistCase,
-            boolean doHoistPoly,
             String basePath,
             List<Module> universe,
             List<Module> modulesToGenerate) {
@@ -391,7 +392,7 @@ public class Generation {
         hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
         Either<hydra.errors.Error_, List<Pair<String, String>>> result =
                 Codegen.generateSourceFiles(coder, language,
-                        doInfer, doExpand, doHoistCase, doHoistPoly,
+                        doInfer,
                         bsGraph, universe, modulesToGenerate, cx);
         List<Pair<String, String>> files;
         if (result.isLeft()) {
@@ -422,7 +423,7 @@ public class Generation {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.java.Coder.moduleToJava(mod, defs, cx, g),
                 hydra.java.Language.javaLanguage(),
-                false, true, false, true,
+                false,
                 basePath, universe, mods);
     }
 
@@ -433,23 +434,29 @@ public class Generation {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.python.Coder.moduleToPython(mod, defs, cx, g),
                 hydra.python.Language.pythonLanguage(),
-                false, true, true, false,
+                false,
+                basePath, universe, mods);
+    }
+
+    /**
+     * Generate Scala source files from modules.
+     */
+    public static void writeScala(String basePath, List<Module> universe, List<Module> mods) {
+        generateSources(
+                mod -> defs -> cx -> g -> hydra.scala.Coder.moduleToScala(mod, defs, cx, g),
+                hydra.scala.Language.scalaLanguage(),
+                false,
                 basePath, universe, mods);
     }
 
     /**
      * Generate TypeScript source files from modules.
-     *
-     * doHoistCaseStatements=true mirrors Python's TS-host setting and the
-     * per-target dispatch in heads/typescript/.../bootstrap.ts. Hoisting
-     * pulls cases out of inline IIFEs into top-level helpers, saving
-     * stack frames when the TS runtime walks deeply-nested terms.
      */
     public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
                 hydra.typeScript.Language.typeScriptLanguage(),
-                false, true, true, false,
+                false,
                 basePath, universe, mods);
     }
 
@@ -460,7 +467,7 @@ public class Generation {
         generateSources(
                 mod -> defs -> cx -> g -> hydra.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
                 hydra.haskell.Language.haskellLanguage(),
-                false, false, false, false,
+                false,
                 basePath, universe, mods);
     }
 
@@ -511,7 +518,7 @@ public class Generation {
                     return new hydra.util.Either.Right(fileMap);
                 },
                 hydra.lisp.Language.lispLanguage(),
-                false, false, false, false,
+                false,
                 basePath, universe, mods);
     }
 
@@ -893,7 +900,8 @@ public class Generation {
                 hydra.errors.Error_ err =
                     ((Either.Left<hydra.errors.Error_, List<Module>>) result).value;
                 throw new RuntimeException(
-                    "inferAndWriteByPackage: inference failed for " + pkg + ": " + err);
+                    "inferAndWriteByPackage: inference failed for " + pkg + ": "
+                        + hydra.show.Errors.error(err));
             }
             List<Module> toWrite = new ArrayList<>();
             for (Module m : inferred) {

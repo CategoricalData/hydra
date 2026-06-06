@@ -367,6 +367,47 @@
             form))
         form))))
 
+(defn- fix-mixed-letfn
+  "Transform `(letfn [b1 b2 ...] body)` when any binding is value-shaped
+   `(name value)` rather than fn-shaped `(name [params] body)` into a
+   sequential `(let [name1 v1 name2 v2 ...] body)` with named-fn wrapping
+   for the originally-fn-shaped bindings so self-recursion still works.
+
+   The Lisp coder (`encodeLetAsNative` in packages/hydra-lisp/.../Coder.hs)
+   emits `letfn` for ANY recursive Hydra `lets` block, but Hydra `lets`
+   freely mixes value bindings and lambda bindings. Clojure's `letfn` spec
+   requires every binding to be `(name [params] body)` — a value-shaped
+   binding fails fn-spec validation at load time. This transform restores
+   well-formedness without requiring a kernel regen."
+  [form]
+  (cond
+    (vector? form) (mapv fix-mixed-letfn form)
+    (not (sequential? form)) form
+    :else
+    (let [items (apply list (map fix-mixed-letfn form))]
+      (if (and (= (first items) 'letfn)
+               (>= (count items) 3)
+               (vector? (second items)))
+        (let [bindings (second items)
+              body (drop 2 items)
+              fn-shaped? (fn [b]
+                           (and (sequential? b)
+                                (>= (count b) 3)
+                                (symbol? (first b))
+                                (vector? (second b))))
+              all-fn? (every? fn-shaped? bindings)]
+          (if all-fn?
+            items
+            (let [let-bindings (vec (mapcat
+                                      (fn [b]
+                                        (let [name- (first b)]
+                                          (if (fn-shaped? b)
+                                            [name- (apply list 'fn name- (second b) (drop 2 b))]
+                                            [name- (second b)])))
+                                      bindings))]
+              (apply list 'let let-bindings body))))
+        items))))
+
 (defn load-ns-manually!
   "Load a generated namespace's .clj file by reading forms and evaluating them
    in the target namespace, skipping the (ns ...) declaration.
@@ -383,26 +424,46 @@
                       (let [form (try (read rdr false ::eof) (catch Exception _ ::eof))]
                         (if (= form ::eof) acc
                             (recur (conj acc form)))))))
-          ;; Filter out ns declarations, desugar if_else, then fix self/forward-referencing let bindings
+          ;; Filter out ns declarations, desugar if_else, fix mixed-binding letfn
+          ;; (coder bug: emits letfn for any recursive let even with value
+          ;; bindings; Clojure's letfn requires all bindings be (name [params]
+          ;; body) shape), then fix self/forward-referencing let bindings.
           eval-forms (->> forms
                          (filterv #(not (and (sequential? %) (= (first %) 'ns))))
                          (mapv desugar-if-else)
+                         (mapv fix-mixed-letfn)
                          (mapv fix-forward-ref-let)
                          (mapv fix-self-ref-let))]
-      ;; Multi-pass evaluation (retry failed forms up to 5 times)
+      ;; Multi-pass evaluation (retry failed forms up to 5 times).
+      ;; Surface ALL failed forms on the final pass: a silently-swallowed
+      ;; failure here turns into a confusing "unbound fn" at call time
+      ;; (this is what hid bug F — clojure-to-haskell letfn shape bug — for
+      ;; an entire session). Walk the cause chain to expose the real reason.
       (binding [*ns* the-ns]
         (loop [remaining eval-forms pass 0]
-          (when (and (seq remaining) (< pass 5))
-            (let [still-failed (atom [])]
+          (when (seq remaining)
+            (let [still-failed (atom [])
+                  last-pass? (>= pass 4)]
               (doseq [form remaining]
                 (try
                   (eval form)
-                  (catch Throwable _
+                  (catch Throwable e
+                    (when last-pass?
+                      (binding [*out* *err*]
+                        (println (str "  [load-ns-manually! " ns-name "] form failed on final pass: "
+                                      (.getName (class e)) ": " (.getMessage e)))
+                        (loop [c (.getCause e) depth 0]
+                          (when (and c (< depth 4))
+                            (println (str "      cause[" depth "]: " (.getName (class c)) ": " (.getMessage c)))
+                            (recur (.getCause c) (inc depth))))
+                        (when (and (sequential? form) (= (first form) 'def))
+                          (println (str "    def of: " (pr-str (second form)))))))
                     (swap! still-failed conj form))))
               (let [failed @still-failed]
-                ;; Only retry if we made progress
-                (when (and (seq failed) (< (count failed) (count remaining)))
-                  (recur failed (inc pass)))))))))))
+                ;; Only retry if we made progress AND we haven't hit the pass limit
+                (when (and (seq failed) (< (count failed) (count remaining)) (< pass 5))
+                  (recur failed (inc pass))))))))
+      nil)))
 
 (defn refer-clojure-into-ns!
   "Refer clojure.core into a namespace so fn, def, cond, etc. are available."
