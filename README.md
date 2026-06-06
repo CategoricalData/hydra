@@ -166,6 +166,8 @@ for the rules.
 
 ### For contributors
 
+- **[Contributing](CONTRIBUTING.md)** — starting point for contributors: setup, expectations,
+  testing, and PR guidance.
 - **[Contributor setup](docs/contributor-setup.md)** — toolchain prerequisites, tiered by scope (kernel only / triad / full matrix).
 - **[Implementation guide](docs/implementation.md)** — architectural deep dive into kernel modules, DSLs, primitives, and coders.
 - **[Code organization](https://github.com/CategoricalData/hydra/wiki/Code-Organization)** — the `packages/`, `heads/`, `overlay/`, and `dist/` layout.

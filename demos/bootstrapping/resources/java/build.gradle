@@ -11,9 +11,10 @@ repositories {
 }
 
 // hydra/lisp/Coder.java and hydra/scala/** were previously excluded as generator
-// warts; both warts are fixed and Java->Lisp / Java->Scala emission is re-enabled
-// (Generation.writeScala / Bootstrap.java now generate Scala), so the excludes are
-// removed here to match packages/hydra-java/build.gradle. For #409.
+// warts. Both warts are fixed: Java->Lisp and Java->Scala emission compile cleanly,
+// and Generation.java#writeScala dispatches Java->Scala via hydra.scala.Coder, so
+// the excludes are removed here to match packages/hydra-java/build.gradle.
+// For #409 / #421.
 
 sourceSets {
     main {
