@@ -3,7 +3,6 @@
 
 module Hydra.Python.Language where
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
@@ -42,7 +41,21 @@ pythonLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}}
+        Coders.languageConstraintsTypes = typePredicate},
+      Coders.languageSupportedFeatures = (Sets.fromList [
+        Coders.LanguageFeatureNestedPolymorphicLetBindings]),
+      Coders.languageCaseConventions = Coders.CaseConventions {
+        Coders.caseConventionsConstant = Util.CaseConventionUpperSnake,
+        Coders.caseConventionsDirectory = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsEnumValue = Util.CaseConventionUpperSnake,
+        Coders.caseConventionsField = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsFile = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsModule = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsTerm = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsTermVariable = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsType = Util.CaseConventionPascal,
+        Coders.caseConventionsTypeVariable = Util.CaseConventionPascal},
+      Coders.languageDefaultFileExtension = (Util.FileExtension "py")}
   where
     literalVariants =
         Sets.fromList [
