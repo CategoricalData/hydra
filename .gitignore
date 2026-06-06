@@ -130,8 +130,13 @@ heads/typescript/node_modules/
 # tracked. Pattern: exclude .claude contents but re-include .claude/commands/.
 .claude/*
 !.claude/commands/
-# Hydra branch plan files (see CLAUDE.md)
-*-plan.md
+# Hydra branch plan files (see CLAUDE.md). These are per-branch working notes named
+# <branch>-plan.md and always live at the WORKTREE ROOT. The leading slash anchors
+# the rule to the root so it ignores only those files — an unanchored `*-plan.md`
+# matched every `-plan.md` anywhere in the tree (e.g. .claude/commands/compact-plan.md,
+# which IS tracked). Keep this anchored. Note: any *other* root-level file ending in
+# `-plan.md` will also be ignored by convention; tracked planning docs belong in docs/.
+/*-plan.md
 # Cross-worktree Claude messages (see CLAUDE.md)
 claude-hydra-messages/
 # Claude session monitor helper scripts (local-only; log-tailing watchers)
