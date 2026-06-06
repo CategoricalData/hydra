@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
@@ -867,7 +867,7 @@ encodeRecordType = def "encodeRecordType" $
                       Cpp._ConstructorDeclaration_parameters>>:
                         Lists.map (lambda "p" $
                           record Cpp._Parameter [
-                            Cpp._Parameter_type>>: Maybes.fromMaybe
+                            Cpp._Parameter_type>>: Optionals.fromOptional
                               (inject Cpp._TypeExpression Cpp._TypeExpression_basic $
                                 inject Cpp._BasicType Cpp._BasicType_int unit)
                               ((project Cpp._VariableDeclaration Cpp._VariableDeclaration_type @@ var "p")),
@@ -913,7 +913,7 @@ encodeType = def "encodeType" $
          right (toConstType @@ (createTemplateType @@ string "std::map" @@ list [var "kt", var "vt"])),
      _Type_literal>>: lambda "lt" $
        right (encodeLiteralType @@ var "lt"),
-     _Type_maybe>>: lambda "et" $
+     _Type_optional>>: lambda "et" $
        Eithers.map (lambda "enc" $ toConstType @@ (createTemplateType @@ string "std::optional" @@ list [var "enc"]))
          (encodeType @@ var "cx" @@ var "g" @@ var "et"),
      _Type_pair>>: lambda "pt" $
@@ -1040,7 +1040,7 @@ findTypeDependencies = def "findTypeDependencies" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (reify Packaging.unModuleName) (Names.moduleNameOf @@ var "n"))
+          (Optionals.map (reify Packaging.unModuleName) (Names.moduleNameOf @@ var "n"))
           (just (Packaging.unModuleName (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
@@ -1100,7 +1100,7 @@ isStdContainerType = def "isStdContainerType" $
        isStdContainerType @@ Core.applicationTypeFunction (var "at"),
      _Type_list>>: constant $ boolean True,
      _Type_map>>: constant $ boolean True,
-     _Type_maybe>>: constant $ boolean True,
+     _Type_optional>>: constant $ boolean True,
      _Type_set>>: constant $ boolean True]
 
 -- | Check whether a type is a struct type (not a literal and not an enum)

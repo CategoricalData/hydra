@@ -21,7 +21,7 @@ from hydra.core import (
     TermApplication,
     Type,
 )
-from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
+from hydra.dsl.python import FrozenDict, Optional, Given, None_, frozenlist, Either, Left, Right
 from hydra.errors import Error, ErrorOther, OtherError
 from hydra.graph import Graph, Primitive, TermCoder
 from hydra.packaging import PrimitiveDefinition
@@ -103,10 +103,10 @@ def default_primitive_definition(name: Name, typ, lazy_args: list[int] = []) -> 
     return PrimitiveDefinition(
         name=name,
         signature=sig,
-        metadata=Nothing(),
+        metadata=None_(),
         is_pure=True,
         is_total=True,
-        default_implementation=Nothing(),
+        default_implementation=None_(),
     )
 
 
@@ -392,20 +392,20 @@ def map_(keys: TermCoder[X], values: TermCoder[Y]) -> TermCoder[FrozenDict[X, Y]
     )
 
 
-def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
+def optional(mel: TermCoder[X]) -> TermCoder[Optional[X]]:
     def encode(cx, g, t):
         return extract.maybe_term(lambda term: mel.encode(cx, g, term), g, t)
     def decode(cx, mv):
         match mv:
-            case Nothing():
-                return Right(terms.optional(Nothing()))
-            case Just(value=v):
+            case None_():
+                return Right(terms.optional(None_()))
+            case Given(value=v):
                 r = mel.decode(cx, v)
                 match r:
                     case Left(_):
                         return r
                     case Right(value=decoded):
-                        return Right(terms.optional(Just(decoded)))
+                        return Right(terms.optional(Given(decoded)))
     return TermCoder(
         type=types.optional(mel.type),
         encode=encode,

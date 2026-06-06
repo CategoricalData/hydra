@@ -411,7 +411,7 @@ encodeType cx g typ st = case deannotateType typ of
   Core.TypeList _ -> pure (goSliceType goAnyType, st)
   Core.TypeSet _ -> pure (goSliceType goAnyType, st)   -- Sets use []any (deduplicated lists)
   Core.TypeMap _ -> pure (goSliceType goAnyType, st)   -- Maps use []any of [2]any{k,v} pairs
-  Core.TypeMaybe _ -> pure (goAnyType, st)  -- nil for Nothing, value for Just
+  Core.TypeOptional _ -> pure (goAnyType, st)  -- nil for Nothing, value for Just
   Core.TypeEither _ -> pure (goAnyType, st)  -- Either is erased to any at the Go type level
   Core.TypePair _ -> pure (goAnyType, st)    -- Pair is erased to any at the Go type level
   Core.TypeFunction ft -> do
@@ -656,7 +656,7 @@ encodeTermInner cx g term st = case term of
           Core.TermMap _ -> pure (funExpr, st1)
           Core.TermSet _ -> pure (funExpr, st1)
           Core.TermUnit -> pure (funExpr, st1)
-          Core.TermMaybe _ -> pure (funExpr, st1)
+          Core.TermOptional _ -> pure (funExpr, st1)
           _ -> do
             -- Look up the first param type for local function calls
             let mFuncParamType = case deannotateTerm funTerm of
@@ -812,7 +812,7 @@ encodeTermInner cx g term st = case term of
     (goEntries, st') <- encodeMapEntries cx g entries st
     let pairExprs = fmap (\(k, v) -> goArrayLit2 k v) goEntries
     pure (goSliceLit goAnyType pairExprs, st')
-  Core.TermMaybe mt -> case mt of
+  Core.TermOptional mt -> case mt of
     Nothing -> pure (goNameExpr "nil", st)
     Just val -> do
       (ve, st') <- encodeTerm cx g val st
@@ -1411,7 +1411,7 @@ producesAny st t = case deannotateTerm t of
   Core.TermSet _ -> False
   Core.TermMap _ -> False
   Core.TermUnit -> False
-  Core.TermMaybe _ -> False
+  Core.TermOptional _ -> False
   Core.TermEither _ -> False
   Core.TermPair _ -> False
   Core.TermVariable name ->
@@ -2052,7 +2052,7 @@ typeVarNeedsGoParam g varName types = any (varInGoVisiblePos varName) types
       Core.TypeList _ -> False
       Core.TypeSet _ -> False
       Core.TypeMap _ -> False
-      Core.TypeMaybe _ -> False
+      Core.TypeOptional _ -> False
       _ -> False
 
 -- | Check if a function type has a function-typed domain (higher-order).

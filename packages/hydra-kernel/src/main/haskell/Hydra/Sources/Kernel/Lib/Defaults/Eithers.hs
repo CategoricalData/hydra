@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math      as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals    as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
@@ -79,7 +79,7 @@ module_ = Module {
       toDefinition lefts_,
       toDefinition map_,
       toDefinition mapList_,
-      toDefinition mapMaybe_,
+      toDefinition mapOptional_,
       toDefinition mapSet_,
       toDefinition partitionEithers_,
       toDefinition rights_]
@@ -289,20 +289,20 @@ mapList_ = define "mapList" $
     -- Reverse elements so foldl with cons builds list in original order
     (Lists.reverse $ var "elements")
 
--- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
--- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
-mapMaybe_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-mapMaybe_ = define "mapMaybe" $
-  doc "Interpreter-friendly mapMaybe for Either (traverse over Maybe)." $
+-- | Interpreter-friendly mapOptional for Either (traverse over an optional).
+-- mapOptional funTerm maybeTerm: if Just, applies funTerm to the value.
+mapOptional_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
+mapOptional_ = define "mapOptional" $
+  doc "Interpreter-friendly mapOptional for Either (traverse over an optional)." $
   "cx" ~> "g" ~>
   "funTerm" ~> "maybeTerm" ~>
   cases _Term (var "maybeTerm")
     (Just (ExtractCore.unexpected (string "maybe value") (ShowCore.term @@ var "maybeTerm"))) [
-    _Term_maybe>>: "opt" ~>
-      right $ Maybes.cases
+    _Term_optional>>: "opt" ~>
+      right $ Optionals.cases
         (var "opt")
         -- Nothing: return Right Nothing
-        (Core.termEither $ right $ Core.termMaybe nothing)
+        (Core.termEither $ right $ Core.termOptional nothing)
         -- Just val: apply funTerm, wrap result in Just
         ("val" ~>
           Core.termApplication $ Core.application
@@ -312,7 +312,7 @@ mapMaybe_ = define "mapMaybe" $
                 (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
                   Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
               (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
-                Core.termEither $ right $ Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "y"))
+                Core.termEither $ right $ Core.termOptional $ just $ Core.termVariable $ wrap _Name $ string "y"))
             (Core.termApplication $ Core.application (var "funTerm") (var "val")))]
 
 -- | Interpreter-friendly mapSet for Either (traverse over Set).

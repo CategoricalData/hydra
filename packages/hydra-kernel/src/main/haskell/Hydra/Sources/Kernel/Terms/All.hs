@@ -34,7 +34,7 @@ import qualified Hydra.Sources.Kernel.Lib.Literals          as LibLiterals
 import qualified Hydra.Sources.Kernel.Lib.Logic             as LibLogic
 import qualified Hydra.Sources.Kernel.Lib.Maps              as LibMaps
 import qualified Hydra.Sources.Kernel.Lib.Math              as LibMath
-import qualified Hydra.Sources.Kernel.Lib.Maybes            as LibMaybes
+import qualified Hydra.Sources.Kernel.Lib.Optionals            as LibOptionals
 -- Hydra.Sources.Kernel.Lib.Names is a Haskell-side derived index (no
 -- module_ declaration; no kernel-module emission).
 import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
@@ -145,7 +145,7 @@ kernelPrimaryTermsModules = [
   LibLogic.module_,
   LibMaps.module_,
   LibMath.module_,
-  LibMaybes.module_,
+  LibOptionals.module_,
   LibPairs.module_,
   LibRegex.module_,
   LibSets.module_,

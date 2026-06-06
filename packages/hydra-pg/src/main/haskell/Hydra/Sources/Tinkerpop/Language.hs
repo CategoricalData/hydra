@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -117,7 +117,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
 
     -- Helper: conditional inclusion
     "cond">: lambda "v" $ lambda "b" $
-      Logic.ifElse (var "b") (Maybes.pure (var "v")) nothing,
+      Logic.ifElse (var "b") (Optionals.pure (var "v")) nothing,
 
     -- Whether lists are supported (any array type is supported)
     "supportsLists">:
@@ -136,7 +136,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
     "supportsMaps">: project TF._DataTypeFeatures TF._DataTypeFeatures_supportsMapValues @@ var "vpFeatures",
 
 
-    "literalVariants">: Sets.fromList (Maybes.cat $ list [
+    "literalVariants">: Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Variants.literalVariantBinary
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsByteArrayValues @@ var "vpFeatures"),
       var "cond" @@ Variants.literalVariantBoolean
@@ -150,33 +150,33 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
       var "cond" @@ Variants.literalVariantString
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsStringValues @@ var "vpFeatures")]),
 
-    "floatTypes">: Sets.fromList (Maybes.cat $ list [
+    "floatTypes">: Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Core.floatTypeFloat32
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsFloatValues @@ var "vpFeatures"),
       var "cond" @@ Core.floatTypeFloat64
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsDoubleValues @@ var "vpFeatures")]),
 
 
-    "integerTypes">: Sets.fromList (Maybes.cat $ list [
+    "integerTypes">: Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Core.integerTypeInt32
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsIntegerValues @@ var "vpFeatures"),
       var "cond" @@ Core.integerTypeInt64
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsLongValues @@ var "vpFeatures")]),
 
     -- Only lists and literal values may be explicitly supported via Graph.Features.
-    "termVariants">: Sets.fromList (Maybes.cat $ list [
+    "termVariants">: Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Variants.termVariantList @@ var "supportsLists",
       var "cond" @@ Variants.termVariantLiteral @@ var "supportsLiterals",
       var "cond" @@ Variants.termVariantMap @@ var "supportsMaps",
       -- An optional value translates to an absent vertex property
-      Maybes.pure Variants.termVariantMaybe]),
+      Optionals.pure Variants.termVariantOptional]),
 
-    "typeVariants">: Sets.fromList (Maybes.cat $ list [
+    "typeVariants">: Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Variants.typeVariantList @@ var "supportsLists",
       var "cond" @@ Variants.typeVariantLiteral @@ var "supportsLiterals",
       var "cond" @@ Variants.typeVariantMap @@ var "supportsMaps",
-      Maybes.pure Variants.typeVariantMaybe,
-      Maybes.pure Variants.typeVariantWrap]),
+      Optionals.pure Variants.typeVariantOptional,
+      Optionals.pure Variants.typeVariantWrap]),
 
     "typePredicate">: "typ" ~> lets [
       "dt">: Strip.deannotateType @@ var "typ"] $
@@ -205,7 +205,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
           project TF._ExtraFeatures TF._ExtraFeatures_supportsMapKey @@ var "extras"
             @@ (project _MapType _MapType_keys @@ var "mt"),
         _Type_wrap>>: constant true,
-        _Type_maybe>>: "ot" ~> cases _Type (Strip.deannotateType @@ var "ot") (Just false) [
+        _Type_optional>>: "ot" ~> cases _Type (Strip.deannotateType @@ var "ot") (Just false) [
           _Type_literal>>: constant true]]] $
 
   Coders.language

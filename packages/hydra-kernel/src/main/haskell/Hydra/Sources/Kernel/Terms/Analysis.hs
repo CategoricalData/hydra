@@ -38,7 +38,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -120,7 +120,7 @@ addNamesToModuleNames = define "addNamesToModuleNames" $
   doc "Add names to existing module names mapping" $
   "encodeModuleName" ~> "names" ~> "ns0" ~>
 --  "nss" <~ Sets.empty $
-  "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (Names.moduleNameOf) $ Sets.toList $ var "names") $
+  "nss" <~ Sets.fromList (Optionals.cat $ Lists.map (Names.moduleNameOf) $ Sets.toList $ var "names") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeModuleName" @@ var "ns")) $
   Util.moduleNamesWithMapping (var "ns0") $ Maps.union
     (Util.moduleNamesMapping $ var "ns0")
@@ -200,7 +200,7 @@ analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
     _Term_lambda>>: "lam" ~>
       Logic.ifElse (var "argMode")
         ("v" <~ Core.lambdaParameter (var "lam") $
-         "dom" <~ Maybes.cases (Core.lambdaDomain (var "lam")) (Core.typeVariable (Core.name (string "_"))) identity $
+         "dom" <~ Optionals.cases (Core.lambdaDomain (var "lam")) (Core.typeVariable (Core.name (string "_"))) identity $
          "body" <~ Core.lambdaBody (var "lam") $
          "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
          analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
@@ -261,7 +261,7 @@ definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
     _Definition_primitive>>: "primDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
-  Sets.fromList (Maybes.cat (Lists.map (Names.moduleNameOf) (Sets.toList (var "allNames"))))
+  Sets.fromList (Optionals.cat (Lists.map (Names.moduleNameOf) (Sets.toList (var "allNames"))))
 
 dependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyModuleNames = define "dependencyModuleNames" $
@@ -272,7 +272,7 @@ dependencyModuleNames = define "dependencyModuleNames" $
     "deannotatedTerm" <~ Strip.deannotateTerm @@ var "term" $
     "dataNames" <~ Dependencies.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
-      (Maybes.cases (Core.bindingTypeScheme (var "el")) Sets.empty ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts")))
+      (Optionals.cases (Core.bindingTypeScheme (var "el")) Sets.empty ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts")))
       Sets.empty $
     -- Handle encoded types: decode as Type and extract type dependency names
     Logic.ifElse (Predicates.isEncodedType @@ var "deannotatedTerm")
@@ -289,7 +289,7 @@ dependencyModuleNames = define "dependencyModuleNames" $
           (Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
               (decoderFor _Term @@ var "graph" @@ var "term")))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
-  Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.moduleNameOf) (
+  Eithers.map ("namesList" ~> Sets.fromList (Optionals.cat (Lists.map (Names.moduleNameOf) (
       Sets.toList (Sets.unions (var "namesList"))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
@@ -431,7 +431,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
               true
               (var "cases_")) $
             -- Default branch (if present) must also be tail-recursive
-            "dfltOk" <~ (Maybes.cases (var "dflt") true ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")) $
+            "dfltOk" <~ (Optionals.cases (var "dflt") true ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")) $
             -- Arguments to the case statement must NOT contain funcName
             "argsOk" <~ (Lists.foldl
               ("ok" ~> "arg" ~>
@@ -465,7 +465,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
           _Literal_binary>>: constant true]]) $
   "termContainsBinary" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
-  "defTerms" <~ Maybes.cat (Lists.map
+  "defTerms" <~ Optionals.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
@@ -485,7 +485,7 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
           _Literal_decimal>>: constant true]]) $
   "termContainsDecimal" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
-  "defTerms" <~ Maybes.cat (Lists.map
+  "defTerms" <~ Optionals.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
@@ -498,13 +498,13 @@ moduleDependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph ->
 moduleDependencyModuleNames = define "moduleDependencyModuleNames" $
   doc "Find dependency module names in all elements of a module, excluding the module's own module name (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
-  "allBindings" <~ Maybes.cat (Lists.map
+  "allBindings" <~ Optionals.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
         just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionBody $ var "td")
-          (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
+          (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
     ("deps" ~> Sets.delete (Packaging.moduleName (var "mod")) (var "deps"))

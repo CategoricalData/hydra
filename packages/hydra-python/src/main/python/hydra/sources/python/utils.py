@@ -4,14 +4,14 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Utils.hs.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Just, Nothing
+from hydra.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.logic as Logic
 import hydra.dsl.meta.lib.maps as Maps
-import hydra.dsl.meta.lib.maybes as Maybes
+import hydra.dsl.meta.lib.optionals as Optionals
 import hydra.dsl.meta.lib.pairs as Pairs
 import hydra.dsl.meta.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
@@ -51,11 +51,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just(EntityMetadata(
-        Just("Python utilities for constructing Python syntax trees"),
+    Given(EntityMetadata(
+        Given("Python utilities for constructing Python syntax trees"),
         (),
         (),
-        Nothing())),
+        None_())),
     DEPENDENCIES,
     (),
 )
@@ -83,7 +83,7 @@ _pynames_encode_namespace = var("hydra.python.names.encodeNamespace")
 # ----------------------------------------------------------------------
 
 def _annotated_expression():
-    body = Maybes.cases(var("mcomment"), var("expr"), lam(
+    body = Optionals.cases(var("mcomment"), var("expr"), lam(
             "c",
             _local("pyPrimaryToPyExpression")(_local("primaryWithExpressionSlices")(_local("pyNameToPyPrimary")(_py_name("Annotated")), list_([
                         var("expr"),
@@ -100,7 +100,7 @@ def _annotated_expression():
 
 
 def _annotated_statement():
-    body = Maybes.cases(var("mcomment"), var("stmt"), lam(
+    body = Optionals.cases(var("mcomment"), var("stmt"), lam(
             "c",
             PySyn.statement_annotated(
                 PySyn.annotated_statement(var("c"), var("stmt")),
@@ -202,15 +202,15 @@ def _decode_py_comparison_to_py_await_primary():
         ],
         _short_circuit_to_nothing([
             Logic.not_(Lists.null(var("rhs"))),
-            Maybes.is_just(var("orLhs")),
-            Maybes.is_just(var("xorLhs")),
-            Maybes.is_just(var("andLhs")),
-            Maybes.is_just(var("shiftLhs")),
-            Maybes.is_just(var("sumLhs")),
-            Maybes.is_just(var("termLhs")),
+            Optionals.is_given(var("orLhs")),
+            Optionals.is_given(var("xorLhs")),
+            Optionals.is_given(var("andLhs")),
+            Optionals.is_given(var("shiftLhs")),
+            Optionals.is_given(var("sumLhs")),
+            Optionals.is_given(var("termLhs")),
             apply(
                 match("hydra.python.syntax.Factor",
-                    Just(nothing()),
+                    Given(nothing()),
                     [
                         field("simple",
                             lam(
@@ -240,7 +240,7 @@ def _decode_py_conjunction_to_py_primary():
         ],
         Logic.if_else(
             Equality.equal(Lists.length(var("inversions")), int32(1)),
-            Maybes.bind(
+            Optionals.bind(
                 Lists.maybe_head(var("inversions")),
                 lam("i", _local("decodePyInversionToPyPrimary")(var("i"))),
             ),
@@ -259,7 +259,7 @@ def _decode_py_conjunction_to_py_primary():
 def _decode_py_expression_to_py_primary():
     body = apply(
         match("hydra.python.syntax.Expression",
-            Just(nothing()),
+            Given(nothing()),
             [
                 field("simple",
                     lam(
@@ -275,7 +275,7 @@ def _decode_py_expression_to_py_primary():
                                     Lists.length(var("conjunctions")),
                                     int32(1),
                                 ),
-                                Maybes.bind(
+                                Optionals.bind(
                                     Lists.maybe_head(var("conjunctions")),
                                     lam(
                                         "c2",
@@ -303,7 +303,7 @@ def _decode_py_expression_to_py_primary():
 def _decode_py_inversion_to_py_primary():
     body = apply(
         match("hydra.python.syntax.Inversion",
-            Just(nothing()),
+            Given(nothing()),
             [
                 field("simple",
                     lam(
@@ -457,7 +457,7 @@ def _indented_block():
     body = lets(
         [
             field("commentGroup",
-                Maybes.cases(var("mcomment"), list_([]), lam(
+                Optionals.cases(var("mcomment"), list_([]), lam(
                         "s",
                         list_([_local("commentStatement")(var("s"))]),
                     ),),
@@ -517,7 +517,7 @@ def _newtype_statement():
 
 def _or_expression():
     # Inner recursive 'build' lambda
-    build_body = Maybes.cases(Lists.uncons(var("ps")), # Unreachable fallback
+    build_body = Optionals.cases(Lists.uncons(var("ps")), # Unreachable fallback
         PySyn.bitwise_or(
             var("prev"),
             _local("pyPrimaryToPyBitwiseXor")(PySyn.primary_simple(PySyn.atom_ellipsis)),
@@ -564,9 +564,9 @@ def _primary_and_params():
 
 
 def _primary_with_expression_slices():
-    body = Maybes.from_maybe(
+    body = Optionals.from_optional(
         var("prim"),
-        Maybes.map(
+        Optionals.map(
             lam(
                 "p",
                 _local("primaryWithSlices")(var("prim"), _local("pyExpressionToPySlice")(Pairs.first(var("p"))), Lists.map(
@@ -776,7 +776,7 @@ def _py_expression_to_py_annotated_rhs():
 
 
 def _py_expression_to_py_primary():
-    body = Maybes.cases(_local("decodePyExpressionToPyPrimary")(var("e")), PySyn.primary_simple(
+    body = Optionals.cases(_local("decodePyExpressionToPyPrimary")(var("e")), PySyn.primary_simple(
             PySyn.atom_group(
                 PySyn.group_expression(PySyn.named_expression_simple(var("e"))),
             ),

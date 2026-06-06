@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -123,14 +123,14 @@ decodeFloat = define "decodeFloat" $
         (Just $ left $ string "expected number or special float string for float32") [
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ Literals.decimalToFloat32 $ var "n",
         _Value_string>>: "s" ~>
-          Maybes.cases (parseSpecialFloat32 @@ var "s") (left $ Strings.cat $ list [string "invalid float32 sentinel: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")],
+          Optionals.cases (parseSpecialFloat32 @@ var "s") (left $ Strings.cat $ list [string "invalid float32 sentinel: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")],
     -- Float64: JSON number (Scientific) -> float64, or special sentinel string
     _FloatType_float64>>: constant $
       cases _Value (var "value")
         (Just $ left $ string "expected number or special float string for float64") [
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "n",
         _Value_string>>: "s" ~>
-          Maybes.cases (parseSpecialFloat @@ var "s") (left $ Strings.cat $ list [string "invalid float64 sentinel: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")]]
+          Optionals.cases (parseSpecialFloat @@ var "s") (left $ Strings.cat $ list [string "invalid float64 sentinel: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")]]
 
 -- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
 -- "NaN", "Infinity", "-Infinity", or "-0.0". Returns Nothing for unrecognized strings.
@@ -151,7 +151,7 @@ decodeInteger = define "decodeInteger" $
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readBigint $ var "s") $
-          Maybes.cases (var "parsed") (left $ Strings.cat $ list [string "invalid bigint: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v"))
+          Optionals.cases (var "parsed") (left $ Strings.cat $ list [string "invalid bigint: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v"))
         (var "strResult"),
     _IntegerType_int64>>: constant $
       "strResult" <~ (expectString @@ var "value") $
@@ -159,7 +159,7 @@ decodeInteger = define "decodeInteger" $
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readInt64 $ var "s") $
-          Maybes.cases (var "parsed") (left $ Strings.cat $ list [string "invalid int64: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v"))
+          Optionals.cases (var "parsed") (left $ Strings.cat $ list [string "invalid int64: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v"))
         (var "strResult"),
     _IntegerType_uint32>>: constant $
       "strResult" <~ (expectString @@ var "value") $
@@ -167,7 +167,7 @@ decodeInteger = define "decodeInteger" $
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readUint32 $ var "s") $
-          Maybes.cases (var "parsed") (left $ Strings.cat $ list [string "invalid uint32: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v"))
+          Optionals.cases (var "parsed") (left $ Strings.cat $ list [string "invalid uint32: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v"))
         (var "strResult"),
     _IntegerType_uint64>>: constant $
       "strResult" <~ (expectString @@ var "value") $
@@ -175,7 +175,7 @@ decodeInteger = define "decodeInteger" $
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readUint64 $ var "s") $
-          Maybes.cases (var "parsed") (left $ Strings.cat $ list [string "invalid uint64: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v"))
+          Optionals.cases (var "parsed") (left $ Strings.cat $ list [string "invalid uint64: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v"))
         (var "strResult"),
     -- Small integers: decode from JSON number
     _IntegerType_int8>>: constant $
@@ -312,33 +312,33 @@ fromJson = define "fromJson" $
     -- Maybe: decoding depends on whether the inner type is itself Maybe
     --   Simple Maybe(T): null -> Nothing, any other value -> Just (decoded as T)
     --   Nested Maybe(Maybe(T)): null -> Nothing, [v] -> Just v (array-wrapped)
-    _Type_maybe>>: "innerType" ~>
+    _Type_optional>>: "innerType" ~>
       "innerStripped" <~ (Strip.deannotateType @@ var "innerType") $
       "isNestedMaybe" <~ (cases _Type (var "innerStripped") (Just false) [
-        _Type_maybe>>: constant true]) $
+        _Type_optional>>: constant true]) $
       Logic.ifElse (var "isNestedMaybe")
         -- Nested Maybe: use array-wrapped encoding (null -> Nothing, [v] -> Just v)
         ("decodeJust" <~ ("arr" ~>
-          Maybes.cases (Lists.maybeHead $ var "arr") (left $ string "expected single-element array for Just") ("firstVal" ~>
-              Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+          Optionals.cases (Lists.maybeHead $ var "arr") (left $ string "expected single-element array for Just") ("firstVal" ~>
+              Eithers.map ("v" ~> Core.termOptional $ just $ var "v")
                 (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "firstVal"))) $
         "decodeMaybeArray" <~ ("arr" ~>
           "len" <~ (Lists.length $ var "arr") $
           Logic.ifElse (Equality.equal (var "len") (int32 0))
-            (right $ Core.termMaybe nothing)
+            (right $ Core.termOptional nothing)
             (Logic.ifElse (Equality.equal (var "len") (int32 1))
               (var "decodeJust" @@ var "arr")
               (left $ string "expected single-element array for Just"))) $
         cases _Value (var "value")
           (Just $ left $ string "expected null or single-element array for nested Maybe") [
-          _Value_null>>: constant $ right $ Core.termMaybe nothing,
+          _Value_null>>: constant $ right $ Core.termOptional nothing,
           _Value_array>>: "arr" ~> var "decodeMaybeArray" @@ var "arr"])
         -- Simple Maybe: idiomatic encoding (null -> Nothing, value -> Just)
         (cases _Value (var "value")
           (Just $
-            Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+            Eithers.map ("v" ~> Core.termOptional $ just $ var "v")
               (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "value")) [
-          _Value_null>>: constant $ right $ Core.termMaybe nothing]),
+          _Value_null>>: constant $ right $ Core.termOptional nothing]),
 
     -- Records
     _Type_record>>: "rt" ~>
@@ -352,7 +352,7 @@ fromJson = define "fromJson" $
             "mval" <~ (Maps.lookup (Core.unName $ var "fname") (var "obj")) $
             -- Use empty object as default for missing optional fields
             "defaultVal" <~ Json.valueNull $
-            "jsonVal" <~ (Maybes.fromMaybe (var "defaultVal") (var "mval")) $
+            "jsonVal" <~ (Optionals.fromOptional (var "defaultVal") (var "mval")) $
             "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
             Eithers.map ("v" ~> Core.field (var "fname") (var "v")) (var "decoded")) $
           "decodedFields" <~ (Eithers.mapList (var "decodeField") (var "rt")) $
@@ -365,7 +365,7 @@ fromJson = define "fromJson" $
     _Type_union>>: "rt" ~>
       -- Helper to decode a field once found
       "decodeVariant" <~ ("key" ~> "val" ~> "ftype" ~>
-        "jsonVal" <~ (Maybes.fromMaybe Json.valueNull (var "val")) $
+        "jsonVal" <~ (Optionals.fromOptional Json.valueNull (var "val")) $
         "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
         Eithers.map
           ("v" ~> Core.termInject $ Core.injection
@@ -375,12 +375,12 @@ fromJson = define "fromJson" $
       -- Find matching field and decode (finds the field whose name matches `key`,
       -- then decodes its value; returns an error if no matching variant is present).
       "findAndDecode" <~ ("key" ~> "val" ~> "fts" ~>
-        Maybes.cases (Lists.find
+        Optionals.cases (Lists.find
             ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
             (var "fts")) (left $ Strings.cat $ list [string "unknown variant: ", var "key"]) ("ft" ~> var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))) $
       -- Helper to decode a single-key object
       "decodeSingleKey" <~ ("obj" ~>
-        Maybes.cases (Lists.maybeHead $ Maps.keys $ var "obj") (left $ string "expected single-key object for union") ("k" ~> var "findAndDecode"
+        Optionals.cases (Lists.maybeHead $ Maps.keys $ var "obj") (left $ string "expected single-key object for union") ("k" ~> var "findAndDecode"
             @@ var "k"
             @@ (Maps.lookup (var "k") (var "obj"))
             @@ var "rt")) $
@@ -423,7 +423,7 @@ fromJson = define "fromJson" $
               ("entryObj" ~>
                 "keyJson" <~ (Maps.lookup (string "key") (var "entryObj")) $
                 "valJson" <~ (Maps.lookup (string "value") (var "entryObj")) $
-                Maybes.cases (var "keyJson") (left $ string "missing key in map entry") ("kj" ~> Maybes.cases (var "valJson") (left $ string "missing value in map entry") ("vj" ~>
+                Optionals.cases (var "keyJson") (left $ string "missing key in map entry") ("kj" ~> Optionals.cases (var "valJson") (left $ string "missing value in map entry") ("vj" ~>
                       "decodedKey" <~ (fromJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "kj") $
                       "decodedVal" <~ (fromJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "vj") $
                       Eithers.either_
@@ -445,7 +445,7 @@ fromJson = define "fromJson" $
         ("obj" ~>
           "firstJson" <~ (Maps.lookup (string "first") (var "obj")) $
           "secondJson" <~ (Maps.lookup (string "second") (var "obj")) $
-          Maybes.cases (var "firstJson") (left $ string "missing first in pair") ("fj" ~> Maybes.cases (var "secondJson") (left $ string "missing second in pair") ("sj" ~>
+          Optionals.cases (var "firstJson") (left $ string "missing first in pair") ("fj" ~> Optionals.cases (var "secondJson") (left $ string "missing second in pair") ("sj" ~>
                 "decodedFirst" <~ (fromJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "fj") $
                 "decodedSecond" <~ (fromJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "sj") $
                 Eithers.either_
@@ -464,7 +464,7 @@ fromJson = define "fromJson" $
         ("obj" ~>
           "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
           "rightJson" <~ (Maps.lookup (string "right") (var "obj")) $
-          Maybes.cases (var "leftJson") (Maybes.cases (var "rightJson") (left $ string "expected left or right in Either") ("rj" ~>
+          Optionals.cases (var "leftJson") (Optionals.cases (var "rightJson") (left $ string "expected left or right in Either") ("rj" ~>
                 "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "rj") $
                 Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))) ("lj" ~>
               "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "leftType" @@ var "lj") $
@@ -474,7 +474,7 @@ fromJson = define "fromJson" $
     -- Type variables (look up in type table and recurse)
     _Type_variable>>: "name" ~>
       "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
-      Maybes.cases (var "lookedUp") (left $ Strings.cat $ list [
+      Optionals.cases (var "lookedUp") (left $ Strings.cat $ list [
           string "unknown type variable: ",
           Core.unName $ var "name"]) ("resolvedType" ~> fromJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "value")]
 

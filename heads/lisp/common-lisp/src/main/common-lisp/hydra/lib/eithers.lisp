@@ -86,8 +86,8 @@
                    (push (either-val result) acc))
             finally (return (list :right (nreverse acc)))))))
 
-;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-(defvar hydra_lib_eithers_map_maybe
+;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+(defvar hydra_lib_eithers_map_optional
   (lambda (f)
     (lambda (m)
       (if (or (null m) (and (consp m) (eq (first m) :nothing)))

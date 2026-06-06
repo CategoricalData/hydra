@@ -33,7 +33,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const UNION_ARMS = new Set<string>([
   // Term arms
   "annotated", "application", "cases", "either", "inject", "lambda",
-  "let", "list", "literal", "map", "maybe", "optional", "pair", "primitive",
+  "let", "list", "literal", "map", "optional", "pair", "primitive",
   "product", "project", "record", "set", "stream", "sum", "typeAbstraction",
   "typeApplication", "typeLambda", "tyabs", "tyapp", "unit", "unwrap",
   "variable", "wrap",
@@ -138,11 +138,11 @@ const convert = (j: unknown): unknown => {
     if ((armName === "variable" || armName === "primitive") && typeof rhs === "string") {
       return { tag: armName, value: { value: rhs } };
     }
-    // Hydra Maybe in a Term position: `{maybe: null}` = Nothing,
-    // `{maybe: <v>}` = Just v. The runtime expects:
-    //   Nothing → { tag: "maybe", value: { tag: "nothing" } }
-    //   Just v  → { tag: "maybe", value: { tag: "just", value: <v> } }
-    if (armName === "maybe" || armName === "optional") {
+    // Hydra optional in a Term position: `{optional: null}` = Nothing,
+    // `{optional: <v>}` = Just v. The runtime expects:
+    //   Nothing → { tag: "optional", value: { tag: "nothing" } }
+    //   Just v  → { tag: "optional", value: { tag: "just", value: <v> } }
+    if (armName === "optional") {
       if (rhs === null) {
         return { tag: armName, value: { tag: "nothing" } };
       }

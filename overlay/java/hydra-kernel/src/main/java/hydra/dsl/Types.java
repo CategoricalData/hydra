@@ -654,7 +654,7 @@ public interface Types {
      * @return the maybe type
      */
     static Type maybe(Type elements) {
-        return new Type.Maybe(elements);
+        return new Type.Optional(elements);
     }
 
     /**

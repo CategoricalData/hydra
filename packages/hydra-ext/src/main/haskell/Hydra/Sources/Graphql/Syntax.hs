@@ -177,7 +177,7 @@ directive :: TypeDefinition
 directive = define "Directive" $
   T.record [
     "Name">: gql "Name",
-    "Arguments">: T.maybe $ gql "Arguments"]
+    "Arguments">: T.optional $ gql "Arguments"]
 
 directives :: TypeDefinition
 directives = define "Directives" $ T.wrap $ T.list $ gql "Directive"
@@ -200,18 +200,18 @@ executableDocument = define "ExecutableDocument" $ T.wrap $ T.list $ gql "Execut
 field_ :: TypeDefinition
 field_ = define "Field" $
   T.record [
-    "Alias">: T.maybe $ gql "Alias",
+    "Alias">: T.optional $ gql "Alias",
     "Name">: gql "Name",
-    "Arguments">: T.maybe $ gql "Arguments",
-    "Directives">: T.maybe $ gql "Directives",
-    "SelectionSet">: T.maybe $ gql "SelectionSet"]
+    "Arguments">: T.optional $ gql "Arguments",
+    "Directives">: T.optional $ gql "Directives",
+    "SelectionSet">: T.optional $ gql "SelectionSet"]
 
 fragmentDefinition :: TypeDefinition
 fragmentDefinition = define "FragmentDefinition" $
   T.record [
     "FragmentName">: gql "FragmentName",
     "TypeCondition">: gql "TypeCondition",
-    "Directives">: T.maybe $ gql "Directives",
+    "Directives">: T.optional $ gql "Directives",
     "SelectionSet">: gql "SelectionSet"]
 
 fragmentName :: TypeDefinition
@@ -221,13 +221,13 @@ fragmentSpread :: TypeDefinition
 fragmentSpread = define "FragmentSpread" $
   T.record [
     "FragmentName">: gql "FragmentName",
-    "Directives">: T.maybe $ gql "Directives"]
+    "Directives">: T.optional $ gql "Directives"]
 
 inlineFragment :: TypeDefinition
 inlineFragment = define "InlineFragment" $
   T.record [
-    "TypeCondition">: T.maybe $ gql "TypeCondition",
-    "Directives">: T.maybe $ gql "Directives",
+    "TypeCondition">: T.optional $ gql "TypeCondition",
+    "Directives">: T.optional $ gql "Directives",
     "SelectionSet">: gql "SelectionSet"]
 
 listType :: TypeDefinition
@@ -279,9 +279,9 @@ operationDefinition_Sequence :: TypeDefinition
 operationDefinition_Sequence = define "OperationDefinition_Sequence" $
   T.record [
     "OperationType">: gql "OperationType",
-    "Name">: T.maybe $ gql "Name",
-    "VariablesDefinition">: T.maybe $ gql "VariablesDefinition",
-    "Directives">: T.maybe $ gql "Directives",
+    "Name">: T.optional $ gql "Name",
+    "VariablesDefinition">: T.optional $ gql "VariablesDefinition",
+    "Directives">: T.optional $ gql "Directives",
     "SelectionSet">: gql "SelectionSet"]
 
 operationType :: TypeDefinition
@@ -335,8 +335,8 @@ variablesDefinition = define "VariablesDefinition" $
   T.record [
     "Variable">: gql "Variable",
     "Type">: gql "Type",
-    "DefaultValue">: T.maybe $ gql "DefaultValue",
-    "Directives">: T.maybe $ gql "Directives"]
+    "DefaultValue">: T.optional $ gql "DefaultValue",
+    "Directives">: T.optional $ gql "Directives"]
 
 -- Type system definitions
 
@@ -349,10 +349,10 @@ description = define "Description" $ T.wrap $ gql "StringValue"
 enumTypeDefinition :: TypeDefinition
 enumTypeDefinition = define "EnumTypeDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives",
-    "EnumValuesDefinition">: T.maybe $ gql "EnumValuesDefinition"]
+    "Directives">: T.optional $ gql "Directives",
+    "EnumValuesDefinition">: T.optional $ gql "EnumValuesDefinition"]
 
 enumTypeExtension :: TypeDefinition
 enumTypeExtension = define "EnumTypeExtension" $
@@ -364,7 +364,7 @@ enumTypeExtension_Sequence :: TypeDefinition
 enumTypeExtension_Sequence = define "EnumTypeExtension_Sequence" $
   T.record [
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives",
+    "Directives">: T.optional $ gql "Directives",
     "EnumValuesDefinition">: gql "EnumValuesDefinition"]
 
 enumTypeExtension_Sequence2 :: TypeDefinition
@@ -376,9 +376,9 @@ enumTypeExtension_Sequence2 = define "EnumTypeExtension_Sequence2" $
 enumValueDefinition :: TypeDefinition
 enumValueDefinition = define "EnumValueDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "EnumValue">: gql "EnumValue",
-    "Directives">: T.maybe $ gql "Directives"]
+    "Directives">: T.optional $ gql "Directives"]
 
 enumValuesDefinition :: TypeDefinition
 enumValuesDefinition = define "EnumValuesDefinition" $ T.wrap $ T.list $ gql "EnumValueDefinition"
@@ -386,11 +386,11 @@ enumValuesDefinition = define "EnumValuesDefinition" $ T.wrap $ T.list $ gql "En
 fieldDefinition :: TypeDefinition
 fieldDefinition = define "FieldDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "ArgumentsDefinition">: T.maybe $ gql "ArgumentsDefinition",
+    "ArgumentsDefinition">: T.optional $ gql "ArgumentsDefinition",
     "Type">: gql "Type",
-    "Directives">: T.maybe $ gql "Directives"]
+    "Directives">: T.optional $ gql "Directives"]
 
 fieldsDefinition :: TypeDefinition
 fieldsDefinition = define "FieldsDefinition" $ T.wrap $ T.list $ gql "FieldDefinition"
@@ -410,7 +410,7 @@ implementsInterfaces_Sequence = define "ImplementsInterfaces_Sequence" $
 implementsInterfaces_Sequence2 :: TypeDefinition
 implementsInterfaces_Sequence2 = define "ImplementsInterfaces_Sequence2" $
   T.record [
-    "Amp">: T.maybe T.unit,
+    "Amp">: T.optional T.unit,
     "NamedType">: gql "NamedType"]
 
 inputFieldsDefinition :: TypeDefinition
@@ -425,17 +425,17 @@ inputObjectTypeDefinition = define "InputObjectTypeDefinition" $
 inputObjectTypeDefinition_Sequence :: TypeDefinition
 inputObjectTypeDefinition_Sequence = define "InputObjectTypeDefinition_Sequence" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives",
+    "Directives">: T.optional $ gql "Directives",
     "InputFieldsDefinition">: gql "InputFieldsDefinition"]
 
 inputObjectTypeDefinition_Sequence2 :: TypeDefinition
 inputObjectTypeDefinition_Sequence2 = define "InputObjectTypeDefinition_Sequence2" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives"]
+    "Directives">: T.optional $ gql "Directives"]
 
 inputObjectTypeExtension :: TypeDefinition
 inputObjectTypeExtension = define "InputObjectTypeExtension" $
@@ -447,7 +447,7 @@ inputObjectTypeExtension_Sequence :: TypeDefinition
 inputObjectTypeExtension_Sequence = define "InputObjectTypeExtension_Sequence" $
   T.record [
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives",
+    "Directives">: T.optional $ gql "Directives",
     "InputFieldsDefinition">: gql "InputFieldsDefinition"]
 
 inputObjectTypeExtension_Sequence2 :: TypeDefinition
@@ -459,11 +459,11 @@ inputObjectTypeExtension_Sequence2 = define "InputObjectTypeExtension_Sequence2"
 inputValueDefinition :: TypeDefinition
 inputValueDefinition = define "InputValueDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
     "Type">: gql "Type",
-    "DefaultValue">: T.maybe $ gql "DefaultValue",
-    "Directives">: T.maybe $ gql "Directives"]
+    "DefaultValue">: T.optional $ gql "DefaultValue",
+    "Directives">: T.optional $ gql "Directives"]
 
 interfaceTypeDefinition :: TypeDefinition
 interfaceTypeDefinition = define "InterfaceTypeDefinition" $
@@ -474,19 +474,19 @@ interfaceTypeDefinition = define "InterfaceTypeDefinition" $
 interfaceTypeDefinition_Sequence :: TypeDefinition
 interfaceTypeDefinition_Sequence = define "InterfaceTypeDefinition_Sequence" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "ImplementsInterfaces">: T.maybe $ gql "ImplementsInterfaces",
-    "Directives">: T.maybe $ gql "Directives",
+    "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
+    "Directives">: T.optional $ gql "Directives",
     "FieldsDefinition">: gql "FieldsDefinition"]
 
 interfaceTypeDefinition_Sequence2 :: TypeDefinition
 interfaceTypeDefinition_Sequence2 = define "InterfaceTypeDefinition_Sequence2" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
     "ImplementsInterfaces">: gql "ImplementsInterfaces",
-    "Directives">: T.maybe $ gql "Directives"]
+    "Directives">: T.optional $ gql "Directives"]
 
 interfaceTypeExtension :: TypeDefinition
 interfaceTypeExtension = define "InterfaceTypeExtension" $
@@ -499,15 +499,15 @@ interfaceTypeExtension_Sequence :: TypeDefinition
 interfaceTypeExtension_Sequence = define "InterfaceTypeExtension_Sequence" $
   T.record [
     "Name">: gql "Name",
-    "ImplementsInterfaces">: T.maybe $ gql "ImplementsInterfaces",
-    "Directives">: T.maybe $ gql "Directives",
+    "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
+    "Directives">: T.optional $ gql "Directives",
     "FieldsDefinition">: gql "FieldsDefinition"]
 
 interfaceTypeExtension_Sequence2 :: TypeDefinition
 interfaceTypeExtension_Sequence2 = define "InterfaceTypeExtension_Sequence2" $
   T.record [
     "Name">: gql "Name",
-    "ImplementsInterfaces">: T.maybe $ gql "ImplementsInterfaces",
+    "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
     "Directives">: gql "Directives"]
 
 interfaceTypeExtension_Sequence3 :: TypeDefinition
@@ -519,11 +519,11 @@ interfaceTypeExtension_Sequence3 = define "InterfaceTypeExtension_Sequence3" $
 objectTypeDefinition :: TypeDefinition
 objectTypeDefinition = define "ObjectTypeDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "ImplementsInterfaces">: T.maybe $ gql "ImplementsInterfaces",
-    "Directives">: T.maybe $ gql "Directives",
-    "FieldsDefinition">: T.maybe $ gql "FieldsDefinition"]
+    "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
+    "Directives">: T.optional $ gql "Directives",
+    "FieldsDefinition">: T.optional $ gql "FieldsDefinition"]
 
 objectTypeExtension :: TypeDefinition
 objectTypeExtension = define "ObjectTypeExtension" $
@@ -536,16 +536,16 @@ objectTypeExtension_Sequence :: TypeDefinition
 objectTypeExtension_Sequence = define "ObjectTypeExtension_Sequence" $
   T.record [
     "Name">: gql "Name",
-    "ImplementsInterfaces">: T.maybe $ gql "ImplementsInterfaces",
-    "Directives">: T.maybe $ gql "Directives",
+    "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
+    "Directives">: T.optional $ gql "Directives",
     "FieldsDefinition">: gql "FieldsDefinition"]
 
 objectTypeExtension_Sequence2 :: TypeDefinition
 objectTypeExtension_Sequence2 = define "ObjectTypeExtension_Sequence2" $
   T.record [
     "Name">: gql "Name",
-    "ImplementsInterfaces">: T.maybe $ gql "ImplementsInterfaces",
-    "Directives">: T.maybe $ gql "Directives"]
+    "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
+    "Directives">: T.optional $ gql "Directives"]
 
 objectTypeExtension_Sequence3 :: TypeDefinition
 objectTypeExtension_Sequence3 = define "ObjectTypeExtension_Sequence3" $
@@ -562,9 +562,9 @@ rootOperationTypeDefinition = define "RootOperationTypeDefinition" $
 scalarTypeDefinition :: TypeDefinition
 scalarTypeDefinition = define "ScalarTypeDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives"]
+    "Directives">: T.optional $ gql "Directives"]
 
 scalarTypeExtension :: TypeDefinition
 scalarTypeExtension = define "ScalarTypeExtension" $
@@ -575,8 +575,8 @@ scalarTypeExtension = define "ScalarTypeExtension" $
 schemaDefinition :: TypeDefinition
 schemaDefinition = define "SchemaDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
-    "Directives">: T.maybe $ gql "Directives",
+    "Description">: T.optional $ gql "Description",
+    "Directives">: T.optional $ gql "Directives",
     "RootOperationTypeDefinition">: gql "RootOperationTypeDefinition"]
 
 schemaExtension :: TypeDefinition
@@ -588,7 +588,7 @@ schemaExtension = define "SchemaExtension" $
 schemaExtension_Sequence :: TypeDefinition
 schemaExtension_Sequence = define "SchemaExtension_Sequence" $
   T.record [
-    "Directives">: T.maybe $ gql "Directives",
+    "Directives">: T.optional $ gql "Directives",
     "RootOperationTypeDefinition">: gql "RootOperationTypeDefinition"]
 
 typeDefinition :: TypeDefinition
@@ -652,16 +652,16 @@ unionMemberTypes_Sequence = define "UnionMemberTypes_Sequence" $
 unionMemberTypes_Sequence2 :: TypeDefinition
 unionMemberTypes_Sequence2 = define "UnionMemberTypes_Sequence2" $
   T.record [
-    "Or">: T.maybe T.unit,
+    "Or">: T.optional T.unit,
     "NamedType">: gql "NamedType"]
 
 unionTypeDefinition :: TypeDefinition
 unionTypeDefinition = define "UnionTypeDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives",
-    "UnionMemberTypes">: T.maybe $ gql "UnionMemberTypes"]
+    "Directives">: T.optional $ gql "Directives",
+    "UnionMemberTypes">: T.optional $ gql "UnionMemberTypes"]
 
 unionTypeExtension :: TypeDefinition
 unionTypeExtension = define "UnionTypeExtension" $
@@ -673,7 +673,7 @@ unionTypeExtension_Sequence :: TypeDefinition
 unionTypeExtension_Sequence = define "UnionTypeExtension_Sequence" $
   T.record [
     "Name">: gql "Name",
-    "Directives">: T.maybe $ gql "Directives",
+    "Directives">: T.optional $ gql "Directives",
     "UnionMemberTypes">: gql "UnionMemberTypes"]
 
 unionTypeExtension_Sequence2 :: TypeDefinition
@@ -687,10 +687,10 @@ unionTypeExtension_Sequence2 = define "UnionTypeExtension_Sequence2" $
 directiveDefinition :: TypeDefinition
 directiveDefinition = define "DirectiveDefinition" $
   T.record [
-    "Description">: T.maybe $ gql "Description",
+    "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
-    "ArgumentsDefinition">: T.maybe $ gql "ArgumentsDefinition",
-    "Repeatable">: T.maybe T.unit,
+    "ArgumentsDefinition">: T.optional $ gql "ArgumentsDefinition",
+    "Repeatable">: T.optional T.unit,
     "DirectiveLocations">: gql "DirectiveLocations"]
 
 directiveLocation :: TypeDefinition
@@ -714,7 +714,7 @@ directiveLocations_Sequence = define "DirectiveLocations_Sequence" $
 directiveLocations_Sequence2 :: TypeDefinition
 directiveLocations_Sequence2 = define "DirectiveLocations_Sequence2" $
   T.record [
-    "Or">: T.maybe T.unit,
+    "Or">: T.optional T.unit,
     "DirectiveLocation">: gql "DirectiveLocation"]
 
 executableDirectiveLocation :: TypeDefinition

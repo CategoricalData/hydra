@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -169,14 +169,14 @@ encodeName = def "encodeName" $
     -- If qualified, check bound vars first, then namespace
     Logic.ifElse (var "isQualified")
       -- Check if name is a bound type variable
-      (Maybes.cases
+      (Optionals.cases
         (Maps.lookup (var "name") (var "boundVars"))
         -- Not a bound type variable - check namespace
         (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
           -- Same namespace - use local name (possibly escaped for future annotations)
           (wrap Py._Name $ Logic.ifElse useFutureAnnotations (var "pyLocal") (PySerde.escapePythonString @@ true @@ var "pyLocal"))
           -- Different namespace or no namespace
-          (Maybes.cases
+          (Optionals.cases
             (var "mns")
             -- No namespace - just use local name
             (wrap Py._Name $ var "pyLocal")
@@ -208,14 +208,14 @@ encodeNameQualified = def "encodeNameQualified" $
       Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal"))] $
     -- Check if name is a bound type variable
-    Maybes.cases
+    Optionals.cases
       (Maps.lookup (var "name") (var "boundVars"))
       -- Not a bound type variable
       (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         -- Same namespace - use local name (possibly escaped for future annotations)
         (wrap Py._Name $ Logic.ifElse useFutureAnnotations (var "local") (PySerde.escapePythonString @@ true @@ var "local"))
         -- Different namespace - use snake-cased dotted namespace + sanitized local
-        (Maybes.cases
+        (Optionals.cases
           (var "mns")
           -- No namespace - just use local sanitized
           (wrap Py._Name $ sanitizePythonName @@ var "local")
@@ -279,7 +279,7 @@ variableReference = def "variableReference" $
     "focusPair">: Util.moduleNamesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
     "mns">: Names.moduleNameOf @@ var "name",
-    "sameNamespace">: Maybes.cases (var "mns") false (lambda "ns" $ Equality.equal (var "ns") (var "focusNs"))] $
+    "sameNamespace">: Optionals.cases (var "mns") false (lambda "ns" $ Equality.equal (var "ns") (var "focusNs"))] $
     Logic.ifElse (Logic.and (var "quoted") (var "sameNamespace"))
       (PyDsl.pyStringToPyExpression $ PyDsl.doubleQuotedString (unwrap Py._Name @@ var "pyName"))
       (var "unquoted")

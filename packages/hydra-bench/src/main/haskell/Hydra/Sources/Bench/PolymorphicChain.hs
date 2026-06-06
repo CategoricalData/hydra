@@ -9,7 +9,7 @@
 -- Patterns exercised in addition to those in 'LinearChain':
 --
 --   1. Type-scheme polymorphism (every def's signature is @forall a@)
---   2. Type-variable propagation through @Maybes.bind@ and lambdas
+--   2. Type-variable propagation through @Optionals.bind@ and lambdas
 --
 -- Adjust 'numPolyWalkers' or 'polyWalkerBody' and re-run the kernel-haskell
 -- sync to regenerate the JSON used by all hosts.
@@ -18,7 +18,7 @@ module Hydra.Sources.Bench.PolymorphicChain where
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 
@@ -36,7 +36,7 @@ module_ = Module {
   moduleName = ns,
   moduleDefinitions = definitions,
   moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
-  moduleMetadata = descriptionMetadata (Just "Polymorphic-chain inference benchmark. polyWalker_K :: Maybe a -> Maybe a; chains via Maybes.bind, instantiating forall a at each cross-def call site.")
+  moduleMetadata = descriptionMetadata (Just "Polymorphic-chain inference benchmark. polyWalker_K :: Maybe a -> Maybe a; chains via Optionals.bind, instantiating forall a at each cross-def call site.")
   }
   where
     definitions = [toDefinition (mkPolyWalker k) | k <- [0 .. numPolyWalkers - 1]]
@@ -55,7 +55,7 @@ numPolyWalkers = 400
 -- | Body of @polyWalker_K@.
 --
 -- Base case @k = 0@ is the identity on @Maybe a@.
--- Inductive case @k > 0@ chains through @Maybes.bind@ and @Maybes.cases@,
+-- Inductive case @k > 0@ chains through @Optionals.bind@ and @Optionals.cases@,
 -- recursing on @polyWalker_(k-1)@.
 polyWalkerBody :: Int -> TypedTerm (Maybe a -> Maybe a)
 polyWalkerBody 0 =
@@ -64,8 +64,8 @@ polyWalkerBody k =
   "m" ~>
     -- Pattern: a let-binding that holds a polymorphic Maybe a, then bind
     -- through. The forall a propagates through the bind.
-    "stepped" <~ (Maybes.bind (var "m") ("v" ~> polyWalkerRef (k-1) @@ just (var "v"))) $
-    Maybes.cases (var "stepped") nothing ("w" ~> just (var "w"))
+    "stepped" <~ (Optionals.bind (var "m") ("v" ~> polyWalkerRef (k-1) @@ just (var "v"))) $
+    Optionals.cases (var "stepped") nothing ("w" ~> just (var "w"))
 
 -- | Hydra-level fully-qualified name for the @k@th polyWalker.
 polyWalkerName :: Int -> Name

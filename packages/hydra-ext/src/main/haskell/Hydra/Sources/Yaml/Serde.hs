@@ -13,7 +13,7 @@ import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
@@ -75,8 +75,8 @@ hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
   "s" ~>
   "chars" <~ Strings.toList (var "s") $
   Logic.or
-    (Maybes.fromMaybe false (Maybes.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeHead (var "chars"))))
-    (Maybes.fromMaybe false (Maybes.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeLast (var "chars"))))
+    (Optionals.fromOptional false (Optionals.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeHead (var "chars"))))
+    (Optionals.fromOptional false (Optionals.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeLast (var "chars"))))
 
 -- | Serialize a YAML node to a string
 hydraYamlToString :: TypedTermDefinition (YM.Node -> String)
@@ -126,7 +126,7 @@ looksLikeNumber = define "looksLikeNumber" $
   doc "Check if a string looks like a number" $
   "s" ~>
   "chars" <~ Strings.toList (var "s") $
-  Maybes.fromMaybe false $ Maybes.map
+  Optionals.fromOptional false $ Optionals.map
     (lambda "p" $ lets [
       "firstCh">: Pairs.first (var "p"),
       "tailCh">: Pairs.second (var "p"),
@@ -267,7 +267,7 @@ writeSequenceItem = define "writeSequenceItem" $
       Logic.ifElse (Equality.equal (Maps.size (var "m")) (int32 0))
         (string "- {}\n")
         ("entries" <~ Maps.toList (var "m") $
-         Maybes.fromMaybe (string "") $ Maybes.map
+         Optionals.fromOptional (string "") $ Optionals.map
            (lambda "p" $ lets [
              "firstEntry">: Pairs.first (var "p"),
              "restEntries">: Pairs.second (var "p"),

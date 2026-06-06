@@ -15,7 +15,7 @@ import hydra.dsl.meta.lib.Literals;
 import hydra.dsl.meta.lib.Logic;
 import hydra.dsl.meta.lib.Maps;
 import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Maybes;
+import hydra.dsl.meta.lib.Optionals;
 import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
@@ -284,10 +284,10 @@ public class Coder {
                         Eithers.bind(
                             right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("cname"))),
                             lambda("mel",
-                                Maybes.cases(
+                                Optionals.cases(
                                     var("mel"),
                                     right(
-                                        Maybes.map(
+                                        Optionals.map(
                                             lambda("prim",
                                                 apply(var("hydra.scoping.termSignatureToTypeScheme"),
                                                     proj(PrimitiveDefinition.TYPE_, PrimitiveDefinition.SIGNATURE,
@@ -299,7 +299,7 @@ public class Coder {
                                         right(
                                             proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el")))))),
                         lambda("mts",
-                            Maybes.cases(
+                            Optionals.cases(
                                 var("mts"),
                                 right(var("argTerms")),
                                 lambda("ts",
@@ -459,7 +459,7 @@ public class Coder {
                                         var("hydra.annotations.getAnnotationMap"),
                                         proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"))),
                                 field("ann'",
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         Maps.lookup(var("hydra.constants.keyType"), var("ann")),
                                         var("ann"),
                                         lambda("typeTerm",
@@ -526,7 +526,7 @@ public class Coder {
                                         proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                     field(
                                         Lambda.DOMAIN,
-                                        Maybes.map(
+                                        Optionals.map(
                                             lambda("d",
                                                 apply(
                                                     ref(Coder.substituteTypeVarsWithTypes),
@@ -551,7 +551,7 @@ public class Coder {
                                         proj(CaseStatement.TYPE_, CaseStatement.TYPE_NAME, "cs")),
                                     field(
                                         CaseStatement.DEFAULT,
-                                        Maybes.map(
+                                        Optionals.map(
                                             lambda("d",
                                                 apply(
                                                     ref(Coder.applyOvergenSubstToTermAnnotations_go),
@@ -703,10 +703,10 @@ public class Coder {
                                 Type.SET,
                                 apply(ref(Coder.applySubstFull), var("s"), var("inner"))))),
                     field(
-                        Type.MAYBE,
+                        Type.OPTIONAL,
                         lambda("inner",
                             inject(Type.TYPE_,
-                                Type.MAYBE,
+                                Type.OPTIONAL,
                                 apply(ref(Coder.applySubstFull), var("s"), var("inner"))))),
                     field(
                         Type.MAP,
@@ -974,7 +974,7 @@ public class Coder {
     public static final Def bindingIsFunctionType = def(
         "bindingIsFunctionType",
         () -> lambda("b",
-                Maybes.cases(
+                Optionals.cases(
                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"),
                     casesWithDefault(Term.TYPE_,
                         apply(
@@ -1118,11 +1118,11 @@ public class Coder {
                                     lambda("names",
                                         Logic.ifElse(
                                             Equality.equal(Lists.length(var("names")), int32(1)),
-                                            Maybes.cases(
+                                            Optionals.cases(
                                                 Lists.maybeHead(var("names")),
                                                 list(),
                                                 lambda("singleName",
-                                                    Maybes.cases(
+                                                    Optionals.cases(
                                                         Maps.lookup(
                                                             var("singleName"),
                                                             var("allDeps")),
@@ -1257,7 +1257,7 @@ public class Coder {
                                                 lambda("decls",
                                                     right(
                                                         Lists.concat2(
-                                                            Maybes.cat(var("inits")),
+                                                            Optionals.cat(var("inits")),
                                                             var("decls")))))))),
                                 var("sorted")),
                             lambda("groups",
@@ -1363,7 +1363,7 @@ public class Coder {
                                         var("g"),
                                         var("body"))),
                                 field("annSubst",
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         Maps.lookup(var("hydra.constants.keyType"), var("anns")),
                                         var("hydra.lib.maps.empty"),
                                         lambda("typeTerm",
@@ -1378,7 +1378,7 @@ public class Coder {
                                                         field(
                                                             Term.LAMBDA,
                                                             lambda("lam",
-                                                                Maybes.cases(
+                                                                Optionals.cases(
                                                                     proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                                                     var("hydra.lib.maps.empty"),
                                                                     lambda("dom",
@@ -1428,7 +1428,7 @@ public class Coder {
                         lambda("cs",
                             let(
                                 field("defSubst",
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs"),
                                         var("hydra.lib.maps.empty"),
                                         lambda("d",
@@ -1493,9 +1493,9 @@ public class Coder {
                                 var("hydra.lib.maps.empty"),
                                 var("terms")))),
                     field(
-                        Term.MAYBE,
+                        Term.OPTIONAL,
                         lambda("mt",
-                            Maybes.cases(
+                            Optionals.cases(
                                 var("mt"),
                                 var("hydra.lib.maps.empty"),
                                 lambda("t",
@@ -1676,13 +1676,13 @@ public class Coder {
                                         Type.SET,
                                         lambda("as'", apply(var("goSub"), var("ss"), var("as'"))))))),
                         field(
-                            Type.MAYBE,
+                            Type.OPTIONAL,
                             lambda("sm",
                                 casesWithDefault(Type.TYPE_,
                                     var("at"),
                                     var("hydra.lib.maps.empty"),
                                     field(
-                                        Type.MAYBE,
+                                        Type.OPTIONAL,
                                         lambda("am", apply(var("goSub"), var("sm"), var("am"))))))),
                         field(
                             Type.MAP,
@@ -1867,13 +1867,13 @@ public class Coder {
                                         Type.SET,
                                         lambda("cs", apply(var("goSub"), var("fs"), var("cs"))))))),
                         field(
-                            Type.MAYBE,
+                            Type.OPTIONAL,
                             lambda("fm",
                                 casesWithDefault(Type.TYPE_,
                                     var("ct"),
                                     var("hydra.lib.maps.empty"),
                                     field(
-                                        Type.MAYBE,
+                                        Type.OPTIONAL,
                                         lambda("cm", apply(var("goSub"), var("fm"), var("cm"))))))),
                         field(
                             Type.MAP,
@@ -1965,14 +1965,14 @@ public class Coder {
                 Eithers.bind(
                     right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("name"))),
                     lambda("mel",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("mel"),
                             right(
                                 inject(JavaSymbolClass.TYPE_,
                                     JavaSymbolClass.LOCAL_VARIABLE,
                                     unit())),
                             lambda("el",
-                                Maybes.cases(
+                                Optionals.cases(
                                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     left(
                                         inject(Error_.TYPE_,
@@ -2134,7 +2134,7 @@ public class Coder {
                     field(
                         Term.LAMBDA,
                         lambda("lam",
-                            Maybes.cases(
+                            Optionals.cases(
                                 proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                 pair(list(), var("t")),
                                 lambda("dom",
@@ -2237,7 +2237,7 @@ public class Coder {
                                 ref(Coder.collectTypeVars_go),
                                 apply(var("hydra.strip.deannotateType"), var("inner"))))),
                     field(
-                        Type.MAYBE,
+                        Type.OPTIONAL,
                         lambda("inner",
                             apply(
                                 ref(Coder.collectTypeVars_go),
@@ -2400,9 +2400,9 @@ public class Coder {
                                     apply(
                                         ref(Utils.javaIntExpression),
                                         bigint(java.math.BigInteger.valueOf(0L))))))),
-                    Maybes.fromMaybe(
+                    Optionals.fromOptional(
                         var("zeroStmts"),
-                        Maybes.map(
+                        Optionals.map(
                             lambda("p",
                                 let(
                                     field("firstField",
@@ -2433,7 +2433,7 @@ public class Coder {
                                                                 var("f"))),
                                                         Lists.cons(
                                                             var("firstField"),
-                                                            Maybes.fromMaybe(
+                                                            Optionals.fromOptional(
                                                                 list(),
                                                                 Lists.maybeInit(var("restFields")))))),
                                                 list(
@@ -2445,7 +2445,7 @@ public class Coder {
                                                                 apply(
                                                                     ref(Coder.compareFieldExpr),
                                                                     var("otherVar"),
-                                                                    Maybes.fromMaybe(
+                                                                    Optionals.fromOptional(
                                                                         var("firstField"),
                                                                         Lists.maybeLast(
                                                                             var("restFields"))))))))))))),
@@ -2672,7 +2672,7 @@ public class Coder {
     field("parentNs",
                         apply(ref(Coder.namespaceParent), var("ns"))),
     field("pkg",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("parentNs"),
                             apply(ref(Utils.javaPackageDeclaration), var("ns")),
                             lambda("pns",
@@ -2724,7 +2724,7 @@ public class Coder {
                                 var("itf")),
                             field(
                                 TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS,
-                                Maybes.bind(
+                                Optionals.bind(
                                     proj(Module.TYPE_, Module.METADATA, "mod"),
                                     lambda("em",
                                         proj(EntityMetadata.TYPE_, EntityMetadata.DESCRIPTION, "em"))))))),
@@ -2763,12 +2763,12 @@ public class Coder {
                                         record(PairType.TYPE_,
                                             field(
                                                 PairType.FIRST,
-                                                Maybes.fromMaybe(
+                                                Optionals.fromOptional(
                                                     var("fallback"),
                                                     Lists.maybeAt(int32(0), var("typeArgs")))),
                                             field(
                                                 PairType.SECOND,
-                                                Maybes.fromMaybe(
+                                                Optionals.fromOptional(
                                                     var("fallback"),
                                                     Lists.maybeAt(int32(1), var("typeArgs"))))))),
                                 right(var("fallback"))))))));
@@ -2785,11 +2785,11 @@ public class Coder {
                 Eithers.bind(
                     right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("name"))),
                     lambda("mel",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("mel"),
                             right(var("fallbackTypeApps")),
                             lambda("el",
-                                Maybes.cases(
+                                Optionals.cases(
                                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     right(var("fallbackTypeApps")),
                                     lambda("ts",
@@ -2933,7 +2933,7 @@ public class Coder {
                                 Logic.not_(
                                     Lists.null_(
                                         Lists.filter(
-                                            lambda("m", Maybes.isNothing(var("m"))),
+                                            lambda("m", Optionals.isNone(var("m"))),
                                             var("mArgTypes")))),
                                 right(var("fallbackTypeApps")),
                                 let(
@@ -2941,7 +2941,7 @@ public class Coder {
                                         Lists.bind(
                                             var("mArgTypes"),
                                             lambda("m",
-                                                Maybes.cases(
+                                                Optionals.cases(
                                                     var("m"),
                                                     list(),
                                                     lambda("x", Lists.pure(var("x"))))))),
@@ -3105,7 +3105,7 @@ public class Coder {
                                                                             var("f")),
                                                                         lambda("mDoc",
                                                                             right(
-                                                                                Maybes.cases(var("mDoc"), string(""), lambda("d",
+                                                                                Optionals.cases(var("mDoc"), string(""), lambda("d",
                                                                                         Strings.cat(
                                                                                             list(
                                                                                                 string("@param "),
@@ -3179,7 +3179,7 @@ public class Coder {
                                                                         let(
                                                                             field(
                                                                                 "comparableMethods",
-                                                                                Maybes.cases(
+                                                                                Optionals.cases(
                                                                                     var("parentName"),
                                                                                     Logic.ifElse(
                                                                                         Logic.and_(
@@ -3832,7 +3832,7 @@ public class Coder {
                                                 field(
                                                     Term.RECORD,
                                                     lambda("rec",
-                                                        Maybes.bind(
+                                                        Optionals.bind(
                                                             Lists.maybeHead(
                                                                 Lists.filter(
                                                                     lambda("f",
@@ -3854,7 +3854,7 @@ public class Coder {
                                                     field(
                                                         Term.RECORD,
                                                         lambda("rec",
-                                                            Maybes.bind(
+                                                            Optionals.bind(
                                                                 Lists.maybeHead(
                                                                     Lists.filter(
                                                                         lambda("f",
@@ -3865,12 +3865,12 @@ public class Coder {
                                                                                     string("function")))),
                                                                         proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                 lambda("funcField",
-                                                                    Maybes.bind(
+                                                                    Optionals.bind(
                                                                         apply(
                                                                             ref(Coder.decodeTypeFromTerm),
                                                                             proj(Field.TYPE_, Field.TERM, "funcField")),
                                                                         lambda("func",
-                                                                            Maybes.bind(
+                                                                            Optionals.bind(
                                                                                 Lists.maybeHead(
                                                                                     Lists.filter(
                                                                                         lambda("f",
@@ -3881,7 +3881,7 @@ public class Coder {
                                                                                                     string("argument")))),
                                                                                         proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                                 lambda("argField",
-                                                                                    Maybes.map(
+                                                                                    Optionals.map(
                                                                                         lambda(
                                                                                             "arg",
                                                                                             inject(
@@ -3906,7 +3906,7 @@ public class Coder {
                                                         field(
                                                             Term.RECORD,
                                                             lambda("rec",
-                                                                Maybes.bind(
+                                                                Optionals.bind(
                                                                     Lists.maybeHead(
                                                                         Lists.filter(
                                                                             lambda("f",
@@ -3917,12 +3917,12 @@ public class Coder {
                                                                                         string("domain")))),
                                                                             proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                     lambda("domField",
-                                                                        Maybes.bind(
+                                                                        Optionals.bind(
                                                                             apply(
                                                                                 ref(Coder.decodeTypeFromTerm),
                                                                                 proj(Field.TYPE_, Field.TERM, "domField")),
                                                                             lambda("dom",
-                                                                                Maybes.bind(
+                                                                                Optionals.bind(
                                                                                     Lists.maybeHead(
                                                                                         Lists.filter(
                                                                                             lambda(
@@ -3935,7 +3935,7 @@ public class Coder {
                                                                                             proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                                     lambda(
                                                                                         "codField",
-                                                                                        Maybes.map(
+                                                                                        Optionals.map(
                                                                                             lambda(
                                                                                                 "cod",
                                                                                                 inject(
@@ -3987,9 +3987,9 @@ public class Coder {
         () -> lambda(
                 "inScope",
                 "bs",
-                Maybes.fromMaybe(
+                Optionals.fromOptional(
                     list(),
-                    Maybes.map(
+                    Optionals.map(
                         lambda("p",
                             let(
                                 field("b",
@@ -4086,14 +4086,14 @@ public class Coder {
                             var("codVar"),
                             var("groupedDirect"))),
     field("codSubst",
-                        Maybes.cases(
+                        Optionals.cases(
                                 apply(ref(Coder.findPairFirst), var("cod")),
                                 var("hydra.lib.maps.empty"),
                                 lambda("cv",
                                 Logic.ifElse(
                                     Maps.member(var("cv"), var("selfRefSubst")),
                                     var("hydra.lib.maps.empty"),
-                                    Maybes.cases(
+                                    Optionals.cases(
                                             apply(ref(Coder.findSelfRefVar), var("groupedByInput")),
                                             var("hydra.lib.maps.empty"),
                                             lambda("refVar",
@@ -4108,11 +4108,11 @@ public class Coder {
                                 lambda("d",
                                     Sets.toList(apply(ref(Coder.collectTypeVars), var("d"))))))),
     field("danglingSubst",
-                        Maybes.cases(apply(ref(Coder.findPairFirst), var("cod")), var("hydra.lib.maps.empty"), lambda("cv",
+                        Optionals.cases(apply(ref(Coder.findPairFirst), var("cod")), var("hydra.lib.maps.empty"), lambda("cv",
                                 Logic.ifElse(
                                     Sets.member(var("cv"), var("domVars")),
                                     var("hydra.lib.maps.empty"),
-                                    Maybes.cases(apply(ref(Coder.findSelfRefVar), var("groupedByInput")), var("hydra.lib.maps.empty"), lambda("refVar",
+                                    Optionals.cases(apply(ref(Coder.findSelfRefVar), var("groupedByInput")), var("hydra.lib.maps.empty"), lambda("refVar",
                                             Maps.singleton(
                                                 var("cv"),
                                                 inject(Type.TYPE_,
@@ -4246,7 +4246,7 @@ public class Coder {
                                         apply(var("hydra.formatting.capitalize"), var("local"))),
                                     string(".")),
                                 ref(Names.applyMethodName))),
-                        Maybes.cases(
+                        Optionals.cases(
                             var("ns_"),
                             wrap(Identifier.TYPE_,
                                 apply(ref(Utils.sanitizeJavaName), var("local"))),
@@ -4294,7 +4294,7 @@ public class Coder {
                         var("hydra.java.language.reservedWords"),
                         apply(
                             var("hydra.formatting.capitalize"),
-                            Maybes.fromMaybe(var("nsStr"), Lists.maybeLast(var("parts"))))))));
+                            Optionals.fromOptional(var("nsStr"), Lists.maybeLast(var("parts"))))))));
 
     public static final Def elementsQualifiedName = def(
         "elementsQualifiedName",
@@ -4347,7 +4347,7 @@ public class Coder {
                                 apply(var("hydra.annotations.termAnnotationInternal"), var("fun")))),
                         lambda("mfunTyp",
                             Eithers.bind(
-                                Maybes.cases(
+                                Optionals.cases(
                                     var("mfunTyp"),
                                     apply(
                                         var("hydra.checking.typeOfTerm"),
@@ -4369,7 +4369,7 @@ public class Coder {
                                                     Term.VARIABLE,
                                                     lambda("n", just(var("n")))))),
                                         Eithers.bind(
-                                            Maybes.cases(
+                                            Optionals.cases(
                                                 var("calleeName"),
                                                 right(var("args")),
                                                 lambda("cname",
@@ -4397,7 +4397,7 @@ public class Coder {
                                                         Term.VARIABLE,
                                                         lambda("name",
                                                             Logic.ifElse(
-                                                                Maybes.isJust(
+                                                                Optionals.isGiven(
                                                                     Maps.lookup(
                                                                         var("name"),
                                                                         proj(Graph.TYPE_, Graph.PRIMITIVES, "g"))),
@@ -4601,7 +4601,7 @@ public class Coder {
                             apply(var("hydra.annotations.termAnnotationInternal"), var("lhs")))),
                     lambda("mt",
                         Eithers.bind(
-                            Maybes.cases(
+                            Optionals.cases(
                                 var("mt"),
                                 apply(
                                     var("hydra.checking.typeOfTerm"),
@@ -4702,7 +4702,7 @@ public class Coder {
                                                                                     var("hydra.annotations.termAnnotationInternal"),
                                                                                     var("rhs")))),
                                                                         lambda("mrt",
-                                                                            Maybes.cases(
+                                                                            Optionals.cases(
                                                                                 var("mrt"),
                                                                                 Eithers.bind(
                                                                                     apply(
@@ -4873,7 +4873,7 @@ public class Coder {
                                                     var("jdom0"),
                                                     var("cx")),
                                                 constant(
-                                                    Maybes.cases(
+                                                    Optionals.cases(
                                                         var("marg"),
                                                         let(
                                                             field("projVar",
@@ -4930,7 +4930,7 @@ public class Coder {
                                         proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                     field("fields",
                                         proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         var("marg"),
                                         let(
                                             field("uVar",
@@ -5054,7 +5054,7 @@ public class Coder {
                                                                                             TypeArgument.REFERENCE,
                                                                                             var("rt"))))),
                                                                             Eithers.bind(
-                                                                                Maybes.cases(
+                                                                                Optionals.cases(
                                                                                     var("def_"),
                                                                                     right(list()),
                                                                                     lambda("d",
@@ -5151,7 +5151,7 @@ public class Coder {
                                                         ref(Utils.javaIdentifier),
                                                         ref(Names.valueFieldName)))))),
                                     right(
-                                        Maybes.cases(
+                                        Optionals.cases(
                                             var("marg"),
                                             let(
                                                 field("wVar",
@@ -5419,9 +5419,9 @@ public class Coder {
                             apply(var("hydra.annotations.getType"), var("g"), var("combinedAnns"))),
                         lambda("mt",
                             Eithers.bind(
-                                Maybes.cases(
+                                Optionals.cases(
                                     var("mt"),
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         apply(ref(Coder.tryInferFunctionType), var("term")),
                                         apply(
                                             var("hydra.checking.typeOfTerm"),
@@ -6164,7 +6164,7 @@ public class Coder {
                                                         TypeArgument.REFERENCE,
                                                         var("rt")))))))))),
                     field(
-                        Type.MAYBE,
+                        Type.OPTIONAL,
                         lambda("mt",
                             Eithers.bind(
                                 apply(
@@ -6286,12 +6286,12 @@ public class Coder {
                                         wrap(Identifier.TYPE_,
                                             Strings.intercalate(
                                                 string("."),
-                                                Maybes.fromMaybe(
+                                                Optionals.fromOptional(
                                                     list(),
                                                     Lists.maybeInit(var("parts")))))),
                                     field("methodName",
                                         wrap(Identifier.TYPE_,
-                                            Maybes.fromMaybe(
+                                            Optionals.fromOptional(
                                                 var("fullName"),
                                                 Lists.maybeLast(var("parts"))))),
                                     right(
@@ -6341,7 +6341,7 @@ public class Coder {
                         lambda("mDoc",
                             let(
                                 field("ts",
-                                    Maybes.cases(proj(TermDefinition.TYPE_, TermDefinition.SIGNATURE, "tdef"), record(TypeScheme.TYPE_,
+                                    Optionals.cases(proj(TermDefinition.TYPE_, TermDefinition.SIGNATURE, "tdef"), record(TypeScheme.TYPE_,
                                             field(TypeScheme.VARIABLES, list()),
                                             field(
                                                 TypeScheme.BODY,
@@ -6431,7 +6431,7 @@ public class Coder {
                                                                 var("tparams"))),
     field("overgenVarSubst",
                                                             Maps.fromList(
-                                                                Maybes.cat(
+                                                                Optionals.cat(
                                                                     Lists.map(
                                                                         lambda("entry",
                                                                             let(
@@ -6485,7 +6485,7 @@ public class Coder {
                                                                                 var("overgenSubst")))),
                                                                     var("tparams")))),
     field("constraints",
-                                                            Maybes.fromMaybe(
+                                                            Optionals.fromOptional(
                                                                 var("hydra.lib.maps.empty"),
                                                                 proj(TypeScheme.TYPE_, TypeScheme.CONSTRAINTS, "ts"))),
     field("jparams",
@@ -6816,7 +6816,7 @@ public class Coder {
                                                                                                                     just(
                                                                                                                         var("methodBody"))),
                                                                                                                 right(
-                                                                                                                    Maybes.cases(var("mDoc"), apply(
+                                                                                                                    Optionals.cases(var("mDoc"), apply(
                                                                                                                             ref(Coder.noInterfaceComment),
                                                                                                                             var("imdMember")), lambda(
                                                                                                                             "doc",
@@ -6916,7 +6916,7 @@ public class Coder {
                                                 lambda("mEitherType",
                                                     let(
                                                         field("branchTypes",
-                                                            Maybes.bind(
+                                                            Optionals.bind(
                                                                 var("mEitherType"),
                                                                 lambda("etyp",
                                                                     casesWithDefault(
@@ -6957,7 +6957,7 @@ public class Coder {
                                                             lambda(
                                                                 "methodName",
                                                                 "expr",
-                                                                Maybes.cases(
+                                                                Optionals.cases(
                                                                     var("mtargs"),
                                                                     apply(
                                                                         ref(Utils.javaMethodInvocationToJavaExpression),
@@ -6986,7 +6986,7 @@ public class Coder {
                                                         Eithers.either_(
                                                             lambda("term1",
                                                                 Eithers.bind(
-                                                                    Maybes.cases(
+                                                                    Optionals.cases(
                                                                         var("branchTypes"),
                                                                         apply(
                                                                             var("encode"),
@@ -7005,7 +7005,7 @@ public class Coder {
                                                                                 var("expr")))))),
                                                             lambda("term1",
                                                                 Eithers.bind(
-                                                                    Maybes.cases(
+                                                                    Optionals.cases(
                                                                         var("branchTypes"),
                                                                         apply(
                                                                             var("encode"),
@@ -7168,7 +7168,7 @@ public class Coder {
                                                                             var("combinedAnns"))),
                                                                     lambda("mt",
                                                                         Eithers.bind(
-                                                                            Maybes.cases(
+                                                                            Optionals.cases(
                                                                                 var("mt"),
                                                                                 apply(
                                                                                     var("hydra.checking.typeOfTerm"),
@@ -7384,9 +7384,9 @@ public class Coder {
                                                                             var("targs"),
                                                                             var("pairExprs")))))))))))))),
                         field(
-                            Term.MAYBE,
+                            Term.OPTIONAL,
                             lambda("mt",
-                                Maybes.cases(
+                                Optionals.cases(
                                     var("mt"),
                                     Logic.ifElse(
                                         Lists.null_(var("tyapps")),
@@ -7403,7 +7403,7 @@ public class Coder {
                                         Eithers.bind(
                                             apply(
                                                 ref(Coder.takeTypeArgs),
-                                                string("maybe"),
+                                                string("optional"),
                                                 int32(1),
                                                 var("tyapps"),
                                                 var("cx"),
@@ -7427,7 +7427,7 @@ public class Coder {
                                                 Eithers.bind(
                                                     apply(
                                                         ref(Coder.collectionTypeArgs),
-                                                        string("maybe"),
+                                                        string("optional"),
                                                         int32(1),
                                                         var("aliases"),
                                                         var("anns"),
@@ -7508,7 +7508,7 @@ public class Coder {
                                                 var("g"),
                                                 var("recName")))),
                                     field("strippedRecTyp",
-                                        Maybes.map(
+                                        Optionals.map(
                                             lambda("recTyp",
                                                 apply(
                                                     ref(Coder.stripForalls),
@@ -7517,7 +7517,7 @@ public class Coder {
                                                         var("recTyp")))),
                                             var("mRecordType"))),
                                     field("mFieldTypeMap",
-                                        Maybes.bind(
+                                        Optionals.bind(
                                             var("strippedRecTyp"),
                                             lambda("bodyTyp",
                                                 casesWithDefault(Type.TYPE_,
@@ -7559,10 +7559,10 @@ public class Coder {
                                         lambda("mAnnotType",
                                             let(
                                                 field("mTypeSubst",
-                                                    Maybes.bind(
+                                                    Optionals.bind(
                                                         var("mAnnotType"),
                                                         lambda("annTyp",
-                                                            Maybes.bind(
+                                                            Optionals.bind(
                                                                 var("mRecordType"),
                                                                 lambda("recTyp",
                                                                     let(
@@ -7596,7 +7596,7 @@ public class Coder {
                                                                                         var("args"))))))))))),
                                                 field("encodeField",
                                                     lambda("fld",
-                                                        Maybes.cases(
+                                                        Optionals.cases(
                                                             var("mFieldTypeMap"),
                                                             apply(
                                                                 var("encode"),
@@ -7606,7 +7606,7 @@ public class Coder {
                                                                     Maps.lookup(
                                                                         proj(Field.TYPE_, Field.NAME, "fld"),
                                                                         var("ftmap")),
-                                                                    Maybes.cases(
+                                                                    Optionals.cases(
                                                                         var("mftyp"),
                                                                         apply(
                                                                             var("encode"),
@@ -7615,7 +7615,7 @@ public class Coder {
                                                                             let(
                                                                                 field(
                                                                                     "resolvedType",
-                                                                                    Maybes.cases(
+                                                                                    Optionals.cases(
                                                                                         var("mTypeSubst"),
                                                                                         var("ftyp"),
                                                                                         lambda(
@@ -7706,7 +7706,7 @@ public class Coder {
                                                                                     var("g"),
                                                                                     var("combinedAnns"))),
                                                                             lambda("mtyp",
-                                                                                Maybes.cases(
+                                                                                Optionals.cases(
                                                                                     var("mtyp"),
                                                                                     right(nothing()),
                                                                                     lambda("annTyp",
@@ -7862,7 +7862,7 @@ public class Coder {
                                                         var("combinedAnns"))),
                                                 lambda("mtyp",
                                                     let("annotatedBody",
-                                                        Maybes.cases(
+                                                        Optionals.cases(
                                                             var("mtyp"),
                                                             proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"),
                                                             lambda("t",
@@ -7953,7 +7953,7 @@ public class Coder {
                         field(
                             Term.VARIABLE,
                             lambda("name",
-                                Maybes.cases(
+                                Optionals.cases(
                                     Maps.lookup(
                                         var("name"),
                                         proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
@@ -7988,7 +7988,7 @@ public class Coder {
                                                         var("combinedAnns"))),
                                                 lambda("mt",
                                                     Eithers.bind(
-                                                        Maybes.cases(
+                                                        Optionals.cases(
                                                             var("mt"),
                                                             apply(
                                                                 var("hydra.checking.typeOfTerm"),
@@ -8089,7 +8089,7 @@ public class Coder {
                                                             var("combinedAnns"))),
                                                     lambda("mtyp",
                                                         Eithers.bind(
-                                                            Maybes.cases(
+                                                            Optionals.cases(
                                                                 var("mtyp"),
                                                                 apply(
                                                                     var("hydra.checking.typeOfTerm"),
@@ -8185,12 +8185,12 @@ public class Coder {
                                                                                                 let(
                                                                                                     "eitherBranchTypes",
                                                                                                     pair(
-                                                                                                        Maybes.fromMaybe(
+                                                                                                        Optionals.fromOptional(
                                                                                                             var("correctedTyp"),
                                                                                                             Lists.maybeAt(
                                                                                                                 int32(0),
                                                                                                                 var("allTypeArgs"))),
-                                                                                                        Maybes.fromMaybe(
+                                                                                                        Optionals.fromOptional(
                                                                                                             var("correctedTyp"),
                                                                                                             Lists.maybeAt(
                                                                                                                 int32(1),
@@ -8473,7 +8473,7 @@ public class Coder {
                                 Logic.ifElse(
                                     Equality.equal(Lists.length(var("args2")), int32(1)),
                                     let("arg",
-                                        Maybes.fromMaybe(
+                                        Optionals.fromOptional(
                                             inject(Term.TYPE_,
                                                 Term.UNIT,
                                                 unit()),
@@ -8769,7 +8769,7 @@ public class Coder {
                                                                                     var("cases_")),
                                                                                 lambda("ifBlocks",
                                                                                     Eithers.bind(
-                                                                                        Maybes.cases(
+                                                                                        Optionals.cases(
                                                                                             var("dflt"),
                                                                                             right(
                                                                                                 list(
@@ -9152,7 +9152,7 @@ public class Coder {
                                             wrap(OtherError.TYPE_,
                                                 string("unexpected anonymous record type"))))))),
                         field(
-                            Type.MAYBE,
+                            Type.OPTIONAL,
                             lambda("ot",
                                 Eithers.bind(
                                     Eithers.bind(
@@ -9211,7 +9211,7 @@ public class Coder {
                             Type.VARIABLE,
                             lambda("name0",
                                 let("name",
-                                    Maybes.fromMaybe(
+                                    Optionals.fromOptional(
                                         var("name0"),
                                         Maps.lookup(var("name0"), var("typeVarSubst"))),
                                     Eithers.bind(
@@ -9224,7 +9224,7 @@ public class Coder {
                                             var("cx"),
                                             var("g")),
                                         lambda("resolved",
-                                            Maybes.cases(
+                                            Optionals.cases(
                                                 var("resolved"),
                                                 right(
                                                     Logic.ifElse(
@@ -9392,7 +9392,7 @@ public class Coder {
                         right(nothing()),
                         let("schemaTypes",
                             proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
-                            Maybes.cases(
+                            Optionals.cases(
                                 Maps.lookup(var("name"), var("schemaTypes")),
                                 right(nothing()),
                                 lambda("ts",
@@ -9658,9 +9658,9 @@ public class Coder {
         () -> lambda(
                 "params",
                 "inner",
-                Maybes.fromMaybe(
+                Optionals.fromOptional(
                     var("inner"),
-                    Maybes.map(
+                    Optionals.map(
                         lambda("p",
                             apply(
                                 ref(Utils.javaLambda),
@@ -9716,11 +9716,11 @@ public class Coder {
                     Eithers.bind(
                         right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("name"))),
                         lambda("mel",
-                            Maybes.cases(
+                            Optionals.cases(
                                 var("mel"),
                                 right(var("lam")),
                                 lambda("el",
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                         right(var("lam")),
                                         lambda("ts",
@@ -10046,11 +10046,11 @@ public class Coder {
                 Eithers.bind(
                     right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("calleeName"))),
                     lambda("mel",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("mel"),
                             right(var("allTypeArgs")),
                             lambda("el",
-                                Maybes.cases(
+                                Optionals.cases(
                                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     right(var("allTypeArgs")),
                                     lambda("ts",
@@ -10144,7 +10144,7 @@ public class Coder {
                     var("name"),
                     Logic.ifElse(
                         apply(ref(Coder.isLambdaBoundIn_isQualified), var("name")),
-                        Maybes.fromMaybe(
+                        Optionals.fromOptional(
                             var("name"),
                             Lists.find(
                                 lambda("lv",
@@ -10187,7 +10187,7 @@ public class Coder {
                         lambda("entry",
                             Lists.elem(Pairs.first(var("entry")), Pairs.second(var("entry")))),
                         Maps.toList(var("grouped"))),
-                    Maybes.map(
+                    Optionals.map(
                         lambda("entry", Pairs.first(var("entry"))),
                         Lists.maybeHead(var("selfRefs"))))));
 
@@ -10351,7 +10351,7 @@ public class Coder {
                                                     var("jargs"))))),
                                     let("overrideMethodName",
                                         lambda("jid",
-                                            Maybes.cases(
+                                            Optionals.cases(
                                                 var("mMethodOverride"),
                                                 var("jid"),
                                                 lambda("m",
@@ -10404,7 +10404,7 @@ public class Coder {
                                                     proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                                                 field("localName",
                                                     proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
-                                                Maybes.cases(
+                                                Optionals.cases(
                                                     var("mns"),
                                                     let("header",
                                                         inject(
@@ -10535,7 +10535,7 @@ public class Coder {
                         lambda("__a", var("__a")),
                         apply(var("hydra.annotations.getType"), var("g"), var("ann"))),
                     lambda("mt",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("mt"),
                             left(
                                 inject(Error_.TYPE_,
@@ -10568,7 +10568,7 @@ public class Coder {
                                 Pairs.second(var("p"))),
                             Maps.alter(
                                 lambda("mv",
-                                    Maybes.cases(var("mv"), just(list(var("v"))), lambda("vs", just(Lists.concat2(var("vs"), list(var("v"))))))),
+                                    Optionals.cases(var("mv"), just(list(var("v"))), lambda("vs", just(Lists.concat2(var("vs"), list(var("v"))))))),
                                 var("k"),
                                 var("m")))),
                     var("hydra.lib.maps.empty"),
@@ -10908,7 +10908,7 @@ public class Coder {
                 "g",
                 let("schemaTypes",
                     proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
-                    Maybes.cases(
+                    Optionals.cases(
                         Maps.lookup(var("typeName"), var("schemaTypes")),
                         right(bool(false)),
                         lambda("ts",
@@ -10921,7 +10921,7 @@ public class Coder {
                                     Type.UNION,
                                     lambda("rt",
                                         right(
-                                            Maybes.cases(
+                                            Optionals.cases(
                                                 Lists.find(
                                                     lambda("ft",
                                                         Equality.equal(
@@ -10946,7 +10946,7 @@ public class Coder {
                     Logic.or_(
                         Logic.and_(
                             apply(ref(Coder.isLambdaBoundIn_isQualified), var("name")),
-                            Maybes.isJust(
+                            Optionals.isGiven(
                                 Lists.find(
                                     lambda("lv",
                                         Logic.and_(
@@ -10965,7 +10965,7 @@ public class Coder {
     public static final Def isLambdaBoundIn_isQualified = def(
         "isLambdaBoundIn_isQualified",
         () -> lambda("n",
-                Maybes.isJust(
+                Optionals.isGiven(
                     apply(
                         project(QualifiedName.TYPE_, QualifiedName.MODULE_NAME),
                         apply(var("hydra.names.qualifyName"), var("n"))))));
@@ -10980,7 +10980,7 @@ public class Coder {
     public static final Def isLocalVariable = def(
         "isLocalVariable",
         () -> lambda("name",
-                Maybes.isNothing(
+                Optionals.isNone(
                     apply(
                         project(QualifiedName.TYPE_, QualifiedName.MODULE_NAME),
                         apply(var("hydra.names.qualifyName"), var("name"))))));
@@ -11036,9 +11036,9 @@ public class Coder {
         () -> lambda("name",
                 let("chars",
                     Strings.toList(apply(unwrap(Name.TYPE_), var("name"))),
-                    Maybes.fromMaybe(
+                    Optionals.fromOptional(
                         bool(false),
-                        Maybes.map(
+                        Optionals.map(
                             lambda("p",
                                 let(
                                     field("firstCh",
@@ -11232,7 +11232,7 @@ public class Coder {
                             string("."),
                             apply(unwrap(ModuleName.TYPE_), var("ns")))),
                     field("initParts",
-                        Maybes.fromMaybe(list(), Lists.maybeInit(var("parts")))),
+                        Optionals.fromOptional(list(), Lists.maybeInit(var("parts")))),
                     Logic.ifElse(
                         Lists.null_(var("initParts")),
                         nothing(),
@@ -11467,7 +11467,7 @@ public class Coder {
                                 let("propagatedBindings",
                                     Lists.map(
                                         lambda("b",
-                                            Maybes.cases(proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"), var("b"), lambda("ts",
+                                            Optionals.cases(proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"), var("b"), lambda("ts",
                                                     record(Binding.TYPE_,
                                                         field(
                                                             Binding.NAME,
@@ -11762,9 +11762,9 @@ public class Coder {
                         field(
                             Type.FUNCTION,
                             lambda("ft",
-                                Maybes.fromMaybe(
+                                Optionals.fromOptional(
                                     var("f"),
-                                    Maybes.map(
+                                    Optionals.map(
                                         lambda("p",
                                             let(
                                                 field("arg",
@@ -12295,7 +12295,7 @@ public class Coder {
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.ID, "vd")),
                     field("mInit",
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
-                    Maybes.cases(
+                    Optionals.cases(
                         var("mInit"),
                         list(
                             inject(InterfaceMemberDeclaration.TYPE_,
@@ -12433,7 +12433,7 @@ public class Coder {
                     field(
                         Type.VARIABLE,
                         lambda("v",
-                            Maybes.cases(
+                            Optionals.cases(
                                 Maps.lookup(var("v"), var("subst")),
                                 var("t"),
                                 lambda("rep", var("rep"))))),
@@ -12492,10 +12492,10 @@ public class Coder {
                                     var("subst"),
                                     var("inner"))))),
                     field(
-                        Type.MAYBE,
+                        Type.OPTIONAL,
                         lambda("inner",
                             inject(Type.TYPE_,
-                                Type.MAYBE,
+                                Type.OPTIONAL,
                                 apply(
                                     ref(Coder.substituteTypeVarsWithTypes_go),
                                     var("subst"),
@@ -12773,7 +12773,7 @@ public class Coder {
                                     var("combinedAnns"))),
                             lambda("mtyp",
                                 Eithers.bind(
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         var("mtyp"),
                                         // No retained type (neither a wrapping type application nor a
                                         // keyType annotation reached this collection term, e.g. a literal
@@ -12796,7 +12796,7 @@ public class Coder {
                                                     lambda("elemType",
                                                         right(list(var("elemType"))))),
                                                 field(
-                                                    Type.MAYBE,
+                                                    Type.OPTIONAL,
                                                     lambda("elemType",
                                                         right(list(var("elemType"))))),
                                                 field(
@@ -12971,7 +12971,7 @@ public class Coder {
                     Sets.member(var("name"), var("recursiveVars")),
                     let(
                         field("binding",
-                            Maybes.fromMaybe(
+                            Optionals.fromOptional(
                                 record(Binding.TYPE_,
                                     field(Binding.NAME, var("name")),
                                     field(
@@ -12988,7 +12988,7 @@ public class Coder {
                         field("value",
                             proj(Binding.TYPE_, Binding.TERM, "binding")),
                         Eithers.bind(
-                            Maybes.cases(
+                            Optionals.cases(
                                 proj(Binding.TYPE_, Binding.TYPE_SCHEME, "binding"),
                                 apply(
                                     var("hydra.checking.typeOfTerm"),
@@ -13084,7 +13084,7 @@ public class Coder {
                 java.util.Arrays.asList("envExt", "aliasesExt", "gExt", "recursiveVars", "thunkedVars", "flatBindings", "name", "cx", "g"),
                 let(
                     field("binding",
-                        Maybes.fromMaybe(
+                        Optionals.fromOptional(
                             record(Binding.TYPE_,
                                 field(Binding.NAME, var("name")),
                                 field(
@@ -13101,7 +13101,7 @@ public class Coder {
                     field("value",
                         proj(Binding.TYPE_, Binding.TERM, "binding")),
                     Eithers.bind(
-                        Maybes.cases(
+                        Optionals.cases(
                             proj(Binding.TYPE_, Binding.TYPE_SCHEME, "binding"),
                             apply(
                                 var("hydra.checking.typeOfTerm"),
@@ -13244,7 +13244,7 @@ public class Coder {
                     field(
                         Term.LAMBDA,
                         lambda("lam",
-                            Maybes.bind(
+                            Optionals.bind(
                                 proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                 lambda("dom",
                                     let("mCod",
@@ -13254,7 +13254,7 @@ public class Coder {
                                             field(
                                                 Term.ANNOTATED,
                                                 lambda("at",
-                                                    Maybes.bind(
+                                                    Optionals.bind(
                                                         Maps.lookup(
                                                             var("hydra.constants.keyType"),
                                                             apply(
@@ -13270,7 +13270,7 @@ public class Coder {
                                                     apply(
                                                         ref(Coder.tryInferFunctionType),
                                                         proj(Lambda.TYPE_, Lambda.BODY, "lam"))))),
-                                        Maybes.map(
+                                        Optionals.map(
                                             lambda("cod",
                                                 inject(Type.TYPE_,
                                                     Type.FUNCTION,
@@ -13355,7 +13355,7 @@ public class Coder {
                         field(
                             JavaSymbolClass.NULLARY_FUNCTION,
                             constant(
-                                Maybes.cases(
+                                Optionals.cases(
                                     var("mns"),
                                     apply(
                                         ref(Coder.typeAppFallbackCast),
@@ -13427,7 +13427,7 @@ public class Coder {
                         field(
                             JavaSymbolClass.HOISTED_LAMBDA,
                             lambda("arity",
-                                Maybes.cases(
+                                Optionals.cases(
                                     var("mns"),
                                     apply(
                                         ref(Coder.typeAppFallbackCast),
@@ -13976,7 +13976,7 @@ public class Coder {
         () -> lambda(
                 "g",
                 "name",
-                Maybes.cases(
+                Optionals.cases(
                     Maps.lookup(var("name"), proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
                     list(),
                     lambda("prim",

@@ -37,7 +37,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -116,7 +116,7 @@ isComplexBinding = define "isComplexBinding" $
   "term" <~ Core.bindingTerm (var "b") $
   "mts" <~ Core.bindingTypeScheme (var "b") $
   -- Bindings without type schemes are complex (e.g., lifted case expressions)
-  Maybes.cases (var "mts")
+  Optionals.cases (var "mts")
     (isComplexTerm @@ var "tc" @@ var "term") $
     "ts" ~>
       -- Check if polymorphic
@@ -150,7 +150,7 @@ isComplexVariable = define "isComplexVariable" $
   -- Check if there's metadata for this variable (indicates complexity)
   "metaLookup" <~ Maps.lookup (var "name") (Graph.graphMetadata $ var "tc") $
   Logic.ifElse
-    (Maybes.isJust (var "metaLookup"))
+    (Optionals.isGiven (var "metaLookup"))
     (boolean True)
     -- Lambda-bound variables are complex because they might be thunked
     (Logic.ifElse
@@ -158,11 +158,11 @@ isComplexVariable = define "isComplexVariable" $
       (boolean True)
       -- Check if the variable is in the graph's bound types
       ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
-       Maybes.cases
+       Optionals.cases
          (var "typeLookup")
          -- Not in graphBoundTypes: fall through to graphPrimitives
          ("primLookup" <~ Maps.lookup (var "name") (Graph.graphPrimitives $ var "tc") $
-          Maybes.cases
+          Optionals.cases
             (var "primLookup")
             -- If not in graph at all, assume mutual recursion (complex)
             (boolean True)
@@ -281,8 +281,8 @@ isTrivialTerm = define "isTrivialTerm" $
         -- newtype unwrap: trivial if the subject is trivial
         _Term_unwrap>>: constant (isTrivialTerm @@ var "arg")],
     -- Maybe term (just x) where x is trivial; nothing is also trivial
-    _Term_maybe>>: "opt" ~>
-      Maybes.cases (var "opt") (boolean True) ("inner" ~> isTrivialTerm @@ var "inner"),
+    _Term_optional>>: "opt" ~>
+      Optionals.cases (var "opt") (boolean True) ("inner" ~> isTrivialTerm @@ var "inner"),
     -- Record construction is trivial if all field terms are trivial
     _Term_record>>: "rec" ~>
       Lists.foldl ("acc" ~> "fld" ~> Logic.and (var "acc") (isTrivialTerm @@ (Core.fieldTerm $ var "fld")))

@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -107,7 +107,7 @@ avroLanguage = define "avroLanguage" $
     Variants.termVariantList,
     Variants.termVariantLiteral,
     Variants.termVariantMap,
-    Variants.termVariantMaybe,
+    Variants.termVariantOptional,
     Variants.termVariantRecord],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
@@ -115,13 +115,13 @@ avroLanguage = define "avroLanguage" $
     Variants.typeVariantLiteral,
     Variants.typeVariantMap,
     Variants.typeVariantWrap,
-    Variants.typeVariantMaybe,
+    Variants.typeVariantOptional,
     Variants.typeVariantRecord],
   "typePredicate">: "typ" ~> cases _Type (Strip.deannotateType @@ var "typ")
     (Just true) [
-    _Type_maybe>>: "inner" ~> cases _Type (Strip.deannotateType @@ var "inner")
+    _Type_optional>>: "inner" ~> cases _Type (Strip.deannotateType @@ var "inner")
       (Just true) [
-      _Type_maybe>>: constant false]]] $
+      _Type_optional>>: constant false]]] $
   Coders.language
     (Coders.languageName2 $ string "hydra.avro")
     (Coders.languageConstraints2

@@ -14,7 +14,7 @@
 --
 --   1. Let-nesting (the @stripped@ binding in each def)
 --   2. Cases on an enum-like union (subset of @_Term@ variants)
---   3. Lazy-alternative @Maybes.cases@ (so eager evaluation in let-bindings is exposed)
+--   3. Lazy-alternative @Optionals.cases@ (so eager evaluation in let-bindings is exposed)
 --   4. Cross-def recursion (the @walkerK -> walkerK-1@ chain)
 --
 -- This is the simplest series — the chain is artificially deep (100 levels)
@@ -29,7 +29,7 @@ import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
@@ -80,14 +80,14 @@ walkerBody k =
       _Term_application>>: "app" ~>
         "fun" <~ Core.applicationFunction (var "app") $
         "arg" <~ Core.applicationArgument (var "app") $
-        -- Pattern 3 + 4: lazy-alternative Maybes.cases + recursion via walkerRef
-        Maybes.cases (walkerRef (k-1) @@ var "fun") (walkerRef (k-1) @@ var "arg") ("_" ~> walkerRef (k-1) @@ var "fun"),
+        -- Pattern 3 + 4: lazy-alternative Optionals.cases + recursion via walkerRef
+        Optionals.cases (walkerRef (k-1) @@ var "fun") (walkerRef (k-1) @@ var "arg") ("_" ~> walkerRef (k-1) @@ var "fun"),
       _Term_lambda>>: "lam" ~>
         "body" <~ Core.lambdaBody (var "lam") $
         walkerRef (k-1) @@ var "body",
       _Term_let>>: "le" ~>
         "body" <~ Core.letBody (var "le") $
-        Maybes.cases (walkerRef (k-1) @@ var "body") nothing ("inner" ~> walkerRef (k-1) @@ var "inner"),
+        Optionals.cases (walkerRef (k-1) @@ var "body") nothing ("inner" ~> walkerRef (k-1) @@ var "inner"),
       _Term_variable>>: constant $ just (var "stripped"),
       _Term_literal>>:  constant $ just (var "stripped")]
 

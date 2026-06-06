@@ -27,7 +27,7 @@ public class VisitorTest {
     private final Type int32Type = new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()));
     private final Type float64Type = new Type.Literal(new LiteralType.Float_(new FloatType.Float64()));
     private final Type listOfStrings = new Type.List(stringType);
-    private final Type maybeInt = new Type.Maybe(int32Type);
+    private final Type maybeInt = new Type.Optional(int32Type);
     private final Type recordType = new Type.Record(ConsList.of(
                     new FieldType(new Name("lat"), float64Type),
                     new FieldType(new Name("lon"), float64Type)));
@@ -108,7 +108,7 @@ public class VisitorTest {
         }
 
         @Override
-        public String visit(Type.Maybe instance) {
+        public String visit(Type.Optional instance) {
             return instance.value.accept(typeToString) + "?";
         }
 

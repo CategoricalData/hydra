@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -174,7 +174,7 @@ encodeName = def "encodeName" $
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
-      (Maybes.cases (Maps.lookup (var "name") (var "boundVars")) (Maybes.cases (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.cat2 (var "cppNs" @@ var "nsVal") (Strings.cat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
+      (Optionals.cases (Maps.lookup (var "name") (var "boundVars")) (Optionals.cases (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.cat2 (var "cppNs" @@ var "nsVal") (Strings.cat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
       (var "cppLocal")
 
 -- | Encode a qualified name with namespace
@@ -190,7 +190,7 @@ encodeNameQualified = def "encodeNameQualified" $
     "qualName">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"] $
-    Maybes.cases (Maps.lookup (var "name") (var "boundVars")) (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
+    Optionals.cases (Maps.lookup (var "name") (var "boundVars")) (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         (sanitizeCppName @@ var "local")
         (Strings.intercalate (string "::")
           (Lists.map sanitizeCppName

@@ -103,7 +103,7 @@ testTypeBuddyListA :: TypedTermDefinition Type
 testTypeBuddyListA = defineType "testTypeBuddyListA" $
   T.forAll "a" $ T.record (testTypeBuddyListAName) [
     "head">: T.variable "a",
-    "tail">: T.maybe $
+    "tail">: T.optional $
       T.apply (Core.typeVariable $ testTypeBuddyListBName) (T.variable "a")]
 
 -- Type name definitions
@@ -115,7 +115,7 @@ testTypeBuddyListB :: TypedTermDefinition Type
 testTypeBuddyListB = defineType "testTypeBuddyListB" $
   T.forAll "a" $ T.record (testTypeBuddyListBName) [
     "head">: T.variable "a",
-    "tail">: T.maybe $
+    "tail">: T.optional $
       T.apply (Core.typeVariable $ testTypeBuddyListAName) (T.variable "a")]
 
 testTypeBuddyListBName :: TypedTermDefinition Name
@@ -167,7 +167,7 @@ testTypeIntList :: TypedTermDefinition Type
 testTypeIntList = defineType "testTypeIntList" $
   T.record testTypeIntListName [
     "head">: T.int32,
-    "tail">: T.maybe $ Core.typeVariable testTypeIntListName]
+    "tail">: T.optional $ Core.typeVariable testTypeIntListName]
 
 testTypeIntListName :: TypedTermDefinition Name
 testTypeIntListName = define "testTypeIntListName" $
@@ -197,7 +197,7 @@ testTypeList :: TypedTermDefinition Type
 testTypeList = defineType "testTypeList" $
   T.forAll "a" $ T.record testTypeListName [
     "head">: T.variable "a",
-    "tail">: T.maybe $
+    "tail">: T.optional $
       T.apply (Core.typeVariable testTypeListName) (T.variable "a")]
 
 testTypeListName :: TypedTermDefinition Name
@@ -376,15 +376,15 @@ mapOfStringsToIntsType = defineType "mapOfStringsToIntsType" $
 
 optionalInt16Type :: TypedTermDefinition Type
 optionalInt16Type = defineType "optionalInt16Type" $
-  T.maybe T.int16
+  T.optional T.int16
 
 optionalInt8Type :: TypedTermDefinition Type
 optionalInt8Type = defineType "optionalInt8Type" $
-  T.maybe (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
+  T.optional (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
 
 optionalStringType :: TypedTermDefinition Type
 optionalStringType = defineType "optionalStringType" $
-  T.maybe T.string
+  T.optional T.string
 
 setOfStringsType :: TypedTermDefinition Type
 setOfStringsType = defineType "setOfStringsType" $

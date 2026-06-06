@@ -20,7 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -277,7 +277,7 @@ differentiateTerm = define "differentiateTerm" $
     _Term_set>>: constant $ f64 0.0,
     _Term_map>>: constant $ f64 0.0,
     _Term_either>>: constant $ f64 0.0,
-    _Term_maybe>>: constant $ f64 0.0,
+    _Term_optional>>: constant $ f64 0.0,
     _Term_inject>>: constant $ f64 0.0,
     _Term_wrap>>: constant $ f64 0.0]
 

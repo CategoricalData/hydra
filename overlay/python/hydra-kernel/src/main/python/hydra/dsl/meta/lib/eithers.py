@@ -59,7 +59,7 @@ def map_list(f: TypedTerm, xs: TypedTerm) -> TypedTerm:
     return primitive2(f, xs)
 
 
-def map_maybe(f: TypedTerm, x: TypedTerm) -> TypedTerm:
+def map_optional(f: TypedTerm, x: TypedTerm) -> TypedTerm:
     """Map a function returning Either over a Maybe, or return Right Nothing if Nothing."""
     return primitive2(f, x)
 

@@ -111,8 +111,8 @@
                 (cl-return result)
                 (push (either-val result) acc))))))))
 
-;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-(defvar hydra_lib_eithers_map_maybe
+;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+(defvar hydra_lib_eithers_map_optional
   (lambda (f)
     "Map a function returning Either over a Maybe, or return Right Nothing if Nothing."
     (lambda (m)

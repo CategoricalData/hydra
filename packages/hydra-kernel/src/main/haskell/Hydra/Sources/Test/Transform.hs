@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -232,8 +232,8 @@ transformToCompiledTests = define "transformToCompiledTests" $
     "desc">: project _TestGroup _TestGroup_description @@ var "tg",
     "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "tg",
     "cases_">: project _TestGroup _TestGroup_cases @@ var "tg",
-    "transformedCases">: Maybes.cat (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
-    "transformedSubgroups">: Maybes.cat (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
+    "transformedCases">: Optionals.cat (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
+    "transformedSubgroups">: Optionals.cat (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
     Logic.ifElse
       (Logic.and (Lists.null (var "transformedCases")) (Lists.null (var "transformedSubgroups")))
       nothing

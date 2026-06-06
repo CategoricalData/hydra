@@ -62,7 +62,7 @@ export const rights = <L, R>(es: readonly Either<L, R>[]): readonly R[] => {
   return out;
 };
 
-export const mapMaybe = (f: (a: any) => any, m: any): Either<any, Maybe<any>> => {
+export const mapOptional = (f: (a: any) => any, m: any): Either<any, Maybe<any>> => {
   if (m.tag === "nothing") return Right(Nothing);
   const r = f(m.value);
   if (r.tag === "left") return r as unknown as Either<any, Maybe<any>>;

@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Yaml.Model                       as Yaml
 import qualified Hydra.Dsl.Terms                           as Terms
@@ -70,7 +70,7 @@ decodeRecord = define "decodeRecord" $
       "coder'" <~ (Pairs.second $ var "coder") $
       "fname" <~ (Core.fieldTypeName $ var "ft") $
       "defaultValue" <~ (Yaml.nodeScalar Yaml.scalarNull) $
-      "yamlValue" <~ (Maybes.fromMaybe (var "defaultValue") $ Maps.lookup (Yaml.nodeScalar $ Yaml.scalarStr $ Core.unName $ var "fname") (var "m")) $
+      "yamlValue" <~ (Optionals.fromOptional (var "defaultValue") $ Maps.lookup (Yaml.nodeScalar $ Yaml.scalarStr $ Core.unName $ var "fname") (var "m")) $
       "v" <<~ Coders.coderDecode (var "coder'") @@ var "cx" @@ var "yamlValue" $
       right (Core.field (var "fname") (var "v"))) $
     "fields" <<~ Eithers.mapList (var "decodeField") (var "coders") $
@@ -84,14 +84,14 @@ encodeRecord = define "encodeRecord" $
   doc "Encode a record term to YAML" $
   "coders" ~> "cx" ~> "graph" ~> "term" ~>
   "stripped" <~ (Strip.deannotateTerm @@ var "term") $
-  -- Check if a field should be omitted: type is Maybe and value is TermMaybe Nothing
+  -- Check if a field should be omitted: type is Maybe and value is TermOptional Nothing
   "isMaybeNothing" <~ ("ft" ~> "fvalue" ~>
     cases _Type (Core.fieldTypeType $ var "ft")
       (Just false) [
-      _Type_maybe>>: constant $
+      _Type_optional>>: constant $
         cases _Term (var "fvalue")
           (Just false) [
-          _Term_maybe>>: "opt" ~> Maybes.isNothing (var "opt")]]) $
+          _Term_optional>>: "opt" ~> Optionals.isNone (var "opt")]]) $
   "encodeField" <~ ("coderAndField" ~>
     "ftAndCoder" <~ (Pairs.first $ var "coderAndField") $
     "field" <~ (Pairs.second $ var "coderAndField") $
@@ -106,7 +106,7 @@ encodeRecord = define "encodeRecord" $
   "record" <<~ ExtractCore.termRecord @@ var "graph" @@ var "stripped" $
   "fields" <~ (Core.recordFields $ var "record") $
   "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
-  right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
+  right (Yaml.nodeMapping $ Maps.fromList $ Optionals.cat $ var "maybeFields")
 
 -- | Lift Either String to Either Error using a context
 liftStringError :: TypedTerm InferenceContext -> TypedTerm (Either String a) -> TypedTerm (Either Error a)
@@ -224,21 +224,21 @@ termCoder = define "termCoder" $
     "strippedMaybeTerm" <~ (Strip.deannotateTerm @@ var "maybeTerm") $
     cases _Term (var "strippedMaybeTerm")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected optional term, found: ", ShowCore.term @@ var "maybeTerm"]))) [
-      _Term_maybe>>: "maybeContents" ~>
-        Maybes.cases (var "maybeContents") (right $ Yaml.nodeScalar Yaml.scalarNull) ("innerTerm" ~>
+      _Term_optional>>: "maybeContents" ~>
+        Optionals.cases (var "maybeContents") (right $ Yaml.nodeScalar Yaml.scalarNull) ("innerTerm" ~>
             "encodedInner" <<~ Coders.coderEncode (var "maybeElementCoder") @@ var "cx" @@ var "innerTerm" $
             right (var "encodedInner"))]) $
   "decodeMaybe" <~ ("maybeElementCoder" ~> "cx" ~> "yamlVal" ~>
     cases YM._Node (var "yamlVal")
       (Just $
         "decodedInner" <<~ Coders.coderDecode (var "maybeElementCoder") @@ var "cx" @@ var "yamlVal" $
-        right (Core.termMaybe $ just $ var "decodedInner")) [
+        right (Core.termOptional $ just $ var "decodedInner")) [
       YM._Node_scalar>>: "s" ~>
         cases YM._Scalar (var "s")
           (Just $
             "decodedInner" <<~ Coders.coderDecode (var "maybeElementCoder") @@ var "cx" @@ var "yamlVal" $
-            right (Core.termMaybe $ just $ var "decodedInner")) [
-          YM._Scalar_null>>: constant $ right (Core.termMaybe nothing)]]) $
+            right (Core.termOptional $ just $ var "decodedInner")) [
+          YM._Scalar_null>>: constant $ right (Core.termOptional nothing)]]) $
   "result" <~ (cases _Type (var "stripped")
     (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [
       string "unsupported type in YAML: ",
@@ -288,7 +288,7 @@ termCoder = define "termCoder" $
             YM._Node_mapping>>: "m" ~>
               "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
               right (Core.termMap $ Maps.fromList $ var "entries")]),
-    _Type_maybe>>: "maybeElementType" ~>
+    _Type_optional>>: "maybeElementType" ~>
       "maybeElementCoder" <<~ termCoder @@ var "maybeElementType" @@ var "cx" @@ var "g" $
       right $ Coders.coder
         (var "encodeMaybe" @@ var "maybeElementCoder")
