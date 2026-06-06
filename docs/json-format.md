@@ -3,14 +3,18 @@
 This document specifies Hydra's JSON encoding for terms and types.
 It covers the rules of the JSON coder itself, independent of the shape of the `Module` type
 or any other particular kernel type being encoded.
+It also specifies the three JSON **sidecar and metadata files** that travel alongside the
+encoded modules — `manifest.json`, `package.json`, and `digest.json` — in
+[Sidecar and metadata files](#sidecar-and-metadata-files).
 
 The encoding is intended to be stable for the lifetime of the v1 series.
-A `formatVersion` field on the per-package `build/<set>/digest.json` advertises the version
-a consumer is reading; see [Format versioning](#format-versioning) below.
+A `moduleFormatVersion` field on the per-package `build/<set>/digest.json` records the encoding version,
+but that digest is gitignored and not shipped, so external consumers cannot read it today;
+see [Format versioning](#format-versioning) below.
 
 ## Status
 
-This document describes **`formatVersion: 1`**.
+This document describes **`moduleFormatVersion: 1`**.
 
 The encoding is implemented by the JSON coder in
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/{Encode,Decode}.hs`.
@@ -98,6 +102,14 @@ Examples:
 - `Type.list (variable "T")` → `{"list": {"variable": "T"}}`
 - `Term.unit` → `{"unit": {}}` (nullary variants take an empty object payload; see [Empty objects](#empty-objects))
 
+The single-key shape is structurally dual to the record encoding for the
+opposite reason that records are objects: a record is a conjunction (it has
+*all* of its fields, which maps to a JSON object containing all its
+attributes), and an injection is a disjunction (it has *exactly one* of its
+fields, which maps to a JSON object containing one attribute). The variant
+key *is* the discriminator; there is no separate `"tag"` / `"value"`
+indirection to maintain.
+
 ## Records
 
 A *record type* (`Type.record`) encodes as a JSON **array** of `{"name": ..., "type": ...}`
@@ -142,6 +154,14 @@ record terms are runtime data and need a canonical order for byte-stable output.
 `null` only ever encodes a `Maybe.Nothing`. It is never used as a generic sentinel,
 never used to mean "missing value" in any other context, and never appears for a non-`Maybe` type.
 
+Each rule exists to eliminate an ambiguity the previous one would create if
+extended naively. Rule 1 works because no Hydra value other than `Maybe.Nothing`
+encodes to bare `null`. Rule 2 needs the array wrapper because without it the
+outer `Nothing` and the inner `Nothing` would both be bare `null` and a
+consumer couldn't tell them apart. Rule 3 omits the field in records because
+the absent key is unambiguous (record-term keys are never bound to `null`
+elsewhere), and the omission is more compact than encoding `null`.
+
 ## Empty values
 
 - `Type.unit`, and any nullary variant payload, encodes as `{}`.
@@ -169,6 +189,9 @@ reference Haskell encoder; equivalent total order for other encoders).
 {"first": <encoded a>, "second": <encoded b>}
 ```
 
+At the JSON layer, the encoding follows the [record rule](#records), using
+the special field names `first` and `second`.
+
 ## Eithers
 
 `Type.either` and `Term.either` encode as a single-key JSON object:
@@ -180,6 +203,9 @@ reference Haskell encoder; equivalent total order for other encoders).
 
 Decoders treat presence of `left` and absence of `right` (or vice versa) as the discriminator.
 A well-formed `Either` value never carries both keys.
+
+At the JSON layer, the encoding follows the [tagged-union rule](#tagged-unions),
+with `left` and `right` as the variant names.
 
 ## Wrapped types
 
@@ -234,6 +260,30 @@ older fixtures continue to load.
 Integer and float literals are themselves tagged with their precision class
 (`int8`/`int16`/`int32`/`int64`/`uint8`/.../`bigint` and `float32`/`float64`).
 
+### Integer formatting
+
+`Literal.integer` values encode according to whether the precision class can
+exceed JavaScript's `Number.MAX_SAFE_INTEGER` (`2^53 - 1`):
+
+- **As JSON numbers:** `int8`, `int16`, `int32`, `uint8`, `uint16`, `uint32`.
+  Every value of these types fits safely in a JS `Number`.
+- **As JSON strings:** `int64`, `uint64`, `bigint`.
+  Values of these types can exceed `2^53 - 1` and would lose precision if
+  read by a JavaScript consumer via `JSON.parse`. Strings preserve precision
+  on the wire.
+
+The threshold is the IEEE 754 double's integer-precision boundary, not the
+64-bit signed range. Typed-language consumers (Haskell, Java, Python, etc.)
+have arbitrary-precision integer types and don't need the string protection,
+but JavaScript's `Number` is the only integer type its `JSON.parse` produces,
+and the format protects against silent corruption on the JS side.
+
+`uint32` moved from the string group to the number group; earlier output quoted
+it as a string. For backward compatibility the decoder accepts `uint32` as
+*either* a JSON number or a JSON string, so JSON written before the change still
+reads. This is a clarification of the existing format and does **not** bump
+`formatVersion`.
+
 ### Float formatting
 
 `Literal.float` values — including both `float32` and `float64` precisions — encode symmetrically:
@@ -245,6 +295,19 @@ Integer and float literals are themselves tagged with their precision class
   if the input is the float64 bit pattern `0.30000000000000004`, the encoder emits exactly that.
 - **Non-finite values and `-0.0`** encode as JSON strings — `"Infinity"`, `"-Infinity"`,
   `"NaN"`, `"-0.0"` — because JSON's number grammar cannot represent these.
+
+The four sentinels are the complete set of IEEE 754 `float32` / `float64` values that
+JSON's number grammar can't represent: `+Infinity` and `-Infinity` (overflow),
+`NaN` (any NaN bit pattern collapses to a single sentinel), and `-0.0` (because
+JSON's `-0` parses as `0` in many parsers, losing the sign of zero). Any other
+finite float survives the number grammar.
+
+The sentinel form is a string rather than an object wrapper (e.g.
+`{"nan": null}`) to keep the wire shape uniform: a `float32` or `float64`
+literal always appears as a single JSON scalar (number or string), never
+sometimes a scalar and sometimes an object. A consumer that wants to recognize
+a float literal only has to look at one position in the AST, regardless of the
+value.
 
 Decoders accept both shapes for either precision.
 The schema disambiguates `float32` from `float64`, just as it disambiguates `int8` from `int64`;
@@ -295,7 +358,8 @@ rule applied separately).
 ### Manifest array values
 
 `manifest.json` files (per package, under `dist/json/<pkg>/src/main/json/manifest.json`) list each module
-name owned by the package, grouped by category (`mainModules`, `dslModules`, `evalLibModules`, etc.).
+name owned by the package, grouped by category (`mainModules`, `dslModules`, `defaultLibModules`, etc.;
+see [Sidecar and metadata files](#sidecar-and-metadata-files) for the full field set).
 Each array's entries must be sorted **lexicographically by module name string**.
 This is independent of the source code's enumeration order — the wire-format requirement is
 sorted; the runtime code that drives the writer should sort before encoding.
@@ -313,22 +377,30 @@ exceed an internal soft-wrap budget.
 
 ## Format versioning
 
-Encoding changes are gated by a `formatVersion` integer carried at the top level of each
+Encoding changes are gated by a `moduleFormatVersion` integer carried at the top level of each
 package's per-source-set `digest.json` (`dist/json/<pkg>/build/<set>/digest.json`):
 
 ```json
 {
-  "formatVersion": 1,
-  "version": 1,
+  "digestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "hashes": {...}
 }
 ```
 
-Bump rules:
+The digest sidecar carries two distinct version descriptors, both reset to `1` for the 0.16.0 release:
 
-- `formatVersion` **increments by 1** when a parser written for version *N* would mis-parse
+- `moduleFormatVersion` versions the JSON encoding of the sibling module files
+  (`dist/json/<pkg>/.../*.json`) — the wire format this document specifies.
+- `digestFormatVersion` versions the digest file's *own* internal schema
+  (the simple hash map vs. the inputs/outputs/generator layout). It is not meant for consumers
+  gating on the module-JSON encoding.
+
+Bump rules for `moduleFormatVersion`:
+
+- It **increments by 1** when a parser written for version *N* would mis-parse
   version *N+1*. This is the load-bearing definition: a consumer who keys their parser
-  selection off `formatVersion` is guaranteed correct results.
+  selection off `moduleFormatVersion` is guaranteed correct results.
 - Adding a new optional field, a new `Term` or `Type` variant, or a new module is **not** a
   bump: existing parsers will see an unknown variant and can fail loudly, but they will
   not silently mis-parse anything that was valid in the prior version.
@@ -336,13 +408,20 @@ Bump rules:
   any existing variant **is** a bump.
 - Bumps are expected to be rare — measured in years, not releases.
 
-The other `version` field in `digest.json` describes the digest file's own internal schema
-and is not meant for consumers gating on the encoding format.
-Consumers should read `formatVersion` only.
+Caveat on consumer visibility: `digest.json` is gitignored and regenerated every sync, so it is
+**not** part of a published package. An external consumer reading shipped artifacts therefore cannot
+currently read `moduleFormatVersion` at all. Surfacing the format version in shipped data is tracked
+under #370 / the post-#370 issue. Until then, `moduleFormatVersion` is an internal build-cache
+descriptor, not a consumer contract.
 
 Module files themselves carry no version field;
 the package's `build/<set>/digest.json` is the single source of truth for the format
 version of all JSON files in the same package's source set.
+
+The two sibling metadata files — `manifest.json` and `package.json` — carry their own
+schema-version fields (`manifestFormatVersion`, `packageFormatVersion`), independent of
+`moduleFormatVersion` and also reset to `1` for 0.16.0. See
+[Sidecar and metadata files](#sidecar-and-metadata-files) for their full schemas.
 
 ## Conformance
 
@@ -360,3 +439,110 @@ A conforming decoder must:
 - Accept all of the above shapes and decode them to the corresponding Hydra terms/types.
 - Reject any tagged-union object with zero or more than one key.
 - Reject any `Either` object carrying both `left` and `right` keys.
+
+## Sidecar and metadata files
+
+Three JSON files describe and track the encoded modules rather than encoding terms themselves.
+Unlike module files (which are pure `Module` serializations governed by `moduleFormatVersion`),
+each of these carries its own schema-version field, all reset to `1` for the 0.16.0 release.
+They are plain JSON objects: 2-space indent, LF line endings, and the same lexicographic key
+ordering described in [Stability of byte order](#stability-of-byte-order).
+
+### `manifest.json` — per-package module listing
+
+One per package at `dist/json/<pkg>/src/main/json/manifest.json` (generated; tracked in git).
+It lists the modules each package owns, grouped by role, so a host can load a package without
+scanning the filesystem. Each array is sorted lexicographically by module name.
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `manifestFormatVersion` | integer | Schema version of this manifest file. Currently `1`. |
+| `package` | string | The package name (e.g. `hydra-rdf`). |
+| `mainModules` | array of string | Module names making up the package's main source set. |
+| `testModules` | array of string | Module names in the package's test source set (empty for most packages). |
+| `dslModules` | array of string | Generated DSL-wrapper module names (empty when the package defines no DSL-wrapped types). |
+| `defaultLibModules` | array of string | Default-implementation library module names owned by the package. |
+
+Example (`mainModules` abbreviated):
+
+```json
+{
+  "defaultLibModules": [],
+  "dslModules": [],
+  "mainModules": ["hydra.owl.syntax", "hydra.rdf.serde", "hydra.rdf.syntax"],
+  "manifestFormatVersion": 1,
+  "package": "hydra-rdf",
+  "testModules": []
+}
+```
+
+The monolithic universe manifest (written to `dist/json/manifest.json` rather than per package)
+carries one additional `kernelModules` array; the per-package manifests above do not.
+
+### `package.json` — hand-authored package descriptor
+
+One per package at `packages/<pkg>/package.json` (hand-authored; the canonical source of package
+metadata). It is the single source of truth for a package's identity and dependency edges, which
+drive build ordering and per-language packaging. This is **distinct** from the npm `package.json`
+files under `heads/typescript/` and `heads/wasm/`, which follow npm's own schema and are unrelated.
+
+| Field | Type | Required | Meaning |
+|-------|------|----------|---------|
+| `packageFormatVersion` | integer | yes | Schema version of this descriptor. Currently `1`. |
+| `name` | string | yes | The package name (matches the directory, e.g. `hydra-kernel`). |
+| `description` | string | yes | One-line human-readable summary; flows into per-language package metadata. |
+| `sourceLanguage` | string | yes | The host language the package's DSL sources are authored in (today always `haskell`). |
+| `dependencies` | array of string | yes | Other package names this package depends on; build order is a topological sort over these edges. May be empty. |
+| `targetLanguages` | array of string | no | Restricts which target languages the package is regenerated to. Omitted means every target. |
+
+```json
+{
+  "packageFormatVersion": 1,
+  "name": "hydra-rdf",
+  "description": "RDF ecosystem support for Hydra: RDF, OWL, SHACL, ShEx, XML Schema",
+  "sourceLanguage": "haskell",
+  "targetLanguages": ["haskell", "java", "python"],
+  "dependencies": ["hydra-kernel"]
+}
+```
+
+### `digest.json` — build-cache sidecar
+
+The digest tracks content hashes so the build can skip regenerating unchanged work. It lives under
+`dist/json/<pkg>/build/<set>/digest.json` (and a universe digest at `dist/json/build/digest.json`).
+It is **gitignored and regenerated every sync**, so it is not shipped in a published package. Parsing
+is deliberately tolerant: unknown keys are ignored and a malformed digest degrades to an empty cache,
+so renaming or adding fields never breaks an older reader, and no migration step is needed.
+
+Two layouts exist, both carrying the two version fields and a content-hash core:
+
+- **Hashes layout** — a flat per-namespace hash map. Used for source-set digests.
+- **Inputs/outputs layout** — records each input and output file with its `kind` and `hash`,
+  plus a `generator` stamp. Used by the `digest-check` executable.
+
+| Field | Type | Layout | Meaning |
+|-------|------|--------|---------|
+| `digestFormatVersion` | integer | both | Schema version of the digest file's own format. Currently `1`. |
+| `moduleFormatVersion` | integer | both | The [module wire-format version](#format-versioning) the sibling `*.json` files were written at. Currently `1`. |
+| `hashes` | object | hashes | Map of module namespace → content hash (hex), sorted by namespace. |
+| `selfHash` | string | both | Hash over this package's own `hashes`; empty on legacy digests. |
+| `depHash:<pkg>` | string | both | Recorded `selfHash` of dependency `<pkg>` at write time. The `depHash:` prefix keeps these distinct from namespace keys; transitive invalidation compares them against deps' current `selfHash`. |
+| `generator` | string | inputs/outputs | Per-target generator-stamp identity (see [build-system.md](build-system.md)). |
+| `inputs` | object | inputs/outputs | Map of input path → `{ "kind": ..., "hash": ... }`. |
+| `outputs` | object | inputs/outputs | Map of output path → `{ "kind": ..., "hash": ... }`. |
+
+```json
+{
+  "digestFormatVersion": 1,
+  "moduleFormatVersion": 1,
+  "selfHash": "…",
+  "depHash:hydra-kernel": "…",
+  "hashes": {
+    "hydra.rdf.syntax": "…",
+    "hydra.rdf.utils": "…"
+  }
+}
+```
+
+See [Format versioning](#format-versioning) for the distinction between the two version fields and the
+bump rules, and [build-system.md](build-system.md) for the digest's role in the cache hierarchy.

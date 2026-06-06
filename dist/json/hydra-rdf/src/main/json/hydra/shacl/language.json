@@ -102,7 +102,59 @@
                               {
                                 "name": "types",
                                 "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}],
-                            "typeName": "hydra.coders.LanguageConstraints"}}}],
+                            "typeName": "hydra.coders.LanguageConstraints"}}},
+                      {
+                        "name": "supportedFeatures",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "list": [
+                                {"inject": {"field": {"name": "partialApplication", "term": {"unit": {}}}, "typeName": "hydra.coders.LanguageFeature"}},
+                                {
+                                  "inject": {"field": {"name": "nestedCaseStatements", "term": {"unit": {}}}, "typeName": "hydra.coders.LanguageFeature"}},
+                                {
+                                  "inject": {"field": {"name": "nestedPolymorphicLetBindings", "term": {"unit": {}}}, "typeName": "hydra.coders.LanguageFeature"}}]},
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.coders.LanguageFeature"}}}}}},
+                      {
+                        "name": "caseConventions",
+                        "term": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "constant",
+                                "term": {"inject": {"field": {"name": "upperSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "directory",
+                                "term": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "enumValue",
+                                "term": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "field",
+                                "term": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "file",
+                                "term": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "module",
+                                "term": {"inject": {"field": {"name": "lowerSnake", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "term",
+                                "term": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "termVariable",
+                                "term": {"inject": {"field": {"name": "camel", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "type",
+                                "term": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}},
+                              {
+                                "name": "typeVariable",
+                                "term": {"inject": {"field": {"name": "pascal", "term": {"unit": {}}}, "typeName": "hydra.util.CaseConvention"}}}],
+                            "typeName": "hydra.coders.CaseConventions"}}},
+                      {
+                        "name": "defaultFileExtension",
+                        "term": {"wrap": {"body": {"literal": {"string": "ttl"}}, "typeName": "hydra.util.FileExtension"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
         "name": "hydra.shacl.language.shaclLanguage",
         "signature": {"parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}, "typeParameters": []}}}],

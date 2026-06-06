@@ -195,6 +195,10 @@ object TestSuiteRunner {
   private def list(terms: Term*): Term =
     Term.list(terms.toSeq)
 
+  // Build a Term.pair value (mirrors hydra.dsl.Terms.pair, #443).
+  private def pair(a: Term, b: Term): Term =
+    Term.pair(hydra.core.Pair(a, b))
+
   private def wrap(typeName: String, term: Term): Term =
     Term.wrap(WrappedTerm(typeName, term))
 
@@ -207,6 +211,10 @@ object TestSuiteRunner {
     //   getAnnotationMap :: Term -> Map<Name, Term>
     //   Project the (Name, value) entries from a TermMap-with-TermVariable-keys
     //   annotation; return Maps.empty for any other shape.
+    // #443: previously these used hydra.lib.tuples.{pair,fst,snd}, which are
+    // not registered primitives. Migrated to hydra.lib.pairs.{first,second}
+    // for projection and a local pair() helper for construction (mirrors
+    // Java's hydra.dsl.Terms.pair).
     boundTerms += ("hydra.annotations.getAnnotationMap" ->
       lambda("t",
         apply(
@@ -220,11 +228,11 @@ object TestSuiteRunner {
                         Some(variable("acc")),
                         field("variable", lambda("n",
                           apply(apply(primitive("hydra.lib.lists.cons"),
-                            apply(apply(primitive("hydra.lib.tuples.pair"),
-                              variable("n")),
-                              apply(primitive("hydra.lib.tuples.snd"), variable("pair")))),
+                            pair(
+                              variable("n"),
+                              apply(primitive("hydra.lib.pairs.second"), variable("pair")))),
                             variable("acc"))))),
-                      apply(primitive("hydra.lib.tuples.fst"), variable("pair")))),
+                      apply(primitive("hydra.lib.pairs.first"), variable("pair")))),
                   list()),
                   apply(primitive("hydra.lib.maps.toList"), variable("m"))))))),
           variable("t"))))
@@ -238,10 +246,10 @@ object TestSuiteRunner {
           apply(primitive("hydra.lib.maps.fromList"),
             apply(apply(primitive("hydra.lib.lists.map"),
               lambda("pair",
-                apply(apply(primitive("hydra.lib.tuples.pair"),
+                pair(
                   inject("hydra.core.Term", "variable",
-                    apply(primitive("hydra.lib.tuples.fst"), variable("pair")))),
-                  apply(primitive("hydra.lib.tuples.snd"), variable("pair"))))),
+                    apply(primitive("hydra.lib.pairs.first"), variable("pair"))),
+                  apply(primitive("hydra.lib.pairs.second"), variable("pair"))))),
               apply(primitive("hydra.lib.maps.toList"), variable("m")))))))
 
     // hydra.rewriting.deannotateTerm

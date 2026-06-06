@@ -176,16 +176,21 @@ def read_manifest_field(base_path, field_name):
     return [ModuleName(ns) for ns in manifest[field_name]]
 
 
-def generate_sources(coder, language, do_infer, do_expand, do_hoist_case, do_hoist_poly,
+def generate_sources(coder, language, do_infer,
                      base_path, universe, modules_to_generate):
-    """Generate source files and write them to disk."""
+    """Generate source files and write them to disk.
+
+    Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
+    are now read from ``language.supported_features`` inside
+    ``generate_source_files``; the caller only supplies ``do_infer``.
+    """
     import time as _time
     bs_graph = bootstrap_graph()
     cx = empty_context()
     _t0 = _time.time()
     result = generate_source_files(
         coder, language,
-        do_infer, do_expand, do_hoist_case, do_hoist_poly,
+        do_infer,
         bs_graph, tuple(universe), tuple(modules_to_generate), cx)
     files = unwrap_either(result)
     _t1 = _time.time()
@@ -243,7 +248,7 @@ def write_java(base_path, universe, mods):
     from hydra.java.language import java_language
     generate_sources(
         module_to_java, java_language(),
-        False, True, False, True,
+        False,
         base_path, universe, mods)
 
 
@@ -253,7 +258,7 @@ def write_python(base_path, universe, mods):
     from hydra.python.language import python_language
     generate_sources(
         module_to_python, python_language(),
-        False, True, True, False,
+        False,
         base_path, universe, mods)
 
 
@@ -263,7 +268,7 @@ def write_haskell(base_path, universe, mods):
     from hydra.haskell.language import haskell_language
     generate_sources(
         module_to_haskell, haskell_language(),
-        False, False, False, False,
+        False,
         base_path, universe, mods)
 
 
@@ -273,23 +278,17 @@ def write_scala(base_path, universe, mods):
     from hydra.scala.language import scala_language
     generate_sources(
         module_to_scala, scala_language(),
-        False, True, False, False,
+        False,
         base_path, universe, mods)
 
 
 def write_typescript(base_path, universe, mods):
-    """Generate TypeScript source files from modules.
-
-    do_hoist_case_statements=True mirrors the per-target dispatch in
-    heads/typescript/.../bootstrap.ts. Hoisting pulls cases out of inline
-    IIFEs into top-level helpers, saving stack frames when the TS runtime
-    walks deeply-nested terms (e.g. when TS hosts the Java coder).
-    """
+    """Generate TypeScript source files from modules."""
     from hydra.type_script.coder import module_to_type_script
     from hydra.type_script.language import type_script_language
     generate_sources(
         module_to_type_script, type_script_language(),
-        False, True, True, False,
+        False,
         base_path, universe, mods)
 
 
@@ -326,7 +325,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
 
     generate_sources(
         lisp_coder, lisp_language(),
-        False, False, False, False,
+        False,
         base_path, universe, mods)
 
 
