@@ -206,34 +206,11 @@ object Libraries:
       true,
       None)
 
-  // Mirror of Haskell kernel's lazySig (Sources.Kernel.Lib.{Logic,Maybes,Maps,Eithers}):
-  // mark the listed (0-based) parameter positions as isLazy=true so that target-language
-  // coders thunk those arguments and avoid eagerly evaluating both branches. Without this,
-  // Scala-host emitters (notably Python and TypeScript) generate strict calls to ifElse /
-  // maybe / fromMaybe / fromLeft / fromRight / findWithDefault that infinite-recurse on
-  // recursive kernel functions. Resolves #423.
-  private def mkPrimDefLazy(name: String, ts: TypeScheme, lazyParams: Seq[Int]): hydra.packaging.PrimitiveDefinition =
-    val sig = hydra.scoping.typeSchemeToTermSignature(ts)
-    val lazyIdx = lazyParams.toSet
-    val markedParams = sig.parameters.zipWithIndex.map { case (p, i) =>
-      if lazyIdx.contains(i) then p.copy(isLazy = true) else p
-    }
-    hydra.packaging.PrimitiveDefinition(
-      name,
-      None,
-      sig.copy(parameters = markedParams),
-      true,
-      true,
-      None)
-
   private def mkPrim(name: String, ts: TypeScheme): Primitive =
     Primitive(mkPrimDef(name, ts), stubImpl)
 
   private def mkPrimImpl(name: String, ts: TypeScheme, impl: Impl): Primitive =
     Primitive(mkPrimDef(name, ts), impl)
-
-  private def mkPrimImplLazy(name: String, ts: TypeScheme, lazyParams: Seq[Int], impl: Impl): Primitive =
-    Primitive(mkPrimDefLazy(name, ts, lazyParams), impl)
 
   // Type construction helpers
   private def tVar(n: String): Type = Type.variable(n)
@@ -369,16 +346,13 @@ object Libraries:
           }
         }),
       // First-order: fromLeft, fromRight, isLeft, isRight, lefts, rights, partitionEithers
-      // fromLeft/fromRight: the default (position 0) is lazy — only evaluated when
-      // the Either takes the unfavoured side. Mirrors kernel's
-      // Sources.Kernel.Lib.Eithers.{fromLeft,fromRight}Sig = lazySig [0]. #423.
-      s"$ns.fromLeft" -> mkPrimImplLazy(s"$ns.fromLeft", tScheme(Seq("x", "y"),
-        tFun(x, tFun(tEither(x, y), x))), Seq(0),
+      s"$ns.fromLeft" -> mkPrimImpl(s"$ns.fromLeft", tScheme(Seq("x", "y"),
+        tFun(x, tFun(tEither(x, y), x))),
         impl2((d, e) => exEither(e) match
           case Left(a) => a
           case Right(_) => d)),
-      s"$ns.fromRight" -> mkPrimImplLazy(s"$ns.fromRight", tScheme(Seq("x", "y"),
-        tFun(y, tFun(tEither(x, y), y))), Seq(0),
+      s"$ns.fromRight" -> mkPrimImpl(s"$ns.fromRight", tScheme(Seq("x", "y"),
+        tFun(y, tFun(tEither(x, y), y))),
         impl2((d, e) => exEither(e) match
           case Left(_) => d
           case Right(b) => b)),
@@ -683,11 +657,9 @@ object Libraries:
     Map(
       s"$ns.and" -> mkPrimImpl(s"$ns.and", tMono(tFun(tBool, tFun(tBool, tBool))),
         impl2((a, b) => mkBool(exBool(a) && exBool(b)))),
-      // ifElse is higher-order (lazy args act like functions). Parameters 1 and 2
-      // (then/else branches) are lazy: only the selected branch must be evaluated.
-      // Mirrors kernel's Sources.Kernel.Lib.Logic.ifElseSig = lazySig [1, 2]. #423.
-      s"$ns.ifElse" -> mkPrimImplLazy(s"$ns.ifElse", tScheme(Seq("a"),
-        tFun(tBool, tFun(a, tFun(a, a)))), Seq(1, 2),
+      // ifElse is higher-order (lazy args act like functions)
+      s"$ns.ifElse" -> mkPrimImpl(s"$ns.ifElse", tScheme(Seq("a"),
+        tFun(tBool, tFun(a, tFun(a, a)))),
         impl3((cond, ifTrue, ifFalse) => if exBool(cond) then ifTrue else ifFalse)),
       s"$ns.not" -> mkPrimImpl(s"$ns.not", tMono(tFun(tBool, tBool)),
         impl1(a => mkBool(!exBool(a)))),
@@ -768,10 +740,8 @@ object Libraries:
       s"$ns.empty" -> mkPrimImpl(s"$ns.empty", tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         mapKV),
         impl0(mkMapTerm(Map.empty))),
-      // findWithDefault: the default (position 0) is lazy — only evaluated on miss.
-      // Mirrors kernel's Sources.Kernel.Lib.Maps.findWithDefaultSig = lazySig [0]. #423.
-      s"$ns.findWithDefault" -> mkPrimImplLazy(s"$ns.findWithDefault", tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
-        tFun(v, tFun(k, tFun(mapKV, v)))), Seq(0),
+      s"$ns.findWithDefault" -> mkPrimImpl(s"$ns.findWithDefault", tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
+        tFun(v, tFun(k, tFun(mapKV, v)))),
         impl3((d, key, m) => exMap(m).getOrElse(key, d))),
       s"$ns.fromList" -> mkPrimImpl(s"$ns.fromList", tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(tList(tPair(k, v)), mapKV)),
@@ -929,11 +899,8 @@ object Libraries:
             case None => mkMaybe(None)
             case Some(x) => app(f, x)
         }),
-      // maybes.cases: the Nothing-default (position 1) is lazy — only evaluated when
-      // the Maybe is Nothing. Mirrors kernel's Sources.Kernel.Lib.Maybes.casesSig
-      // = lazySig [1]. #423.
-      s"$ns.cases" -> mkPrimImplLazy(s"$ns.cases", tScheme(Seq("a", "b"),
-        tFun(tOpt(a), tFun(b, tFun(tFun(a, b), b)))), Seq(1),
+      s"$ns.cases" -> mkPrimImpl(s"$ns.cases", tScheme(Seq("a", "b"),
+        tFun(tOpt(a), tFun(b, tFun(tFun(a, b), b)))),
         impl3 { (mx, d, f) =>
           exMaybe(mx) match
             case None => d
@@ -970,10 +937,8 @@ object Libraries:
             }
           }
         }),
-      // maybes.maybe: the Nothing-default (position 0) is lazy. Mirrors kernel's
-      // Sources.Kernel.Lib.Maybes.maybeSig = lazySig [0]. #423.
-      s"$ns.maybe" -> mkPrimImplLazy(s"$ns.maybe", tScheme(Seq("b", "a"),
-        tFun(b, tFun(tFun(a, b), tFun(tOpt(a), b)))), Seq(0),
+      s"$ns.maybe" -> mkPrimImpl(s"$ns.maybe", tScheme(Seq("b", "a"),
+        tFun(b, tFun(tFun(a, b), tFun(tOpt(a), b)))),
         impl3 { (d, f, mx) =>
           exMaybe(mx) match
             case None => d
@@ -983,10 +948,8 @@ object Libraries:
       s"$ns.cat" -> mkPrimImpl(s"$ns.cat", tScheme(Seq("a"),
         tFun(tList(tOpt(a)), tList(a))),
         impl1(xs => mkList(exList(xs).flatMap(exMaybe)))),
-      // fromMaybe: the default (position 0) is lazy. Mirrors kernel's
-      // Sources.Kernel.Lib.Maybes.fromMaybeSig = lazySig [0]. #423.
-      s"$ns.fromMaybe" -> mkPrimImplLazy(s"$ns.fromMaybe", tScheme(Seq("a"),
-        tFun(a, tFun(tOpt(a), a))), Seq(0),
+      s"$ns.fromMaybe" -> mkPrimImpl(s"$ns.fromMaybe", tScheme(Seq("a"),
+        tFun(a, tFun(tOpt(a), a))),
         impl2((d, ma) => exMaybe(ma).getOrElse(d))),
       s"$ns.isJust" -> mkPrimImpl(s"$ns.isJust", tScheme(Seq("a"),
         tFun(tOpt(a), tBool)),

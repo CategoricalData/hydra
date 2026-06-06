@@ -49,7 +49,7 @@
   (into {}
     (map (fn [[name typ]]
            (let [ts ((r 'hydra_scoping_f_type_to_type_scheme) typ)]
-             [name ((r 'hydra_strip_deannotate_type_recursive) (:body ts))]))
+             [name ((r 'hydra_strip_deannotate_type_recursive) (:type ts))]))
          (r 'hydra_json_bootstrap_types_by_name))))
 
 (defn- load-modules-from-json [base-path namespaces]
@@ -143,7 +143,7 @@
                                             code (@(rc 'hydra_serialization_print_expr)
                                                    (@(rc 'hydra_serialization_parenthesize)
                                                      (pte program)))
-                                            ns-val (let [ns (:name mod)]
+                                            ns-val (let [ns (:namespace mod)]
                                                      (if (string? ns) ns (:value ns)))
                                             fp (str (@(rc 'hydra_codegen_module_name_to_path) ns-val) ".clj")]
                                         (list :right {fp code}))))))))))
@@ -176,7 +176,7 @@
           ;; Step 5: Build graphs
           (println "Step 5: Build graphs...")
           (flush)
-          (let [namespace-map (into {} (map (fn [m] [(:name m) m]) all-mods))
+          (let [namespace-map (into {} (map (fn [m] [(:namespace m) m]) all-mods))
                 schema-mods (timed "schemaModDeps"
                               #(((r 'hydra_codegen_module_type_deps_transitive) namespace-map) all-mods))
                 schema-elements (vec (filter #(is-native-type %)
@@ -199,7 +199,7 @@
             (println (str "  flags: infer=" do-infer " expand=" do-expand
                           " hoistCase=" do-hoist-case " hoistPoly=" do-hoist-poly))
             (flush)
-            (let [namespaces (mapv #(:name %) term-mods)
+            (let [namespaces (mapv #(:namespace %) term-mods)
                   raw-result (timed "dataGraphToDefinitions"
                                #((((((((((r 'hydra_adapt_data_graph_to_definitions)
                                            constraints) do-infer) do-expand) do-hoist-case) do-hoist-poly)
@@ -231,7 +231,7 @@
                                                      all-bindings))
                                                   (:definitions mod)))
                             refreshed-mod (assoc mod :definitions refreshed-els)
-                            ns-str (let [ns (:name mod)]
+                            ns-str (let [ns (:namespace mod)]
                                      (if (string? ns) ns (:value ns)))
                             t0 (System/currentTimeMillis)
                             result ((((coder refreshed-mod)
