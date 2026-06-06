@@ -155,6 +155,14 @@ pythonLanguage = define "pythonLanguage" $
         (var "termVariants")
         (var "typeVariants")
         (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionLowerSnake Util.caseConventionUpperSnake
+        Util.caseConventionLowerSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake Util.caseConventionLowerSnake Util.caseConventionPascal
+        Util.caseConventionPascal)
+      (wrap _FileExtension (string "py"))
 
 pythonReservedWords :: TypedTermDefinition (S.Set String)
 pythonReservedWords = define "pythonReservedWords" $

@@ -56,14 +56,74 @@
                        (equal (cdr (assq :type_name inj)) "hydra.core.Term")
                        (equal (cdr (assq :name (cdr (assq :field inj)))) "annotated")))))))
 
+(defun hydra--unwrap-term-variable-key (k)
+  "After #386, annotation map keys are wrapped as TermVariable terms.
+   Encodings: (:inject ((:type_name . T) (:field . ((:name . \"variable\") (:term . NAME)))))
+              (:variable NAME) struct-compat short form.
+   Peel one level to return the underlying Name term."
+  (cond
+   ((and (consp k) (eq (car k) :inject)
+         (let* ((inj (cadr k))
+                (tn (cdr (assq :type_name inj)))
+                (fld (cdr (assq :field inj))))
+           (and (equal tn "hydra.core.Term")
+                (equal (cdr (assq :name fld)) "variable"))))
+    (let* ((inj (cadr k))
+           (fld (cdr (assq :field inj))))
+      (cdr (assq :term fld))))
+   ((and (consp k) (eq (car k) :variable))
+    (cadr k))
+   (t k)))
+
+(defun hydra--map-payload-to-alist (m)
+  "Coerce the payload of a (:map M) term to a list of (key . value) pairs.
+   In EL generated code M can be either a hash-table (kernel-runtime
+   representation) or an alist (test-data literal); accept both."
+  (cond
+   ((hash-table-p m)
+    (let (acc)
+      (maphash (lambda (k v) (push (cons k v) acc)) m)
+      acc))
+   ((listp m) m)
+   (t nil)))
+
+(defun hydra--unwrap-term-annotation (ann)
+  "Project the annotation Term (#386: a TermMap whose keys are TermVariables
+   wrapping Names) to an alist of (NameTerm . ValueTerm) pairs.
+   Handles Inject form, short form, and legacy map shapes; the inner map
+   payload may be a hash-table or a list."
+  (cond
+   ;; Inject{Term, map = (:map M)}
+   ((and (consp ann) (eq (car ann) :inject)
+         (let* ((inj (cadr ann))
+                (tn (cdr (assq :type_name inj)))
+                (fld (cdr (assq :field inj))))
+           (and (equal tn "hydra.core.Term")
+                (equal (cdr (assq :name fld)) "map"))))
+    (let* ((inj (cadr ann))
+           (fld (cdr (assq :field inj)))
+           (inner (cdr (assq :term fld))))
+      (when (and (consp inner) (eq (car inner) :map))
+        (mapcar (lambda (pair)
+                  (cons (hydra--unwrap-term-variable-key (car pair)) (cdr pair)))
+                (hydra--map-payload-to-alist (cadr inner))))))
+   ;; Short form: (:map M) — bare map term, M may be hash-table or alist
+   ((and (consp ann) (eq (car ann) :map))
+    (mapcar (lambda (pair)
+              (cons (hydra--unwrap-term-variable-key (car pair)) (cdr pair)))
+            (hydra--map-payload-to-alist (cadr ann))))
+   (t nil)))
+
 (defun hydra--ann-body-and-map (term)
-  "Extract (body . annotation-map-entries) from an annotated term in either format."
+  "Extract (body . annotation-map-entries) from an annotated term in either format.
+   #386: AnnotatedTerm.annotation is a Term; hydra--unwrap-term-annotation projects
+   the (Name . value) entries out of the TermMap-with-TermVariable-keys shape."
   (cond
    ((eq (car term) :annotated)
     (let* ((at (cadr term))
            (ann (hydra_core_annotated_term-annotation at))
            (body (hydra_core_annotated_term-body at)))
-      (cons body (when (and (consp ann) (eq (car ann) :map)) (cadr ann)))))
+      (cons body (hydra--unwrap-term-annotation ann))))
    ((eq (car term) :union)
     (let* ((inj (cadr term))
            (fld (cdr (assq :field inj)))
@@ -74,7 +134,7 @@
                (ann-fld (cl-find-if (lambda (f) (equal (cdr (assq :name f)) "annotation")) fields))
                (body (cdr (assq :term body-fld)))
                (ann-term (cdr (assq :term ann-fld))))
-          (cons body (when (and (consp ann-term) (eq (car ann-term) :map)) (cadr ann-term)))))))))
+          (cons body (hydra--unwrap-term-annotation ann-term))))))))
 
 (defun hydra--deannotate (term)
   (if (hydra--is-annotated-p term)
@@ -133,11 +193,28 @@
         (let* ((at (cadr term))
                (body (hydra_core_annotated_term-body at))
                (ann (hydra_core_annotated_term-annotation at))
-               (ann-term (if (and (consp ann) (eq (car ann) :map)) ann (list :map ann))))
+               ;; #386: AnnotatedTerm.annotation is a Term. If it's already a
+               ;; Term (Inject{Term, ...}), recurse meta-fully; if it's a bare
+               ;; (:map alist) treat each pair as (Name . value) and wrap canonically.
+               (ann-meta
+                (cond
+                 ;; Already a Term: recurse normally.
+                 ((and (consp ann) (eq (car ann) :inject)
+                       (let* ((inj (cadr ann))
+                              (tn (cdr (assq :type_name inj))))
+                         (equal tn "hydra.core.Term")))
+                  (hydra--term-to-meta ann))
+                 ;; Bare (:map alist) — wrap as TermMap with TermVariable keys.
+                 ((and (consp ann) (eq (car ann) :map))
+                  (hydra--term-to-meta (hydra--wrap-annotation-alist-as-term (cadr ann))))
+                 ;; Plain alist — same treatment.
+                 ((and (consp ann) (consp (car ann)))
+                  (hydra--term-to-meta (hydra--wrap-annotation-alist-as-term ann)))
+                 (t (hydra--term-to-meta ann)))))
           (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
                          (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
                                          (list (hydra--make-field "body" (hydra--term-to-meta body))
-                                               (hydra--make-field "annotation" (hydra--term-to-meta-map ann-term)))))))))
+                                               (hydra--make-field "annotation" ann-meta))))))))
        ((eq tag :literal)
         (list :inject (hydra--make-injection "hydra.core.Term" "literal"
                        (hydra--literal-to-meta (cadr term)))))
@@ -215,15 +292,41 @@
                          (cadr m)))
     m))
 
+(defun hydra--wrap-key-as-term-variable (k)
+  "Lift a Name term to TermVariable form: (:inject Inj{Term, variable=k}).
+   Keys already in TermVariable form pass through."
+  (cond
+   ((and (consp k) (eq (car k) :inject)
+         (let* ((inj (cadr k))
+                (tn (cdr (assq :type_name inj)))
+                (fld (cdr (assq :field inj))))
+           (and (equal tn "hydra.core.Term")
+                (equal (cdr (assq :name fld)) "variable"))))
+    k)
+   (t
+    (list :inject (hydra--make-injection "hydra.core.Term" "variable" k)))))
+
+(defun hydra--wrap-annotation-alist-as-term (anns)
+  "Wrap a (NameTerm . ValueTerm) alist as the Term-encoded annotation map
+   shape required by AnnotatedTerm.annotation after #386:
+   Inject{Term, map = (:map ((TermVariable . ValueTerm) ...))}."
+  (list :inject (hydra--make-injection "hydra.core.Term" "map"
+                 (list :map (mapcar (lambda (entry)
+                                      (cons (hydra--wrap-key-as-term-variable (car entry))
+                                            (cdr entry)))
+                                    anns)))))
+
 (defun hydra--make-annotated (body anns)
-  "Build a meta-encoded annotated term."
-  (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
-                 (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
-                                 (list (hydra--make-field "body" (hydra--term-to-meta body))
-                                       (hydra--make-field "annotation"
-                                         (list :map (mapcar (lambda (entry)
-                                                              (cons (car entry) (hydra--term-to-meta (cdr entry))))
-                                                            anns)))))))))
+  "Build a meta-encoded annotated term. After #386 the annotation field is a Term,
+   wrapped via hydra--wrap-annotation-alist-as-term."
+  (let* ((wrapped-pairs (mapcar (lambda (entry)
+                                  (cons (car entry) (hydra--term-to-meta (cdr entry))))
+                                anns))
+         (ann-term (hydra--wrap-annotation-alist-as-term wrapped-pairs)))
+    (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
+                   (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
+                                   (list (hydra--make-field "body" (hydra--term-to-meta body))
+                                         (hydra--make-field "annotation" ann-term))))))))
 
 
 (defun hydra--prim-set-term-annotation (_cx _g args)
@@ -342,20 +445,25 @@
 (defvar hydra--annotation-cache (make-hash-table :test 'equal))
 
 (defun hydra--install-annotation-cache ()
-  "Wrap hydra_strip_deannotate_term to cache annotations before stripping."
+  "Wrap hydra_strip_deannotate_term to cache annotations before stripping.
+No-op when the symbol is undefined — the wrapper is a memoization aid,
+not a correctness requirement, so installs that arrive before the kernel
+is loaded (e.g. host-coder bootstraps that don't emit hydra.strip) just
+skip silently."
   (let ((original (or (and (fboundp 'hydra_strip_deannotate_term)
                            (symbol-function 'hydra_strip_deannotate_term))
-                      hydra_strip_deannotate_term)))
-    (let ((wrapper (lambda (t_)
-                     (when (hydra--is-annotated-p t_)
-                       (let ((body (funcall original t_))
-                             (anns (hydra--term-annotations t_)))
-                         (when anns
-                           (puthash body anns hydra--annotation-cache))))
-                     (funcall original t_))))
-      ;; Set both value and function cells
-      (setq hydra_strip_deannotate_term wrapper)
-      (fset 'hydra_strip_deannotate_term wrapper))))
+                      (and (boundp 'hydra_strip_deannotate_term)
+                           hydra_strip_deannotate_term))))
+    (when original
+      (let ((wrapper (lambda (t_)
+                       (when (hydra--is-annotated-p t_)
+                         (let ((body (funcall original t_))
+                               (anns (hydra--term-annotations t_)))
+                           (when anns
+                             (puthash body anns hydra--annotation-cache))))
+                       (funcall original t_))))
+        (setq hydra_strip_deannotate_term wrapper)
+        (fset 'hydra_strip_deannotate_term wrapper)))))
 
 (defun hydra--lookup-cached-annotations (term)
   (gethash term hydra--annotation-cache))
