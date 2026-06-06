@@ -12556,7 +12556,7 @@
                                                                   "name": "integer",
                                                                   "term": {
                                                                     "inject": {
-                                                                      "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "4294967295"}}}},
+                                                                      "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 4294967295}}}},
                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                 "typeName": "hydra.core.Literal"}}},
                                                           "typeName": "hydra.core.Term"}},

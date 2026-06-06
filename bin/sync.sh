@@ -420,10 +420,7 @@ for H in $HOSTS; do
             STATIC_DEPS="hydra-lisp hydra-typescript"
             ;;
         scala)
-            # hydra-typescript would belong here once the Scala emitter for the
-            # TS coder is fixed (currently Found:Any / Required:Graph at coder
-            # line 10) and packages/hydra-scala/build.sbt re-enables it.
-            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-lisp"
+            STATIC_DEPS="hydra-haskell hydra-java hydra-python"
             ;;
         typescript)
             # Generated dist/typescript/hydra-scala/.../serde.ts imports

@@ -7,7 +7,7 @@
 ;;;   --target <lang>       Target language (haskell|java|python|clojure)
 ;;;   --json-dir <path>     Path to kernel JSON modules
 ;;;   --output <dir>        Output base directory (default: /tmp/hydra-bootstrapping-demo)
-;;;   --kernel-only         Only generate kernel modules (those listed in the kernel JSON manifest)
+;;;   --kernel-only         Only generate kernel modules
 ;;;   --include-tests       Also generate test modules
 
 (require 'cl-lib)
@@ -266,7 +266,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                                (code (funcall 'hydra_serialization_print_expr
                                        (funcall 'hydra_serialization_parenthesize
                                          (funcall pte program))))
-                               (ns-val (let ((ns (cdr (assoc :name mod))))
+                               (ns-val (let ((ns (cdr (assoc :namespace mod))))
                                          (if (stringp ns) ns (cdr (assoc :value ns)))))
                                (fp (format "%s%s" (bootstrap-namespace-to-path ns-val) ext)))
                           (list :right (list (cons fp code))))))))))
@@ -346,26 +346,21 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
     (let* ((main-ns (bootstrap-read-manifest-field bootstrap-json-dir "mainModules"))
            (default-ns (bootstrap-read-manifest-field bootstrap-json-dir "defaultLibModules"))
            (all-ns (append main-ns default-ns))
-           (kernel-ns-set all-ns)
            (all-mods (bootstrap-load-modules-from-json bootstrap-json-dir all-ns))
            (total-bindings (cl-reduce #'+ (mapcar (lambda (m)
                                                     (length (cdr (assoc :definitions m))))
                                                   all-mods))))
       (princ (format "  Loaded %d modules (%d bindings).\n" (length all-mods) total-bindings))
 
-      ;; Filter if needed.
-      ;; kernel-only keeps modules whose namespace is in the kernel manifest
-      ;; (mainModules ∪ defaultLibModules). When the source dir is already
-      ;; hydra-kernel/, this is an identity filter; it becomes useful when
-      ;; called against a mixed JSON source.
-      (let* ((ns-str-of (lambda (m)
-                          (let ((ns (cdr (assoc :name m))))
-                            (if (stringp ns) ns (cdr (assoc :value ns))))))
-             (mods-to-generate
+      ;; Filter if needed
+      (let* ((mods-to-generate
               (if bootstrap-kernel-only
-                  (cl-remove-if-not (lambda (m)
-                                      (member (funcall ns-str-of m) kernel-ns-set))
-                                    all-mods)
+                  (cl-remove-if (lambda (m)
+                                  (let ((ns (cdr (assoc :namespace m))))
+                                    (let ((ns-str (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                      (or (string-match-p "hydra\\.ext\\." ns-str)
+                                          (string-match-p "hydra\\.json\\.yaml\\." ns-str)))))
+                                all-mods)
                 all-mods))
              (out-main (format "%s/emacs-lisp-to-%s/src/main/%s"
                                bootstrap-output-base bootstrap-target subdir)))
@@ -403,9 +398,9 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    (test-mods-to-emit
                      (cl-remove-if
                        (lambda (m)
-                         (let* ((ns (hydra_packaging_module-name m))
+                         (let* ((ns (hydra_packaging_module-namespace m))
                                 (ns-str (if (stringp ns) ns
-                                            (hydra_packaging_module_name-value ns))))
+                                            (hydra_packaging_namespace-value ns))))
                            (string= ns-str "hydra.test.testEnv")))
                        test-mods))
                    (out-test (format "%s/emacs-lisp-to-%s/src/test/%s"
