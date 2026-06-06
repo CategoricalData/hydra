@@ -41,7 +41,23 @@ lispLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}}
+        Coders.languageConstraintsTypes = typePredicate},
+      Coders.languageSupportedFeatures = (Sets.fromList [
+        Coders.LanguageFeaturePartialApplication,
+        Coders.LanguageFeatureNestedCaseStatements,
+        Coders.LanguageFeatureNestedPolymorphicLetBindings]),
+      Coders.languageCaseConventions = Coders.CaseConventions {
+        Coders.caseConventionsConstant = Util.CaseConventionUpperSnake,
+        Coders.caseConventionsDirectory = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsEnumValue = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsField = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsFile = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsModule = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsTerm = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsTermVariable = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsType = Util.CaseConventionLowerSnake,
+        Coders.caseConventionsTypeVariable = Util.CaseConventionLowerSnake},
+      Coders.languageDefaultFileExtension = (Util.FileExtension "clj")}
   where
     literalVariants =
         Sets.fromList [
