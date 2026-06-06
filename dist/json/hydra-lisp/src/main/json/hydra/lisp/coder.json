@@ -2500,11 +2500,11 @@
                                                                                 {"name": "field", "term": {"wrap": {"body": {"variable": "fname"}, "typeName": "hydra.lisp.syntax.Symbol"}}},
                                                                                 {
                                                                                   "name": "target",
-                                                                                  "term": {"application": {"argument": {"literal": {"string": "__rec"}}, "function": {"variable": "hydra.lisp.coder.lispVar"}}}}],
+                                                                                  "term": {"application": {"argument": {"literal": {"string": "v"}}, "function": {"variable": "hydra.lisp.coder.lispVar"}}}}],
                                                                               "typeName": "hydra.lisp.syntax.FieldAccess"}}},
                                                                         "typeName": "hydra.lisp.syntax.Expression"}},
                                                                     "function": {
-                                                                      "application": {"argument": {"list": [{"literal": {"string": "__rec"}}]}, "function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}}}}}}},
+                                                                      "application": {"argument": {"list": [{"literal": {"string": "v"}}]}, "function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}}}}}}},
                                                             "type": {"variable": "t1"}}},
                                                         "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                                     "function": {
@@ -5264,9 +5264,9 @@
                                                       "either": {
                                                         "right": {
                                                           "application": {
-                                                            "argument": {"application": {"argument": {"literal": {"string": "__rec"}}, "function": {"variable": "hydra.lisp.coder.lispVar"}}},
+                                                            "argument": {"application": {"argument": {"literal": {"string": "v"}}, "function": {"variable": "hydra.lisp.coder.lispVar"}}},
                                                             "function": {
-                                                              "application": {"argument": {"list": [{"literal": {"string": "__rec"}}]}, "function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}}}}}}},
+                                                              "application": {"argument": {"list": [{"literal": {"string": "v"}}]}, "function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}}}}}}},
                                                     "type": {"variable": "t1"}}},
                                                 "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                             "function": {

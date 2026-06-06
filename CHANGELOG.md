@@ -104,6 +104,11 @@ and primitive-metadata reification.
 
 ### Bug fixes
 
+- Encode `uint32` JSON literals as numbers, not strings ([#431](https://github.com/CategoricalData/hydra/issues/431)):
+  `uint32`'s maximum (`2^32 - 1`) is well below JavaScript's `2^53 - 1` safe-integer
+  boundary, so the string encoding was unnecessary and asymmetric with `int32`.
+  The decoder accepts either a number or a string for `uint32` (forward compatibility);
+  the module format version is unchanged.
 - Satisfied or suppressed warnings in generated Java ([#349](https://github.com/CategoricalData/hydra/issues/349)).
 - Restored JSON parser test cases ([#336](https://github.com/CategoricalData/hydra/issues/336)):
   fixed polymorphic case-statement handling in the eta-expander

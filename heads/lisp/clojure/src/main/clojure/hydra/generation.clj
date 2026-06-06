@@ -20,7 +20,7 @@
   (into {}
     (map (fn [[name typ]]
            (let [ts ((r 'hydra_scoping_f_type_to_type_scheme) typ)]
-             [name ((r 'hydra_strip_deannotate_type_recursive) (:body ts))]))
+             [name ((r 'hydra_strip_deannotate_type_recursive) (:type ts))]))
          (r 'hydra_json_bootstrap_types_by_name))))
 
 (defn bootstrap-graph
@@ -135,7 +135,7 @@
     (count files)))
 
 (defn- ns-str-of [m]
-  (let [ns (:name m)]
+  (let [ns (:namespace m)]
     (if (string? ns) ns (:value ns))))
 
 (defn filter-kernel-modules
