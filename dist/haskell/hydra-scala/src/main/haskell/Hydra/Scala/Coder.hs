@@ -119,7 +119,8 @@ encodeCase cx g ftypes sn f =
                     Core.TypeUnit -> True
                     Core.TypeRecord v0 -> Equality.equal (Lists.length v0) 0
                     _ -> False)
-          shortTypeName = Optionals.fromOptional "x" (Lists.maybeLast (Strings.splitOn "." (Optionals.cases sn "x" (\n -> Core.unName n))))
+          shortTypeName =
+                  Optionals.fromOptional "x" (Lists.maybeLast (Strings.splitOn "." (Optionals.cases sn "x" (\n -> Core.unName n))))
           lamParamSuffix =
                   case (Strip.deannotateAndDetypeTerm fterm) of
                     Core.TermLambda v0 ->
