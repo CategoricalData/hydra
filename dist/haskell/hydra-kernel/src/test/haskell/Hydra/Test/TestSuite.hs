@@ -38,7 +38,7 @@ import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
 import qualified Hydra.Test.Lib.Maps as Maps
 import qualified Hydra.Test.Lib.Math as Math
-import qualified Hydra.Test.Lib.Maybes as Maybes
+import qualified Hydra.Test.Lib.Optionals as Optionals
 import qualified Hydra.Test.Lib.Pairs as Pairs
 import qualified Hydra.Test.Lib.Regex as Regex
 import qualified Hydra.Test.Lib.Sets as Sets
@@ -77,7 +77,7 @@ allTests =
         Logic.allTests,
         Maps.allTests,
         Math.allTests,
-        Maybes.allTests,
+        Optionals.allTests,
         Pairs.allTests,
         Regex.allTests,
         Sets.allTests,

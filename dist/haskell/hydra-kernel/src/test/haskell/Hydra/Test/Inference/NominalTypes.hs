@@ -309,7 +309,7 @@ testGroupForRecords =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "tail"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                         Core.recordTypeName = TestTypes.testTypeIntListName,
                         Core.recordFields = [
                           Core.Field {
@@ -317,7 +317,7 @@ testGroupForRecords =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
-                            Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})))),
+                            Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypeVariable TestTypes.testTypeIntListName),
@@ -340,7 +340,7 @@ testGroupForRecords =
                           Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
-                          Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                             Core.recordTypeName = TestTypes.testTypeIntListName,
                             Core.recordFields = [
                               Core.Field {
@@ -348,7 +348,7 @@ testGroupForRecords =
                                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
-                                Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))})),
+                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
@@ -368,7 +368,7 @@ testGroupForRecords =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "tail"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                         Core.recordTypeName = TestTypes.testTypeListName,
                         Core.recordFields = [
                           Core.Field {
@@ -376,7 +376,7 @@ testGroupForRecords =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
-                            Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})))),
+                            Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypeApplication (Core.ApplicationType {
@@ -401,7 +401,7 @@ testGroupForRecords =
                           Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
-                          Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                             Core.recordTypeName = TestTypes.testTypeListName,
                             Core.recordFields = [
                               Core.Field {
@@ -409,7 +409,7 @@ testGroupForRecords =
                                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
-                                Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))})),
+                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
@@ -434,7 +434,7 @@ testGroupForRecords =
                         Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                       Core.Field {
                         Core.fieldName = (Core.Name "tail"),
-                        Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                        Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                           Core.recordTypeName = TestTypes.testTypeListName,
                           Core.recordFields = [
                             Core.Field {
@@ -442,7 +442,7 @@ testGroupForRecords =
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))})))),
+                              Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -475,7 +475,7 @@ testGroupForRecords =
                           Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
-                          Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                             Core.recordTypeName = TestTypes.testTypeBuddyListBName,
                             Core.recordFields = [
                               Core.Field {
@@ -483,7 +483,7 @@ testGroupForRecords =
                                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
-                                Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))})),
+                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
@@ -508,7 +508,7 @@ testGroupForRecords =
                         Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                       Core.Field {
                         Core.fieldName = (Core.Name "tail"),
-                        Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
+                        Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
                           Core.recordTypeName = TestTypes.testTypeBuddyListBName,
                           Core.recordFields = [
                             Core.Field {
@@ -516,7 +516,7 @@ testGroupForRecords =
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))})))),
+                              Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],

@@ -14,7 +14,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Packaging as Packaging
@@ -46,7 +46,7 @@ composeTypeSubstList = Lists.foldl composeTypeSubst idTypeSubst
 composeTypeSubstNonEmpty :: Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst
 composeTypeSubstNonEmpty s1 s2 =
 
-      let isExtra = \k -> \v -> Maybes.isNothing (Maps.lookup k (Typing.unTypeSubst s1))
+      let isExtra = \k -> \v -> Optionals.isNone (Maps.lookup k (Typing.unTypeSubst s1))
           withExtra = Maps.filterWithKey isExtra (Typing.unTypeSubst s2)
       in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
 -- | The identity type substitution
@@ -61,7 +61,7 @@ substInClassConstraints subst constraints =
 
       let substMap = Typing.unTypeSubst subst
           insertOrMerge =
-                  \varName -> \metadata -> \acc -> Maybes.cases (Maps.lookup varName acc) (Maps.insert varName metadata acc) (\existing ->
+                  \varName -> \metadata -> \acc -> Optionals.cases (Maps.lookup varName acc) (Maps.insert varName metadata acc) (\existing ->
                     let merged =
                             Core.TypeVariableConstraints {
                               Core.typeVariableConstraintsClasses = (Lists.nub (Lists.concat2 (Core.typeVariableConstraintsClasses existing) (Core.typeVariableConstraintsClasses metadata)))}
@@ -69,7 +69,7 @@ substInClassConstraints subst constraints =
       in (Lists.foldl (\acc -> \pair ->
         let varName = Pairs.first pair
             metadata = Pairs.second pair
-        in (Maybes.cases (Maps.lookup varName substMap) (insertOrMerge varName metadata acc) (\targetType ->
+        in (Optionals.cases (Maps.lookup varName substMap) (insertOrMerge varName metadata acc) (\targetType ->
           let freeVars = Sets.toList (Variables.freeVariablesInType targetType)
           in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)))) Maps.empty (Maps.toList constraints))
 -- | Apply a type substitution to a graph's bound types and class constraints
@@ -106,10 +106,10 @@ substInTypeNonEmpty subst typ0 =
 
       let rewrite =
               \recurse -> \typ -> case typ of
-                Core.TypeForall v0 -> Maybes.cases (Maps.lookup (Core.forallTypeParameter v0) (Typing.unTypeSubst subst)) (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
+                Core.TypeForall v0 -> Optionals.cases (Maps.lookup (Core.forallTypeParameter v0) (Typing.unTypeSubst subst)) (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
                   Core.forallTypeParameter = (Core.forallTypeParameter v0),
                   Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v0)) (Core.forallTypeBody v0))}))
-                Core.TypeVariable v0 -> Maybes.cases (Maps.lookup v0 (Typing.unTypeSubst subst)) typ (\styp -> styp)
+                Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 (Typing.unTypeSubst subst)) typ (\styp -> styp)
                 _ -> recurse typ
           removeVar = \v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst))
       in (Rewriting.rewriteType rewrite typ0)
@@ -122,7 +122,7 @@ substInTypeScheme subst ts =
       in Core.TypeScheme {
         Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
         Core.typeSchemeBody = (substInType scopedSubst (Core.typeSchemeBody ts)),
-        Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints scopedSubst) (Core.typeSchemeConstraints ts))}
+        Core.typeSchemeConstraints = (Optionals.map (substInClassConstraints scopedSubst) (Core.typeSchemeConstraints ts))}
 -- | Apply a type substitution to the type annotations within a term
 substTypesInTerm :: Typing.TypeSubst -> Core.Term -> Core.Term
 substTypesInTerm subst term0 =
@@ -133,7 +133,7 @@ substTypesInTerm subst term0 =
                     forLambda =
                             \l -> Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.lambdaParameter l),
-                              Core.lambdaDomain = (Maybes.map (substInType subst) (Core.lambdaDomain l)),
+                              Core.lambdaDomain = (Optionals.map (substInType subst) (Core.lambdaDomain l)),
                               Core.lambdaBody = (substTypesInTerm subst (Core.lambdaBody l))})
                     forLet =
                             \l ->
@@ -141,7 +141,7 @@ substTypesInTerm subst term0 =
                                       \b -> Core.Binding {
                                         Core.bindingName = (Core.bindingName b),
                                         Core.bindingTerm = (substTypesInTerm subst (Core.bindingTerm b)),
-                                        Core.bindingTypeScheme = (Maybes.map (substInTypeScheme subst) (Core.bindingTypeScheme b))}
+                                        Core.bindingTypeScheme = (Optionals.map (substInTypeScheme subst) (Core.bindingTypeScheme b))}
                               in (Core.TermLet (Core.Let {
                                 Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
                                 Core.letBody = (substTypesInTerm subst (Core.letBody l))}))
@@ -211,6 +211,6 @@ substituteInTerm subst term0 =
                     in case term of
                       Core.TermLambda v0 -> withLambda v0
                       Core.TermLet v0 -> withLet v0
-                      Core.TermVariable v0 -> Maybes.cases (Maps.lookup v0 s) (recurse term) (\sterm -> sterm)
+                      Core.TermVariable v0 -> Optionals.cases (Maps.lookup v0 s) (recurse term) (\sterm -> sterm)
                       _ -> recurse term
       in (Rewriting.rewriteTerm rewrite term0)

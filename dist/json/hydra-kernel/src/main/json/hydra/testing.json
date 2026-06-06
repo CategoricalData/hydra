@@ -59,7 +59,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "tags",
                     "type": {
@@ -95,7 +95,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "subgroups",
                     "type": {

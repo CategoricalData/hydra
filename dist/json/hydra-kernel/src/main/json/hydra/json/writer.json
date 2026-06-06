@@ -73,12 +73,12 @@
                                             "parameter": "ch"}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
                                             "type": {"literal": {"string": {}}}}}}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"literal": {"string": "?"}},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
                             "domain": {"literal": {"integer": {"int32": {}}}},
                             "parameter": "i"}},
                         "typeScheme": {
@@ -101,7 +101,7 @@
                                       "application": {
                                         "argument": {"literal": {"integer": {"int32": 0}}},
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                 "function": {"variable": "nibble"}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
@@ -121,7 +121,7 @@
                                           "application": {
                                             "argument": {"literal": {"integer": {"int32": 0}}},
                                             "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                     "function": {"variable": "nibble"}}},
                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                             "body": {

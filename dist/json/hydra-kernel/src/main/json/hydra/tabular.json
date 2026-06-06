@@ -26,7 +26,7 @@
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "A data row, containing optional-valued cells; one per column"}}}]},
-              "body": {"forall": {"body": {"wrap": {"list": {"maybe": {"variable": "v"}}}}, "parameter": "v"}}}},
+              "body": {"forall": {"body": {"wrap": {"list": {"optional": {"variable": "v"}}}}, "parameter": "v"}}}},
           "variables": []},
         "name": "hydra.tabular.DataRow"}},
     {
@@ -67,7 +67,7 @@
                                   "value": {
                                     "literal": {
                                       "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}]},
-                            "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}}},
+                            "body": {"optional": {"variable": "hydra.tabular.HeaderRow"}}}}},
                       {
                         "name": "data",
                         "type": {

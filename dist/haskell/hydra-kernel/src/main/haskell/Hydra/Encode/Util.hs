@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as Packaging
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -94,7 +94,7 @@ qualifiedName x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "moduleName"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Packaging.moduleName opt)) (Util.qualifiedNameModuleName x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map Packaging.moduleName opt)) (Util.qualifiedNameModuleName x))},
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.qualifiedNameLocal x))}]})

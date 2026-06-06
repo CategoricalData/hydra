@@ -657,7 +657,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "codomain": {

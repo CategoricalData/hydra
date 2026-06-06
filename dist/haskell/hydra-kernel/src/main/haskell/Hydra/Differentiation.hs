@@ -14,7 +14,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -190,7 +190,7 @@ differentiateTerm dx term =
         let func = Core.applicationFunction v0
             arg = Core.applicationArgument v0
         in case func of
-          Core.TermVariable v1 -> Maybes.cases (primitiveDerivative v1) (differentiateTerm dx (Core.TermApplication (Core.Application {
+          Core.TermVariable v1 -> Optionals.cases (primitiveDerivative v1) (differentiateTerm dx (Core.TermApplication (Core.Application {
             Core.applicationFunction = func,
             Core.applicationArgument = arg}))) (\derivTerm -> Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -248,7 +248,7 @@ differentiateTerm dx term =
       Core.TermSet _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermMap _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermEither _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
-      Core.TermMaybe _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
+      Core.TermOptional _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermInject _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermWrap _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
 -- | Compute the gradient of a term as a record of partial derivatives

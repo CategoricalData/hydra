@@ -16,7 +16,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -66,7 +66,7 @@ encodeName isQualified conv env name =
           pyLocal = sanitizePythonName (Formatting.convertCase Util.CaseConventionCamel conv local)
           pyNs =
                   \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
-      in (Logic.ifElse isQualified (Maybes.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Maybes.cases mns (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))))) (\n -> n)) (Syntax.Name pyLocal))
+      in (Logic.ifElse isQualified (Optionals.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Optionals.cases mns (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))))) (\n -> n)) (Syntax.Name pyLocal))
 -- | Encode a name as a fully qualified Python name
 encodeNameQualified :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeNameQualified env name =
@@ -80,7 +80,7 @@ encodeNameQualified env name =
           local = Util.qualifiedNameLocal qualName
           pyNs =
                   \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
-      in (Maybes.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Maybes.cases mns (Syntax.Name (sanitizePythonName local)) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." (sanitizePythonName local)))))) (\n -> n))
+      in (Optionals.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Optionals.cases mns (Syntax.Name (sanitizePythonName local)) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." (sanitizePythonName local)))))) (\n -> n))
 -- | Encode a namespace as a Python dotted name
 encodeNamespace :: Packaging.ModuleName -> Syntax.DottedName
 encodeNamespace nsVal =
@@ -131,7 +131,7 @@ variableReference conv quoted env name =
           focusPair = Util.moduleNamesFocus namespaces
           focusNs = Pairs.first focusPair
           mns = Names.moduleNameOf name
-          sameNamespace = Maybes.cases mns False (\ns -> Equality.equal ns focusNs)
+          sameNamespace = Optionals.cases mns False (\ns -> Equality.equal ns focusNs)
       in (Logic.ifElse (Logic.and quoted sameNamespace) (Syntax.ExpressionSimple (Syntax.Disjunction [
         Syntax.Conjunction [
           Syntax.InversionSimple (Syntax.Comparison {

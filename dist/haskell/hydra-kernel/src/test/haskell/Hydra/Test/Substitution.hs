@@ -100,8 +100,8 @@ allTests =
               Testing.testCaseWithMetadataName = "substitute in optional type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Substitution.substInType (Typing.TypeSubst (Maps.fromList [
-                  (Core.Name "a", (Core.TypeLiteral Core.LiteralTypeString))])) (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))})),
+                  (Core.Name "a", (Core.TypeLiteral Core.LiteralTypeString))])) (Core.TypeOptional (Core.TypeVariable (Core.Name "a"))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
