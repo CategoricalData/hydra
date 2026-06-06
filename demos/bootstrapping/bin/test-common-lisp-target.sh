@@ -15,6 +15,27 @@ fi
 # hydra_test_test_env_test_{context,graph} refs directly, and the
 # hand-written heads/lisp/common-lisp/.../test_env.lisp resolves them.
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
+HYDRA_CL_DIR="$HYDRA_ROOT/heads/lisp/common-lisp"
+
+# Defensive re-copy of static resources that setup-common-lisp-target.sh laid
+# down. In the typescript-host cells (#444), these were observed missing at
+# test time, even though the setup script ran. Root cause is unidentified;
+# this guarantees the test step has the runner regardless. Idempotent: if
+# setup already populated the dir, these cp's are no-ops on content. Mirrors
+# setup-common-lisp-target.sh.
+if [ ! -f "$OUTPUT_DIR/src/test/common-lisp/run-tests.lisp" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/common-lisp"
+    for f in "$HYDRA_CL_DIR/src/test/common-lisp"/*.lisp; do
+        [ -f "$f" ] && cp "$f" "$OUTPUT_DIR/src/test/common-lisp/"
+    done
+fi
+if [ -d "$HYDRA_CL_DIR/src/test/common-lisp/hydra" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/common-lisp/hydra"
+    cp -r "$HYDRA_CL_DIR/src/test/common-lisp/hydra/." "$OUTPUT_DIR/src/test/common-lisp/hydra/"
+fi
+
 echo "Running Common Lisp tests..."
 cd "$OUTPUT_DIR"
 # HYDRA_LISP_DIST_BASE tells the (head's) run-tests.lisp to find generated
