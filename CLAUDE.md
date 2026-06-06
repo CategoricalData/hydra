@@ -311,6 +311,8 @@ Current commands:
 
 - `/bootstrap` — cross-host bootstrap demo (default: triad; modes
   include `all`, `others`, and arbitrary scoped lang lists)
+- `/compact-plan` — trim the branch plan to durable state, then `/compact`
+  and re-read it (space-saving context switch between major tasks)
 - `/improve-docs` — end-of-session documentation pass
 - `/inference-bench` — cross-host inference benchmark
 - `/lexicon` — regenerate `docs/hydra-lexicon.txt`
