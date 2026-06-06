@@ -1044,16 +1044,15 @@ encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
             cod = Core.functionTypeCodomain v0
-            defaultExpr =
-                    Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
-            elimBranch =
-                    Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal rhs))) (\mrt -> Maybes.cases mrt (Eithers.bind (Checking.typeOfTerm cx g rhs) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod (Strip.deannotateTerm lhs) cx g))
         in case (Strip.deannotateAndDetypeTerm lhs) of
-          Core.TermProject _ -> elimBranch
-          Core.TermCases _ -> elimBranch
-          Core.TermUnwrap _ -> elimBranch
-          _ -> defaultExpr
+          Core.TermProject _ -> encodeApplication_fallback_elimBranch env dom cod lhs rhs cx g
+          Core.TermCases _ -> encodeApplication_fallback_elimBranch env dom cod lhs rhs cx g
+          Core.TermUnwrap _ -> encodeApplication_fallback_elimBranch env dom cod lhs rhs cx g
+          _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
       _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))))
+encodeApplication_fallback_elimBranch :: JavaEnvironment.JavaEnvironment -> Core.Type -> Core.Type -> Core.Term -> Core.Term -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error Syntax.Expression
+encodeApplication_fallback_elimBranch env dom cod lhs rhs cx g =
+    Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal rhs))) (\mrt -> Maybes.cases mrt (Eithers.bind (Checking.typeOfTerm cx g rhs) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod (Strip.deannotateTerm lhs) cx g))
 encodeDefinitions :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map Core.Name Syntax.CompilationUnit)
 encodeDefinitions mod defs cx g =
 
