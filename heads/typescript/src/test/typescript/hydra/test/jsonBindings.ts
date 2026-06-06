@@ -155,6 +155,31 @@ const convert = (j: unknown): unknown => {
       const cs = convertCases(rhs);
       return { tag: armName, value: cs };
     }
+    // Term_map (and Term_optional/maybe also handled above): the JSON
+    // serializes a Map<K,V> as a list of {key, value} objects. The runtime
+    // expects a ReadonlyMap. Convert here so primitives like Maps.toList
+    // receive the right shape. (#443)
+    if (armName === "map") {
+      const entries = Array.isArray(rhs)
+        ? (rhs as Array<{ key: unknown; value: unknown }>).map((e) => [convert(e.key), convert(e.value)] as const)
+        : [];
+      return { tag: armName, value: libMaps.fromList(entries as ReadonlyArray<readonly [unknown, unknown]>) };
+    }
+    // Term_set: JSON serializes a Set as a list. Convert to a ReadonlySet.
+    if (armName === "set") {
+      const entries = Array.isArray(rhs) ? (rhs as unknown[]).map(convert) : [];
+      return { tag: armName, value: libSets.fromList(entries) };
+    }
+    // Term_pair: JSON serializes Hydra Pair<a,b> as {first: ..., second: ...}.
+    // The runtime expects a [Term, Term] tuple so `hydra.lib.pairs.first(p)
+    // = p[0]` works. (#443)
+    if (armName === "pair"
+        && rhs !== null && typeof rhs === "object" && !Array.isArray(rhs)) {
+      const r = rhs as { first?: unknown; second?: unknown };
+      if ("first" in r && "second" in r) {
+        return { tag: armName, value: [convert(r.first), convert(r.second)] as const };
+      }
+    }
     return { tag: armName, value: convert(rhs) };
   }
   // Otherwise it's a record. Recurse over values; rewrite a few field names
