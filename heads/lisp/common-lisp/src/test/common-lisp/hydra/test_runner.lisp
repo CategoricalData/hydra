@@ -260,7 +260,10 @@
                                  :lambda :let :list :literal :map :maybe :pair
                                  :project :record :set :type_application
                                  :type_lambda :unit :unwrap :variable :wrap)))
-     (let* ((variant-name (string-downcase (string (first term))))
+     (let* ((variant-name (if (eq (first term) :maybe)
+                              ;; Host tag :maybe maps to the kernel Term variant "optional".
+                              "optional"
+                              (string-downcase (string (first term)))))
             (payload (second term)))
        (list :inject (make-injection "hydra.core.Term"
                        (make-field variant-name
@@ -680,7 +683,7 @@
                               (make-field "body" (term-to-meta (wrapped_term-body wt)))))))))))
         (:maybe
           (list :inject (make-injection "hydra.core.Term"
-                  (make-field "maybe"
+                  (make-field "optional"
                     (if (second term)
                         (list :maybe (term-to-meta (second term)))
                         (list :maybe nil))))))

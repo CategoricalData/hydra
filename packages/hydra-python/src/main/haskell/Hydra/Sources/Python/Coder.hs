@@ -30,7 +30,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -506,7 +506,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
           Core.termCases $
             Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
-              (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+              (Optionals.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
               (Lists.map (var "rewriteCaseAlternative" @@ var "recurse") (Core.caseStatementCases $ var "cs")),
         _Term_let>>: "lt" ~>
           Core.termLet $ Core.let_
@@ -529,8 +529,8 @@ eliminateUnitVar = def "eliminateUnitVar" $
           Core.termInject $ Core.injection
             (Core.injectionTypeName $ var "inj")
             (var "rewriteField" @@ var "recurse" @@ Core.injectionField (var "inj")),
-        _Term_maybe>>: "mt" ~>
-          Core.termMaybe $ Maybes.map (var "recurse") (var "mt"),
+        _Term_optional>>: "mt" ~>
+          Core.termOptional $ Optionals.map (var "recurse") (var "mt"),
         _Term_pair>>: "p" ~>
           Core.termPair $ pair
             (var "recurse" @@ Pairs.first (var "p"))
@@ -631,7 +631,7 @@ encodeApplicationInner :: TypedTermDefinition (InferenceContext -> PyHelpers.Pyt
 encodeApplicationInner = def "encodeApplicationInner" $
   doc "Inner helper for encodeApplication" $
   "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
-    "firstArg" <~ (Maybes.fromMaybe (PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "")) (Lists.maybeHead $ var "hargs")) $
+    "firstArg" <~ (Optionals.fromOptional (PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "")) (Lists.maybeHead $ var "hargs")) $
     "restArgs" <~ (Lists.drop (int32 1) $ var "hargs") $
     "withRest" <~ ("e" ~>
       Logic.ifElse (Lists.null $ var "restArgs")
@@ -667,16 +667,16 @@ encodeApplicationInner = def "encodeApplicationInner" $
         "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
         "allArgs" <~ (Lists.concat2 (var "hargs") (var "rargs")) $
         "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
-        Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+        Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
           -- Not a primitive: use original logic
-          (Maybes.cases
+          (Optionals.cases
             (Lexical.lookupBinding @@ var "g" @@ var "name")
             -- Not in graph elements: use encodeVariable
             ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
               right $ pair (var "expr") (var "rargs"))
             -- In graph elements: check arity
             ("el" ~>
-              Maybes.cases
+              Optionals.cases
                 (Core.bindingTypeScheme $ var "el")
                 -- No type: use encodeVariable
                 ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
@@ -728,7 +728,7 @@ encodeApplicationType = def "encodeApplicationType" $
           _Type_list>>: constant $ pair (var "t") (var "ps"),
           _Type_literal>>: constant $ pair (var "t") (var "ps"),
           _Type_map>>: constant $ pair (var "t") (var "ps"),
-          _Type_maybe>>: constant $ pair (var "t") (var "ps"),
+          _Type_optional>>: constant $ pair (var "t") (var "ps"),
           _Type_either>>: constant $ pair (var "t") (var "ps"),
           _Type_pair>>: constant $ pair (var "t") (var "ps"),
           _Type_record>>: constant $ pair (var "t") (var "ps"),
@@ -760,7 +760,7 @@ encodeBindingAs = def "encodeBindingAs" $
     "mts" <~ Core.bindingTypeScheme (var "binding") $
     "fname" <~ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name1") $
     -- Check if binding has a type scheme - if so, use encodeTermAssignment
-    Maybes.cases
+    Optionals.cases
       (var "mts")
       -- No type scheme (e.g., lifted local functions) - check for special patterns
       ("gathered" <~ (gatherLambdas @@ var "term1") $
@@ -769,15 +769,15 @@ encodeBindingAs = def "encodeBindingAs" $
         -- Check for hoisted binding pattern: lambdas wrapping a case statement application
         "mcsa" <~ (isCaseStatementApplication @@ var "innerBody") $
         -- Try hoisted binding pattern first
-        Maybes.cases
+        Optionals.cases
           (var "mcsa")
           -- Not a hoisted binding, try simple case elimination
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
-            Maybes.cases
+            Optionals.cases
               (var "mcs")
               -- Default case: not a case elimination, encode term normally and take first statement
               (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
-                ("stmts" ~> Maybes.cases (Lists.maybeHead (var "stmts")) (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements") (reify right)))
+                ("stmts" ~> Optionals.cases (Lists.maybeHead (var "stmts")) (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements") (reify right)))
               -- Case elimination function - encode as function with match statement
           ("cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -817,8 +817,8 @@ encodeBindingAs = def "encodeBindingAs" $
         Logic.ifElse (Lists.null $ var "lambdaParams")
           -- No lambda params, fall back to case elimination check
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
-            Maybes.cases (var "mcs") (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
-                ("stmts" ~> Maybes.cases (Lists.maybeHead (var "stmts")) (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements") (reify right))) ("cs" ~>
+            Optionals.cases (var "mcs") (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
+                ("stmts" ~> Optionals.cases (Lists.maybeHead (var "stmts")) (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements") (reify right))) ("cs" ~>
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                 "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                 "cases_" <~ (Core.caseStatementCases $ var "cs") $
@@ -865,8 +865,8 @@ encodeBindingAs = def "encodeBindingAs" $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             -- Separate captured variables (all but last) from the match parameter (last).
             -- The last lambda parameter is the case expression's own parameter.
-            "capturedVarNames" <~ (Maybes.fromMaybe (list ([] :: [TypedTerm Name])) (Lists.maybeInit $ var "lambdaParams")) $
-            "matchLambdaParam" <~ (Maybes.fromMaybe (wrap _Name $ string "") (Lists.maybeLast $ var "lambdaParams")) $
+            "capturedVarNames" <~ (Optionals.fromOptional (list ([] :: [TypedTerm Name])) (Lists.maybeInit $ var "lambdaParams")) $
+            "matchLambdaParam" <~ (Optionals.fromOptional (wrap _Name $ string "") (Lists.maybeLast $ var "lambdaParams")) $
             -- Create parameters for captured variables only
             "capturedParams" <~ (Lists.map
               ("n" ~> Phantoms.record Py._ParamNoDefault [
@@ -910,7 +910,7 @@ encodeBindingAs = def "encodeBindingAs" $
       -- Use-site `name()` dispatches via Lazy.__call__ to get()).
       ("ts" ~>
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
-        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
+        "normComment" <~ (Optionals.map Formatting.normalizeComment (var "comment")) $
         encodeTermAssignment @@ var "cx" @@ var "env" @@ false @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
 
 -- | Encode a binding as a walrus operator assignment (for inline let expressions).
@@ -989,9 +989,9 @@ encodeDefinition = def "encodeDefinition" $
       _Definition_term>>: "td" ~>
         "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
         "term" <~ (project _TermDefinition _TermDefinition_body @@ var "td") $
-        "typ" <~ Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing) ("x" ~> var "x") $
+        "typ" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing) ("x" ~> var "x") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
-        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
+        "normComment" <~ (Optionals.map Formatting.normalizeComment (var "comment")) $
         -- topLevel=true: keep public API stable (`@lru_cache(1) def name():` form
         -- so external Python code calling `module.thunk()` continues to work).
         "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ true @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
@@ -1000,7 +1000,7 @@ encodeDefinition = def "encodeDefinition" $
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
         "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_body @@ var "td") $
         "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
-        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
+        "normComment" <~ (Optionals.map Formatting.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
 
 -- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
@@ -1116,7 +1116,7 @@ encodeForallType = def "encodeForallType" $
           _Type_list>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_literal>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_map>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
-          _Type_maybe>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_optional>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_either>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_pair>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_record>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
@@ -1155,7 +1155,7 @@ encodeFunctionType = def "encodeFunctionType" $
           _Type_list>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_literal>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_map>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
-          _Type_maybe>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_optional>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_either>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_pair>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_record>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
@@ -1296,7 +1296,7 @@ encodePythonModule = def "encodePythonModule" $
         (var "meta2") $
       "namespaces" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
       -- Generate comment statements from module description
-      "commentStmts" <~ (Maybes.cases (Maybes.map Formatting.normalizeComment ((Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))))) (list ([] :: [TypedTerm Py.Statement])) ("c" ~> list [PyUtils.commentStatement @@ var "c"])) $
+      "commentStmts" <~ (Optionals.cases (Optionals.map Formatting.normalizeComment ((Optionals.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))))) (list ([] :: [TypedTerm Py.Statement])) ("c" ~> list [PyUtils.commentStatement @@ var "c"])) $
       -- Generate import statements
       "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
       -- Generate type variable statements
@@ -1541,11 +1541,11 @@ encodeTermInline = def "encodeTermInline" $
         right $ PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pmapOfEntries")
           @@ var "tuplePairs",
 
-      -- TermMaybe - encode as Nothing() or Just(value)
-      _Term_maybe>>: "mt" ~>
-        Maybes.cases (var "mt") (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TypedTerm Py.Expression])) ("t1" ~>
+      -- TermOptional - encode as None_() or Given(value)
+      _Term_optional>>: "mt" ~>
+        Optionals.cases (var "mt") (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "None_")) @@ list ([] :: [TypedTerm Py.Expression])) ("t1" ~>
             "pyexp" <<~ (var "encode" @@ var "t1") $
-            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Just")) @@ list [var "pyexp"])),
+            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Given")) @@ list [var "pyexp"])),
 
       -- TermPair - encode as 2-tuple
       _Term_pair>>: "p" ~>
@@ -1599,7 +1599,7 @@ encodeTermInline = def "encodeTermInline" $
           -- Class variant
           ("fname" <~ Core.fieldName (var "field") $
             -- Check if this is a unit variant
-            "isUnitVariant" <~ (Maybes.cases (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt")) false ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))) $
+            "isUnitVariant" <~ (Optionals.cases (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt")) false ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))) $
             "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
               (right (list ([] :: [TypedTerm Py.Expression])))
               ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
@@ -1656,7 +1656,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
     -- Check if exactly one argument for potential case statement
     Logic.ifElse (Equality.equal (Lists.length $ var "args") (int32 1))
       -- Try to handle case statement specially
-      ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args")) $
+      ("arg" <~ (Optionals.fromOptional Core.termUnit (Lists.maybeHead $ var "args")) $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
           _Term_cases>>: "cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -1713,7 +1713,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
-          ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args2")) $
+          ("arg" <~ (Optionals.fromOptional Core.termUnit (Lists.maybeHead $ var "args2")) $
             cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
@@ -1766,11 +1766,11 @@ encodeType = def "encodeType" $
         "pyvt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_values @@ var "mt") $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "Mapping") @@ list [var "pykt", var "pyvt"],
       _Type_literal>>: "lt" ~> encodeLiteralType @@ var "lt",
-      _Type_maybe>>: "et" ~>
+      _Type_optional>>: "et" ~>
         "ptype" <<~ encodeType @@ var "env" @@ var "et" $
         right $ PyUtils.pyPrimaryToPyExpression @@
           (PyUtils.primaryWithExpressionSlices @@
-            (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Maybe") @@
+            (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Optional") @@
             list [var "ptype"]),
       _Type_either>>: "eitherT" ~>
         "pyleft" <<~ encodeType @@ var "env" @@ (project _EitherType _EitherType_left @@ var "eitherT") $
@@ -1876,7 +1876,7 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
     -- Build the isinstance function reference
     "isinstancePrimary" <~ (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "isinstance")) $
     -- Encode the default expression (used as final else)
-    "pyDefault" <<~ (Maybes.cases
+    "pyDefault" <<~ (Optionals.cases
       (var "mdefault")
       -- No default: produce an unsupported expression as fallback
       (right $ unsupportedExpression @@ string "no matching case in inline union elimination")
@@ -2033,7 +2033,7 @@ encodeVariable = def "encodeVariable" $
     "tcMetadata" <~ (Graph.graphMetadata $ var "tc") $
     "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
     "mTypScheme" <~ (Maps.lookup (var "name") (var "tcTypes")) $
-    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeBody (var "ts_")) (var "mTypScheme")) $
+    "mTyp" <~ (Optionals.map ("ts_" ~> Core.typeSchemeBody (var "ts_")) (var "mTypScheme")) $
     "asVariable" <~ (PyNames.termVariableReference @@ var "env" @@ var "name") $
     "asFunctionCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "args") $
     -- Lazy-aware function call for inline-var references: name.get()(args)
@@ -2042,7 +2042,7 @@ encodeVariable = def "encodeVariable" $
       -- Non-empty args: inline-var calls need .get(); otherwise check primitives
       (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
         (right $ var "asLazyCall")
-        (Maybes.cases
+        (Optionals.cases
         (Lexical.lookupPrimitive @@ var "g" @@ var "name")
         -- No primitive found: use regular function call
         (right $ var "asFunctionCall")
@@ -2060,7 +2060,7 @@ encodeVariable = def "encodeVariable" $
               "fullCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "allArgs") $
               right $ makeUncurriedLambda @@ var "remainingParams" @@ var "fullCall"))))
       -- Empty args: check various contexts
-      (Maybes.cases
+      (Optionals.cases
         (var "mTyp")
         -- Name not in graphBoundTypes
         (Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
@@ -2071,20 +2071,20 @@ encodeVariable = def "encodeVariable" $
             -- Untyped inline variable (Lazy-wrapped at definition; force via .get())
             (right $ lazyDotGet @@ var "asVariable")
             -- Not inline - check primitives
-            (Maybes.cases
+            (Optionals.cases
               (Lexical.lookupPrimitive @@ var "g" @@ var "name")
               -- Not a primitive - check graph elements
-              (Maybes.cases
+              (Optionals.cases
                 (Lexical.lookupBinding @@ var "g" @@ var "name")
                 -- Not in graph elements - check metadata
-                (Maybes.cases
+                (Optionals.cases
                   (Maps.lookup (var "name") (var "tcMetadata"))
                   (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
                   (constant $ right $ var "asFunctionCall"))
               -- In graph elements
               ("el" ~>
                 "elTrivial1" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
-                Maybes.cases (Core.bindingTypeScheme $ var "el") (right $ var "asVariable") ("ts" ~>
+                Optionals.cases (Core.bindingTypeScheme $ var "el") (right $ var "asVariable") ("ts" ~>
                     Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
                                                        (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
                                             (Logic.not (var "elTrivial1")))
@@ -2121,7 +2121,7 @@ encodeVariable = def "encodeVariable" $
               -- Not inline variable
               (Logic.ifElse (Logic.not $ Maps.member (var "name") (var "tcMetadata"))
                 -- Not in metadata - check graph elements
-                (Maybes.cases
+                (Optionals.cases
                   (Lexical.lookupBinding @@ var "g" @@ var "name")
                   -- Not in graph elements: inline let binding
                   ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
@@ -2131,7 +2131,7 @@ encodeVariable = def "encodeVariable" $
                   -- In graph elements
                   ("el" ~>
                     "elTrivial" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
-                    Maybes.cases (Core.bindingTypeScheme $ var "el") (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                    Optionals.cases (Core.bindingTypeScheme $ var "el") (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                                (Logic.not (var "elTrivial")))
                         (right $ var "asFunctionCall")
                         ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
@@ -2253,13 +2253,13 @@ extendMetaForTerm = def "extendMetaForTerm" $
             (constant $ setMetaUsesRight @@ var "metaWithCast" @@ true)
             (var "e"),
         _Term_lambda>>: "lam" ~>
-          Maybes.cases (Core.lambdaDomain $ var "lam") (var "meta") ("dom" ~> Logic.ifElse (var "topLevel")
+          Optionals.cases (Core.lambdaDomain $ var "lam") (var "meta") ("dom" ~> Logic.ifElse (var "topLevel")
               (extendMetaForType @@ true @@ false @@ var "dom" @@ var "meta")
               (var "meta")),
         _Term_let>>: "lt" ~>
           "bindings" <~ Core.letBindings (var "lt") $
           Lists.foldl ("forBinding" <~ ("m" ~> "b" ~>
-            Maybes.cases (Core.bindingTypeScheme $ var "b") (var "m") ("ts" ~>
+            Optionals.cases (Core.bindingTypeScheme $ var "b") (var "m") ("ts" ~>
                 "term1" <~ Core.bindingTerm (var "b") $
                 Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
                   (var "m")
@@ -2275,8 +2275,8 @@ extendMetaForTerm = def "extendMetaForTerm" $
           setMetaUsesFrozenDict @@ var "meta" @@ true,
         _Term_set>>: constant $
           setMetaUsesFrozenSet @@ var "meta" @@ true,
-        _Term_maybe>>: "m" ~>
-          Maybes.cases (var "m") (setMetaUsesNothing @@ var "meta" @@ true) (constant $ setMetaUsesJust @@ var "meta" @@ true),
+        _Term_optional>>: "m" ~>
+          Optionals.cases (var "m") (setMetaUsesNothing @@ var "meta" @@ true) (constant $ setMetaUsesJust @@ var "meta" @@ true),
         -- Union injections require cast() for proper typing
         _Term_inject>>: constant $
           setMetaUsesCast @@ true @@ var "meta"]) $
@@ -2379,7 +2379,7 @@ extendMetaForType = def "extendMetaForType" $
       _Type_set>>: constant $
         setMetaUsesFrozenSet @@ var "metaWithSubtypes" @@ true,
       -- Maybe type: need Maybe import
-      _Type_maybe>>: constant $
+      _Type_optional>>: constant $
         setMetaUsesMaybe @@ var "metaWithSubtypes" @@ true,
       -- Either type: need Either import
       _Type_either>>: constant $
@@ -2457,7 +2457,7 @@ findTypeParams = def "findTypeParams" $
   doc "Find type parameters in a type that are bound in the environment" $
   "env" ~> "typ" ~>
     "boundVars" <~ (Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
-    "isBound" <~ ("v" ~> Maybes.isJust (Maps.lookup (var "v") (var "boundVars"))) $
+    "isBound" <~ ("v" ~> Optionals.isGiven (Maps.lookup (var "v") (var "boundVars"))) $
     Lists.filter (var "isBound") (Sets.toList (Variables.freeVariablesInType @@ var "typ"))
 
 -- | Extract lambdas and their bodies from a term.
@@ -2487,7 +2487,7 @@ gatherMetadata = def "gatherMetadata" $
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
           "term" <~ Packaging.termDefinitionBody (var "termDef") $
-          "typ" <~ Maybes.cases (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "termDef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
+          "typ" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "termDef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
@@ -2578,7 +2578,7 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
     -- Check for exactly one argument
     Logic.ifElse (Logic.not $ Equality.equal (Lists.length $ var "args") (int32 1))
       nothing
-      ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args")) $
+      ("arg" <~ (Optionals.fromOptional Core.termUnit (Lists.maybeHead $ var "args")) $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
           _Term_cases>>: "cs" ~>
             just $ Phantoms.tuple4
@@ -2623,8 +2623,8 @@ isVariantUnitType = def "isVariantUnitType" $
   doc "Check if a variant field has unit type" $
   "rowType" ~> "fieldName" ~>
     "mfield" <~ (Lists.find ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fieldName")) (var "rowType")) $
-    Maybes.fromMaybe false $
-      Maybes.map
+    Optionals.fromOptional false $
+      Optionals.map
         ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
         (var "mfield")
 
@@ -2779,16 +2779,16 @@ moduleStandardImports = def "moduleStandardImports" $
       pair (string "hydra.dsl.python") (list [
         condImportSymbol @@ string "Either" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "meta"),
-        condImportSymbol @@ string "Just" @@
+        condImportSymbol @@ string "Given" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "meta"),
         condImportSymbol @@ string "Left" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "meta"),
-        condImportSymbol @@ string "Maybe" @@
-          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "meta"),
         condImportSymbol @@ string "Node" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "meta"),
-        condImportSymbol @@ string "Nothing" @@
+        condImportSymbol @@ string "None_" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "meta"),
+        condImportSymbol @@ string "Optional" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "meta"),
         condImportSymbol @@ string "Right" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "meta")]),
       pair (string "hydra.python.util") (list [
@@ -2813,10 +2813,10 @@ moduleStandardImports = def "moduleStandardImports" $
         condImportSymbol @@ string "cast" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "meta")])] $
     -- Filter each pair to remove Nothing symbols, then filter out pairs with no remaining symbols
-    "simplified" <~ Maybes.cat (Lists.map
+    "simplified" <~ Optionals.cat (Lists.map
       ("p" ~>
         "modName" <~ Pairs.first (var "p") $
-        "symbols" <~ Maybes.cat (Pairs.second (var "p")) $
+        "symbols" <~ Optionals.cat (Pairs.second (var "p")) $
         Logic.ifElse (Lists.null $ var "symbols")
           nothing
           (just $ pair (var "modName") (var "symbols")))
@@ -4188,7 +4188,7 @@ variantArgs = def "variantArgs" $
   doc "Create args for variant (Node[type], Generic[tparams])" $
   "ptype" ~> "tparams" ~>
     PyUtils.pyExpressionsToPyArgs @@
-      (Maybes.cat (list [
+      (Optionals.cat (list [
         just $ PyUtils.pyPrimaryToPyExpression @@
           (PyUtils.primaryWithExpressionSlices @@
             (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Node") @@
@@ -4224,14 +4224,14 @@ withDefinitions = def "withDefinitions" $
   doc "Execute a computation with definitions in scope" $
   "env" ~> "defs" ~> "body" ~>
     -- Convert definitions to bindings for a dummy let
-    "bindings" <~ (Maybes.cat $ Lists.map
+    "bindings" <~ (Optionals.cat $ Lists.map
       ("def_" ~>
         cases _Definition (var "def_") (Just nothing) [
           _Definition_term>>: "td" ~>
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
               (project _TermDefinition _TermDefinition_body @@ var "td")
-              (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
+              (Optionals.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
           _Definition_type>>: constant nothing])
       (var "defs")) $
     "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $
@@ -4303,7 +4303,7 @@ wrapInNullaryLambda = def "wrapInNullaryLambda" $
 lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
 lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
   "g" ~> "name" ~>
-    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+    Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
       (list ([] :: [TypedTerm Bool]))
       ("prim" ~>
         Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))

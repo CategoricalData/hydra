@@ -46,7 +46,7 @@ public class Libraries {
                 logicPrimitives(),
                 mapsPrimitives(),
                 mathPrimitives(),
-                maybesPrimitives(),
+                optionalsPrimitives(),
                 pairsPrimitives(),
                 regexPrimitives(),
                 setsPrimitives(),
@@ -81,7 +81,7 @@ public class Libraries {
                 new hydra.lib.eithers.Lefts(),
                 new hydra.lib.eithers.Map(),
                 new hydra.lib.eithers.MapList(),
-                new hydra.lib.eithers.MapMaybe(),
+                new hydra.lib.eithers.MapOptional(),
                 new hydra.lib.eithers.MapSet(),
                 new hydra.lib.eithers.PartitionEithers(),
                 new hydra.lib.eithers.Rights());
@@ -282,20 +282,20 @@ public class Libraries {
                 new hydra.lib.math.Truncate());
     }
 
-    private static List<PrimitiveFunction> maybesPrimitives() {
+    private static List<PrimitiveFunction> optionalsPrimitives() {
         return Arrays.asList(
-                new hydra.lib.maybes.Apply(),
-                new hydra.lib.maybes.Bind(),
-                new hydra.lib.maybes.Cases(),
-                new hydra.lib.maybes.Cat(),
-                new hydra.lib.maybes.Compose(),
-                new hydra.lib.maybes.FromMaybe(),
-                new hydra.lib.maybes.IsJust(),
-                new hydra.lib.maybes.IsNothing(),
-                new hydra.lib.maybes.Map(),
-                new hydra.lib.maybes.MapMaybe(),
-                new hydra.lib.maybes.Pure(),
-                new hydra.lib.maybes.ToList());
+                new hydra.lib.optionals.Apply(),
+                new hydra.lib.optionals.Bind(),
+                new hydra.lib.optionals.Cases(),
+                new hydra.lib.optionals.Cat(),
+                new hydra.lib.optionals.Compose(),
+                new hydra.lib.optionals.FromOptional(),
+                new hydra.lib.optionals.IsGiven(),
+                new hydra.lib.optionals.IsNone(),
+                new hydra.lib.optionals.Map(),
+                new hydra.lib.optionals.MapOptional(),
+                new hydra.lib.optionals.Pure(),
+                new hydra.lib.optionals.ToList());
     }
 
     private static List<PrimitiveFunction> pairsPrimitives() {

@@ -77,7 +77,7 @@ entityMetadata = define "EntityMetadata" $
   T.record [
     "description">:
       doc "An optional, concise one-line human-readable summary of the entity." $
-      T.maybe T.string,
+      T.optional T.string,
     "comments">:
       doc ("Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and"
         ++ " references that would otherwise be repeated across the entity's constituents.") $
@@ -87,7 +87,7 @@ entityMetadata = define "EntityMetadata" $
       T.list entityReference,
     "lifecycle">:
       doc "Optional version-lifecycle milestones for the entity." $
-      T.maybe lifecycleInfo]
+      T.optional lifecycleInfo]
 
 entityReference :: TypeDefinition
 entityReference = define "EntityReference" $
@@ -110,10 +110,10 @@ lifecycleInfo = define "LifecycleInfo" $
   T.record [
     "availableSince">:
       doc "The version in which the entity was introduced, if known." $
-      T.maybe version,
+      T.optional version,
     "deprecatedSince">:
       doc "The version in which the entity was deprecated, if applicable." $
-      T.maybe version]
+      T.optional version]
 
 module' :: TypeDefinition
 module' = define "Module" $
@@ -124,7 +124,7 @@ module' = define "Module" $
       moduleNameDef,
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the module" $
-      T.maybe entityMetadata,
+      T.optional entityMetadata,
     "dependencies">:
       doc "Any modules which this module directly depends on" $
       T.list moduleDependency,
@@ -145,7 +145,7 @@ moduleDependency = define "ModuleDependency" $
       moduleNameDef,
     "package">:
       doc "The package providing the depended-on module, if disambiguation is required" $
-      T.maybe packageName]
+      T.optional packageName]
 
 moduleNameDef :: TypeDefinition
 moduleNameDef = define "ModuleName" $
@@ -161,7 +161,7 @@ package = define "Package" $
       packageName,
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the package" $
-      T.maybe entityMetadata,
+      T.optional entityMetadata,
     "dependencies">:
       doc "The packages which this package depends on" $
       T.list packageDependency,
@@ -194,7 +194,7 @@ primitiveDefinition = define "PrimitiveDefinition" $
       Core.name,
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the primitive." $
-      T.maybe entityMetadata,
+      T.optional entityMetadata,
     "signature">:
       doc "The signature of the primitive. Always explicit, never inferred."
       Typing.termSignature,
@@ -206,7 +206,7 @@ primitiveDefinition = define "PrimitiveDefinition" $
       T.boolean,
     "defaultImplementation">:
       doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
-      T.maybe Core.term]
+      T.optional Core.term]
 
 termDefinition :: TypeDefinition
 termDefinition = define "TermDefinition" $
@@ -217,10 +217,10 @@ termDefinition = define "TermDefinition" $
       Core.name,
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the term definition" $
-      T.maybe entityMetadata,
+      T.optional entityMetadata,
     "signature">:
       doc "The optional signature of the term. When absent, the signature has yet to be inferred." $
-      T.maybe Typing.termSignature,
+      T.optional Typing.termSignature,
     "body">:
       doc "The term being defined"
       Core.term]
@@ -234,7 +234,7 @@ typeDefinition = define "TypeDefinition" $
       Core.name,
     "metadata">:
       doc "Optional documentation and lifecycle metadata for the type definition" $
-      T.maybe entityMetadata,
+      T.optional entityMetadata,
     "body">:
       doc "The type scheme being defined"
       Core.typeScheme]

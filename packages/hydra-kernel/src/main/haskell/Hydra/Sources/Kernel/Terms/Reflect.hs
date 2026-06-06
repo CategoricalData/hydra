@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -228,7 +228,7 @@ termVariant = define "termVariant" $
     _Term_list>>: constant Variants.termVariantList,
     _Term_literal>>: constant Variants.termVariantLiteral,
     _Term_map>>: constant Variants.termVariantMap,
-    _Term_maybe>>: constant Variants.termVariantMaybe,
+    _Term_optional>>: constant Variants.termVariantOptional,
     _Term_pair>>: constant Variants.termVariantPair,
     _Term_project>>: constant Variants.termVariantProject,
     _Term_record>>: constant Variants.termVariantRecord,
@@ -254,7 +254,7 @@ termVariants = define "termVariants" $
     _TermVariant_list,
     _TermVariant_literal,
     _TermVariant_map,
-    _TermVariant_maybe,
+    _TermVariant_optional,
     _TermVariant_pair,
     _TermVariant_project,
     _TermVariant_record,
@@ -279,7 +279,7 @@ typeVariant = define "typeVariant" $
     _Type_list>>: constant Variants.typeVariantList,
     _Type_literal>>: constant Variants.typeVariantLiteral,
     _Type_map>>: constant Variants.typeVariantMap,
-    _Type_maybe>>: constant Variants.typeVariantMaybe,
+    _Type_optional>>: constant Variants.typeVariantOptional,
     _Type_pair>>: constant Variants.typeVariantPair,
     _Type_record>>: constant Variants.typeVariantRecord,
     _Type_set>>: constant Variants.typeVariantSet,
@@ -302,7 +302,7 @@ typeVariants = define "typeVariants" $
     _TypeVariant_literal,
     _TypeVariant_map,
     _TypeVariant_wrap,
-    _TypeVariant_maybe,
+    _TypeVariant_optional,
     _TypeVariant_pair,
     _TypeVariant_record,
     _TypeVariant_set,

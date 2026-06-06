@@ -6,7 +6,7 @@ path produces JSON byte-equivalent to the Haskell-generated language.json.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Just
+from hydra.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.lists as Lists
@@ -64,7 +64,7 @@ def _python_language_term():
                         Variants.term_variant_list,
                         Variants.term_variant_literal,
                         Variants.term_variant_map,
-                        Variants.term_variant_maybe,
+                        Variants.term_variant_optional,
                         Variants.term_variant_pair,
                         Variants.term_variant_record,
                         Variants.term_variant_set,
@@ -86,7 +86,7 @@ def _python_language_term():
                         Variants.type_variant_list,
                         Variants.type_variant_literal,
                         Variants.type_variant_map,
-                        Variants.type_variant_maybe,
+                        Variants.type_variant_optional,
                         Variants.type_variant_pair,
                         Variants.type_variant_record,
                         Variants.type_variant_set,
@@ -168,11 +168,11 @@ def _build_module() -> Module:
     # Mirror Haskell pattern: define = definitionInModule module_; build defs; then module_ uses them.
     placeholder = Module(
         _NS,
-        Just(EntityMetadata(
-            Just("Language constraints and reserved words for Python 3"),
+        Given(EntityMetadata(
+            Given("Language constraints and reserved words for Python 3"),
             (),
             (),
-            Nothing())),
+            None_())),
         [unqualified_dep(LEXICAL_NS)] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )

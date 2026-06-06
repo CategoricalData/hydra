@@ -32,7 +32,7 @@ from hydra.core import (
     TermList,
     TermLiteral,
     TermMap,
-    TermMaybe,
+    TermOptional,
     TermPair,
     TermProject,
     TermRecord,
@@ -50,7 +50,7 @@ from hydra.core import (
     TypeScheme,
     WrappedTerm,
 )
-from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, Left, Right
+from hydra.dsl.python import FrozenDict, Optional, Given, None_, Left, Right
 from hydra.util import Comparison
 
 
@@ -174,7 +174,7 @@ def compose(f: Term, g: Term) -> Term:
     This creates a function equivalent to: lambda x: stringLength(toString(x))
     Function composition applies right-to-left: (f . g)(x) = f(g(x))
     """
-    return TermLambda(Lambda(Name("arg_"), Nothing(), apply(f, apply(g, var("arg_")))))
+    return TermLambda(Lambda(Name("arg_"), None_(), apply(f, apply(g, var("arg_")))))
 
 
 def constant(term: Term) -> Term:
@@ -292,7 +292,7 @@ def just(term: Term) -> Term:
 
     Example: just(string("found"))
     """
-    return optional(Just(term))
+    return optional(Given(term))
 
 
 def lambda_(param: str, body: Term) -> Term:
@@ -300,7 +300,7 @@ def lambda_(param: str, body: Term) -> Term:
 
     Example: lambda_("x", apply(var("x"), int32(1)))
     """
-    return TermLambda(Lambda(Name(param), Nothing(), body))
+    return TermLambda(Lambda(Name(param), None_(), body))
 
 
 def lambdas(params: Sequence[str], body: Term) -> Term:
@@ -319,7 +319,7 @@ def lambda_typed(param: str, dom: Type, body: Term) -> Term:
 
     Example: lambda_typed("x", Types.int32, list_([var("x")]))
     """
-    return TermLambda(Lambda(Name(param), Just(dom), body))
+    return TermLambda(Lambda(Name(param), Given(dom), body))
 
 
 def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
@@ -329,7 +329,7 @@ def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
     """
     return TermLet(
         Let(
-            tuple([Binding(Name(name), term, Nothing()) for name, term in bindings]),
+            tuple([Binding(Name(name), term, None_()) for name, term in bindings]),
             body,
         )
     )
@@ -337,7 +337,7 @@ def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
 
 def let_term(v: Name, t1: Term, t2: Term) -> Term:
     """Create a let expression with a single binding."""
-    return TermLet(Let(tuple([Binding(v, t1, Nothing())]), t2))
+    return TermLet(Let(tuple([Binding(v, t1, None_())]), t2))
 
 
 def lets(bindings: Sequence[Field], env: Term) -> Term:
@@ -346,7 +346,7 @@ def lets(bindings: Sequence[Field], env: Term) -> Term:
     Example: lets([field("x", int32(1)), field("y", int32(2))], pair(var("x"), var("y")))
     """
     def to_binding(f: Field) -> Binding:
-        return Binding(f.name, f.term, Nothing())
+        return Binding(f.name, f.term, None_())
 
     return TermLet(Let(tuple([to_binding(f) for f in bindings]), env))
 
@@ -355,7 +355,7 @@ def lets_typed(bindings: Sequence[tuple[str, Term, TypeScheme]], env: Term) -> T
     """Create a let expression with typed bindings."""
     def to_binding(b: tuple[str, Term, TypeScheme]) -> Binding:
         name, term, ts = b
-        return Binding(Name(name), term, Just(ts))
+        return Binding(Name(name), term, Given(ts))
 
     return TermLet(Let(tuple([to_binding(b) for b in bindings]), env))
 
@@ -397,7 +397,7 @@ def map_term(terms: Mapping[Term, Term]) -> Term:
     return TermMap(FrozenDict(terms))
 
 
-def match(tname: Name, def_: Maybe[Term], fields: Sequence[Field]) -> Term:
+def match(tname: Name, def_: Optional[Term], fields: Sequence[Field]) -> Term:
     """Create a pattern match on a union type.
 
     Example: match(Name("Result"), Just(string("unknown")),
@@ -415,7 +415,7 @@ def match(tname: Name, def_: Maybe[Term], fields: Sequence[Field]) -> Term:
 
 
 def match_with_variants(
-        tname: Name, def_: Maybe[Term], pairs: Sequence[tuple[Name, Name]]
+        tname: Name, def_: Optional[Term], pairs: Sequence[tuple[Name, Name]]
 ) -> Term:
     """Create a match term that maps variant names to other variants."""
     return match(
@@ -427,15 +427,15 @@ def match_with_variants(
 
 def nothing() -> Term:
     """Create a 'Nothing' optional value."""
-    return optional(Nothing())
+    return optional(None_())
 
 
-def optional(term: Maybe[Term]) -> Term:
+def optional(term: Optional[Term]) -> Term:
     """Create an optional (nullable) term.
 
     Example: optional(Just(string("found")))
     """
-    return TermMaybe(term)
+    return TermOptional(term)
 
 
 def pair(a: Term, b: Term) -> Term:

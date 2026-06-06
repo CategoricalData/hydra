@@ -49,7 +49,7 @@ blockStyle = define "BlockStyle" $
   T.record [
     "indent">:
       doc "An optional indentation string" $
-      T.maybe T.string,
+      T.optional T.string,
     "newlineBeforeContent">:
       doc "Whether to place a newline before the content" $
       T.boolean,

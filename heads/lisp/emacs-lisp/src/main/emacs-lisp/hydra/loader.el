@@ -598,7 +598,7 @@ style used by generated code).")
                   "test/lib/logic.el"
                   "test/lib/maps.el"
                   "test/lib/math.el"
-                  "test/lib/maybes.el"
+                  "test/lib/optionals.el"
                   "test/lib/pairs.el"
                   "test/lib/regex.el"
                   "test/lib/sets.el"
@@ -656,7 +656,7 @@ style used by generated code).")
 
 (dolist (f '("lib/chars.el" "lib/eithers.el" "lib/equality.el"
              "lib/lists.el" "lib/literals.el" "lib/logic.el"
-             "lib/maps.el" "lib/math.el" "lib/maybes.el"
+             "lib/maps.el" "lib/math.el" "lib/optionals.el"
              "lib/pairs.el" "lib/regex.el" "lib/sets.el" "lib/strings.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
 

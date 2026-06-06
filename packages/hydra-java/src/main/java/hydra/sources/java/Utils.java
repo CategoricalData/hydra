@@ -15,7 +15,7 @@ import hydra.dsl.meta.lib.Literals;
 import hydra.dsl.meta.lib.Logic;
 import hydra.dsl.meta.lib.Maps;
 import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Maybes;
+import hydra.dsl.meta.lib.Optionals;
 import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
@@ -206,7 +206,7 @@ public class Utils {
                                         var("me"))))),
                         inject(AdditiveExpression.TYPE_,
                             AdditiveExpression.UNARY,
-                            Maybes.fromMaybe(var("dummyMult"), Lists.maybeHead(var("exprs")))),
+                            Optionals.fromOptional(var("dummyMult"), Lists.maybeHead(var("exprs")))),
                         Lists.drop(int32(1), var("exprs"))))));
 
     public static final Def addInScopeVar = def(
@@ -583,7 +583,7 @@ public class Utils {
         "isEscaped",
         () -> lambda("s",
                 Equality.equal(
-                    Maybes.fromMaybe(int32(0), Strings.maybeCharAt(int32(0), var("s"))),
+                    Optionals.fromOptional(int32(0), Strings.maybeCharAt(int32(0), var("s"))),
                     int32(36))));
 
     public static final Def javaAdditiveExpressionToJavaExpression = def(
@@ -624,7 +624,7 @@ public class Utils {
                 "primType",
                 "minit",
                 let("init_",
-                    Maybes.cases(
+                    Optionals.cases(
                         var("minit"),
                         wrap(ArrayInitializer.TYPE_, list()),
                         lambda("i", var("i"))),
@@ -807,7 +807,7 @@ public class Utils {
                 "impls",
                 "bodyDecls",
                 let("extends_",
-                    Maybes.map(
+                    Optionals.map(
                         lambda("n",
                             apply(
                                 ref(Utils.nameToJavaClassType),
@@ -842,7 +842,7 @@ public class Utils {
                 "id",
                 let(
                     field("qual",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("pkg"),
                             inject(ClassTypeQualifier.TYPE_,
                                 ClassTypeQualifier.NONE,
@@ -1157,9 +1157,9 @@ public class Utils {
                                                                 apply(
                                                                     unwrap(ConditionalOrExpression.TYPE_),
                                                                     var("cor")),
-                                                                Maybes.fromMaybe(
+                                                                Optionals.fromOptional(
                                                                     var("fallback"),
-                                                                    Maybes.bind(
+                                                                    Optionals.bind(
                                                                         Lists.maybeHead(
                                                                             var("cands")),
                                                                         lambda("candHead",
@@ -1167,7 +1167,7 @@ public class Utils {
                                                                                 apply(
                                                                                     unwrap(ConditionalAndExpression.TYPE_),
                                                                                     var("candHead")),
-                                                                                Maybes.bind(
+                                                                                Optionals.bind(
                                                                                     Lists.maybeHead(
                                                                                         var("iors")),
                                                                                     lambda(
@@ -1176,7 +1176,7 @@ public class Utils {
                                                                                             apply(
                                                                                                 unwrap(InclusiveOrExpression.TYPE_),
                                                                                                 var("iorHead")),
-                                                                                            Maybes.bind(
+                                                                                            Optionals.bind(
                                                                                                 Lists.maybeHead(
                                                                                                     var("xors")),
                                                                                                 lambda(
@@ -1186,7 +1186,7 @@ public class Utils {
                                                                                                         apply(
                                                                                                             unwrap(ExclusiveOrExpression.TYPE_),
                                                                                                             var("xorHead")),
-                                                                                                        Maybes.bind(
+                                                                                                        Optionals.bind(
                                                                                                             Lists.maybeHead(
                                                                                                                 var("ands")),
                                                                                                             lambda(
@@ -1196,7 +1196,7 @@ public class Utils {
                                                                                                                     apply(
                                                                                                                         unwrap(AndExpression.TYPE_),
                                                                                                                         var("andHead")),
-                                                                                                                    Maybes.bind(
+                                                                                                                    Optionals.bind(
                                                                                                                         Lists.maybeHead(
                                                                                                                             var("eqs")),
                                                                                                                         lambda(
@@ -1656,7 +1656,7 @@ public class Utils {
     public static final Def javaMethodBody = def(
         "javaMethodBody",
         () -> lambda("mstmts",
-                Maybes.cases(
+                Optionals.cases(
                     var("mstmts"),
                     inject(MethodBody.TYPE_,
                         MethodBody.NONE,
@@ -2468,7 +2468,7 @@ public class Utils {
         () -> lambda(
                 "aliases",
                 "name",
-                Maybes.cases(
+                Optionals.cases(
                     Maps.lookup(
                         var("name"),
                         proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
@@ -2557,7 +2557,7 @@ public class Utils {
                 "methodName",
                 "args",
                 let("header",
-                    Maybes.cases(
+                    Optionals.cases(
                         var("lhs"),
                         inject(MethodInvocation_Header.TYPE_,
                             MethodInvocation_Header.SIMPLE,
@@ -2685,13 +2685,13 @@ public class Utils {
                             apply(unwrap(Name.TYPE_), var("name"))),
                         wrap(Identifier.TYPE_,
                             apply(ref(Utils.sanitizeJavaName), var("local"))),
-                        Maybes.cases(
+                        Optionals.cases(
                             var("ns_"),
                             wrap(Identifier.TYPE_, var("local")),
                             lambda("gname",
                                 let(
                                     field("parts",
-                                        Maybes.cases(
+                                        Optionals.cases(
                                             Maps.lookup(
                                                 var("gname"),
                                                 proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
@@ -2765,12 +2765,12 @@ public class Utils {
                     field("local",
                         proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("alias",
-                        Maybes.cases(
+                        Optionals.cases(
                             var("ns_"),
                             nothing(),
                             lambda("n",
                                 just(
-                                    Maybes.cases(
+                                    Optionals.cases(
                                         Maps.lookup(
                                             var("n"),
                                             proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
@@ -2785,7 +2785,7 @@ public class Utils {
                     field("pkg",
                         Logic.ifElse(
                             var("qualify"),
-                            Maybes.cases(
+                            Optionals.cases(
                                 var("alias"),
                                 inject(ClassTypeQualifier.TYPE_,
                                     ClassTypeQualifier.NONE,
@@ -2800,7 +2800,7 @@ public class Utils {
                     field("jid",
                         apply(
                             ref(Utils.javaTypeIdentifier),
-                            Maybes.cases(
+                            Optionals.cases(
                                 var("mlocal"),
                                 apply(ref(Utils.sanitizeJavaName), var("local")),
                                 lambda("l",

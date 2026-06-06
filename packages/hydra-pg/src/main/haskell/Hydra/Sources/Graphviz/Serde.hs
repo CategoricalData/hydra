@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -168,7 +168,7 @@ edgeStmtToExpr = define "edgeStmtToExpr" $
     "rhsParts">: Lists.concat (Lists.map
       (lambda "n" $ list [Serialization.cst @@ var "arrow", nodeOrSubgraphToExpr @@ var "directed" @@ var "n"])
       (var "r")),
-    "attrParts">: Maybes.cases (var "attr") (list ([] :: [TypedTerm Expr])) (lambda "a" $ list [attrListToExpr @@ var "a"])] $
+    "attrParts">: Optionals.cases (var "attr") (list ([] :: [TypedTerm Expr])) (lambda "a" $ list [attrListToExpr @@ var "a"])] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [nodeOrSubgraphToExpr @@ var "directed" @@ var "l"],
       var "rhsParts",
@@ -210,9 +210,9 @@ nodeIdToExpr = define "nodeIdToExpr" $
   lambda "nid" $ lets [
     "i">: project Dot._NodeId Dot._NodeId_id @@ var "nid",
     "mp">: project Dot._NodeId Dot._NodeId_port @@ var "nid"] $
-    Serialization.noSep @@ (Maybes.cat $ list [
-      Maybes.pure (idToExpr @@ var "i"),
-      Maybes.map portToExpr (var "mp")])
+    Serialization.noSep @@ (Optionals.cat $ list [
+      Optionals.pure (idToExpr @@ var "i"),
+      Optionals.map portToExpr (var "mp")])
 
 nodeOrSubgraphToExpr :: TypedTermDefinition (Bool -> Dot.NodeOrSubgraph -> Expr)
 nodeOrSubgraphToExpr = define "nodeOrSubgraphToExpr" $
@@ -228,9 +228,9 @@ nodeStmtToExpr = define "nodeStmtToExpr" $
   lambda "ns" $ lets [
     "i">: project Dot._NodeStmt Dot._NodeStmt_id @@ var "ns",
     "attr">: project Dot._NodeStmt Dot._NodeStmt_attributes @@ var "ns"] $
-    Serialization.spaceSep @@ (Maybes.cat $ list [
-      Maybes.pure (nodeIdToExpr @@ var "i"),
-      Maybes.map attrListToExpr (var "attr")])
+    Serialization.spaceSep @@ (Optionals.cat $ list [
+      Optionals.pure (nodeIdToExpr @@ var "i"),
+      Optionals.map attrListToExpr (var "attr")])
 
 portToExpr :: TypedTermDefinition (Dot.Port -> Expr)
 portToExpr = define "portToExpr" $
@@ -238,8 +238,8 @@ portToExpr = define "portToExpr" $
   lambda "p" $ lets [
     "mi">: project Dot._Port Dot._Port_id @@ var "p",
     "mp">: project Dot._Port Dot._Port_position @@ var "p",
-    "pre">: Maybes.cases (var "mi") (list ([] :: [TypedTerm Expr])) (lambda "i" $ list [Serialization.cst @@ string ":", idToExpr @@ var "i"]),
-    "suf">: Maybes.cases (var "mp") (list ([] :: [TypedTerm Expr])) (lambda "cp" $ list [Serialization.cst @@ string ":", compassPtToExpr @@ var "cp"])] $
+    "pre">: Optionals.cases (var "mi") (list ([] :: [TypedTerm Expr])) (lambda "i" $ list [Serialization.cst @@ string ":", idToExpr @@ var "i"]),
+    "suf">: Optionals.cases (var "mp") (list ([] :: [TypedTerm Expr])) (lambda "cp" $ list [Serialization.cst @@ string ":", compassPtToExpr @@ var "cp"])] $
     Serialization.noSep @@ (Lists.concat $ list [var "pre", var "suf"])
 
 stmtToExpr :: TypedTermDefinition (Bool -> Dot.Stmt -> Expr)
@@ -257,9 +257,9 @@ subgraphIdToExpr :: TypedTermDefinition (Dot.SubgraphId -> Expr)
 subgraphIdToExpr = define "subgraphIdToExpr" $
   doc "Convert a subgraph identifier to an expression" $
   lambda "sid" $
-    Serialization.spaceSep @@ (Maybes.cat $ list [
-      Maybes.pure (Serialization.cst @@ string "subgraph"),
-      Maybes.map idToExpr (unwrap Dot._SubgraphId @@ var "sid")])
+    Serialization.spaceSep @@ (Optionals.cat $ list [
+      Optionals.pure (Serialization.cst @@ string "subgraph"),
+      Optionals.map idToExpr (unwrap Dot._SubgraphId @@ var "sid")])
 
 subgraphToExpr :: TypedTermDefinition (Bool -> Dot.Subgraph -> Expr)
 subgraphToExpr = define "subgraphToExpr" $
@@ -269,6 +269,6 @@ subgraphToExpr = define "subgraphToExpr" $
     "stmts">: project Dot._Subgraph Dot._Subgraph_statements @@ var "sg",
     "body">: Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.inlineStyle @@
       (Serialization.spaceSep @@ (Lists.map (stmtToExpr @@ var "directed") (var "stmts")))] $
-    Serialization.spaceSep @@ (Maybes.cat $ list [
-      Maybes.map subgraphIdToExpr (var "mid"),
-      Maybes.pure (var "body")])
+    Serialization.spaceSep @@ (Optionals.cat $ list [
+      Optionals.map subgraphIdToExpr (var "mid"),
+      Optionals.pure (var "body")])

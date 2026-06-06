@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -209,7 +209,7 @@ collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
         collectTypeVariablesFromType @@ Core.mapTypeKeys (var "mt"),
         collectOrdConstrainedVariables @@ Core.mapTypeKeys (var "mt"),
         collectOrdConstrainedVariables @@ Core.mapTypeValues (var "mt")]),
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       collectOrdConstrainedVariables @@ var "elemType",
     _Type_pair>>: "pt" ~>
       Lists.concat2
@@ -268,7 +268,7 @@ collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
       Lists.concat2
         (collectTypeVariablesFromType @@ Core.mapTypeKeys (var "mt"))
         (collectTypeVariablesFromType @@ Core.mapTypeValues (var "mt")),
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       collectTypeVariablesFromType @@ var "elemType",
     _Type_pair>>: "pt" ~>
       Lists.concat2
@@ -321,8 +321,8 @@ decodeBindingName = define "decodeBindingName" $
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
   "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
   "localResult" <~ (Core.name (var "localPart")) $
-  Maybes.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
-      Maybes.cases (Lists.uncons $ var "nsParts") (var "localResult") ("nsUc" ~>
+  Optionals.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
+      Optionals.cases (Lists.uncons $ var "nsParts") (var "localResult") ("nsUc" ~>
           "tail" <~ Pairs.second (var "nsUc") $
           Core.name (Strings.intercalate (string ".") (Lists.concat2
             (list [string "hydra", string "decode"])
@@ -465,7 +465,7 @@ decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Maybes.cat $ Lists.map
+      (Optionals.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -500,7 +500,7 @@ decodeModule = define "decodeModule" $
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") nothing
-            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
             (Core.bindingTerm $ var "b")))
             (var "decodedBindings")))))
 
@@ -512,7 +512,7 @@ decodeModuleName = define "decodeModuleName" $
   "ns" ~>
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
-  Maybes.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
+  Optionals.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
       Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.decode.",
@@ -615,7 +615,7 @@ decodeType = define "decodeType" $
     _Type_list>>: "elemType" ~> decodeListType @@ var "elemType",
     _Type_literal>>: "lt" ~> decodeLiteralType @@ var "lt",
     _Type_map>>: "mt" ~> decodeMapType @@ var "mt",
-    _Type_maybe>>: "elemType" ~> decodeMaybeType @@ var "elemType",
+    _Type_optional>>: "elemType" ~> decodeMaybeType @@ var "elemType",
     _Type_pair>>: "pt" ~> decodePairType @@ var "pt",
     _Type_record>>: "rt" ~> decodeRecordType @@ var "rt",
     _Type_set>>: "elemType" ~> decodeSetType @@ var "elemType",
@@ -644,7 +644,7 @@ decodeTypeNamed = define "decodeTypeNamed" $
     _Type_list>>: "elemType" ~> decodeListType @@ var "elemType",
     _Type_literal>>: "lt" ~> decodeLiteralType @@ var "lt",
     _Type_map>>: "mt" ~> decodeMapType @@ var "mt",
-    _Type_maybe>>: "elemType" ~> decodeMaybeType @@ var "elemType",
+    _Type_optional>>: "elemType" ~> decodeMaybeType @@ var "elemType",
     _Type_pair>>: "pt" ~> decodePairType @@ var "pt",
     _Type_record>>: "rt" ~> decodeRecordTypeNamed @@ var "ename" @@ var "rt",
     _Type_set>>: "elemType" ~> decodeSetType @@ var "elemType",
@@ -681,7 +681,7 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
       ("fterm", DeepCore.project _Field _Field_term @@@ DeepCore.var "field"),
       ("variantMap", DeepCore.primitive _maps_fromList
         @@@ (DeepCore.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
-      DeepCore.primitive _maybes_cases
+      DeepCore.primitive _optionals_cases
         @@@ (DeepCore.primitive _maps_lookup
           @@@ DeepCore.var "fname"
           @@@ DeepCore.var "variantMap")
@@ -758,9 +758,9 @@ decoderFullResultType = define "decoderFullResultType" $
       Core.typeMap $ Core.mapType
         (decoderFullResultType @@ Core.mapTypeKeys (var "mt"))
         (decoderFullResultType @@ Core.mapTypeValues (var "mt")),
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       -- Maybe a -> Maybe (decoded a)
-      Core.typeMaybe (decoderFullResultType @@ var "elemType"),
+      Core.typeOptional (decoderFullResultType @@ var "elemType"),
     _Type_pair>>: "pt" ~>
       -- (a, b) -> (decoded a, decoded b)
       Core.typePair $ Core.pairType
@@ -810,8 +810,8 @@ decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
       Core.typeMap $ Core.mapType
         (decoderFullResultType @@ Core.mapTypeKeys (var "mt"))
         (decoderFullResultType @@ Core.mapTypeValues (var "mt")),
-    _Type_maybe>>: "elemType" ~>
-      Core.typeMaybe (decoderFullResultType @@ var "elemType"),
+    _Type_optional>>: "elemType" ~>
+      Core.typeOptional (decoderFullResultType @@ var "elemType"),
     _Type_pair>>: "pt" ~>
       Core.typePair $ Core.pairType
         (decoderFullResultType @@ Core.pairTypeFirst (var "pt"))
@@ -944,7 +944,7 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-  Eithers.map (primitive _maybes_cat) $
+  Eithers.map (primitive _optionals_cat) $
     Eithers.mapList (isDecodableBinding @@ var "cx" @@ var "graph") $
       primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 

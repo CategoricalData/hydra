@@ -40,7 +40,7 @@ columnType = define "ColumnType" $
 dataRow :: TypeDefinition
 dataRow = define "DataRow" $
   doc "A data row, containing optional-valued cells; one per column" $
-  T.forAll "v" $ T.wrap $ T.list $ T.maybe "v"
+  T.forAll "v" $ T.wrap $ T.list $ T.optional "v"
 
 headerRow :: TypeDefinition
 headerRow = define "HeaderRow" $
@@ -53,7 +53,7 @@ table = define "Table" $
   T.forAll "v" $ T.record [
     "header">:
       doc "The optional header row of the table. If present, the header must have the same number of cells as each data row." $
-      T.maybe headerRow,
+      T.optional headerRow,
     "data">:
       doc "The data rows of the table. Each row must have the same number of cells." $
       T.list (dataRow @@ "v")]

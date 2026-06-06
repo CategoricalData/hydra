@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -95,8 +95,8 @@ compactName = define "compactName" $
     "qualName">: qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"]
-    $ Maybes.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
-          Maybes.cases (Maps.lookup (var "ns") (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
+    $ Optionals.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
+          Optionals.cases (Maps.lookup (var "ns") (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
 
 freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $
@@ -151,7 +151,7 @@ nameToFilePath = define "nameToFilePath" $
     Strings.intercalate (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
       (Strings.splitOn (string ".") (Packaging.unModuleName (var "nsArg"))))) $
-  "prefix" <~ Maybes.cases (var "ns") (string "") ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/")) $
+  "prefix" <~ Optionals.cases (var "ns") (string "") ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/")) $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.cat (list [var "prefix", var "suffix", string ".", Util.unFileExtension (var "ext")])
 
@@ -182,7 +182,7 @@ qualifyName = define "qualifyName" $
     -- Use uncons to destructure (last, rest) from the reversed parts list.
     -- Empty parts is unreachable (splitOn on a string produces >= 1 element);
     -- in that case fall back to an unqualified name.
-    $ Maybes.cases (Lists.uncons $ var "parts") (Util.qualifiedName nothing (Core.unName $ var "name")) ("uc" ~>
+    $ Optionals.cases (Lists.uncons $ var "parts") (Util.qualifiedName nothing (Core.unName $ var "name")) ("uc" ~>
         "localName" <~ Pairs.first (var "uc") $
         "restReversed" <~ Pairs.second (var "uc") $
         Logic.ifElse
@@ -212,5 +212,5 @@ unqualifyName :: TypedTermDefinition (QualifiedName -> Name)
 unqualifyName = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
-    "prefix">: Maybes.cases (Util.qualifiedNameModuleName $ var "qname") (string "") (lambda "n" $ (Packaging.unModuleName $ var "n") ++ string ".")]
+    "prefix">: Optionals.cases (Util.qualifiedNameModuleName $ var "qname") (string "") (lambda "n" $ (Packaging.unModuleName $ var "n") ++ string ".")]
     $ wrap _Name $ var "prefix" ++ (Util.qualifiedNameLocal $ var "qname")

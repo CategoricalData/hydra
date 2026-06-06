@@ -16,7 +16,7 @@
 (load (hydra-path "src/main/common-lisp/hydra/prelude.lisp"))
 (dolist (f '("lib/equality.lisp" "lib/maps.lisp" "lib/sets.lisp" "lib/lists.lisp"
              "lib/strings.lisp" "lib/logic.lisp" "lib/math.lisp" "lib/chars.lisp"
-             "lib/eithers.lisp" "lib/literals.lisp" "lib/maybes.lisp" "lib/pairs.lisp"))
+             "lib/eithers.lisp" "lib/literals.lisp" "lib/optionals.lisp" "lib/pairs.lisp"))
   (load (hydra-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
 
 ;; Load loader and gen-main

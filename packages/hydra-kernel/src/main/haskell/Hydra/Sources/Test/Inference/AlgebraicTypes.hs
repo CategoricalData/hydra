@@ -195,19 +195,19 @@ testGroupForFolds = define "testGroupForFolds" $
       -- eliminator in a lambda over the optional, since cases takes the scrutinee first and
       -- cannot be partially applied to (def, f) while leaving the optional open.
       expectMono 1 [tag_disabledForMinimalInference]
-        (lambda "m" $ primitive _maybes_cases @@ (var "m") @@ (int32 42) @@ (primitive _math_negate))
+        (lambda "m" $ primitive _optionals_cases @@ (var "m") @@ (int32 42) @@ (primitive _math_negate))
         (T.function (T.optional T.int32) T.int32),
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive _maybes_cases @@ (optional (just $ int32 137)) @@ (int32 42) @@ (primitive _math_negate))
+        (primitive _optionals_cases @@ (optional (just $ int32 137)) @@ (int32 42) @@ (primitive _math_negate))
         T.int32,
       expectMono 3 [tag_disabledForMinimalInference]
-        (primitive _maybes_cases @@ optional nothing @@ (int32 42) @@ (primitive _math_negate))
+        (primitive _optionals_cases @@ optional nothing @@ (int32 42) @@ (primitive _math_negate))
         T.int32,
       expectPoly 4 [tag_disabledForMinimalInference]
-        (lambda "x" $ primitive _maybes_cases @@ (var "x") @@ (var "x") @@ (primitive _maybes_pure))
+        (lambda "x" $ primitive _optionals_cases @@ (var "x") @@ (var "x") @@ (primitive _optionals_pure))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
       expectPoly 5 [tag_disabledForMinimalInference]
-        (lambda "m" $ primitive _maybes_cases @@ (var "m") @@ (list []) @@ (lambda "x" $ list [var "x"]))
+        (lambda "m" $ primitive _optionals_cases @@ (var "m") @@ (list []) @@ (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))]]
   where
     foldAdd = primitive _lists_foldl @@ primitive _math_add

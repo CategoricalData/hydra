@@ -175,7 +175,7 @@ singlePartQuery = define "SinglePartQuery" $
   T.record [
     "reading">: T.list $ cypher "ReadingClause",
     "updating">: T.list $ cypher "UpdatingClause",
-    "return">: T.maybe $ cypher "Return"]
+    "return">: T.optional $ cypher "Return"]
 
 -- SingleQuery = SinglePartQuery
 --             | MultiPartQuery
@@ -246,7 +246,7 @@ match = define "Match" $
   T.record [
     "optional">: T.boolean,
     "pattern">: cypher "Pattern",
-    "where">: T.maybe $ cypher "Where"]
+    "where">: T.optional $ cypher "Where"]
 
 -- Unwind = (U,N,W,I,N,D), [SP], Expression, SP, (A,S), SP, Variable ;
 
@@ -358,7 +358,7 @@ inQueryCall :: TypeDefinition
 inQueryCall = define "InQueryCall" $
   T.record [
     "call">: cypher "ExplicitProcedureInvocation",
-    "yieldItems">: T.maybe $ cypher "YieldItems"]
+    "yieldItems">: T.optional $ cypher "YieldItems"]
 
 -- StandaloneCall = (C,A,L,L), SP, (ExplicitProcedureInvocation | ImplicitProcedureInvocation), [[SP], (Y,I,E,L,D), SP, ('*' | YieldItems)] ;
 
@@ -372,7 +372,7 @@ standaloneCall :: TypeDefinition
 standaloneCall = define "StandaloneCall" $
   T.record [
     "call">: cypher "ProcedureInvocation",
-    "yieldItems">: T.maybe $ cypher "StarOrYieldItems"]
+    "yieldItems">: T.optional $ cypher "StarOrYieldItems"]
 
 starOrYieldItems :: TypeDefinition
 starOrYieldItems = define "StarOrYieldItems" $
@@ -386,14 +386,14 @@ yieldItems :: TypeDefinition
 yieldItems = define "YieldItems" $
   T.record [
     "items">: T.list $ cypher "YieldItem",
-    "where">: T.maybe $ cypher "Where"]
+    "where">: T.optional $ cypher "Where"]
 
 -- YieldItem = [ProcedureResultField, SP, (A,S), SP], Variable ;
 
 yieldItem :: TypeDefinition
 yieldItem = define "YieldItem" $
   T.record [
-    "field">: T.maybe $ cypher "ProcedureResultField",
+    "field">: T.optional $ cypher "ProcedureResultField",
     "variable">: cypher "Variable"]
 
 -- With = (W,I,T,H), ProjectionBody, [[SP], Where] ;
@@ -402,7 +402,7 @@ with :: TypeDefinition
 with = define "With" $
   T.record [
     "projection">: cypher "ProjectionBody",
-    "where">: T.maybe $ cypher "Where"]
+    "where">: T.optional $ cypher "Where"]
 
 -- Return = (R,E,T,U,R,N), ProjectionBody ;
 
@@ -417,9 +417,9 @@ projectionBody = define "ProjectionBody" $
   T.record [
     "distinct">: T.boolean,
     "projectionItems">: cypher "ProjectionItems",
-    "order">: T.maybe $ cypher "Order",
-    "skip">: T.maybe $ cypher "Skip",
-    "limit">: T.maybe $ cypher "Limit"]
+    "order">: T.optional $ cypher "Order",
+    "skip">: T.optional $ cypher "Skip",
+    "limit">: T.optional $ cypher "Limit"]
 
 -- ProjectionItems = ('*', { [SP], ',', [SP], ProjectionItem })
 --                 | (ProjectionItem, { [SP], ',', [SP], ProjectionItem })
@@ -429,7 +429,7 @@ projectionItem :: TypeDefinition
 projectionItem = define "ProjectionItem" $
     T.record [
       "expression">: cypher "Expression",
-      "variable">: T.maybe $ cypher "Variable"]
+      "variable">: T.optional $ cypher "Variable"]
 
 projectionItems :: TypeDefinition
 projectionItems = define "ProjectionItems" $
@@ -465,7 +465,7 @@ sortItem :: TypeDefinition
 sortItem = define "SortItem" $
   T.record [
     "expression">: cypher "Expression",
-    "order">: T.maybe $ cypher "SortOrder"]
+    "order">: T.optional $ cypher "SortOrder"]
 
 sortOrder :: TypeDefinition
 sortOrder = define "SortOrder" $
@@ -490,7 +490,7 @@ pattern = define "Pattern" $
 patternPart :: TypeDefinition
 patternPart = define "PatternPart" $
   T.record [
-    "variable">: T.maybe $ cypher "Variable",
+    "variable">: T.optional $ cypher "Variable",
     "pattern">: cypher "AnonymousPatternPart"]
 
 -- AnonymousPatternPart = PatternElement ;
@@ -521,9 +521,9 @@ patternElement = define "PatternElement" $
 nodePattern :: TypeDefinition
 nodePattern = define "NodePattern" $
   T.record [
-    "variable">: T.maybe $ cypher "Variable",
-    "labels">: T.maybe $ cypher "NodeLabels",
-    "properties">: T.maybe $ cypher "Properties"]
+    "variable">: T.optional $ cypher "Variable",
+    "labels">: T.optional $ cypher "NodeLabels",
+    "properties">: T.optional $ cypher "Properties"]
 
 relationshipsPattern :: TypeDefinition
 relationshipsPattern = define "RelationshipsPattern" $
@@ -549,7 +549,7 @@ relationshipPattern :: TypeDefinition
 relationshipPattern = define "RelationshipPattern" $
     T.record [
       "leftArrow">: T.boolean,
-      "detail">: T.maybe $ cypher "RelationshipDetail",
+      "detail">: T.optional $ cypher "RelationshipDetail",
       "rightArrow">: T.boolean]
 
 -- RelationshipDetail = '[', [SP], [Variable, [SP]], [RelationshipTypes, [SP]], [RangeLiteral], [Properties, [SP]], ']' ;
@@ -563,10 +563,10 @@ properties = define "Properties" $
 relationshipDetail :: TypeDefinition
 relationshipDetail = define "RelationshipDetail" $
   T.record [
-    "variable">: T.maybe $ cypher "Variable",
-    "types">: T.maybe $ cypher "RelationshipTypes",
-    "range">: T.maybe $ cypher "RangeLiteral",
-    "properties">: T.maybe $ cypher "Properties"]
+    "variable">: T.optional $ cypher "Variable",
+    "types">: T.optional $ cypher "RelationshipTypes",
+    "range">: T.optional $ cypher "RangeLiteral",
+    "properties">: T.optional $ cypher "Properties"]
 
 -- Properties = MapLiteral
 --            | Parameter
@@ -596,8 +596,8 @@ nodeLabel = define "NodeLabel" $
 rangeLiteral :: TypeDefinition
 rangeLiteral = define "RangeLiteral" $
   T.record [
-    "start">: T.maybe T.bigint,
-    "end">: T.maybe T.bigint]
+    "start">: T.optional T.bigint,
+    "end">: T.optional T.bigint]
 
 -- LabelName = SchemaName ;
 --
@@ -777,7 +777,7 @@ powerOfExpression = define "PowerOfExpression" $
 unaryAddOrSubtractExpression :: TypeDefinition
 unaryAddOrSubtractExpression = define "UnaryAddOrSubtractExpression" $
   T.record [
-    "operator">: T.maybe $ cypher "AddOrSubtractOperator",
+    "operator">: T.optional $ cypher "AddOrSubtractOperator",
     "expression">: cypher "NonArithmeticOperatorExpression"]
 
 -- NonArithmeticOperatorExpression = Atom, { ([SP], ListOperatorExpression) | ([SP], PropertyLookup) }, [[SP], NodeLabels] ;
@@ -799,7 +799,7 @@ nonArithmeticOperatorExpression = define "NonArithmeticOperatorExpression" $
   T.record [
     "atom">: cypher "Atom",
     "listsAndLookups">: T.list $ cypher "ListOperatorExpressionOrPropertyLookup",
-    "labels">: T.maybe $ cypher "NodeLabels"]
+    "labels">: T.optional $ cypher "NodeLabels"]
 
 -- ListOperatorExpression = ('[', Expression, ']')
 --                        | ('[', [Expression], '..', [Expression], ']')
@@ -808,8 +808,8 @@ nonArithmeticOperatorExpression = define "NonArithmeticOperatorExpression" $
 rangeExpression :: TypeDefinition
 rangeExpression = define "RangeExpression" $
    T.record [
-      "start">: T.maybe $ cypher "Expression",
-      "end">: T.maybe $ cypher "Expression"]
+      "start">: T.optional $ cypher "Expression",
+      "end">: T.optional $ cypher "Expression"]
 
 -- PropertyLookup = '.', [SP], (PropertyKeyName) ;
 
@@ -852,9 +852,9 @@ propertyLookup = define "PropertyLookup" $
 caseExpression :: TypeDefinition
 caseExpression = define "CaseExpression" $
   T.record [
-    "expression">: T.maybe $ cypher "Expression",
+    "expression">: T.optional $ cypher "Expression",
     "alternatives">: T.list $ cypher "CaseAlternative",
-    "else">: T.maybe $ cypher "Expression"]
+    "else">: T.optional $ cypher "Expression"]
 
 -- CaseAlternative = (W,H,E,N), [SP], Expression, [SP], (T,H,E,N), [SP], Expression ;
 
@@ -870,16 +870,16 @@ listComprehension :: TypeDefinition
 listComprehension = define "ListComprehension" $
   T.record [
     "left">: cypher "FilterExpression",
-    "right">: T.maybe $ cypher "Expression"]
+    "right">: T.optional $ cypher "Expression"]
 
 -- PatternComprehension = '[', [SP], [Variable, [SP], '=', [SP]], RelationshipsPattern, [SP], [Where, [SP]], '|', [SP], Expression, [SP], ']' ;
 
 patternComprehension :: TypeDefinition
 patternComprehension = define "PatternComprehension" $
   T.record [
-    "variable">: T.maybe $ cypher "Variable",
+    "variable">: T.optional $ cypher "Variable",
     "pattern">: cypher "RelationshipsPattern",
-    "where">: T.maybe $ cypher "Where",
+    "where">: T.optional $ cypher "Where",
     "right">: cypher "Expression"]
 
 -- Quantifier = ((A,L,L), [SP], '(', [SP], FilterExpression, [SP], ')')
@@ -908,7 +908,7 @@ filterExpression :: TypeDefinition
 filterExpression = define "FilterExpression" $
   T.record [
     "idInColl">: cypher "IdInColl",
-    "where">: T.maybe $ cypher "Where"]
+    "where">: T.optional $ cypher "Where"]
 
 -- PatternPredicate = RelationshipsPattern ;
 
@@ -959,7 +959,7 @@ patternWhere :: TypeDefinition
 patternWhere = define "PatternWhere" $
   T.record [
     "pattern">: cypher "Pattern",
-    "where">: T.maybe $ cypher "Where"]
+    "where">: T.optional $ cypher "Where"]
 
 -- ExplicitProcedureInvocation = ProcedureName, [SP], '(', [SP], [Expression, [SP], { ',', [SP], Expression, [SP] }], ')' ;
 

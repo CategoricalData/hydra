@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -165,7 +165,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
           PG._AdjacentEdge_vertex>>: var "outV",
           PG._AdjacentEdge_properties>>: var "props"]) $
         -- Add to out-vertex's outs list
-        "vmap1" <~ (Maybes.cases (Maps.lookup (var "outV") (var "vmap")) (var "vmap") ("vae" ~>
+        "vmap1" <~ (Optionals.cases (Maps.lookup (var "outV") (var "vmap")) (var "vmap") ("vae" ~>
             Maps.insert (var "outV")
               (record PG._VertexWithAdjacentEdges [
                 PG._VertexWithAdjacentEdges_vertex>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_vertex @@ var "vae",
@@ -173,7 +173,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
                 PG._VertexWithAdjacentEdges_outs>>: Lists.cons (var "adjEdgeOut") (project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_outs @@ var "vae")])
               (var "vmap"))) $
         -- Add to in-vertex's ins list
-        Maybes.cases (Maps.lookup (var "inV") (var "vmap1")) (var "vmap1") ("vae" ~>
+        Optionals.cases (Maps.lookup (var "inV") (var "vmap1")) (var "vmap1") ("vae" ~>
             Maps.insert (var "inV")
               (record PG._VertexWithAdjacentEdges [
                 PG._VertexWithAdjacentEdges_vertex>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_vertex @@ var "vae",

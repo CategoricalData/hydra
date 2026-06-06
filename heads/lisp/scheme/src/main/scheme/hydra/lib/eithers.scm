@@ -12,7 +12,7 @@
           hydra_lib_eithers_lefts
           hydra_lib_eithers_map
           hydra_lib_eithers_map_list
-          hydra_lib_eithers_map_maybe
+          hydra_lib_eithers_map_optional
           hydra_lib_eithers_map_set
           hydra_lib_eithers_partition_eithers
           hydra_lib_eithers_foldl
@@ -108,8 +108,8 @@
                       result
                       (loop (cdr rest) (cons (either-val result) acc)))))))))
 
-    ;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-    (define hydra_lib_eithers_map_maybe
+    ;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+    (define hydra_lib_eithers_map_optional
       (lambda (f)
         (lambda (m)
           (if (or (null? m) (and (pair? m) (eq? (car m) 'nothing)))

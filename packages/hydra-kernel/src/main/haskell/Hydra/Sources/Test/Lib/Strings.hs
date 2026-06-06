@@ -182,8 +182,8 @@ allTests = define "allTests" $
         test "empty string" 0 "" Nothing]
         where
           test name idx s result = primCase name _strings_maybeCharAt [int32 idx, string s] (optionalInt32 result)
-          optionalInt32 Nothing = Core.termMaybe nothing
-          optionalInt32 (Just x) = Core.termMaybe $ just (int32 x)
+          optionalInt32 Nothing = Core.termOptional nothing
+          optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 
       stringsNull = subgroup "null" [
         test "empty string" "" True,

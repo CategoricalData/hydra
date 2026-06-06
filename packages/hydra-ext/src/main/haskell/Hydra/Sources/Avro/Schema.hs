@@ -64,7 +64,7 @@ enum_ = define "Enum" $
       doc ("A default value for this enumeration, used during resolution when the reader encounters " ++
         "a symbol from the writer that isn't defined in the reader's schema. " ++
         "The value provided here must be a JSON string that's a member of the symbols array") $
-      T.maybe T.string]
+      T.optional T.string]
 
 field_ :: TypeDefinition
 field_ = define "Field" $
@@ -74,19 +74,19 @@ field_ = define "Field" $
       T.string,
     "doc">:
       doc "a JSON string describing this field for users" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "a schema" $
       avro "Schema",
     "default">:
       doc "default value for this field, only used when reading instances that lack the field for schema evolution purposes" $
-      T.maybe $ json "Value",
+      T.optional $ json "Value",
     "order">:
       doc "specifies how this field impacts sort ordering of this record" $
-      T.maybe $ avro "Order",
+      T.optional $ avro "Order",
     "aliases">:
       doc "a JSON array of strings, providing alternate names for this field" $
-      T.maybe $ T.list T.string,
+      T.optional $ T.list T.string,
     "annotations">:
       doc "Any additional key/value pairs attached to the field" $
       T.map T.string $ json "Value"]
@@ -114,13 +114,13 @@ named = define "Named" $
       T.string,
     "namespace">:
       doc "a string that qualifies the name" $
-      T.maybe T.string,
+      T.optional T.string,
     "aliases">:
       doc "a JSON array of strings, providing alternate names for this schema" $
-      T.maybe $ T.list T.string,
+      T.optional $ T.list T.string,
     "doc">:
       doc "a JSON string providing documentation to the user of this schema" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">: avro "NamedType",
     "annotations">:
       doc "Any additional key/value pairs attached to the type" $

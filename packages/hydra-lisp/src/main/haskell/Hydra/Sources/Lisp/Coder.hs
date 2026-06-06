@@ -18,7 +18,7 @@ import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
@@ -274,7 +274,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
     "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjList") $
     "nameToBinding" <~ Maps.fromList
       (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
-    "sortedBindings" <~ Maybes.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
+    "sortedBindings" <~ Optionals.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
       (Lists.concat (var "sccs"))) $
     -- A cycle is any SCC of size greater than one.
     "hasCycle" <~ (Lists.foldl (lambda "acc" $ lambda "scc" $
@@ -460,7 +460,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
       -- Record projection: (:field record) or (record-type-field record)
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: (lambda (v) (record-type-field v))
           (right (lispLambdaExpr @@ list [string "v"] @@
             (inject L._Expression L._Expression_fieldAccess $
@@ -540,8 +540,8 @@ encodeTerm = def "encodeTerm" $
            record L._MapLiteral [
              L._MapLiteral_entries>>: var "pairs"]),
 
-     _Term_maybe>>: lambda "mt" $
-       Maybes.cases (var "mt")
+     _Term_optional>>: lambda "mt" $
+       Optionals.cases (var "mt")
          -- Nothing -> (list :nothing)
          (right (lispApp @@ (lispVar @@ string "list") @@ list [
            lispKeyword @@ string "nothing"]))
@@ -676,7 +676,7 @@ encodeType = def "encodeType" $
      _Type_map>>: lambda "mt" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
          wrap L._Symbol (string "Map")),
-     _Type_maybe>>: lambda "inner" $
+     _Type_optional>>: lambda "inner" $
        Eithers.map (lambda "enc" $
          inject L._TypeSpecifier L._TypeSpecifier_maybe (var "enc"))
          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
@@ -794,7 +794,7 @@ encodeUnionElim = def "encodeUnionElim" $
         -- Default clause
         -- Default is a direct result value, NOT a handler function.
         -- The reducer returns the default as-is without applying it to the payload.
-        "defExpr" <<~ (Maybes.cases (var "defCase")
+        "defExpr" <<~ (Optionals.cases (var "defCase")
           (right nothing)
           (lambda "dt" $
             "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
@@ -808,7 +808,7 @@ encodeUnionElim = def "encodeUnionElim" $
         "innerExpr" <~ (lispApp @@
           (lispLambdaExpr @@ list [string "match_value"] @@ var "condExpr") @@
           list [lispApp @@ (lispVar @@ (dialectCadr @@ var "dialect")) @@ list [lispVar @@ string "match_target"]]) $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
           (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
           (lambda "arg" $
@@ -822,7 +822,7 @@ encodeUnwrapElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph 
 encodeUnwrapElim = def "encodeUnwrapElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: identity function
           (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
           (lambda "arg" $
@@ -849,9 +849,9 @@ primHeadName = def "primHeadName" $
 lazyFlagsForPrimitiveTerm :: TypedTermDefinition (Graph -> Term -> [Bool])
 lazyFlagsForPrimitiveTerm = def "lazyFlagsForPrimitiveTerm" $
   "g" ~> "headTerm" ~>
-    Maybes.cases (primHeadName @@ var "headTerm")
+    Optionals.cases (primHeadName @@ var "headTerm")
       (list ([] :: [TypedTerm Bool]))
-      ("name" ~> Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      ("name" ~> Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
         (list ([] :: [TypedTerm Bool]))
         ("prim" ~>
           Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))
@@ -864,7 +864,7 @@ lazyFlagsForPrimitiveTerm = def "lazyFlagsForPrimitiveTerm" $
 primIsLazyAt :: TypedTermDefinition (Graph -> Term -> Int -> Bool)
 primIsLazyAt = def "primIsLazyAt" $
   "g" ~> "headTerm" ~> "i" ~>
-    Maybes.fromMaybe false (Lists.maybeAt (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
+    Optionals.fromOptional false (Lists.maybeAt (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
 
 -- | Check if a term is a reference to a specific primitive, stripping type
 -- applications, type lambdas, and annotations to find the underlying primitive.
@@ -963,7 +963,7 @@ lispTopFormWithComments :: TypedTermDefinition (Maybe String -> L.TopLevelForm -
 lispTopFormWithComments = def "lispTopFormWithComments" $
   lambda "mdoc" $ lambda "form" $
     record L._TopLevelFormWithComments [
-      L._TopLevelFormWithComments_doc>>: Maybes.map (lambda "d" $ wrap L._Docstring (var "d")) (var "mdoc"),
+      L._TopLevelFormWithComments_doc>>: Optionals.map (lambda "d" $ wrap L._Docstring (var "d")) (var "mdoc"),
       L._TopLevelFormWithComments_comment>>: nothing,
       L._TopLevelFormWithComments_form>>: var "form"]
 

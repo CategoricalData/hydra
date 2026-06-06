@@ -52,9 +52,9 @@ map = fmap
 mapList :: (a -> Either c b) -> [a] -> Either c [b]
 mapList = CM.mapM
 
--- | Map a function returning Either over a Maybe, or return Right Nothing if Nothing.
-mapMaybe :: (a -> Either c b) -> Maybe a -> Either c (Maybe b)
-mapMaybe = CM.mapM
+-- | Map a function returning Either over an optional, or return Right Nothing if Nothing.
+mapOptional :: (a -> Either c b) -> Maybe a -> Either c (Maybe b)
+mapOptional = CM.mapM
 
 -- | Map a function returning Either over a Set, collecting results or short-circuiting on Left.
 mapSet :: Ord b => (a -> Either c b) -> S.Set a -> Either c (S.Set b)

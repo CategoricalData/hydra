@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -199,7 +199,7 @@ addExpressions = def "addExpressions" $
     Lists.foldl
       (lambda "ae" $ lambda "me" $
         JavaDsl.additiveExpressionPlus (JavaDsl.additiveExpressionBinary (var "ae") (var "me")))
-      (JavaDsl.additiveExpressionUnary (Maybes.fromMaybe (var "dummyMult") (Lists.maybeHead (var "exprs"))))
+      (JavaDsl.additiveExpressionUnary (Optionals.fromOptional (var "dummyMult") (Lists.maybeHead (var "exprs"))))
       (Lists.drop (int32 1) (var "exprs"))
 
 -- | Add a variable to the in-scope set and return updated aliases
@@ -371,7 +371,7 @@ interfaceMethodDeclaration = def "interfaceMethodDeclaration" $
 
 isEscaped :: TypedTermDefinition (String -> Bool)
 isEscaped = def "isEscaped" $
-  lambda "s" $ Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (var "s"))) (int32 36)
+  lambda "s" $ Equality.equal (Optionals.fromOptional (int32 0) (Strings.maybeCharAt (int32 0) (var "s"))) (int32 36)
 
 javaAdditiveExpressionToJavaExpression :: TypedTermDefinition (Java.AdditiveExpression -> Java.Expression)
 javaAdditiveExpressionToJavaExpression = def "javaAdditiveExpressionToJavaExpression" $
@@ -381,7 +381,7 @@ javaAdditiveExpressionToJavaExpression = def "javaAdditiveExpressionToJavaExpres
 javaArrayCreation :: TypedTermDefinition (Java.PrimitiveTypeWithAnnotations -> Maybe Java.ArrayInitializer -> Java.Expression)
 javaArrayCreation = def "javaArrayCreation" $
   lambda "primType" $ lambda "minit" $ lets [
-    "init_">: Maybes.cases (var "minit")
+    "init_">: Optionals.cases (var "minit")
       (JavaDsl.arrayInitializer (list ([] :: [TypedTerm Java.VariableInitializer])))
       (lambda "i" $ var "i")] $
     javaPrimaryToJavaExpression @@
@@ -454,7 +454,7 @@ javaClassDeclaration :: TypedTermDefinition (JavaHelpers.Aliases -> [Java.TypePa
 javaClassDeclaration = def "javaClassDeclaration" $
   lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "mods" $
     lambda "supname" $ lambda "impls" $ lambda "bodyDecls" $ lets [
-    "extends_">: Maybes.map
+    "extends_">: Optionals.map
       (lambda "n" $ nameToJavaClassType @@ var "aliases" @@ boolean True @@ list ([] :: [TypedTerm Java.TypeArgument]) @@ var "n" @@ nothing)
       (var "supname")] $
     inject Java._ClassDeclaration Java._ClassDeclaration_normal
@@ -470,7 +470,7 @@ javaClassDeclaration = def "javaClassDeclaration" $
 javaClassType :: TypedTermDefinition ([Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.ClassType)
 javaClassType = def "javaClassType" $
   lambda "args" $ lambda "pkg" $ lambda "id" $ lets [
-    "qual">: Maybes.cases (var "pkg")
+    "qual">: Optionals.cases (var "pkg")
       JavaDsl.classTypeQualifierNone
       (lambda "p" $ JavaDsl.classTypeQualifierPackage (var "p")),
     "targs">: Lists.map
@@ -567,16 +567,16 @@ javaExpressionToJavaPrimary = def "javaExpressionToJavaPrimary" $
                 -- Walk down the operator precedence chain, requiring each level
                 -- to have a single element and unwrapping through to a bare Primary.
                 -- We keep the expression intact (original form) if any step fails.
-                Maybes.fromMaybe (var "fallback") $
-                  Maybes.bind (Lists.maybeHead $ var "cands") $ lambda "candHead" $
+                Optionals.fromOptional (var "fallback") $
+                  Optionals.bind (Lists.maybeHead $ var "cands") $ lambda "candHead" $
                   "iors" <~ unwrap Java._ConditionalAndExpression @@ var "candHead" $
-                  Maybes.bind (Lists.maybeHead $ var "iors") $ lambda "iorHead" $
+                  Optionals.bind (Lists.maybeHead $ var "iors") $ lambda "iorHead" $
                   "xors" <~ unwrap Java._InclusiveOrExpression @@ var "iorHead" $
-                  Maybes.bind (Lists.maybeHead $ var "xors") $ lambda "xorHead" $
+                  Optionals.bind (Lists.maybeHead $ var "xors") $ lambda "xorHead" $
                   "ands" <~ unwrap Java._ExclusiveOrExpression @@ var "xorHead" $
-                  Maybes.bind (Lists.maybeHead $ var "ands") $ lambda "andHead" $
+                  Optionals.bind (Lists.maybeHead $ var "ands") $ lambda "andHead" $
                   "eqs" <~ unwrap Java._AndExpression @@ var "andHead" $
-                  Maybes.bind (Lists.maybeHead $ var "eqs") $ lambda "eqHead" $
+                  Optionals.bind (Lists.maybeHead $ var "eqs") $ lambda "eqHead" $
                   just $ cases Java._EqualityExpression (var "eqHead") (Just $ var "fallback") [
                     Java._EqualityExpression_unary>>: "rel" ~>
                       cases Java._RelationalExpression (var "rel") (Just $ var "fallback") [
@@ -688,7 +688,7 @@ javaMemberField = def "javaMemberField" $
 
 javaMethodBody :: TypedTermDefinition (Maybe [Java.BlockStatement] -> Java.MethodBody)
 javaMethodBody = def "javaMethodBody" $
-  lambda "mstmts" $ Maybes.cases (var "mstmts")
+  lambda "mstmts" $ Optionals.cases (var "mstmts")
     JavaDsl.methodBodyNone
     (lambda "stmts" $ JavaDsl.methodBodyBlock (JavaDsl.block (var "stmts")))
 
@@ -954,7 +954,7 @@ javaVariableName = def "javaVariableName" $
 lookupJavaVarName :: TypedTermDefinition (JavaHelpers.Aliases -> Name -> Name)
 lookupJavaVarName = def "lookupJavaVarName" $
   lambda "aliases" $ lambda "name" $
-    Maybes.cases
+    Optionals.cases
       (Maps.lookup (var "name")
         (project JavaHelpers._Aliases JavaHelpers._Aliases_varRenames @@ var "aliases"))
       (var "name")
@@ -986,7 +986,7 @@ methodDeclaration = def "methodDeclaration" $
 methodInvocation :: TypedTermDefinition (Maybe (Either Java.ExpressionName Java.Primary) -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation)
 methodInvocation = def "methodInvocation" $
   lambda "lhs" $ lambda "methodName" $ lambda "args" $ lets [
-    "header">: Maybes.cases (var "lhs")
+    "header">: Optionals.cases (var "lhs")
       (JavaDsl.methodInvocationHeaderSimple (JavaDsl.methodName (var "methodName")))
       (lambda "either" $ JavaDsl.methodInvocationHeaderComplex
         (JavaDsl.methodInvocationComplex
@@ -1036,10 +1036,10 @@ nameToJavaName = def "nameToJavaName" $
     "local">: Util.qualifiedNameLocal (var "qn")] $
     Logic.ifElse (isEscaped @@ (Core.unName $ var "name"))
       (JavaDsl.identifier (sanitizeJavaName @@ var "local"))
-      (Maybes.cases (var "ns_")
+      (Optionals.cases (var "ns_")
         (JavaDsl.identifier (var "local"))
         (lambda "gname" $ lets [
-          "parts">: Maybes.cases
+          "parts">: Optionals.cases
             (Maps.lookup (var "gname")
               (project JavaHelpers._Aliases JavaHelpers._Aliases_packages @@ var "aliases"))
             (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "gname"))
@@ -1074,21 +1074,21 @@ nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
     "ns_">: Util.qualifiedNameModuleName (var "qn"),
     "local">: Util.qualifiedNameLocal (var "qn"),
     -- Build the alias: if ns is Just, look up in packages map; if not found, create from namespace
-    "alias">: Maybes.cases (var "ns_")
+    "alias">: Optionals.cases (var "ns_")
       nothing
       (lambda "n" $
-        just (Maybes.cases
+        just (Optionals.cases
           (Maps.lookup (var "n")
             (project JavaHelpers._Aliases JavaHelpers._Aliases_packages @@ var "aliases"))
           (JavaNamesSource.javaPackageName @@ (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "n")))
           (lambda "id" $ var "id"))),
     -- Build the package qualifier
     "pkg">: Logic.ifElse (var "qualify")
-      (Maybes.cases (var "alias") JavaDsl.classTypeQualifierNone
+      (Optionals.cases (var "alias") JavaDsl.classTypeQualifierNone
         (lambda "p" $ JavaDsl.classTypeQualifierPackage (var "p")))
       JavaDsl.classTypeQualifierNone,
     -- Build the type identifier
-    "jid">: javaTypeIdentifier @@ (Maybes.cases (var "mlocal")
+    "jid">: javaTypeIdentifier @@ (Optionals.cases (var "mlocal")
       (sanitizeJavaName @@ var "local")
       (lambda "l" $ (sanitizeJavaName @@ var "local") ++ string "." ++ (sanitizeJavaName @@ var "l")))] $
     pair (var "jid") (var "pkg")

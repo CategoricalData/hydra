@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -178,17 +178,17 @@ encodeFieldType = define "encodeFieldType" $
     "iri">: propertyIri @@ var "rname" @@ var "fname",
     "forType">: lambda "mn" $ lambda "mx" $ lambda "t" $
       cases _Type (Strip.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
-        _Type_maybe>>: lambda "ot" $ var "forType" @@ (just (bigint 0)) @@ var "mx" @@ var "ot",
+        _Type_optional>>: lambda "ot" $ var "forType" @@ (just (bigint 0)) @@ var "mx" @@ var "ot",
         _Type_set>>: lambda "st" $ var "forType" @@ var "mn" @@ nothing @@ var "st"],
     -- Default case: build property shape
     "forTypeDefault">: lambda "mn" $ lambda "mx" $ lambda "t" $
       Eithers.map
         ("__cp" ~> lets [
           "baseProp">: property @@ var "iri",
-          "minC">: Maybes.map
+          "minC">: Optionals.map
             ("__n" ~> inject Shacl._PropertyShapeConstraint Shacl._PropertyShapeConstraint_minCount (var "__n"))
             (var "mn"),
-          "maxC">: Maybes.map
+          "maxC">: Optionals.map
             ("__n" ~> inject Shacl._PropertyShapeConstraint Shacl._PropertyShapeConstraint_maxCount (var "__n"))
             (var "mx")] $
           record Shacl._Definition [
@@ -196,7 +196,7 @@ encodeFieldType = define "encodeFieldType" $
             Shacl._Definition_target>>:
               record Shacl._PropertyShape [
                 Shacl._PropertyShape_common>>: var "__cp",
-                Shacl._PropertyShape_constraints>>: Sets.fromList (Maybes.cat $ list [var "minC", var "maxC"]),
+                Shacl._PropertyShape_constraints>>: Sets.fromList (Optionals.cat $ list [var "minC", var "maxC"]),
                 Shacl._PropertyShape_defaultValue>>: nothing,
                 Shacl._PropertyShape_description>>: wrap Rdf._LangStrings Maps.empty,
                 Shacl._PropertyShape_name>>: wrap Rdf._LangStrings Maps.empty,
@@ -217,7 +217,7 @@ encodeList = define "encodeList" $
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
           Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
         (var "cx0"))
-      (Maybes.cases (Lists.uncons (var "terms")) (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0")) (lambda "p" $ lets [
+      (Optionals.cases (Lists.uncons (var "terms")) (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0")) (lambda "p" $ lets [
           "pair1">: nextBlankNode @@ var "cx0",
           "node1">: Pairs.first (var "pair1"),
           "cx1">: Pairs.second (var "pair1")] $
@@ -323,15 +323,15 @@ encodeTerm = define "encodeTerm" $
             "descs">: Pairs.first (var "__dr"),
             "cx1">: Pairs.second (var "__dr")] $
             pair
-              (Maybes.fromMaybe (var "descs") (Maybes.map
+              (Optionals.fromOptional (var "descs") (Optionals.map
                 (lambda "p" $ Lists.cons
                   (withType @@ (Core.wrappedTermTypeName (var "wt")) @@ Pairs.first (var "p"))
                   (Pairs.second (var "p")))
                 (Lists.uncons (var "descs"))))
               (var "cx1"))
           (encodeTerm @@ var "subject" @@ (Core.wrappedTermBody (var "wt")) @@ var "cx" @@ var "g"),
-      _Term_maybe>>: lambda "mterm" $
-        Maybes.cases (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
+      _Term_optional>>: lambda "mterm" $
+        Optionals.cases (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
       _Term_record>>: lambda "rec" $ lets [
         "rname">: Core.recordTypeName (var "rec"),
         "fields">: Core.recordFields (var "rec")] $
@@ -425,7 +425,7 @@ foldAccumResult :: TypedTermDefinition ((I.Int32 -> a -> Either Error (b, I.Int3
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
-    Maybes.cases (Lists.uncons (var "xs")) (right (pair (list ([] :: [TypedTerm b])) (var "cx"))) (lambda "p" $
+    Optionals.cases (Lists.uncons (var "xs")) (right (pair (list ([] :: [TypedTerm b])) (var "cx"))) (lambda "p" $
         Eithers.bind
           (var "f" @@ var "cx" @@ Pairs.first (var "p"))
           ("__r" ~> Eithers.map
@@ -489,7 +489,7 @@ shaclCoder :: TypedTermDefinition (Module -> I.Int32 -> Graph -> Either Error (S
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
-    "typeEls">: Maybes.cat (Lists.map
+    "typeEls">: Optionals.cat (Lists.map
       ("d" ~> cases _Definition (var "d") (Just nothing) [
         _Definition_type>>: "td" ~>
           just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])

@@ -53,15 +53,15 @@ asset = define "Asset" $
       stac "Uri",
     "title">:
       doc "The displayed title for clients and users." $
-      T.maybe T.string,
+      T.optional T.string,
     "description">:
       doc ("A description of the Asset providing additional details, such as how it was processed or " ++
            "created. CommonMark 0.29 syntax MAY be used for rich text representation.") $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc ("Media type of the asset. See the common media types in the best practice doc for commonly " ++
            "used asset types.") $
-      T.maybe $ stac "MediaType",
+      T.optional $ stac "MediaType",
     "roles">:
       doc "The semantic roles of the asset, similar to the use of rel in links." $
       T.list $ stac "Role"]
@@ -97,7 +97,7 @@ item = define "Item" $
            "is required if such a relation type is present and is not allowed otherwise. This field provides " ++
            "an easy way for a user to search for any Items that belong in a specified Collection. Must be a " ++
            "non-empty string.") $
-      T.maybe $ geoj "Id"]
+      T.optional $ geoj "Id"]
 
 link :: TypeDefinition
 link = define "Link" $
@@ -115,10 +115,10 @@ link = define "Link" $
       stac "RelationType",
     "type">:
       doc "Media type of the referenced entity." $
-      T.maybe $ stac "MediaType",
+      T.optional $ stac "MediaType",
     "title">:
       doc "A human readable title to be used in rendered displays of the link." $
-      T.maybe T.string]
+      T.optional T.string]
 
 mediaType :: TypeDefinition
 mediaType = define "MediaType" $ T.wrap T.string

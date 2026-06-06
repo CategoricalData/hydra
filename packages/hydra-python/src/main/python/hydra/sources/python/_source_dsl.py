@@ -12,7 +12,7 @@ Conventions:
 """
 
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.dsl.python import Nothing
+from hydra.dsl.python import None_
 from hydra.core import Name
 from hydra.packaging import ModuleDependency, ModuleName
 import hydra.dsl.python.syntax as PySyn
@@ -20,7 +20,7 @@ import hydra.dsl.python.syntax as PySyn
 
 def unqualified_dep(module: ModuleName) -> ModuleDependency:
     """Construct an unqualified ModuleDependency (no package qualifier)."""
-    return ModuleDependency(module, Nothing())
+    return ModuleDependency(module, None_())
 
 
 # The kernel "types" module dependencies — every coder package's source module list

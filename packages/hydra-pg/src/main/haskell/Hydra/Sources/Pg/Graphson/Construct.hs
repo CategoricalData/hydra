@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -152,7 +152,7 @@ aggregateMap = define "aggregateMap" $
         "v" <~ (Pairs.second $ var "p") $
         "existing" <~ (Maps.lookup (var "k") (var "m")) $
         Maps.insert (var "k")
-          (Maybes.cases (var "existing") (Lists.pure $ var "v") ("vs" ~> Lists.cons (var "v") (var "vs")))
+          (Optionals.cases (var "existing") (Lists.pure $ var "v") ("vs" ~> Lists.cons (var "v") (var "vs")))
           (var "m"))
       Maps.empty
       (var "pairs")

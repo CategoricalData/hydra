@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -100,7 +100,7 @@ binding = define "binding" $
   "el" ~>
   "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
-  "typeStr" <~ Maybes.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat [string ":(", typeScheme @@ var "ts", string ")"]) $
+  "typeStr" <~ Optionals.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat [string ":(", typeScheme @@ var "ts", string ")"]) $
   Strings.cat $ list [
     var "name",
     var "typeStr",
@@ -117,7 +117,7 @@ caseStatement = define "caseStatement" $
   "caseFields" <~ Lists.map
     ("alt" ~> Core.field (Core.caseAlternativeName $ var "alt") (Core.caseAlternativeHandler $ var "alt"))
     (var "csCases") $
-  "defaultField" <~ Maybes.cases (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")]) $
+  "defaultField" <~ Optionals.cases (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")]) $
   "allFields" <~ Lists.concat (list [var "caseFields", var "defaultField"]) $
   Strings.cat $ list [
     string "case(",
@@ -224,7 +224,7 @@ lambda = define "lambda" $
   "v" <~ unwrap _Name @@ (Core.lambdaParameter $ var "l") $
   "mt" <~ Core.lambdaDomain (var "l") $
   "body" <~ Core.lambdaBody (var "l") $
-  "typeStr" <~ Maybes.cases (var "mt") (string "") ("t" ~> Strings.cat2 (string ":") (type_ @@ var "t")) $
+  "typeStr" <~ Optionals.cases (var "mt") (string "") ("t" ~> Strings.cat2 (string ":") (type_ @@ var "t")) $
   Strings.cat $ list [
     string "λ",
     var "v",
@@ -294,7 +294,7 @@ maybe_ :: TypedTermDefinition ((a -> String) -> Maybe a -> String)
 maybe_ = define "maybe" $
   doc "Show a Maybe value using a given function to show the element" $
   "f" ~> "mx" ~>
-  Maybes.cases (var "mx") (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")")))
+  Optionals.cases (var "mx") (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")")))
 
 pair_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
 pair_ = define "pair" $
@@ -383,7 +383,7 @@ term = define "term" $
         string "{",
         Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
         string "}"],
-    _Term_maybe>>: "mt" ~> Maybes.cases (var "mt") (string "nothing") ("t" ~> Strings.cat $ list [
+    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "nothing") ("t" ~> Strings.cat $ list [
         string "just(",
         term @@ var "t",
         string ")"]),
@@ -547,7 +547,7 @@ type_ = define "type" $
         string ", ",
         type_ @@ var "valTyp",
         string ">"],
-    _Type_maybe>>: "etyp" ~> Strings.cat $ list [
+    _Type_optional>>: "etyp" ~> Strings.cat $ list [
       string "maybe<",
       type_ @@ var "etyp",
       string ">"],

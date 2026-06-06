@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -216,9 +216,9 @@ jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
     "root">: project JS._Document JS._Document_root @@ var "doc",
     "schemaMap">: fromObject @@ (schemaToExpr @@ var "root"),
     "restMap">: fromObject @@ (toObject @@ list [
-      pair key_id (Maybes.map (lambda "i" $ Json.valueString (var "i")) (var "mid")),
-      pair key_schema (Maybes.pure (Json.valueString (string "http://json-schema.org/2020-12/schema"))),
-      pair key_definitions (Maybes.map
+      pair key_id (Optionals.map (lambda "i" $ Json.valueString (var "i")) (var "mid")),
+      pair key_schema (Optionals.pure (Json.valueString (string "http://json-schema.org/2020-12/schema"))),
+      pair key_definitions (Optionals.map
         (lambda "mp" $ Json.valueObject (Maps.fromList
           (Lists.map
             (lambda "p" $ lets [
@@ -547,11 +547,11 @@ toObject = define "toObject" $
   doc "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values" $
   lambda "pairs" $
     Json.valueObject (Maps.fromList
-      (Maybes.cat (Lists.map
+      (Optionals.cat (Lists.map
         (lambda "p" $ lets [
           "k">: Pairs.first (var "p"),
           "mv">: Pairs.second (var "p")] $
-          Maybes.map
+          Optionals.map
             (lambda "v" $ pair (var "k") (var "v"))
             (var "mv"))
         (var "pairs"))))

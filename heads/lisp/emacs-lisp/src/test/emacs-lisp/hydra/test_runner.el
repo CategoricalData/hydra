@@ -160,7 +160,7 @@
                                                                (list :literal (list :string (hydra_core_wrapped_term-type_name wt))))))
                                                (hydra--make-field "body" (hydra--term-to-meta (hydra_core_wrapped_term-body wt))))))))))
        ((eq tag :maybe)
-        (list :inject (hydra--make-injection "hydra.core.Term" "maybe"
+        (list :inject (hydra--make-injection "hydra.core.Term" "optional"
                        (if (cadr term)
                            (list :maybe (hydra--term-to-meta (cadr term)))
                          (list :maybe nil)))))

@@ -7,7 +7,7 @@ import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
@@ -348,7 +348,7 @@ even_ :: TypedTermDefinition (I.Int32 -> Bool)
 even_ = define "even" $
   doc "Test whether an integer is even, defined via maybeMod and equality." $
   "x" ~> Equality.equal
-    (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "x") (int32 2)))
+    (Optionals.fromOptional (int32 0) (Math.maybeMod (var "x") (int32 2)))
     (int32 0)
 
 -- odd x = not (even x)

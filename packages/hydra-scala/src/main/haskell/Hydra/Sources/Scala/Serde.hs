@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -167,9 +167,9 @@ dataParamToExpr = define "dataParamToExpr" $
   lambda "dp" $ lets [
     "name">: project Scala._ParamData Scala._ParamData_name @@ var "dp",
     "stype">: project Scala._ParamData Scala._ParamData_decltpe @@ var "dp"] $
-    Serialization.noSep @@ (Maybes.cat $ list [
-      Maybes.pure (nameToExpr @@ var "name"),
-      Maybes.map
+    Serialization.noSep @@ (Optionals.cat $ list [
+      Optionals.pure (nameToExpr @@ var "name"),
+      Optionals.map
         (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", typeToExpr @@ var "t"])
         (var "stype")])
 
@@ -203,18 +203,18 @@ defnToExpr = define "defnToExpr" $
         "body">: project Scala._DefDefn Scala._DefDefn_body @@ var "dd",
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
-          (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
-        "scodExpr">: Maybes.map
+          (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
+        "scodExpr">: Optionals.map
           (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", typeToExpr @@ var "t"])
           (var "scod"),
         -- Render each parameter list in its own parens (for curried defs)
         "paramssExprs">: Lists.map
           ("ps" ~> Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "ps")))
           (var "paramss"),
-        "nameAndParams">: Serialization.noSep @@ (Maybes.cat $ Lists.concat (list [
-          list [Maybes.pure (dataNameToExpr @@ var "name")],
+        "nameAndParams">: Serialization.noSep @@ (Optionals.cat $ Lists.concat (list [
+          list [Optionals.pure (dataNameToExpr @@ var "name")],
           list [var "tparamsExpr"],
-          Lists.map ("pe" ~> Maybes.pure (var "pe")) (var "paramssExprs"),
+          Lists.map ("pe" ~> Optionals.pure (var "pe")) (var "paramssExprs"),
           list [var "scodExpr"]]))] $
         "bodyExpr" <~ (termToExpr @@ var "body") $
         "defSig" <~ (Serialization.spaceSep @@ list [
@@ -231,27 +231,27 @@ defnToExpr = define "defnToExpr" $
         "name">: project Scala._TypeDefn Scala._TypeDefn_name @@ var "dt",
         "tparams">: project Scala._TypeDefn Scala._TypeDefn_tparams @@ var "dt",
         "body">: project Scala._TypeDefn Scala._TypeDefn_body @@ var "dt"] $
-        Serialization.spaceSep @@ (Maybes.cat $ list [
-          Maybes.pure (Serialization.cst @@ string "type"),
-          Maybes.pure (typeNameToExpr @@ var "name"),
+        Serialization.spaceSep @@ (Optionals.cat $ list [
+          Optionals.pure (Serialization.cst @@ string "type"),
+          Optionals.pure (typeNameToExpr @@ var "name"),
           Logic.ifElse (Lists.null (var "tparams"))
             nothing
-            (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
-          Maybes.pure (Serialization.cst @@ string "="),
-          Maybes.pure (typeToExpr @@ var "body")]),
+            (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
+          Optionals.pure (Serialization.cst @@ string "="),
+          Optionals.pure (typeToExpr @@ var "body")]),
 
       Scala._Defn_val>>: lambda "dv" $ lets [
         "mods">: project Scala._ValDefn Scala._ValDefn_mods @@ var "dv",
         "pats">: project Scala._ValDefn Scala._ValDefn_pats @@ var "dv",
         "typ">: project Scala._ValDefn Scala._ValDefn_decltpe @@ var "dv",
         "rhs">: project Scala._ValDefn Scala._ValDefn_rhs @@ var "dv",
-        "nameStr">: Maybes.fromMaybe (string "") (Maybes.map
+        "nameStr">: Optionals.fromOptional (string "") (Optionals.map
           (lambda "firstPat" $
             "patName" <~ (cases Scala._Pat (var "firstPat") Nothing [
               Scala._Pat_var>>: lambda "pv" $ project Scala._VarPat Scala._VarPat_name @@ var "pv"]) $
             unwrap Scala._PredefString @@ (project Scala._NameData Scala._NameData_value @@ var "patName"))
           (Lists.maybeHead (var "pats"))),
-        "nameAndType">: Maybes.cases (var "typ") (Serialization.cst @@ var "nameStr") (lambda "t" $ Serialization.spaceSep @@ list [
+        "nameAndType">: Optionals.cases (var "typ") (Serialization.cst @@ var "nameStr") (lambda "t" $ Serialization.spaceSep @@ list [
             Serialization.cst @@ (Strings.cat2 (var "nameStr") (string ":")),
             typeToExpr @@ var "t"]),
         "valKeyword">: Logic.ifElse (Lists.null (var "mods")) (string "val") (string "lazy val")] $
@@ -269,12 +269,12 @@ defnToExpr = define "defnToExpr" $
         "paramss">: project Scala._PrimaryCtor Scala._PrimaryCtor_paramss @@ var "ctor",
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
-          (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
+          (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
         "paramsExpr">: Logic.ifElse (Lists.null (var "paramss"))
           nothing
-          (Maybes.pure (Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (Lists.concat (var "paramss"))))),
-        "nameAndParams">: Serialization.noSep @@ (Maybes.cat $ list [
-          Maybes.pure (typeNameToExpr @@ var "name"),
+          (Optionals.pure (Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (Lists.concat (var "paramss"))))),
+        "nameAndParams">: Serialization.noSep @@ (Optionals.cat $ list [
+          Optionals.pure (typeNameToExpr @@ var "name"),
           var "tparamsExpr",
           var "paramsExpr"])] $
         Serialization.spaceSep @@ (Lists.concat $ list [
@@ -288,11 +288,11 @@ defnToExpr = define "defnToExpr" $
         "stats">: project Scala._Template Scala._Template_stats @@ var "template",
         "enumHeader">: Serialization.spaceSep @@ list [
           Serialization.cst @@ string "enum",
-          Serialization.noSep @@ (Maybes.cat $ list [
-            Maybes.pure (typeNameToExpr @@ var "name"),
+          Serialization.noSep @@ (Optionals.cat $ list [
+            Optionals.pure (typeNameToExpr @@ var "name"),
             Logic.ifElse (Lists.null (var "tparams"))
               nothing
-              (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams"))))]),
+              (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams"))))]),
           Serialization.cst @@ string ":"],
         "enumCases">: Lists.map
           (lambda "s" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "  ", statToExpr @@ var "s"])
@@ -349,7 +349,7 @@ importerToExpr = define "importerToExpr" $
     "forImportees">: Logic.ifElse (Lists.null (var "importees"))
       (Serialization.cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length (var "importees")) (int32 1))
-        (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map
+        (Optionals.fromOptional (Serialization.cst @@ string "") (Optionals.map
           (lambda "firstImp" $ Serialization.noSep @@ list [
             Serialization.cst @@ string ".",
             cases Scala._Importee (var "firstImp") Nothing [
@@ -536,7 +536,7 @@ typeToExpr = define "typeToExpr" $
           Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeToExpr (var "args"))],
       Scala._Type_function>>: lambda "tf" $ lets [
         "cod">: project Scala._FunctionType Scala._FunctionType_res @@ var "tf",
-        "dom">: Maybes.fromMaybe (var "cod") (Lists.maybeHead (project Scala._FunctionType Scala._FunctionType_params @@ var "tf"))] $
+        "dom">: Optionals.fromOptional (var "cod") (Lists.maybeHead (project Scala._FunctionType Scala._FunctionType_params @@ var "tf"))] $
         Serialization.ifx @@ functionArrowOp @@ (typeToExpr @@ var "dom") @@ (typeToExpr @@ var "cod"),
       Scala._Type_lambda>>: lambda "tl" $ lets [
         "params">: project Scala._LambdaType Scala._LambdaType_tparams @@ var "tl",

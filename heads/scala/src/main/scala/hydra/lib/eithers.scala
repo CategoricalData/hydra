@@ -26,7 +26,7 @@ object eithers:
     xs.foldLeft[Either[A, Seq[C]]](Right(Seq.empty)) { (acc, x) =>
       acc.flatMap(cs => f(x).map(c => cs :+ c))
     }
-  def mapMaybe[B, C, A](f: B => Either[A, C])(m: Option[B]): Either[A, Option[C]] = m match
+  def mapOptional[B, C, A](f: B => Either[A, C])(m: Option[B]): Either[A, Option[C]] = m match
     case None => Right(None)
     case Some(b) => f(b).map(Some(_))
   def mapSet[B, C, A](f: B => Either[A, C])(xs: Set[B]): Either[A, Set[C]] =

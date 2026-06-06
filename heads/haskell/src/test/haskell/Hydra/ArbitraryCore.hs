@@ -184,7 +184,7 @@ arbitraryTerm typ n = case typ of
             return (k, v)
           where
             n' = div n 2
-    TypeMaybe ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
+    TypeOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
     TypeRecord sfields -> record (Name "placeholder") <$> arbitraryFields sfields
     TypeSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
     TypeUnion sfields -> do
@@ -209,7 +209,7 @@ arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
     TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
     TypeList <$> arbitraryType n',
     TypeMap <$> arbitraryPair MapType arbitraryType n',
-    TypeMaybe <$> arbitraryType n',
+    TypeOptional <$> arbitraryType n',
 --    TypeRecord <$> arbitraryList False arbitraryFieldType n', -- TODO: avoid duplicate field names
     TypeSet <$> arbitraryType n']
 --    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
@@ -252,12 +252,12 @@ shrinkers typ = trivialShrinker ++ case typ of
           where
             shrinkPair m (km, vm) = (\vm' -> (km, vm')) <$> m vm
         dropPairs = [(Types.map kt vt, \(TermMap m) -> TermMap . M.fromList <$> dropAny (M.toList m))]
-    TypeMaybe ot -> toNothing : promoteType : shrinkType
+    TypeOptional ot -> toNothing : promoteType : shrinkType
       where
-        toNothing = (Types.maybe ot, \(TermMaybe m) -> optional <$> Y.maybe [] (const [Nothing]) m)
-        promoteType = (ot, \(TermMaybe m) -> Y.maybeToList m)
-        shrinkType = (\(t, m) -> (Types.maybe t,
-          \(TermMaybe mb) -> Y.maybe [] (fmap (optional . Just) . m) mb)) <$> shrinkers ot
+        toNothing = (Types.optional ot, \(TermOptional m) -> optional <$> Y.maybe [] (const [Nothing]) m)
+        promoteType = (ot, \(TermOptional m) -> Y.maybeToList m)
+        shrinkType = (\(t, m) -> (Types.optional t,
+          \(TermOptional mb) -> Y.maybe [] (fmap (optional . Just) . m) mb)) <$> shrinkers ot
     TypeRecord sfields -> dropFields
         ++ shrinkFieldNames TypeRecord (record (Name "placeholder")) (\(TermRecord (Record _ dfields)) -> dfields) sfields
         ++ promoteTypes ++ shrinkTypes

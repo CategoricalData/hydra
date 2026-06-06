@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -123,7 +123,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   "augment" <~ ("b" ~>
     "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
     "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types"))) (var "freeVars") $
-    "varTypes" <~ Maybes.cat (Lists.map (reify Pairs.second) (var "varTypePairs")) $
+    "varTypes" <~ Optionals.cat (Lists.map (reify Pairs.second) (var "varTypePairs")) $
     Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
                            (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
       (pair (var "b") nothing)
@@ -131,7 +131,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
         (Core.binding
           (Core.bindingName $ var "b")
           (var "wrapAfterTypeLambdas" @@ var "varTypePairs" @@ (Core.bindingTerm $ var "b"))
-          (Maybes.map ("ts" ~> Core.typeScheme
+          (Optionals.map ("ts" ~> Core.typeScheme
             (Core.typeSchemeVariables $ var "ts")
             (Lists.foldl
               ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
@@ -147,7 +147,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   "results" <~ Lists.map (var "augment") (var "bindings") $
   pair
     (Lists.map (reify Pairs.first) (var "results"))
-    (Typing.termSubst $ Maps.fromList $ Maybes.cat $ Lists.map (reify Pairs.second) (var "results"))
+    (Typing.termSubst $ Maps.fromList $ Optionals.cat $ Lists.map (reify Pairs.second) (var "results"))
 
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: TypedTermDefinition (Binding -> Bool)
@@ -268,7 +268,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
       (var "capturedTermVars") $
     -- We can only construct a new type scheme if all of the captured term variables have types
     -- If there are any captured term variables, we create a function type
-    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (reify Pairs.second) (var "capturedTermVarTypePairs"))) $
+    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Optionals.cat (Lists.map (reify Pairs.second) (var "capturedTermVarTypePairs"))) $
     -- Captured type vars include those free in the binding's type AND those free in captured term var types.
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
@@ -285,7 +285,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "newUsedNames" <~ Sets.insert (var "globalBindingName") (var "alreadyUsedNames") $
     "newTypeScheme" <~ Logic.ifElse
       (Equality.equal (Lists.length $ var "capturedTermVarTypes") (Lists.length $ var "capturedTermVarTypePairs"))
-      (Maybes.map
+      (Optionals.map
         ("ts" ~> Core.typeScheme
           (Lists.nub $ Lists.concat2 (var "capturedTypeVars") (Core.typeSchemeVariables $ var "ts"))
           (Lists.foldl
@@ -300,14 +300,14 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- Then re-add all type scheme variables as type lambdas.
     "strippedTerm" <~ Strip.stripTypeLambdas @@ (Core.bindingTerm $ var "b") $
     "termWithLambdas" <~ Lists.foldl
-      ("t" ~> "p" ~> Core.termLambda $ Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Strip.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
+      ("t" ~> "p" ~> Core.termLambda $ Core.lambda (Pairs.first $ var "p") (Optionals.map ("dom" ~> Strip.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
       (var "strippedTerm")
       (Lists.reverse $ var "capturedTermVarTypePairs") $
     -- Add type lambdas for all new type scheme variables (captured + original scheme vars)
     "termWithTypeLambdas" <~ Lists.foldl
       ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
       (var "termWithLambdas")
-      (Lists.reverse $ Maybes.cases (var "newTypeScheme") (list ([] :: [TypedTerm Name])) (reify Core.typeSchemeVariables)) $
+      (Lists.reverse $ Optionals.cases (var "newTypeScheme") (list ([] :: [TypedTerm Name])) (reify Core.typeSchemeVariables)) $
 
     -- Build the replacement: first apply type variables for captured type vars,
     -- then apply term variables for captured term vars.
@@ -366,7 +366,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- We need to include them for argument propagation, but exclude them from the final list of arguments
         -- for each hoisted binding.
         "polyLetVariables" <~ (Sets.fromList $ Lists.filter
-          ("v" ~> optCases (Maybes.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
+          ("v" ~> optCases (Optionals.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
             false -- This function should not be applied to untyped terms, but we make a hopeful guess if it is
             Resolution.fTypeIsPolymorphic)
           (Sets.toList $ Sets.difference (Sets.fromList $ Maps.keys $ Graph.graphBoundTerms $ var "cx") (Graph.graphLambdaVariables $ var "cx"))) $
@@ -668,7 +668,7 @@ hoistSubterms = define "hoistSubterms" $
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
-    "firstBindingName" <~ Maybes.cases (Lists.maybeHead (var "bindings")) (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
+    "firstBindingName" <~ Optionals.cases (Lists.maybeHead (var "bindings")) (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
     "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $
     "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
@@ -741,10 +741,10 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
   "path" ~>
   -- Helper: process pairs of adjacent accessors
   "go" <~ ("remaining" ~>
-    Maybes.cases (Lists.uncons $ var "remaining") (var "remaining") ("uc1" ~>
+    Optionals.cases (Lists.uncons $ var "remaining") (var "remaining") ("uc1" ~>
         "first" <~ Pairs.first (var "uc1") $
         "afterFirst" <~ Pairs.second (var "uc1") $
-        Maybes.cases
+        Optionals.cases
           (Lists.uncons $ var "afterFirst")
           -- Only one element: return as-is (no pair to inspect)
           (var "remaining")

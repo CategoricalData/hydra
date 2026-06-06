@@ -297,7 +297,7 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Maybe instance) {
+                public Consumer<StringBuilder> visit(Term.Optional instance) {
                     Maybe<Term> opt = instance.value;
                     return sb -> {
                         if (opt.isJust()) {

@@ -54,7 +54,7 @@ credited :: TypeDefinition
 credited = define "Credited" $
   T.record [
     "name">: T.string,
-    "contact">: T.maybe $ T.list $ osv "Url"]
+    "contact">: T.optional $ T.list $ osv "Url"]
 
 ecosystem :: TypeDefinition
 ecosystem = define "Ecosystem" $
@@ -67,19 +67,19 @@ entry = define "Entry" $
   T.record [
     "schemaVersion">:
       doc "The default value is '1.0.0', matching version 1.0 of the OSV Schema" $
-      T.maybe $ osv "OsvVersion",
+      T.optional $ osv "OsvVersion",
     "id">: osv "Id",
     "modified">: osv "Timestamp",
-    "published">: T.maybe $ osv "Timestamp",
-    "withdrawn">: T.maybe $ osv "Timestamp",
-    "aliases">: T.maybe $ T.list $ osv "Id",
-    "related">: T.maybe $ T.list $ osv "Id",
-    "summary">: T.maybe T.string,
-    "details">: T.maybe $ osv "Markdown",
-    "severity">: T.maybe $ T.list $ osv "Severity",
-    "affected">: T.maybe  $ T.list $ osv "PackageVersions",
-    "references">: T.maybe $ T.list $ osv "Reference",
-    "credits">: T.maybe $ T.list $ osv "Credited"]
+    "published">: T.optional $ osv "Timestamp",
+    "withdrawn">: T.optional $ osv "Timestamp",
+    "aliases">: T.optional $ T.list $ osv "Id",
+    "related">: T.optional $ T.list $ osv "Id",
+    "summary">: T.optional T.string,
+    "details">: T.optional $ osv "Markdown",
+    "severity">: T.optional $ T.list $ osv "Severity",
+    "affected">: T.optional  $ T.list $ osv "PackageVersions",
+    "references">: T.optional $ T.list $ osv "Reference",
+    "credits">: T.optional $ T.list $ osv "Credited"]
 
 event :: TypeDefinition
 event = define "Event" $
@@ -112,15 +112,15 @@ packageVersions :: TypeDefinition
 packageVersions = define "PackageVersions" $
   T.record [
     "package">: osv "Package",
-    "ranges">: T.maybe $ T.list $ osv "VersionRange",
-    "versions">: T.maybe $ T.list $ osv "Version"]
+    "ranges">: T.optional $ T.list $ osv "VersionRange",
+    "versions">: T.optional $ T.list $ osv "Version"]
 
 package_ :: TypeDefinition
 package_ = define "Package" $
   T.record [
     "ecosystem">: osv "Ecosystem",
     "name">: T.string,
-    "purl">: T.maybe $ osv "Url"]
+    "purl">: T.optional $ osv "Url"]
 
 reference :: TypeDefinition
 reference = define "Reference" $
@@ -174,7 +174,7 @@ versionRange :: TypeDefinition
 versionRange = define "VersionRange" $
   T.record [
     "type">: osv "VersionType",
-    "repo">: T.maybe $ osv "Url",
+    "repo">: T.optional $ osv "Url",
     "events">: T.list $ osv "Event"]
 
 versionType :: TypeDefinition

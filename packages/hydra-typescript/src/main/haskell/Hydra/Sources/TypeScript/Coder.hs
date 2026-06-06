@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -193,7 +193,7 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
     "ownVars" <~ (cases _Term (Strip.deannotateTerm @@ var "term")
       (Just (Sets.empty :: TypedTerm (S.Set Name))) [
       _Term_lambda>>: lambda "lam" $
-        Maybes.cases (Core.lambdaDomain (var "lam"))
+        Optionals.cases (Core.lambdaDomain (var "lam"))
           (Sets.empty :: TypedTerm (S.Set Name))
           (lambda "d" $ Variables.freeVariablesInType @@ var "d"),
       _Term_typeApplication>>: lambda "ta" $
@@ -204,7 +204,7 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
         -- typeScheme — collect them too.
         Lists.foldl
           (lambda "acc" $ lambda "b" $
-            Maybes.cases (Core.bindingTypeScheme (var "b"))
+            Optionals.cases (Core.bindingTypeScheme (var "b"))
               (var "acc")
               (lambda "ts" $ Sets.union (var "acc")
                 (Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts"))))
@@ -259,7 +259,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
         -- via the function-structure pipeline.
         "innerFunDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
           @@ var "lname" @@ var "bterm"
-          @@ (Maybes.bind (Core.bindingTypeScheme (var "b"))
+          @@ (Optionals.bind (Core.bindingTypeScheme (var "b"))
                 ("ts" ~> just (Core.typeSchemeBody (var "ts"))))) $
         inject TS._Statement TS._Statement_functionDeclaration (var "innerFunDecl")]
 
@@ -290,7 +290,7 @@ encodeLazyCall = def "encodeLazyCall" $
 lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
 lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
   lambda "g" $ lambda "name" $
-    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+    Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
       (list ([] :: [TypedTerm Bool]))
       (lambda "prim" $
         Lists.map (lambda "p" $ Typing.parameterIsLazy (var "p"))
@@ -445,7 +445,7 @@ encodeTerm = def "encodeTerm" $
        -- just the local identifier. Different namespace: emit `alias.local`
        -- as a member expression, matching the namespace-style import in
        -- the file header.
-       Maybes.cases (Names.moduleNameOf @@ var "n")
+       Optionals.cases (Names.moduleNameOf @@ var "n")
          (tsExprIdent @@ var "local")
          (lambda "ns" $
            Logic.ifElse
@@ -545,7 +545,7 @@ encodeTerm = def "encodeTerm" $
        -- flagged args are then wrapped as thunks. `Nothing` otherwise. The
        -- lazy positions come from the primitive's `isLazy` flags, not a
        -- hard-coded name table (issue #391).
-       "lazyMaybe" <~ Maybes.cases (var "mName")
+       "lazyMaybe" <~ Optionals.cases (var "mName")
          (nothing :: TypedTerm (Maybe TS.Expression))
          (lambda "n" $
            "lazyFlags" <~ (lazyFlagsForPrimitive @@ var "g" @@ var "n") $
@@ -558,7 +558,7 @@ encodeTerm = def "encodeTerm" $
                      @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                      @@ var "lazyFlags"))
              (nothing :: TypedTerm (Maybe TS.Expression))) $
-       Maybes.cases (var "lazyMaybe")
+       Optionals.cases (var "lazyMaybe")
          -- Default eager emission: detect projection/unwrap heads applied
          -- to one or more args, and inline as `firstArg.field(restArgs...)`
          -- instead of `(x => x.field)(firstArg, restArgs...)`. This mirrors
@@ -581,7 +581,7 @@ encodeTerm = def "encodeTerm" $
                 ("fname" <~ (Formatting.sanitizeWithUnderscores
                    @@ TypeScriptLanguageSource.typeScriptReservedWords
                    @@ Core.unName (Core.projectionFieldName (var "proj"))) $
-                 "firstA" <~ Maybes.fromMaybe (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
+                 "firstA" <~ Optionals.fromOptional (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "fieldExpr" <~ (tsMember @@ var "firstA" @@ var "fname") $
                  Logic.ifElse (Lists.null (var "restA"))
@@ -591,7 +591,7 @@ encodeTerm = def "encodeTerm" $
               Logic.ifElse (Lists.null (var "encArgs"))
                 ("headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
                  var "headExpr")
-                ("firstA" <~ Maybes.fromMaybe (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
+                ("firstA" <~ Optionals.fromOptional (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "valueExpr" <~ (tsMember @@ var "firstA" @@ string "value") $
                  Logic.ifElse (Lists.null (var "restA"))
@@ -628,8 +628,8 @@ encodeTerm = def "encodeTerm" $
      --   Just v  → ({ tag: "just", value: <v> } as any)
      -- The `as any` cast lets the literal flow into nominal positions
      -- typed as `Maybe<X>` / `Term` / `Type` without TS2322 churn.
-     _Term_maybe>>: lambda "mt" $
-       Maybes.cases (var "mt")
+     _Term_optional>>: lambda "mt" $
+       Optionals.cases (var "mt")
          (tsAsAny @@ (tsObject @@ list [pair (string "tag") (tsExprStr @@ string "nothing")]))
          (lambda "v" $ tsAsAny @@ (tsObject @@ list [
            pair (string "tag") (tsExprStr @@ string "just"),
@@ -767,7 +767,7 @@ encodeTerm = def "encodeTerm" $
        -- Default arm: emit either `default: return <default-expr>;` if
        -- the user supplied one, or `default: throw new Error("unmatched
        -- case");` otherwise.
-       "defaultCase" <~ Maybes.cases (var "defaultMaybe")
+       "defaultCase" <~ Optionals.cases (var "defaultMaybe")
          -- No default: throw. The TS AST doesn't have a Throw statement
          -- variant, so emit the throw via an unsanitized identifier
          -- inside an Expression statement (return of an IIFE that
@@ -833,7 +833,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "asExport" <~ (lambda "stmt" $
       inject TS._ModuleItem TS._ModuleItem_export
         (inject TS._ExportDeclaration TS._ExportDeclaration_declaration (var "stmt"))) $
-    "mScheme" <~ (Maybes.bind (Packaging.termDefinitionSignature (var "td"))
+    "mScheme" <~ (Optionals.bind (Packaging.termDefinitionSignature (var "td"))
       ("sig" ~> just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme @@ var "sig")))) $
     -- Determine whether the term is a function (Term_lambda) or carries any
     -- typeLambda wrappers (the typical pattern for polymorphic top-level
@@ -929,7 +929,7 @@ encodeType = def "encodeType" $
       -- matching the runtime value encoding, rather than `T | undefined`
       -- (which mismatched the kernel's `{tag: "just", value: x}` literals).
       -- Inlining (like Either) avoids needing a Maybe import in every module.
-      _Type_maybe>>: lambda "inner" $
+      _Type_optional>>: lambda "inner" $
         Eithers.map (lambda "enc" $
           inject TS._TypeExpression TS._TypeExpression_union (list [
             inject TS._TypeExpression TS._TypeExpression_object $ list [
@@ -1154,9 +1154,9 @@ encodeTypeOrAny = def "encodeTypeOrAny" $
 filterNonLocalNames :: TypedTermDefinition (ModuleName -> S.Set Name -> S.Set Name)
 filterNonLocalNames = def "filterNonLocalNames" $
   lambda "currentNs" $ lambda "names" $
-    Sets.fromList $ Maybes.cat $ Lists.map
+    Sets.fromList $ Optionals.cat $ Lists.map
       (lambda "n" $
-        Maybes.cases (Names.moduleNameOf @@ var "n")
+        Optionals.cases (Names.moduleNameOf @@ var "n")
           nothing
           (lambda "nameNs" $
             Logic.ifElse
@@ -1249,9 +1249,9 @@ importsToText = def "importsToText" $
   lambda "kind" $ lambda "currentNs" $ lambda "names" $
     -- Pair each Name with its optional ModuleName; drop ones with no namespace
     -- or whose namespace matches the current module.
-    "pairs" <~ (Maybes.cat $ Lists.map
+    "pairs" <~ (Optionals.cat $ Lists.map
       (lambda "n" $
-        Maybes.cases (Names.moduleNameOf @@ var "n")
+        Optionals.cases (Names.moduleNameOf @@ var "n")
           nothing
           (lambda "ns" $
             Logic.ifElse
@@ -1278,7 +1278,7 @@ importsToText = def "importsToText" $
         "ns" <~ Pairs.first (var "p") $
         "n" <~ Pairs.second (var "p") $
         "local" <~ (var "transformLocal" @@ (Names.localNameOf @@ var "n")) $
-        "existing" <~ (Maybes.fromMaybe (list ([] :: [TypedTerm String]))
+        "existing" <~ (Optionals.fromOptional (list ([] :: [TypedTerm String]))
           (Maps.lookup (var "ns") (var "acc"))) $
         Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc"))
       (Maps.empty :: TypedTerm (M.Map ModuleName [String]))
@@ -1300,7 +1300,7 @@ importsToText = def "importsToText" $
     "currentDepth" <~ (Lists.length (var "currentSegs")) $
     "currentIsTest" <~ Logic.and
       (Logic.not (Lists.null (var "currentSegs")))
-      (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "currentSegs"))) (string "test")) $
+      (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "currentSegs"))) (string "test")) $
     "baseUpPrefix" <~ Logic.ifElse
       (Equality.equal (var "currentDepth") (int32 1))
       (string "./")
@@ -1313,7 +1313,7 @@ importsToText = def "importsToText" $
           (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
         "targetIsTest" <~ Logic.and
           (Logic.not (Lists.null (var "targetSegs")))
-          (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
+          (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
         "targetPath" <~ Strings.intercalate (string "/") (var "targetSegs") $
         -- Cross-tree paths: test → main needs extra "../../main/typescript/".
         -- main → test would need the inverse, but currently no main module
@@ -1403,7 +1403,7 @@ importsToText = def "importsToText" $
 -- duplicative with TS's own type annotations).
 mkDocComment :: TypedTermDefinition (Maybe String -> Maybe TS.DocumentationComment)
 mkDocComment = def "mkDocComment" $
-  lambda "mdesc" $ Maybes.cases (var "mdesc")
+  lambda "mdesc" $ Optionals.cases (var "mdesc")
     nothing
     (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
       nothing
@@ -1444,7 +1444,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     -- present in the term's free-variable set.
     "typeImportsFromTerms" <~ (Lists.foldl
       (lambda "acc" $ lambda "td" $
-        Maybes.cases (Packaging.termDefinitionSignature (var "td"))
+        Optionals.cases (Packaging.termDefinitionSignature (var "td"))
           (var "acc")
           (lambda "sig" $ Sets.union (var "acc")
             (collectImports @@ var "currentNs" @@ (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme @@ var "sig")))))
@@ -1479,8 +1479,8 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     -- Module-level description becomes a JSDoc block at the top of the
     -- file, between the auto-generated warning and the imports.
-    "mModuleDoc" <~ (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))) $
-    "moduleDocText" <~ Maybes.cases (var "mModuleDoc")
+    "mModuleDoc" <~ (Optionals.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))) $
+    "moduleDocText" <~ Optionals.cases (var "mModuleDoc")
       (string "")
       (lambda "d" $ Strings.cat2
         (TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TypedTerm TS.DocumentationTag])))
@@ -1495,7 +1495,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       "mdoc" <~ Pairs.first (var "docAndItem") $
       "item" <~ Pairs.second (var "docAndItem") $
       "itemText" <~ (printModuleItem @@ var "item") $
-      Maybes.cases (var "mdoc")
+      Optionals.cases (var "mdoc")
         (var "itemText")
         (lambda "d" $ Strings.cat (list [
           TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TypedTerm TS.DocumentationTag])),
@@ -1605,7 +1605,7 @@ printPropertySignature = def "printPropertySignature" $
         (string "?") (string ""),
       string ": ",
       printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")]) $
-    Maybes.cases (var "mcomments")
+    Optionals.cases (var "mcomments")
       (var "line")
       (lambda "dc" $ Strings.cat (list [
         TypeScriptSerdeSource.toTypeScriptComments
@@ -1692,7 +1692,7 @@ printTypeParameter = def "printTypeParameter" $
   lambda "tp" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._TypeParameter TS._TypeParameter_name @@ var "tp")) $
     "constraint" <~ (project TS._TypeParameter TS._TypeParameter_constraint @@ var "tp") $
-    Maybes.cases (var "constraint")
+    Optionals.cases (var "constraint")
       (var "name")
       (lambda "c" $ Strings.cat (list [
         var "name",
@@ -1740,7 +1740,7 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
         pair (var "bname") (var "deps"))
       (var "bindings")) $
     "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
-    Maybes.cat $ Lists.map
+    Optionals.cat $ Lists.map
       (lambda "n" $ Maps.lookup (var "n") (var "byName"))
       (Lists.concat (var "sccs"))
 
@@ -1774,7 +1774,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
     "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
     -- Flatten SCCs (cycles are tolerated; their order within is the input
     -- order) and map names back to TermDefinitions.
-    Maybes.cat $ Lists.map
+    Optionals.cat $ Lists.map
       (lambda "n" $ Maps.lookup (var "n") (var "byName"))
       (Lists.concat (var "sccs"))
 

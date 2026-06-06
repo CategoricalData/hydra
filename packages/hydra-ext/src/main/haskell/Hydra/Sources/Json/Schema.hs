@@ -41,8 +41,8 @@ module_ = Module {
 -- JSDoc := { ( id, )? ( defs, )? JSch }
 
       def "Document" $ T.record [
-        "id">: T.maybe T.string,
-        "definitions">: T.maybe keywordSchemaMap,
+        "id">: T.optional T.string,
+        "definitions">: T.optional keywordSchemaMap,
         "root">: js "Schema"],
 
 -- id := "id": "uri"

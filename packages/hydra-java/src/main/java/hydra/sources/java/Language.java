@@ -15,7 +15,7 @@ import hydra.dsl.meta.lib.Literals;
 import hydra.dsl.meta.lib.Logic;
 import hydra.dsl.meta.lib.Maps;
 import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Maybes;
+import hydra.dsl.meta.lib.Optionals;
 import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
@@ -151,7 +151,7 @@ public class Language {
                             termVariantInj("list"),
                             termVariantInj("literal"),
                             termVariantInj("map"),
-                            termVariantInj("maybe"),
+                            termVariantInj("optional"),
                             termVariantInj("pair"),
                             termVariantInj("record"),
                             termVariantInj("set"),
@@ -170,7 +170,7 @@ public class Language {
                             typeVariantInj("list"),
                             typeVariantInj("literal"),
                             typeVariantInj("map"),
-                            typeVariantInj("maybe"),
+                            typeVariantInj("optional"),
                             typeVariantInj("pair"),
                             typeVariantInj("record"),
                             typeVariantInj("set"),

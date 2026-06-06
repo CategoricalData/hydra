@@ -81,9 +81,9 @@ const tInject = (typeName: string, fieldName: string, body: Term): Term =>
   } } as never);
 
 const tMaybeJust = (v: Term): Term =>
-  ({ tag: "maybe", value: { tag: "just", value: v } } as never);
+  ({ tag: "optional", value: { tag: "just", value: v } } as never);
 const tMaybeNothing: Term =
-  ({ tag: "maybe", value: { tag: "nothing" } } as never);
+  ({ tag: "optional", value: { tag: "nothing" } } as never);
 const tMaybe = <T>(m: { tag: "just"; value: T } | { tag: "nothing" }, lift: (t: T) => Term): Term =>
   m.tag === "just" ? tMaybeJust(lift(m.value)) : tMaybeNothing;
 
@@ -130,7 +130,7 @@ const tySet = (a: Type): Type =>
 const tyMap = (k: Type, v: Type): Type =>
   ({ tag: "map", value: { keys: k, values: v } as never } as never);
 const tyMaybe = (a: Type): Type =>
-  ({ tag: "maybe", value: a } as never);
+  ({ tag: "optional", value: a } as never);
 const tyPair = (a: Type, b: Type): Type =>
   ({ tag: "pair", value: { first: a, second: b } as never } as never);
 const tyEither = (a: Type, b: Type): Type =>
@@ -1602,7 +1602,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
                 if (reduced.tag === "left") return reduced as Either<HydraError, Term>;
                 // The result is a Hydra Maybe Term. Interpret it.
                 const r = reduced.value as { tag: string; value?: { tag?: string; value?: Term } };
-                if (r.tag !== "maybe") return left({ tag: "other", value: "alter: closure didn't return Maybe" } as never);
+                if (r.tag !== "optional") return left({ tag: "other", value: "alter: closure didn't return Maybe" } as never);
                 const next = r.value;
                 if (next?.tag === "just" && next.value !== undefined) {
                   return right(mkMap(libMaps.insert(k, next.value, mp) as ReadonlyMap<unknown, Term>));
@@ -1727,41 +1727,41 @@ const mapsPrimitives = (): readonly Primitive[] => {
 // reference only through forwarded calls in registration helpers.
 void libLists; void libSets; void dInt64; void dFloat32; void tyUnit;
 
-// === lib.maybes ===
+// === lib.optionals ===
 
-const maybesPrimitives = (): readonly Primitive[] => {
+const optionalsPrimitives = (): readonly Primitive[] => {
   const asMaybe = (t: Term): { tag: "just"; value: Term } | { tag: "nothing" } | null => {
     const x = t as { tag: string; value?: { tag?: string; value?: Term } };
-    if (x.tag === "maybe" && x.value) {
+    if (x.tag === "optional" && x.value) {
       if (x.value.tag === "just") return { tag: "just", value: x.value.value! };
       if (x.value.tag === "nothing") return { tag: "nothing" };
     }
     return null;
   };
   return [
-    prim("hydra.lib.maybes.fromMaybe", scheme(tyFnCurried(tyVar("a"), tyMaybe(tyVar("a")), tyVar("a")), ["a"]),
+    prim("hydra.lib.optionals.fromOptional", scheme(tyFnCurried(tyVar("a"), tyMaybe(tyVar("a")), tyVar("a")), ["a"]),
       (_cx, _g, args) =>
-        bind(need(args, 0, "fromMaybe-default"), (def) =>
-          bind(need(args, 1, "fromMaybe-m"), (m) => {
+        bind(need(args, 0, "fromOptional-default"), (def) =>
+          bind(need(args, 1, "fromOptional-m"), (m) => {
             const mv = asMaybe(m);
             if (!mv) return left({ tag: "other", value: "expected a maybe" } as never);
             return right(mv.tag === "just" ? mv.value : def);
           }))),
-    prim("hydra.lib.maybes.isJust", scheme(tyFn(tyMaybe(tyVar("a")), tyBool), ["a"]),
+    prim("hydra.lib.optionals.isGiven", scheme(tyFn(tyMaybe(tyVar("a")), tyBool), ["a"]),
       (_cx, _g, args) =>
-        bind(need(args, 0, "isJust"), (m) => {
+        bind(need(args, 0, "isGiven"), (m) => {
           const mv = asMaybe(m);
           if (!mv) return left({ tag: "other", value: "expected a maybe" } as never);
           return right(tBool(mv.tag === "just"));
         })),
-    prim("hydra.lib.maybes.isNothing", scheme(tyFn(tyMaybe(tyVar("a")), tyBool), ["a"]),
+    prim("hydra.lib.optionals.isNone", scheme(tyFn(tyMaybe(tyVar("a")), tyBool), ["a"]),
       (_cx, _g, args) =>
-        bind(need(args, 0, "isNothing"), (m) => {
+        bind(need(args, 0, "isNone"), (m) => {
           const mv = asMaybe(m);
           if (!mv) return left({ tag: "other", value: "expected a maybe" } as never);
           return right(tBool(mv.tag === "nothing"));
         })),
-    prim("hydra.lib.maybes.map", scheme(tyFnCurried(tyFn(tyVar("a"), tyVar("b")), tyMaybe(tyVar("a")), tyMaybe(tyVar("b"))), ["a", "b"]),
+    prim("hydra.lib.optionals.map", scheme(tyFnCurried(tyFn(tyVar("a"), tyVar("b")), tyMaybe(tyVar("a")), tyMaybe(tyVar("b"))), ["a", "b"]),
       (cx, g, args) =>
         bind(need(args, 0, "map-fn"), (fn) =>
           bind(need(args, 1, "map-m"), (m) => {
@@ -1773,7 +1773,7 @@ const maybesPrimitives = (): readonly Primitive[] => {
             if (r.tag === "left") return r as Either<HydraError, Term>;
             return right(tMaybeJust(r.value));
           }))),
-    prim("hydra.lib.maybes.bind", scheme(tyFnCurried(tyMaybe(tyVar("a")), tyFn(tyVar("a"), tyMaybe(tyVar("b"))), tyMaybe(tyVar("b"))), ["a", "b"]),
+    prim("hydra.lib.optionals.bind", scheme(tyFnCurried(tyMaybe(tyVar("a")), tyFn(tyVar("a"), tyMaybe(tyVar("b"))), tyMaybe(tyVar("b"))), ["a", "b"]),
       (cx, g, args) =>
         bind(need(args, 0, "bind-m"), (m) =>
           bind(need(args, 1, "bind-fn"), (fn) => {
@@ -1783,10 +1783,10 @@ const maybesPrimitives = (): readonly Primitive[] => {
             const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
             return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(cx, g, true, app);
           }))),
-    prim("hydra.lib.maybes.pure", scheme(tyFn(tyVar("a"), tyMaybe(tyVar("a"))), ["a"]),
+    prim("hydra.lib.optionals.pure", scheme(tyFn(tyVar("a"), tyMaybe(tyVar("a"))), ["a"]),
       (_cx, _g, args) =>
         bind(need(args, 0, "pure"), (x) => right(tMaybeJust(x)))),
-    prim("hydra.lib.maybes.cat", scheme(tyFn(tyList(tyMaybe(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
+    prim("hydra.lib.optionals.cat", scheme(tyFn(tyList(tyMaybe(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
       (_cx, _g, args) =>
         bind(need(args, 0, "cat"), (xs) => {
           const lst = xs as { tag: string; value?: readonly Term[] };
@@ -1798,14 +1798,14 @@ const maybesPrimitives = (): readonly Primitive[] => {
           }
           return right({ tag: "list", value: out } as never);
         })),
-    prim("hydra.lib.maybes.toList", scheme(tyFn(tyMaybe(tyVar("a")), tyList(tyVar("a"))), ["a"]),
+    prim("hydra.lib.optionals.toList", scheme(tyFn(tyMaybe(tyVar("a")), tyList(tyVar("a"))), ["a"]),
       (_cx, _g, args) =>
         bind(need(args, 0, "toList"), (m) => {
           const mv = asMaybe(m);
           if (!mv) return left({ tag: "other", value: "expected a maybe" } as never);
           return right({ tag: "list", value: mv.tag === "just" ? [mv.value] : [] } as never);
         })),
-    prim("hydra.lib.maybes.cases", scheme(tyFnCurried(tyMaybe(tyVar("a")), tyVar("b"), tyFn(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
+    prim("hydra.lib.optionals.cases", scheme(tyFnCurried(tyMaybe(tyVar("a")), tyVar("b"), tyFn(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
       (cx, g, args) =>
         bind(need(args, 0, "cases-m"), (m) =>
           bind(need(args, 1, "cases-default"), (def) =>
@@ -1816,10 +1816,10 @@ const maybesPrimitives = (): readonly Primitive[] => {
               const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
               return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(cx, g, true, app);
             })))),
-    prim("hydra.lib.maybes.mapMaybe", scheme(tyFnCurried(tyFn(tyVar("a"), tyMaybe(tyVar("b"))), tyList(tyVar("a")), tyList(tyVar("b"))), ["a", "b"]),
+    prim("hydra.lib.optionals.mapOptional", scheme(tyFnCurried(tyFn(tyVar("a"), tyMaybe(tyVar("b"))), tyList(tyVar("a")), tyList(tyVar("b"))), ["a", "b"]),
       (cx, g, args) =>
-        bind(need(args, 0, "mapMaybe-fn"), (fn) =>
-          bind(need(args, 1, "mapMaybe-xs"), (xs) => {
+        bind(need(args, 0, "mapOptional-fn"), (fn) =>
+          bind(need(args, 1, "mapOptional-xs"), (xs) => {
             const lst = xs as { tag: string; value?: readonly Term[] };
             if (lst.tag !== "list") return left({ tag: "other", value: "expected a list" } as never);
             const out: Term[] = [];
@@ -1960,11 +1960,11 @@ const eithersPrimitives = (): readonly Primitive[] => {
         tyList(tyVar("a")), tyEither(tyVar("c"), tyList(tyVar("b")))),
       ["a", "b", "c"]),
       (_cx, _g, args) => left({ tag: "other", value: "mapList interpreter not implemented (kernel-only)" } as never)),
-    prim("hydra.lib.eithers.mapMaybe", scheme(
+    prim("hydra.lib.eithers.mapOptional", scheme(
       tyFnCurried(tyFn(tyVar("a"), tyEither(tyVar("c"), tyVar("b"))),
         tyMaybe(tyVar("a")), tyEither(tyVar("c"), tyMaybe(tyVar("b")))),
       ["a", "b", "c"]),
-      (_cx, _g, args) => left({ tag: "other", value: "mapMaybe interpreter not implemented (kernel-only)" } as never)),
+      (_cx, _g, args) => left({ tag: "other", value: "mapOptional interpreter not implemented (kernel-only)" } as never)),
     prim("hydra.lib.eithers.mapSet", scheme(
       tyFnCurried(tyFn(tyVar("a"), tyEither(tyVar("c"), tyVar("b"))),
         tySet(tyVar("a")), tyEither(tyVar("c"), tySet(tyVar("b")))),
@@ -1989,7 +1989,7 @@ export const standardPrimitives = (): readonly Primitive[] => [
   ...logicPrimitives(),
   ...mapsPrimitives(),
   ...mathPrimitives(),
-  ...maybesPrimitives(),
+  ...optionalsPrimitives(),
   ...pairsPrimitivesList(),
   ...regexPrimitives(),
   ...setsPrimitives(),

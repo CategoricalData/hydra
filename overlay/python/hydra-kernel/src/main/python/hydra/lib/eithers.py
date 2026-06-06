@@ -3,7 +3,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeVar
-from hydra.dsl.python import Either, Left, Right, Maybe, Just, NOTHING, frozenlist
+from hydra.dsl.python import Either, Left, Right, Optional, Given, NONE_, frozenlist
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -120,17 +120,17 @@ def map_list(f: Callable[[A], Either[C, B]], xs: frozenlist[A]) -> Either[C, fro
     return Right(tuple(results))
 
 
-def map_maybe(f: Callable[[A], Either[C, B]], mx: Maybe[A]) -> Either[C, Maybe[B]]:
-    """Map a function returning Either over a Maybe, or return Right(Nothing) if Nothing."""
+def map_optional(f: Callable[[A], Either[C, B]], mx: Optional[A]) -> Either[C, Optional[B]]:
+    """Map a function returning Either over an optional, or return Right(Nothing) if Nothing."""
     match mx:
-        case Just(val):
+        case Given(val):
             match f(val):
                 case Left(err):
                     return Left(err)
                 case Right(result):
-                    return Right(Just(result))
+                    return Right(Given(result))
         case _:
-            return Right(NOTHING)
+            return Right(NONE_)
 
 
 def map_right(f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:

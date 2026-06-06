@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -213,7 +213,7 @@ literalToExpr = define "literalToExpr" $
     "lang">: project Rdf._Literal Rdf._Literal_languageTag @@ var "lit",
     "lexExpr">: Serialization.cst @@
       (Strings.cat $ list [string "\"", escapeLiteralString @@ var "lex", string "\""]),
-    "suffix">: Maybes.cases (var "lang") (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"]) languageTagToExpr] $
+    "suffix">: Optionals.cases (var "lang") (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"]) languageTagToExpr] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
 nodeToExpr :: TypedTermDefinition (Rdf.Node -> Expr)
@@ -260,12 +260,12 @@ uchar4 :: TypedTermDefinition (Int -> String)
 uchar4 = define "uchar4" $
   doc "Format a code point as a 4-digit UCHAR escape sequence" $
   lambda "c" $
-    "d3" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "c") (int32 4096)) $    -- c / 16^3
-    "r3" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 4096)) $
-    "d2" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $    -- r3 / 16^2
-    "r2" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
-    "d1" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $     -- r2 / 16
-    "d0" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r2") (int32 16)) $
+    "d3" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "c") (int32 4096)) $    -- c / 16^3
+    "r3" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "c") (int32 4096)) $
+    "d2" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $    -- r3 / 16^2
+    "r2" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
+    "d1" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $     -- r2 / 16
+    "d0" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "r2") (int32 16)) $
     Strings.cat2 (string "\\u")
       (Strings.fromList $ list [hexDigit @@ var "d3", hexDigit @@ var "d2",
                                 hexDigit @@ var "d1", hexDigit @@ var "d0"])

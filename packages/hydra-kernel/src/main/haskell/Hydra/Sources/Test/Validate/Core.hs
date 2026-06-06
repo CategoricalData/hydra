@@ -59,7 +59,7 @@ emptyPath = Phantoms.wrap _SubtermPath (Phantoms.list ([] :: [TypedTerm SubtermS
 
 -- Typed just for InvalidTermError
 justError :: TypedTerm InvalidTermError -> TypedTerm (Maybe InvalidTermError)
-justError (TypedTerm t) = TypedTerm $ TermMaybe $ Just t
+justError (TypedTerm t) = TypedTerm $ TermOptional $ Just t
 
 -- Helper to build names
 nm :: String -> TypedTerm Name
@@ -67,7 +67,7 @@ nm s = Core.name $ Phantoms.string s
 
 -- No error expected
 noError :: TypedTerm (Maybe InvalidTermError)
-noError = TypedTerm $ TermMaybe Nothing
+noError = TypedTerm $ TermOptional Nothing
 
 -- Shorthand for untyped term test case
 untypedCase :: String -> TypedTerm Term -> TypedTerm (Maybe InvalidTermError) -> TypedTerm TestCaseWithMetadata

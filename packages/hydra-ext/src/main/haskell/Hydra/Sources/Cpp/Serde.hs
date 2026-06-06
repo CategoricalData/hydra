@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -408,9 +408,9 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
     "isEnum">: Logic.or
       (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enum unit))
       (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enumClass unit))] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ (Maybes.cat $ list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ (Optionals.cat $ list [
       just (classSpecifierToExpr @@ var "spec"),
-      Maybes.map (lambda "body" $ classBodyToExpr @@ var "isEnum" @@ var "body") (var "mbody")]))
+      Optionals.map (lambda "body" $ classBodyToExpr @@ var "isEnum" @@ var "body") (var "mbody")]))
 
 classKeyToExpr :: TypedTermDefinition (Cpp.ClassKey -> Expr)
 classKeyToExpr = define "classKeyToExpr" $
@@ -478,7 +478,7 @@ constructorDeclarationToExpr = define "constructorDeclarationToExpr" $
     "params">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_parameters @@ var "cd",
     "inits">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_initializers @@ var "cd",
     "body">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_body @@ var "cd"] $
-    Serialization.spaceSep @@ (Maybes.cat $ list [
+    Serialization.spaceSep @@ (Optionals.cat $ list [
       just (Serialization.noSep @@ list [
         Serialization.cst @@ var "name",
         Serialization.parenListAdaptive @@ (Lists.map parameterToExpr (var "params"))]),
@@ -511,8 +511,8 @@ defineDirectiveToExpr = define "defineDirectiveToExpr" $
     "replacement">: project Cpp._DefineDirective Cpp._DefineDirective_replacement @@ var "dd"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [Serialization.cst @@ string "#define", Serialization.cst @@ var "name"],
-      Maybes.cases (var "params") (list ([] :: [TypedTerm Expr])) (lambda "ps" $ list [Serialization.parenListAdaptive @@ (Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "ps"))]),
-      Maybes.cases (var "replacement") (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [Serialization.cst @@ var "r"])])
+      Optionals.cases (var "params") (list ([] :: [TypedTerm Expr])) (lambda "ps" $ list [Serialization.parenListAdaptive @@ (Lists.map (lambda "p" $ Serialization.cst @@ var "p") (var "ps"))]),
+      Optionals.cases (var "replacement") (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [Serialization.cst @@ var "r"])])
 
 destructorDeclarationToExpr :: TypedTermDefinition (Cpp.DestructorDeclaration -> Expr)
 destructorDeclarationToExpr = define "destructorDeclarationToExpr" $
@@ -864,7 +864,7 @@ lambdaExpressionToExpr = define "lambdaExpressionToExpr" $
       Logic.ifElse (Lists.null (var "params"))
         (Serialization.parens @@ (Serialization.cst @@ string ""))
         (Serialization.parenListAdaptive @@ (Lists.map parameterToExpr (var "params"))),
-      Maybes.cases (var "retType") (Serialization.cst @@ string "") (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", typeExpressionToExpr @@ var "t"]),
+      Optionals.cases (var "retType") (Serialization.cst @@ string "") (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", typeExpressionToExpr @@ var "t"]),
       compoundStatementToExpr @@ var "body"]
 
 leftShiftOperationToExpr :: TypedTermDefinition (Cpp.LeftShiftOperation -> Expr)
@@ -908,7 +908,7 @@ lineDirectiveToExpr = define "lineDirectiveToExpr" $
     "filename">: project Cpp._LineDirective Cpp._LineDirective_filename @@ var "ld"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [Serialization.cst @@ string "#line", Serialization.cst @@ (Literals.showInt32 (var "lineNumber"))],
-      Maybes.cases (var "filename") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.cst @@ (Strings.cat $ list [string "\"", var "f", string "\""])])])
+      Optionals.cases (var "filename") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.cst @@ (Strings.cat $ list [string "\"", var "f", string "\""])])])
 
 literalToExpr :: TypedTermDefinition (Cpp.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
@@ -1094,7 +1094,7 @@ optionalToExpr = define "optionalToExpr" $
       Serialization.cst @@ string "std::optional<",
       typeExpressionToExpr @@ var "valType",
       Serialization.cst @@ string ">",
-      Maybes.cases (var "val") (Serialization.cst @@ string "{}") (lambda "v" $ Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [expressionToExpr @@ var "v"])]
+      Optionals.cases (var "val") (Serialization.cst @@ string "{}") (lambda "v" $ Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ list [expressionToExpr @@ var "v"])]
 
 overloadedLambdasToExpr :: TypedTermDefinition (Cpp.OverloadedLambdas -> Expr)
 overloadedLambdasToExpr = define "overloadedLambdasToExpr" $
@@ -1118,7 +1118,7 @@ parameterToExpr = define "parameterToExpr" $
       (var "name"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [typeExpressionToExpr @@ var "typ", var "nameExpr"],
-      Maybes.cases (var "defaultVal") (list ([] :: [TypedTerm Expr])) (lambda "expr" $ list [Serialization.cst @@ string "=", expressionToExpr @@ var "expr"])])
+      Optionals.cases (var "defaultVal") (list ([] :: [TypedTerm Expr])) (lambda "expr" $ list [Serialization.cst @@ string "=", expressionToExpr @@ var "expr"])])
 
 patternMatchToExpr :: TypedTermDefinition (Cpp.PatternMatch -> Expr)
 patternMatchToExpr = define "patternMatchToExpr" $
@@ -1205,7 +1205,7 @@ programToExpr = define "programToExpr" $
       Logic.ifElse (Lists.null (var "defs"))
         nothing
         (just (var "sep" @@ var "defs"))] $
-    Serialization.doubleNewlineSep @@ (Maybes.cat $ list [
+    Serialization.doubleNewlineSep @@ (Optionals.cat $ list [
       var "separate" @@ Serialization.newlineSep @@ (Lists.map preprocessorDirectiveToExpr (var "preps")),
       var "separate" @@ Serialization.newlineSep @@ (Lists.map includeDirectiveToExpr (var "includes")),
       var "separate" @@ Serialization.doubleNewlineSep @@ (Lists.map declarationToExpr (var "decls"))])
@@ -1286,7 +1286,7 @@ selectionStatementToExpr = define "selectionStatementToExpr" $
         Serialization.cst @@ string "if",
         Serialization.parens @@ (expressionToExpr @@ var "cond")],
       statementToExpr @@ var "thenBranch",
-      Maybes.cases (var "elseBranch") (Serialization.cst @@ string "") (lambda "stmt" $ Serialization.newlineSep @@ list [Serialization.cst @@ string "else", statementToExpr @@ var "stmt"])]
+      Optionals.cases (var "elseBranch") (Serialization.cst @@ string "") (lambda "stmt" $ Serialization.newlineSep @@ list [Serialization.cst @@ string "else", statementToExpr @@ var "stmt"])]
 
 setToExpr :: TypedTermDefinition (Cpp.Set -> Expr)
 setToExpr = define "setToExpr" $
@@ -1517,9 +1517,9 @@ variableDeclarationToExpr = define "variableDeclarationToExpr" $
     var "terminator" @@ (Serialization.spaceSep @@ (Lists.concat $ list [
       Logic.ifElse (var "isAuto")
         (list [Serialization.cst @@ string "auto"])
-        (Maybes.cases (var "typ") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [typeExpressionToExpr @@ var "t"])),
+        (Optionals.cases (var "typ") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [typeExpressionToExpr @@ var "t"])),
       list [Serialization.cst @@ var "name"],
-      Maybes.cases (var "init") (list ([] :: [TypedTerm Expr])) (lambda "expr" $ list [Serialization.cst @@ string "=", expressionToExpr @@ var "expr"])]))
+      Optionals.cases (var "init") (list ([] :: [TypedTerm Expr])) (lambda "expr" $ list [Serialization.cst @@ string "=", expressionToExpr @@ var "expr"])]))
 
 vectorToExpr :: TypedTermDefinition (Cpp.Vector -> Expr)
 vectorToExpr = define "vectorToExpr" $

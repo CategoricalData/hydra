@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Equality     as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists        as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic        as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps         as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes       as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals       as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs        as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Regex        as Regex
 import qualified Hydra.Dsl.Meta.Lib.Sets         as Sets
@@ -99,7 +99,7 @@ appendFindingModule :: TypedTermDefinition (
 appendFindingModule = define "appendFindingModule" $
   doc "Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Maybes.cases (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -129,7 +129,7 @@ appendFindingPackage :: TypedTermDefinition (
 appendFindingPackage = define "appendFindingPackage" $
   doc "Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Maybes.cases (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -164,11 +164,11 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
     ("acc" ~> "mod" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Maybes.cases (var "err")
+      Optionals.cases (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           "key" <~ Strings.toLower (Packaging.unModuleName $ var "ns") $
           "existing" <~ Maps.lookup (var "key") (var "seen") $
-          Maybes.cases (var "existing")
+          Optionals.cases (var "existing")
             -- No conflict: add to map
             (pair (Maps.insert (var "key") (var "ns") (var "seen")) nothing)
             -- Conflict found
@@ -200,7 +200,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
   -- For each type definition that is a union, check each field
   Lists.foldl
     ("acc" ~> "def" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         (cases _Definition (var "def") (Just nothing) [
           _Definition_type>>: "td" ~>
             "typeName" <~ Packaging.typeDefinitionName (var "td") $
@@ -211,7 +211,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
                 -- Check each field of the union
                 Lists.foldl
                   ("innerAcc" ~> "field" ~>
-                    Maybes.cases (var "innerAcc")
+                    Optionals.cases (var "innerAcc")
                       ("fieldName" <~ Core.fieldTypeName (var "field") $
                         "localFieldName" <~ (Names.localNameOf @@ var "fieldName") $
                         "constructorName" <~ Strings.cat2
@@ -245,7 +245,7 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
   "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         ("name" <~ (definitionName @@ var "def") $
           "documented" <~ cases _Definition (var "def") (Just false) [
             _Definition_term>>: "td" ~>
@@ -259,8 +259,8 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
                 _Type_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
             _Definition_primitive>>: "pd" ~>
-              Maybes.cases (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
-                  (Maybes.fromMaybe (string "") (Packaging.entityMetadataDescription $ var "em"))
+              Optionals.cases (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
+                  (Optionals.fromOptional (string "") (Packaging.entityMetadataDescription $ var "em"))
                   (string "")))] $
           Logic.ifElse (var "documented")
             nothing
@@ -282,7 +282,7 @@ checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
   "prefixLen" <~ Strings.length (var "prefix") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
           "nameStr" <~ Core.unName (var "name") $
@@ -306,7 +306,7 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
   "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         ("name" <~ (definitionName @@ var "def") $
           "local" <~ (Names.localNameOf @@ var "name") $
           "expected" <~ cases _Definition (var "def") (Just Util.caseConventionCamel) [
@@ -347,10 +347,10 @@ checkDefinitionOrdering = define "checkDefinitionOrdering" $
     ("acc" ~> "def" ~>
       "prev" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Maybes.cases (var "err")
+      Optionals.cases (var "err")
         ("currName" <~ (definitionName @@ var "def") $
           "currLocal" <~ (Names.localNameOf @@ var "currName") $
-          Maybes.cases (var "prev")
+          Optionals.cases (var "prev")
             -- First entry: no comparison needed
             (pair (just $ var "currName") nothing)
             -- Subsequent entries: compare local names
@@ -382,7 +382,7 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
     ("acc" ~> "def" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Maybes.cases (var "err")
+      Optionals.cases (var "err")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
           Logic.ifElse (Sets.member (var "name") (var "seen"))
@@ -406,7 +406,7 @@ checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
     ("acc" ~> "mod" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Maybes.cases (var "err")
+      Optionals.cases (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           Logic.ifElse (Sets.member (var "ns") (var "seen"))
             (pair (var "seen") (just $
@@ -690,7 +690,7 @@ guardedModuleRule
   -> TypedTerm (Maybe (Name, InvalidModuleError))
 guardedModuleRule profile unionName variantName findingExpr =
   Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    (Optionals.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
     nothing
   where
     ruleNameTerm = nameLift (qualifiedRule unionName variantName)
@@ -704,7 +704,7 @@ guardedPackageRule
   -> TypedTerm (Maybe (Name, InvalidPackageError))
 guardedPackageRule profile unionName variantName findingExpr =
   Logic.ifElse (enabledPackaging @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    (Optionals.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
     nothing
   where
     ruleNameTerm = nameLift (qualifiedRule unionName variantName)

@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -251,7 +251,7 @@ isRequiredField = define "isRequiredField" $
   lambda "ft" $ lets [
     "typ">: project _FieldType _FieldType_type @@ var "ft"] $
     cases _Type (Strip.deannotateType @@ var "typ") (Just true) [
-      _Type_maybe>>: constant false]
+      _Type_optional>>: constant false]
 
 jsType :: TypedTermDefinition (Bool -> JS.TypeName -> [JS.Restriction])
 jsType = define "jsType" $
@@ -297,7 +297,7 @@ nameToPath = define "nameToPath" $
     "qn">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName (var "qn"),
     "local">: Util.qualifiedNameLocal (var "qn"),
-    "nsPart">: Maybes.cases (var "mns") (string "") ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))] $
+    "nsPart">: Optionals.cases (var "mns") (string "") ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))] $
     Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "json")
@@ -337,7 +337,7 @@ transitiveTypeDeps = define "transitiveTypeDeps" $
       Logic.ifElse (Sets.member (var "n") (var "acc"))
         (var "acc")
         (lets ["acc1">: Sets.insert (var "n") (var "acc")] $
-          Maybes.cases (Maps.lookup (var "n") (var "typeMap")) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
+          Optionals.cases (Maps.lookup (var "n") (var "typeMap")) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
     Lists.foldl (var "step") (var "visited") (Sets.toList (var "directDeps"))
 
 typeDefToDocument :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Name -> Type -> Either Error (FilePath, JS.Document))
@@ -349,12 +349,12 @@ typeDefToDocument = define "typeDefToDocument" $
       (list [var "rootName"])
       (Lists.filter ("n" ~> Logic.not (Equality.equal (var "n") (var "rootName"))) (var "depNames")),
     "allTypes">: Lists.map
-      ("n" ~> Maybes.fromMaybe (Core.typeVariable (var "n")) (Maps.lookup (var "n") (var "typeMap")))
+      ("n" ~> Optionals.fromOptional (Core.typeVariable (var "n")) (Maps.lookup (var "n") (var "typeMap")))
       (var "allNames"),
     "nameSubst">: Dependencies.toShortNames @@ var "allNames",
     "types">: Lists.map ("t" ~> Variables.substituteTypeVariables @@ var "nameSubst" @@ var "t") (var "allTypes"),
-    "names">: Lists.map ("n" ~> Maybes.fromMaybe (var "n") (Maps.lookup (var "n") (var "nameSubst"))) (var "allNames"),
-    "subRoot">: Maybes.fromMaybe (var "rootName") (Maps.lookup (var "rootName") (var "nameSubst")),
+    "names">: Lists.map ("n" ~> Optionals.fromOptional (var "n") (Maps.lookup (var "n") (var "nameSubst"))) (var "allNames"),
+    "subRoot">: Optionals.fromOptional (var "rootName") (Maps.lookup (var "rootName") (var "nameSubst")),
     "pairs">: Lists.zip (var "names") (var "types")] $
     Eithers.bind
       (Eithers.mapList ("p" ~> typeToKeywordSchemaPair @@ var "cx" @@ var "g"
@@ -381,7 +381,7 @@ typeToExpr = define "typeToExpr" $
           ("res" ~> Eithers.bind
             (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
             ("mdesc" ~> right (Lists.concat2
-              (Maybes.cases (var "mdesc") (list ([] :: [TypedTerm JS.Restriction])) ("d" ~> list [inject JS._Restriction JS._Restriction_description (var "d")]))
+              (Optionals.cases (var "mdesc") (list ([] :: [TypedTerm JS.Restriction])) ("d" ~> list [inject JS._Restriction JS._Restriction_description (var "d")]))
               (var "res"))))),
 
       _Type_application>>: ("at" ~>
@@ -426,7 +426,7 @@ typeToExpr = define "typeToExpr" $
               (inject JS._ObjectRestriction JS._ObjectRestriction_additionalProperties
                 (inject JS._AdditionalItems JS._AdditionalItems_schema (wrap JS._Schema (var "vRes"))))])))),
 
-      _Type_maybe>>: ("mt" ~>
+      _Type_optional>>: ("mt" ~>
         asTerm typeToExpr @@ var "cx" @@ var "g" @@ true @@ var "mt"),
 
       _Type_pair>>: ("pt" ~> lets [
