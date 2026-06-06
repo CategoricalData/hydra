@@ -4643,7 +4643,24 @@ public class Coder {
                                                     proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                                 field("cod",
                                                     proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
+                                                // BUG #438: defaultExpr and elimBranch used to be let-bound
+                                                // as plain values here. That works in lazy Haskell (let
+                                                // bindings aren't forced unless used) but BREAKS in eager
+                                                // Clojure: both branches evaluate even though only one is
+                                                // selected. When lhs is a CASES/PROJECT/UNWRAP, the unused
+                                                // defaultExpr still evaluates `encodeTerm env lhs`, which
+                                                // routes back through encodeFunction →
+                                                // encodeElimination(:nothing, …) → typedLambda →
+                                                // encodeApplication_fallback again on the same lhs —
+                                                // unbounded recursion.
+                                                //
+                                                // Fix: thunk each binding behind `lambda("_", …)` so it
+                                                // is only evaluated when explicitly applied in the
+                                                // matching casesWithDefault branch. This preserves the
+                                                // original Haskell-lazy semantics under Clojure-strict
+                                                // evaluation without restructuring the call site.
                                                 field("defaultExpr",
+                                                    lambda("__bug438_dflt",
                                                     Eithers.bind(
                                                         apply(
                                                             ref(Coder.encodeTerm),
@@ -4664,8 +4681,9 @@ public class Coder {
                                                                         apply(
                                                                             ref(Coder.applyJavaArg),
                                                                             var("jfun"),
-                                                                            var("jarg")))))))),
+                                                                            var("jarg"))))))))),
                                                 field("elimBranch",
+                                                    lambda("__bug438_elim",
                                                     Eithers.bind(
                                                         apply(
                                                             ref(Coder.encodeTerm),
@@ -4741,21 +4759,21 @@ public class Coder {
                                                                             var("hydra.strip.deannotateTerm"),
                                                                             var("lhs")),
                                                                         var("cx"),
-                                                                        var("g"))))))),
+                                                                        var("g")))))))),
                                                 casesWithDefault(Term.TYPE_,
                                                     apply(
                                                         var("hydra.strip.deannotateAndDetypeTerm"),
                                                         var("lhs")),
-                                                    var("defaultExpr"),
+                                                    apply(var("defaultExpr"), unit()),
                                                     field(
                                                         Term.PROJECT,
-                                                        constant(var("elimBranch"))),
+                                                        constant(apply(var("elimBranch"), unit()))),
                                                     field(
                                                         Term.CASES,
-                                                        constant(var("elimBranch"))),
+                                                        constant(apply(var("elimBranch"), unit()))),
                                                     field(
                                                         Term.UNWRAP,
-                                                        constant(var("elimBranch"))))))))))))));
+                                                        constant(apply(var("elimBranch"), unit()))))))))))))));
 
     public static final Def encodeDefinitions = def(
         "encodeDefinitions",
