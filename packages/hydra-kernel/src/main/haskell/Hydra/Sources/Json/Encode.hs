@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -213,13 +213,13 @@ toJson = define "toJson" $
           Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results")],
 
     -- Maybe: encoding depends on whether the inner type is itself Maybe
-    _Type_maybe>>: "innerType" ~>
+    _Type_optional>>: "innerType" ~>
       "innerStripped" <~ (Strip.deannotateType @@ var "innerType") $
       "isNestedMaybe" <~ (cases _Type (var "innerStripped") (Just false) [
-        _Type_maybe>>: constant true]) $
+        _Type_optional>>: constant true]) $
       cases _Term (var "strippedTerm")
         (Just $ left $ string "expected maybe term") [
-        _Term_maybe>>: "opt" ~> optCases (var "opt")
+        _Term_optional>>: "opt" ~> optCases (var "opt")
           -- Nothing: always null
           (right Json.valueNull)
           -- Just v: plain value for simple Maybe, array-wrapped for nested Maybe
@@ -237,9 +237,9 @@ toJson = define "toJson" $
           -- Helper to check if a field type is simple Maybe (i.e. Maybe(T) where T is not Maybe)
           "isSimpleMaybe" <~ ("ftype" ~>
             cases _Type (Strip.deannotateType @@ var "ftype") (Just false) [
-              _Type_maybe>>: "innerT" ~>
+              _Type_optional>>: "innerT" ~>
                 cases _Type (Strip.deannotateType @@ var "innerT") (Just true) [
-                  _Type_maybe>>: constant false]]) $
+                  _Type_optional>>: constant false]]) $
           -- Encode a (fieldType, field) pair. For simple Maybe fields, omit Nothing and encode Just as plain value.
           "encodeFieldWithType" <~ ("ft" ~> "f" ~>
             "fname" <~ (Core.unName $ Core.fieldName $ var "f") $
@@ -249,11 +249,11 @@ toJson = define "toJson" $
               -- Simple Maybe field: omit Nothing, encode Just as plain value
               (cases _Term (Strip.deannotateTerm @@ var "fterm")
                 (Just $ left $ string "expected maybe term for optional field") [
-                _Term_maybe>>: "opt" ~> optCases (var "opt")
+                _Term_optional>>: "opt" ~> optCases (var "opt")
                   (right nothing)  -- Nothing -> omit field (signal with Nothing)
                   ("v" ~>
                     "innerType" <~ (cases _Type (Strip.deannotateType @@ var "ftype") (Just $ var "ftype") [
-                      _Type_maybe>>: "it" ~> var "it"]) $
+                      _Type_optional>>: "it" ~> var "it"]) $
                     "encoded" <~ (toJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "v") $
                     Eithers.map ("ev" ~> just $ pair (var "fname") (var "ev")) (var "encoded"))])
               -- Non-optional field: encode normally
@@ -267,7 +267,7 @@ toJson = define "toJson" $
             (Lists.zip (var "fieldTypes") (var "fields"))) $
           -- Filter out Nothing entries (omitted optional fields) and build object
           Eithers.map ("pairs" ~>
-            Json.valueObject $ Maps.fromList $ Maybes.cat $ var "pairs")
+            Json.valueObject $ Maps.fromList $ Optionals.cat $ var "pairs")
             (var "encodedPairs")],
 
     -- Unions (single-key object)
@@ -280,7 +280,7 @@ toJson = define "toJson" $
           "fterm" <~ (Core.fieldTerm $ var "field") $
           -- Find the field type that matches this variant
           "ftypeResult" <~ (
-            Maybes.cases (Lists.find
+            Optionals.cases (Lists.find
                 ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
                 (var "rt")) (left $ Strings.cat $ list [string "unknown variant: ", var "fname"]) ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
           Eithers.either_
@@ -369,7 +369,7 @@ toJson = define "toJson" $
     -- Type variables (look up in type table and recurse; fall back to untyped encoding)
     _Type_variable>>: "name" ~>
       "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
-      Maybes.cases (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "term")]
+      Optionals.cases (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "term")]
 
 -- | Encode a Term to a JSON Value without type information.
 -- This is a structural fallback used when type information is unavailable (e.g. unresolved
@@ -405,7 +405,7 @@ toJsonUntyped = define "toJsonUntyped" $
       Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results"),
 
     -- Maybe (legacy encoding: null/[value], since we don't know if it's nested)
-    _Term_maybe>>: "opt" ~> optCases (var "opt")
+    _Term_optional>>: "opt" ~> optCases (var "opt")
       (right Json.valueNull)
       ("v" ~>
         "encodedMaybe" <~ (toJsonUntyped @@ var "v") $

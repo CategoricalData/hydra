@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from decimal import Decimal
-from hydra.dsl.python import Maybe, Just, NOTHING
+from hydra.dsl.python import Optional, Given, NONE_
 
 
 def _format_float_like_haskell(x: float) -> str:
@@ -164,30 +164,30 @@ def int64_to_bigint(x: int) -> int:
     return x
 
 
-def read_bigint(s: str) -> Maybe[int]:
+def read_bigint(s: str) -> Optional[int]:
     """Parse a string to a bigint (Integer)."""
     try:
-        return Just(int(s))
+        return Given(int(s))
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_boolean(s: str) -> Maybe[bool]:
+def read_boolean(s: str) -> Optional[bool]:
     """Parse a string to a boolean."""
     if s == "true":
-        return Just(True)
+        return Given(True)
     elif s == "false":
-        return Just(False)
+        return Given(False)
     else:
-        return NOTHING
+        return NONE_
 
 
-def read_decimal(s: str) -> Maybe[Decimal]:
+def read_decimal(s: str) -> Optional[Decimal]:
     """Parse a string to a decimal (arbitrary-precision exact decimal)."""
     try:
-        return Just(Decimal(s))
+        return Given(Decimal(s))
     except:
-        return NOTHING
+        return NONE_
 
 
 def _parse_float_token(s: str) -> float:
@@ -203,7 +203,7 @@ def _parse_float_token(s: str) -> float:
     return float(s)
 
 
-def read_float32(s: str) -> Maybe[float]:
+def read_float32(s: str) -> Optional[float]:
     """Parse a string to a float32 (Float)."""
     import struct
     try:
@@ -211,115 +211,115 @@ def read_float32(s: str) -> Maybe[float]:
         # Convert to float32 precision
         f32_bytes = struct.pack('f', f64)
         f32 = struct.unpack('f', f32_bytes)[0]
-        return Just(f32)
+        return Given(f32)
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_float64(s: str) -> Maybe[float]:
+def read_float64(s: str) -> Optional[float]:
     """Parse a string to a float64 (Double)."""
     try:
-        return Just(_parse_float_token(s))
+        return Given(_parse_float_token(s))
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_int8(s: str) -> Maybe[int]:
+def read_int8(s: str) -> Optional[int]:
     """Parse a string to an int8 (-128 to 127)."""
     try:
         n = int(s)
         if n >= -128 and n <= 127:
-            return Just(n)
+            return Given(n)
         else:
-            return NOTHING
+            return NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_int16(s: str) -> Maybe[int]:
+def read_int16(s: str) -> Optional[int]:
     """Parse a string to an int16 (-32768 to 32767)."""
     try:
         n = int(s)
         if n >= -32768 and n <= 32767:
-            return Just(n)
+            return Given(n)
         else:
-            return NOTHING
+            return NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_int32(s: str) -> Maybe[int]:
+def read_int32(s: str) -> Optional[int]:
     """Parse a string to an int32."""
     try:
-        return Just(int(s))
+        return Given(int(s))
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_int64(s: str) -> Maybe[int]:
+def read_int64(s: str) -> Optional[int]:
     """Parse a string to an int64."""
     try:
-        return Just(int(s))
+        return Given(int(s))
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_string(s: str) -> Maybe[str]:
+def read_string(s: str) -> Optional[str]:
     """Parse a string literal."""
     try:
         import ast
         result = ast.literal_eval(s)
-        return Just(result) if isinstance(result, str) else NOTHING
+        return Given(result) if isinstance(result, str) else NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_uint8(s: str) -> Maybe[int]:
+def read_uint8(s: str) -> Optional[int]:
     """Parse a string to a uint8 (0 to 255)."""
     try:
         n = int(s)
         if n >= 0 and n <= 255:
-            return Just(n)
+            return Given(n)
         else:
-            return NOTHING
+            return NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_uint16(s: str) -> Maybe[int]:
+def read_uint16(s: str) -> Optional[int]:
     """Parse a string to a uint16 (0 to 65535)."""
     try:
         n = int(s)
         if n >= 0 and n <= 65535:
-            return Just(n)
+            return Given(n)
         else:
-            return NOTHING
+            return NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_uint32(s: str) -> Maybe[int]:
+def read_uint32(s: str) -> Optional[int]:
     """Parse a string to a uint32 (0 to 4294967295)."""
     try:
         n = int(s)
         if n >= 0 and n <= 4294967295:
-            return Just(n)
+            return Given(n)
         else:
-            return NOTHING
+            return NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
-def read_uint64(s: str) -> Maybe[int]:
+def read_uint64(s: str) -> Optional[int]:
     """Parse a string to a uint64 (0 to 18446744073709551615)."""
     try:
         n = int(s)
         if n >= 0 and n <= 18446744073709551615:
-            return Just(n)
+            return Given(n)
         else:
-            return NOTHING
+            return NONE_
     except:
-        return NOTHING
+        return NONE_
 
 
 def show_bigint(x: int) -> str:

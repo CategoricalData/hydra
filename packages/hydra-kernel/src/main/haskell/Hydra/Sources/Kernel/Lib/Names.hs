@@ -29,7 +29,7 @@ import Hydra.Names (qname)
 
 -- Namespace constants
 
-chars, eithers, equality, lists, literals, logic, maps, math, maybes, pairs, regex, sets, strings, typeclass :: ModuleName
+chars, eithers, equality, lists, literals, logic, maps, math, optionals, pairs, regex, sets, strings, typeclass :: ModuleName
 chars     = ModuleName "hydra.lib.chars"
 eithers   = ModuleName "hydra.lib.eithers"
 equality  = ModuleName "hydra.lib.equality"
@@ -38,7 +38,7 @@ literals  = ModuleName "hydra.lib.literals"
 logic     = ModuleName "hydra.lib.logic"
 maps      = ModuleName "hydra.lib.maps"
 math      = ModuleName "hydra.lib.math"
-maybes    = ModuleName "hydra.lib.maybes"
+optionals = ModuleName "hydra.lib.optionals"
 pairs     = ModuleName "hydra.lib.pairs"
 regex     = ModuleName "hydra.lib.regex"
 sets      = ModuleName "hydra.lib.sets"
@@ -89,8 +89,8 @@ eithersMap                       :: Name
 eithersMap                       = qname eithers "map"
 eithersMapList                   :: Name
 eithersMapList                   = qname eithers "mapList"
-eithersMapMaybe                  :: Name
-eithersMapMaybe                  = qname eithers "mapMaybe"
+eithersMapOptional                  :: Name
+eithersMapOptional                  = qname eithers "mapOptional"
 eithersMapSet                    :: Name
 eithersMapSet                    = qname eithers "mapSet"
 eithersPartitionEithers          :: Name
@@ -452,31 +452,31 @@ mathTanh                         = qname math "tanh"
 mathTruncate                     :: Name
 mathTruncate                     = qname math "truncate"
 
--- maybes
-maybesApply                      :: Name
-maybesApply                      = qname maybes "apply"
-maybesBind                       :: Name
-maybesBind                       = qname maybes "bind"
-maybesCases                      :: Name
-maybesCases                      = qname maybes "cases"
-maybesCat                        :: Name
-maybesCat                        = qname maybes "cat"
-maybesCompose                    :: Name
-maybesCompose                    = qname maybes "compose"
-maybesFromMaybe                  :: Name
-maybesFromMaybe                  = qname maybes "fromMaybe"
-maybesIsJust                     :: Name
-maybesIsJust                     = qname maybes "isJust"
-maybesIsNothing                  :: Name
-maybesIsNothing                  = qname maybes "isNothing"
-maybesMap                        :: Name
-maybesMap                        = qname maybes "map"
-maybesMapMaybe                   :: Name
-maybesMapMaybe                   = qname maybes "mapMaybe"
-maybesPure                       :: Name
-maybesPure                       = qname maybes "pure"
-maybesToList                     :: Name
-maybesToList                     = qname maybes "toList"
+-- optionals
+optionalsApply                   :: Name
+optionalsApply                   = qname optionals "apply"
+optionalsBind                    :: Name
+optionalsBind                    = qname optionals "bind"
+optionalsCases                   :: Name
+optionalsCases                   = qname optionals "cases"
+optionalsCat                     :: Name
+optionalsCat                     = qname optionals "cat"
+optionalsCompose                 :: Name
+optionalsCompose                 = qname optionals "compose"
+optionalsFromOptional            :: Name
+optionalsFromOptional            = qname optionals "fromOptional"
+optionalsIsGiven                 :: Name
+optionalsIsGiven                 = qname optionals "isGiven"
+optionalsIsNone                  :: Name
+optionalsIsNone                  = qname optionals "isNone"
+optionalsMap                     :: Name
+optionalsMap                     = qname optionals "map"
+optionalsMapOptional             :: Name
+optionalsMapOptional             = qname optionals "mapOptional"
+optionalsPure                    :: Name
+optionalsPure                    = qname optionals "pure"
+optionalsToList                  :: Name
+optionalsToList                  = qname optionals "toList"
 
 -- pairs
 pairsBimap                       :: Name

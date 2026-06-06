@@ -7,7 +7,7 @@ from __future__ import annotations
 import hydra.core
 import hydra.graph
 import hydra.test.test_graph as test_graph
-from hydra.dsl.python import FrozenDict, Nothing
+from hydra.dsl.python import FrozenDict, None_
 
 
 def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
@@ -94,7 +94,7 @@ def build_test_graph() -> hydra.graph.Graph:
     kernel_term_bindings = list(kernel_terms.values())
 
     test_terms_dict = test_graph.test_terms()
-    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=Nothing())
+    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=None_())
                      for name, term in test_terms_dict.items()]
 
     return hydra.lexical.elements_to_graph(

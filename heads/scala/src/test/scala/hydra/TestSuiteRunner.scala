@@ -284,12 +284,12 @@ object TestSuiteRunner {
       lambda("key",
         lambda("val",
           lambda("m",
-            apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+            apply(apply(apply(primitive("hydra.lib.optionals.cases"),
+              variable("val")),
               apply(apply(primitive("hydra.lib.maps.delete"), variable("key")), variable("m"))),
               lambda("v",
                 apply(apply(apply(primitive("hydra.lib.maps.insert"),
-                  variable("key")), variable("v")), variable("m")))),
-              variable("val"))))))
+                  variable("key")), variable("v")), variable("m"))))))))
 
     // hydra.annotations.setTermAnnotation
     // After #386: the annotation field is a Term. The map produced by
@@ -317,7 +317,7 @@ object TestSuiteRunner {
       lambda("d",
         apply(apply(variable("hydra.annotations.setTermAnnotation"),
           variable("hydra.constants.keyDescription")),
-          apply(apply(primitive("hydra.lib.maybes.map"),
+          apply(apply(primitive("hydra.lib.optionals.map"),
             lambda("s",
               inject("hydra.core.Term", "literal",
                 inject("hydra.core.Literal", "string", variable("s"))))),
@@ -328,7 +328,10 @@ object TestSuiteRunner {
       lambda("cx",
         lambda("g",
           lambda("anns",
-            apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+            apply(apply(apply(primitive("hydra.lib.optionals.cases"),
+              apply(apply(primitive("hydra.lib.maps.lookup"),
+                variable("hydra.constants.keyDescription")),
+                variable("anns"))),
               right(nothing())),
               lambda("descTerm",
                 apply(
@@ -340,10 +343,7 @@ object TestSuiteRunner {
                           left(inject("hydra.errors.Error", "other", wrap("hydra.errors.OtherError", string("Expected string literal"))))),
                           field("string", lambda("s", right(just(variable("s")))))),
                         variable("lit"))))),
-                  variable("descTerm")))),
-              apply(apply(primitive("hydra.lib.maps.lookup"),
-                variable("hydra.constants.keyDescription")),
-                variable("anns")))))))
+                  variable("descTerm"))))))))
 
     // hydra.annotations.getTermDescription
     boundTerms += ("hydra.annotations.getTermDescription" ->
@@ -450,7 +450,7 @@ object TestSuiteRunner {
         FieldType("list", Type.variable(typeName)),
         FieldType("literal", Type.variable("literalType")),
         FieldType("map", Type.variable("mapType")),
-        FieldType("maybe", Type.variable(typeName)),
+        FieldType("optional", Type.variable(typeName)),
         FieldType("pair", Type.variable("pairType")),
         FieldType("record", Type.variable("rowType")),
         FieldType("set", Type.variable(typeName)),

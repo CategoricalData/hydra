@@ -24,7 +24,7 @@
           (hydra lib libraries)
           (hydra lib equality)
           (hydra lib maps)
-          (hydra lib maybes)
+          (hydra lib optionals)
           (hydra lib pairs)
           (hydra lib sets))
   (export run-test-group)
@@ -145,7 +145,7 @@
               (t-lam "key"
                 (t-lam "val"
                   (t-lam "m"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.cases")
+                    (t-app (t-app (t-app (t-prim "hydra.lib.optionals.cases")
                       (t-var "val"))
                       (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
                       (t-lam "v"
@@ -176,12 +176,12 @@
                                     (t-field "annotation" (t-var "anns"))))))))))))
 
         ;; hydra.annotations.setTermDescription = \d ->
-        ;;   setTermAnnotation(keyDescription, maybes.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
+        ;;   setTermAnnotation(keyDescription, optionals.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
         (list "hydra.annotations.setTermDescription"
               (t-lam "d"
                 (t-app (t-app (t-var "hydra.annotations.setTermAnnotation")
                   (t-var "hydra.constants.keyDescription"))
-                  (t-app (t-app (t-prim "hydra.lib.maybes.map")
+                  (t-app (t-app (t-prim "hydra.lib.optionals.map")
                     (t-lam "s"
                       (t-inject "hydra.core.Term" "literal"
                         (t-inject "hydra.core.Literal" "string" (t-var "s")))))
@@ -204,7 +204,7 @@
               (t-lam "cx"
                 (t-lam "g"
                   (t-lam "anns"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.cases")
+                    (t-app (t-app (t-app (t-prim "hydra.lib.optionals.cases")
                       ;; scrutinee: maps.lookup(keyDescription, anns)
                       (t-app (t-app (t-prim "hydra.lib.maps.lookup")
                         (t-var "hydra.constants.keyDescription"))
@@ -481,7 +481,7 @@
                              (make-hydra_core_field "body" (term-to-meta (hydra_core_wrapped_term-body wt)))))))))))
               ((eq? tag 'maybe)
                (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                 (make-hydra_core_field "maybe"
+                 (make-hydra_core_field "optional"
                    (if (cadr term)
                        (list 'maybe (term-to-meta (cadr term)))
                        (list 'maybe '()))))))

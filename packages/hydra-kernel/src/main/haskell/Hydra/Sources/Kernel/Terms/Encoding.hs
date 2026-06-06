@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -157,8 +157,8 @@ encodeBindingName = define "encodeBindingName" $
   "localResult" <~ (Core.name (var "localPart")) $
   -- Extract namespace parts (all but the last); if the name has no namespace,
   -- fall back to the bare decapitalized local name.
-  Maybes.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
-      Maybes.cases
+  Optionals.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
+      Optionals.cases
         (Lists.uncons $ var "nsParts")
         (var "localResult")  -- unreachable: nsParts empty means no namespace
         ("nsUc" ~>
@@ -342,7 +342,7 @@ encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Maybes.cat $ Lists.map
+      (Optionals.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -367,7 +367,7 @@ encodeModule = define "encodeModule" $
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") nothing
-            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
             (Core.bindingTerm $ var "b")))
             (var "encodedBindings")))))
 
@@ -387,7 +387,7 @@ encodeModuleName = define "encodeModuleName" $
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
   -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
-  Maybes.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
+  Optionals.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
       Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.encode.",
@@ -401,8 +401,8 @@ encodeOptionalType :: TypedTermDefinition (Type -> Term)
 encodeOptionalType = define "encodeOptionalType" $
   doc "Generate an encoder for a Maybe type" $
   "elemType" ~> DeepCore.lambda "opt" $
-    DeepCore.injection _Term (DeepCore.field _Term_maybe
-      (DeepCore.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
+    DeepCore.injection _Term (DeepCore.field _Term_optional
+      (DeepCore.primitiveEncoded _optionals_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
 
 -- | Generate an encoder for a pair type
 -- Encodes both elements and wraps in Term.pair
@@ -479,7 +479,7 @@ encodeType = define "encodeType" $
       encodeLiteralType @@ var "lt",
     _Type_map>>: "mt" ~>
       encodeMapType @@ var "mt",
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       encodeOptionalType @@ var "elemType",
     _Type_pair>>: "pt" ~>
       encodePairType @@ var "pt",
@@ -524,7 +524,7 @@ encodeTypeNamed = define "encodeTypeNamed" $
       encodeLiteralType @@ var "lt",
     _Type_map>>: "mt" ~>
       encodeMapType @@ var "mt",
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       encodeOptionalType @@ var "elemType",
     _Type_pair>>: "pt" ~>
       encodePairType @@ var "pt",
@@ -632,7 +632,7 @@ encoderCollectOrdVars = define "encoderCollectOrdVars" $
         encoderCollectTypeVarsFromType @@ Core.mapTypeKeys (var "mt"),
         encoderCollectOrdVars @@ Core.mapTypeKeys (var "mt"),
         encoderCollectOrdVars @@ Core.mapTypeValues (var "mt")]),
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       encoderCollectOrdVars @@ var "elemType",
     _Type_pair>>: "pt" ~>
       Lists.concat2
@@ -675,7 +675,7 @@ encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
       Lists.concat2
         (encoderCollectTypeVarsFromType @@ Core.mapTypeKeys (var "mt"))
         (encoderCollectTypeVarsFromType @@ Core.mapTypeValues (var "mt")),
-    _Type_maybe>>: "elemType" ~>
+    _Type_optional>>: "elemType" ~>
       encoderCollectTypeVarsFromType @@ var "elemType",
     _Type_pair>>: "pt" ~>
       Lists.concat2
@@ -727,8 +727,8 @@ encoderFullResultType = define "encoderFullResultType" $
       Core.typeMap $ Core.mapType
         (encoderFullResultType @@ Core.mapTypeKeys (var "mt"))
         (encoderFullResultType @@ Core.mapTypeValues (var "mt")),
-    _Type_maybe>>: "elemType" ~>
-      Core.typeMaybe (encoderFullResultType @@ var "elemType"),
+    _Type_optional>>: "elemType" ~>
+      Core.typeOptional (encoderFullResultType @@ var "elemType"),
     _Type_pair>>: "pt" ~>
       Core.typePair $ Core.pairType
         (encoderFullResultType @@ Core.pairTypeFirst (var "pt"))
@@ -772,8 +772,8 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
       Core.typeMap $ Core.mapType
         (encoderFullResultType @@ Core.mapTypeKeys (var "mt"))
         (encoderFullResultType @@ Core.mapTypeValues (var "mt")),
-    _Type_maybe>>: "elemType" ~>
-      Core.typeMaybe (encoderFullResultType @@ var "elemType"),
+    _Type_optional>>: "elemType" ~>
+      Core.typeOptional (encoderFullResultType @@ var "elemType"),
     _Type_pair>>: "pt" ~>
       Core.typePair $ Core.pairType
         (encoderFullResultType @@ Core.pairTypeFirst (var "pt"))
@@ -873,7 +873,7 @@ filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
     -- First filter to native types, then check serializability for each
-    Eithers.map (primitive _maybes_cat) $
+    Eithers.map (primitive _optionals_cat) $
       Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 

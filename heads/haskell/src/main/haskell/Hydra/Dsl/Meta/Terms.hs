@@ -341,7 +341,7 @@ nothing = Phantoms.nothing
 -- | Create a term-encoded optional value from a Maybe
 -- Example: optional (just (int32 42))
 optional :: TypedTerm (Maybe Term) -> TypedTerm Term
-optional = Core.termMaybe
+optional = Core.termOptional
 
 -- | Create a term-encoded pair
 -- Example: pair (string "name") (int32 42)

@@ -225,7 +225,7 @@ extractElements typ term = case (stripType typ, stripTerm term) of
       in selfElements ++ childElements
     (TypeList innerType, TermList terms) ->
       L.concatMap (extractElements innerType) terms
-    (TypeMaybe innerType, TermMaybe (Just t)) ->
+    (TypeOptional innerType, TermOptional (Just t)) ->
       extractElements innerType t
     _ -> []
   where

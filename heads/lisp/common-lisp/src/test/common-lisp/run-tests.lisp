@@ -77,7 +77,7 @@
              "lib/chars.lisp"
              "lib/eithers.lisp"
              "lib/literals.lisp"
-             "lib/maybes.lisp"
+             "lib/optionals.lisp"
              "lib/pairs.lisp"
              "lib/regex.lisp"))
   (load (hydra-head-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
@@ -121,7 +121,7 @@
           "lib/chars.lisp" "lib/eithers.lisp" "lib/equality.lisp"
           "lib/libraries.lisp"
           "lib/lists.lisp" "lib/literals.lisp" "lib/logic.lisp"
-          "lib/maps.lisp" "lib/math.lisp" "lib/maybes.lisp"
+          "lib/maps.lisp" "lib/math.lisp" "lib/optionals.lisp"
           "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp"
           "lib/strings.lisp")))
 
@@ -189,7 +189,7 @@
              "lib/logic.lisp"
              "lib/maps.lisp"
              "lib/math.lisp"
-             "lib/maybes.lisp"
+             "lib/optionals.lisp"
              "lib/pairs.lisp"
              "lib/regex.lisp"
              "lib/sets.lisp"

@@ -16,7 +16,7 @@ import qualified Hydra.Lib.Defaults.Lists as DefaultLists
 import qualified Hydra.Lib.Defaults.Logic as DefaultLogic
 import qualified Hydra.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Lib.Defaults.Math as DefaultMath
-import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
+import qualified Hydra.Lib.Defaults.Optionals as DefaultOptionals
 import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
 import qualified Hydra.Lib.Defaults.Sets as DefaultSets
 
@@ -30,7 +30,7 @@ defaultLibraries = [
   defaultLibLogic,
   defaultLibMaps,
   defaultLibMath,
-  defaultLibMaybes,
+  defaultLibOptionals,
   defaultLibPairs,
   defaultLibSets]
 
@@ -100,9 +100,9 @@ defaultLibEithers = standardLibrary _hydra_lib_eithers [
   mkPrim _eithers_mapList 2 $ \cx g args -> case args of
     [f, lt] -> DefaultEithers.mapList cx g f lt
     _ -> unexpected cx "eithers.mapList" 2,
-  mkPrim _eithers_mapMaybe 2 $ \cx g args -> case args of
-    [f, mt] -> DefaultEithers.mapMaybe cx g f mt
-    _ -> unexpected cx "eithers.mapMaybe" 2,
+  mkPrim _eithers_mapOptional 2 $ \cx g args -> case args of
+    [f, mt] -> DefaultEithers.mapOptional cx g f mt
+    _ -> unexpected cx "eithers.mapOptional" 2,
   mkPrim _eithers_mapSet 2 $ \cx g args -> case args of
     [f, st] -> DefaultEithers.mapSet cx g f st
     _ -> unexpected cx "eithers.mapSet" 2,
@@ -252,46 +252,46 @@ defaultLibMath = standardLibrary _hydra_lib_math [
     [x] -> coerceError $ DefaultMath.odd cx g x
     _ -> unexpected cx "math.odd" 1]
 
--- ---- Maybes ----
+-- ---- Optionals ----
 
-defaultLibMaybes :: Library
-defaultLibMaybes = standardLibrary _hydra_lib_maybes [
-  mkPrim _maybes_apply 2 $ \cx g args -> case args of
-    [ft, xt] -> DefaultMaybes.apply cx g ft xt
-    _ -> unexpected cx "maybes.apply" 2,
-  mkPrim _maybes_bind 2 $ \cx g args -> case args of
-    [t, f] -> DefaultMaybes.bind cx g t f
-    _ -> unexpected cx "maybes.bind" 2,
-  mkPrim _maybes_cases 3 $ \cx g args -> case args of
-    [t, def, f] -> DefaultMaybes.cases cx g t def f
-    _ -> unexpected cx "maybes.cases" 3,
-  mkPrim _maybes_cat 1 $ \cx g args -> case args of
-    [t] -> fmap TermList (DefaultMaybes.cat cx g t)
-    _ -> unexpected cx "maybes.cat" 1,
-  mkPrim _maybes_compose 3 $ \cx g args -> case args of
-    [f, g_, x] -> coerceError $ DefaultMaybes.compose cx g f g_ x
-    _ -> unexpected cx "maybes.compose" 3,
-  mkPrim _maybes_fromMaybe 2 $ \cx g args -> case args of
-    [def, t] -> DefaultMaybes.fromMaybe cx g def t
-    _ -> unexpected cx "maybes.fromMaybe" 2,
-  mkPrim _maybes_isJust 1 $ \cx g args -> case args of
-    [t] -> DefaultMaybes.isJust cx g t
-    _ -> unexpected cx "maybes.isJust" 1,
-  mkPrim _maybes_isNothing 1 $ \cx g args -> case args of
-    [t] -> DefaultMaybes.isNothing cx g t
-    _ -> unexpected cx "maybes.isNothing" 1,
-  mkPrim _maybes_map 2 $ \cx g args -> case args of
-    [f, t] -> DefaultMaybes.map cx g f t
-    _ -> unexpected cx "maybes.map" 2,
-  mkPrim _maybes_mapMaybe 2 $ \cx g args -> case args of
-    [f, t] -> DefaultMaybes.mapMaybe cx g f t
-    _ -> unexpected cx "maybes.mapMaybe" 2,
-  mkPrim _maybes_pure 1 $ \cx g args -> case args of
-    [x] -> coerceError $ DefaultMaybes.pure cx g x
-    _ -> unexpected cx "maybes.pure" 1,
-  mkPrim _maybes_toList 1 $ \cx g args -> case args of
-    [t] -> DefaultMaybes.toList cx g t
-    _ -> unexpected cx "maybes.toList" 1]
+defaultLibOptionals :: Library
+defaultLibOptionals = standardLibrary _hydra_lib_optionals [
+  mkPrim _optionals_apply 2 $ \cx g args -> case args of
+    [ft, xt] -> DefaultOptionals.apply cx g ft xt
+    _ -> unexpected cx "optionals.apply" 2,
+  mkPrim _optionals_bind 2 $ \cx g args -> case args of
+    [t, f] -> DefaultOptionals.bind cx g t f
+    _ -> unexpected cx "optionals.bind" 2,
+  mkPrim _optionals_cases 3 $ \cx g args -> case args of
+    [t, def, f] -> DefaultOptionals.cases cx g t def f
+    _ -> unexpected cx "optionals.cases" 3,
+  mkPrim _optionals_cat 1 $ \cx g args -> case args of
+    [t] -> fmap TermList (DefaultOptionals.cat cx g t)
+    _ -> unexpected cx "optionals.cat" 1,
+  mkPrim _optionals_compose 3 $ \cx g args -> case args of
+    [f, g_, x] -> coerceError $ DefaultOptionals.compose cx g f g_ x
+    _ -> unexpected cx "optionals.compose" 3,
+  mkPrim _optionals_fromOptional 2 $ \cx g args -> case args of
+    [def, t] -> DefaultOptionals.fromOptional cx g def t
+    _ -> unexpected cx "optionals.fromOptional" 2,
+  mkPrim _optionals_isGiven 1 $ \cx g args -> case args of
+    [t] -> DefaultOptionals.isGiven cx g t
+    _ -> unexpected cx "optionals.isGiven" 1,
+  mkPrim _optionals_isNone 1 $ \cx g args -> case args of
+    [t] -> DefaultOptionals.isNone cx g t
+    _ -> unexpected cx "optionals.isNone" 1,
+  mkPrim _optionals_map 2 $ \cx g args -> case args of
+    [f, t] -> DefaultOptionals.map cx g f t
+    _ -> unexpected cx "optionals.map" 2,
+  mkPrim _optionals_mapOptional 2 $ \cx g args -> case args of
+    [f, t] -> DefaultOptionals.mapOptional cx g f t
+    _ -> unexpected cx "optionals.mapOptional" 2,
+  mkPrim _optionals_pure 1 $ \cx g args -> case args of
+    [x] -> coerceError $ DefaultOptionals.pure cx g x
+    _ -> unexpected cx "optionals.pure" 1,
+  mkPrim _optionals_toList 1 $ \cx g args -> case args of
+    [t] -> DefaultOptionals.toList cx g t
+    _ -> unexpected cx "optionals.toList" 1]
 
 -- ---- Pairs ----
 

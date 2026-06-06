@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -217,8 +217,8 @@ generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
         "testModuleContent">: buildPythonTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleName (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
-        "dirParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
-        "fileName">: Strings.cat (list [string "test_", Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")), string ".py"]),
+        "dirParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
+        "fileName">: Strings.cat (list [string "test_", Optionals.fromOptional (string "") (Lists.maybeLast (var "parts")), string ".py"]),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))
       (generatePythonTestGroupHierarchy @@ list ([] :: [TypedTerm String]) @@ var "testGroup")

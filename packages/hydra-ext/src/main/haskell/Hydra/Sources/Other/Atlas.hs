@@ -49,22 +49,22 @@ atlasAttribute :: TypeDefinition
 atlasAttribute = define "AtlasAttributeDef" $
   doc "class that captures details of a struct-attribute." $
   T.record [
-    "name">: T.maybe T.string,
-    "typeName">: T.maybe T.string,
+    "name">: T.optional T.string,
+    "typeName">: T.optional T.string,
     "isOptional">: T.boolean,
-    "cardinality">: T.maybe $ atlas "AtlasAttributeDef_Cardinality",
+    "cardinality">: T.optional $ atlas "AtlasAttributeDef_Cardinality",
     "valuesMinCount">: T.int32,
     "valuesMaxCount">: T.int32,
     "isUnique">: T.boolean,
     "isIndexable">: T.boolean,
     "includeInNotification">: T.boolean,
-    "defaultValue">: T.maybe T.string,
-    "description">: T.maybe T.string,
+    "defaultValue">: T.optional T.string,
+    "description">: T.optional T.string,
     "searchWeight">: T.int32,
-    "indexType">: T.maybe $ atlas "AtlasAttributeDef_IndexType",
+    "indexType">: T.optional $ atlas "AtlasAttributeDef_IndexType",
     "constraints">: T.list $ atlas "AtlasConstraintDef",
     "options">: T.map T.string T.string,
-    "displayName">: T.maybe T.string]
+    "displayName">: T.optional T.string]
 
 atlasAttributeDef_Cardinality :: TypeDefinition
 atlasAttributeDef_Cardinality = define "AtlasAttributeDef_Cardinality" $ T.enum ["single", "list", "set"]
@@ -76,24 +76,24 @@ atlasBaseType :: TypeDefinition
 atlasBaseType = define "AtlasBaseTypeDef" $
   doc "Base class that captures common-attributes for all Atlas types." $
   T.record [
-    "category">: T.maybe $ atlas "TypeCategory",
-    "guid">: T.maybe T.string,
-    "createdBy">: T.maybe T.string,
-    "updatedBy">: T.maybe T.string,
-    "createTime">: T.maybe $ xsd "DateTime",
-    "updateTime">: T.maybe $ xsd "DateTime",
-    "version">: T.maybe T.int64,
-    "name">: T.maybe T.string,
-    "description">: T.maybe T.string,
-    "typeVersion">: T.maybe T.string,
-    "serviceType">: T.maybe T.string,
+    "category">: T.optional $ atlas "TypeCategory",
+    "guid">: T.optional T.string,
+    "createdBy">: T.optional T.string,
+    "updatedBy">: T.optional T.string,
+    "createTime">: T.optional $ xsd "DateTime",
+    "updateTime">: T.optional $ xsd "DateTime",
+    "version">: T.optional T.int64,
+    "name">: T.optional T.string,
+    "description">: T.optional T.string,
+    "typeVersion">: T.optional T.string,
+    "serviceType">: T.optional T.string,
     "options">: T.map T.string T.string]
 
 atlasConstraint :: TypeDefinition
 atlasConstraint = define "AtlasConstraintDef" $
   doc "class that captures details of a constraint." $
   T.record [
-    "type">: T.maybe T.string,
+    "type">: T.optional T.string,
     "params">: T.map T.string T.string] -- Map<String, Object>
 
 atlasEntity :: TypeDefinition
@@ -122,7 +122,7 @@ atlasRelationshipAttribute = define "AtlasRelationshipAttributeDef" $
   doc "class that captures details of a struct-attribute." $
   T.record [
     "asAtlasAttribute">: atlas "AtlasAttributeDef",
-    "relationshipTypeName">: T.maybe T.string,
+    "relationshipTypeName">: T.optional T.string,
     "isLegacyAttribute">: T.boolean]
 
 atlasStruct :: TypeDefinition

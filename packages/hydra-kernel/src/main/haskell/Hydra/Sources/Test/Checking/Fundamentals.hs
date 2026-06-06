@@ -657,8 +657,8 @@ higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
     (tylam "t0" $ tyapp (primitive _lists_filter) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.function (T.var "t0") T.boolean) (T.function (T.list $ T.var "t0") (T.list $ T.var "t0"))),
   checkTest "optionals cases" []
-    (primitive _maybes_cases)
-    (tylams ["t0", "t1"] $ tyapps (primitive _maybes_cases) [T.var "t0", T.var "t1"])
+    (primitive _optionals_cases)
+    (tylams ["t0", "t1"] $ tyapps (primitive _optionals_cases) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $
       T.function (T.optional $ T.var "t0") (T.function (T.var "t1") (T.function (T.function (T.var "t0") (T.var "t1")) (T.var "t1"))))]
 
@@ -877,8 +877,8 @@ variablesInComplexContextsTests = define "variablesInComplexContextsTests" $
       mapTerm [(var "key", var "value")])
     (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.map (T.var "t0") (T.var "t1")))),
   checkTest "variable in optional" []
-    (lambda "x" $ Core.termMaybe $ just $ var "x")
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Core.termMaybe $ just $ var "x")
+    (lambda "x" $ Core.termOptional $ just $ var "x")
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ Core.termOptional $ just $ var "x")
     (T.forAll "t0" $ T.function (T.var "t0") (T.optional $ T.var "t0"))]
 
 variablesTests :: TypedTermDefinition TestGroup

@@ -315,7 +315,7 @@ object Libraries:
     val z = tVar("z")
     val w = tVar("w")
     Map(
-      // Higher-order: bind, bimap, either, foldl, map, mapList, mapMaybe, mapSet
+      // Higher-order: bind, bimap, either, foldl, map, mapList, mapOptional, mapSet
       s"$ns.bind" -> mkPrimImpl(s"$ns.bind", tScheme(Seq("x", "y", "z"),
         tFun(tEither(x, y), tFun(tFun(y, tEither(x, z)), tEither(x, z)))),
         impl2 { (e, f) =>
@@ -389,7 +389,7 @@ object Libraries:
             }
           }
         }),
-      s"$ns.mapMaybe" -> mkPrimImpl(s"$ns.mapMaybe", tScheme(Seq("x", "y", "z"),
+      s"$ns.mapOptional" -> mkPrimImpl(s"$ns.mapOptional", tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tEither(z, y)), tFun(tOpt(x), tEither(z, tOpt(y))))),
         cx => g => args => {
           val f = args(0); val mx = exMaybe(args(1))
@@ -878,13 +878,13 @@ object Libraries:
 
   // ===== Maybes primitives =====
 
-  private def maybesPrimitives(): Map[String, Primitive] =
-    val ns = "hydra.lib.maybes"
+  private def optionalsPrimitives(): Map[String, Primitive] =
+    val ns = "hydra.lib.optionals"
     val a = tVar("a")
     val b = tVar("b")
     val c = tVar("c")
     Map(
-      // Higher-order: apply, bind, cases, compose, map, mapMaybe, maybe
+      // Higher-order: apply, bind, cases, compose, map, mapOptional
       s"$ns.apply" -> mkPrimImpl(s"$ns.apply", tScheme(Seq("a", "b"),
         tFun(tOpt(tFun(a, b)), tFun(tOpt(a), tOpt(b)))),
         impl2 { (mf, mx) =>
@@ -923,7 +923,7 @@ object Libraries:
             case None => mkMaybe(None)
             case Some(x) => mkMaybe(Some(app(f, x)))
         }),
-      s"$ns.mapMaybe" -> mkPrimImpl(s"$ns.mapMaybe", tScheme(Seq("a", "b"),
+      s"$ns.mapOptional" -> mkPrimImpl(s"$ns.mapOptional", tScheme(Seq("a", "b"),
         tFun(tFun(a, tOpt(b)), tFun(tList(a), tList(b)))),
         cx => g => args => {
           val f = args(0); val xs = exList(args(1))
@@ -937,24 +937,17 @@ object Libraries:
             }
           }
         }),
-      s"$ns.maybe" -> mkPrimImpl(s"$ns.maybe", tScheme(Seq("b", "a"),
-        tFun(b, tFun(tFun(a, b), tFun(tOpt(a), b)))),
-        impl3 { (d, f, mx) =>
-          exMaybe(mx) match
-            case None => d
-            case Some(x) => app(f, x)
-        }),
       // First-order
       s"$ns.cat" -> mkPrimImpl(s"$ns.cat", tScheme(Seq("a"),
         tFun(tList(tOpt(a)), tList(a))),
         impl1(xs => mkList(exList(xs).flatMap(exMaybe)))),
-      s"$ns.fromMaybe" -> mkPrimImpl(s"$ns.fromMaybe", tScheme(Seq("a"),
+      s"$ns.fromOptional" -> mkPrimImpl(s"$ns.fromOptional", tScheme(Seq("a"),
         tFun(a, tFun(tOpt(a), a))),
         impl2((d, ma) => exMaybe(ma).getOrElse(d))),
-      s"$ns.isJust" -> mkPrimImpl(s"$ns.isJust", tScheme(Seq("a"),
+      s"$ns.isGiven" -> mkPrimImpl(s"$ns.isGiven", tScheme(Seq("a"),
         tFun(tOpt(a), tBool)),
         impl1(ma => mkBool(exMaybe(ma).isDefined))),
-      s"$ns.isNothing" -> mkPrimImpl(s"$ns.isNothing", tScheme(Seq("a"),
+      s"$ns.isNone" -> mkPrimImpl(s"$ns.isNone", tScheme(Seq("a"),
         tFun(tOpt(a), tBool)),
         impl1(ma => mkBool(exMaybe(ma).isEmpty))),
       s"$ns.pure" -> mkPrimImpl(s"$ns.pure", tScheme(Seq("a"),
@@ -1228,7 +1221,7 @@ object Libraries:
     logicPrimitives() ++
     mapsPrimitives() ++
     mathPrimitives() ++
-    maybesPrimitives() ++
+    optionalsPrimitives() ++
     pairsPrimitives() ++
     regexPrimitives() ++
     setsPrimitives() ++

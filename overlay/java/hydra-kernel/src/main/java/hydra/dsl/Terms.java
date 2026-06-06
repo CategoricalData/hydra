@@ -787,7 +787,7 @@ public interface Terms {
      * @return the optional term
      */
     static Term optional(Maybe<Term> maybeTerm) {
-        return new Term.Maybe(maybeTerm);
+        return new Term.Optional(maybeTerm);
     }
 
     /**

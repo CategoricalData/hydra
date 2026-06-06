@@ -18,7 +18,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Regex as Regex
 import qualified Hydra.Haskell.Lib.Sets as Sets
@@ -39,7 +39,7 @@ _hydra_lib_literals = LibNames.literals
 _hydra_lib_logic    = LibNames.logic
 _hydra_lib_maps     = LibNames.maps
 _hydra_lib_math     = LibNames.math
-_hydra_lib_maybes   = LibNames.maybes
+_hydra_lib_optionals = LibNames.optionals
 _hydra_lib_pairs    = LibNames.pairs
 _hydra_lib_regex    = LibNames.regex
 _hydra_lib_sets     = LibNames.sets
@@ -66,7 +66,7 @@ _eithers_isRight          = LibNames.eithersIsRight
 _eithers_lefts            = LibNames.eithersLefts
 _eithers_map              = LibNames.eithersMap
 _eithers_mapList          = LibNames.eithersMapList
-_eithers_mapMaybe         = LibNames.eithersMapMaybe
+_eithers_mapOptional         = LibNames.eithersMapOptional
 _eithers_mapSet           = LibNames.eithersMapSet
 _eithers_partitionEithers = LibNames.eithersPartitionEithers
 _eithers_rights           = LibNames.eithersRights
@@ -254,19 +254,19 @@ _math_tan      = LibNames.mathTan
 _math_tanh     = LibNames.mathTanh
 _math_truncate = LibNames.mathTruncate
 
--- Maybes
-_maybes_apply     = LibNames.maybesApply
-_maybes_bind      = LibNames.maybesBind
-_maybes_cases     = LibNames.maybesCases
-_maybes_cat       = LibNames.maybesCat
-_maybes_compose   = LibNames.maybesCompose
-_maybes_fromMaybe = LibNames.maybesFromMaybe
-_maybes_isJust    = LibNames.maybesIsJust
-_maybes_isNothing = LibNames.maybesIsNothing
-_maybes_map       = LibNames.maybesMap
-_maybes_mapMaybe  = LibNames.maybesMapMaybe
-_maybes_pure      = LibNames.maybesPure
-_maybes_toList    = LibNames.maybesToList
+-- Optionals
+_optionals_apply     = LibNames.optionalsApply
+_optionals_bind      = LibNames.optionalsBind
+_optionals_cases     = LibNames.optionalsCases
+_optionals_cat       = LibNames.optionalsCat
+_optionals_compose   = LibNames.optionalsCompose
+_optionals_fromOptional = LibNames.optionalsFromOptional
+_optionals_isGiven    = LibNames.optionalsIsGiven
+_optionals_isNone = LibNames.optionalsIsNone
+_optionals_map       = LibNames.optionalsMap
+_optionals_mapOptional  = LibNames.optionalsMapOptional
+_optionals_pure      = LibNames.optionalsPure
+_optionals_toList    = LibNames.optionalsToList
 
 -- Pairs
 _pairs_bimap  = LibNames.pairsBimap
@@ -394,7 +394,7 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim1       _eithers_lefts            Eithers.lefts            [_x, _y]         (list $ Prims.either_ x_ y_) (list x_),
     prim2       _eithers_map              Eithers.map              [_x, _y, _z]     (fun x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
     prim2       _eithers_mapList          Eithers.mapList          [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
-    prim2       _eithers_mapMaybe         Eithers.mapMaybe         [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
+    prim2       _eithers_mapOptional         Eithers.mapOptional         [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
     prim2       _eithers_mapSet           Eithers.mapSet           [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
     prim1       _eithers_partitionEithers Eithers.partitionEithers [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       _eithers_rights           Eithers.rights           [_x, _y]         (list $ Prims.either_ x_ y_) (list y_)]
@@ -593,20 +593,20 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim2 _math_sub    Math.sub    [] int32 int32 int32,
   prim1 _math_maybeSucc Math.maybeSucc [] int32 (optional int32)]
 
-hydraLibMaybes :: Library
-hydraLibMaybes = standardLibrary _hydra_lib_maybes [
-    prim2     _maybes_apply     Maybes.apply        [_x, _y]     (optional $ fun x_ y_) (optional x_) (optional y_),
-    prim2     _maybes_bind      Maybes.bind         [_x, _y]     (optional x_) (fun x_ (optional y_)) (optional y_),
-    Prims.lazyArgs [1] $ prim3 _maybes_cases     Maybes.cases        [_x, _y]     (optional x_) y_ (fun x_ y_) y_,
-    prim1     _maybes_cat       Maybes.cat          [_x]         (list $ optional x_) (list x_),
-    prim3     _maybes_compose   Maybes.compose      [_x, _y, _z] (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
-    Prims.lazyArgs [0] $ prim2 _maybes_fromMaybe Maybes.fromMaybe    [_x]         x_ (optional x_) x_,
-    prim1     _maybes_isJust    Maybes.isJust       [_x]         (optional x_) boolean,
-    prim1     _maybes_isNothing Maybes.isNothing    [_x]         (optional x_) boolean,
-    prim2     _maybes_map       Maybes.map          [_x, _y]     (fun x_ y_) (optional x_) (optional y_),
-    prim2     _maybes_mapMaybe  Maybes.mapMaybe     [_x, _y]     (fun x_ $ optional y_) (list x_) (list y_),
-    prim1     _maybes_pure      Maybes.pure         [_x]         x_ (optional x_),
-    prim1     _maybes_toList    Maybes.toList       [_x]         (optional x_) (list x_)]
+hydraLibOptionals :: Library
+hydraLibOptionals = standardLibrary _hydra_lib_optionals [
+    prim2     _optionals_apply     Optionals.apply        [_x, _y]     (optional $ fun x_ y_) (optional x_) (optional y_),
+    prim2     _optionals_bind      Optionals.bind         [_x, _y]     (optional x_) (fun x_ (optional y_)) (optional y_),
+    Prims.lazyArgs [1] $ prim3 _optionals_cases     Optionals.cases        [_x, _y]     (optional x_) y_ (fun x_ y_) y_,
+    prim1     _optionals_cat       Optionals.cat          [_x]         (list $ optional x_) (list x_),
+    prim3     _optionals_compose   Optionals.compose      [_x, _y, _z] (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
+    Prims.lazyArgs [0] $ prim2 _optionals_fromOptional Optionals.fromOptional    [_x]         x_ (optional x_) x_,
+    prim1     _optionals_isGiven    Optionals.isGiven       [_x]         (optional x_) boolean,
+    prim1     _optionals_isNone Optionals.isNone    [_x]         (optional x_) boolean,
+    prim2     _optionals_map       Optionals.map          [_x, _y]     (fun x_ y_) (optional x_) (optional y_),
+    prim2     _optionals_mapOptional  Optionals.mapOptional     [_x, _y]     (fun x_ $ optional y_) (list x_) (list y_),
+    prim1     _optionals_pure      Optionals.pure         [_x]         x_ (optional x_),
+    prim1     _optionals_toList    Optionals.toList       [_x]         (optional x_) (list x_)]
 
 hydraLibPairs :: Library
 hydraLibPairs = standardLibrary _hydra_lib_pairs [
@@ -667,7 +667,7 @@ standardLibraries = [
   hydraLibMaps,
   hydraLibMathFloat64,
   hydraLibMathInt32,
-  hydraLibMaybes,
+  hydraLibOptionals,
   hydraLibPairs,
   hydraLibRegex,
   hydraLibSets,

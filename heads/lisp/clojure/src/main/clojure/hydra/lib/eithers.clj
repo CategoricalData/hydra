@@ -42,8 +42,8 @@
             result
             (recur (next rest_) (cons (second result) acc)))))))))
 
-;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-(def hydra_lib_eithers_map_maybe
+;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+(def hydra_lib_eithers_map_optional
   (fn [f] (fn [m]
     (cond
       (or (nil? m)

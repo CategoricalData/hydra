@@ -1,6 +1,6 @@
 (ns hydra.lib.maps
   (:require [hydra.lib.equality :refer [generic-compare]]
-            [hydra.lib.maybes :refer [maybe-nothing?]]))
+            [hydra.lib.optionals :refer [maybe-nothing?]]))
 
 ;; Maps are Clojure hash maps for O(1) amortized lookup/insert/delete.
 ;; toList produces sorted output (via generic-compare on keys) for determinism.

@@ -112,7 +112,7 @@
           (hydra--t-lam "key"
             (hydra--t-lam "val"
               (hydra--t-lam "m"
-                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.cases")
+                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.cases")
                   (hydra--t-var "val"))
                   (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.delete") (hydra--t-var "key")) (hydra--t-var "m")))
                   (hydra--t-lam "v"
@@ -143,12 +143,12 @@
                                 (hydra--t-field "annotation" (hydra--t-var "anns"))))))))))))
 
     ;; hydra.annotations.setTermDescription = \d ->
-    ;;   setTermAnnotation(keyDescription, maybes.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
+    ;;   setTermAnnotation(keyDescription, optionals.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
     (list "hydra.annotations.setTermDescription"
           (hydra--t-lam "d"
             (hydra--t-app (hydra--t-app (hydra--t-var "hydra.annotations.setTermAnnotation")
               (hydra--t-var "hydra.constants.keyDescription"))
-              (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.map")
+              (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.map")
                 (hydra--t-lam "s"
                   (hydra--t-inject "hydra.core.Term" "literal"
                     (hydra--t-inject "hydra.core.Literal" "string" (hydra--t-var "s")))))
@@ -171,7 +171,7 @@
           (hydra--t-lam "cx"
             (hydra--t-lam "g"
               (hydra--t-lam "anns"
-                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maybes.cases")
+                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.cases")
                   ;; scrutinee: maps.lookup(keyDescription, anns)
                   (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.lookup")
                     (hydra--t-var "hydra.constants.keyDescription"))

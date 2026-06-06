@@ -100,7 +100,7 @@ alternative = define "Alternative" $
       caseRhs,
     "binds">:
       doc "Optional local bindings" $
-      T.maybe localBindings]
+      T.optional localBindings]
 
 applicationDeclarationHead :: TypeDefinition
 applicationDeclarationHead = define "ApplicationDeclarationHead" $
@@ -241,7 +241,7 @@ dataDeclaration = define "DataDeclaration" $
       T.list derivingClause,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 dataKeyword :: TypeDefinition
 dataKeyword = define "DataKeyword" $
@@ -366,7 +366,7 @@ field = define "Field" $
       type_,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 fieldUpdate :: TypeDefinition
 fieldUpdate = define "FieldUpdate" $
@@ -445,10 +445,10 @@ import_ = define "Import" $
       moduleNameDef,
     "as">:
       doc "Optional alias for the module" $
-      T.maybe moduleNameDef,
+      T.optional moduleNameDef,
     "spec">:
       doc "Optional import specification" $
-      T.maybe importSpec]
+      T.optional importSpec]
 
 infixExpression :: TypeDefinition
 infixExpression = define "InfixExpression" $
@@ -548,7 +548,7 @@ module' = define "Module" $
   T.record [
     "head">:
       doc "Optional module head" $
-      T.maybe moduleHead,
+      T.optional moduleHead,
     "imports">:
       doc "Import statements" $
       T.list import_,
@@ -563,7 +563,7 @@ moduleHead = define "ModuleHead" $
   T.record [
     "comments">:
       doc "Optional module-level comments" $
-      T.maybe T.string,
+      T.optional T.string,
     "name">:
       doc "The module name"
       moduleNameDef,
@@ -598,13 +598,13 @@ namedImportExport = define "NamedImportExport" $
   T.record [
     "modifier">:
       doc "Optional import modifier" $
-      T.maybe importModifier,
+      T.optional importModifier,
     "name">:
       doc "The name being imported or exported"
       name,
     "subspec">:
       doc "Optional subspecification" $
-      T.maybe importExportSubspec]
+      T.optional importExportSubspec]
 
 operator :: TypeDefinition
 operator = define "Operator" $
@@ -674,7 +674,7 @@ positionalConstructor = define "PositionalConstructor" $
       T.list type_,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
@@ -699,7 +699,7 @@ recordConstructor = define "RecordConstructor" $
       T.list field,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 recordExpression :: TypeDefinition
 recordExpression = define "RecordExpression" $
@@ -763,10 +763,10 @@ simpleValueBinding = define "SimpleValueBinding" $
       rightHandSide,
     "localBindings">:
       doc "Optional local bindings (where clause)" $
-      T.maybe localBindings,
+      T.optional localBindings,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 statement :: TypeDefinition
 statement = define "Statement" $
@@ -796,7 +796,7 @@ typeSynonymDeclaration = define "TypeSynonymDeclaration" $
       type_,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 type_ :: TypeDefinition
 type_ = define "Type" $
@@ -838,7 +838,7 @@ typedBinding = define "TypedBinding" $
       valueBinding,
     "comments">:
       doc "Optional comments" $
-      T.maybe T.string]
+      T.optional T.string]
 
 typedExpression :: TypeDefinition
 typedExpression = define "TypedExpression" $

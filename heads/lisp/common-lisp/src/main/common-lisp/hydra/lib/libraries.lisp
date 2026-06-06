@@ -1,7 +1,7 @@
 ;;; Hydra Common Lisp standard library registration
 ;;;
 ;;; Registers all primitive functions (chars, equality, eithers, lists, literals,
-;;; logic, maps, math, maybes, pairs, sets, strings, annotations) for the
+;;; logic, maps, math, optionals, pairs, sets, strings, annotations) for the
 ;;; generated reducer.  Direct translation of Clojure hydra/lib/libraries.clj.
 
 (in-package :cl-user)
@@ -73,8 +73,8 @@
       (cons (qname ns_ "mapList") (prim2 (qname ns_ "mapList")
                                           hydra_lib_eithers_map_list
                                           nil (fun x (tc-either z y)) (tc-list x) (tc-either z (tc-list y))))
-      (cons (qname ns_ "mapMaybe") (prim2 (qname ns_ "mapMaybe")
-                                           hydra_lib_eithers_map_maybe
+      (cons (qname ns_ "mapOptional") (prim2 (qname ns_ "mapOptional")
+                                           hydra_lib_eithers_map_optional
                                            nil (fun x (tc-either z y)) (tc-optional x) (tc-either z (tc-optional y))))
       (cons (qname ns_ "mapSet")  (prim2 (qname ns_ "mapSet")
                                           hydra_lib_eithers_map_set
@@ -358,38 +358,38 @@
 ;; Maybes
 ;; ============================================================================
 
-(defun register-maybes ()
-  (let ((ns_ "hydra.lib.maybes")
+(defun register-optionals ()
+  (let ((ns_ "hydra.lib.optionals")
         (a (tc-variable "a"))
         (b (tc-variable "b"))
         (c (tc-variable "c")))
     (list
       (cons (qname ns_ "apply")    (prim2 (qname ns_ "apply")
-                                           hydra_lib_maybes_apply
+                                           hydra_lib_optionals_apply
                                            nil (tc-optional (fun a b)) (tc-optional a) (tc-optional b)))
       (cons (qname ns_ "bind")     (prim2 (qname ns_ "bind")
-                                           hydra_lib_maybes_bind
+                                           hydra_lib_optionals_bind
                                            nil (tc-optional a) (fun a (tc-optional b)) (tc-optional b)))
       (cons (qname ns_ "cases")    (prim3 (qname ns_ "cases")
-                                           hydra_lib_maybes_cases
+                                           hydra_lib_optionals_cases
                                            nil (tc-optional a) b (fun a b) b))
-      (cons (qname ns_ "cat")      (prim1 (qname ns_ "cat")      hydra_lib_maybes_cat      nil (tc-list (tc-optional a)) (tc-list a)))
+      (cons (qname ns_ "cat")      (prim1 (qname ns_ "cat")      hydra_lib_optionals_cat      nil (tc-list (tc-optional a)) (tc-list a)))
       (cons (qname ns_ "compose")  (prim3 (qname ns_ "compose")
-                                           hydra_lib_maybes_compose
+                                           hydra_lib_optionals_compose
                                            nil (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-      (cons (qname ns_ "fromMaybe") (prim2 (qname ns_ "fromMaybe")
-                                            hydra_lib_maybes_from_maybe
+      (cons (qname ns_ "fromOptional") (prim2 (qname ns_ "fromOptional")
+                                            hydra_lib_optionals_from_optional
                                             nil a (tc-optional a) a))
-      (cons (qname ns_ "isJust")    (prim1 (qname ns_ "isJust")    hydra_lib_maybes_is_just    nil (tc-optional a) (tc-boolean)))
-      (cons (qname ns_ "isNothing") (prim1 (qname ns_ "isNothing") hydra_lib_maybes_is_nothing nil (tc-optional a) (tc-boolean)))
+      (cons (qname ns_ "isGiven")    (prim1 (qname ns_ "isGiven")    hydra_lib_optionals_is_given    nil (tc-optional a) (tc-boolean)))
+      (cons (qname ns_ "isNone") (prim1 (qname ns_ "isNone") hydra_lib_optionals_is_none nil (tc-optional a) (tc-boolean)))
       (cons (qname ns_ "map")       (prim2 (qname ns_ "map")
-                                            hydra_lib_maybes_map
+                                            hydra_lib_optionals_map
                                             nil (fun a b) (tc-optional a) (tc-optional b)))
-      (cons (qname ns_ "mapMaybe")  (prim2 (qname ns_ "mapMaybe")
-                                            hydra_lib_maybes_map_maybe
+      (cons (qname ns_ "mapOptional")  (prim2 (qname ns_ "mapOptional")
+                                            hydra_lib_optionals_map_optional
                                             nil (fun a (tc-optional b)) (tc-list a) (tc-list b)))
-      (cons (qname ns_ "pure")      (prim1 (qname ns_ "pure")      hydra_lib_maybes_pure      nil a (tc-optional a)))
-      (cons (qname ns_ "toList")    (prim1 (qname ns_ "toList")    hydra_lib_maybes_to_list   nil (tc-optional a) (tc-list a))))))
+      (cons (qname ns_ "pure")      (prim1 (qname ns_ "pure")      hydra_lib_optionals_pure      nil a (tc-optional a)))
+      (cons (qname ns_ "toList")    (prim1 (qname ns_ "toList")    hydra_lib_optionals_to_list   nil (tc-optional a) (tc-list a))))))
 
 ;; ============================================================================
 ;; Pairs
@@ -690,7 +690,7 @@
     (register-logic)
     (register-maps)
     (register-math)
-    (register-maybes)
+    (register-optionals)
     (register-pairs)
     (register-regex)
     (register-sets)

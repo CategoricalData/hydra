@@ -4,7 +4,7 @@ from __future__ import annotations
 import math
 from decimal import Decimal
 
-from hydra.dsl.python import frozenlist, Maybe, Just, Nothing
+from hydra.dsl.python import frozenlist, Optional, Given, None_
 
 
 import builtins as _builtins
@@ -138,32 +138,32 @@ def log_base(base: float, x: float) -> float:
         return float('nan')
 
 
-def maybe_div(x: int, y: int) -> Maybe[int]:
+def maybe_div(x: int, y: int) -> Optional[int]:
     """Divide two integers, returning Nothing if the divisor is zero."""
-    return Nothing() if y == 0 else Just(x // y)
+    return None_() if y == 0 else Given(x // y)
 
 
-def maybe_mod(x: int, y: int) -> Maybe[int]:
+def maybe_mod(x: int, y: int) -> Optional[int]:
     """Mathematical modulo, returning Nothing if the divisor is zero."""
-    return Nothing() if y == 0 else Just(x % y)
+    return None_() if y == 0 else Given(x % y)
 
 
-def maybe_pred(x: int) -> Maybe[int]:
+def maybe_pred(x: int) -> Optional[int]:
     """Return the predecessor, returning Nothing if x is minBound."""
-    return Nothing() if x == -2147483648 else Just(x - 1)
+    return None_() if x == -2147483648 else Given(x - 1)
 
 
-def maybe_rem(x: int, y: int) -> Maybe[int]:
+def maybe_rem(x: int, y: int) -> Optional[int]:
     """Integer remainder, returning Nothing if the divisor is zero."""
     if y == 0:
-        return Nothing()
+        return None_()
     q = int(x / y)
-    return Just(x - q * y)
+    return Given(x - q * y)
 
 
-def maybe_succ(x: int) -> Maybe[int]:
+def maybe_succ(x: int) -> Optional[int]:
     """Return the successor, returning Nothing if x is maxBound."""
-    return Nothing() if x == 2147483647 else Just(x + 1)
+    return None_() if x == 2147483647 else Given(x + 1)
 
 
 def max_(x: int, y: int) -> int:
