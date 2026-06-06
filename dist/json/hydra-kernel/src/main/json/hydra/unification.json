@@ -661,13 +661,13 @@
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                             "domain": {"variable": "hydra.core.Type"},
                                                                                             "parameter": "r"}},
-                                                                                        "name": "maybe"}],
+                                                                                        "name": "optional"}],
                                                                                     "default": {
                                                                                       "typeApplication": {"body": {"variable": "cannotUnify"}, "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                     "typeName": "hydra.core.Type"}}}},
                                                                             "domain": {"variable": "hydra.core.Type"},
                                                                             "parameter": "l"}},
-                                                                        "name": "maybe"},
+                                                                        "name": "optional"},
                                                                       {
                                                                         "handler": {
                                                                           "lambda": {
@@ -1347,7 +1347,7 @@
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                                     "type": {"variable": "t1"}}}}}}},
-                                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "t1"}}}}},
+                                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "t1"}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
@@ -1366,7 +1366,7 @@
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                             "type": {"variable": "t1"}}}}}}},
-                                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "t1"}}}}},
+                                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "t1"}}}}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
@@ -1473,7 +1473,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.cases"},
+                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                         "type": {
                                                           "pair": {"first": {"variable": "hydra.typing.TypeConstraint"}, "second": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}},
                                                     "type": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}}}}},

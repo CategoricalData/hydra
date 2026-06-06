@@ -16,7 +16,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -44,7 +44,7 @@ binding el =
       let name = Core.unName (Core.bindingName el)
           t = Core.bindingTerm el
           typeStr =
-                  Maybes.cases (Core.bindingTypeScheme el) "" (\ts -> Strings.cat [
+                  Optionals.cases (Core.bindingTypeScheme el) "" (\ts -> Strings.cat [
                     ":(",
                     (typeScheme ts),
                     ")"])
@@ -65,7 +65,7 @@ caseStatement cs =
                     Core.fieldName = (Core.caseAlternativeName alt),
                     Core.fieldTerm = (Core.caseAlternativeHandler alt)}) csCases
           defaultField =
-                  Maybes.cases mdef [] (\d -> [
+                  Optionals.cases mdef [] (\d -> [
                     Core.Field {
                       Core.fieldName = (Core.Name "[default]"),
                       Core.fieldTerm = d}])
@@ -168,7 +168,7 @@ lambda l =
       let v = Core.unName (Core.lambdaParameter l)
           mt = Core.lambdaDomain l
           body = Core.lambdaBody l
-          typeStr = Maybes.cases mt "" (\t -> Strings.cat2 ":" (type_ t))
+          typeStr = Optionals.cases mt "" (\t -> Strings.cat2 ":" (type_ t))
       in (Strings.cat [
         "\955",
         v,
@@ -231,7 +231,7 @@ map showK showV m =
         "}"])
 -- | Show a Maybe value using a given function to show the element
 maybe :: (t0 -> String) -> Maybe t0 -> String
-maybe f mx = Maybes.cases mx "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")"))
+maybe f mx = Optionals.cases mx "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")"))
 -- | Show a pair using given functions to show each element
 pair :: (t0 -> String) -> (t1 -> String) -> (t0, t1) -> String
 pair showA showB p =
@@ -312,7 +312,7 @@ term t =
             "{",
             (Strings.intercalate ", " (Lists.map entry (Maps.toList v0))),
             "}"])
-        Core.TermMaybe v0 -> Maybes.cases v0 "nothing" (\t2 -> Strings.cat [
+        Core.TermOptional v0 -> Optionals.cases v0 "nothing" (\t2 -> Strings.cat [
           "just(",
           (term t2),
           ")"])
@@ -440,7 +440,7 @@ type_ typ =
             ", ",
             (type_ valTyp),
             ">"])
-        Core.TypeMaybe v0 -> Strings.cat [
+        Core.TypeOptional v0 -> Strings.cat [
           "maybe<",
           (type_ v0),
           ">"]
@@ -486,7 +486,7 @@ typeScheme ts =
                     (Core.unName v)]
           toConstraintPairs =
                   \p -> Lists.map (toConstraintPair (Pairs.first p)) (Core.typeVariableConstraintsClasses (Pairs.second p))
-          tc = Maybes.cases (Core.typeSchemeConstraints ts) [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m)))
+          tc = Optionals.cases (Core.typeSchemeConstraints ts) [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m)))
       in (Strings.cat [
         "(",
         fa,

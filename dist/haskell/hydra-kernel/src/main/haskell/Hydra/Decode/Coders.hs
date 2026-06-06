@@ -14,7 +14,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -32,7 +32,7 @@ coderDirection cx raw =
                     Maps.fromList [
                       (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
@@ -59,7 +59,7 @@ traversalOrder cx raw =
                     Maps.fromList [
                       (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))

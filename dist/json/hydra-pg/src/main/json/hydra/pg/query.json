@@ -72,9 +72,9 @@
           "body": {
             "record": [
               {"name": "direction", "type": {"variable": "hydra.pg.model.Direction"}},
-              {"name": "label", "type": {"maybe": {"variable": "hydra.pg.model.EdgeLabel"}}},
+              {"name": "label", "type": {"optional": {"variable": "hydra.pg.model.EdgeLabel"}}},
               {"name": "properties", "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
-              {"name": "vertex", "type": {"maybe": {"variable": "hydra.pg.query.VertexPattern"}}}]},
+              {"name": "vertex", "type": {"optional": {"variable": "hydra.pg.query.VertexPattern"}}}]},
           "variables": []},
         "name": "hydra.pg.query.EdgeProjectionPattern"}},
     {
@@ -106,7 +106,7 @@
             "record": [
               {"name": "optional", "type": {"literal": {"boolean": {}}}},
               {"name": "pattern", "type": {"list": {"variable": "hydra.pg.query.Projection"}}},
-              {"name": "where", "type": {"maybe": {"variable": "hydra.pg.query.Expression"}}}]},
+              {"name": "where", "type": {"optional": {"variable": "hydra.pg.query.Expression"}}}]},
           "variables": []},
         "name": "hydra.pg.query.MatchQuery"}},
     {
@@ -115,7 +115,7 @@
           "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.pg.query.Expression"}},
-              {"name": "as", "type": {"maybe": {"variable": "hydra.pg.query.Variable"}}}]},
+              {"name": "as", "type": {"optional": {"variable": "hydra.pg.query.Variable"}}}]},
           "variables": []},
         "name": "hydra.pg.query.Projection"}},
     {
@@ -197,8 +197,8 @@
         "body": {
           "body": {
             "record": [
-              {"name": "variable", "type": {"maybe": {"variable": "hydra.pg.query.Variable"}}},
-              {"name": "label", "type": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}}},
+              {"name": "variable", "type": {"optional": {"variable": "hydra.pg.query.Variable"}}},
+              {"name": "label", "type": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}},
               {"name": "properties", "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
               {"name": "edges", "type": {"list": {"variable": "hydra.pg.query.EdgeProjectionPattern"}}}]},
           "variables": []},

@@ -19,7 +19,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -47,7 +47,7 @@ compactName namespaces name =
       let qualName = qualifyName name
           mns = Util.qualifiedNameModuleName qualName
           local = Util.qualifiedNameLocal qualName
-      in (Maybes.cases mns (Core.unName name) (\ns -> Maybes.cases (Maps.lookup ns namespaces) local (\pre -> Strings.cat [
+      in (Optionals.cases mns (Core.unName name) (\ns -> Optionals.cases (Maps.lookup ns namespaces) local (\pre -> Strings.cat [
         pre,
         ":",
         local])))
@@ -95,7 +95,7 @@ nameToFilePath nsConv localConv ext name =
           local = Util.qualifiedNameLocal qualName
           nsToFilePath =
                   \nsArg -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unModuleName nsArg)))
-          prefix = Maybes.cases ns "" (\n -> Strings.cat2 (nsToFilePath n) "/")
+          prefix = Optionals.cases ns "" (\n -> Strings.cat2 (nsToFilePath n) "/")
           suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
       in (Strings.cat [
         prefix,
@@ -123,7 +123,7 @@ qualifyName :: Core.Name -> Util.QualifiedName
 qualifyName name =
 
       let parts = Lists.reverse (Strings.splitOn "." (Core.unName name))
-      in (Maybes.cases (Lists.uncons parts) (Util.QualifiedName {
+      in (Optionals.cases (Lists.uncons parts) (Util.QualifiedName {
         Util.qualifiedNameModuleName = Nothing,
         Util.qualifiedNameLocal = (Core.unName name)}) (\uc ->
         let localName = Pairs.first uc
@@ -146,5 +146,5 @@ uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visite
 unqualifyName :: Util.QualifiedName -> Core.Name
 unqualifyName qname =
 
-      let prefix = Maybes.cases (Util.qualifiedNameModuleName qname) "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".")
+      let prefix = Optionals.cases (Util.qualifiedNameModuleName qname) "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".")
       in (Core.Name (Strings.cat2 prefix (Util.qualifiedNameLocal qname)))

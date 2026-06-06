@@ -190,7 +190,7 @@
                           "application": {
                             "argument": {"variable": "caseExpr"},
                             "function": {"project": {"fieldName": "default", "typeName": "hydra.lisp.syntax.CaseExpression"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "clauseExprs",
                         "term": {
@@ -273,7 +273,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
@@ -367,7 +367,7 @@
                           "application": {
                             "argument": {"variable": "condExpr"},
                             "function": {"project": {"fieldName": "default", "typeName": "hydra.lisp.syntax.CondExpression"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}}],
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "d"},
@@ -439,7 +439,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                             "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                                         "body": {
@@ -536,7 +536,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                             "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                                         "body": {
@@ -633,7 +633,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                             "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                                         "body": {
@@ -730,7 +730,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                             "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                                         "body": {
@@ -2258,7 +2258,7 @@
                           "application": {
                             "argument": {"variable": "ifExpr"},
                             "function": {"project": {"fieldName": "else", "typeName": "hydra.lisp.syntax.IfExpression"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "elsePart",
                         "term": {
@@ -2282,7 +2282,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
@@ -2461,7 +2461,7 @@
                           "application": {
                             "argument": {"variable": "k"},
                             "function": {"project": {"fieldName": "namespace", "typeName": "hydra.lisp.syntax.Keyword"}}}},
-                        "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}}],
+                        "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "d"},
@@ -2504,7 +2504,7 @@
                                             "argument": {"variable": "ns"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"literal": {"string": {}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
                                                 "type": {"literal": {"string": {}}}}}}}}}}},
                                 "function": {"variable": "hydra.serialization.cst"}}},
                             "typeName": "hydra.lisp.syntax.Dialect"}}}}}},
@@ -2596,7 +2596,7 @@
                           "application": {
                             "argument": {"variable": "lam"},
                             "function": {"project": {"fieldName": "name", "typeName": "hydra.lisp.syntax.Lambda"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}, "variables": []}},
                       {
                         "name": "kw",
                         "term": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.lisp.serde.lambdaKeyword"}}},
@@ -2676,7 +2676,8 @@
                                                 "argument": {"variable": "mname"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Symbol"}}},
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Symbol"}}},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}},
@@ -4800,7 +4801,7 @@
                       "application": {
                         "argument": {"variable": "prog"},
                         "function": {"project": {"fieldName": "module", "typeName": "hydra.lisp.syntax.Program"}}}},
-                    "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}, "variables": []}},
+                    "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}, "variables": []}},
                   {
                     "name": "imports",
                     "term": {
@@ -5151,7 +5152,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                 "domain": {"unit": {}},
                                 "parameter": "_"}},
@@ -5279,7 +5280,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                 "domain": {"unit": {}},
                                 "parameter": "_"}},
@@ -5467,7 +5468,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                 "domain": {"unit": {}},
                                 "parameter": "_"}},
@@ -5742,7 +5743,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                 "domain": {"unit": {}},
                                 "parameter": "_"}},
@@ -6440,14 +6441,14 @@
                           "application": {
                             "argument": {"variable": "fwc"},
                             "function": {"project": {"fieldName": "doc", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}, "variables": []}},
                       {
                         "name": "mcomment",
                         "term": {
                           "application": {
                             "argument": {"variable": "fwc"},
                             "function": {"project": {"fieldName": "comment", "typeName": "hydra.lisp.syntax.TopLevelFormWithComments"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}, "variables": []}},
                       {
                         "name": "form",
                         "term": {
@@ -6474,7 +6475,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Docstring"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Docstring"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
@@ -6494,7 +6495,8 @@
                                     "argument": {"variable": "mcomment"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.lisp.syntax.Comment"}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.lisp.syntax.Comment"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {

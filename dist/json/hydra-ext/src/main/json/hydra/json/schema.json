@@ -5,11 +5,11 @@
         "body": {
           "body": {
             "record": [
-              {"name": "id", "type": {"maybe": {"literal": {"string": {}}}}},
+              {"name": "id", "type": {"optional": {"literal": {"string": {}}}}},
               {
                 "name": "definitions",
                 "type": {
-                  "maybe": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
+                  "optional": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
               {"name": "root", "type": {"variable": "hydra.json.schema.Schema"}}]},
           "variables": []},
         "name": "hydra.json.schema.Document"}},

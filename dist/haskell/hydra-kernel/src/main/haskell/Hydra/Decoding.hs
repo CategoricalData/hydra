@@ -22,7 +22,7 @@ import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -65,7 +65,7 @@ collectOrdConstrainedVariables typ =
         collectTypeVariablesFromType (Core.mapTypeKeys v0),
         (collectOrdConstrainedVariables (Core.mapTypeKeys v0)),
         (collectOrdConstrainedVariables (Core.mapTypeValues v0))]
-      Core.TypeMaybe v0 -> collectOrdConstrainedVariables v0
+      Core.TypeOptional v0 -> collectOrdConstrainedVariables v0
       Core.TypePair v0 -> Lists.concat2 (collectOrdConstrainedVariables (Core.pairTypeFirst v0)) (collectOrdConstrainedVariables (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) v0)
       Core.TypeSet v0 -> Lists.concat2 (collectTypeVariablesFromType v0) (collectOrdConstrainedVariables v0)
@@ -85,7 +85,7 @@ collectTypeVariablesFromType typ =
       Core.TypeForall v0 -> collectTypeVariablesFromType (Core.forallTypeBody v0)
       Core.TypeList v0 -> collectTypeVariablesFromType v0
       Core.TypeMap v0 -> Lists.concat2 (collectTypeVariablesFromType (Core.mapTypeKeys v0)) (collectTypeVariablesFromType (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> collectTypeVariablesFromType v0
+      Core.TypeOptional v0 -> collectTypeVariablesFromType v0
       Core.TypePair v0 -> Lists.concat2 (collectTypeVariablesFromType (Core.pairTypeFirst v0)) (collectTypeVariablesFromType (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) v0)
       Core.TypeSet v0 -> collectTypeVariablesFromType v0
@@ -114,7 +114,7 @@ decodeBindingName n =
       let parts = Strings.splitOn "." (Core.unName n)
           localPart = Formatting.decapitalize (Names.localNameOf n)
           localResult = Core.Name localPart
-      in (Maybes.cases (Lists.maybeInit parts) localResult (\nsParts -> Maybes.cases (Lists.uncons nsParts) localResult (\nsUc ->
+      in (Optionals.cases (Lists.maybeInit parts) localResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) localResult (\nsUc ->
         let tail = Pairs.second nsUc
         in (Core.Name (Strings.intercalate "." (Lists.concat2 [
           "hydra",
@@ -1063,7 +1063,7 @@ decodeMaybeType elemType =
 -- | Transform a type module into a decoder module
 decodeModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 decodeModule cx graph mod =
-    Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
+    Eithers.bind (filterTypeBindings cx graph (Optionals.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
         let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
             dataTerm =
@@ -1101,7 +1101,7 @@ decodeModule cx graph mod =
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+          Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) decodedBindings)}))))))
 -- | Generate a decoder module name from a source module name
 decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
@@ -1109,7 +1109,7 @@ decodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)
-      in (Maybes.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
+      in (Optionals.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.decode.",
         (Strings.intercalate "." (Pairs.second uc))])))
 -- | Generate a decoder for a pair type
@@ -1229,7 +1229,7 @@ decodeType typ =
       Core.TypeList v0 -> decodeListType v0
       Core.TypeLiteral v0 -> decodeLiteralType v0
       Core.TypeMap v0 -> decodeMapType v0
-      Core.TypeMaybe v0 -> decodeMaybeType v0
+      Core.TypeOptional v0 -> decodeMaybeType v0
       Core.TypePair v0 -> decodePairType v0
       Core.TypeRecord v0 -> decodeRecordType v0
       Core.TypeSet v0 -> decodeSetType v0
@@ -1263,7 +1263,7 @@ decodeTypeNamed ename typ =
       Core.TypeList v0 -> decodeListType v0
       Core.TypeLiteral v0 -> decodeLiteralType v0
       Core.TypeMap v0 -> decodeMapType v0
-      Core.TypeMaybe v0 -> decodeMaybeType v0
+      Core.TypeOptional v0 -> decodeMaybeType v0
       Core.TypePair v0 -> decodePairType v0
       Core.TypeRecord v0 -> decodeRecordTypeNamed ename v0
       Core.TypeSet v0 -> decodeSetType v0
@@ -1376,7 +1376,7 @@ decodeUnionTypeNamed ename rt =
                             Core.letBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cases")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
@@ -1498,7 +1498,7 @@ decoderFullResultType typ =
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (decoderFullResultType (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (decoderFullResultType (Core.mapTypeValues v0))})
-      Core.TypeMaybe v0 -> Core.TypeMaybe (decoderFullResultType v0)
+      Core.TypeOptional v0 -> Core.TypeOptional (decoderFullResultType v0)
       Core.TypePair v0 -> Core.TypePair (Core.PairType {
         Core.pairTypeFirst = (decoderFullResultType (Core.pairTypeFirst v0)),
         Core.pairTypeSecond = (decoderFullResultType (Core.pairTypeSecond v0))})
@@ -1532,7 +1532,7 @@ decoderFullResultTypeNamed ename typ =
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (decoderFullResultType (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (decoderFullResultType (Core.mapTypeValues v0))})
-      Core.TypeMaybe v0 -> Core.TypeMaybe (decoderFullResultType v0)
+      Core.TypeOptional v0 -> Core.TypeOptional (decoderFullResultType v0)
       Core.TypePair v0 -> Core.TypePair (Core.PairType {
         Core.pairTypeFirst = (decoderFullResultType (Core.pairTypeFirst v0)),
         Core.pairTypeSecond = (decoderFullResultType (Core.pairTypeSecond v0))})
@@ -1618,7 +1618,7 @@ decoderTypeSchemeNamed ename typ =
 -- | Filter bindings to only decodable type definitions
 filterTypeBindings :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
-    Eithers.map Maybes.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
+    Eithers.map Optionals.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 -- | Check if a binding is decodable (serializable type)
 isDecodableBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isDecodableBinding cx graph b =

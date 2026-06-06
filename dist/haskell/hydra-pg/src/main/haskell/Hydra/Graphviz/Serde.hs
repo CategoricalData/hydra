@@ -3,12 +3,33 @@
 
 module Hydra.Graphviz.Serde where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Graphviz.Dot as Dot
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Convert an attribute list to an expression
@@ -57,8 +78,8 @@ edgeStmtToExpr directed es =
                   Lists.concat (Lists.map (\n -> [
                     Serialization.cst arrow,
                     (nodeOrSubgraphToExpr directed n)]) r)
-          attrParts = Maybes.maybe [] (\a -> [
-                attrListToExpr a]) attr
+          attrParts = Optionals.cases attr [] (\a -> [
+                attrListToExpr a])
       in (Serialization.spaceSep (Lists.concat [
         [
           nodeOrSubgraphToExpr directed l],
@@ -104,9 +125,9 @@ nodeIdToExpr nid =
 
       let i = Dot.nodeIdId nid
           mp = Dot.nodeIdPort nid
-      in (Serialization.noSep (Maybes.cat [
-        Maybes.pure (idToExpr i),
-        (Maybes.map portToExpr mp)]))
+      in (Serialization.noSep (Optionals.cat [
+        Optionals.pure (idToExpr i),
+        (Optionals.map portToExpr mp)]))
 -- | Convert a node or subgraph to an expression
 nodeOrSubgraphToExpr :: Bool -> Dot.NodeOrSubgraph -> Ast.Expr
 nodeOrSubgraphToExpr directed ns =
@@ -119,9 +140,9 @@ nodeStmtToExpr ns =
 
       let i = Dot.nodeStmtId ns
           attr = Dot.nodeStmtAttributes ns
-      in (Serialization.spaceSep (Maybes.cat [
-        Maybes.pure (nodeIdToExpr i),
-        (Maybes.map attrListToExpr attr)]))
+      in (Serialization.spaceSep (Optionals.cat [
+        Optionals.pure (nodeIdToExpr i),
+        (Optionals.map attrListToExpr attr)]))
 -- | Convert a port to an expression
 portToExpr :: Dot.Port -> Ast.Expr
 portToExpr p =
@@ -129,13 +150,13 @@ portToExpr p =
       let mi = Dot.portId p
           mp = Dot.portPosition p
           pre =
-                  Maybes.maybe [] (\i -> [
+                  Optionals.cases mi [] (\i -> [
                     Serialization.cst ":",
-                    (idToExpr i)]) mi
+                    (idToExpr i)])
           suf =
-                  Maybes.maybe [] (\cp -> [
+                  Optionals.cases mp [] (\cp -> [
                     Serialization.cst ":",
-                    (compassPtToExpr cp)]) mp
+                    (compassPtToExpr cp)])
       in (Serialization.noSep (Lists.concat [
         pre,
         suf]))
@@ -151,9 +172,9 @@ stmtToExpr directed s =
 -- | Convert a subgraph identifier to an expression
 subgraphIdToExpr :: Dot.SubgraphId -> Ast.Expr
 subgraphIdToExpr sid =
-    Serialization.spaceSep (Maybes.cat [
-      Maybes.pure (Serialization.cst "subgraph"),
-      (Maybes.map idToExpr (Dot.unSubgraphId sid))])
+    Serialization.spaceSep (Optionals.cat [
+      Optionals.pure (Serialization.cst "subgraph"),
+      (Optionals.map idToExpr (Dot.unSubgraphId sid))])
 -- | Convert a subgraph to an expression
 subgraphToExpr :: Bool -> Dot.Subgraph -> Ast.Expr
 subgraphToExpr directed sg =
@@ -162,6 +183,6 @@ subgraphToExpr directed sg =
           stmts = Dot.subgraphStatements sg
           body =
                   Serialization.brackets Serialization.curlyBraces Serialization.inlineStyle (Serialization.spaceSep (Lists.map (stmtToExpr directed) stmts))
-      in (Serialization.spaceSep (Maybes.cat [
-        Maybes.map subgraphIdToExpr mid,
-        (Maybes.pure body)]))
+      in (Serialization.spaceSep (Optionals.cat [
+        Optionals.map subgraphIdToExpr mid,
+        (Optionals.pure body)]))

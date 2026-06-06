@@ -2,22 +2,41 @@
 -- | C++ naming utilities: encoding Hydra names as C++ names
 
 module Hydra.Cpp.Names where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Cpp.Environment as Environment
 import qualified Hydra.Cpp.Language as Language
 import qualified Hydra.Cpp.Syntax as Syntax
 import qualified Hydra.Cpp.Utils as Utils
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Get the C++ class name from a Hydra Name
@@ -47,7 +66,7 @@ encodeName isQualified conv env name =
           cppLocal = sanitizeCppName (Formatting.convertCase Util.CaseConventionCamel conv local)
           cppNs =
                   \nsVal -> Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
-      in (Logic.ifElse isQualified (Maybes.maybe (Maybes.maybe cppLocal (\nsVal -> Strings.cat2 (cppNs nsVal) (Strings.cat2 "::" cppLocal)) mns) (\n -> n) (Maps.lookup name boundVars)) cppLocal)
+      in (Logic.ifElse isQualified (Optionals.cases (Maps.lookup name boundVars) (Optionals.cases mns cppLocal (\nsVal -> Strings.cat2 (cppNs nsVal) (Strings.cat2 "::" cppLocal))) (\n -> n)) cppLocal)
 -- | Encode a qualified name with namespace
 encodeNameQualified :: Environment.CppEnvironment -> Core.Name -> String
 encodeNameQualified env name =
@@ -57,7 +76,7 @@ encodeNameQualified env name =
           qualName = Names.qualifyName name
           mns = Util.qualifiedNameModuleName qualName
           local = Util.qualifiedNameLocal qualName
-      in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (sanitizeCppName local) (Strings.intercalate "::" (Lists.map sanitizeCppName (Strings.splitOn "." (Core.unName name))))) (\n -> n) (Maps.lookup name boundVars))
+      in (Optionals.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (sanitizeCppName local) (Strings.intercalate "::" (Lists.map sanitizeCppName (Strings.splitOn "." (Core.unName name))))) (\n -> n))
 -- | Encode a namespace as a C++ namespace string
 encodeNamespace :: Packaging.ModuleName -> String
 encodeNamespace nsVal =

@@ -44,7 +44,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Name"}}}}},
+                        "body": {"optional": {"variable": "hydra.core.Name"}}}}},
                   {
                     "name": "in",
                     "type": {
@@ -54,7 +54,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Name"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.core.Name"}}}}}]}}},
           "variables": []},
         "name": "hydra.query.Edge"}},
     {

@@ -2,31 +2,54 @@
 -- | C++ code generator: converts Hydra modules to C++ header files
 
 module Hydra.Cpp.Coder where
+import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Cpp.Language as Language
 import qualified Hydra.Cpp.Serde as Serde
 import qualified Hydra.Cpp.Syntax as Syntax
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -393,7 +416,7 @@ encodeRecordType cx g name rt comment =
           Syntax.MemberSpecificationMember (Syntax.MemberDeclarationConstructor (Syntax.ConstructorDeclaration {
             Syntax.constructorDeclarationName = (className name),
             Syntax.constructorDeclarationParameters = (Lists.map (\p -> Syntax.Parameter {
-              Syntax.parameterType = (Maybes.fromMaybe (Syntax.TypeExpressionBasic Syntax.BasicTypeInt) (Syntax.variableDeclarationType p)),
+              Syntax.parameterType = (Optionals.fromOptional (Syntax.TypeExpressionBasic Syntax.BasicTypeInt) (Syntax.variableDeclarationType p)),
               Syntax.parameterName = (Syntax.variableDeclarationName p),
               Syntax.parameterUnnamed = False,
               Syntax.parameterDefaultValue = Nothing}) constructorParams),
@@ -420,7 +443,7 @@ encodeType cx g typ =
           kt,
           vt]))))
         Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
-        Core.TypeMaybe v0 -> Eithers.map (\enc -> toConstType (createTemplateType "std::optional" [
+        Core.TypeOptional v0 -> Eithers.map (\enc -> toConstType (createTemplateType "std::optional" [
           enc])) (encodeType cx g v0)
         Core.TypePair v0 -> Eithers.bind (encodeType cx g (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g (Core.pairTypeSecond v0)) (\st -> Right (toConstType (createTemplateType "std::pair" [
           ft,
@@ -490,7 +513,7 @@ findIncludes withFwd ns defs =
           Syntax.includeDirectiveIsSystem = False}] [])]
 findTypeDependencies :: Packaging.ModuleName -> [Packaging.TypeDefinition] -> [Core.Name]
 findTypeDependencies ns defs =
-    Lists.filter (\n -> Logic.not (Equality.equal (Maybes.map Packaging.unModuleName (Names.moduleNameOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionBody d)))) Sets.empty defs))
+    Lists.filter (\n -> Logic.not (Equality.equal (Optionals.map Packaging.unModuleName (Names.moduleNameOf n)) (Just (Packaging.unModuleName ns)))) (Sets.toList (Lists.foldl (\acc -> \d -> Sets.union acc (Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionBody d)))) Sets.empty defs))
 fwdHeaderName :: Packaging.ModuleName -> Core.Name
 fwdHeaderName ns =
     Names.unqualifyName (Util.QualifiedName {
@@ -522,7 +545,7 @@ isStdContainerType typ =
         Core.TypeApplication v0 -> isStdContainerType (Core.applicationTypeFunction v0)
         Core.TypeList _ -> True
         Core.TypeMap _ -> True
-        Core.TypeMaybe _ -> True
+        Core.TypeOptional _ -> True
         Core.TypeSet _ -> True
         _ -> False
 isStructType :: Core.Type -> Bool

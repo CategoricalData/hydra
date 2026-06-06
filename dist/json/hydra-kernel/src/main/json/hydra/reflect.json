@@ -607,10 +607,10 @@
                   {
                     "handler": {
                       "lambda": {
-                        "body": {"inject": {"field": {"name": "maybe", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
-                        "domain": {"maybe": {"variable": "hydra.core.Term"}},
+                        "body": {"inject": {"field": {"name": "optional", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
+                        "domain": {"optional": {"variable": "hydra.core.Term"}},
                         "parameter": "_"}},
-                    "name": "maybe"},
+                    "name": "optional"},
                   {
                     "handler": {
                       "lambda": {
@@ -714,7 +714,7 @@
                 {"inject": {"field": {"name": "list", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
                 {"inject": {"field": {"name": "literal", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
                 {"inject": {"field": {"name": "map", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
-                {"inject": {"field": {"name": "maybe", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
+                {"inject": {"field": {"name": "optional", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
                 {"inject": {"field": {"name": "pair", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
                 {"inject": {"field": {"name": "project", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
                 {"inject": {"field": {"name": "record", "term": {"unit": {}}}, "typeName": "hydra.variants.TermVariant"}},
@@ -799,10 +799,10 @@
                   {
                     "handler": {
                       "lambda": {
-                        "body": {"inject": {"field": {"name": "maybe", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                        "body": {"inject": {"field": {"name": "optional", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                         "domain": {"variable": "hydra.core.Type"},
                         "parameter": "_"}},
-                    "name": "maybe"},
+                    "name": "optional"},
                   {
                     "handler": {
                       "lambda": {
@@ -882,7 +882,7 @@
                 {"inject": {"field": {"name": "literal", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                 {"inject": {"field": {"name": "map", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                 {"inject": {"field": {"name": "wrap", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
-                {"inject": {"field": {"name": "maybe", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
+                {"inject": {"field": {"name": "optional", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                 {"inject": {"field": {"name": "pair", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                 {"inject": {"field": {"name": "record", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},
                 {"inject": {"field": {"name": "set", "term": {"unit": {}}}, "typeName": "hydra.variants.TypeVariant"}},

@@ -18,7 +18,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as LibLiterals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -99,14 +99,14 @@ toJson types tname typ term =
                 results = Eithers.mapList (\t -> toJson types tname v0 t) terms
             in (Eithers.map (\vs -> Model.ValueArray vs) results)
           _ -> Left "expected set term"
-        Core.TypeMaybe v0 ->
+        Core.TypeOptional v0 ->
           let innerStripped = Strip.deannotateType v0
               isNestedMaybe =
                       case innerStripped of
-                        Core.TypeMaybe _ -> True
+                        Core.TypeOptional _ -> True
                         _ -> False
           in case strippedTerm of
-            Core.TermMaybe v1 -> Maybes.cases v1 (Right Model.ValueNull) (\v ->
+            Core.TermOptional v1 -> Optionals.cases v1 (Right Model.ValueNull) (\v ->
               let encoded = toJson types tname v0 v
               in (Logic.ifElse isNestedMaybe (Eithers.map (\ev -> Model.ValueArray [
                 ev]) encoded) encoded))
@@ -115,8 +115,8 @@ toJson types tname typ term =
           Core.TermRecord v1 ->
             let isSimpleMaybe =
                     \ftype -> case (Strip.deannotateType ftype) of
-                      Core.TypeMaybe v2 -> case (Strip.deannotateType v2) of
-                        Core.TypeMaybe _ -> False
+                      Core.TypeOptional v2 -> case (Strip.deannotateType v2) of
+                        Core.TypeOptional _ -> False
                         _ -> True
                       _ -> False
                 encodeFieldWithType =
@@ -125,10 +125,10 @@ toJson types tname typ term =
                               fterm = Core.fieldTerm f
                               ftype = Core.fieldTypeType ft
                           in (Logic.ifElse (isSimpleMaybe ftype) (case (Strip.deannotateTerm fterm) of
-                            Core.TermMaybe v2 -> Maybes.cases v2 (Right Nothing) (\v ->
+                            Core.TermOptional v2 -> Optionals.cases v2 (Right Nothing) (\v ->
                               let innerType =
                                       case (Strip.deannotateType ftype) of
-                                        Core.TypeMaybe v3 -> v3
+                                        Core.TypeOptional v3 -> v3
                                         _ -> ftype
                                   encoded = toJson types tname innerType v
                               in (Eithers.map (\ev -> Just (fname, ev)) encoded))
@@ -139,7 +139,7 @@ toJson types tname typ term =
                 fields = Core.recordFields v1
                 encodedPairs =
                         Eithers.mapList (\ftf -> encodeFieldWithType (Pairs.first ftf) (Pairs.second ftf)) (Lists.zip fieldTypes fields)
-            in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList (Maybes.cat pairs))) encodedPairs)
+            in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList (Optionals.cat pairs))) encodedPairs)
           _ -> Left "expected record term"
         Core.TypeUnion v0 -> case strippedTerm of
           Core.TermInject v1 ->
@@ -147,7 +147,7 @@ toJson types tname typ term =
                 fname = Core.unName (Core.fieldName field)
                 fterm = Core.fieldTerm field
                 ftypeResult =
-                        Maybes.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0) (Left (Strings.cat [
+                        Optionals.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0) (Left (Strings.cat [
                           "unknown variant: ",
                           fname])) (\ft -> Right (Core.fieldTypeType ft))
             in (Eithers.either (\err -> Left err) (\ftype ->
@@ -203,7 +203,7 @@ toJson types tname typ term =
             _ -> Left "expected either term"
         Core.TypeVariable v0 ->
           let lookedUp = Maps.lookup v0 types
-          in (Maybes.cases lookedUp (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term))
+          in (Optionals.cases lookedUp (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term))
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
           (ShowCore.type_ typ)])
@@ -221,7 +221,7 @@ toJsonUntyped term =
           let terms = Sets.toList v0
               results = Eithers.mapList (\t -> toJsonUntyped t) terms
           in (Eithers.map (\vs -> Model.ValueArray vs) results)
-        Core.TermMaybe v0 -> Maybes.cases v0 (Right Model.ValueNull) (\v ->
+        Core.TermOptional v0 -> Optionals.cases v0 (Right Model.ValueNull) (\v ->
           let encodedMaybe = toJsonUntyped v
           in (Eithers.map (\encoded -> Model.ValueArray [
             encoded]) encodedMaybe))

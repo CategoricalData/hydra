@@ -22,7 +22,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -58,7 +58,7 @@ import qualified Data.Set as S
 -- | Return the element at the given index, or Left(Other) with the given description if out of range
 atOrFail :: Int -> String -> [t0] -> Either Errors.Error t0
 atOrFail i desc xs =
-    Maybes.cases (Lists.maybeAt i xs) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "atOrFail: " desc)))) (\x -> Right x)
+    Optionals.cases (Lists.maybeAt i xs) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "atOrFail: " desc)))) (\x -> Right x)
 -- | Unify type constraints and check the substitution
 bindConstraints :: Typing.InferenceContext -> Graph.Graph -> [Typing.TypeConstraint] -> Either Errors.Error Typing.TypeSubst
 bindConstraints flowCx cx constraints =
@@ -77,7 +77,7 @@ bindUnboundTypeVariables cx term0 =
                               \b ->
                                 let bname = Core.bindingName b
                                     bterm = Core.bindingTerm b
-                                in (Maybes.cases (Core.bindingTypeScheme b) (Core.Binding {
+                                in (Optionals.cases (Core.bindingTypeScheme b) (Core.Binding {
                                   Core.bindingName = bname,
                                   Core.bindingTerm = (bindUnboundTypeVariables cx bterm),
                                   Core.bindingTypeScheme = Nothing}) (\ts ->
@@ -158,7 +158,7 @@ generalize cx typ =
                   Lists.nub (Lists.filter (\v -> Logic.and (isUnbound cx v) (isTypeVarName v)) (Variables.freeVariablesInTypeOrdered typ))
           allConstraints = Graph.graphClassConstraints cx
           relevantConstraints =
-                  Maps.fromList (Maybes.cat (Lists.map (\v -> Maybes.map (\meta -> (v, meta)) (Maps.lookup v allConstraints)) vars))
+                  Maps.fromList (Optionals.cat (Lists.map (\v -> Optionals.map (\meta -> (v, meta)) (Maps.lookup v allConstraints)) vars))
           constraintsMaybe = Logic.ifElse (Maps.null relevantConstraints) Nothing (Just relevantConstraints)
       in Core.TypeScheme {
         Core.typeSchemeVariables = vars,
@@ -167,7 +167,7 @@ generalize cx typ =
 -- | Return the first element of a list, or Left(Other) with the given description if the list is empty
 headOrFail :: String -> [t0] -> Either Errors.Error t0
 headOrFail desc xs =
-    Maybes.cases (Lists.maybeHead xs) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "headOrFail: " desc)))) (\x -> Right x)
+    Optionals.cases (Lists.maybeHead xs) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "headOrFail: " desc)))) (\x -> Right x)
 -- | Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings.
 inferGraphTypes :: Typing.InferenceContext -> [Core.Binding] -> Graph.Graph -> Either Errors.Error ((Graph.Graph, [Core.Binding]), Typing.InferenceContext)
 inferGraphTypes fcx0 bindings0 g0 =
@@ -212,7 +212,7 @@ inferMany :: Typing.InferenceContext -> Graph.Graph -> [(Core.Term, String)] -> 
 inferMany fcx cx pairs =
 
       let emptyResult = Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)
-      in (Maybes.cases (Lists.uncons pairs) emptyResult (\pairsUc ->
+      in (Optionals.cases (Lists.uncons pairs) emptyResult (\pairsUc ->
         let headPair = Pairs.first pairsUc
             tl = Pairs.second pairsUc
             e = Pairs.first headPair
@@ -256,7 +256,7 @@ inferTypeOf fcx cx term =
           in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (Eithers.bind (headOrFail "inferTypeOf: single binding expected" bindings) (\binding ->
             let term1 = Core.bindingTerm binding
                 mts = Core.bindingTypeScheme binding
-            in (Maybes.cases mts (Left (Errors.ErrorInference (Errors.InferenceErrorOther (Errors.OtherInferenceError {
+            in (Optionals.cases mts (Left (Errors.ErrorInference (Errors.InferenceErrorOther (Errors.OtherInferenceError {
               Errors.otherInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace fcx2))),
               Errors.otherInferenceErrorMessage = "Expected a type scheme"})))) (\ts -> Right ((term1, ts), fcx2))))) (Left (Errors.ErrorInference (Errors.InferenceErrorOther (Errors.OtherInferenceError {
             Errors.otherInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace fcx2))),
@@ -347,12 +347,13 @@ inferTypeOfCaseStatement fcx cx caseStmt =
             stype = Core.typeSchemeBody schemaType
         in (Eithers.bind (ExtractCore.unionType tname stype) (\sfields ->
           let fcxDflt = Names.pushSubtermStep Paths.SubtermStepUnionCasesDefault fcx2
-          in (Eithers.bind (Eithers.mapMaybe (\t -> inferTypeOfTerm fcxDflt cx t (Strings.cat [
+          in (Eithers.bind (Eithers.mapOptional (\t -> inferTypeOfTerm fcxDflt cx t (Strings.cat [
             "case ",
             (Core.unName tname),
             ".<default>"])) dflt) (\dfltRp ->
             let dfltResult = dfltRp
-                fcx3 = Maybes.fromMaybe fcx2 (Maybes.map (\_r -> Names.restoreTrace fcx2 (Typing.inferenceResultContext _r)) dfltRp)
+                fcx3 =
+                        Optionals.fromOptional fcx2 (Optionals.map (\_r -> Names.restoreTrace fcx2 (Typing.inferenceResultContext _r)) dfltRp)
             in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (
               Core.caseAlternativeHandler f,
               (Strings.cat [
@@ -372,28 +373,28 @@ inferTypeOfCaseStatement fcx cx caseStmt =
                   cod = Core.TypeVariable codv
                   caseMap = Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields)
                   dfltConstraints =
-                          Maybes.toList (Maybes.map (\r -> Typing.TypeConstraint {
+                          Optionals.toList (Optionals.map (\r -> Typing.TypeConstraint {
                             Typing.typeConstraintLeft = cod,
                             Typing.typeConstraintRight = (Substitution.substInType isubst (Typing.inferenceResultType r)),
                             Typing.typeConstraintComment = "match default"}) dfltResult)
                   caseConstraints =
-                          Maybes.cat (Lists.zipWith (\fname -> \itype -> Maybes.map (\ftype -> Typing.TypeConstraint {
+                          Optionals.cat (Lists.zipWith (\fname -> \itype -> Optionals.map (\ftype -> Typing.TypeConstraint {
                             Typing.typeConstraintLeft = itype,
                             Typing.typeConstraintRight = (Core.TypeFunction (Core.FunctionType {
                               Core.functionTypeDomain = ftype,
                               Core.functionTypeCodomain = cod})),
                             Typing.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes)
-                  dfltClassConstraints = Maybes.fromMaybe Maps.empty (Maybes.map Typing.inferenceResultClassConstraints dfltResult)
+                  dfltClassConstraints = Optionals.fromOptional Maps.empty (Optionals.map Typing.inferenceResultClassConstraints dfltResult)
                   allElemConstraints = mergeClassConstraints caseElemConstraints dfltClassConstraints
               in (Eithers.bind (mapConstraints fcx5 cx (\subst -> yieldWithConstraints fcx5 (buildTypeApplicationTerm svars (Core.TermCases (Core.CaseStatement {
                 Core.caseStatementTypeName = tname,
-                Core.caseStatementDefault = (Maybes.map Typing.inferenceResultTerm dfltResult),
+                Core.caseStatementDefault = (Optionals.map Typing.inferenceResultTerm dfltResult),
                 Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.CaseAlternative {
                   Core.caseAlternativeName = n,
                   Core.caseAlternativeHandler = t}) fnames iterms)}))) (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
                 Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-                Maybes.toList (Maybes.map Typing.inferenceResultSubst dfltResult),
+                Optionals.toList (Optionals.map Typing.inferenceResultSubst dfltResult),
                 [
                   isubst,
                   subst]])) (Substitution.substInClassConstraints subst allElemConstraints)) (Lists.concat [
@@ -570,7 +571,7 @@ inferTypeOfLet fcx0 cx let0 =
           bindingMap = Maps.fromList (Lists.zip names bindings0)
           createLet =
                   \e -> \group -> Core.TermLet (Core.Let {
-                    Core.letBindings = (Maybes.cat (Lists.map (\n -> Maps.lookup n bindingMap) group)),
+                    Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap) group)),
                     Core.letBody = e})
           rewrittenLet = Lists.foldl createLet body0 (Lists.reverse groups)
           restoreLet =
@@ -591,7 +592,7 @@ inferTypeOfLet fcx0 cx let0 =
                         e = Pairs.second result
                         bindingMap2 = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindingList)
                     in (Core.TermLet (Core.Let {
-                      Core.letBindings = (Maybes.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
+                      Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
                       Core.letBody = e}))
           rewriteResult =
                   \iresult ->
@@ -643,7 +644,7 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
               constraintsWithS2 = Substitution.substInClassConstraints s2 inferredConstraints
               composedSubst = Substitution.composeTypeSubst s1 s2
               originalBindingConstraints =
-                      Lists.foldl (\acc -> \b -> Maybes.cases (Core.bindingTypeScheme b) acc (\ts -> Maybes.cases (Core.typeSchemeConstraints ts) acc (\c -> mergeClassConstraints acc c))) Maps.empty bins0
+                      Lists.foldl (\acc -> \b -> Optionals.cases (Core.bindingTypeScheme b) acc (\ts -> Optionals.cases (Core.typeSchemeConstraints ts) acc (\c -> mergeClassConstraints acc c))) Maps.empty bins0
               originalConstraintsSubst = Substitution.substInClassConstraints composedSubst originalBindingConstraints
               allInferredConstraints = mergeClassConstraints constraintsWithS2 originalConstraintsSubst
               mergedConstraints = mergeClassConstraints (Graph.graphClassConstraints g2base) allInferredConstraints
@@ -768,8 +769,8 @@ inferTypeOfMap fcx cx m =
 inferTypeOfOptional :: Typing.InferenceContext -> Graph.Graph -> Maybe Core.Term -> Either Errors.Error Typing.InferenceResult
 inferTypeOfOptional fcx cx m =
 
-      let trmCons = \terms -> Core.TermMaybe (Lists.maybeHead terms)
-      in (inferTypeOfCollection fcx cx (\x -> Core.TypeMaybe x) trmCons "optional element" Sets.empty (Maybes.cases m [] Lists.singleton))
+      let trmCons = \terms -> Core.TermOptional (Lists.maybeHead terms)
+      in (inferTypeOfCollection fcx cx (\x -> Core.TypeOptional x) trmCons "optional element" Sets.empty (Optionals.cases m [] Lists.singleton))
 -- | Infer the type of a pair (Either version)
 inferTypeOfPair :: Typing.InferenceContext -> Graph.Graph -> (Core.Term, Core.Term) -> Either Errors.Error Typing.InferenceResult
 inferTypeOfPair fcx cx p =
@@ -796,12 +797,12 @@ inferTypeOfPair fcx cx p =
 -- | Infer the type of a primitive function (Either version)
 inferTypeOfPrimitive :: Typing.InferenceContext -> Graph.Graph -> Core.Name -> Either Errors.Error Typing.InferenceResult
 inferTypeOfPrimitive fcx cx name =
-    Maybes.cases (Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives cx))) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
+    Optionals.cases (Optionals.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives cx))) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchPrimitive (Errors.NoSuchPrimitiveError {
       Errors.noSuchPrimitiveErrorName = name})))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
-          constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
+          constraints = Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints ts)
       in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints)))
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Typing.InferenceContext -> Graph.Graph -> Core.Projection -> Either Errors.Error Typing.InferenceResult
@@ -870,7 +871,7 @@ inferTypeOfTerm fcx cx term desc =
         Core.TermList v0 -> inferTypeOfList fcx2 cx v0
         Core.TermLiteral v0 -> Right (inferTypeOfLiteral fcx2 v0)
         Core.TermMap v0 -> inferTypeOfMap fcx2 cx v0
-        Core.TermMaybe v0 -> inferTypeOfOptional fcx2 cx v0
+        Core.TermOptional v0 -> inferTypeOfOptional fcx2 cx v0
         Core.TermPair v0 -> inferTypeOfPair fcx2 cx v0
         Core.TermProject v0 -> inferTypeOfProjection fcx2 cx v0
         Core.TermRecord v0 -> inferTypeOfRecord fcx2 cx v0
@@ -931,17 +932,17 @@ inferTypeOfUnwrap fcx cx tname =
 -- | Infer the type of a variable (Either version)
 inferTypeOfVariable :: Typing.InferenceContext -> Graph.Graph -> Core.Name -> Either Errors.Error Typing.InferenceResult
 inferTypeOfVariable fcx cx name =
-    Maybes.cases (Maps.lookup name (Graph.graphBoundTypes cx)) (Maybes.cases (Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives cx))) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+    Optionals.cases (Maps.lookup name (Graph.graphBoundTypes cx)) (Optionals.cases (Optionals.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives cx))) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = name})))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
-          constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
+          constraints = Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints ts)
       in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints)))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
-          constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
+          constraints = Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints ts)
       in (Right (Typing.InferenceResult {
         Typing.inferenceResultTerm = (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)),
         Typing.inferenceResultType = (Core.typeSchemeBody ts),
@@ -980,7 +981,7 @@ inferTypesOfTemporaryBindings :: Typing.InferenceContext -> Graph.Graph -> [Core
 inferTypesOfTemporaryBindings fcx cx bins =
 
       let emptyResult = Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)
-      in (Maybes.cases (Lists.uncons bins) emptyResult (\binsUc ->
+      in (Optionals.cases (Lists.uncons bins) emptyResult (\binsUc ->
         let binding = Pairs.first binsUc
             tl = Pairs.second binsUc
             k = Core.bindingName binding
@@ -995,10 +996,10 @@ inferTypesOfTemporaryBindings fcx cx bins =
               u_prime = Typing.inferenceResultType result1
               u = Typing.inferenceResultSubst result1
               c1Inferred = Typing.inferenceResultClassConstraints result1
-          in (Eithers.bind (Maybes.cases (Core.bindingTypeScheme binding) (Right Maps.empty) (\ts ->
+          in (Eithers.bind (Optionals.cases (Core.bindingTypeScheme binding) (Right Maps.empty) (\ts ->
             let tsResult = Resolution.instantiateTypeScheme fcx2 ts
                 instantiatedTs = Pairs.first tsResult
-                freshConstraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints instantiatedTs)
+                freshConstraints = Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints instantiatedTs)
             in (Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorInference (Errors.InferenceErrorUnification (Errors.UnificationInferenceError {
               Errors.unificationInferenceErrorPath = (Paths.SubtermPath (Lists.reverse (Typing.inferenceContextTrace fcx2))),
               Errors.unificationInferenceErrorCause = _e}))) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeBody instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints))))) (\originalBindingConstraints ->
@@ -1034,7 +1035,7 @@ mergeClassConstraints m1 m2 =
     Lists.foldl (\acc -> \pair ->
       let k = Pairs.first pair
           v = Pairs.second pair
-      in (Maybes.cases (Maps.lookup k acc) (Maps.insert k v acc) (\existing ->
+      in (Optionals.cases (Maps.lookup k acc) (Maps.insert k v acc) (\existing ->
         let merged =
                 Core.TypeVariableConstraints {
                   Core.typeVariableConstraintsClasses = (Lists.nub (Lists.concat2 (Core.typeVariableConstraintsClasses existing) (Core.typeVariableConstraintsClasses v)))}
