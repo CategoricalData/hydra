@@ -11,7 +11,7 @@ import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -40,13 +40,13 @@ walker1 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker0 fun) (walker0 arg) (\_ -> walker0 fun))
+          in (Maybes.maybe (walker0 arg) (\_ -> walker0 fun) (walker0 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker0 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker0 body) Nothing (\inner -> walker0 inner))
+          in (Maybes.maybe Nothing (\inner -> walker0 inner) (walker0 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -59,13 +59,13 @@ walker10 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker9 fun) (walker9 arg) (\_ -> walker9 fun))
+          in (Maybes.maybe (walker9 arg) (\_ -> walker9 fun) (walker9 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker9 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker9 body) Nothing (\inner -> walker9 inner))
+          in (Maybes.maybe Nothing (\inner -> walker9 inner) (walker9 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -78,13 +78,13 @@ walker100 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker99 fun) (walker99 arg) (\_ -> walker99 fun))
+          in (Maybes.maybe (walker99 arg) (\_ -> walker99 fun) (walker99 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker99 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker99 body) Nothing (\inner -> walker99 inner))
+          in (Maybes.maybe Nothing (\inner -> walker99 inner) (walker99 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -97,13 +97,13 @@ walker101 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker100 fun) (walker100 arg) (\_ -> walker100 fun))
+          in (Maybes.maybe (walker100 arg) (\_ -> walker100 fun) (walker100 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker100 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker100 body) Nothing (\inner -> walker100 inner))
+          in (Maybes.maybe Nothing (\inner -> walker100 inner) (walker100 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -116,13 +116,13 @@ walker102 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker101 fun) (walker101 arg) (\_ -> walker101 fun))
+          in (Maybes.maybe (walker101 arg) (\_ -> walker101 fun) (walker101 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker101 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker101 body) Nothing (\inner -> walker101 inner))
+          in (Maybes.maybe Nothing (\inner -> walker101 inner) (walker101 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -135,13 +135,13 @@ walker103 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker102 fun) (walker102 arg) (\_ -> walker102 fun))
+          in (Maybes.maybe (walker102 arg) (\_ -> walker102 fun) (walker102 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker102 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker102 body) Nothing (\inner -> walker102 inner))
+          in (Maybes.maybe Nothing (\inner -> walker102 inner) (walker102 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -154,13 +154,13 @@ walker104 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker103 fun) (walker103 arg) (\_ -> walker103 fun))
+          in (Maybes.maybe (walker103 arg) (\_ -> walker103 fun) (walker103 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker103 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker103 body) Nothing (\inner -> walker103 inner))
+          in (Maybes.maybe Nothing (\inner -> walker103 inner) (walker103 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -173,13 +173,13 @@ walker105 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker104 fun) (walker104 arg) (\_ -> walker104 fun))
+          in (Maybes.maybe (walker104 arg) (\_ -> walker104 fun) (walker104 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker104 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker104 body) Nothing (\inner -> walker104 inner))
+          in (Maybes.maybe Nothing (\inner -> walker104 inner) (walker104 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -192,13 +192,13 @@ walker106 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker105 fun) (walker105 arg) (\_ -> walker105 fun))
+          in (Maybes.maybe (walker105 arg) (\_ -> walker105 fun) (walker105 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker105 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker105 body) Nothing (\inner -> walker105 inner))
+          in (Maybes.maybe Nothing (\inner -> walker105 inner) (walker105 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -211,13 +211,13 @@ walker107 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker106 fun) (walker106 arg) (\_ -> walker106 fun))
+          in (Maybes.maybe (walker106 arg) (\_ -> walker106 fun) (walker106 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker106 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker106 body) Nothing (\inner -> walker106 inner))
+          in (Maybes.maybe Nothing (\inner -> walker106 inner) (walker106 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -230,13 +230,13 @@ walker108 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker107 fun) (walker107 arg) (\_ -> walker107 fun))
+          in (Maybes.maybe (walker107 arg) (\_ -> walker107 fun) (walker107 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker107 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker107 body) Nothing (\inner -> walker107 inner))
+          in (Maybes.maybe Nothing (\inner -> walker107 inner) (walker107 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -249,13 +249,13 @@ walker109 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker108 fun) (walker108 arg) (\_ -> walker108 fun))
+          in (Maybes.maybe (walker108 arg) (\_ -> walker108 fun) (walker108 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker108 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker108 body) Nothing (\inner -> walker108 inner))
+          in (Maybes.maybe Nothing (\inner -> walker108 inner) (walker108 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -268,13 +268,13 @@ walker11 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker10 fun) (walker10 arg) (\_ -> walker10 fun))
+          in (Maybes.maybe (walker10 arg) (\_ -> walker10 fun) (walker10 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker10 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker10 body) Nothing (\inner -> walker10 inner))
+          in (Maybes.maybe Nothing (\inner -> walker10 inner) (walker10 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -287,13 +287,13 @@ walker110 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker109 fun) (walker109 arg) (\_ -> walker109 fun))
+          in (Maybes.maybe (walker109 arg) (\_ -> walker109 fun) (walker109 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker109 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker109 body) Nothing (\inner -> walker109 inner))
+          in (Maybes.maybe Nothing (\inner -> walker109 inner) (walker109 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -306,13 +306,13 @@ walker111 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker110 fun) (walker110 arg) (\_ -> walker110 fun))
+          in (Maybes.maybe (walker110 arg) (\_ -> walker110 fun) (walker110 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker110 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker110 body) Nothing (\inner -> walker110 inner))
+          in (Maybes.maybe Nothing (\inner -> walker110 inner) (walker110 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -325,13 +325,13 @@ walker112 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker111 fun) (walker111 arg) (\_ -> walker111 fun))
+          in (Maybes.maybe (walker111 arg) (\_ -> walker111 fun) (walker111 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker111 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker111 body) Nothing (\inner -> walker111 inner))
+          in (Maybes.maybe Nothing (\inner -> walker111 inner) (walker111 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -344,13 +344,13 @@ walker113 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker112 fun) (walker112 arg) (\_ -> walker112 fun))
+          in (Maybes.maybe (walker112 arg) (\_ -> walker112 fun) (walker112 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker112 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker112 body) Nothing (\inner -> walker112 inner))
+          in (Maybes.maybe Nothing (\inner -> walker112 inner) (walker112 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -363,13 +363,13 @@ walker114 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker113 fun) (walker113 arg) (\_ -> walker113 fun))
+          in (Maybes.maybe (walker113 arg) (\_ -> walker113 fun) (walker113 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker113 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker113 body) Nothing (\inner -> walker113 inner))
+          in (Maybes.maybe Nothing (\inner -> walker113 inner) (walker113 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -382,13 +382,13 @@ walker115 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker114 fun) (walker114 arg) (\_ -> walker114 fun))
+          in (Maybes.maybe (walker114 arg) (\_ -> walker114 fun) (walker114 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker114 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker114 body) Nothing (\inner -> walker114 inner))
+          in (Maybes.maybe Nothing (\inner -> walker114 inner) (walker114 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -401,13 +401,13 @@ walker116 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker115 fun) (walker115 arg) (\_ -> walker115 fun))
+          in (Maybes.maybe (walker115 arg) (\_ -> walker115 fun) (walker115 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker115 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker115 body) Nothing (\inner -> walker115 inner))
+          in (Maybes.maybe Nothing (\inner -> walker115 inner) (walker115 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -420,13 +420,13 @@ walker117 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker116 fun) (walker116 arg) (\_ -> walker116 fun))
+          in (Maybes.maybe (walker116 arg) (\_ -> walker116 fun) (walker116 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker116 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker116 body) Nothing (\inner -> walker116 inner))
+          in (Maybes.maybe Nothing (\inner -> walker116 inner) (walker116 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -439,13 +439,13 @@ walker118 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker117 fun) (walker117 arg) (\_ -> walker117 fun))
+          in (Maybes.maybe (walker117 arg) (\_ -> walker117 fun) (walker117 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker117 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker117 body) Nothing (\inner -> walker117 inner))
+          in (Maybes.maybe Nothing (\inner -> walker117 inner) (walker117 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -458,13 +458,13 @@ walker119 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker118 fun) (walker118 arg) (\_ -> walker118 fun))
+          in (Maybes.maybe (walker118 arg) (\_ -> walker118 fun) (walker118 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker118 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker118 body) Nothing (\inner -> walker118 inner))
+          in (Maybes.maybe Nothing (\inner -> walker118 inner) (walker118 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -477,13 +477,13 @@ walker12 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker11 fun) (walker11 arg) (\_ -> walker11 fun))
+          in (Maybes.maybe (walker11 arg) (\_ -> walker11 fun) (walker11 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker11 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker11 body) Nothing (\inner -> walker11 inner))
+          in (Maybes.maybe Nothing (\inner -> walker11 inner) (walker11 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -496,13 +496,13 @@ walker120 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker119 fun) (walker119 arg) (\_ -> walker119 fun))
+          in (Maybes.maybe (walker119 arg) (\_ -> walker119 fun) (walker119 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker119 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker119 body) Nothing (\inner -> walker119 inner))
+          in (Maybes.maybe Nothing (\inner -> walker119 inner) (walker119 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -515,13 +515,13 @@ walker121 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker120 fun) (walker120 arg) (\_ -> walker120 fun))
+          in (Maybes.maybe (walker120 arg) (\_ -> walker120 fun) (walker120 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker120 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker120 body) Nothing (\inner -> walker120 inner))
+          in (Maybes.maybe Nothing (\inner -> walker120 inner) (walker120 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -534,13 +534,13 @@ walker122 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker121 fun) (walker121 arg) (\_ -> walker121 fun))
+          in (Maybes.maybe (walker121 arg) (\_ -> walker121 fun) (walker121 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker121 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker121 body) Nothing (\inner -> walker121 inner))
+          in (Maybes.maybe Nothing (\inner -> walker121 inner) (walker121 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -553,13 +553,13 @@ walker123 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker122 fun) (walker122 arg) (\_ -> walker122 fun))
+          in (Maybes.maybe (walker122 arg) (\_ -> walker122 fun) (walker122 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker122 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker122 body) Nothing (\inner -> walker122 inner))
+          in (Maybes.maybe Nothing (\inner -> walker122 inner) (walker122 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -572,13 +572,13 @@ walker124 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker123 fun) (walker123 arg) (\_ -> walker123 fun))
+          in (Maybes.maybe (walker123 arg) (\_ -> walker123 fun) (walker123 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker123 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker123 body) Nothing (\inner -> walker123 inner))
+          in (Maybes.maybe Nothing (\inner -> walker123 inner) (walker123 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -591,13 +591,13 @@ walker125 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker124 fun) (walker124 arg) (\_ -> walker124 fun))
+          in (Maybes.maybe (walker124 arg) (\_ -> walker124 fun) (walker124 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker124 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker124 body) Nothing (\inner -> walker124 inner))
+          in (Maybes.maybe Nothing (\inner -> walker124 inner) (walker124 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -610,13 +610,13 @@ walker126 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker125 fun) (walker125 arg) (\_ -> walker125 fun))
+          in (Maybes.maybe (walker125 arg) (\_ -> walker125 fun) (walker125 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker125 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker125 body) Nothing (\inner -> walker125 inner))
+          in (Maybes.maybe Nothing (\inner -> walker125 inner) (walker125 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -629,13 +629,13 @@ walker127 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker126 fun) (walker126 arg) (\_ -> walker126 fun))
+          in (Maybes.maybe (walker126 arg) (\_ -> walker126 fun) (walker126 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker126 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker126 body) Nothing (\inner -> walker126 inner))
+          in (Maybes.maybe Nothing (\inner -> walker126 inner) (walker126 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -648,13 +648,13 @@ walker128 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker127 fun) (walker127 arg) (\_ -> walker127 fun))
+          in (Maybes.maybe (walker127 arg) (\_ -> walker127 fun) (walker127 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker127 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker127 body) Nothing (\inner -> walker127 inner))
+          in (Maybes.maybe Nothing (\inner -> walker127 inner) (walker127 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -667,13 +667,13 @@ walker129 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker128 fun) (walker128 arg) (\_ -> walker128 fun))
+          in (Maybes.maybe (walker128 arg) (\_ -> walker128 fun) (walker128 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker128 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker128 body) Nothing (\inner -> walker128 inner))
+          in (Maybes.maybe Nothing (\inner -> walker128 inner) (walker128 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -686,13 +686,13 @@ walker13 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker12 fun) (walker12 arg) (\_ -> walker12 fun))
+          in (Maybes.maybe (walker12 arg) (\_ -> walker12 fun) (walker12 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker12 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker12 body) Nothing (\inner -> walker12 inner))
+          in (Maybes.maybe Nothing (\inner -> walker12 inner) (walker12 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -705,13 +705,13 @@ walker130 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker129 fun) (walker129 arg) (\_ -> walker129 fun))
+          in (Maybes.maybe (walker129 arg) (\_ -> walker129 fun) (walker129 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker129 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker129 body) Nothing (\inner -> walker129 inner))
+          in (Maybes.maybe Nothing (\inner -> walker129 inner) (walker129 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -724,13 +724,13 @@ walker131 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker130 fun) (walker130 arg) (\_ -> walker130 fun))
+          in (Maybes.maybe (walker130 arg) (\_ -> walker130 fun) (walker130 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker130 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker130 body) Nothing (\inner -> walker130 inner))
+          in (Maybes.maybe Nothing (\inner -> walker130 inner) (walker130 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -743,13 +743,13 @@ walker132 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker131 fun) (walker131 arg) (\_ -> walker131 fun))
+          in (Maybes.maybe (walker131 arg) (\_ -> walker131 fun) (walker131 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker131 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker131 body) Nothing (\inner -> walker131 inner))
+          in (Maybes.maybe Nothing (\inner -> walker131 inner) (walker131 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -762,13 +762,13 @@ walker133 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker132 fun) (walker132 arg) (\_ -> walker132 fun))
+          in (Maybes.maybe (walker132 arg) (\_ -> walker132 fun) (walker132 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker132 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker132 body) Nothing (\inner -> walker132 inner))
+          in (Maybes.maybe Nothing (\inner -> walker132 inner) (walker132 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -781,13 +781,13 @@ walker134 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker133 fun) (walker133 arg) (\_ -> walker133 fun))
+          in (Maybes.maybe (walker133 arg) (\_ -> walker133 fun) (walker133 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker133 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker133 body) Nothing (\inner -> walker133 inner))
+          in (Maybes.maybe Nothing (\inner -> walker133 inner) (walker133 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -800,13 +800,13 @@ walker135 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker134 fun) (walker134 arg) (\_ -> walker134 fun))
+          in (Maybes.maybe (walker134 arg) (\_ -> walker134 fun) (walker134 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker134 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker134 body) Nothing (\inner -> walker134 inner))
+          in (Maybes.maybe Nothing (\inner -> walker134 inner) (walker134 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -819,13 +819,13 @@ walker136 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker135 fun) (walker135 arg) (\_ -> walker135 fun))
+          in (Maybes.maybe (walker135 arg) (\_ -> walker135 fun) (walker135 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker135 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker135 body) Nothing (\inner -> walker135 inner))
+          in (Maybes.maybe Nothing (\inner -> walker135 inner) (walker135 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -838,13 +838,13 @@ walker137 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker136 fun) (walker136 arg) (\_ -> walker136 fun))
+          in (Maybes.maybe (walker136 arg) (\_ -> walker136 fun) (walker136 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker136 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker136 body) Nothing (\inner -> walker136 inner))
+          in (Maybes.maybe Nothing (\inner -> walker136 inner) (walker136 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -857,13 +857,13 @@ walker138 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker137 fun) (walker137 arg) (\_ -> walker137 fun))
+          in (Maybes.maybe (walker137 arg) (\_ -> walker137 fun) (walker137 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker137 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker137 body) Nothing (\inner -> walker137 inner))
+          in (Maybes.maybe Nothing (\inner -> walker137 inner) (walker137 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -876,13 +876,13 @@ walker139 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker138 fun) (walker138 arg) (\_ -> walker138 fun))
+          in (Maybes.maybe (walker138 arg) (\_ -> walker138 fun) (walker138 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker138 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker138 body) Nothing (\inner -> walker138 inner))
+          in (Maybes.maybe Nothing (\inner -> walker138 inner) (walker138 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -895,13 +895,13 @@ walker14 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker13 fun) (walker13 arg) (\_ -> walker13 fun))
+          in (Maybes.maybe (walker13 arg) (\_ -> walker13 fun) (walker13 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker13 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker13 body) Nothing (\inner -> walker13 inner))
+          in (Maybes.maybe Nothing (\inner -> walker13 inner) (walker13 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -914,13 +914,13 @@ walker140 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker139 fun) (walker139 arg) (\_ -> walker139 fun))
+          in (Maybes.maybe (walker139 arg) (\_ -> walker139 fun) (walker139 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker139 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker139 body) Nothing (\inner -> walker139 inner))
+          in (Maybes.maybe Nothing (\inner -> walker139 inner) (walker139 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -933,13 +933,13 @@ walker141 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker140 fun) (walker140 arg) (\_ -> walker140 fun))
+          in (Maybes.maybe (walker140 arg) (\_ -> walker140 fun) (walker140 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker140 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker140 body) Nothing (\inner -> walker140 inner))
+          in (Maybes.maybe Nothing (\inner -> walker140 inner) (walker140 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -952,13 +952,13 @@ walker142 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker141 fun) (walker141 arg) (\_ -> walker141 fun))
+          in (Maybes.maybe (walker141 arg) (\_ -> walker141 fun) (walker141 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker141 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker141 body) Nothing (\inner -> walker141 inner))
+          in (Maybes.maybe Nothing (\inner -> walker141 inner) (walker141 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -971,13 +971,13 @@ walker143 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker142 fun) (walker142 arg) (\_ -> walker142 fun))
+          in (Maybes.maybe (walker142 arg) (\_ -> walker142 fun) (walker142 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker142 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker142 body) Nothing (\inner -> walker142 inner))
+          in (Maybes.maybe Nothing (\inner -> walker142 inner) (walker142 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -990,13 +990,13 @@ walker144 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker143 fun) (walker143 arg) (\_ -> walker143 fun))
+          in (Maybes.maybe (walker143 arg) (\_ -> walker143 fun) (walker143 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker143 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker143 body) Nothing (\inner -> walker143 inner))
+          in (Maybes.maybe Nothing (\inner -> walker143 inner) (walker143 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1009,13 +1009,13 @@ walker145 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker144 fun) (walker144 arg) (\_ -> walker144 fun))
+          in (Maybes.maybe (walker144 arg) (\_ -> walker144 fun) (walker144 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker144 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker144 body) Nothing (\inner -> walker144 inner))
+          in (Maybes.maybe Nothing (\inner -> walker144 inner) (walker144 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1028,13 +1028,13 @@ walker146 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker145 fun) (walker145 arg) (\_ -> walker145 fun))
+          in (Maybes.maybe (walker145 arg) (\_ -> walker145 fun) (walker145 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker145 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker145 body) Nothing (\inner -> walker145 inner))
+          in (Maybes.maybe Nothing (\inner -> walker145 inner) (walker145 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1047,13 +1047,13 @@ walker147 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker146 fun) (walker146 arg) (\_ -> walker146 fun))
+          in (Maybes.maybe (walker146 arg) (\_ -> walker146 fun) (walker146 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker146 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker146 body) Nothing (\inner -> walker146 inner))
+          in (Maybes.maybe Nothing (\inner -> walker146 inner) (walker146 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1066,13 +1066,13 @@ walker148 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker147 fun) (walker147 arg) (\_ -> walker147 fun))
+          in (Maybes.maybe (walker147 arg) (\_ -> walker147 fun) (walker147 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker147 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker147 body) Nothing (\inner -> walker147 inner))
+          in (Maybes.maybe Nothing (\inner -> walker147 inner) (walker147 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1085,13 +1085,13 @@ walker149 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker148 fun) (walker148 arg) (\_ -> walker148 fun))
+          in (Maybes.maybe (walker148 arg) (\_ -> walker148 fun) (walker148 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker148 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker148 body) Nothing (\inner -> walker148 inner))
+          in (Maybes.maybe Nothing (\inner -> walker148 inner) (walker148 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1104,13 +1104,13 @@ walker15 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker14 fun) (walker14 arg) (\_ -> walker14 fun))
+          in (Maybes.maybe (walker14 arg) (\_ -> walker14 fun) (walker14 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker14 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker14 body) Nothing (\inner -> walker14 inner))
+          in (Maybes.maybe Nothing (\inner -> walker14 inner) (walker14 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1123,13 +1123,13 @@ walker150 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker149 fun) (walker149 arg) (\_ -> walker149 fun))
+          in (Maybes.maybe (walker149 arg) (\_ -> walker149 fun) (walker149 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker149 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker149 body) Nothing (\inner -> walker149 inner))
+          in (Maybes.maybe Nothing (\inner -> walker149 inner) (walker149 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1142,13 +1142,13 @@ walker151 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker150 fun) (walker150 arg) (\_ -> walker150 fun))
+          in (Maybes.maybe (walker150 arg) (\_ -> walker150 fun) (walker150 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker150 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker150 body) Nothing (\inner -> walker150 inner))
+          in (Maybes.maybe Nothing (\inner -> walker150 inner) (walker150 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1161,13 +1161,13 @@ walker152 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker151 fun) (walker151 arg) (\_ -> walker151 fun))
+          in (Maybes.maybe (walker151 arg) (\_ -> walker151 fun) (walker151 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker151 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker151 body) Nothing (\inner -> walker151 inner))
+          in (Maybes.maybe Nothing (\inner -> walker151 inner) (walker151 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1180,13 +1180,13 @@ walker153 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker152 fun) (walker152 arg) (\_ -> walker152 fun))
+          in (Maybes.maybe (walker152 arg) (\_ -> walker152 fun) (walker152 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker152 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker152 body) Nothing (\inner -> walker152 inner))
+          in (Maybes.maybe Nothing (\inner -> walker152 inner) (walker152 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1199,13 +1199,13 @@ walker154 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker153 fun) (walker153 arg) (\_ -> walker153 fun))
+          in (Maybes.maybe (walker153 arg) (\_ -> walker153 fun) (walker153 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker153 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker153 body) Nothing (\inner -> walker153 inner))
+          in (Maybes.maybe Nothing (\inner -> walker153 inner) (walker153 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1218,13 +1218,13 @@ walker155 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker154 fun) (walker154 arg) (\_ -> walker154 fun))
+          in (Maybes.maybe (walker154 arg) (\_ -> walker154 fun) (walker154 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker154 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker154 body) Nothing (\inner -> walker154 inner))
+          in (Maybes.maybe Nothing (\inner -> walker154 inner) (walker154 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1237,13 +1237,13 @@ walker156 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker155 fun) (walker155 arg) (\_ -> walker155 fun))
+          in (Maybes.maybe (walker155 arg) (\_ -> walker155 fun) (walker155 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker155 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker155 body) Nothing (\inner -> walker155 inner))
+          in (Maybes.maybe Nothing (\inner -> walker155 inner) (walker155 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1256,13 +1256,13 @@ walker157 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker156 fun) (walker156 arg) (\_ -> walker156 fun))
+          in (Maybes.maybe (walker156 arg) (\_ -> walker156 fun) (walker156 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker156 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker156 body) Nothing (\inner -> walker156 inner))
+          in (Maybes.maybe Nothing (\inner -> walker156 inner) (walker156 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1275,13 +1275,13 @@ walker158 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker157 fun) (walker157 arg) (\_ -> walker157 fun))
+          in (Maybes.maybe (walker157 arg) (\_ -> walker157 fun) (walker157 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker157 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker157 body) Nothing (\inner -> walker157 inner))
+          in (Maybes.maybe Nothing (\inner -> walker157 inner) (walker157 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1294,13 +1294,13 @@ walker159 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker158 fun) (walker158 arg) (\_ -> walker158 fun))
+          in (Maybes.maybe (walker158 arg) (\_ -> walker158 fun) (walker158 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker158 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker158 body) Nothing (\inner -> walker158 inner))
+          in (Maybes.maybe Nothing (\inner -> walker158 inner) (walker158 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1313,13 +1313,13 @@ walker16 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker15 fun) (walker15 arg) (\_ -> walker15 fun))
+          in (Maybes.maybe (walker15 arg) (\_ -> walker15 fun) (walker15 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker15 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker15 body) Nothing (\inner -> walker15 inner))
+          in (Maybes.maybe Nothing (\inner -> walker15 inner) (walker15 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1332,13 +1332,13 @@ walker160 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker159 fun) (walker159 arg) (\_ -> walker159 fun))
+          in (Maybes.maybe (walker159 arg) (\_ -> walker159 fun) (walker159 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker159 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker159 body) Nothing (\inner -> walker159 inner))
+          in (Maybes.maybe Nothing (\inner -> walker159 inner) (walker159 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1351,13 +1351,13 @@ walker161 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker160 fun) (walker160 arg) (\_ -> walker160 fun))
+          in (Maybes.maybe (walker160 arg) (\_ -> walker160 fun) (walker160 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker160 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker160 body) Nothing (\inner -> walker160 inner))
+          in (Maybes.maybe Nothing (\inner -> walker160 inner) (walker160 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1370,13 +1370,13 @@ walker162 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker161 fun) (walker161 arg) (\_ -> walker161 fun))
+          in (Maybes.maybe (walker161 arg) (\_ -> walker161 fun) (walker161 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker161 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker161 body) Nothing (\inner -> walker161 inner))
+          in (Maybes.maybe Nothing (\inner -> walker161 inner) (walker161 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1389,13 +1389,13 @@ walker163 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker162 fun) (walker162 arg) (\_ -> walker162 fun))
+          in (Maybes.maybe (walker162 arg) (\_ -> walker162 fun) (walker162 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker162 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker162 body) Nothing (\inner -> walker162 inner))
+          in (Maybes.maybe Nothing (\inner -> walker162 inner) (walker162 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1408,13 +1408,13 @@ walker164 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker163 fun) (walker163 arg) (\_ -> walker163 fun))
+          in (Maybes.maybe (walker163 arg) (\_ -> walker163 fun) (walker163 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker163 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker163 body) Nothing (\inner -> walker163 inner))
+          in (Maybes.maybe Nothing (\inner -> walker163 inner) (walker163 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1427,13 +1427,13 @@ walker165 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker164 fun) (walker164 arg) (\_ -> walker164 fun))
+          in (Maybes.maybe (walker164 arg) (\_ -> walker164 fun) (walker164 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker164 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker164 body) Nothing (\inner -> walker164 inner))
+          in (Maybes.maybe Nothing (\inner -> walker164 inner) (walker164 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1446,13 +1446,13 @@ walker166 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker165 fun) (walker165 arg) (\_ -> walker165 fun))
+          in (Maybes.maybe (walker165 arg) (\_ -> walker165 fun) (walker165 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker165 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker165 body) Nothing (\inner -> walker165 inner))
+          in (Maybes.maybe Nothing (\inner -> walker165 inner) (walker165 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1465,13 +1465,13 @@ walker167 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker166 fun) (walker166 arg) (\_ -> walker166 fun))
+          in (Maybes.maybe (walker166 arg) (\_ -> walker166 fun) (walker166 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker166 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker166 body) Nothing (\inner -> walker166 inner))
+          in (Maybes.maybe Nothing (\inner -> walker166 inner) (walker166 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1484,13 +1484,13 @@ walker168 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker167 fun) (walker167 arg) (\_ -> walker167 fun))
+          in (Maybes.maybe (walker167 arg) (\_ -> walker167 fun) (walker167 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker167 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker167 body) Nothing (\inner -> walker167 inner))
+          in (Maybes.maybe Nothing (\inner -> walker167 inner) (walker167 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1503,13 +1503,13 @@ walker169 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker168 fun) (walker168 arg) (\_ -> walker168 fun))
+          in (Maybes.maybe (walker168 arg) (\_ -> walker168 fun) (walker168 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker168 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker168 body) Nothing (\inner -> walker168 inner))
+          in (Maybes.maybe Nothing (\inner -> walker168 inner) (walker168 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1522,13 +1522,13 @@ walker17 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker16 fun) (walker16 arg) (\_ -> walker16 fun))
+          in (Maybes.maybe (walker16 arg) (\_ -> walker16 fun) (walker16 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker16 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker16 body) Nothing (\inner -> walker16 inner))
+          in (Maybes.maybe Nothing (\inner -> walker16 inner) (walker16 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1541,13 +1541,13 @@ walker170 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker169 fun) (walker169 arg) (\_ -> walker169 fun))
+          in (Maybes.maybe (walker169 arg) (\_ -> walker169 fun) (walker169 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker169 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker169 body) Nothing (\inner -> walker169 inner))
+          in (Maybes.maybe Nothing (\inner -> walker169 inner) (walker169 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1560,13 +1560,13 @@ walker171 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker170 fun) (walker170 arg) (\_ -> walker170 fun))
+          in (Maybes.maybe (walker170 arg) (\_ -> walker170 fun) (walker170 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker170 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker170 body) Nothing (\inner -> walker170 inner))
+          in (Maybes.maybe Nothing (\inner -> walker170 inner) (walker170 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1579,13 +1579,13 @@ walker172 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker171 fun) (walker171 arg) (\_ -> walker171 fun))
+          in (Maybes.maybe (walker171 arg) (\_ -> walker171 fun) (walker171 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker171 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker171 body) Nothing (\inner -> walker171 inner))
+          in (Maybes.maybe Nothing (\inner -> walker171 inner) (walker171 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1598,13 +1598,13 @@ walker173 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker172 fun) (walker172 arg) (\_ -> walker172 fun))
+          in (Maybes.maybe (walker172 arg) (\_ -> walker172 fun) (walker172 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker172 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker172 body) Nothing (\inner -> walker172 inner))
+          in (Maybes.maybe Nothing (\inner -> walker172 inner) (walker172 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1617,13 +1617,13 @@ walker174 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker173 fun) (walker173 arg) (\_ -> walker173 fun))
+          in (Maybes.maybe (walker173 arg) (\_ -> walker173 fun) (walker173 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker173 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker173 body) Nothing (\inner -> walker173 inner))
+          in (Maybes.maybe Nothing (\inner -> walker173 inner) (walker173 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1636,13 +1636,13 @@ walker175 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker174 fun) (walker174 arg) (\_ -> walker174 fun))
+          in (Maybes.maybe (walker174 arg) (\_ -> walker174 fun) (walker174 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker174 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker174 body) Nothing (\inner -> walker174 inner))
+          in (Maybes.maybe Nothing (\inner -> walker174 inner) (walker174 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1655,13 +1655,13 @@ walker176 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker175 fun) (walker175 arg) (\_ -> walker175 fun))
+          in (Maybes.maybe (walker175 arg) (\_ -> walker175 fun) (walker175 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker175 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker175 body) Nothing (\inner -> walker175 inner))
+          in (Maybes.maybe Nothing (\inner -> walker175 inner) (walker175 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1674,13 +1674,13 @@ walker177 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker176 fun) (walker176 arg) (\_ -> walker176 fun))
+          in (Maybes.maybe (walker176 arg) (\_ -> walker176 fun) (walker176 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker176 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker176 body) Nothing (\inner -> walker176 inner))
+          in (Maybes.maybe Nothing (\inner -> walker176 inner) (walker176 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1693,13 +1693,13 @@ walker178 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker177 fun) (walker177 arg) (\_ -> walker177 fun))
+          in (Maybes.maybe (walker177 arg) (\_ -> walker177 fun) (walker177 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker177 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker177 body) Nothing (\inner -> walker177 inner))
+          in (Maybes.maybe Nothing (\inner -> walker177 inner) (walker177 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1712,13 +1712,13 @@ walker179 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker178 fun) (walker178 arg) (\_ -> walker178 fun))
+          in (Maybes.maybe (walker178 arg) (\_ -> walker178 fun) (walker178 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker178 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker178 body) Nothing (\inner -> walker178 inner))
+          in (Maybes.maybe Nothing (\inner -> walker178 inner) (walker178 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1731,13 +1731,13 @@ walker18 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker17 fun) (walker17 arg) (\_ -> walker17 fun))
+          in (Maybes.maybe (walker17 arg) (\_ -> walker17 fun) (walker17 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker17 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker17 body) Nothing (\inner -> walker17 inner))
+          in (Maybes.maybe Nothing (\inner -> walker17 inner) (walker17 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1750,13 +1750,13 @@ walker180 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker179 fun) (walker179 arg) (\_ -> walker179 fun))
+          in (Maybes.maybe (walker179 arg) (\_ -> walker179 fun) (walker179 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker179 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker179 body) Nothing (\inner -> walker179 inner))
+          in (Maybes.maybe Nothing (\inner -> walker179 inner) (walker179 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1769,13 +1769,13 @@ walker181 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker180 fun) (walker180 arg) (\_ -> walker180 fun))
+          in (Maybes.maybe (walker180 arg) (\_ -> walker180 fun) (walker180 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker180 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker180 body) Nothing (\inner -> walker180 inner))
+          in (Maybes.maybe Nothing (\inner -> walker180 inner) (walker180 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1788,13 +1788,13 @@ walker182 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker181 fun) (walker181 arg) (\_ -> walker181 fun))
+          in (Maybes.maybe (walker181 arg) (\_ -> walker181 fun) (walker181 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker181 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker181 body) Nothing (\inner -> walker181 inner))
+          in (Maybes.maybe Nothing (\inner -> walker181 inner) (walker181 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1807,13 +1807,13 @@ walker183 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker182 fun) (walker182 arg) (\_ -> walker182 fun))
+          in (Maybes.maybe (walker182 arg) (\_ -> walker182 fun) (walker182 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker182 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker182 body) Nothing (\inner -> walker182 inner))
+          in (Maybes.maybe Nothing (\inner -> walker182 inner) (walker182 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1826,13 +1826,13 @@ walker184 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker183 fun) (walker183 arg) (\_ -> walker183 fun))
+          in (Maybes.maybe (walker183 arg) (\_ -> walker183 fun) (walker183 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker183 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker183 body) Nothing (\inner -> walker183 inner))
+          in (Maybes.maybe Nothing (\inner -> walker183 inner) (walker183 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1845,13 +1845,13 @@ walker185 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker184 fun) (walker184 arg) (\_ -> walker184 fun))
+          in (Maybes.maybe (walker184 arg) (\_ -> walker184 fun) (walker184 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker184 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker184 body) Nothing (\inner -> walker184 inner))
+          in (Maybes.maybe Nothing (\inner -> walker184 inner) (walker184 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1864,13 +1864,13 @@ walker186 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker185 fun) (walker185 arg) (\_ -> walker185 fun))
+          in (Maybes.maybe (walker185 arg) (\_ -> walker185 fun) (walker185 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker185 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker185 body) Nothing (\inner -> walker185 inner))
+          in (Maybes.maybe Nothing (\inner -> walker185 inner) (walker185 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1883,13 +1883,13 @@ walker187 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker186 fun) (walker186 arg) (\_ -> walker186 fun))
+          in (Maybes.maybe (walker186 arg) (\_ -> walker186 fun) (walker186 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker186 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker186 body) Nothing (\inner -> walker186 inner))
+          in (Maybes.maybe Nothing (\inner -> walker186 inner) (walker186 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1902,13 +1902,13 @@ walker188 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker187 fun) (walker187 arg) (\_ -> walker187 fun))
+          in (Maybes.maybe (walker187 arg) (\_ -> walker187 fun) (walker187 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker187 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker187 body) Nothing (\inner -> walker187 inner))
+          in (Maybes.maybe Nothing (\inner -> walker187 inner) (walker187 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1921,13 +1921,13 @@ walker189 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker188 fun) (walker188 arg) (\_ -> walker188 fun))
+          in (Maybes.maybe (walker188 arg) (\_ -> walker188 fun) (walker188 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker188 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker188 body) Nothing (\inner -> walker188 inner))
+          in (Maybes.maybe Nothing (\inner -> walker188 inner) (walker188 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1940,13 +1940,13 @@ walker19 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker18 fun) (walker18 arg) (\_ -> walker18 fun))
+          in (Maybes.maybe (walker18 arg) (\_ -> walker18 fun) (walker18 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker18 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker18 body) Nothing (\inner -> walker18 inner))
+          in (Maybes.maybe Nothing (\inner -> walker18 inner) (walker18 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1959,13 +1959,13 @@ walker190 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker189 fun) (walker189 arg) (\_ -> walker189 fun))
+          in (Maybes.maybe (walker189 arg) (\_ -> walker189 fun) (walker189 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker189 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker189 body) Nothing (\inner -> walker189 inner))
+          in (Maybes.maybe Nothing (\inner -> walker189 inner) (walker189 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1978,13 +1978,13 @@ walker191 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker190 fun) (walker190 arg) (\_ -> walker190 fun))
+          in (Maybes.maybe (walker190 arg) (\_ -> walker190 fun) (walker190 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker190 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker190 body) Nothing (\inner -> walker190 inner))
+          in (Maybes.maybe Nothing (\inner -> walker190 inner) (walker190 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1997,13 +1997,13 @@ walker192 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker191 fun) (walker191 arg) (\_ -> walker191 fun))
+          in (Maybes.maybe (walker191 arg) (\_ -> walker191 fun) (walker191 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker191 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker191 body) Nothing (\inner -> walker191 inner))
+          in (Maybes.maybe Nothing (\inner -> walker191 inner) (walker191 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2016,13 +2016,13 @@ walker193 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker192 fun) (walker192 arg) (\_ -> walker192 fun))
+          in (Maybes.maybe (walker192 arg) (\_ -> walker192 fun) (walker192 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker192 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker192 body) Nothing (\inner -> walker192 inner))
+          in (Maybes.maybe Nothing (\inner -> walker192 inner) (walker192 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2035,13 +2035,13 @@ walker194 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker193 fun) (walker193 arg) (\_ -> walker193 fun))
+          in (Maybes.maybe (walker193 arg) (\_ -> walker193 fun) (walker193 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker193 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker193 body) Nothing (\inner -> walker193 inner))
+          in (Maybes.maybe Nothing (\inner -> walker193 inner) (walker193 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2054,13 +2054,13 @@ walker195 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker194 fun) (walker194 arg) (\_ -> walker194 fun))
+          in (Maybes.maybe (walker194 arg) (\_ -> walker194 fun) (walker194 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker194 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker194 body) Nothing (\inner -> walker194 inner))
+          in (Maybes.maybe Nothing (\inner -> walker194 inner) (walker194 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2073,13 +2073,13 @@ walker196 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker195 fun) (walker195 arg) (\_ -> walker195 fun))
+          in (Maybes.maybe (walker195 arg) (\_ -> walker195 fun) (walker195 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker195 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker195 body) Nothing (\inner -> walker195 inner))
+          in (Maybes.maybe Nothing (\inner -> walker195 inner) (walker195 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2092,13 +2092,13 @@ walker197 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker196 fun) (walker196 arg) (\_ -> walker196 fun))
+          in (Maybes.maybe (walker196 arg) (\_ -> walker196 fun) (walker196 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker196 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker196 body) Nothing (\inner -> walker196 inner))
+          in (Maybes.maybe Nothing (\inner -> walker196 inner) (walker196 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2111,13 +2111,13 @@ walker198 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker197 fun) (walker197 arg) (\_ -> walker197 fun))
+          in (Maybes.maybe (walker197 arg) (\_ -> walker197 fun) (walker197 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker197 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker197 body) Nothing (\inner -> walker197 inner))
+          in (Maybes.maybe Nothing (\inner -> walker197 inner) (walker197 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2130,13 +2130,13 @@ walker199 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker198 fun) (walker198 arg) (\_ -> walker198 fun))
+          in (Maybes.maybe (walker198 arg) (\_ -> walker198 fun) (walker198 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker198 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker198 body) Nothing (\inner -> walker198 inner))
+          in (Maybes.maybe Nothing (\inner -> walker198 inner) (walker198 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2149,13 +2149,13 @@ walker2 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker1 fun) (walker1 arg) (\_ -> walker1 fun))
+          in (Maybes.maybe (walker1 arg) (\_ -> walker1 fun) (walker1 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker1 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker1 body) Nothing (\inner -> walker1 inner))
+          in (Maybes.maybe Nothing (\inner -> walker1 inner) (walker1 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2168,13 +2168,13 @@ walker20 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker19 fun) (walker19 arg) (\_ -> walker19 fun))
+          in (Maybes.maybe (walker19 arg) (\_ -> walker19 fun) (walker19 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker19 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker19 body) Nothing (\inner -> walker19 inner))
+          in (Maybes.maybe Nothing (\inner -> walker19 inner) (walker19 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2187,13 +2187,13 @@ walker200 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker199 fun) (walker199 arg) (\_ -> walker199 fun))
+          in (Maybes.maybe (walker199 arg) (\_ -> walker199 fun) (walker199 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker199 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker199 body) Nothing (\inner -> walker199 inner))
+          in (Maybes.maybe Nothing (\inner -> walker199 inner) (walker199 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2206,13 +2206,13 @@ walker201 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker200 fun) (walker200 arg) (\_ -> walker200 fun))
+          in (Maybes.maybe (walker200 arg) (\_ -> walker200 fun) (walker200 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker200 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker200 body) Nothing (\inner -> walker200 inner))
+          in (Maybes.maybe Nothing (\inner -> walker200 inner) (walker200 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2225,13 +2225,13 @@ walker202 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker201 fun) (walker201 arg) (\_ -> walker201 fun))
+          in (Maybes.maybe (walker201 arg) (\_ -> walker201 fun) (walker201 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker201 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker201 body) Nothing (\inner -> walker201 inner))
+          in (Maybes.maybe Nothing (\inner -> walker201 inner) (walker201 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2244,13 +2244,13 @@ walker203 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker202 fun) (walker202 arg) (\_ -> walker202 fun))
+          in (Maybes.maybe (walker202 arg) (\_ -> walker202 fun) (walker202 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker202 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker202 body) Nothing (\inner -> walker202 inner))
+          in (Maybes.maybe Nothing (\inner -> walker202 inner) (walker202 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2263,13 +2263,13 @@ walker204 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker203 fun) (walker203 arg) (\_ -> walker203 fun))
+          in (Maybes.maybe (walker203 arg) (\_ -> walker203 fun) (walker203 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker203 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker203 body) Nothing (\inner -> walker203 inner))
+          in (Maybes.maybe Nothing (\inner -> walker203 inner) (walker203 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2282,13 +2282,13 @@ walker205 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker204 fun) (walker204 arg) (\_ -> walker204 fun))
+          in (Maybes.maybe (walker204 arg) (\_ -> walker204 fun) (walker204 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker204 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker204 body) Nothing (\inner -> walker204 inner))
+          in (Maybes.maybe Nothing (\inner -> walker204 inner) (walker204 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2301,13 +2301,13 @@ walker206 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker205 fun) (walker205 arg) (\_ -> walker205 fun))
+          in (Maybes.maybe (walker205 arg) (\_ -> walker205 fun) (walker205 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker205 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker205 body) Nothing (\inner -> walker205 inner))
+          in (Maybes.maybe Nothing (\inner -> walker205 inner) (walker205 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2320,13 +2320,13 @@ walker207 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker206 fun) (walker206 arg) (\_ -> walker206 fun))
+          in (Maybes.maybe (walker206 arg) (\_ -> walker206 fun) (walker206 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker206 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker206 body) Nothing (\inner -> walker206 inner))
+          in (Maybes.maybe Nothing (\inner -> walker206 inner) (walker206 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2339,13 +2339,13 @@ walker208 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker207 fun) (walker207 arg) (\_ -> walker207 fun))
+          in (Maybes.maybe (walker207 arg) (\_ -> walker207 fun) (walker207 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker207 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker207 body) Nothing (\inner -> walker207 inner))
+          in (Maybes.maybe Nothing (\inner -> walker207 inner) (walker207 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2358,13 +2358,13 @@ walker209 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker208 fun) (walker208 arg) (\_ -> walker208 fun))
+          in (Maybes.maybe (walker208 arg) (\_ -> walker208 fun) (walker208 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker208 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker208 body) Nothing (\inner -> walker208 inner))
+          in (Maybes.maybe Nothing (\inner -> walker208 inner) (walker208 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2377,13 +2377,13 @@ walker21 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker20 fun) (walker20 arg) (\_ -> walker20 fun))
+          in (Maybes.maybe (walker20 arg) (\_ -> walker20 fun) (walker20 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker20 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker20 body) Nothing (\inner -> walker20 inner))
+          in (Maybes.maybe Nothing (\inner -> walker20 inner) (walker20 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2396,13 +2396,13 @@ walker210 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker209 fun) (walker209 arg) (\_ -> walker209 fun))
+          in (Maybes.maybe (walker209 arg) (\_ -> walker209 fun) (walker209 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker209 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker209 body) Nothing (\inner -> walker209 inner))
+          in (Maybes.maybe Nothing (\inner -> walker209 inner) (walker209 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2415,13 +2415,13 @@ walker211 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker210 fun) (walker210 arg) (\_ -> walker210 fun))
+          in (Maybes.maybe (walker210 arg) (\_ -> walker210 fun) (walker210 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker210 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker210 body) Nothing (\inner -> walker210 inner))
+          in (Maybes.maybe Nothing (\inner -> walker210 inner) (walker210 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2434,13 +2434,13 @@ walker212 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker211 fun) (walker211 arg) (\_ -> walker211 fun))
+          in (Maybes.maybe (walker211 arg) (\_ -> walker211 fun) (walker211 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker211 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker211 body) Nothing (\inner -> walker211 inner))
+          in (Maybes.maybe Nothing (\inner -> walker211 inner) (walker211 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2453,13 +2453,13 @@ walker213 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker212 fun) (walker212 arg) (\_ -> walker212 fun))
+          in (Maybes.maybe (walker212 arg) (\_ -> walker212 fun) (walker212 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker212 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker212 body) Nothing (\inner -> walker212 inner))
+          in (Maybes.maybe Nothing (\inner -> walker212 inner) (walker212 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2472,13 +2472,13 @@ walker214 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker213 fun) (walker213 arg) (\_ -> walker213 fun))
+          in (Maybes.maybe (walker213 arg) (\_ -> walker213 fun) (walker213 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker213 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker213 body) Nothing (\inner -> walker213 inner))
+          in (Maybes.maybe Nothing (\inner -> walker213 inner) (walker213 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2491,13 +2491,13 @@ walker215 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker214 fun) (walker214 arg) (\_ -> walker214 fun))
+          in (Maybes.maybe (walker214 arg) (\_ -> walker214 fun) (walker214 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker214 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker214 body) Nothing (\inner -> walker214 inner))
+          in (Maybes.maybe Nothing (\inner -> walker214 inner) (walker214 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2510,13 +2510,13 @@ walker216 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker215 fun) (walker215 arg) (\_ -> walker215 fun))
+          in (Maybes.maybe (walker215 arg) (\_ -> walker215 fun) (walker215 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker215 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker215 body) Nothing (\inner -> walker215 inner))
+          in (Maybes.maybe Nothing (\inner -> walker215 inner) (walker215 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2529,13 +2529,13 @@ walker217 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker216 fun) (walker216 arg) (\_ -> walker216 fun))
+          in (Maybes.maybe (walker216 arg) (\_ -> walker216 fun) (walker216 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker216 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker216 body) Nothing (\inner -> walker216 inner))
+          in (Maybes.maybe Nothing (\inner -> walker216 inner) (walker216 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2548,13 +2548,13 @@ walker218 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker217 fun) (walker217 arg) (\_ -> walker217 fun))
+          in (Maybes.maybe (walker217 arg) (\_ -> walker217 fun) (walker217 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker217 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker217 body) Nothing (\inner -> walker217 inner))
+          in (Maybes.maybe Nothing (\inner -> walker217 inner) (walker217 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2567,13 +2567,13 @@ walker219 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker218 fun) (walker218 arg) (\_ -> walker218 fun))
+          in (Maybes.maybe (walker218 arg) (\_ -> walker218 fun) (walker218 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker218 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker218 body) Nothing (\inner -> walker218 inner))
+          in (Maybes.maybe Nothing (\inner -> walker218 inner) (walker218 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2586,13 +2586,13 @@ walker22 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker21 fun) (walker21 arg) (\_ -> walker21 fun))
+          in (Maybes.maybe (walker21 arg) (\_ -> walker21 fun) (walker21 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker21 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker21 body) Nothing (\inner -> walker21 inner))
+          in (Maybes.maybe Nothing (\inner -> walker21 inner) (walker21 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2605,13 +2605,13 @@ walker220 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker219 fun) (walker219 arg) (\_ -> walker219 fun))
+          in (Maybes.maybe (walker219 arg) (\_ -> walker219 fun) (walker219 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker219 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker219 body) Nothing (\inner -> walker219 inner))
+          in (Maybes.maybe Nothing (\inner -> walker219 inner) (walker219 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2624,13 +2624,13 @@ walker221 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker220 fun) (walker220 arg) (\_ -> walker220 fun))
+          in (Maybes.maybe (walker220 arg) (\_ -> walker220 fun) (walker220 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker220 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker220 body) Nothing (\inner -> walker220 inner))
+          in (Maybes.maybe Nothing (\inner -> walker220 inner) (walker220 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2643,13 +2643,13 @@ walker222 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker221 fun) (walker221 arg) (\_ -> walker221 fun))
+          in (Maybes.maybe (walker221 arg) (\_ -> walker221 fun) (walker221 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker221 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker221 body) Nothing (\inner -> walker221 inner))
+          in (Maybes.maybe Nothing (\inner -> walker221 inner) (walker221 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2662,13 +2662,13 @@ walker223 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker222 fun) (walker222 arg) (\_ -> walker222 fun))
+          in (Maybes.maybe (walker222 arg) (\_ -> walker222 fun) (walker222 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker222 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker222 body) Nothing (\inner -> walker222 inner))
+          in (Maybes.maybe Nothing (\inner -> walker222 inner) (walker222 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2681,13 +2681,13 @@ walker224 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker223 fun) (walker223 arg) (\_ -> walker223 fun))
+          in (Maybes.maybe (walker223 arg) (\_ -> walker223 fun) (walker223 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker223 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker223 body) Nothing (\inner -> walker223 inner))
+          in (Maybes.maybe Nothing (\inner -> walker223 inner) (walker223 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2700,13 +2700,13 @@ walker225 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker224 fun) (walker224 arg) (\_ -> walker224 fun))
+          in (Maybes.maybe (walker224 arg) (\_ -> walker224 fun) (walker224 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker224 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker224 body) Nothing (\inner -> walker224 inner))
+          in (Maybes.maybe Nothing (\inner -> walker224 inner) (walker224 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2719,13 +2719,13 @@ walker226 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker225 fun) (walker225 arg) (\_ -> walker225 fun))
+          in (Maybes.maybe (walker225 arg) (\_ -> walker225 fun) (walker225 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker225 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker225 body) Nothing (\inner -> walker225 inner))
+          in (Maybes.maybe Nothing (\inner -> walker225 inner) (walker225 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2738,13 +2738,13 @@ walker227 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker226 fun) (walker226 arg) (\_ -> walker226 fun))
+          in (Maybes.maybe (walker226 arg) (\_ -> walker226 fun) (walker226 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker226 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker226 body) Nothing (\inner -> walker226 inner))
+          in (Maybes.maybe Nothing (\inner -> walker226 inner) (walker226 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2757,13 +2757,13 @@ walker228 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker227 fun) (walker227 arg) (\_ -> walker227 fun))
+          in (Maybes.maybe (walker227 arg) (\_ -> walker227 fun) (walker227 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker227 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker227 body) Nothing (\inner -> walker227 inner))
+          in (Maybes.maybe Nothing (\inner -> walker227 inner) (walker227 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2776,13 +2776,13 @@ walker229 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker228 fun) (walker228 arg) (\_ -> walker228 fun))
+          in (Maybes.maybe (walker228 arg) (\_ -> walker228 fun) (walker228 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker228 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker228 body) Nothing (\inner -> walker228 inner))
+          in (Maybes.maybe Nothing (\inner -> walker228 inner) (walker228 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2795,13 +2795,13 @@ walker23 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker22 fun) (walker22 arg) (\_ -> walker22 fun))
+          in (Maybes.maybe (walker22 arg) (\_ -> walker22 fun) (walker22 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker22 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker22 body) Nothing (\inner -> walker22 inner))
+          in (Maybes.maybe Nothing (\inner -> walker22 inner) (walker22 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2814,13 +2814,13 @@ walker230 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker229 fun) (walker229 arg) (\_ -> walker229 fun))
+          in (Maybes.maybe (walker229 arg) (\_ -> walker229 fun) (walker229 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker229 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker229 body) Nothing (\inner -> walker229 inner))
+          in (Maybes.maybe Nothing (\inner -> walker229 inner) (walker229 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2833,13 +2833,13 @@ walker231 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker230 fun) (walker230 arg) (\_ -> walker230 fun))
+          in (Maybes.maybe (walker230 arg) (\_ -> walker230 fun) (walker230 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker230 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker230 body) Nothing (\inner -> walker230 inner))
+          in (Maybes.maybe Nothing (\inner -> walker230 inner) (walker230 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2852,13 +2852,13 @@ walker232 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker231 fun) (walker231 arg) (\_ -> walker231 fun))
+          in (Maybes.maybe (walker231 arg) (\_ -> walker231 fun) (walker231 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker231 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker231 body) Nothing (\inner -> walker231 inner))
+          in (Maybes.maybe Nothing (\inner -> walker231 inner) (walker231 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2871,13 +2871,13 @@ walker233 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker232 fun) (walker232 arg) (\_ -> walker232 fun))
+          in (Maybes.maybe (walker232 arg) (\_ -> walker232 fun) (walker232 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker232 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker232 body) Nothing (\inner -> walker232 inner))
+          in (Maybes.maybe Nothing (\inner -> walker232 inner) (walker232 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2890,13 +2890,13 @@ walker234 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker233 fun) (walker233 arg) (\_ -> walker233 fun))
+          in (Maybes.maybe (walker233 arg) (\_ -> walker233 fun) (walker233 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker233 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker233 body) Nothing (\inner -> walker233 inner))
+          in (Maybes.maybe Nothing (\inner -> walker233 inner) (walker233 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2909,13 +2909,13 @@ walker235 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker234 fun) (walker234 arg) (\_ -> walker234 fun))
+          in (Maybes.maybe (walker234 arg) (\_ -> walker234 fun) (walker234 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker234 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker234 body) Nothing (\inner -> walker234 inner))
+          in (Maybes.maybe Nothing (\inner -> walker234 inner) (walker234 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2928,13 +2928,13 @@ walker236 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker235 fun) (walker235 arg) (\_ -> walker235 fun))
+          in (Maybes.maybe (walker235 arg) (\_ -> walker235 fun) (walker235 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker235 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker235 body) Nothing (\inner -> walker235 inner))
+          in (Maybes.maybe Nothing (\inner -> walker235 inner) (walker235 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2947,13 +2947,13 @@ walker237 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker236 fun) (walker236 arg) (\_ -> walker236 fun))
+          in (Maybes.maybe (walker236 arg) (\_ -> walker236 fun) (walker236 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker236 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker236 body) Nothing (\inner -> walker236 inner))
+          in (Maybes.maybe Nothing (\inner -> walker236 inner) (walker236 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2966,13 +2966,13 @@ walker238 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker237 fun) (walker237 arg) (\_ -> walker237 fun))
+          in (Maybes.maybe (walker237 arg) (\_ -> walker237 fun) (walker237 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker237 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker237 body) Nothing (\inner -> walker237 inner))
+          in (Maybes.maybe Nothing (\inner -> walker237 inner) (walker237 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2985,13 +2985,13 @@ walker239 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker238 fun) (walker238 arg) (\_ -> walker238 fun))
+          in (Maybes.maybe (walker238 arg) (\_ -> walker238 fun) (walker238 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker238 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker238 body) Nothing (\inner -> walker238 inner))
+          in (Maybes.maybe Nothing (\inner -> walker238 inner) (walker238 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3004,13 +3004,13 @@ walker24 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker23 fun) (walker23 arg) (\_ -> walker23 fun))
+          in (Maybes.maybe (walker23 arg) (\_ -> walker23 fun) (walker23 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker23 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker23 body) Nothing (\inner -> walker23 inner))
+          in (Maybes.maybe Nothing (\inner -> walker23 inner) (walker23 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3023,13 +3023,13 @@ walker240 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker239 fun) (walker239 arg) (\_ -> walker239 fun))
+          in (Maybes.maybe (walker239 arg) (\_ -> walker239 fun) (walker239 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker239 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker239 body) Nothing (\inner -> walker239 inner))
+          in (Maybes.maybe Nothing (\inner -> walker239 inner) (walker239 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3042,13 +3042,13 @@ walker241 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker240 fun) (walker240 arg) (\_ -> walker240 fun))
+          in (Maybes.maybe (walker240 arg) (\_ -> walker240 fun) (walker240 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker240 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker240 body) Nothing (\inner -> walker240 inner))
+          in (Maybes.maybe Nothing (\inner -> walker240 inner) (walker240 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3061,13 +3061,13 @@ walker242 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker241 fun) (walker241 arg) (\_ -> walker241 fun))
+          in (Maybes.maybe (walker241 arg) (\_ -> walker241 fun) (walker241 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker241 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker241 body) Nothing (\inner -> walker241 inner))
+          in (Maybes.maybe Nothing (\inner -> walker241 inner) (walker241 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3080,13 +3080,13 @@ walker243 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker242 fun) (walker242 arg) (\_ -> walker242 fun))
+          in (Maybes.maybe (walker242 arg) (\_ -> walker242 fun) (walker242 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker242 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker242 body) Nothing (\inner -> walker242 inner))
+          in (Maybes.maybe Nothing (\inner -> walker242 inner) (walker242 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3099,13 +3099,13 @@ walker244 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker243 fun) (walker243 arg) (\_ -> walker243 fun))
+          in (Maybes.maybe (walker243 arg) (\_ -> walker243 fun) (walker243 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker243 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker243 body) Nothing (\inner -> walker243 inner))
+          in (Maybes.maybe Nothing (\inner -> walker243 inner) (walker243 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3118,13 +3118,13 @@ walker245 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker244 fun) (walker244 arg) (\_ -> walker244 fun))
+          in (Maybes.maybe (walker244 arg) (\_ -> walker244 fun) (walker244 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker244 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker244 body) Nothing (\inner -> walker244 inner))
+          in (Maybes.maybe Nothing (\inner -> walker244 inner) (walker244 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3137,13 +3137,13 @@ walker246 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker245 fun) (walker245 arg) (\_ -> walker245 fun))
+          in (Maybes.maybe (walker245 arg) (\_ -> walker245 fun) (walker245 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker245 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker245 body) Nothing (\inner -> walker245 inner))
+          in (Maybes.maybe Nothing (\inner -> walker245 inner) (walker245 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3156,13 +3156,13 @@ walker247 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker246 fun) (walker246 arg) (\_ -> walker246 fun))
+          in (Maybes.maybe (walker246 arg) (\_ -> walker246 fun) (walker246 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker246 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker246 body) Nothing (\inner -> walker246 inner))
+          in (Maybes.maybe Nothing (\inner -> walker246 inner) (walker246 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3175,13 +3175,13 @@ walker248 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker247 fun) (walker247 arg) (\_ -> walker247 fun))
+          in (Maybes.maybe (walker247 arg) (\_ -> walker247 fun) (walker247 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker247 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker247 body) Nothing (\inner -> walker247 inner))
+          in (Maybes.maybe Nothing (\inner -> walker247 inner) (walker247 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3194,13 +3194,13 @@ walker249 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker248 fun) (walker248 arg) (\_ -> walker248 fun))
+          in (Maybes.maybe (walker248 arg) (\_ -> walker248 fun) (walker248 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker248 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker248 body) Nothing (\inner -> walker248 inner))
+          in (Maybes.maybe Nothing (\inner -> walker248 inner) (walker248 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3213,13 +3213,13 @@ walker25 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker24 fun) (walker24 arg) (\_ -> walker24 fun))
+          in (Maybes.maybe (walker24 arg) (\_ -> walker24 fun) (walker24 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker24 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker24 body) Nothing (\inner -> walker24 inner))
+          in (Maybes.maybe Nothing (\inner -> walker24 inner) (walker24 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3232,13 +3232,13 @@ walker250 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker249 fun) (walker249 arg) (\_ -> walker249 fun))
+          in (Maybes.maybe (walker249 arg) (\_ -> walker249 fun) (walker249 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker249 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker249 body) Nothing (\inner -> walker249 inner))
+          in (Maybes.maybe Nothing (\inner -> walker249 inner) (walker249 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3251,13 +3251,13 @@ walker251 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker250 fun) (walker250 arg) (\_ -> walker250 fun))
+          in (Maybes.maybe (walker250 arg) (\_ -> walker250 fun) (walker250 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker250 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker250 body) Nothing (\inner -> walker250 inner))
+          in (Maybes.maybe Nothing (\inner -> walker250 inner) (walker250 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3270,13 +3270,13 @@ walker252 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker251 fun) (walker251 arg) (\_ -> walker251 fun))
+          in (Maybes.maybe (walker251 arg) (\_ -> walker251 fun) (walker251 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker251 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker251 body) Nothing (\inner -> walker251 inner))
+          in (Maybes.maybe Nothing (\inner -> walker251 inner) (walker251 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3289,13 +3289,13 @@ walker253 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker252 fun) (walker252 arg) (\_ -> walker252 fun))
+          in (Maybes.maybe (walker252 arg) (\_ -> walker252 fun) (walker252 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker252 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker252 body) Nothing (\inner -> walker252 inner))
+          in (Maybes.maybe Nothing (\inner -> walker252 inner) (walker252 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3308,13 +3308,13 @@ walker254 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker253 fun) (walker253 arg) (\_ -> walker253 fun))
+          in (Maybes.maybe (walker253 arg) (\_ -> walker253 fun) (walker253 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker253 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker253 body) Nothing (\inner -> walker253 inner))
+          in (Maybes.maybe Nothing (\inner -> walker253 inner) (walker253 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3327,13 +3327,13 @@ walker255 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker254 fun) (walker254 arg) (\_ -> walker254 fun))
+          in (Maybes.maybe (walker254 arg) (\_ -> walker254 fun) (walker254 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker254 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker254 body) Nothing (\inner -> walker254 inner))
+          in (Maybes.maybe Nothing (\inner -> walker254 inner) (walker254 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3346,13 +3346,13 @@ walker256 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker255 fun) (walker255 arg) (\_ -> walker255 fun))
+          in (Maybes.maybe (walker255 arg) (\_ -> walker255 fun) (walker255 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker255 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker255 body) Nothing (\inner -> walker255 inner))
+          in (Maybes.maybe Nothing (\inner -> walker255 inner) (walker255 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3365,13 +3365,13 @@ walker257 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker256 fun) (walker256 arg) (\_ -> walker256 fun))
+          in (Maybes.maybe (walker256 arg) (\_ -> walker256 fun) (walker256 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker256 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker256 body) Nothing (\inner -> walker256 inner))
+          in (Maybes.maybe Nothing (\inner -> walker256 inner) (walker256 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3384,13 +3384,13 @@ walker258 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker257 fun) (walker257 arg) (\_ -> walker257 fun))
+          in (Maybes.maybe (walker257 arg) (\_ -> walker257 fun) (walker257 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker257 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker257 body) Nothing (\inner -> walker257 inner))
+          in (Maybes.maybe Nothing (\inner -> walker257 inner) (walker257 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3403,13 +3403,13 @@ walker259 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker258 fun) (walker258 arg) (\_ -> walker258 fun))
+          in (Maybes.maybe (walker258 arg) (\_ -> walker258 fun) (walker258 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker258 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker258 body) Nothing (\inner -> walker258 inner))
+          in (Maybes.maybe Nothing (\inner -> walker258 inner) (walker258 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3422,13 +3422,13 @@ walker26 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker25 fun) (walker25 arg) (\_ -> walker25 fun))
+          in (Maybes.maybe (walker25 arg) (\_ -> walker25 fun) (walker25 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker25 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker25 body) Nothing (\inner -> walker25 inner))
+          in (Maybes.maybe Nothing (\inner -> walker25 inner) (walker25 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3441,13 +3441,13 @@ walker260 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker259 fun) (walker259 arg) (\_ -> walker259 fun))
+          in (Maybes.maybe (walker259 arg) (\_ -> walker259 fun) (walker259 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker259 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker259 body) Nothing (\inner -> walker259 inner))
+          in (Maybes.maybe Nothing (\inner -> walker259 inner) (walker259 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3460,13 +3460,13 @@ walker261 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker260 fun) (walker260 arg) (\_ -> walker260 fun))
+          in (Maybes.maybe (walker260 arg) (\_ -> walker260 fun) (walker260 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker260 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker260 body) Nothing (\inner -> walker260 inner))
+          in (Maybes.maybe Nothing (\inner -> walker260 inner) (walker260 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3479,13 +3479,13 @@ walker262 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker261 fun) (walker261 arg) (\_ -> walker261 fun))
+          in (Maybes.maybe (walker261 arg) (\_ -> walker261 fun) (walker261 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker261 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker261 body) Nothing (\inner -> walker261 inner))
+          in (Maybes.maybe Nothing (\inner -> walker261 inner) (walker261 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3498,13 +3498,13 @@ walker263 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker262 fun) (walker262 arg) (\_ -> walker262 fun))
+          in (Maybes.maybe (walker262 arg) (\_ -> walker262 fun) (walker262 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker262 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker262 body) Nothing (\inner -> walker262 inner))
+          in (Maybes.maybe Nothing (\inner -> walker262 inner) (walker262 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3517,13 +3517,13 @@ walker264 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker263 fun) (walker263 arg) (\_ -> walker263 fun))
+          in (Maybes.maybe (walker263 arg) (\_ -> walker263 fun) (walker263 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker263 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker263 body) Nothing (\inner -> walker263 inner))
+          in (Maybes.maybe Nothing (\inner -> walker263 inner) (walker263 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3536,13 +3536,13 @@ walker265 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker264 fun) (walker264 arg) (\_ -> walker264 fun))
+          in (Maybes.maybe (walker264 arg) (\_ -> walker264 fun) (walker264 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker264 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker264 body) Nothing (\inner -> walker264 inner))
+          in (Maybes.maybe Nothing (\inner -> walker264 inner) (walker264 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3555,13 +3555,13 @@ walker266 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker265 fun) (walker265 arg) (\_ -> walker265 fun))
+          in (Maybes.maybe (walker265 arg) (\_ -> walker265 fun) (walker265 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker265 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker265 body) Nothing (\inner -> walker265 inner))
+          in (Maybes.maybe Nothing (\inner -> walker265 inner) (walker265 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3574,13 +3574,13 @@ walker267 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker266 fun) (walker266 arg) (\_ -> walker266 fun))
+          in (Maybes.maybe (walker266 arg) (\_ -> walker266 fun) (walker266 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker266 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker266 body) Nothing (\inner -> walker266 inner))
+          in (Maybes.maybe Nothing (\inner -> walker266 inner) (walker266 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3593,13 +3593,13 @@ walker268 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker267 fun) (walker267 arg) (\_ -> walker267 fun))
+          in (Maybes.maybe (walker267 arg) (\_ -> walker267 fun) (walker267 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker267 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker267 body) Nothing (\inner -> walker267 inner))
+          in (Maybes.maybe Nothing (\inner -> walker267 inner) (walker267 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3612,13 +3612,13 @@ walker269 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker268 fun) (walker268 arg) (\_ -> walker268 fun))
+          in (Maybes.maybe (walker268 arg) (\_ -> walker268 fun) (walker268 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker268 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker268 body) Nothing (\inner -> walker268 inner))
+          in (Maybes.maybe Nothing (\inner -> walker268 inner) (walker268 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3631,13 +3631,13 @@ walker27 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker26 fun) (walker26 arg) (\_ -> walker26 fun))
+          in (Maybes.maybe (walker26 arg) (\_ -> walker26 fun) (walker26 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker26 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker26 body) Nothing (\inner -> walker26 inner))
+          in (Maybes.maybe Nothing (\inner -> walker26 inner) (walker26 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3650,13 +3650,13 @@ walker270 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker269 fun) (walker269 arg) (\_ -> walker269 fun))
+          in (Maybes.maybe (walker269 arg) (\_ -> walker269 fun) (walker269 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker269 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker269 body) Nothing (\inner -> walker269 inner))
+          in (Maybes.maybe Nothing (\inner -> walker269 inner) (walker269 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3669,13 +3669,13 @@ walker271 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker270 fun) (walker270 arg) (\_ -> walker270 fun))
+          in (Maybes.maybe (walker270 arg) (\_ -> walker270 fun) (walker270 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker270 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker270 body) Nothing (\inner -> walker270 inner))
+          in (Maybes.maybe Nothing (\inner -> walker270 inner) (walker270 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3688,13 +3688,13 @@ walker272 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker271 fun) (walker271 arg) (\_ -> walker271 fun))
+          in (Maybes.maybe (walker271 arg) (\_ -> walker271 fun) (walker271 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker271 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker271 body) Nothing (\inner -> walker271 inner))
+          in (Maybes.maybe Nothing (\inner -> walker271 inner) (walker271 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3707,13 +3707,13 @@ walker273 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker272 fun) (walker272 arg) (\_ -> walker272 fun))
+          in (Maybes.maybe (walker272 arg) (\_ -> walker272 fun) (walker272 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker272 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker272 body) Nothing (\inner -> walker272 inner))
+          in (Maybes.maybe Nothing (\inner -> walker272 inner) (walker272 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3726,13 +3726,13 @@ walker274 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker273 fun) (walker273 arg) (\_ -> walker273 fun))
+          in (Maybes.maybe (walker273 arg) (\_ -> walker273 fun) (walker273 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker273 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker273 body) Nothing (\inner -> walker273 inner))
+          in (Maybes.maybe Nothing (\inner -> walker273 inner) (walker273 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3745,13 +3745,13 @@ walker275 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker274 fun) (walker274 arg) (\_ -> walker274 fun))
+          in (Maybes.maybe (walker274 arg) (\_ -> walker274 fun) (walker274 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker274 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker274 body) Nothing (\inner -> walker274 inner))
+          in (Maybes.maybe Nothing (\inner -> walker274 inner) (walker274 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3764,13 +3764,13 @@ walker276 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker275 fun) (walker275 arg) (\_ -> walker275 fun))
+          in (Maybes.maybe (walker275 arg) (\_ -> walker275 fun) (walker275 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker275 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker275 body) Nothing (\inner -> walker275 inner))
+          in (Maybes.maybe Nothing (\inner -> walker275 inner) (walker275 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3783,13 +3783,13 @@ walker277 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker276 fun) (walker276 arg) (\_ -> walker276 fun))
+          in (Maybes.maybe (walker276 arg) (\_ -> walker276 fun) (walker276 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker276 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker276 body) Nothing (\inner -> walker276 inner))
+          in (Maybes.maybe Nothing (\inner -> walker276 inner) (walker276 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3802,13 +3802,13 @@ walker278 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker277 fun) (walker277 arg) (\_ -> walker277 fun))
+          in (Maybes.maybe (walker277 arg) (\_ -> walker277 fun) (walker277 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker277 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker277 body) Nothing (\inner -> walker277 inner))
+          in (Maybes.maybe Nothing (\inner -> walker277 inner) (walker277 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3821,13 +3821,13 @@ walker279 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker278 fun) (walker278 arg) (\_ -> walker278 fun))
+          in (Maybes.maybe (walker278 arg) (\_ -> walker278 fun) (walker278 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker278 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker278 body) Nothing (\inner -> walker278 inner))
+          in (Maybes.maybe Nothing (\inner -> walker278 inner) (walker278 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3840,13 +3840,13 @@ walker28 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker27 fun) (walker27 arg) (\_ -> walker27 fun))
+          in (Maybes.maybe (walker27 arg) (\_ -> walker27 fun) (walker27 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker27 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker27 body) Nothing (\inner -> walker27 inner))
+          in (Maybes.maybe Nothing (\inner -> walker27 inner) (walker27 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3859,13 +3859,13 @@ walker280 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker279 fun) (walker279 arg) (\_ -> walker279 fun))
+          in (Maybes.maybe (walker279 arg) (\_ -> walker279 fun) (walker279 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker279 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker279 body) Nothing (\inner -> walker279 inner))
+          in (Maybes.maybe Nothing (\inner -> walker279 inner) (walker279 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3878,13 +3878,13 @@ walker281 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker280 fun) (walker280 arg) (\_ -> walker280 fun))
+          in (Maybes.maybe (walker280 arg) (\_ -> walker280 fun) (walker280 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker280 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker280 body) Nothing (\inner -> walker280 inner))
+          in (Maybes.maybe Nothing (\inner -> walker280 inner) (walker280 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3897,13 +3897,13 @@ walker282 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker281 fun) (walker281 arg) (\_ -> walker281 fun))
+          in (Maybes.maybe (walker281 arg) (\_ -> walker281 fun) (walker281 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker281 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker281 body) Nothing (\inner -> walker281 inner))
+          in (Maybes.maybe Nothing (\inner -> walker281 inner) (walker281 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3916,13 +3916,13 @@ walker283 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker282 fun) (walker282 arg) (\_ -> walker282 fun))
+          in (Maybes.maybe (walker282 arg) (\_ -> walker282 fun) (walker282 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker282 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker282 body) Nothing (\inner -> walker282 inner))
+          in (Maybes.maybe Nothing (\inner -> walker282 inner) (walker282 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3935,13 +3935,13 @@ walker284 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker283 fun) (walker283 arg) (\_ -> walker283 fun))
+          in (Maybes.maybe (walker283 arg) (\_ -> walker283 fun) (walker283 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker283 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker283 body) Nothing (\inner -> walker283 inner))
+          in (Maybes.maybe Nothing (\inner -> walker283 inner) (walker283 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3954,13 +3954,13 @@ walker285 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker284 fun) (walker284 arg) (\_ -> walker284 fun))
+          in (Maybes.maybe (walker284 arg) (\_ -> walker284 fun) (walker284 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker284 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker284 body) Nothing (\inner -> walker284 inner))
+          in (Maybes.maybe Nothing (\inner -> walker284 inner) (walker284 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3973,13 +3973,13 @@ walker286 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker285 fun) (walker285 arg) (\_ -> walker285 fun))
+          in (Maybes.maybe (walker285 arg) (\_ -> walker285 fun) (walker285 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker285 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker285 body) Nothing (\inner -> walker285 inner))
+          in (Maybes.maybe Nothing (\inner -> walker285 inner) (walker285 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3992,13 +3992,13 @@ walker287 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker286 fun) (walker286 arg) (\_ -> walker286 fun))
+          in (Maybes.maybe (walker286 arg) (\_ -> walker286 fun) (walker286 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker286 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker286 body) Nothing (\inner -> walker286 inner))
+          in (Maybes.maybe Nothing (\inner -> walker286 inner) (walker286 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4011,13 +4011,13 @@ walker288 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker287 fun) (walker287 arg) (\_ -> walker287 fun))
+          in (Maybes.maybe (walker287 arg) (\_ -> walker287 fun) (walker287 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker287 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker287 body) Nothing (\inner -> walker287 inner))
+          in (Maybes.maybe Nothing (\inner -> walker287 inner) (walker287 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4030,13 +4030,13 @@ walker289 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker288 fun) (walker288 arg) (\_ -> walker288 fun))
+          in (Maybes.maybe (walker288 arg) (\_ -> walker288 fun) (walker288 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker288 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker288 body) Nothing (\inner -> walker288 inner))
+          in (Maybes.maybe Nothing (\inner -> walker288 inner) (walker288 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4049,13 +4049,13 @@ walker29 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker28 fun) (walker28 arg) (\_ -> walker28 fun))
+          in (Maybes.maybe (walker28 arg) (\_ -> walker28 fun) (walker28 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker28 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker28 body) Nothing (\inner -> walker28 inner))
+          in (Maybes.maybe Nothing (\inner -> walker28 inner) (walker28 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4068,13 +4068,13 @@ walker290 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker289 fun) (walker289 arg) (\_ -> walker289 fun))
+          in (Maybes.maybe (walker289 arg) (\_ -> walker289 fun) (walker289 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker289 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker289 body) Nothing (\inner -> walker289 inner))
+          in (Maybes.maybe Nothing (\inner -> walker289 inner) (walker289 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4087,13 +4087,13 @@ walker291 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker290 fun) (walker290 arg) (\_ -> walker290 fun))
+          in (Maybes.maybe (walker290 arg) (\_ -> walker290 fun) (walker290 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker290 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker290 body) Nothing (\inner -> walker290 inner))
+          in (Maybes.maybe Nothing (\inner -> walker290 inner) (walker290 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4106,13 +4106,13 @@ walker292 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker291 fun) (walker291 arg) (\_ -> walker291 fun))
+          in (Maybes.maybe (walker291 arg) (\_ -> walker291 fun) (walker291 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker291 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker291 body) Nothing (\inner -> walker291 inner))
+          in (Maybes.maybe Nothing (\inner -> walker291 inner) (walker291 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4125,13 +4125,13 @@ walker293 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker292 fun) (walker292 arg) (\_ -> walker292 fun))
+          in (Maybes.maybe (walker292 arg) (\_ -> walker292 fun) (walker292 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker292 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker292 body) Nothing (\inner -> walker292 inner))
+          in (Maybes.maybe Nothing (\inner -> walker292 inner) (walker292 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4144,13 +4144,13 @@ walker294 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker293 fun) (walker293 arg) (\_ -> walker293 fun))
+          in (Maybes.maybe (walker293 arg) (\_ -> walker293 fun) (walker293 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker293 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker293 body) Nothing (\inner -> walker293 inner))
+          in (Maybes.maybe Nothing (\inner -> walker293 inner) (walker293 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4163,13 +4163,13 @@ walker295 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker294 fun) (walker294 arg) (\_ -> walker294 fun))
+          in (Maybes.maybe (walker294 arg) (\_ -> walker294 fun) (walker294 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker294 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker294 body) Nothing (\inner -> walker294 inner))
+          in (Maybes.maybe Nothing (\inner -> walker294 inner) (walker294 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4182,13 +4182,13 @@ walker296 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker295 fun) (walker295 arg) (\_ -> walker295 fun))
+          in (Maybes.maybe (walker295 arg) (\_ -> walker295 fun) (walker295 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker295 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker295 body) Nothing (\inner -> walker295 inner))
+          in (Maybes.maybe Nothing (\inner -> walker295 inner) (walker295 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4201,13 +4201,13 @@ walker297 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker296 fun) (walker296 arg) (\_ -> walker296 fun))
+          in (Maybes.maybe (walker296 arg) (\_ -> walker296 fun) (walker296 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker296 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker296 body) Nothing (\inner -> walker296 inner))
+          in (Maybes.maybe Nothing (\inner -> walker296 inner) (walker296 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4220,13 +4220,13 @@ walker298 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker297 fun) (walker297 arg) (\_ -> walker297 fun))
+          in (Maybes.maybe (walker297 arg) (\_ -> walker297 fun) (walker297 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker297 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker297 body) Nothing (\inner -> walker297 inner))
+          in (Maybes.maybe Nothing (\inner -> walker297 inner) (walker297 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4239,13 +4239,13 @@ walker299 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker298 fun) (walker298 arg) (\_ -> walker298 fun))
+          in (Maybes.maybe (walker298 arg) (\_ -> walker298 fun) (walker298 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker298 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker298 body) Nothing (\inner -> walker298 inner))
+          in (Maybes.maybe Nothing (\inner -> walker298 inner) (walker298 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4258,13 +4258,13 @@ walker3 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker2 fun) (walker2 arg) (\_ -> walker2 fun))
+          in (Maybes.maybe (walker2 arg) (\_ -> walker2 fun) (walker2 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker2 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker2 body) Nothing (\inner -> walker2 inner))
+          in (Maybes.maybe Nothing (\inner -> walker2 inner) (walker2 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4277,13 +4277,13 @@ walker30 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker29 fun) (walker29 arg) (\_ -> walker29 fun))
+          in (Maybes.maybe (walker29 arg) (\_ -> walker29 fun) (walker29 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker29 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker29 body) Nothing (\inner -> walker29 inner))
+          in (Maybes.maybe Nothing (\inner -> walker29 inner) (walker29 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4296,13 +4296,13 @@ walker300 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker299 fun) (walker299 arg) (\_ -> walker299 fun))
+          in (Maybes.maybe (walker299 arg) (\_ -> walker299 fun) (walker299 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker299 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker299 body) Nothing (\inner -> walker299 inner))
+          in (Maybes.maybe Nothing (\inner -> walker299 inner) (walker299 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4315,13 +4315,13 @@ walker301 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker300 fun) (walker300 arg) (\_ -> walker300 fun))
+          in (Maybes.maybe (walker300 arg) (\_ -> walker300 fun) (walker300 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker300 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker300 body) Nothing (\inner -> walker300 inner))
+          in (Maybes.maybe Nothing (\inner -> walker300 inner) (walker300 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4334,13 +4334,13 @@ walker302 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker301 fun) (walker301 arg) (\_ -> walker301 fun))
+          in (Maybes.maybe (walker301 arg) (\_ -> walker301 fun) (walker301 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker301 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker301 body) Nothing (\inner -> walker301 inner))
+          in (Maybes.maybe Nothing (\inner -> walker301 inner) (walker301 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4353,13 +4353,13 @@ walker303 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker302 fun) (walker302 arg) (\_ -> walker302 fun))
+          in (Maybes.maybe (walker302 arg) (\_ -> walker302 fun) (walker302 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker302 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker302 body) Nothing (\inner -> walker302 inner))
+          in (Maybes.maybe Nothing (\inner -> walker302 inner) (walker302 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4372,13 +4372,13 @@ walker304 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker303 fun) (walker303 arg) (\_ -> walker303 fun))
+          in (Maybes.maybe (walker303 arg) (\_ -> walker303 fun) (walker303 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker303 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker303 body) Nothing (\inner -> walker303 inner))
+          in (Maybes.maybe Nothing (\inner -> walker303 inner) (walker303 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4391,13 +4391,13 @@ walker305 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker304 fun) (walker304 arg) (\_ -> walker304 fun))
+          in (Maybes.maybe (walker304 arg) (\_ -> walker304 fun) (walker304 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker304 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker304 body) Nothing (\inner -> walker304 inner))
+          in (Maybes.maybe Nothing (\inner -> walker304 inner) (walker304 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4410,13 +4410,13 @@ walker306 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker305 fun) (walker305 arg) (\_ -> walker305 fun))
+          in (Maybes.maybe (walker305 arg) (\_ -> walker305 fun) (walker305 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker305 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker305 body) Nothing (\inner -> walker305 inner))
+          in (Maybes.maybe Nothing (\inner -> walker305 inner) (walker305 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4429,13 +4429,13 @@ walker307 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker306 fun) (walker306 arg) (\_ -> walker306 fun))
+          in (Maybes.maybe (walker306 arg) (\_ -> walker306 fun) (walker306 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker306 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker306 body) Nothing (\inner -> walker306 inner))
+          in (Maybes.maybe Nothing (\inner -> walker306 inner) (walker306 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4448,13 +4448,13 @@ walker308 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker307 fun) (walker307 arg) (\_ -> walker307 fun))
+          in (Maybes.maybe (walker307 arg) (\_ -> walker307 fun) (walker307 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker307 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker307 body) Nothing (\inner -> walker307 inner))
+          in (Maybes.maybe Nothing (\inner -> walker307 inner) (walker307 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4467,13 +4467,13 @@ walker309 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker308 fun) (walker308 arg) (\_ -> walker308 fun))
+          in (Maybes.maybe (walker308 arg) (\_ -> walker308 fun) (walker308 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker308 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker308 body) Nothing (\inner -> walker308 inner))
+          in (Maybes.maybe Nothing (\inner -> walker308 inner) (walker308 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4486,13 +4486,13 @@ walker31 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker30 fun) (walker30 arg) (\_ -> walker30 fun))
+          in (Maybes.maybe (walker30 arg) (\_ -> walker30 fun) (walker30 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker30 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker30 body) Nothing (\inner -> walker30 inner))
+          in (Maybes.maybe Nothing (\inner -> walker30 inner) (walker30 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4505,13 +4505,13 @@ walker310 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker309 fun) (walker309 arg) (\_ -> walker309 fun))
+          in (Maybes.maybe (walker309 arg) (\_ -> walker309 fun) (walker309 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker309 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker309 body) Nothing (\inner -> walker309 inner))
+          in (Maybes.maybe Nothing (\inner -> walker309 inner) (walker309 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4524,13 +4524,13 @@ walker311 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker310 fun) (walker310 arg) (\_ -> walker310 fun))
+          in (Maybes.maybe (walker310 arg) (\_ -> walker310 fun) (walker310 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker310 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker310 body) Nothing (\inner -> walker310 inner))
+          in (Maybes.maybe Nothing (\inner -> walker310 inner) (walker310 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4543,13 +4543,13 @@ walker312 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker311 fun) (walker311 arg) (\_ -> walker311 fun))
+          in (Maybes.maybe (walker311 arg) (\_ -> walker311 fun) (walker311 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker311 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker311 body) Nothing (\inner -> walker311 inner))
+          in (Maybes.maybe Nothing (\inner -> walker311 inner) (walker311 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4562,13 +4562,13 @@ walker313 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker312 fun) (walker312 arg) (\_ -> walker312 fun))
+          in (Maybes.maybe (walker312 arg) (\_ -> walker312 fun) (walker312 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker312 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker312 body) Nothing (\inner -> walker312 inner))
+          in (Maybes.maybe Nothing (\inner -> walker312 inner) (walker312 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4581,13 +4581,13 @@ walker314 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker313 fun) (walker313 arg) (\_ -> walker313 fun))
+          in (Maybes.maybe (walker313 arg) (\_ -> walker313 fun) (walker313 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker313 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker313 body) Nothing (\inner -> walker313 inner))
+          in (Maybes.maybe Nothing (\inner -> walker313 inner) (walker313 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4600,13 +4600,13 @@ walker315 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker314 fun) (walker314 arg) (\_ -> walker314 fun))
+          in (Maybes.maybe (walker314 arg) (\_ -> walker314 fun) (walker314 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker314 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker314 body) Nothing (\inner -> walker314 inner))
+          in (Maybes.maybe Nothing (\inner -> walker314 inner) (walker314 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4619,13 +4619,13 @@ walker316 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker315 fun) (walker315 arg) (\_ -> walker315 fun))
+          in (Maybes.maybe (walker315 arg) (\_ -> walker315 fun) (walker315 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker315 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker315 body) Nothing (\inner -> walker315 inner))
+          in (Maybes.maybe Nothing (\inner -> walker315 inner) (walker315 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4638,13 +4638,13 @@ walker317 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker316 fun) (walker316 arg) (\_ -> walker316 fun))
+          in (Maybes.maybe (walker316 arg) (\_ -> walker316 fun) (walker316 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker316 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker316 body) Nothing (\inner -> walker316 inner))
+          in (Maybes.maybe Nothing (\inner -> walker316 inner) (walker316 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4657,13 +4657,13 @@ walker318 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker317 fun) (walker317 arg) (\_ -> walker317 fun))
+          in (Maybes.maybe (walker317 arg) (\_ -> walker317 fun) (walker317 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker317 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker317 body) Nothing (\inner -> walker317 inner))
+          in (Maybes.maybe Nothing (\inner -> walker317 inner) (walker317 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4676,13 +4676,13 @@ walker319 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker318 fun) (walker318 arg) (\_ -> walker318 fun))
+          in (Maybes.maybe (walker318 arg) (\_ -> walker318 fun) (walker318 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker318 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker318 body) Nothing (\inner -> walker318 inner))
+          in (Maybes.maybe Nothing (\inner -> walker318 inner) (walker318 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4695,13 +4695,13 @@ walker32 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker31 fun) (walker31 arg) (\_ -> walker31 fun))
+          in (Maybes.maybe (walker31 arg) (\_ -> walker31 fun) (walker31 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker31 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker31 body) Nothing (\inner -> walker31 inner))
+          in (Maybes.maybe Nothing (\inner -> walker31 inner) (walker31 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4714,13 +4714,13 @@ walker320 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker319 fun) (walker319 arg) (\_ -> walker319 fun))
+          in (Maybes.maybe (walker319 arg) (\_ -> walker319 fun) (walker319 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker319 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker319 body) Nothing (\inner -> walker319 inner))
+          in (Maybes.maybe Nothing (\inner -> walker319 inner) (walker319 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4733,13 +4733,13 @@ walker321 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker320 fun) (walker320 arg) (\_ -> walker320 fun))
+          in (Maybes.maybe (walker320 arg) (\_ -> walker320 fun) (walker320 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker320 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker320 body) Nothing (\inner -> walker320 inner))
+          in (Maybes.maybe Nothing (\inner -> walker320 inner) (walker320 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4752,13 +4752,13 @@ walker322 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker321 fun) (walker321 arg) (\_ -> walker321 fun))
+          in (Maybes.maybe (walker321 arg) (\_ -> walker321 fun) (walker321 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker321 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker321 body) Nothing (\inner -> walker321 inner))
+          in (Maybes.maybe Nothing (\inner -> walker321 inner) (walker321 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4771,13 +4771,13 @@ walker323 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker322 fun) (walker322 arg) (\_ -> walker322 fun))
+          in (Maybes.maybe (walker322 arg) (\_ -> walker322 fun) (walker322 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker322 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker322 body) Nothing (\inner -> walker322 inner))
+          in (Maybes.maybe Nothing (\inner -> walker322 inner) (walker322 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4790,13 +4790,13 @@ walker324 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker323 fun) (walker323 arg) (\_ -> walker323 fun))
+          in (Maybes.maybe (walker323 arg) (\_ -> walker323 fun) (walker323 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker323 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker323 body) Nothing (\inner -> walker323 inner))
+          in (Maybes.maybe Nothing (\inner -> walker323 inner) (walker323 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4809,13 +4809,13 @@ walker325 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker324 fun) (walker324 arg) (\_ -> walker324 fun))
+          in (Maybes.maybe (walker324 arg) (\_ -> walker324 fun) (walker324 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker324 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker324 body) Nothing (\inner -> walker324 inner))
+          in (Maybes.maybe Nothing (\inner -> walker324 inner) (walker324 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4828,13 +4828,13 @@ walker326 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker325 fun) (walker325 arg) (\_ -> walker325 fun))
+          in (Maybes.maybe (walker325 arg) (\_ -> walker325 fun) (walker325 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker325 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker325 body) Nothing (\inner -> walker325 inner))
+          in (Maybes.maybe Nothing (\inner -> walker325 inner) (walker325 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4847,13 +4847,13 @@ walker327 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker326 fun) (walker326 arg) (\_ -> walker326 fun))
+          in (Maybes.maybe (walker326 arg) (\_ -> walker326 fun) (walker326 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker326 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker326 body) Nothing (\inner -> walker326 inner))
+          in (Maybes.maybe Nothing (\inner -> walker326 inner) (walker326 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4866,13 +4866,13 @@ walker328 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker327 fun) (walker327 arg) (\_ -> walker327 fun))
+          in (Maybes.maybe (walker327 arg) (\_ -> walker327 fun) (walker327 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker327 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker327 body) Nothing (\inner -> walker327 inner))
+          in (Maybes.maybe Nothing (\inner -> walker327 inner) (walker327 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4885,13 +4885,13 @@ walker329 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker328 fun) (walker328 arg) (\_ -> walker328 fun))
+          in (Maybes.maybe (walker328 arg) (\_ -> walker328 fun) (walker328 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker328 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker328 body) Nothing (\inner -> walker328 inner))
+          in (Maybes.maybe Nothing (\inner -> walker328 inner) (walker328 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4904,13 +4904,13 @@ walker33 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker32 fun) (walker32 arg) (\_ -> walker32 fun))
+          in (Maybes.maybe (walker32 arg) (\_ -> walker32 fun) (walker32 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker32 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker32 body) Nothing (\inner -> walker32 inner))
+          in (Maybes.maybe Nothing (\inner -> walker32 inner) (walker32 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4923,13 +4923,13 @@ walker330 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker329 fun) (walker329 arg) (\_ -> walker329 fun))
+          in (Maybes.maybe (walker329 arg) (\_ -> walker329 fun) (walker329 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker329 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker329 body) Nothing (\inner -> walker329 inner))
+          in (Maybes.maybe Nothing (\inner -> walker329 inner) (walker329 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4942,13 +4942,13 @@ walker331 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker330 fun) (walker330 arg) (\_ -> walker330 fun))
+          in (Maybes.maybe (walker330 arg) (\_ -> walker330 fun) (walker330 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker330 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker330 body) Nothing (\inner -> walker330 inner))
+          in (Maybes.maybe Nothing (\inner -> walker330 inner) (walker330 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4961,13 +4961,13 @@ walker332 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker331 fun) (walker331 arg) (\_ -> walker331 fun))
+          in (Maybes.maybe (walker331 arg) (\_ -> walker331 fun) (walker331 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker331 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker331 body) Nothing (\inner -> walker331 inner))
+          in (Maybes.maybe Nothing (\inner -> walker331 inner) (walker331 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4980,13 +4980,13 @@ walker333 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker332 fun) (walker332 arg) (\_ -> walker332 fun))
+          in (Maybes.maybe (walker332 arg) (\_ -> walker332 fun) (walker332 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker332 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker332 body) Nothing (\inner -> walker332 inner))
+          in (Maybes.maybe Nothing (\inner -> walker332 inner) (walker332 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4999,13 +4999,13 @@ walker334 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker333 fun) (walker333 arg) (\_ -> walker333 fun))
+          in (Maybes.maybe (walker333 arg) (\_ -> walker333 fun) (walker333 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker333 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker333 body) Nothing (\inner -> walker333 inner))
+          in (Maybes.maybe Nothing (\inner -> walker333 inner) (walker333 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5018,13 +5018,13 @@ walker335 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker334 fun) (walker334 arg) (\_ -> walker334 fun))
+          in (Maybes.maybe (walker334 arg) (\_ -> walker334 fun) (walker334 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker334 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker334 body) Nothing (\inner -> walker334 inner))
+          in (Maybes.maybe Nothing (\inner -> walker334 inner) (walker334 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5037,13 +5037,13 @@ walker336 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker335 fun) (walker335 arg) (\_ -> walker335 fun))
+          in (Maybes.maybe (walker335 arg) (\_ -> walker335 fun) (walker335 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker335 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker335 body) Nothing (\inner -> walker335 inner))
+          in (Maybes.maybe Nothing (\inner -> walker335 inner) (walker335 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5056,13 +5056,13 @@ walker337 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker336 fun) (walker336 arg) (\_ -> walker336 fun))
+          in (Maybes.maybe (walker336 arg) (\_ -> walker336 fun) (walker336 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker336 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker336 body) Nothing (\inner -> walker336 inner))
+          in (Maybes.maybe Nothing (\inner -> walker336 inner) (walker336 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5075,13 +5075,13 @@ walker338 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker337 fun) (walker337 arg) (\_ -> walker337 fun))
+          in (Maybes.maybe (walker337 arg) (\_ -> walker337 fun) (walker337 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker337 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker337 body) Nothing (\inner -> walker337 inner))
+          in (Maybes.maybe Nothing (\inner -> walker337 inner) (walker337 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5094,13 +5094,13 @@ walker339 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker338 fun) (walker338 arg) (\_ -> walker338 fun))
+          in (Maybes.maybe (walker338 arg) (\_ -> walker338 fun) (walker338 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker338 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker338 body) Nothing (\inner -> walker338 inner))
+          in (Maybes.maybe Nothing (\inner -> walker338 inner) (walker338 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5113,13 +5113,13 @@ walker34 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker33 fun) (walker33 arg) (\_ -> walker33 fun))
+          in (Maybes.maybe (walker33 arg) (\_ -> walker33 fun) (walker33 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker33 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker33 body) Nothing (\inner -> walker33 inner))
+          in (Maybes.maybe Nothing (\inner -> walker33 inner) (walker33 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5132,13 +5132,13 @@ walker340 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker339 fun) (walker339 arg) (\_ -> walker339 fun))
+          in (Maybes.maybe (walker339 arg) (\_ -> walker339 fun) (walker339 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker339 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker339 body) Nothing (\inner -> walker339 inner))
+          in (Maybes.maybe Nothing (\inner -> walker339 inner) (walker339 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5151,13 +5151,13 @@ walker341 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker340 fun) (walker340 arg) (\_ -> walker340 fun))
+          in (Maybes.maybe (walker340 arg) (\_ -> walker340 fun) (walker340 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker340 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker340 body) Nothing (\inner -> walker340 inner))
+          in (Maybes.maybe Nothing (\inner -> walker340 inner) (walker340 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5170,13 +5170,13 @@ walker342 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker341 fun) (walker341 arg) (\_ -> walker341 fun))
+          in (Maybes.maybe (walker341 arg) (\_ -> walker341 fun) (walker341 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker341 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker341 body) Nothing (\inner -> walker341 inner))
+          in (Maybes.maybe Nothing (\inner -> walker341 inner) (walker341 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5189,13 +5189,13 @@ walker343 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker342 fun) (walker342 arg) (\_ -> walker342 fun))
+          in (Maybes.maybe (walker342 arg) (\_ -> walker342 fun) (walker342 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker342 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker342 body) Nothing (\inner -> walker342 inner))
+          in (Maybes.maybe Nothing (\inner -> walker342 inner) (walker342 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5208,13 +5208,13 @@ walker344 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker343 fun) (walker343 arg) (\_ -> walker343 fun))
+          in (Maybes.maybe (walker343 arg) (\_ -> walker343 fun) (walker343 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker343 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker343 body) Nothing (\inner -> walker343 inner))
+          in (Maybes.maybe Nothing (\inner -> walker343 inner) (walker343 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5227,13 +5227,13 @@ walker345 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker344 fun) (walker344 arg) (\_ -> walker344 fun))
+          in (Maybes.maybe (walker344 arg) (\_ -> walker344 fun) (walker344 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker344 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker344 body) Nothing (\inner -> walker344 inner))
+          in (Maybes.maybe Nothing (\inner -> walker344 inner) (walker344 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5246,13 +5246,13 @@ walker346 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker345 fun) (walker345 arg) (\_ -> walker345 fun))
+          in (Maybes.maybe (walker345 arg) (\_ -> walker345 fun) (walker345 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker345 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker345 body) Nothing (\inner -> walker345 inner))
+          in (Maybes.maybe Nothing (\inner -> walker345 inner) (walker345 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5265,13 +5265,13 @@ walker347 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker346 fun) (walker346 arg) (\_ -> walker346 fun))
+          in (Maybes.maybe (walker346 arg) (\_ -> walker346 fun) (walker346 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker346 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker346 body) Nothing (\inner -> walker346 inner))
+          in (Maybes.maybe Nothing (\inner -> walker346 inner) (walker346 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5284,13 +5284,13 @@ walker348 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker347 fun) (walker347 arg) (\_ -> walker347 fun))
+          in (Maybes.maybe (walker347 arg) (\_ -> walker347 fun) (walker347 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker347 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker347 body) Nothing (\inner -> walker347 inner))
+          in (Maybes.maybe Nothing (\inner -> walker347 inner) (walker347 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5303,13 +5303,13 @@ walker349 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker348 fun) (walker348 arg) (\_ -> walker348 fun))
+          in (Maybes.maybe (walker348 arg) (\_ -> walker348 fun) (walker348 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker348 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker348 body) Nothing (\inner -> walker348 inner))
+          in (Maybes.maybe Nothing (\inner -> walker348 inner) (walker348 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5322,13 +5322,13 @@ walker35 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker34 fun) (walker34 arg) (\_ -> walker34 fun))
+          in (Maybes.maybe (walker34 arg) (\_ -> walker34 fun) (walker34 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker34 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker34 body) Nothing (\inner -> walker34 inner))
+          in (Maybes.maybe Nothing (\inner -> walker34 inner) (walker34 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5341,13 +5341,13 @@ walker350 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker349 fun) (walker349 arg) (\_ -> walker349 fun))
+          in (Maybes.maybe (walker349 arg) (\_ -> walker349 fun) (walker349 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker349 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker349 body) Nothing (\inner -> walker349 inner))
+          in (Maybes.maybe Nothing (\inner -> walker349 inner) (walker349 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5360,13 +5360,13 @@ walker351 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker350 fun) (walker350 arg) (\_ -> walker350 fun))
+          in (Maybes.maybe (walker350 arg) (\_ -> walker350 fun) (walker350 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker350 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker350 body) Nothing (\inner -> walker350 inner))
+          in (Maybes.maybe Nothing (\inner -> walker350 inner) (walker350 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5379,13 +5379,13 @@ walker352 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker351 fun) (walker351 arg) (\_ -> walker351 fun))
+          in (Maybes.maybe (walker351 arg) (\_ -> walker351 fun) (walker351 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker351 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker351 body) Nothing (\inner -> walker351 inner))
+          in (Maybes.maybe Nothing (\inner -> walker351 inner) (walker351 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5398,13 +5398,13 @@ walker353 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker352 fun) (walker352 arg) (\_ -> walker352 fun))
+          in (Maybes.maybe (walker352 arg) (\_ -> walker352 fun) (walker352 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker352 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker352 body) Nothing (\inner -> walker352 inner))
+          in (Maybes.maybe Nothing (\inner -> walker352 inner) (walker352 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5417,13 +5417,13 @@ walker354 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker353 fun) (walker353 arg) (\_ -> walker353 fun))
+          in (Maybes.maybe (walker353 arg) (\_ -> walker353 fun) (walker353 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker353 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker353 body) Nothing (\inner -> walker353 inner))
+          in (Maybes.maybe Nothing (\inner -> walker353 inner) (walker353 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5436,13 +5436,13 @@ walker355 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker354 fun) (walker354 arg) (\_ -> walker354 fun))
+          in (Maybes.maybe (walker354 arg) (\_ -> walker354 fun) (walker354 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker354 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker354 body) Nothing (\inner -> walker354 inner))
+          in (Maybes.maybe Nothing (\inner -> walker354 inner) (walker354 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5455,13 +5455,13 @@ walker356 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker355 fun) (walker355 arg) (\_ -> walker355 fun))
+          in (Maybes.maybe (walker355 arg) (\_ -> walker355 fun) (walker355 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker355 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker355 body) Nothing (\inner -> walker355 inner))
+          in (Maybes.maybe Nothing (\inner -> walker355 inner) (walker355 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5474,13 +5474,13 @@ walker357 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker356 fun) (walker356 arg) (\_ -> walker356 fun))
+          in (Maybes.maybe (walker356 arg) (\_ -> walker356 fun) (walker356 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker356 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker356 body) Nothing (\inner -> walker356 inner))
+          in (Maybes.maybe Nothing (\inner -> walker356 inner) (walker356 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5493,13 +5493,13 @@ walker358 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker357 fun) (walker357 arg) (\_ -> walker357 fun))
+          in (Maybes.maybe (walker357 arg) (\_ -> walker357 fun) (walker357 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker357 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker357 body) Nothing (\inner -> walker357 inner))
+          in (Maybes.maybe Nothing (\inner -> walker357 inner) (walker357 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5512,13 +5512,13 @@ walker359 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker358 fun) (walker358 arg) (\_ -> walker358 fun))
+          in (Maybes.maybe (walker358 arg) (\_ -> walker358 fun) (walker358 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker358 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker358 body) Nothing (\inner -> walker358 inner))
+          in (Maybes.maybe Nothing (\inner -> walker358 inner) (walker358 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5531,13 +5531,13 @@ walker36 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker35 fun) (walker35 arg) (\_ -> walker35 fun))
+          in (Maybes.maybe (walker35 arg) (\_ -> walker35 fun) (walker35 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker35 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker35 body) Nothing (\inner -> walker35 inner))
+          in (Maybes.maybe Nothing (\inner -> walker35 inner) (walker35 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5550,13 +5550,13 @@ walker360 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker359 fun) (walker359 arg) (\_ -> walker359 fun))
+          in (Maybes.maybe (walker359 arg) (\_ -> walker359 fun) (walker359 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker359 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker359 body) Nothing (\inner -> walker359 inner))
+          in (Maybes.maybe Nothing (\inner -> walker359 inner) (walker359 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5569,13 +5569,13 @@ walker361 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker360 fun) (walker360 arg) (\_ -> walker360 fun))
+          in (Maybes.maybe (walker360 arg) (\_ -> walker360 fun) (walker360 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker360 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker360 body) Nothing (\inner -> walker360 inner))
+          in (Maybes.maybe Nothing (\inner -> walker360 inner) (walker360 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5588,13 +5588,13 @@ walker362 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker361 fun) (walker361 arg) (\_ -> walker361 fun))
+          in (Maybes.maybe (walker361 arg) (\_ -> walker361 fun) (walker361 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker361 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker361 body) Nothing (\inner -> walker361 inner))
+          in (Maybes.maybe Nothing (\inner -> walker361 inner) (walker361 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5607,13 +5607,13 @@ walker363 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker362 fun) (walker362 arg) (\_ -> walker362 fun))
+          in (Maybes.maybe (walker362 arg) (\_ -> walker362 fun) (walker362 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker362 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker362 body) Nothing (\inner -> walker362 inner))
+          in (Maybes.maybe Nothing (\inner -> walker362 inner) (walker362 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5626,13 +5626,13 @@ walker364 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker363 fun) (walker363 arg) (\_ -> walker363 fun))
+          in (Maybes.maybe (walker363 arg) (\_ -> walker363 fun) (walker363 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker363 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker363 body) Nothing (\inner -> walker363 inner))
+          in (Maybes.maybe Nothing (\inner -> walker363 inner) (walker363 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5645,13 +5645,13 @@ walker365 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker364 fun) (walker364 arg) (\_ -> walker364 fun))
+          in (Maybes.maybe (walker364 arg) (\_ -> walker364 fun) (walker364 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker364 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker364 body) Nothing (\inner -> walker364 inner))
+          in (Maybes.maybe Nothing (\inner -> walker364 inner) (walker364 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5664,13 +5664,13 @@ walker366 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker365 fun) (walker365 arg) (\_ -> walker365 fun))
+          in (Maybes.maybe (walker365 arg) (\_ -> walker365 fun) (walker365 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker365 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker365 body) Nothing (\inner -> walker365 inner))
+          in (Maybes.maybe Nothing (\inner -> walker365 inner) (walker365 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5683,13 +5683,13 @@ walker367 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker366 fun) (walker366 arg) (\_ -> walker366 fun))
+          in (Maybes.maybe (walker366 arg) (\_ -> walker366 fun) (walker366 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker366 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker366 body) Nothing (\inner -> walker366 inner))
+          in (Maybes.maybe Nothing (\inner -> walker366 inner) (walker366 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5702,13 +5702,13 @@ walker368 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker367 fun) (walker367 arg) (\_ -> walker367 fun))
+          in (Maybes.maybe (walker367 arg) (\_ -> walker367 fun) (walker367 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker367 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker367 body) Nothing (\inner -> walker367 inner))
+          in (Maybes.maybe Nothing (\inner -> walker367 inner) (walker367 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5721,13 +5721,13 @@ walker369 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker368 fun) (walker368 arg) (\_ -> walker368 fun))
+          in (Maybes.maybe (walker368 arg) (\_ -> walker368 fun) (walker368 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker368 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker368 body) Nothing (\inner -> walker368 inner))
+          in (Maybes.maybe Nothing (\inner -> walker368 inner) (walker368 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5740,13 +5740,13 @@ walker37 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker36 fun) (walker36 arg) (\_ -> walker36 fun))
+          in (Maybes.maybe (walker36 arg) (\_ -> walker36 fun) (walker36 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker36 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker36 body) Nothing (\inner -> walker36 inner))
+          in (Maybes.maybe Nothing (\inner -> walker36 inner) (walker36 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5759,13 +5759,13 @@ walker370 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker369 fun) (walker369 arg) (\_ -> walker369 fun))
+          in (Maybes.maybe (walker369 arg) (\_ -> walker369 fun) (walker369 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker369 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker369 body) Nothing (\inner -> walker369 inner))
+          in (Maybes.maybe Nothing (\inner -> walker369 inner) (walker369 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5778,13 +5778,13 @@ walker371 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker370 fun) (walker370 arg) (\_ -> walker370 fun))
+          in (Maybes.maybe (walker370 arg) (\_ -> walker370 fun) (walker370 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker370 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker370 body) Nothing (\inner -> walker370 inner))
+          in (Maybes.maybe Nothing (\inner -> walker370 inner) (walker370 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5797,13 +5797,13 @@ walker372 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker371 fun) (walker371 arg) (\_ -> walker371 fun))
+          in (Maybes.maybe (walker371 arg) (\_ -> walker371 fun) (walker371 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker371 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker371 body) Nothing (\inner -> walker371 inner))
+          in (Maybes.maybe Nothing (\inner -> walker371 inner) (walker371 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5816,13 +5816,13 @@ walker373 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker372 fun) (walker372 arg) (\_ -> walker372 fun))
+          in (Maybes.maybe (walker372 arg) (\_ -> walker372 fun) (walker372 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker372 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker372 body) Nothing (\inner -> walker372 inner))
+          in (Maybes.maybe Nothing (\inner -> walker372 inner) (walker372 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5835,13 +5835,13 @@ walker374 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker373 fun) (walker373 arg) (\_ -> walker373 fun))
+          in (Maybes.maybe (walker373 arg) (\_ -> walker373 fun) (walker373 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker373 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker373 body) Nothing (\inner -> walker373 inner))
+          in (Maybes.maybe Nothing (\inner -> walker373 inner) (walker373 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5854,13 +5854,13 @@ walker375 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker374 fun) (walker374 arg) (\_ -> walker374 fun))
+          in (Maybes.maybe (walker374 arg) (\_ -> walker374 fun) (walker374 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker374 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker374 body) Nothing (\inner -> walker374 inner))
+          in (Maybes.maybe Nothing (\inner -> walker374 inner) (walker374 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5873,13 +5873,13 @@ walker376 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker375 fun) (walker375 arg) (\_ -> walker375 fun))
+          in (Maybes.maybe (walker375 arg) (\_ -> walker375 fun) (walker375 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker375 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker375 body) Nothing (\inner -> walker375 inner))
+          in (Maybes.maybe Nothing (\inner -> walker375 inner) (walker375 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5892,13 +5892,13 @@ walker377 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker376 fun) (walker376 arg) (\_ -> walker376 fun))
+          in (Maybes.maybe (walker376 arg) (\_ -> walker376 fun) (walker376 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker376 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker376 body) Nothing (\inner -> walker376 inner))
+          in (Maybes.maybe Nothing (\inner -> walker376 inner) (walker376 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5911,13 +5911,13 @@ walker378 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker377 fun) (walker377 arg) (\_ -> walker377 fun))
+          in (Maybes.maybe (walker377 arg) (\_ -> walker377 fun) (walker377 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker377 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker377 body) Nothing (\inner -> walker377 inner))
+          in (Maybes.maybe Nothing (\inner -> walker377 inner) (walker377 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5930,13 +5930,13 @@ walker379 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker378 fun) (walker378 arg) (\_ -> walker378 fun))
+          in (Maybes.maybe (walker378 arg) (\_ -> walker378 fun) (walker378 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker378 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker378 body) Nothing (\inner -> walker378 inner))
+          in (Maybes.maybe Nothing (\inner -> walker378 inner) (walker378 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5949,13 +5949,13 @@ walker38 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker37 fun) (walker37 arg) (\_ -> walker37 fun))
+          in (Maybes.maybe (walker37 arg) (\_ -> walker37 fun) (walker37 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker37 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker37 body) Nothing (\inner -> walker37 inner))
+          in (Maybes.maybe Nothing (\inner -> walker37 inner) (walker37 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5968,13 +5968,13 @@ walker380 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker379 fun) (walker379 arg) (\_ -> walker379 fun))
+          in (Maybes.maybe (walker379 arg) (\_ -> walker379 fun) (walker379 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker379 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker379 body) Nothing (\inner -> walker379 inner))
+          in (Maybes.maybe Nothing (\inner -> walker379 inner) (walker379 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5987,13 +5987,13 @@ walker381 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker380 fun) (walker380 arg) (\_ -> walker380 fun))
+          in (Maybes.maybe (walker380 arg) (\_ -> walker380 fun) (walker380 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker380 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker380 body) Nothing (\inner -> walker380 inner))
+          in (Maybes.maybe Nothing (\inner -> walker380 inner) (walker380 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6006,13 +6006,13 @@ walker382 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker381 fun) (walker381 arg) (\_ -> walker381 fun))
+          in (Maybes.maybe (walker381 arg) (\_ -> walker381 fun) (walker381 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker381 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker381 body) Nothing (\inner -> walker381 inner))
+          in (Maybes.maybe Nothing (\inner -> walker381 inner) (walker381 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6025,13 +6025,13 @@ walker383 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker382 fun) (walker382 arg) (\_ -> walker382 fun))
+          in (Maybes.maybe (walker382 arg) (\_ -> walker382 fun) (walker382 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker382 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker382 body) Nothing (\inner -> walker382 inner))
+          in (Maybes.maybe Nothing (\inner -> walker382 inner) (walker382 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6044,13 +6044,13 @@ walker384 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker383 fun) (walker383 arg) (\_ -> walker383 fun))
+          in (Maybes.maybe (walker383 arg) (\_ -> walker383 fun) (walker383 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker383 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker383 body) Nothing (\inner -> walker383 inner))
+          in (Maybes.maybe Nothing (\inner -> walker383 inner) (walker383 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6063,13 +6063,13 @@ walker385 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker384 fun) (walker384 arg) (\_ -> walker384 fun))
+          in (Maybes.maybe (walker384 arg) (\_ -> walker384 fun) (walker384 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker384 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker384 body) Nothing (\inner -> walker384 inner))
+          in (Maybes.maybe Nothing (\inner -> walker384 inner) (walker384 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6082,13 +6082,13 @@ walker386 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker385 fun) (walker385 arg) (\_ -> walker385 fun))
+          in (Maybes.maybe (walker385 arg) (\_ -> walker385 fun) (walker385 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker385 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker385 body) Nothing (\inner -> walker385 inner))
+          in (Maybes.maybe Nothing (\inner -> walker385 inner) (walker385 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6101,13 +6101,13 @@ walker387 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker386 fun) (walker386 arg) (\_ -> walker386 fun))
+          in (Maybes.maybe (walker386 arg) (\_ -> walker386 fun) (walker386 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker386 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker386 body) Nothing (\inner -> walker386 inner))
+          in (Maybes.maybe Nothing (\inner -> walker386 inner) (walker386 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6120,13 +6120,13 @@ walker388 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker387 fun) (walker387 arg) (\_ -> walker387 fun))
+          in (Maybes.maybe (walker387 arg) (\_ -> walker387 fun) (walker387 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker387 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker387 body) Nothing (\inner -> walker387 inner))
+          in (Maybes.maybe Nothing (\inner -> walker387 inner) (walker387 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6139,13 +6139,13 @@ walker389 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker388 fun) (walker388 arg) (\_ -> walker388 fun))
+          in (Maybes.maybe (walker388 arg) (\_ -> walker388 fun) (walker388 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker388 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker388 body) Nothing (\inner -> walker388 inner))
+          in (Maybes.maybe Nothing (\inner -> walker388 inner) (walker388 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6158,13 +6158,13 @@ walker39 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker38 fun) (walker38 arg) (\_ -> walker38 fun))
+          in (Maybes.maybe (walker38 arg) (\_ -> walker38 fun) (walker38 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker38 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker38 body) Nothing (\inner -> walker38 inner))
+          in (Maybes.maybe Nothing (\inner -> walker38 inner) (walker38 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6177,13 +6177,13 @@ walker390 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker389 fun) (walker389 arg) (\_ -> walker389 fun))
+          in (Maybes.maybe (walker389 arg) (\_ -> walker389 fun) (walker389 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker389 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker389 body) Nothing (\inner -> walker389 inner))
+          in (Maybes.maybe Nothing (\inner -> walker389 inner) (walker389 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6196,13 +6196,13 @@ walker391 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker390 fun) (walker390 arg) (\_ -> walker390 fun))
+          in (Maybes.maybe (walker390 arg) (\_ -> walker390 fun) (walker390 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker390 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker390 body) Nothing (\inner -> walker390 inner))
+          in (Maybes.maybe Nothing (\inner -> walker390 inner) (walker390 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6215,13 +6215,13 @@ walker392 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker391 fun) (walker391 arg) (\_ -> walker391 fun))
+          in (Maybes.maybe (walker391 arg) (\_ -> walker391 fun) (walker391 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker391 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker391 body) Nothing (\inner -> walker391 inner))
+          in (Maybes.maybe Nothing (\inner -> walker391 inner) (walker391 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6234,13 +6234,13 @@ walker393 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker392 fun) (walker392 arg) (\_ -> walker392 fun))
+          in (Maybes.maybe (walker392 arg) (\_ -> walker392 fun) (walker392 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker392 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker392 body) Nothing (\inner -> walker392 inner))
+          in (Maybes.maybe Nothing (\inner -> walker392 inner) (walker392 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6253,13 +6253,13 @@ walker394 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker393 fun) (walker393 arg) (\_ -> walker393 fun))
+          in (Maybes.maybe (walker393 arg) (\_ -> walker393 fun) (walker393 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker393 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker393 body) Nothing (\inner -> walker393 inner))
+          in (Maybes.maybe Nothing (\inner -> walker393 inner) (walker393 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6272,13 +6272,13 @@ walker395 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker394 fun) (walker394 arg) (\_ -> walker394 fun))
+          in (Maybes.maybe (walker394 arg) (\_ -> walker394 fun) (walker394 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker394 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker394 body) Nothing (\inner -> walker394 inner))
+          in (Maybes.maybe Nothing (\inner -> walker394 inner) (walker394 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6291,13 +6291,13 @@ walker396 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker395 fun) (walker395 arg) (\_ -> walker395 fun))
+          in (Maybes.maybe (walker395 arg) (\_ -> walker395 fun) (walker395 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker395 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker395 body) Nothing (\inner -> walker395 inner))
+          in (Maybes.maybe Nothing (\inner -> walker395 inner) (walker395 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6310,13 +6310,13 @@ walker397 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker396 fun) (walker396 arg) (\_ -> walker396 fun))
+          in (Maybes.maybe (walker396 arg) (\_ -> walker396 fun) (walker396 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker396 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker396 body) Nothing (\inner -> walker396 inner))
+          in (Maybes.maybe Nothing (\inner -> walker396 inner) (walker396 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6329,13 +6329,13 @@ walker398 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker397 fun) (walker397 arg) (\_ -> walker397 fun))
+          in (Maybes.maybe (walker397 arg) (\_ -> walker397 fun) (walker397 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker397 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker397 body) Nothing (\inner -> walker397 inner))
+          in (Maybes.maybe Nothing (\inner -> walker397 inner) (walker397 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6348,13 +6348,13 @@ walker399 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker398 fun) (walker398 arg) (\_ -> walker398 fun))
+          in (Maybes.maybe (walker398 arg) (\_ -> walker398 fun) (walker398 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker398 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker398 body) Nothing (\inner -> walker398 inner))
+          in (Maybes.maybe Nothing (\inner -> walker398 inner) (walker398 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6367,13 +6367,13 @@ walker4 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker3 fun) (walker3 arg) (\_ -> walker3 fun))
+          in (Maybes.maybe (walker3 arg) (\_ -> walker3 fun) (walker3 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker3 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker3 body) Nothing (\inner -> walker3 inner))
+          in (Maybes.maybe Nothing (\inner -> walker3 inner) (walker3 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6386,13 +6386,13 @@ walker40 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker39 fun) (walker39 arg) (\_ -> walker39 fun))
+          in (Maybes.maybe (walker39 arg) (\_ -> walker39 fun) (walker39 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker39 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker39 body) Nothing (\inner -> walker39 inner))
+          in (Maybes.maybe Nothing (\inner -> walker39 inner) (walker39 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6405,13 +6405,13 @@ walker400 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker399 fun) (walker399 arg) (\_ -> walker399 fun))
+          in (Maybes.maybe (walker399 arg) (\_ -> walker399 fun) (walker399 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker399 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker399 body) Nothing (\inner -> walker399 inner))
+          in (Maybes.maybe Nothing (\inner -> walker399 inner) (walker399 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6424,13 +6424,13 @@ walker401 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker400 fun) (walker400 arg) (\_ -> walker400 fun))
+          in (Maybes.maybe (walker400 arg) (\_ -> walker400 fun) (walker400 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker400 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker400 body) Nothing (\inner -> walker400 inner))
+          in (Maybes.maybe Nothing (\inner -> walker400 inner) (walker400 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6443,13 +6443,13 @@ walker402 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker401 fun) (walker401 arg) (\_ -> walker401 fun))
+          in (Maybes.maybe (walker401 arg) (\_ -> walker401 fun) (walker401 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker401 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker401 body) Nothing (\inner -> walker401 inner))
+          in (Maybes.maybe Nothing (\inner -> walker401 inner) (walker401 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6462,13 +6462,13 @@ walker403 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker402 fun) (walker402 arg) (\_ -> walker402 fun))
+          in (Maybes.maybe (walker402 arg) (\_ -> walker402 fun) (walker402 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker402 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker402 body) Nothing (\inner -> walker402 inner))
+          in (Maybes.maybe Nothing (\inner -> walker402 inner) (walker402 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6481,13 +6481,13 @@ walker404 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker403 fun) (walker403 arg) (\_ -> walker403 fun))
+          in (Maybes.maybe (walker403 arg) (\_ -> walker403 fun) (walker403 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker403 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker403 body) Nothing (\inner -> walker403 inner))
+          in (Maybes.maybe Nothing (\inner -> walker403 inner) (walker403 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6500,13 +6500,13 @@ walker405 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker404 fun) (walker404 arg) (\_ -> walker404 fun))
+          in (Maybes.maybe (walker404 arg) (\_ -> walker404 fun) (walker404 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker404 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker404 body) Nothing (\inner -> walker404 inner))
+          in (Maybes.maybe Nothing (\inner -> walker404 inner) (walker404 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6519,13 +6519,13 @@ walker406 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker405 fun) (walker405 arg) (\_ -> walker405 fun))
+          in (Maybes.maybe (walker405 arg) (\_ -> walker405 fun) (walker405 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker405 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker405 body) Nothing (\inner -> walker405 inner))
+          in (Maybes.maybe Nothing (\inner -> walker405 inner) (walker405 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6538,13 +6538,13 @@ walker407 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker406 fun) (walker406 arg) (\_ -> walker406 fun))
+          in (Maybes.maybe (walker406 arg) (\_ -> walker406 fun) (walker406 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker406 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker406 body) Nothing (\inner -> walker406 inner))
+          in (Maybes.maybe Nothing (\inner -> walker406 inner) (walker406 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6557,13 +6557,13 @@ walker408 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker407 fun) (walker407 arg) (\_ -> walker407 fun))
+          in (Maybes.maybe (walker407 arg) (\_ -> walker407 fun) (walker407 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker407 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker407 body) Nothing (\inner -> walker407 inner))
+          in (Maybes.maybe Nothing (\inner -> walker407 inner) (walker407 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6576,13 +6576,13 @@ walker409 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker408 fun) (walker408 arg) (\_ -> walker408 fun))
+          in (Maybes.maybe (walker408 arg) (\_ -> walker408 fun) (walker408 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker408 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker408 body) Nothing (\inner -> walker408 inner))
+          in (Maybes.maybe Nothing (\inner -> walker408 inner) (walker408 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6595,13 +6595,13 @@ walker41 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker40 fun) (walker40 arg) (\_ -> walker40 fun))
+          in (Maybes.maybe (walker40 arg) (\_ -> walker40 fun) (walker40 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker40 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker40 body) Nothing (\inner -> walker40 inner))
+          in (Maybes.maybe Nothing (\inner -> walker40 inner) (walker40 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6614,13 +6614,13 @@ walker410 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker409 fun) (walker409 arg) (\_ -> walker409 fun))
+          in (Maybes.maybe (walker409 arg) (\_ -> walker409 fun) (walker409 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker409 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker409 body) Nothing (\inner -> walker409 inner))
+          in (Maybes.maybe Nothing (\inner -> walker409 inner) (walker409 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6633,13 +6633,13 @@ walker411 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker410 fun) (walker410 arg) (\_ -> walker410 fun))
+          in (Maybes.maybe (walker410 arg) (\_ -> walker410 fun) (walker410 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker410 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker410 body) Nothing (\inner -> walker410 inner))
+          in (Maybes.maybe Nothing (\inner -> walker410 inner) (walker410 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6652,13 +6652,13 @@ walker412 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker411 fun) (walker411 arg) (\_ -> walker411 fun))
+          in (Maybes.maybe (walker411 arg) (\_ -> walker411 fun) (walker411 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker411 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker411 body) Nothing (\inner -> walker411 inner))
+          in (Maybes.maybe Nothing (\inner -> walker411 inner) (walker411 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6671,13 +6671,13 @@ walker413 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker412 fun) (walker412 arg) (\_ -> walker412 fun))
+          in (Maybes.maybe (walker412 arg) (\_ -> walker412 fun) (walker412 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker412 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker412 body) Nothing (\inner -> walker412 inner))
+          in (Maybes.maybe Nothing (\inner -> walker412 inner) (walker412 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6690,13 +6690,13 @@ walker414 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker413 fun) (walker413 arg) (\_ -> walker413 fun))
+          in (Maybes.maybe (walker413 arg) (\_ -> walker413 fun) (walker413 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker413 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker413 body) Nothing (\inner -> walker413 inner))
+          in (Maybes.maybe Nothing (\inner -> walker413 inner) (walker413 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6709,13 +6709,13 @@ walker415 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker414 fun) (walker414 arg) (\_ -> walker414 fun))
+          in (Maybes.maybe (walker414 arg) (\_ -> walker414 fun) (walker414 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker414 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker414 body) Nothing (\inner -> walker414 inner))
+          in (Maybes.maybe Nothing (\inner -> walker414 inner) (walker414 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6728,13 +6728,13 @@ walker416 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker415 fun) (walker415 arg) (\_ -> walker415 fun))
+          in (Maybes.maybe (walker415 arg) (\_ -> walker415 fun) (walker415 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker415 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker415 body) Nothing (\inner -> walker415 inner))
+          in (Maybes.maybe Nothing (\inner -> walker415 inner) (walker415 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6747,13 +6747,13 @@ walker417 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker416 fun) (walker416 arg) (\_ -> walker416 fun))
+          in (Maybes.maybe (walker416 arg) (\_ -> walker416 fun) (walker416 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker416 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker416 body) Nothing (\inner -> walker416 inner))
+          in (Maybes.maybe Nothing (\inner -> walker416 inner) (walker416 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6766,13 +6766,13 @@ walker418 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker417 fun) (walker417 arg) (\_ -> walker417 fun))
+          in (Maybes.maybe (walker417 arg) (\_ -> walker417 fun) (walker417 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker417 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker417 body) Nothing (\inner -> walker417 inner))
+          in (Maybes.maybe Nothing (\inner -> walker417 inner) (walker417 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6785,13 +6785,13 @@ walker419 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker418 fun) (walker418 arg) (\_ -> walker418 fun))
+          in (Maybes.maybe (walker418 arg) (\_ -> walker418 fun) (walker418 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker418 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker418 body) Nothing (\inner -> walker418 inner))
+          in (Maybes.maybe Nothing (\inner -> walker418 inner) (walker418 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6804,13 +6804,13 @@ walker42 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker41 fun) (walker41 arg) (\_ -> walker41 fun))
+          in (Maybes.maybe (walker41 arg) (\_ -> walker41 fun) (walker41 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker41 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker41 body) Nothing (\inner -> walker41 inner))
+          in (Maybes.maybe Nothing (\inner -> walker41 inner) (walker41 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6823,13 +6823,13 @@ walker420 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker419 fun) (walker419 arg) (\_ -> walker419 fun))
+          in (Maybes.maybe (walker419 arg) (\_ -> walker419 fun) (walker419 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker419 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker419 body) Nothing (\inner -> walker419 inner))
+          in (Maybes.maybe Nothing (\inner -> walker419 inner) (walker419 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6842,13 +6842,13 @@ walker421 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker420 fun) (walker420 arg) (\_ -> walker420 fun))
+          in (Maybes.maybe (walker420 arg) (\_ -> walker420 fun) (walker420 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker420 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker420 body) Nothing (\inner -> walker420 inner))
+          in (Maybes.maybe Nothing (\inner -> walker420 inner) (walker420 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6861,13 +6861,13 @@ walker422 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker421 fun) (walker421 arg) (\_ -> walker421 fun))
+          in (Maybes.maybe (walker421 arg) (\_ -> walker421 fun) (walker421 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker421 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker421 body) Nothing (\inner -> walker421 inner))
+          in (Maybes.maybe Nothing (\inner -> walker421 inner) (walker421 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6880,13 +6880,13 @@ walker423 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker422 fun) (walker422 arg) (\_ -> walker422 fun))
+          in (Maybes.maybe (walker422 arg) (\_ -> walker422 fun) (walker422 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker422 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker422 body) Nothing (\inner -> walker422 inner))
+          in (Maybes.maybe Nothing (\inner -> walker422 inner) (walker422 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6899,13 +6899,13 @@ walker424 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker423 fun) (walker423 arg) (\_ -> walker423 fun))
+          in (Maybes.maybe (walker423 arg) (\_ -> walker423 fun) (walker423 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker423 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker423 body) Nothing (\inner -> walker423 inner))
+          in (Maybes.maybe Nothing (\inner -> walker423 inner) (walker423 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6918,13 +6918,13 @@ walker425 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker424 fun) (walker424 arg) (\_ -> walker424 fun))
+          in (Maybes.maybe (walker424 arg) (\_ -> walker424 fun) (walker424 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker424 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker424 body) Nothing (\inner -> walker424 inner))
+          in (Maybes.maybe Nothing (\inner -> walker424 inner) (walker424 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6937,13 +6937,13 @@ walker426 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker425 fun) (walker425 arg) (\_ -> walker425 fun))
+          in (Maybes.maybe (walker425 arg) (\_ -> walker425 fun) (walker425 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker425 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker425 body) Nothing (\inner -> walker425 inner))
+          in (Maybes.maybe Nothing (\inner -> walker425 inner) (walker425 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6956,13 +6956,13 @@ walker427 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker426 fun) (walker426 arg) (\_ -> walker426 fun))
+          in (Maybes.maybe (walker426 arg) (\_ -> walker426 fun) (walker426 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker426 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker426 body) Nothing (\inner -> walker426 inner))
+          in (Maybes.maybe Nothing (\inner -> walker426 inner) (walker426 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6975,13 +6975,13 @@ walker428 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker427 fun) (walker427 arg) (\_ -> walker427 fun))
+          in (Maybes.maybe (walker427 arg) (\_ -> walker427 fun) (walker427 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker427 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker427 body) Nothing (\inner -> walker427 inner))
+          in (Maybes.maybe Nothing (\inner -> walker427 inner) (walker427 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6994,13 +6994,13 @@ walker429 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker428 fun) (walker428 arg) (\_ -> walker428 fun))
+          in (Maybes.maybe (walker428 arg) (\_ -> walker428 fun) (walker428 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker428 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker428 body) Nothing (\inner -> walker428 inner))
+          in (Maybes.maybe Nothing (\inner -> walker428 inner) (walker428 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7013,13 +7013,13 @@ walker43 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker42 fun) (walker42 arg) (\_ -> walker42 fun))
+          in (Maybes.maybe (walker42 arg) (\_ -> walker42 fun) (walker42 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker42 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker42 body) Nothing (\inner -> walker42 inner))
+          in (Maybes.maybe Nothing (\inner -> walker42 inner) (walker42 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7032,13 +7032,13 @@ walker430 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker429 fun) (walker429 arg) (\_ -> walker429 fun))
+          in (Maybes.maybe (walker429 arg) (\_ -> walker429 fun) (walker429 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker429 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker429 body) Nothing (\inner -> walker429 inner))
+          in (Maybes.maybe Nothing (\inner -> walker429 inner) (walker429 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7051,13 +7051,13 @@ walker431 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker430 fun) (walker430 arg) (\_ -> walker430 fun))
+          in (Maybes.maybe (walker430 arg) (\_ -> walker430 fun) (walker430 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker430 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker430 body) Nothing (\inner -> walker430 inner))
+          in (Maybes.maybe Nothing (\inner -> walker430 inner) (walker430 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7070,13 +7070,13 @@ walker432 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker431 fun) (walker431 arg) (\_ -> walker431 fun))
+          in (Maybes.maybe (walker431 arg) (\_ -> walker431 fun) (walker431 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker431 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker431 body) Nothing (\inner -> walker431 inner))
+          in (Maybes.maybe Nothing (\inner -> walker431 inner) (walker431 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7089,13 +7089,13 @@ walker433 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker432 fun) (walker432 arg) (\_ -> walker432 fun))
+          in (Maybes.maybe (walker432 arg) (\_ -> walker432 fun) (walker432 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker432 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker432 body) Nothing (\inner -> walker432 inner))
+          in (Maybes.maybe Nothing (\inner -> walker432 inner) (walker432 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7108,13 +7108,13 @@ walker434 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker433 fun) (walker433 arg) (\_ -> walker433 fun))
+          in (Maybes.maybe (walker433 arg) (\_ -> walker433 fun) (walker433 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker433 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker433 body) Nothing (\inner -> walker433 inner))
+          in (Maybes.maybe Nothing (\inner -> walker433 inner) (walker433 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7127,13 +7127,13 @@ walker435 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker434 fun) (walker434 arg) (\_ -> walker434 fun))
+          in (Maybes.maybe (walker434 arg) (\_ -> walker434 fun) (walker434 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker434 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker434 body) Nothing (\inner -> walker434 inner))
+          in (Maybes.maybe Nothing (\inner -> walker434 inner) (walker434 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7146,13 +7146,13 @@ walker436 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker435 fun) (walker435 arg) (\_ -> walker435 fun))
+          in (Maybes.maybe (walker435 arg) (\_ -> walker435 fun) (walker435 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker435 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker435 body) Nothing (\inner -> walker435 inner))
+          in (Maybes.maybe Nothing (\inner -> walker435 inner) (walker435 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7165,13 +7165,13 @@ walker437 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker436 fun) (walker436 arg) (\_ -> walker436 fun))
+          in (Maybes.maybe (walker436 arg) (\_ -> walker436 fun) (walker436 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker436 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker436 body) Nothing (\inner -> walker436 inner))
+          in (Maybes.maybe Nothing (\inner -> walker436 inner) (walker436 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7184,13 +7184,13 @@ walker438 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker437 fun) (walker437 arg) (\_ -> walker437 fun))
+          in (Maybes.maybe (walker437 arg) (\_ -> walker437 fun) (walker437 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker437 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker437 body) Nothing (\inner -> walker437 inner))
+          in (Maybes.maybe Nothing (\inner -> walker437 inner) (walker437 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7203,13 +7203,13 @@ walker439 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker438 fun) (walker438 arg) (\_ -> walker438 fun))
+          in (Maybes.maybe (walker438 arg) (\_ -> walker438 fun) (walker438 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker438 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker438 body) Nothing (\inner -> walker438 inner))
+          in (Maybes.maybe Nothing (\inner -> walker438 inner) (walker438 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7222,13 +7222,13 @@ walker44 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker43 fun) (walker43 arg) (\_ -> walker43 fun))
+          in (Maybes.maybe (walker43 arg) (\_ -> walker43 fun) (walker43 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker43 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker43 body) Nothing (\inner -> walker43 inner))
+          in (Maybes.maybe Nothing (\inner -> walker43 inner) (walker43 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7241,13 +7241,13 @@ walker440 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker439 fun) (walker439 arg) (\_ -> walker439 fun))
+          in (Maybes.maybe (walker439 arg) (\_ -> walker439 fun) (walker439 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker439 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker439 body) Nothing (\inner -> walker439 inner))
+          in (Maybes.maybe Nothing (\inner -> walker439 inner) (walker439 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7260,13 +7260,13 @@ walker441 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker440 fun) (walker440 arg) (\_ -> walker440 fun))
+          in (Maybes.maybe (walker440 arg) (\_ -> walker440 fun) (walker440 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker440 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker440 body) Nothing (\inner -> walker440 inner))
+          in (Maybes.maybe Nothing (\inner -> walker440 inner) (walker440 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7279,13 +7279,13 @@ walker442 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker441 fun) (walker441 arg) (\_ -> walker441 fun))
+          in (Maybes.maybe (walker441 arg) (\_ -> walker441 fun) (walker441 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker441 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker441 body) Nothing (\inner -> walker441 inner))
+          in (Maybes.maybe Nothing (\inner -> walker441 inner) (walker441 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7298,13 +7298,13 @@ walker443 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker442 fun) (walker442 arg) (\_ -> walker442 fun))
+          in (Maybes.maybe (walker442 arg) (\_ -> walker442 fun) (walker442 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker442 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker442 body) Nothing (\inner -> walker442 inner))
+          in (Maybes.maybe Nothing (\inner -> walker442 inner) (walker442 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7317,13 +7317,13 @@ walker444 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker443 fun) (walker443 arg) (\_ -> walker443 fun))
+          in (Maybes.maybe (walker443 arg) (\_ -> walker443 fun) (walker443 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker443 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker443 body) Nothing (\inner -> walker443 inner))
+          in (Maybes.maybe Nothing (\inner -> walker443 inner) (walker443 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7336,13 +7336,13 @@ walker445 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker444 fun) (walker444 arg) (\_ -> walker444 fun))
+          in (Maybes.maybe (walker444 arg) (\_ -> walker444 fun) (walker444 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker444 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker444 body) Nothing (\inner -> walker444 inner))
+          in (Maybes.maybe Nothing (\inner -> walker444 inner) (walker444 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7355,13 +7355,13 @@ walker446 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker445 fun) (walker445 arg) (\_ -> walker445 fun))
+          in (Maybes.maybe (walker445 arg) (\_ -> walker445 fun) (walker445 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker445 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker445 body) Nothing (\inner -> walker445 inner))
+          in (Maybes.maybe Nothing (\inner -> walker445 inner) (walker445 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7374,13 +7374,13 @@ walker447 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker446 fun) (walker446 arg) (\_ -> walker446 fun))
+          in (Maybes.maybe (walker446 arg) (\_ -> walker446 fun) (walker446 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker446 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker446 body) Nothing (\inner -> walker446 inner))
+          in (Maybes.maybe Nothing (\inner -> walker446 inner) (walker446 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7393,13 +7393,13 @@ walker448 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker447 fun) (walker447 arg) (\_ -> walker447 fun))
+          in (Maybes.maybe (walker447 arg) (\_ -> walker447 fun) (walker447 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker447 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker447 body) Nothing (\inner -> walker447 inner))
+          in (Maybes.maybe Nothing (\inner -> walker447 inner) (walker447 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7412,13 +7412,13 @@ walker449 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker448 fun) (walker448 arg) (\_ -> walker448 fun))
+          in (Maybes.maybe (walker448 arg) (\_ -> walker448 fun) (walker448 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker448 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker448 body) Nothing (\inner -> walker448 inner))
+          in (Maybes.maybe Nothing (\inner -> walker448 inner) (walker448 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7431,13 +7431,13 @@ walker45 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker44 fun) (walker44 arg) (\_ -> walker44 fun))
+          in (Maybes.maybe (walker44 arg) (\_ -> walker44 fun) (walker44 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker44 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker44 body) Nothing (\inner -> walker44 inner))
+          in (Maybes.maybe Nothing (\inner -> walker44 inner) (walker44 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7450,13 +7450,13 @@ walker450 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker449 fun) (walker449 arg) (\_ -> walker449 fun))
+          in (Maybes.maybe (walker449 arg) (\_ -> walker449 fun) (walker449 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker449 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker449 body) Nothing (\inner -> walker449 inner))
+          in (Maybes.maybe Nothing (\inner -> walker449 inner) (walker449 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7469,13 +7469,13 @@ walker451 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker450 fun) (walker450 arg) (\_ -> walker450 fun))
+          in (Maybes.maybe (walker450 arg) (\_ -> walker450 fun) (walker450 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker450 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker450 body) Nothing (\inner -> walker450 inner))
+          in (Maybes.maybe Nothing (\inner -> walker450 inner) (walker450 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7488,13 +7488,13 @@ walker452 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker451 fun) (walker451 arg) (\_ -> walker451 fun))
+          in (Maybes.maybe (walker451 arg) (\_ -> walker451 fun) (walker451 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker451 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker451 body) Nothing (\inner -> walker451 inner))
+          in (Maybes.maybe Nothing (\inner -> walker451 inner) (walker451 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7507,13 +7507,13 @@ walker453 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker452 fun) (walker452 arg) (\_ -> walker452 fun))
+          in (Maybes.maybe (walker452 arg) (\_ -> walker452 fun) (walker452 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker452 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker452 body) Nothing (\inner -> walker452 inner))
+          in (Maybes.maybe Nothing (\inner -> walker452 inner) (walker452 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7526,13 +7526,13 @@ walker454 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker453 fun) (walker453 arg) (\_ -> walker453 fun))
+          in (Maybes.maybe (walker453 arg) (\_ -> walker453 fun) (walker453 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker453 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker453 body) Nothing (\inner -> walker453 inner))
+          in (Maybes.maybe Nothing (\inner -> walker453 inner) (walker453 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7545,13 +7545,13 @@ walker455 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker454 fun) (walker454 arg) (\_ -> walker454 fun))
+          in (Maybes.maybe (walker454 arg) (\_ -> walker454 fun) (walker454 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker454 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker454 body) Nothing (\inner -> walker454 inner))
+          in (Maybes.maybe Nothing (\inner -> walker454 inner) (walker454 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7564,13 +7564,13 @@ walker456 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker455 fun) (walker455 arg) (\_ -> walker455 fun))
+          in (Maybes.maybe (walker455 arg) (\_ -> walker455 fun) (walker455 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker455 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker455 body) Nothing (\inner -> walker455 inner))
+          in (Maybes.maybe Nothing (\inner -> walker455 inner) (walker455 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7583,13 +7583,13 @@ walker457 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker456 fun) (walker456 arg) (\_ -> walker456 fun))
+          in (Maybes.maybe (walker456 arg) (\_ -> walker456 fun) (walker456 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker456 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker456 body) Nothing (\inner -> walker456 inner))
+          in (Maybes.maybe Nothing (\inner -> walker456 inner) (walker456 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7602,13 +7602,13 @@ walker458 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker457 fun) (walker457 arg) (\_ -> walker457 fun))
+          in (Maybes.maybe (walker457 arg) (\_ -> walker457 fun) (walker457 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker457 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker457 body) Nothing (\inner -> walker457 inner))
+          in (Maybes.maybe Nothing (\inner -> walker457 inner) (walker457 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7621,13 +7621,13 @@ walker459 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker458 fun) (walker458 arg) (\_ -> walker458 fun))
+          in (Maybes.maybe (walker458 arg) (\_ -> walker458 fun) (walker458 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker458 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker458 body) Nothing (\inner -> walker458 inner))
+          in (Maybes.maybe Nothing (\inner -> walker458 inner) (walker458 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7640,13 +7640,13 @@ walker46 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker45 fun) (walker45 arg) (\_ -> walker45 fun))
+          in (Maybes.maybe (walker45 arg) (\_ -> walker45 fun) (walker45 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker45 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker45 body) Nothing (\inner -> walker45 inner))
+          in (Maybes.maybe Nothing (\inner -> walker45 inner) (walker45 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7659,13 +7659,13 @@ walker460 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker459 fun) (walker459 arg) (\_ -> walker459 fun))
+          in (Maybes.maybe (walker459 arg) (\_ -> walker459 fun) (walker459 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker459 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker459 body) Nothing (\inner -> walker459 inner))
+          in (Maybes.maybe Nothing (\inner -> walker459 inner) (walker459 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7678,13 +7678,13 @@ walker461 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker460 fun) (walker460 arg) (\_ -> walker460 fun))
+          in (Maybes.maybe (walker460 arg) (\_ -> walker460 fun) (walker460 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker460 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker460 body) Nothing (\inner -> walker460 inner))
+          in (Maybes.maybe Nothing (\inner -> walker460 inner) (walker460 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7697,13 +7697,13 @@ walker462 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker461 fun) (walker461 arg) (\_ -> walker461 fun))
+          in (Maybes.maybe (walker461 arg) (\_ -> walker461 fun) (walker461 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker461 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker461 body) Nothing (\inner -> walker461 inner))
+          in (Maybes.maybe Nothing (\inner -> walker461 inner) (walker461 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7716,13 +7716,13 @@ walker463 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker462 fun) (walker462 arg) (\_ -> walker462 fun))
+          in (Maybes.maybe (walker462 arg) (\_ -> walker462 fun) (walker462 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker462 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker462 body) Nothing (\inner -> walker462 inner))
+          in (Maybes.maybe Nothing (\inner -> walker462 inner) (walker462 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7735,13 +7735,13 @@ walker464 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker463 fun) (walker463 arg) (\_ -> walker463 fun))
+          in (Maybes.maybe (walker463 arg) (\_ -> walker463 fun) (walker463 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker463 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker463 body) Nothing (\inner -> walker463 inner))
+          in (Maybes.maybe Nothing (\inner -> walker463 inner) (walker463 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7754,13 +7754,13 @@ walker465 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker464 fun) (walker464 arg) (\_ -> walker464 fun))
+          in (Maybes.maybe (walker464 arg) (\_ -> walker464 fun) (walker464 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker464 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker464 body) Nothing (\inner -> walker464 inner))
+          in (Maybes.maybe Nothing (\inner -> walker464 inner) (walker464 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7773,13 +7773,13 @@ walker466 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker465 fun) (walker465 arg) (\_ -> walker465 fun))
+          in (Maybes.maybe (walker465 arg) (\_ -> walker465 fun) (walker465 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker465 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker465 body) Nothing (\inner -> walker465 inner))
+          in (Maybes.maybe Nothing (\inner -> walker465 inner) (walker465 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7792,13 +7792,13 @@ walker467 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker466 fun) (walker466 arg) (\_ -> walker466 fun))
+          in (Maybes.maybe (walker466 arg) (\_ -> walker466 fun) (walker466 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker466 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker466 body) Nothing (\inner -> walker466 inner))
+          in (Maybes.maybe Nothing (\inner -> walker466 inner) (walker466 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7811,13 +7811,13 @@ walker468 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker467 fun) (walker467 arg) (\_ -> walker467 fun))
+          in (Maybes.maybe (walker467 arg) (\_ -> walker467 fun) (walker467 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker467 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker467 body) Nothing (\inner -> walker467 inner))
+          in (Maybes.maybe Nothing (\inner -> walker467 inner) (walker467 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7830,13 +7830,13 @@ walker469 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker468 fun) (walker468 arg) (\_ -> walker468 fun))
+          in (Maybes.maybe (walker468 arg) (\_ -> walker468 fun) (walker468 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker468 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker468 body) Nothing (\inner -> walker468 inner))
+          in (Maybes.maybe Nothing (\inner -> walker468 inner) (walker468 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7849,13 +7849,13 @@ walker47 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker46 fun) (walker46 arg) (\_ -> walker46 fun))
+          in (Maybes.maybe (walker46 arg) (\_ -> walker46 fun) (walker46 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker46 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker46 body) Nothing (\inner -> walker46 inner))
+          in (Maybes.maybe Nothing (\inner -> walker46 inner) (walker46 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7868,13 +7868,13 @@ walker470 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker469 fun) (walker469 arg) (\_ -> walker469 fun))
+          in (Maybes.maybe (walker469 arg) (\_ -> walker469 fun) (walker469 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker469 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker469 body) Nothing (\inner -> walker469 inner))
+          in (Maybes.maybe Nothing (\inner -> walker469 inner) (walker469 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7887,13 +7887,13 @@ walker471 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker470 fun) (walker470 arg) (\_ -> walker470 fun))
+          in (Maybes.maybe (walker470 arg) (\_ -> walker470 fun) (walker470 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker470 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker470 body) Nothing (\inner -> walker470 inner))
+          in (Maybes.maybe Nothing (\inner -> walker470 inner) (walker470 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7906,13 +7906,13 @@ walker472 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker471 fun) (walker471 arg) (\_ -> walker471 fun))
+          in (Maybes.maybe (walker471 arg) (\_ -> walker471 fun) (walker471 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker471 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker471 body) Nothing (\inner -> walker471 inner))
+          in (Maybes.maybe Nothing (\inner -> walker471 inner) (walker471 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7925,13 +7925,13 @@ walker473 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker472 fun) (walker472 arg) (\_ -> walker472 fun))
+          in (Maybes.maybe (walker472 arg) (\_ -> walker472 fun) (walker472 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker472 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker472 body) Nothing (\inner -> walker472 inner))
+          in (Maybes.maybe Nothing (\inner -> walker472 inner) (walker472 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7944,13 +7944,13 @@ walker474 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker473 fun) (walker473 arg) (\_ -> walker473 fun))
+          in (Maybes.maybe (walker473 arg) (\_ -> walker473 fun) (walker473 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker473 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker473 body) Nothing (\inner -> walker473 inner))
+          in (Maybes.maybe Nothing (\inner -> walker473 inner) (walker473 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7963,13 +7963,13 @@ walker475 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker474 fun) (walker474 arg) (\_ -> walker474 fun))
+          in (Maybes.maybe (walker474 arg) (\_ -> walker474 fun) (walker474 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker474 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker474 body) Nothing (\inner -> walker474 inner))
+          in (Maybes.maybe Nothing (\inner -> walker474 inner) (walker474 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7982,13 +7982,13 @@ walker476 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker475 fun) (walker475 arg) (\_ -> walker475 fun))
+          in (Maybes.maybe (walker475 arg) (\_ -> walker475 fun) (walker475 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker475 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker475 body) Nothing (\inner -> walker475 inner))
+          in (Maybes.maybe Nothing (\inner -> walker475 inner) (walker475 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8001,13 +8001,13 @@ walker477 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker476 fun) (walker476 arg) (\_ -> walker476 fun))
+          in (Maybes.maybe (walker476 arg) (\_ -> walker476 fun) (walker476 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker476 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker476 body) Nothing (\inner -> walker476 inner))
+          in (Maybes.maybe Nothing (\inner -> walker476 inner) (walker476 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8020,13 +8020,13 @@ walker478 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker477 fun) (walker477 arg) (\_ -> walker477 fun))
+          in (Maybes.maybe (walker477 arg) (\_ -> walker477 fun) (walker477 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker477 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker477 body) Nothing (\inner -> walker477 inner))
+          in (Maybes.maybe Nothing (\inner -> walker477 inner) (walker477 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8039,13 +8039,13 @@ walker479 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker478 fun) (walker478 arg) (\_ -> walker478 fun))
+          in (Maybes.maybe (walker478 arg) (\_ -> walker478 fun) (walker478 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker478 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker478 body) Nothing (\inner -> walker478 inner))
+          in (Maybes.maybe Nothing (\inner -> walker478 inner) (walker478 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8058,13 +8058,13 @@ walker48 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker47 fun) (walker47 arg) (\_ -> walker47 fun))
+          in (Maybes.maybe (walker47 arg) (\_ -> walker47 fun) (walker47 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker47 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker47 body) Nothing (\inner -> walker47 inner))
+          in (Maybes.maybe Nothing (\inner -> walker47 inner) (walker47 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8077,13 +8077,13 @@ walker480 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker479 fun) (walker479 arg) (\_ -> walker479 fun))
+          in (Maybes.maybe (walker479 arg) (\_ -> walker479 fun) (walker479 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker479 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker479 body) Nothing (\inner -> walker479 inner))
+          in (Maybes.maybe Nothing (\inner -> walker479 inner) (walker479 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8096,13 +8096,13 @@ walker481 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker480 fun) (walker480 arg) (\_ -> walker480 fun))
+          in (Maybes.maybe (walker480 arg) (\_ -> walker480 fun) (walker480 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker480 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker480 body) Nothing (\inner -> walker480 inner))
+          in (Maybes.maybe Nothing (\inner -> walker480 inner) (walker480 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8115,13 +8115,13 @@ walker482 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker481 fun) (walker481 arg) (\_ -> walker481 fun))
+          in (Maybes.maybe (walker481 arg) (\_ -> walker481 fun) (walker481 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker481 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker481 body) Nothing (\inner -> walker481 inner))
+          in (Maybes.maybe Nothing (\inner -> walker481 inner) (walker481 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8134,13 +8134,13 @@ walker483 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker482 fun) (walker482 arg) (\_ -> walker482 fun))
+          in (Maybes.maybe (walker482 arg) (\_ -> walker482 fun) (walker482 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker482 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker482 body) Nothing (\inner -> walker482 inner))
+          in (Maybes.maybe Nothing (\inner -> walker482 inner) (walker482 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8153,13 +8153,13 @@ walker484 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker483 fun) (walker483 arg) (\_ -> walker483 fun))
+          in (Maybes.maybe (walker483 arg) (\_ -> walker483 fun) (walker483 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker483 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker483 body) Nothing (\inner -> walker483 inner))
+          in (Maybes.maybe Nothing (\inner -> walker483 inner) (walker483 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8172,13 +8172,13 @@ walker485 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker484 fun) (walker484 arg) (\_ -> walker484 fun))
+          in (Maybes.maybe (walker484 arg) (\_ -> walker484 fun) (walker484 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker484 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker484 body) Nothing (\inner -> walker484 inner))
+          in (Maybes.maybe Nothing (\inner -> walker484 inner) (walker484 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8191,13 +8191,13 @@ walker486 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker485 fun) (walker485 arg) (\_ -> walker485 fun))
+          in (Maybes.maybe (walker485 arg) (\_ -> walker485 fun) (walker485 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker485 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker485 body) Nothing (\inner -> walker485 inner))
+          in (Maybes.maybe Nothing (\inner -> walker485 inner) (walker485 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8210,13 +8210,13 @@ walker487 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker486 fun) (walker486 arg) (\_ -> walker486 fun))
+          in (Maybes.maybe (walker486 arg) (\_ -> walker486 fun) (walker486 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker486 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker486 body) Nothing (\inner -> walker486 inner))
+          in (Maybes.maybe Nothing (\inner -> walker486 inner) (walker486 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8229,13 +8229,13 @@ walker488 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker487 fun) (walker487 arg) (\_ -> walker487 fun))
+          in (Maybes.maybe (walker487 arg) (\_ -> walker487 fun) (walker487 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker487 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker487 body) Nothing (\inner -> walker487 inner))
+          in (Maybes.maybe Nothing (\inner -> walker487 inner) (walker487 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8248,13 +8248,13 @@ walker489 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker488 fun) (walker488 arg) (\_ -> walker488 fun))
+          in (Maybes.maybe (walker488 arg) (\_ -> walker488 fun) (walker488 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker488 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker488 body) Nothing (\inner -> walker488 inner))
+          in (Maybes.maybe Nothing (\inner -> walker488 inner) (walker488 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8267,13 +8267,13 @@ walker49 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker48 fun) (walker48 arg) (\_ -> walker48 fun))
+          in (Maybes.maybe (walker48 arg) (\_ -> walker48 fun) (walker48 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker48 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker48 body) Nothing (\inner -> walker48 inner))
+          in (Maybes.maybe Nothing (\inner -> walker48 inner) (walker48 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8286,13 +8286,13 @@ walker490 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker489 fun) (walker489 arg) (\_ -> walker489 fun))
+          in (Maybes.maybe (walker489 arg) (\_ -> walker489 fun) (walker489 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker489 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker489 body) Nothing (\inner -> walker489 inner))
+          in (Maybes.maybe Nothing (\inner -> walker489 inner) (walker489 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8305,13 +8305,13 @@ walker491 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker490 fun) (walker490 arg) (\_ -> walker490 fun))
+          in (Maybes.maybe (walker490 arg) (\_ -> walker490 fun) (walker490 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker490 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker490 body) Nothing (\inner -> walker490 inner))
+          in (Maybes.maybe Nothing (\inner -> walker490 inner) (walker490 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8324,13 +8324,13 @@ walker492 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker491 fun) (walker491 arg) (\_ -> walker491 fun))
+          in (Maybes.maybe (walker491 arg) (\_ -> walker491 fun) (walker491 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker491 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker491 body) Nothing (\inner -> walker491 inner))
+          in (Maybes.maybe Nothing (\inner -> walker491 inner) (walker491 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8343,13 +8343,13 @@ walker493 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker492 fun) (walker492 arg) (\_ -> walker492 fun))
+          in (Maybes.maybe (walker492 arg) (\_ -> walker492 fun) (walker492 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker492 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker492 body) Nothing (\inner -> walker492 inner))
+          in (Maybes.maybe Nothing (\inner -> walker492 inner) (walker492 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8362,13 +8362,13 @@ walker494 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker493 fun) (walker493 arg) (\_ -> walker493 fun))
+          in (Maybes.maybe (walker493 arg) (\_ -> walker493 fun) (walker493 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker493 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker493 body) Nothing (\inner -> walker493 inner))
+          in (Maybes.maybe Nothing (\inner -> walker493 inner) (walker493 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8381,13 +8381,13 @@ walker495 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker494 fun) (walker494 arg) (\_ -> walker494 fun))
+          in (Maybes.maybe (walker494 arg) (\_ -> walker494 fun) (walker494 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker494 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker494 body) Nothing (\inner -> walker494 inner))
+          in (Maybes.maybe Nothing (\inner -> walker494 inner) (walker494 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8400,13 +8400,13 @@ walker496 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker495 fun) (walker495 arg) (\_ -> walker495 fun))
+          in (Maybes.maybe (walker495 arg) (\_ -> walker495 fun) (walker495 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker495 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker495 body) Nothing (\inner -> walker495 inner))
+          in (Maybes.maybe Nothing (\inner -> walker495 inner) (walker495 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8419,13 +8419,13 @@ walker497 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker496 fun) (walker496 arg) (\_ -> walker496 fun))
+          in (Maybes.maybe (walker496 arg) (\_ -> walker496 fun) (walker496 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker496 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker496 body) Nothing (\inner -> walker496 inner))
+          in (Maybes.maybe Nothing (\inner -> walker496 inner) (walker496 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8438,13 +8438,13 @@ walker498 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker497 fun) (walker497 arg) (\_ -> walker497 fun))
+          in (Maybes.maybe (walker497 arg) (\_ -> walker497 fun) (walker497 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker497 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker497 body) Nothing (\inner -> walker497 inner))
+          in (Maybes.maybe Nothing (\inner -> walker497 inner) (walker497 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8457,13 +8457,13 @@ walker499 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker498 fun) (walker498 arg) (\_ -> walker498 fun))
+          in (Maybes.maybe (walker498 arg) (\_ -> walker498 fun) (walker498 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker498 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker498 body) Nothing (\inner -> walker498 inner))
+          in (Maybes.maybe Nothing (\inner -> walker498 inner) (walker498 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8476,13 +8476,13 @@ walker5 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker4 fun) (walker4 arg) (\_ -> walker4 fun))
+          in (Maybes.maybe (walker4 arg) (\_ -> walker4 fun) (walker4 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker4 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker4 body) Nothing (\inner -> walker4 inner))
+          in (Maybes.maybe Nothing (\inner -> walker4 inner) (walker4 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8495,13 +8495,13 @@ walker50 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker49 fun) (walker49 arg) (\_ -> walker49 fun))
+          in (Maybes.maybe (walker49 arg) (\_ -> walker49 fun) (walker49 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker49 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker49 body) Nothing (\inner -> walker49 inner))
+          in (Maybes.maybe Nothing (\inner -> walker49 inner) (walker49 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8514,13 +8514,13 @@ walker500 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker499 fun) (walker499 arg) (\_ -> walker499 fun))
+          in (Maybes.maybe (walker499 arg) (\_ -> walker499 fun) (walker499 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker499 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker499 body) Nothing (\inner -> walker499 inner))
+          in (Maybes.maybe Nothing (\inner -> walker499 inner) (walker499 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8533,13 +8533,13 @@ walker501 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker500 fun) (walker500 arg) (\_ -> walker500 fun))
+          in (Maybes.maybe (walker500 arg) (\_ -> walker500 fun) (walker500 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker500 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker500 body) Nothing (\inner -> walker500 inner))
+          in (Maybes.maybe Nothing (\inner -> walker500 inner) (walker500 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8552,13 +8552,13 @@ walker502 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker501 fun) (walker501 arg) (\_ -> walker501 fun))
+          in (Maybes.maybe (walker501 arg) (\_ -> walker501 fun) (walker501 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker501 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker501 body) Nothing (\inner -> walker501 inner))
+          in (Maybes.maybe Nothing (\inner -> walker501 inner) (walker501 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8571,13 +8571,13 @@ walker503 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker502 fun) (walker502 arg) (\_ -> walker502 fun))
+          in (Maybes.maybe (walker502 arg) (\_ -> walker502 fun) (walker502 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker502 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker502 body) Nothing (\inner -> walker502 inner))
+          in (Maybes.maybe Nothing (\inner -> walker502 inner) (walker502 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8590,13 +8590,13 @@ walker504 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker503 fun) (walker503 arg) (\_ -> walker503 fun))
+          in (Maybes.maybe (walker503 arg) (\_ -> walker503 fun) (walker503 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker503 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker503 body) Nothing (\inner -> walker503 inner))
+          in (Maybes.maybe Nothing (\inner -> walker503 inner) (walker503 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8609,13 +8609,13 @@ walker505 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker504 fun) (walker504 arg) (\_ -> walker504 fun))
+          in (Maybes.maybe (walker504 arg) (\_ -> walker504 fun) (walker504 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker504 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker504 body) Nothing (\inner -> walker504 inner))
+          in (Maybes.maybe Nothing (\inner -> walker504 inner) (walker504 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8628,13 +8628,13 @@ walker506 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker505 fun) (walker505 arg) (\_ -> walker505 fun))
+          in (Maybes.maybe (walker505 arg) (\_ -> walker505 fun) (walker505 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker505 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker505 body) Nothing (\inner -> walker505 inner))
+          in (Maybes.maybe Nothing (\inner -> walker505 inner) (walker505 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8647,13 +8647,13 @@ walker507 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker506 fun) (walker506 arg) (\_ -> walker506 fun))
+          in (Maybes.maybe (walker506 arg) (\_ -> walker506 fun) (walker506 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker506 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker506 body) Nothing (\inner -> walker506 inner))
+          in (Maybes.maybe Nothing (\inner -> walker506 inner) (walker506 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8666,13 +8666,13 @@ walker508 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker507 fun) (walker507 arg) (\_ -> walker507 fun))
+          in (Maybes.maybe (walker507 arg) (\_ -> walker507 fun) (walker507 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker507 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker507 body) Nothing (\inner -> walker507 inner))
+          in (Maybes.maybe Nothing (\inner -> walker507 inner) (walker507 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8685,13 +8685,13 @@ walker509 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker508 fun) (walker508 arg) (\_ -> walker508 fun))
+          in (Maybes.maybe (walker508 arg) (\_ -> walker508 fun) (walker508 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker508 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker508 body) Nothing (\inner -> walker508 inner))
+          in (Maybes.maybe Nothing (\inner -> walker508 inner) (walker508 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8704,13 +8704,13 @@ walker51 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker50 fun) (walker50 arg) (\_ -> walker50 fun))
+          in (Maybes.maybe (walker50 arg) (\_ -> walker50 fun) (walker50 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker50 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker50 body) Nothing (\inner -> walker50 inner))
+          in (Maybes.maybe Nothing (\inner -> walker50 inner) (walker50 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8723,13 +8723,13 @@ walker510 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker509 fun) (walker509 arg) (\_ -> walker509 fun))
+          in (Maybes.maybe (walker509 arg) (\_ -> walker509 fun) (walker509 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker509 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker509 body) Nothing (\inner -> walker509 inner))
+          in (Maybes.maybe Nothing (\inner -> walker509 inner) (walker509 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8742,13 +8742,13 @@ walker511 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker510 fun) (walker510 arg) (\_ -> walker510 fun))
+          in (Maybes.maybe (walker510 arg) (\_ -> walker510 fun) (walker510 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker510 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker510 body) Nothing (\inner -> walker510 inner))
+          in (Maybes.maybe Nothing (\inner -> walker510 inner) (walker510 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8761,13 +8761,13 @@ walker512 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker511 fun) (walker511 arg) (\_ -> walker511 fun))
+          in (Maybes.maybe (walker511 arg) (\_ -> walker511 fun) (walker511 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker511 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker511 body) Nothing (\inner -> walker511 inner))
+          in (Maybes.maybe Nothing (\inner -> walker511 inner) (walker511 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8780,13 +8780,13 @@ walker513 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker512 fun) (walker512 arg) (\_ -> walker512 fun))
+          in (Maybes.maybe (walker512 arg) (\_ -> walker512 fun) (walker512 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker512 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker512 body) Nothing (\inner -> walker512 inner))
+          in (Maybes.maybe Nothing (\inner -> walker512 inner) (walker512 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8799,13 +8799,13 @@ walker514 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker513 fun) (walker513 arg) (\_ -> walker513 fun))
+          in (Maybes.maybe (walker513 arg) (\_ -> walker513 fun) (walker513 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker513 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker513 body) Nothing (\inner -> walker513 inner))
+          in (Maybes.maybe Nothing (\inner -> walker513 inner) (walker513 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8818,13 +8818,13 @@ walker515 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker514 fun) (walker514 arg) (\_ -> walker514 fun))
+          in (Maybes.maybe (walker514 arg) (\_ -> walker514 fun) (walker514 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker514 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker514 body) Nothing (\inner -> walker514 inner))
+          in (Maybes.maybe Nothing (\inner -> walker514 inner) (walker514 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8837,13 +8837,13 @@ walker516 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker515 fun) (walker515 arg) (\_ -> walker515 fun))
+          in (Maybes.maybe (walker515 arg) (\_ -> walker515 fun) (walker515 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker515 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker515 body) Nothing (\inner -> walker515 inner))
+          in (Maybes.maybe Nothing (\inner -> walker515 inner) (walker515 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8856,13 +8856,13 @@ walker517 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker516 fun) (walker516 arg) (\_ -> walker516 fun))
+          in (Maybes.maybe (walker516 arg) (\_ -> walker516 fun) (walker516 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker516 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker516 body) Nothing (\inner -> walker516 inner))
+          in (Maybes.maybe Nothing (\inner -> walker516 inner) (walker516 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8875,13 +8875,13 @@ walker518 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker517 fun) (walker517 arg) (\_ -> walker517 fun))
+          in (Maybes.maybe (walker517 arg) (\_ -> walker517 fun) (walker517 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker517 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker517 body) Nothing (\inner -> walker517 inner))
+          in (Maybes.maybe Nothing (\inner -> walker517 inner) (walker517 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8894,13 +8894,13 @@ walker519 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker518 fun) (walker518 arg) (\_ -> walker518 fun))
+          in (Maybes.maybe (walker518 arg) (\_ -> walker518 fun) (walker518 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker518 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker518 body) Nothing (\inner -> walker518 inner))
+          in (Maybes.maybe Nothing (\inner -> walker518 inner) (walker518 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8913,13 +8913,13 @@ walker52 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker51 fun) (walker51 arg) (\_ -> walker51 fun))
+          in (Maybes.maybe (walker51 arg) (\_ -> walker51 fun) (walker51 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker51 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker51 body) Nothing (\inner -> walker51 inner))
+          in (Maybes.maybe Nothing (\inner -> walker51 inner) (walker51 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8932,13 +8932,13 @@ walker520 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker519 fun) (walker519 arg) (\_ -> walker519 fun))
+          in (Maybes.maybe (walker519 arg) (\_ -> walker519 fun) (walker519 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker519 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker519 body) Nothing (\inner -> walker519 inner))
+          in (Maybes.maybe Nothing (\inner -> walker519 inner) (walker519 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8951,13 +8951,13 @@ walker521 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker520 fun) (walker520 arg) (\_ -> walker520 fun))
+          in (Maybes.maybe (walker520 arg) (\_ -> walker520 fun) (walker520 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker520 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker520 body) Nothing (\inner -> walker520 inner))
+          in (Maybes.maybe Nothing (\inner -> walker520 inner) (walker520 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8970,13 +8970,13 @@ walker522 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker521 fun) (walker521 arg) (\_ -> walker521 fun))
+          in (Maybes.maybe (walker521 arg) (\_ -> walker521 fun) (walker521 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker521 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker521 body) Nothing (\inner -> walker521 inner))
+          in (Maybes.maybe Nothing (\inner -> walker521 inner) (walker521 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -8989,13 +8989,13 @@ walker523 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker522 fun) (walker522 arg) (\_ -> walker522 fun))
+          in (Maybes.maybe (walker522 arg) (\_ -> walker522 fun) (walker522 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker522 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker522 body) Nothing (\inner -> walker522 inner))
+          in (Maybes.maybe Nothing (\inner -> walker522 inner) (walker522 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9008,13 +9008,13 @@ walker524 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker523 fun) (walker523 arg) (\_ -> walker523 fun))
+          in (Maybes.maybe (walker523 arg) (\_ -> walker523 fun) (walker523 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker523 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker523 body) Nothing (\inner -> walker523 inner))
+          in (Maybes.maybe Nothing (\inner -> walker523 inner) (walker523 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9027,13 +9027,13 @@ walker525 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker524 fun) (walker524 arg) (\_ -> walker524 fun))
+          in (Maybes.maybe (walker524 arg) (\_ -> walker524 fun) (walker524 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker524 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker524 body) Nothing (\inner -> walker524 inner))
+          in (Maybes.maybe Nothing (\inner -> walker524 inner) (walker524 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9046,13 +9046,13 @@ walker526 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker525 fun) (walker525 arg) (\_ -> walker525 fun))
+          in (Maybes.maybe (walker525 arg) (\_ -> walker525 fun) (walker525 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker525 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker525 body) Nothing (\inner -> walker525 inner))
+          in (Maybes.maybe Nothing (\inner -> walker525 inner) (walker525 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9065,13 +9065,13 @@ walker527 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker526 fun) (walker526 arg) (\_ -> walker526 fun))
+          in (Maybes.maybe (walker526 arg) (\_ -> walker526 fun) (walker526 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker526 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker526 body) Nothing (\inner -> walker526 inner))
+          in (Maybes.maybe Nothing (\inner -> walker526 inner) (walker526 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9084,13 +9084,13 @@ walker528 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker527 fun) (walker527 arg) (\_ -> walker527 fun))
+          in (Maybes.maybe (walker527 arg) (\_ -> walker527 fun) (walker527 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker527 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker527 body) Nothing (\inner -> walker527 inner))
+          in (Maybes.maybe Nothing (\inner -> walker527 inner) (walker527 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9103,13 +9103,13 @@ walker529 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker528 fun) (walker528 arg) (\_ -> walker528 fun))
+          in (Maybes.maybe (walker528 arg) (\_ -> walker528 fun) (walker528 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker528 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker528 body) Nothing (\inner -> walker528 inner))
+          in (Maybes.maybe Nothing (\inner -> walker528 inner) (walker528 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9122,13 +9122,13 @@ walker53 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker52 fun) (walker52 arg) (\_ -> walker52 fun))
+          in (Maybes.maybe (walker52 arg) (\_ -> walker52 fun) (walker52 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker52 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker52 body) Nothing (\inner -> walker52 inner))
+          in (Maybes.maybe Nothing (\inner -> walker52 inner) (walker52 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9141,13 +9141,13 @@ walker530 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker529 fun) (walker529 arg) (\_ -> walker529 fun))
+          in (Maybes.maybe (walker529 arg) (\_ -> walker529 fun) (walker529 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker529 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker529 body) Nothing (\inner -> walker529 inner))
+          in (Maybes.maybe Nothing (\inner -> walker529 inner) (walker529 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9160,13 +9160,13 @@ walker531 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker530 fun) (walker530 arg) (\_ -> walker530 fun))
+          in (Maybes.maybe (walker530 arg) (\_ -> walker530 fun) (walker530 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker530 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker530 body) Nothing (\inner -> walker530 inner))
+          in (Maybes.maybe Nothing (\inner -> walker530 inner) (walker530 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9179,13 +9179,13 @@ walker532 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker531 fun) (walker531 arg) (\_ -> walker531 fun))
+          in (Maybes.maybe (walker531 arg) (\_ -> walker531 fun) (walker531 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker531 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker531 body) Nothing (\inner -> walker531 inner))
+          in (Maybes.maybe Nothing (\inner -> walker531 inner) (walker531 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9198,13 +9198,13 @@ walker533 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker532 fun) (walker532 arg) (\_ -> walker532 fun))
+          in (Maybes.maybe (walker532 arg) (\_ -> walker532 fun) (walker532 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker532 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker532 body) Nothing (\inner -> walker532 inner))
+          in (Maybes.maybe Nothing (\inner -> walker532 inner) (walker532 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9217,13 +9217,13 @@ walker534 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker533 fun) (walker533 arg) (\_ -> walker533 fun))
+          in (Maybes.maybe (walker533 arg) (\_ -> walker533 fun) (walker533 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker533 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker533 body) Nothing (\inner -> walker533 inner))
+          in (Maybes.maybe Nothing (\inner -> walker533 inner) (walker533 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9236,13 +9236,13 @@ walker535 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker534 fun) (walker534 arg) (\_ -> walker534 fun))
+          in (Maybes.maybe (walker534 arg) (\_ -> walker534 fun) (walker534 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker534 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker534 body) Nothing (\inner -> walker534 inner))
+          in (Maybes.maybe Nothing (\inner -> walker534 inner) (walker534 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9255,13 +9255,13 @@ walker536 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker535 fun) (walker535 arg) (\_ -> walker535 fun))
+          in (Maybes.maybe (walker535 arg) (\_ -> walker535 fun) (walker535 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker535 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker535 body) Nothing (\inner -> walker535 inner))
+          in (Maybes.maybe Nothing (\inner -> walker535 inner) (walker535 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9274,13 +9274,13 @@ walker537 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker536 fun) (walker536 arg) (\_ -> walker536 fun))
+          in (Maybes.maybe (walker536 arg) (\_ -> walker536 fun) (walker536 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker536 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker536 body) Nothing (\inner -> walker536 inner))
+          in (Maybes.maybe Nothing (\inner -> walker536 inner) (walker536 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9293,13 +9293,13 @@ walker538 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker537 fun) (walker537 arg) (\_ -> walker537 fun))
+          in (Maybes.maybe (walker537 arg) (\_ -> walker537 fun) (walker537 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker537 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker537 body) Nothing (\inner -> walker537 inner))
+          in (Maybes.maybe Nothing (\inner -> walker537 inner) (walker537 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9312,13 +9312,13 @@ walker539 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker538 fun) (walker538 arg) (\_ -> walker538 fun))
+          in (Maybes.maybe (walker538 arg) (\_ -> walker538 fun) (walker538 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker538 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker538 body) Nothing (\inner -> walker538 inner))
+          in (Maybes.maybe Nothing (\inner -> walker538 inner) (walker538 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9331,13 +9331,13 @@ walker54 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker53 fun) (walker53 arg) (\_ -> walker53 fun))
+          in (Maybes.maybe (walker53 arg) (\_ -> walker53 fun) (walker53 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker53 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker53 body) Nothing (\inner -> walker53 inner))
+          in (Maybes.maybe Nothing (\inner -> walker53 inner) (walker53 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9350,13 +9350,13 @@ walker540 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker539 fun) (walker539 arg) (\_ -> walker539 fun))
+          in (Maybes.maybe (walker539 arg) (\_ -> walker539 fun) (walker539 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker539 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker539 body) Nothing (\inner -> walker539 inner))
+          in (Maybes.maybe Nothing (\inner -> walker539 inner) (walker539 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9369,13 +9369,13 @@ walker541 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker540 fun) (walker540 arg) (\_ -> walker540 fun))
+          in (Maybes.maybe (walker540 arg) (\_ -> walker540 fun) (walker540 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker540 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker540 body) Nothing (\inner -> walker540 inner))
+          in (Maybes.maybe Nothing (\inner -> walker540 inner) (walker540 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9388,13 +9388,13 @@ walker542 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker541 fun) (walker541 arg) (\_ -> walker541 fun))
+          in (Maybes.maybe (walker541 arg) (\_ -> walker541 fun) (walker541 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker541 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker541 body) Nothing (\inner -> walker541 inner))
+          in (Maybes.maybe Nothing (\inner -> walker541 inner) (walker541 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9407,13 +9407,13 @@ walker543 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker542 fun) (walker542 arg) (\_ -> walker542 fun))
+          in (Maybes.maybe (walker542 arg) (\_ -> walker542 fun) (walker542 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker542 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker542 body) Nothing (\inner -> walker542 inner))
+          in (Maybes.maybe Nothing (\inner -> walker542 inner) (walker542 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9426,13 +9426,13 @@ walker544 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker543 fun) (walker543 arg) (\_ -> walker543 fun))
+          in (Maybes.maybe (walker543 arg) (\_ -> walker543 fun) (walker543 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker543 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker543 body) Nothing (\inner -> walker543 inner))
+          in (Maybes.maybe Nothing (\inner -> walker543 inner) (walker543 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9445,13 +9445,13 @@ walker545 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker544 fun) (walker544 arg) (\_ -> walker544 fun))
+          in (Maybes.maybe (walker544 arg) (\_ -> walker544 fun) (walker544 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker544 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker544 body) Nothing (\inner -> walker544 inner))
+          in (Maybes.maybe Nothing (\inner -> walker544 inner) (walker544 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9464,13 +9464,13 @@ walker546 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker545 fun) (walker545 arg) (\_ -> walker545 fun))
+          in (Maybes.maybe (walker545 arg) (\_ -> walker545 fun) (walker545 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker545 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker545 body) Nothing (\inner -> walker545 inner))
+          in (Maybes.maybe Nothing (\inner -> walker545 inner) (walker545 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9483,13 +9483,13 @@ walker547 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker546 fun) (walker546 arg) (\_ -> walker546 fun))
+          in (Maybes.maybe (walker546 arg) (\_ -> walker546 fun) (walker546 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker546 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker546 body) Nothing (\inner -> walker546 inner))
+          in (Maybes.maybe Nothing (\inner -> walker546 inner) (walker546 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9502,13 +9502,13 @@ walker548 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker547 fun) (walker547 arg) (\_ -> walker547 fun))
+          in (Maybes.maybe (walker547 arg) (\_ -> walker547 fun) (walker547 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker547 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker547 body) Nothing (\inner -> walker547 inner))
+          in (Maybes.maybe Nothing (\inner -> walker547 inner) (walker547 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9521,13 +9521,13 @@ walker549 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker548 fun) (walker548 arg) (\_ -> walker548 fun))
+          in (Maybes.maybe (walker548 arg) (\_ -> walker548 fun) (walker548 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker548 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker548 body) Nothing (\inner -> walker548 inner))
+          in (Maybes.maybe Nothing (\inner -> walker548 inner) (walker548 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9540,13 +9540,13 @@ walker55 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker54 fun) (walker54 arg) (\_ -> walker54 fun))
+          in (Maybes.maybe (walker54 arg) (\_ -> walker54 fun) (walker54 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker54 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker54 body) Nothing (\inner -> walker54 inner))
+          in (Maybes.maybe Nothing (\inner -> walker54 inner) (walker54 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9559,13 +9559,13 @@ walker550 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker549 fun) (walker549 arg) (\_ -> walker549 fun))
+          in (Maybes.maybe (walker549 arg) (\_ -> walker549 fun) (walker549 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker549 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker549 body) Nothing (\inner -> walker549 inner))
+          in (Maybes.maybe Nothing (\inner -> walker549 inner) (walker549 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9578,13 +9578,13 @@ walker551 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker550 fun) (walker550 arg) (\_ -> walker550 fun))
+          in (Maybes.maybe (walker550 arg) (\_ -> walker550 fun) (walker550 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker550 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker550 body) Nothing (\inner -> walker550 inner))
+          in (Maybes.maybe Nothing (\inner -> walker550 inner) (walker550 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9597,13 +9597,13 @@ walker552 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker551 fun) (walker551 arg) (\_ -> walker551 fun))
+          in (Maybes.maybe (walker551 arg) (\_ -> walker551 fun) (walker551 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker551 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker551 body) Nothing (\inner -> walker551 inner))
+          in (Maybes.maybe Nothing (\inner -> walker551 inner) (walker551 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9616,13 +9616,13 @@ walker553 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker552 fun) (walker552 arg) (\_ -> walker552 fun))
+          in (Maybes.maybe (walker552 arg) (\_ -> walker552 fun) (walker552 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker552 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker552 body) Nothing (\inner -> walker552 inner))
+          in (Maybes.maybe Nothing (\inner -> walker552 inner) (walker552 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9635,13 +9635,13 @@ walker554 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker553 fun) (walker553 arg) (\_ -> walker553 fun))
+          in (Maybes.maybe (walker553 arg) (\_ -> walker553 fun) (walker553 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker553 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker553 body) Nothing (\inner -> walker553 inner))
+          in (Maybes.maybe Nothing (\inner -> walker553 inner) (walker553 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9654,13 +9654,13 @@ walker555 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker554 fun) (walker554 arg) (\_ -> walker554 fun))
+          in (Maybes.maybe (walker554 arg) (\_ -> walker554 fun) (walker554 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker554 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker554 body) Nothing (\inner -> walker554 inner))
+          in (Maybes.maybe Nothing (\inner -> walker554 inner) (walker554 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9673,13 +9673,13 @@ walker556 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker555 fun) (walker555 arg) (\_ -> walker555 fun))
+          in (Maybes.maybe (walker555 arg) (\_ -> walker555 fun) (walker555 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker555 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker555 body) Nothing (\inner -> walker555 inner))
+          in (Maybes.maybe Nothing (\inner -> walker555 inner) (walker555 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9692,13 +9692,13 @@ walker557 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker556 fun) (walker556 arg) (\_ -> walker556 fun))
+          in (Maybes.maybe (walker556 arg) (\_ -> walker556 fun) (walker556 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker556 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker556 body) Nothing (\inner -> walker556 inner))
+          in (Maybes.maybe Nothing (\inner -> walker556 inner) (walker556 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9711,13 +9711,13 @@ walker558 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker557 fun) (walker557 arg) (\_ -> walker557 fun))
+          in (Maybes.maybe (walker557 arg) (\_ -> walker557 fun) (walker557 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker557 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker557 body) Nothing (\inner -> walker557 inner))
+          in (Maybes.maybe Nothing (\inner -> walker557 inner) (walker557 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9730,13 +9730,13 @@ walker559 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker558 fun) (walker558 arg) (\_ -> walker558 fun))
+          in (Maybes.maybe (walker558 arg) (\_ -> walker558 fun) (walker558 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker558 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker558 body) Nothing (\inner -> walker558 inner))
+          in (Maybes.maybe Nothing (\inner -> walker558 inner) (walker558 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9749,13 +9749,13 @@ walker56 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker55 fun) (walker55 arg) (\_ -> walker55 fun))
+          in (Maybes.maybe (walker55 arg) (\_ -> walker55 fun) (walker55 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker55 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker55 body) Nothing (\inner -> walker55 inner))
+          in (Maybes.maybe Nothing (\inner -> walker55 inner) (walker55 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9768,13 +9768,13 @@ walker560 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker559 fun) (walker559 arg) (\_ -> walker559 fun))
+          in (Maybes.maybe (walker559 arg) (\_ -> walker559 fun) (walker559 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker559 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker559 body) Nothing (\inner -> walker559 inner))
+          in (Maybes.maybe Nothing (\inner -> walker559 inner) (walker559 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9787,13 +9787,13 @@ walker561 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker560 fun) (walker560 arg) (\_ -> walker560 fun))
+          in (Maybes.maybe (walker560 arg) (\_ -> walker560 fun) (walker560 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker560 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker560 body) Nothing (\inner -> walker560 inner))
+          in (Maybes.maybe Nothing (\inner -> walker560 inner) (walker560 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9806,13 +9806,13 @@ walker562 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker561 fun) (walker561 arg) (\_ -> walker561 fun))
+          in (Maybes.maybe (walker561 arg) (\_ -> walker561 fun) (walker561 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker561 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker561 body) Nothing (\inner -> walker561 inner))
+          in (Maybes.maybe Nothing (\inner -> walker561 inner) (walker561 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9825,13 +9825,13 @@ walker563 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker562 fun) (walker562 arg) (\_ -> walker562 fun))
+          in (Maybes.maybe (walker562 arg) (\_ -> walker562 fun) (walker562 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker562 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker562 body) Nothing (\inner -> walker562 inner))
+          in (Maybes.maybe Nothing (\inner -> walker562 inner) (walker562 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9844,13 +9844,13 @@ walker564 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker563 fun) (walker563 arg) (\_ -> walker563 fun))
+          in (Maybes.maybe (walker563 arg) (\_ -> walker563 fun) (walker563 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker563 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker563 body) Nothing (\inner -> walker563 inner))
+          in (Maybes.maybe Nothing (\inner -> walker563 inner) (walker563 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9863,13 +9863,13 @@ walker565 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker564 fun) (walker564 arg) (\_ -> walker564 fun))
+          in (Maybes.maybe (walker564 arg) (\_ -> walker564 fun) (walker564 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker564 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker564 body) Nothing (\inner -> walker564 inner))
+          in (Maybes.maybe Nothing (\inner -> walker564 inner) (walker564 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9882,13 +9882,13 @@ walker566 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker565 fun) (walker565 arg) (\_ -> walker565 fun))
+          in (Maybes.maybe (walker565 arg) (\_ -> walker565 fun) (walker565 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker565 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker565 body) Nothing (\inner -> walker565 inner))
+          in (Maybes.maybe Nothing (\inner -> walker565 inner) (walker565 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9901,13 +9901,13 @@ walker567 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker566 fun) (walker566 arg) (\_ -> walker566 fun))
+          in (Maybes.maybe (walker566 arg) (\_ -> walker566 fun) (walker566 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker566 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker566 body) Nothing (\inner -> walker566 inner))
+          in (Maybes.maybe Nothing (\inner -> walker566 inner) (walker566 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9920,13 +9920,13 @@ walker568 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker567 fun) (walker567 arg) (\_ -> walker567 fun))
+          in (Maybes.maybe (walker567 arg) (\_ -> walker567 fun) (walker567 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker567 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker567 body) Nothing (\inner -> walker567 inner))
+          in (Maybes.maybe Nothing (\inner -> walker567 inner) (walker567 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9939,13 +9939,13 @@ walker569 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker568 fun) (walker568 arg) (\_ -> walker568 fun))
+          in (Maybes.maybe (walker568 arg) (\_ -> walker568 fun) (walker568 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker568 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker568 body) Nothing (\inner -> walker568 inner))
+          in (Maybes.maybe Nothing (\inner -> walker568 inner) (walker568 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9958,13 +9958,13 @@ walker57 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker56 fun) (walker56 arg) (\_ -> walker56 fun))
+          in (Maybes.maybe (walker56 arg) (\_ -> walker56 fun) (walker56 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker56 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker56 body) Nothing (\inner -> walker56 inner))
+          in (Maybes.maybe Nothing (\inner -> walker56 inner) (walker56 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9977,13 +9977,13 @@ walker570 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker569 fun) (walker569 arg) (\_ -> walker569 fun))
+          in (Maybes.maybe (walker569 arg) (\_ -> walker569 fun) (walker569 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker569 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker569 body) Nothing (\inner -> walker569 inner))
+          in (Maybes.maybe Nothing (\inner -> walker569 inner) (walker569 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -9996,13 +9996,13 @@ walker571 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker570 fun) (walker570 arg) (\_ -> walker570 fun))
+          in (Maybes.maybe (walker570 arg) (\_ -> walker570 fun) (walker570 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker570 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker570 body) Nothing (\inner -> walker570 inner))
+          in (Maybes.maybe Nothing (\inner -> walker570 inner) (walker570 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10015,13 +10015,13 @@ walker572 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker571 fun) (walker571 arg) (\_ -> walker571 fun))
+          in (Maybes.maybe (walker571 arg) (\_ -> walker571 fun) (walker571 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker571 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker571 body) Nothing (\inner -> walker571 inner))
+          in (Maybes.maybe Nothing (\inner -> walker571 inner) (walker571 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10034,13 +10034,13 @@ walker573 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker572 fun) (walker572 arg) (\_ -> walker572 fun))
+          in (Maybes.maybe (walker572 arg) (\_ -> walker572 fun) (walker572 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker572 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker572 body) Nothing (\inner -> walker572 inner))
+          in (Maybes.maybe Nothing (\inner -> walker572 inner) (walker572 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10053,13 +10053,13 @@ walker574 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker573 fun) (walker573 arg) (\_ -> walker573 fun))
+          in (Maybes.maybe (walker573 arg) (\_ -> walker573 fun) (walker573 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker573 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker573 body) Nothing (\inner -> walker573 inner))
+          in (Maybes.maybe Nothing (\inner -> walker573 inner) (walker573 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10072,13 +10072,13 @@ walker575 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker574 fun) (walker574 arg) (\_ -> walker574 fun))
+          in (Maybes.maybe (walker574 arg) (\_ -> walker574 fun) (walker574 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker574 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker574 body) Nothing (\inner -> walker574 inner))
+          in (Maybes.maybe Nothing (\inner -> walker574 inner) (walker574 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10091,13 +10091,13 @@ walker576 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker575 fun) (walker575 arg) (\_ -> walker575 fun))
+          in (Maybes.maybe (walker575 arg) (\_ -> walker575 fun) (walker575 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker575 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker575 body) Nothing (\inner -> walker575 inner))
+          in (Maybes.maybe Nothing (\inner -> walker575 inner) (walker575 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10110,13 +10110,13 @@ walker577 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker576 fun) (walker576 arg) (\_ -> walker576 fun))
+          in (Maybes.maybe (walker576 arg) (\_ -> walker576 fun) (walker576 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker576 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker576 body) Nothing (\inner -> walker576 inner))
+          in (Maybes.maybe Nothing (\inner -> walker576 inner) (walker576 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10129,13 +10129,13 @@ walker578 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker577 fun) (walker577 arg) (\_ -> walker577 fun))
+          in (Maybes.maybe (walker577 arg) (\_ -> walker577 fun) (walker577 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker577 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker577 body) Nothing (\inner -> walker577 inner))
+          in (Maybes.maybe Nothing (\inner -> walker577 inner) (walker577 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10148,13 +10148,13 @@ walker579 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker578 fun) (walker578 arg) (\_ -> walker578 fun))
+          in (Maybes.maybe (walker578 arg) (\_ -> walker578 fun) (walker578 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker578 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker578 body) Nothing (\inner -> walker578 inner))
+          in (Maybes.maybe Nothing (\inner -> walker578 inner) (walker578 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10167,13 +10167,13 @@ walker58 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker57 fun) (walker57 arg) (\_ -> walker57 fun))
+          in (Maybes.maybe (walker57 arg) (\_ -> walker57 fun) (walker57 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker57 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker57 body) Nothing (\inner -> walker57 inner))
+          in (Maybes.maybe Nothing (\inner -> walker57 inner) (walker57 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10186,13 +10186,13 @@ walker580 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker579 fun) (walker579 arg) (\_ -> walker579 fun))
+          in (Maybes.maybe (walker579 arg) (\_ -> walker579 fun) (walker579 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker579 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker579 body) Nothing (\inner -> walker579 inner))
+          in (Maybes.maybe Nothing (\inner -> walker579 inner) (walker579 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10205,13 +10205,13 @@ walker581 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker580 fun) (walker580 arg) (\_ -> walker580 fun))
+          in (Maybes.maybe (walker580 arg) (\_ -> walker580 fun) (walker580 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker580 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker580 body) Nothing (\inner -> walker580 inner))
+          in (Maybes.maybe Nothing (\inner -> walker580 inner) (walker580 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10224,13 +10224,13 @@ walker582 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker581 fun) (walker581 arg) (\_ -> walker581 fun))
+          in (Maybes.maybe (walker581 arg) (\_ -> walker581 fun) (walker581 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker581 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker581 body) Nothing (\inner -> walker581 inner))
+          in (Maybes.maybe Nothing (\inner -> walker581 inner) (walker581 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10243,13 +10243,13 @@ walker583 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker582 fun) (walker582 arg) (\_ -> walker582 fun))
+          in (Maybes.maybe (walker582 arg) (\_ -> walker582 fun) (walker582 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker582 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker582 body) Nothing (\inner -> walker582 inner))
+          in (Maybes.maybe Nothing (\inner -> walker582 inner) (walker582 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10262,13 +10262,13 @@ walker584 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker583 fun) (walker583 arg) (\_ -> walker583 fun))
+          in (Maybes.maybe (walker583 arg) (\_ -> walker583 fun) (walker583 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker583 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker583 body) Nothing (\inner -> walker583 inner))
+          in (Maybes.maybe Nothing (\inner -> walker583 inner) (walker583 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10281,13 +10281,13 @@ walker585 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker584 fun) (walker584 arg) (\_ -> walker584 fun))
+          in (Maybes.maybe (walker584 arg) (\_ -> walker584 fun) (walker584 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker584 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker584 body) Nothing (\inner -> walker584 inner))
+          in (Maybes.maybe Nothing (\inner -> walker584 inner) (walker584 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10300,13 +10300,13 @@ walker586 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker585 fun) (walker585 arg) (\_ -> walker585 fun))
+          in (Maybes.maybe (walker585 arg) (\_ -> walker585 fun) (walker585 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker585 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker585 body) Nothing (\inner -> walker585 inner))
+          in (Maybes.maybe Nothing (\inner -> walker585 inner) (walker585 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10319,13 +10319,13 @@ walker587 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker586 fun) (walker586 arg) (\_ -> walker586 fun))
+          in (Maybes.maybe (walker586 arg) (\_ -> walker586 fun) (walker586 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker586 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker586 body) Nothing (\inner -> walker586 inner))
+          in (Maybes.maybe Nothing (\inner -> walker586 inner) (walker586 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10338,13 +10338,13 @@ walker588 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker587 fun) (walker587 arg) (\_ -> walker587 fun))
+          in (Maybes.maybe (walker587 arg) (\_ -> walker587 fun) (walker587 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker587 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker587 body) Nothing (\inner -> walker587 inner))
+          in (Maybes.maybe Nothing (\inner -> walker587 inner) (walker587 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10357,13 +10357,13 @@ walker589 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker588 fun) (walker588 arg) (\_ -> walker588 fun))
+          in (Maybes.maybe (walker588 arg) (\_ -> walker588 fun) (walker588 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker588 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker588 body) Nothing (\inner -> walker588 inner))
+          in (Maybes.maybe Nothing (\inner -> walker588 inner) (walker588 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10376,13 +10376,13 @@ walker59 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker58 fun) (walker58 arg) (\_ -> walker58 fun))
+          in (Maybes.maybe (walker58 arg) (\_ -> walker58 fun) (walker58 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker58 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker58 body) Nothing (\inner -> walker58 inner))
+          in (Maybes.maybe Nothing (\inner -> walker58 inner) (walker58 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10395,13 +10395,13 @@ walker590 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker589 fun) (walker589 arg) (\_ -> walker589 fun))
+          in (Maybes.maybe (walker589 arg) (\_ -> walker589 fun) (walker589 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker589 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker589 body) Nothing (\inner -> walker589 inner))
+          in (Maybes.maybe Nothing (\inner -> walker589 inner) (walker589 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10414,13 +10414,13 @@ walker591 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker590 fun) (walker590 arg) (\_ -> walker590 fun))
+          in (Maybes.maybe (walker590 arg) (\_ -> walker590 fun) (walker590 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker590 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker590 body) Nothing (\inner -> walker590 inner))
+          in (Maybes.maybe Nothing (\inner -> walker590 inner) (walker590 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10433,13 +10433,13 @@ walker592 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker591 fun) (walker591 arg) (\_ -> walker591 fun))
+          in (Maybes.maybe (walker591 arg) (\_ -> walker591 fun) (walker591 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker591 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker591 body) Nothing (\inner -> walker591 inner))
+          in (Maybes.maybe Nothing (\inner -> walker591 inner) (walker591 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10452,13 +10452,13 @@ walker593 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker592 fun) (walker592 arg) (\_ -> walker592 fun))
+          in (Maybes.maybe (walker592 arg) (\_ -> walker592 fun) (walker592 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker592 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker592 body) Nothing (\inner -> walker592 inner))
+          in (Maybes.maybe Nothing (\inner -> walker592 inner) (walker592 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10471,13 +10471,13 @@ walker594 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker593 fun) (walker593 arg) (\_ -> walker593 fun))
+          in (Maybes.maybe (walker593 arg) (\_ -> walker593 fun) (walker593 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker593 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker593 body) Nothing (\inner -> walker593 inner))
+          in (Maybes.maybe Nothing (\inner -> walker593 inner) (walker593 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10490,13 +10490,13 @@ walker595 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker594 fun) (walker594 arg) (\_ -> walker594 fun))
+          in (Maybes.maybe (walker594 arg) (\_ -> walker594 fun) (walker594 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker594 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker594 body) Nothing (\inner -> walker594 inner))
+          in (Maybes.maybe Nothing (\inner -> walker594 inner) (walker594 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10509,13 +10509,13 @@ walker596 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker595 fun) (walker595 arg) (\_ -> walker595 fun))
+          in (Maybes.maybe (walker595 arg) (\_ -> walker595 fun) (walker595 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker595 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker595 body) Nothing (\inner -> walker595 inner))
+          in (Maybes.maybe Nothing (\inner -> walker595 inner) (walker595 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10528,13 +10528,13 @@ walker597 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker596 fun) (walker596 arg) (\_ -> walker596 fun))
+          in (Maybes.maybe (walker596 arg) (\_ -> walker596 fun) (walker596 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker596 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker596 body) Nothing (\inner -> walker596 inner))
+          in (Maybes.maybe Nothing (\inner -> walker596 inner) (walker596 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10547,13 +10547,13 @@ walker598 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker597 fun) (walker597 arg) (\_ -> walker597 fun))
+          in (Maybes.maybe (walker597 arg) (\_ -> walker597 fun) (walker597 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker597 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker597 body) Nothing (\inner -> walker597 inner))
+          in (Maybes.maybe Nothing (\inner -> walker597 inner) (walker597 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10566,13 +10566,13 @@ walker599 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker598 fun) (walker598 arg) (\_ -> walker598 fun))
+          in (Maybes.maybe (walker598 arg) (\_ -> walker598 fun) (walker598 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker598 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker598 body) Nothing (\inner -> walker598 inner))
+          in (Maybes.maybe Nothing (\inner -> walker598 inner) (walker598 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10585,13 +10585,13 @@ walker6 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker5 fun) (walker5 arg) (\_ -> walker5 fun))
+          in (Maybes.maybe (walker5 arg) (\_ -> walker5 fun) (walker5 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker5 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker5 body) Nothing (\inner -> walker5 inner))
+          in (Maybes.maybe Nothing (\inner -> walker5 inner) (walker5 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10604,13 +10604,13 @@ walker60 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker59 fun) (walker59 arg) (\_ -> walker59 fun))
+          in (Maybes.maybe (walker59 arg) (\_ -> walker59 fun) (walker59 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker59 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker59 body) Nothing (\inner -> walker59 inner))
+          in (Maybes.maybe Nothing (\inner -> walker59 inner) (walker59 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10623,13 +10623,13 @@ walker600 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker599 fun) (walker599 arg) (\_ -> walker599 fun))
+          in (Maybes.maybe (walker599 arg) (\_ -> walker599 fun) (walker599 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker599 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker599 body) Nothing (\inner -> walker599 inner))
+          in (Maybes.maybe Nothing (\inner -> walker599 inner) (walker599 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10642,13 +10642,13 @@ walker601 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker600 fun) (walker600 arg) (\_ -> walker600 fun))
+          in (Maybes.maybe (walker600 arg) (\_ -> walker600 fun) (walker600 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker600 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker600 body) Nothing (\inner -> walker600 inner))
+          in (Maybes.maybe Nothing (\inner -> walker600 inner) (walker600 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10661,13 +10661,13 @@ walker602 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker601 fun) (walker601 arg) (\_ -> walker601 fun))
+          in (Maybes.maybe (walker601 arg) (\_ -> walker601 fun) (walker601 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker601 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker601 body) Nothing (\inner -> walker601 inner))
+          in (Maybes.maybe Nothing (\inner -> walker601 inner) (walker601 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10680,13 +10680,13 @@ walker603 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker602 fun) (walker602 arg) (\_ -> walker602 fun))
+          in (Maybes.maybe (walker602 arg) (\_ -> walker602 fun) (walker602 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker602 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker602 body) Nothing (\inner -> walker602 inner))
+          in (Maybes.maybe Nothing (\inner -> walker602 inner) (walker602 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10699,13 +10699,13 @@ walker604 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker603 fun) (walker603 arg) (\_ -> walker603 fun))
+          in (Maybes.maybe (walker603 arg) (\_ -> walker603 fun) (walker603 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker603 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker603 body) Nothing (\inner -> walker603 inner))
+          in (Maybes.maybe Nothing (\inner -> walker603 inner) (walker603 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10718,13 +10718,13 @@ walker605 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker604 fun) (walker604 arg) (\_ -> walker604 fun))
+          in (Maybes.maybe (walker604 arg) (\_ -> walker604 fun) (walker604 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker604 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker604 body) Nothing (\inner -> walker604 inner))
+          in (Maybes.maybe Nothing (\inner -> walker604 inner) (walker604 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10737,13 +10737,13 @@ walker606 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker605 fun) (walker605 arg) (\_ -> walker605 fun))
+          in (Maybes.maybe (walker605 arg) (\_ -> walker605 fun) (walker605 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker605 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker605 body) Nothing (\inner -> walker605 inner))
+          in (Maybes.maybe Nothing (\inner -> walker605 inner) (walker605 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10756,13 +10756,13 @@ walker607 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker606 fun) (walker606 arg) (\_ -> walker606 fun))
+          in (Maybes.maybe (walker606 arg) (\_ -> walker606 fun) (walker606 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker606 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker606 body) Nothing (\inner -> walker606 inner))
+          in (Maybes.maybe Nothing (\inner -> walker606 inner) (walker606 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10775,13 +10775,13 @@ walker608 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker607 fun) (walker607 arg) (\_ -> walker607 fun))
+          in (Maybes.maybe (walker607 arg) (\_ -> walker607 fun) (walker607 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker607 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker607 body) Nothing (\inner -> walker607 inner))
+          in (Maybes.maybe Nothing (\inner -> walker607 inner) (walker607 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10794,13 +10794,13 @@ walker609 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker608 fun) (walker608 arg) (\_ -> walker608 fun))
+          in (Maybes.maybe (walker608 arg) (\_ -> walker608 fun) (walker608 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker608 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker608 body) Nothing (\inner -> walker608 inner))
+          in (Maybes.maybe Nothing (\inner -> walker608 inner) (walker608 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10813,13 +10813,13 @@ walker61 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker60 fun) (walker60 arg) (\_ -> walker60 fun))
+          in (Maybes.maybe (walker60 arg) (\_ -> walker60 fun) (walker60 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker60 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker60 body) Nothing (\inner -> walker60 inner))
+          in (Maybes.maybe Nothing (\inner -> walker60 inner) (walker60 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10832,13 +10832,13 @@ walker610 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker609 fun) (walker609 arg) (\_ -> walker609 fun))
+          in (Maybes.maybe (walker609 arg) (\_ -> walker609 fun) (walker609 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker609 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker609 body) Nothing (\inner -> walker609 inner))
+          in (Maybes.maybe Nothing (\inner -> walker609 inner) (walker609 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10851,13 +10851,13 @@ walker611 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker610 fun) (walker610 arg) (\_ -> walker610 fun))
+          in (Maybes.maybe (walker610 arg) (\_ -> walker610 fun) (walker610 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker610 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker610 body) Nothing (\inner -> walker610 inner))
+          in (Maybes.maybe Nothing (\inner -> walker610 inner) (walker610 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10870,13 +10870,13 @@ walker612 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker611 fun) (walker611 arg) (\_ -> walker611 fun))
+          in (Maybes.maybe (walker611 arg) (\_ -> walker611 fun) (walker611 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker611 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker611 body) Nothing (\inner -> walker611 inner))
+          in (Maybes.maybe Nothing (\inner -> walker611 inner) (walker611 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10889,13 +10889,13 @@ walker613 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker612 fun) (walker612 arg) (\_ -> walker612 fun))
+          in (Maybes.maybe (walker612 arg) (\_ -> walker612 fun) (walker612 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker612 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker612 body) Nothing (\inner -> walker612 inner))
+          in (Maybes.maybe Nothing (\inner -> walker612 inner) (walker612 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10908,13 +10908,13 @@ walker614 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker613 fun) (walker613 arg) (\_ -> walker613 fun))
+          in (Maybes.maybe (walker613 arg) (\_ -> walker613 fun) (walker613 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker613 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker613 body) Nothing (\inner -> walker613 inner))
+          in (Maybes.maybe Nothing (\inner -> walker613 inner) (walker613 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10927,13 +10927,13 @@ walker615 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker614 fun) (walker614 arg) (\_ -> walker614 fun))
+          in (Maybes.maybe (walker614 arg) (\_ -> walker614 fun) (walker614 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker614 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker614 body) Nothing (\inner -> walker614 inner))
+          in (Maybes.maybe Nothing (\inner -> walker614 inner) (walker614 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10946,13 +10946,13 @@ walker616 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker615 fun) (walker615 arg) (\_ -> walker615 fun))
+          in (Maybes.maybe (walker615 arg) (\_ -> walker615 fun) (walker615 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker615 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker615 body) Nothing (\inner -> walker615 inner))
+          in (Maybes.maybe Nothing (\inner -> walker615 inner) (walker615 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10965,13 +10965,13 @@ walker617 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker616 fun) (walker616 arg) (\_ -> walker616 fun))
+          in (Maybes.maybe (walker616 arg) (\_ -> walker616 fun) (walker616 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker616 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker616 body) Nothing (\inner -> walker616 inner))
+          in (Maybes.maybe Nothing (\inner -> walker616 inner) (walker616 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -10984,13 +10984,13 @@ walker618 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker617 fun) (walker617 arg) (\_ -> walker617 fun))
+          in (Maybes.maybe (walker617 arg) (\_ -> walker617 fun) (walker617 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker617 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker617 body) Nothing (\inner -> walker617 inner))
+          in (Maybes.maybe Nothing (\inner -> walker617 inner) (walker617 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11003,13 +11003,13 @@ walker619 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker618 fun) (walker618 arg) (\_ -> walker618 fun))
+          in (Maybes.maybe (walker618 arg) (\_ -> walker618 fun) (walker618 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker618 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker618 body) Nothing (\inner -> walker618 inner))
+          in (Maybes.maybe Nothing (\inner -> walker618 inner) (walker618 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11022,13 +11022,13 @@ walker62 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker61 fun) (walker61 arg) (\_ -> walker61 fun))
+          in (Maybes.maybe (walker61 arg) (\_ -> walker61 fun) (walker61 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker61 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker61 body) Nothing (\inner -> walker61 inner))
+          in (Maybes.maybe Nothing (\inner -> walker61 inner) (walker61 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11041,13 +11041,13 @@ walker620 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker619 fun) (walker619 arg) (\_ -> walker619 fun))
+          in (Maybes.maybe (walker619 arg) (\_ -> walker619 fun) (walker619 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker619 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker619 body) Nothing (\inner -> walker619 inner))
+          in (Maybes.maybe Nothing (\inner -> walker619 inner) (walker619 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11060,13 +11060,13 @@ walker621 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker620 fun) (walker620 arg) (\_ -> walker620 fun))
+          in (Maybes.maybe (walker620 arg) (\_ -> walker620 fun) (walker620 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker620 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker620 body) Nothing (\inner -> walker620 inner))
+          in (Maybes.maybe Nothing (\inner -> walker620 inner) (walker620 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11079,13 +11079,13 @@ walker622 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker621 fun) (walker621 arg) (\_ -> walker621 fun))
+          in (Maybes.maybe (walker621 arg) (\_ -> walker621 fun) (walker621 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker621 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker621 body) Nothing (\inner -> walker621 inner))
+          in (Maybes.maybe Nothing (\inner -> walker621 inner) (walker621 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11098,13 +11098,13 @@ walker623 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker622 fun) (walker622 arg) (\_ -> walker622 fun))
+          in (Maybes.maybe (walker622 arg) (\_ -> walker622 fun) (walker622 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker622 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker622 body) Nothing (\inner -> walker622 inner))
+          in (Maybes.maybe Nothing (\inner -> walker622 inner) (walker622 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11117,13 +11117,13 @@ walker624 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker623 fun) (walker623 arg) (\_ -> walker623 fun))
+          in (Maybes.maybe (walker623 arg) (\_ -> walker623 fun) (walker623 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker623 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker623 body) Nothing (\inner -> walker623 inner))
+          in (Maybes.maybe Nothing (\inner -> walker623 inner) (walker623 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11136,13 +11136,13 @@ walker625 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker624 fun) (walker624 arg) (\_ -> walker624 fun))
+          in (Maybes.maybe (walker624 arg) (\_ -> walker624 fun) (walker624 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker624 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker624 body) Nothing (\inner -> walker624 inner))
+          in (Maybes.maybe Nothing (\inner -> walker624 inner) (walker624 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11155,13 +11155,13 @@ walker626 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker625 fun) (walker625 arg) (\_ -> walker625 fun))
+          in (Maybes.maybe (walker625 arg) (\_ -> walker625 fun) (walker625 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker625 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker625 body) Nothing (\inner -> walker625 inner))
+          in (Maybes.maybe Nothing (\inner -> walker625 inner) (walker625 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11174,13 +11174,13 @@ walker627 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker626 fun) (walker626 arg) (\_ -> walker626 fun))
+          in (Maybes.maybe (walker626 arg) (\_ -> walker626 fun) (walker626 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker626 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker626 body) Nothing (\inner -> walker626 inner))
+          in (Maybes.maybe Nothing (\inner -> walker626 inner) (walker626 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11193,13 +11193,13 @@ walker628 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker627 fun) (walker627 arg) (\_ -> walker627 fun))
+          in (Maybes.maybe (walker627 arg) (\_ -> walker627 fun) (walker627 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker627 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker627 body) Nothing (\inner -> walker627 inner))
+          in (Maybes.maybe Nothing (\inner -> walker627 inner) (walker627 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11212,13 +11212,13 @@ walker629 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker628 fun) (walker628 arg) (\_ -> walker628 fun))
+          in (Maybes.maybe (walker628 arg) (\_ -> walker628 fun) (walker628 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker628 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker628 body) Nothing (\inner -> walker628 inner))
+          in (Maybes.maybe Nothing (\inner -> walker628 inner) (walker628 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11231,13 +11231,13 @@ walker63 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker62 fun) (walker62 arg) (\_ -> walker62 fun))
+          in (Maybes.maybe (walker62 arg) (\_ -> walker62 fun) (walker62 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker62 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker62 body) Nothing (\inner -> walker62 inner))
+          in (Maybes.maybe Nothing (\inner -> walker62 inner) (walker62 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11250,13 +11250,13 @@ walker630 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker629 fun) (walker629 arg) (\_ -> walker629 fun))
+          in (Maybes.maybe (walker629 arg) (\_ -> walker629 fun) (walker629 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker629 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker629 body) Nothing (\inner -> walker629 inner))
+          in (Maybes.maybe Nothing (\inner -> walker629 inner) (walker629 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11269,13 +11269,13 @@ walker631 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker630 fun) (walker630 arg) (\_ -> walker630 fun))
+          in (Maybes.maybe (walker630 arg) (\_ -> walker630 fun) (walker630 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker630 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker630 body) Nothing (\inner -> walker630 inner))
+          in (Maybes.maybe Nothing (\inner -> walker630 inner) (walker630 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11288,13 +11288,13 @@ walker632 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker631 fun) (walker631 arg) (\_ -> walker631 fun))
+          in (Maybes.maybe (walker631 arg) (\_ -> walker631 fun) (walker631 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker631 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker631 body) Nothing (\inner -> walker631 inner))
+          in (Maybes.maybe Nothing (\inner -> walker631 inner) (walker631 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11307,13 +11307,13 @@ walker633 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker632 fun) (walker632 arg) (\_ -> walker632 fun))
+          in (Maybes.maybe (walker632 arg) (\_ -> walker632 fun) (walker632 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker632 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker632 body) Nothing (\inner -> walker632 inner))
+          in (Maybes.maybe Nothing (\inner -> walker632 inner) (walker632 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11326,13 +11326,13 @@ walker634 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker633 fun) (walker633 arg) (\_ -> walker633 fun))
+          in (Maybes.maybe (walker633 arg) (\_ -> walker633 fun) (walker633 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker633 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker633 body) Nothing (\inner -> walker633 inner))
+          in (Maybes.maybe Nothing (\inner -> walker633 inner) (walker633 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11345,13 +11345,13 @@ walker635 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker634 fun) (walker634 arg) (\_ -> walker634 fun))
+          in (Maybes.maybe (walker634 arg) (\_ -> walker634 fun) (walker634 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker634 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker634 body) Nothing (\inner -> walker634 inner))
+          in (Maybes.maybe Nothing (\inner -> walker634 inner) (walker634 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11364,13 +11364,13 @@ walker636 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker635 fun) (walker635 arg) (\_ -> walker635 fun))
+          in (Maybes.maybe (walker635 arg) (\_ -> walker635 fun) (walker635 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker635 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker635 body) Nothing (\inner -> walker635 inner))
+          in (Maybes.maybe Nothing (\inner -> walker635 inner) (walker635 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11383,13 +11383,13 @@ walker637 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker636 fun) (walker636 arg) (\_ -> walker636 fun))
+          in (Maybes.maybe (walker636 arg) (\_ -> walker636 fun) (walker636 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker636 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker636 body) Nothing (\inner -> walker636 inner))
+          in (Maybes.maybe Nothing (\inner -> walker636 inner) (walker636 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11402,13 +11402,13 @@ walker638 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker637 fun) (walker637 arg) (\_ -> walker637 fun))
+          in (Maybes.maybe (walker637 arg) (\_ -> walker637 fun) (walker637 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker637 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker637 body) Nothing (\inner -> walker637 inner))
+          in (Maybes.maybe Nothing (\inner -> walker637 inner) (walker637 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11421,13 +11421,13 @@ walker639 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker638 fun) (walker638 arg) (\_ -> walker638 fun))
+          in (Maybes.maybe (walker638 arg) (\_ -> walker638 fun) (walker638 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker638 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker638 body) Nothing (\inner -> walker638 inner))
+          in (Maybes.maybe Nothing (\inner -> walker638 inner) (walker638 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11440,13 +11440,13 @@ walker64 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker63 fun) (walker63 arg) (\_ -> walker63 fun))
+          in (Maybes.maybe (walker63 arg) (\_ -> walker63 fun) (walker63 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker63 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker63 body) Nothing (\inner -> walker63 inner))
+          in (Maybes.maybe Nothing (\inner -> walker63 inner) (walker63 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11459,13 +11459,13 @@ walker640 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker639 fun) (walker639 arg) (\_ -> walker639 fun))
+          in (Maybes.maybe (walker639 arg) (\_ -> walker639 fun) (walker639 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker639 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker639 body) Nothing (\inner -> walker639 inner))
+          in (Maybes.maybe Nothing (\inner -> walker639 inner) (walker639 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11478,13 +11478,13 @@ walker641 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker640 fun) (walker640 arg) (\_ -> walker640 fun))
+          in (Maybes.maybe (walker640 arg) (\_ -> walker640 fun) (walker640 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker640 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker640 body) Nothing (\inner -> walker640 inner))
+          in (Maybes.maybe Nothing (\inner -> walker640 inner) (walker640 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11497,13 +11497,13 @@ walker642 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker641 fun) (walker641 arg) (\_ -> walker641 fun))
+          in (Maybes.maybe (walker641 arg) (\_ -> walker641 fun) (walker641 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker641 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker641 body) Nothing (\inner -> walker641 inner))
+          in (Maybes.maybe Nothing (\inner -> walker641 inner) (walker641 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11516,13 +11516,13 @@ walker643 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker642 fun) (walker642 arg) (\_ -> walker642 fun))
+          in (Maybes.maybe (walker642 arg) (\_ -> walker642 fun) (walker642 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker642 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker642 body) Nothing (\inner -> walker642 inner))
+          in (Maybes.maybe Nothing (\inner -> walker642 inner) (walker642 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11535,13 +11535,13 @@ walker644 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker643 fun) (walker643 arg) (\_ -> walker643 fun))
+          in (Maybes.maybe (walker643 arg) (\_ -> walker643 fun) (walker643 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker643 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker643 body) Nothing (\inner -> walker643 inner))
+          in (Maybes.maybe Nothing (\inner -> walker643 inner) (walker643 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11554,13 +11554,13 @@ walker645 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker644 fun) (walker644 arg) (\_ -> walker644 fun))
+          in (Maybes.maybe (walker644 arg) (\_ -> walker644 fun) (walker644 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker644 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker644 body) Nothing (\inner -> walker644 inner))
+          in (Maybes.maybe Nothing (\inner -> walker644 inner) (walker644 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11573,13 +11573,13 @@ walker646 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker645 fun) (walker645 arg) (\_ -> walker645 fun))
+          in (Maybes.maybe (walker645 arg) (\_ -> walker645 fun) (walker645 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker645 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker645 body) Nothing (\inner -> walker645 inner))
+          in (Maybes.maybe Nothing (\inner -> walker645 inner) (walker645 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11592,13 +11592,13 @@ walker647 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker646 fun) (walker646 arg) (\_ -> walker646 fun))
+          in (Maybes.maybe (walker646 arg) (\_ -> walker646 fun) (walker646 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker646 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker646 body) Nothing (\inner -> walker646 inner))
+          in (Maybes.maybe Nothing (\inner -> walker646 inner) (walker646 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11611,13 +11611,13 @@ walker648 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker647 fun) (walker647 arg) (\_ -> walker647 fun))
+          in (Maybes.maybe (walker647 arg) (\_ -> walker647 fun) (walker647 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker647 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker647 body) Nothing (\inner -> walker647 inner))
+          in (Maybes.maybe Nothing (\inner -> walker647 inner) (walker647 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11630,13 +11630,13 @@ walker649 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker648 fun) (walker648 arg) (\_ -> walker648 fun))
+          in (Maybes.maybe (walker648 arg) (\_ -> walker648 fun) (walker648 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker648 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker648 body) Nothing (\inner -> walker648 inner))
+          in (Maybes.maybe Nothing (\inner -> walker648 inner) (walker648 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11649,13 +11649,13 @@ walker65 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker64 fun) (walker64 arg) (\_ -> walker64 fun))
+          in (Maybes.maybe (walker64 arg) (\_ -> walker64 fun) (walker64 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker64 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker64 body) Nothing (\inner -> walker64 inner))
+          in (Maybes.maybe Nothing (\inner -> walker64 inner) (walker64 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11668,13 +11668,13 @@ walker650 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker649 fun) (walker649 arg) (\_ -> walker649 fun))
+          in (Maybes.maybe (walker649 arg) (\_ -> walker649 fun) (walker649 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker649 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker649 body) Nothing (\inner -> walker649 inner))
+          in (Maybes.maybe Nothing (\inner -> walker649 inner) (walker649 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11687,13 +11687,13 @@ walker651 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker650 fun) (walker650 arg) (\_ -> walker650 fun))
+          in (Maybes.maybe (walker650 arg) (\_ -> walker650 fun) (walker650 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker650 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker650 body) Nothing (\inner -> walker650 inner))
+          in (Maybes.maybe Nothing (\inner -> walker650 inner) (walker650 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11706,13 +11706,13 @@ walker652 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker651 fun) (walker651 arg) (\_ -> walker651 fun))
+          in (Maybes.maybe (walker651 arg) (\_ -> walker651 fun) (walker651 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker651 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker651 body) Nothing (\inner -> walker651 inner))
+          in (Maybes.maybe Nothing (\inner -> walker651 inner) (walker651 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11725,13 +11725,13 @@ walker653 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker652 fun) (walker652 arg) (\_ -> walker652 fun))
+          in (Maybes.maybe (walker652 arg) (\_ -> walker652 fun) (walker652 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker652 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker652 body) Nothing (\inner -> walker652 inner))
+          in (Maybes.maybe Nothing (\inner -> walker652 inner) (walker652 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11744,13 +11744,13 @@ walker654 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker653 fun) (walker653 arg) (\_ -> walker653 fun))
+          in (Maybes.maybe (walker653 arg) (\_ -> walker653 fun) (walker653 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker653 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker653 body) Nothing (\inner -> walker653 inner))
+          in (Maybes.maybe Nothing (\inner -> walker653 inner) (walker653 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11763,13 +11763,13 @@ walker655 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker654 fun) (walker654 arg) (\_ -> walker654 fun))
+          in (Maybes.maybe (walker654 arg) (\_ -> walker654 fun) (walker654 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker654 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker654 body) Nothing (\inner -> walker654 inner))
+          in (Maybes.maybe Nothing (\inner -> walker654 inner) (walker654 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11782,13 +11782,13 @@ walker656 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker655 fun) (walker655 arg) (\_ -> walker655 fun))
+          in (Maybes.maybe (walker655 arg) (\_ -> walker655 fun) (walker655 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker655 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker655 body) Nothing (\inner -> walker655 inner))
+          in (Maybes.maybe Nothing (\inner -> walker655 inner) (walker655 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11801,13 +11801,13 @@ walker657 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker656 fun) (walker656 arg) (\_ -> walker656 fun))
+          in (Maybes.maybe (walker656 arg) (\_ -> walker656 fun) (walker656 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker656 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker656 body) Nothing (\inner -> walker656 inner))
+          in (Maybes.maybe Nothing (\inner -> walker656 inner) (walker656 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11820,13 +11820,13 @@ walker658 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker657 fun) (walker657 arg) (\_ -> walker657 fun))
+          in (Maybes.maybe (walker657 arg) (\_ -> walker657 fun) (walker657 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker657 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker657 body) Nothing (\inner -> walker657 inner))
+          in (Maybes.maybe Nothing (\inner -> walker657 inner) (walker657 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11839,13 +11839,13 @@ walker659 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker658 fun) (walker658 arg) (\_ -> walker658 fun))
+          in (Maybes.maybe (walker658 arg) (\_ -> walker658 fun) (walker658 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker658 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker658 body) Nothing (\inner -> walker658 inner))
+          in (Maybes.maybe Nothing (\inner -> walker658 inner) (walker658 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11858,13 +11858,13 @@ walker66 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker65 fun) (walker65 arg) (\_ -> walker65 fun))
+          in (Maybes.maybe (walker65 arg) (\_ -> walker65 fun) (walker65 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker65 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker65 body) Nothing (\inner -> walker65 inner))
+          in (Maybes.maybe Nothing (\inner -> walker65 inner) (walker65 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11877,13 +11877,13 @@ walker660 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker659 fun) (walker659 arg) (\_ -> walker659 fun))
+          in (Maybes.maybe (walker659 arg) (\_ -> walker659 fun) (walker659 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker659 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker659 body) Nothing (\inner -> walker659 inner))
+          in (Maybes.maybe Nothing (\inner -> walker659 inner) (walker659 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11896,13 +11896,13 @@ walker661 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker660 fun) (walker660 arg) (\_ -> walker660 fun))
+          in (Maybes.maybe (walker660 arg) (\_ -> walker660 fun) (walker660 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker660 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker660 body) Nothing (\inner -> walker660 inner))
+          in (Maybes.maybe Nothing (\inner -> walker660 inner) (walker660 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11915,13 +11915,13 @@ walker662 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker661 fun) (walker661 arg) (\_ -> walker661 fun))
+          in (Maybes.maybe (walker661 arg) (\_ -> walker661 fun) (walker661 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker661 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker661 body) Nothing (\inner -> walker661 inner))
+          in (Maybes.maybe Nothing (\inner -> walker661 inner) (walker661 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11934,13 +11934,13 @@ walker663 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker662 fun) (walker662 arg) (\_ -> walker662 fun))
+          in (Maybes.maybe (walker662 arg) (\_ -> walker662 fun) (walker662 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker662 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker662 body) Nothing (\inner -> walker662 inner))
+          in (Maybes.maybe Nothing (\inner -> walker662 inner) (walker662 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11953,13 +11953,13 @@ walker664 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker663 fun) (walker663 arg) (\_ -> walker663 fun))
+          in (Maybes.maybe (walker663 arg) (\_ -> walker663 fun) (walker663 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker663 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker663 body) Nothing (\inner -> walker663 inner))
+          in (Maybes.maybe Nothing (\inner -> walker663 inner) (walker663 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11972,13 +11972,13 @@ walker665 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker664 fun) (walker664 arg) (\_ -> walker664 fun))
+          in (Maybes.maybe (walker664 arg) (\_ -> walker664 fun) (walker664 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker664 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker664 body) Nothing (\inner -> walker664 inner))
+          in (Maybes.maybe Nothing (\inner -> walker664 inner) (walker664 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -11991,13 +11991,13 @@ walker666 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker665 fun) (walker665 arg) (\_ -> walker665 fun))
+          in (Maybes.maybe (walker665 arg) (\_ -> walker665 fun) (walker665 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker665 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker665 body) Nothing (\inner -> walker665 inner))
+          in (Maybes.maybe Nothing (\inner -> walker665 inner) (walker665 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12010,13 +12010,13 @@ walker667 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker666 fun) (walker666 arg) (\_ -> walker666 fun))
+          in (Maybes.maybe (walker666 arg) (\_ -> walker666 fun) (walker666 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker666 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker666 body) Nothing (\inner -> walker666 inner))
+          in (Maybes.maybe Nothing (\inner -> walker666 inner) (walker666 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12029,13 +12029,13 @@ walker668 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker667 fun) (walker667 arg) (\_ -> walker667 fun))
+          in (Maybes.maybe (walker667 arg) (\_ -> walker667 fun) (walker667 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker667 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker667 body) Nothing (\inner -> walker667 inner))
+          in (Maybes.maybe Nothing (\inner -> walker667 inner) (walker667 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12048,13 +12048,13 @@ walker669 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker668 fun) (walker668 arg) (\_ -> walker668 fun))
+          in (Maybes.maybe (walker668 arg) (\_ -> walker668 fun) (walker668 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker668 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker668 body) Nothing (\inner -> walker668 inner))
+          in (Maybes.maybe Nothing (\inner -> walker668 inner) (walker668 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12067,13 +12067,13 @@ walker67 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker66 fun) (walker66 arg) (\_ -> walker66 fun))
+          in (Maybes.maybe (walker66 arg) (\_ -> walker66 fun) (walker66 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker66 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker66 body) Nothing (\inner -> walker66 inner))
+          in (Maybes.maybe Nothing (\inner -> walker66 inner) (walker66 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12086,13 +12086,13 @@ walker670 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker669 fun) (walker669 arg) (\_ -> walker669 fun))
+          in (Maybes.maybe (walker669 arg) (\_ -> walker669 fun) (walker669 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker669 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker669 body) Nothing (\inner -> walker669 inner))
+          in (Maybes.maybe Nothing (\inner -> walker669 inner) (walker669 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12105,13 +12105,13 @@ walker671 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker670 fun) (walker670 arg) (\_ -> walker670 fun))
+          in (Maybes.maybe (walker670 arg) (\_ -> walker670 fun) (walker670 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker670 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker670 body) Nothing (\inner -> walker670 inner))
+          in (Maybes.maybe Nothing (\inner -> walker670 inner) (walker670 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12124,13 +12124,13 @@ walker672 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker671 fun) (walker671 arg) (\_ -> walker671 fun))
+          in (Maybes.maybe (walker671 arg) (\_ -> walker671 fun) (walker671 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker671 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker671 body) Nothing (\inner -> walker671 inner))
+          in (Maybes.maybe Nothing (\inner -> walker671 inner) (walker671 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12143,13 +12143,13 @@ walker673 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker672 fun) (walker672 arg) (\_ -> walker672 fun))
+          in (Maybes.maybe (walker672 arg) (\_ -> walker672 fun) (walker672 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker672 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker672 body) Nothing (\inner -> walker672 inner))
+          in (Maybes.maybe Nothing (\inner -> walker672 inner) (walker672 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12162,13 +12162,13 @@ walker674 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker673 fun) (walker673 arg) (\_ -> walker673 fun))
+          in (Maybes.maybe (walker673 arg) (\_ -> walker673 fun) (walker673 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker673 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker673 body) Nothing (\inner -> walker673 inner))
+          in (Maybes.maybe Nothing (\inner -> walker673 inner) (walker673 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12181,13 +12181,13 @@ walker675 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker674 fun) (walker674 arg) (\_ -> walker674 fun))
+          in (Maybes.maybe (walker674 arg) (\_ -> walker674 fun) (walker674 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker674 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker674 body) Nothing (\inner -> walker674 inner))
+          in (Maybes.maybe Nothing (\inner -> walker674 inner) (walker674 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12200,13 +12200,13 @@ walker676 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker675 fun) (walker675 arg) (\_ -> walker675 fun))
+          in (Maybes.maybe (walker675 arg) (\_ -> walker675 fun) (walker675 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker675 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker675 body) Nothing (\inner -> walker675 inner))
+          in (Maybes.maybe Nothing (\inner -> walker675 inner) (walker675 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12219,13 +12219,13 @@ walker677 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker676 fun) (walker676 arg) (\_ -> walker676 fun))
+          in (Maybes.maybe (walker676 arg) (\_ -> walker676 fun) (walker676 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker676 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker676 body) Nothing (\inner -> walker676 inner))
+          in (Maybes.maybe Nothing (\inner -> walker676 inner) (walker676 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12238,13 +12238,13 @@ walker678 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker677 fun) (walker677 arg) (\_ -> walker677 fun))
+          in (Maybes.maybe (walker677 arg) (\_ -> walker677 fun) (walker677 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker677 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker677 body) Nothing (\inner -> walker677 inner))
+          in (Maybes.maybe Nothing (\inner -> walker677 inner) (walker677 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12257,13 +12257,13 @@ walker679 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker678 fun) (walker678 arg) (\_ -> walker678 fun))
+          in (Maybes.maybe (walker678 arg) (\_ -> walker678 fun) (walker678 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker678 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker678 body) Nothing (\inner -> walker678 inner))
+          in (Maybes.maybe Nothing (\inner -> walker678 inner) (walker678 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12276,13 +12276,13 @@ walker68 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker67 fun) (walker67 arg) (\_ -> walker67 fun))
+          in (Maybes.maybe (walker67 arg) (\_ -> walker67 fun) (walker67 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker67 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker67 body) Nothing (\inner -> walker67 inner))
+          in (Maybes.maybe Nothing (\inner -> walker67 inner) (walker67 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12295,13 +12295,13 @@ walker680 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker679 fun) (walker679 arg) (\_ -> walker679 fun))
+          in (Maybes.maybe (walker679 arg) (\_ -> walker679 fun) (walker679 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker679 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker679 body) Nothing (\inner -> walker679 inner))
+          in (Maybes.maybe Nothing (\inner -> walker679 inner) (walker679 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12314,13 +12314,13 @@ walker681 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker680 fun) (walker680 arg) (\_ -> walker680 fun))
+          in (Maybes.maybe (walker680 arg) (\_ -> walker680 fun) (walker680 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker680 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker680 body) Nothing (\inner -> walker680 inner))
+          in (Maybes.maybe Nothing (\inner -> walker680 inner) (walker680 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12333,13 +12333,13 @@ walker682 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker681 fun) (walker681 arg) (\_ -> walker681 fun))
+          in (Maybes.maybe (walker681 arg) (\_ -> walker681 fun) (walker681 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker681 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker681 body) Nothing (\inner -> walker681 inner))
+          in (Maybes.maybe Nothing (\inner -> walker681 inner) (walker681 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12352,13 +12352,13 @@ walker683 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker682 fun) (walker682 arg) (\_ -> walker682 fun))
+          in (Maybes.maybe (walker682 arg) (\_ -> walker682 fun) (walker682 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker682 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker682 body) Nothing (\inner -> walker682 inner))
+          in (Maybes.maybe Nothing (\inner -> walker682 inner) (walker682 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12371,13 +12371,13 @@ walker684 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker683 fun) (walker683 arg) (\_ -> walker683 fun))
+          in (Maybes.maybe (walker683 arg) (\_ -> walker683 fun) (walker683 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker683 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker683 body) Nothing (\inner -> walker683 inner))
+          in (Maybes.maybe Nothing (\inner -> walker683 inner) (walker683 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12390,13 +12390,13 @@ walker685 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker684 fun) (walker684 arg) (\_ -> walker684 fun))
+          in (Maybes.maybe (walker684 arg) (\_ -> walker684 fun) (walker684 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker684 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker684 body) Nothing (\inner -> walker684 inner))
+          in (Maybes.maybe Nothing (\inner -> walker684 inner) (walker684 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12409,13 +12409,13 @@ walker686 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker685 fun) (walker685 arg) (\_ -> walker685 fun))
+          in (Maybes.maybe (walker685 arg) (\_ -> walker685 fun) (walker685 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker685 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker685 body) Nothing (\inner -> walker685 inner))
+          in (Maybes.maybe Nothing (\inner -> walker685 inner) (walker685 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12428,13 +12428,13 @@ walker687 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker686 fun) (walker686 arg) (\_ -> walker686 fun))
+          in (Maybes.maybe (walker686 arg) (\_ -> walker686 fun) (walker686 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker686 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker686 body) Nothing (\inner -> walker686 inner))
+          in (Maybes.maybe Nothing (\inner -> walker686 inner) (walker686 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12447,13 +12447,13 @@ walker688 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker687 fun) (walker687 arg) (\_ -> walker687 fun))
+          in (Maybes.maybe (walker687 arg) (\_ -> walker687 fun) (walker687 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker687 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker687 body) Nothing (\inner -> walker687 inner))
+          in (Maybes.maybe Nothing (\inner -> walker687 inner) (walker687 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12466,13 +12466,13 @@ walker689 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker688 fun) (walker688 arg) (\_ -> walker688 fun))
+          in (Maybes.maybe (walker688 arg) (\_ -> walker688 fun) (walker688 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker688 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker688 body) Nothing (\inner -> walker688 inner))
+          in (Maybes.maybe Nothing (\inner -> walker688 inner) (walker688 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12485,13 +12485,13 @@ walker69 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker68 fun) (walker68 arg) (\_ -> walker68 fun))
+          in (Maybes.maybe (walker68 arg) (\_ -> walker68 fun) (walker68 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker68 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker68 body) Nothing (\inner -> walker68 inner))
+          in (Maybes.maybe Nothing (\inner -> walker68 inner) (walker68 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12504,13 +12504,13 @@ walker690 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker689 fun) (walker689 arg) (\_ -> walker689 fun))
+          in (Maybes.maybe (walker689 arg) (\_ -> walker689 fun) (walker689 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker689 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker689 body) Nothing (\inner -> walker689 inner))
+          in (Maybes.maybe Nothing (\inner -> walker689 inner) (walker689 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12523,13 +12523,13 @@ walker691 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker690 fun) (walker690 arg) (\_ -> walker690 fun))
+          in (Maybes.maybe (walker690 arg) (\_ -> walker690 fun) (walker690 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker690 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker690 body) Nothing (\inner -> walker690 inner))
+          in (Maybes.maybe Nothing (\inner -> walker690 inner) (walker690 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12542,13 +12542,13 @@ walker692 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker691 fun) (walker691 arg) (\_ -> walker691 fun))
+          in (Maybes.maybe (walker691 arg) (\_ -> walker691 fun) (walker691 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker691 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker691 body) Nothing (\inner -> walker691 inner))
+          in (Maybes.maybe Nothing (\inner -> walker691 inner) (walker691 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12561,13 +12561,13 @@ walker693 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker692 fun) (walker692 arg) (\_ -> walker692 fun))
+          in (Maybes.maybe (walker692 arg) (\_ -> walker692 fun) (walker692 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker692 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker692 body) Nothing (\inner -> walker692 inner))
+          in (Maybes.maybe Nothing (\inner -> walker692 inner) (walker692 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12580,13 +12580,13 @@ walker694 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker693 fun) (walker693 arg) (\_ -> walker693 fun))
+          in (Maybes.maybe (walker693 arg) (\_ -> walker693 fun) (walker693 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker693 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker693 body) Nothing (\inner -> walker693 inner))
+          in (Maybes.maybe Nothing (\inner -> walker693 inner) (walker693 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12599,13 +12599,13 @@ walker695 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker694 fun) (walker694 arg) (\_ -> walker694 fun))
+          in (Maybes.maybe (walker694 arg) (\_ -> walker694 fun) (walker694 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker694 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker694 body) Nothing (\inner -> walker694 inner))
+          in (Maybes.maybe Nothing (\inner -> walker694 inner) (walker694 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12618,13 +12618,13 @@ walker696 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker695 fun) (walker695 arg) (\_ -> walker695 fun))
+          in (Maybes.maybe (walker695 arg) (\_ -> walker695 fun) (walker695 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker695 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker695 body) Nothing (\inner -> walker695 inner))
+          in (Maybes.maybe Nothing (\inner -> walker695 inner) (walker695 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12637,13 +12637,13 @@ walker697 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker696 fun) (walker696 arg) (\_ -> walker696 fun))
+          in (Maybes.maybe (walker696 arg) (\_ -> walker696 fun) (walker696 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker696 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker696 body) Nothing (\inner -> walker696 inner))
+          in (Maybes.maybe Nothing (\inner -> walker696 inner) (walker696 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12656,13 +12656,13 @@ walker698 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker697 fun) (walker697 arg) (\_ -> walker697 fun))
+          in (Maybes.maybe (walker697 arg) (\_ -> walker697 fun) (walker697 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker697 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker697 body) Nothing (\inner -> walker697 inner))
+          in (Maybes.maybe Nothing (\inner -> walker697 inner) (walker697 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12675,13 +12675,13 @@ walker699 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker698 fun) (walker698 arg) (\_ -> walker698 fun))
+          in (Maybes.maybe (walker698 arg) (\_ -> walker698 fun) (walker698 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker698 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker698 body) Nothing (\inner -> walker698 inner))
+          in (Maybes.maybe Nothing (\inner -> walker698 inner) (walker698 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12694,13 +12694,13 @@ walker7 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker6 fun) (walker6 arg) (\_ -> walker6 fun))
+          in (Maybes.maybe (walker6 arg) (\_ -> walker6 fun) (walker6 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker6 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker6 body) Nothing (\inner -> walker6 inner))
+          in (Maybes.maybe Nothing (\inner -> walker6 inner) (walker6 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12713,13 +12713,13 @@ walker70 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker69 fun) (walker69 arg) (\_ -> walker69 fun))
+          in (Maybes.maybe (walker69 arg) (\_ -> walker69 fun) (walker69 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker69 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker69 body) Nothing (\inner -> walker69 inner))
+          in (Maybes.maybe Nothing (\inner -> walker69 inner) (walker69 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12732,13 +12732,13 @@ walker700 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker699 fun) (walker699 arg) (\_ -> walker699 fun))
+          in (Maybes.maybe (walker699 arg) (\_ -> walker699 fun) (walker699 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker699 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker699 body) Nothing (\inner -> walker699 inner))
+          in (Maybes.maybe Nothing (\inner -> walker699 inner) (walker699 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12751,13 +12751,13 @@ walker701 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker700 fun) (walker700 arg) (\_ -> walker700 fun))
+          in (Maybes.maybe (walker700 arg) (\_ -> walker700 fun) (walker700 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker700 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker700 body) Nothing (\inner -> walker700 inner))
+          in (Maybes.maybe Nothing (\inner -> walker700 inner) (walker700 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12770,13 +12770,13 @@ walker702 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker701 fun) (walker701 arg) (\_ -> walker701 fun))
+          in (Maybes.maybe (walker701 arg) (\_ -> walker701 fun) (walker701 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker701 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker701 body) Nothing (\inner -> walker701 inner))
+          in (Maybes.maybe Nothing (\inner -> walker701 inner) (walker701 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12789,13 +12789,13 @@ walker703 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker702 fun) (walker702 arg) (\_ -> walker702 fun))
+          in (Maybes.maybe (walker702 arg) (\_ -> walker702 fun) (walker702 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker702 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker702 body) Nothing (\inner -> walker702 inner))
+          in (Maybes.maybe Nothing (\inner -> walker702 inner) (walker702 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12808,13 +12808,13 @@ walker704 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker703 fun) (walker703 arg) (\_ -> walker703 fun))
+          in (Maybes.maybe (walker703 arg) (\_ -> walker703 fun) (walker703 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker703 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker703 body) Nothing (\inner -> walker703 inner))
+          in (Maybes.maybe Nothing (\inner -> walker703 inner) (walker703 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12827,13 +12827,13 @@ walker705 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker704 fun) (walker704 arg) (\_ -> walker704 fun))
+          in (Maybes.maybe (walker704 arg) (\_ -> walker704 fun) (walker704 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker704 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker704 body) Nothing (\inner -> walker704 inner))
+          in (Maybes.maybe Nothing (\inner -> walker704 inner) (walker704 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12846,13 +12846,13 @@ walker706 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker705 fun) (walker705 arg) (\_ -> walker705 fun))
+          in (Maybes.maybe (walker705 arg) (\_ -> walker705 fun) (walker705 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker705 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker705 body) Nothing (\inner -> walker705 inner))
+          in (Maybes.maybe Nothing (\inner -> walker705 inner) (walker705 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12865,13 +12865,13 @@ walker707 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker706 fun) (walker706 arg) (\_ -> walker706 fun))
+          in (Maybes.maybe (walker706 arg) (\_ -> walker706 fun) (walker706 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker706 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker706 body) Nothing (\inner -> walker706 inner))
+          in (Maybes.maybe Nothing (\inner -> walker706 inner) (walker706 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12884,13 +12884,13 @@ walker708 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker707 fun) (walker707 arg) (\_ -> walker707 fun))
+          in (Maybes.maybe (walker707 arg) (\_ -> walker707 fun) (walker707 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker707 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker707 body) Nothing (\inner -> walker707 inner))
+          in (Maybes.maybe Nothing (\inner -> walker707 inner) (walker707 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12903,13 +12903,13 @@ walker709 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker708 fun) (walker708 arg) (\_ -> walker708 fun))
+          in (Maybes.maybe (walker708 arg) (\_ -> walker708 fun) (walker708 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker708 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker708 body) Nothing (\inner -> walker708 inner))
+          in (Maybes.maybe Nothing (\inner -> walker708 inner) (walker708 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12922,13 +12922,13 @@ walker71 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker70 fun) (walker70 arg) (\_ -> walker70 fun))
+          in (Maybes.maybe (walker70 arg) (\_ -> walker70 fun) (walker70 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker70 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker70 body) Nothing (\inner -> walker70 inner))
+          in (Maybes.maybe Nothing (\inner -> walker70 inner) (walker70 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12941,13 +12941,13 @@ walker710 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker709 fun) (walker709 arg) (\_ -> walker709 fun))
+          in (Maybes.maybe (walker709 arg) (\_ -> walker709 fun) (walker709 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker709 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker709 body) Nothing (\inner -> walker709 inner))
+          in (Maybes.maybe Nothing (\inner -> walker709 inner) (walker709 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12960,13 +12960,13 @@ walker711 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker710 fun) (walker710 arg) (\_ -> walker710 fun))
+          in (Maybes.maybe (walker710 arg) (\_ -> walker710 fun) (walker710 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker710 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker710 body) Nothing (\inner -> walker710 inner))
+          in (Maybes.maybe Nothing (\inner -> walker710 inner) (walker710 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12979,13 +12979,13 @@ walker712 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker711 fun) (walker711 arg) (\_ -> walker711 fun))
+          in (Maybes.maybe (walker711 arg) (\_ -> walker711 fun) (walker711 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker711 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker711 body) Nothing (\inner -> walker711 inner))
+          in (Maybes.maybe Nothing (\inner -> walker711 inner) (walker711 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -12998,13 +12998,13 @@ walker713 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker712 fun) (walker712 arg) (\_ -> walker712 fun))
+          in (Maybes.maybe (walker712 arg) (\_ -> walker712 fun) (walker712 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker712 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker712 body) Nothing (\inner -> walker712 inner))
+          in (Maybes.maybe Nothing (\inner -> walker712 inner) (walker712 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13017,13 +13017,13 @@ walker714 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker713 fun) (walker713 arg) (\_ -> walker713 fun))
+          in (Maybes.maybe (walker713 arg) (\_ -> walker713 fun) (walker713 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker713 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker713 body) Nothing (\inner -> walker713 inner))
+          in (Maybes.maybe Nothing (\inner -> walker713 inner) (walker713 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13036,13 +13036,13 @@ walker715 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker714 fun) (walker714 arg) (\_ -> walker714 fun))
+          in (Maybes.maybe (walker714 arg) (\_ -> walker714 fun) (walker714 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker714 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker714 body) Nothing (\inner -> walker714 inner))
+          in (Maybes.maybe Nothing (\inner -> walker714 inner) (walker714 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13055,13 +13055,13 @@ walker716 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker715 fun) (walker715 arg) (\_ -> walker715 fun))
+          in (Maybes.maybe (walker715 arg) (\_ -> walker715 fun) (walker715 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker715 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker715 body) Nothing (\inner -> walker715 inner))
+          in (Maybes.maybe Nothing (\inner -> walker715 inner) (walker715 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13074,13 +13074,13 @@ walker717 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker716 fun) (walker716 arg) (\_ -> walker716 fun))
+          in (Maybes.maybe (walker716 arg) (\_ -> walker716 fun) (walker716 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker716 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker716 body) Nothing (\inner -> walker716 inner))
+          in (Maybes.maybe Nothing (\inner -> walker716 inner) (walker716 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13093,13 +13093,13 @@ walker718 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker717 fun) (walker717 arg) (\_ -> walker717 fun))
+          in (Maybes.maybe (walker717 arg) (\_ -> walker717 fun) (walker717 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker717 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker717 body) Nothing (\inner -> walker717 inner))
+          in (Maybes.maybe Nothing (\inner -> walker717 inner) (walker717 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13112,13 +13112,13 @@ walker719 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker718 fun) (walker718 arg) (\_ -> walker718 fun))
+          in (Maybes.maybe (walker718 arg) (\_ -> walker718 fun) (walker718 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker718 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker718 body) Nothing (\inner -> walker718 inner))
+          in (Maybes.maybe Nothing (\inner -> walker718 inner) (walker718 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13131,13 +13131,13 @@ walker72 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker71 fun) (walker71 arg) (\_ -> walker71 fun))
+          in (Maybes.maybe (walker71 arg) (\_ -> walker71 fun) (walker71 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker71 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker71 body) Nothing (\inner -> walker71 inner))
+          in (Maybes.maybe Nothing (\inner -> walker71 inner) (walker71 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13150,13 +13150,13 @@ walker720 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker719 fun) (walker719 arg) (\_ -> walker719 fun))
+          in (Maybes.maybe (walker719 arg) (\_ -> walker719 fun) (walker719 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker719 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker719 body) Nothing (\inner -> walker719 inner))
+          in (Maybes.maybe Nothing (\inner -> walker719 inner) (walker719 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13169,13 +13169,13 @@ walker721 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker720 fun) (walker720 arg) (\_ -> walker720 fun))
+          in (Maybes.maybe (walker720 arg) (\_ -> walker720 fun) (walker720 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker720 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker720 body) Nothing (\inner -> walker720 inner))
+          in (Maybes.maybe Nothing (\inner -> walker720 inner) (walker720 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13188,13 +13188,13 @@ walker722 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker721 fun) (walker721 arg) (\_ -> walker721 fun))
+          in (Maybes.maybe (walker721 arg) (\_ -> walker721 fun) (walker721 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker721 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker721 body) Nothing (\inner -> walker721 inner))
+          in (Maybes.maybe Nothing (\inner -> walker721 inner) (walker721 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13207,13 +13207,13 @@ walker723 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker722 fun) (walker722 arg) (\_ -> walker722 fun))
+          in (Maybes.maybe (walker722 arg) (\_ -> walker722 fun) (walker722 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker722 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker722 body) Nothing (\inner -> walker722 inner))
+          in (Maybes.maybe Nothing (\inner -> walker722 inner) (walker722 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13226,13 +13226,13 @@ walker724 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker723 fun) (walker723 arg) (\_ -> walker723 fun))
+          in (Maybes.maybe (walker723 arg) (\_ -> walker723 fun) (walker723 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker723 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker723 body) Nothing (\inner -> walker723 inner))
+          in (Maybes.maybe Nothing (\inner -> walker723 inner) (walker723 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13245,13 +13245,13 @@ walker725 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker724 fun) (walker724 arg) (\_ -> walker724 fun))
+          in (Maybes.maybe (walker724 arg) (\_ -> walker724 fun) (walker724 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker724 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker724 body) Nothing (\inner -> walker724 inner))
+          in (Maybes.maybe Nothing (\inner -> walker724 inner) (walker724 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13264,13 +13264,13 @@ walker726 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker725 fun) (walker725 arg) (\_ -> walker725 fun))
+          in (Maybes.maybe (walker725 arg) (\_ -> walker725 fun) (walker725 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker725 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker725 body) Nothing (\inner -> walker725 inner))
+          in (Maybes.maybe Nothing (\inner -> walker725 inner) (walker725 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13283,13 +13283,13 @@ walker727 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker726 fun) (walker726 arg) (\_ -> walker726 fun))
+          in (Maybes.maybe (walker726 arg) (\_ -> walker726 fun) (walker726 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker726 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker726 body) Nothing (\inner -> walker726 inner))
+          in (Maybes.maybe Nothing (\inner -> walker726 inner) (walker726 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13302,13 +13302,13 @@ walker728 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker727 fun) (walker727 arg) (\_ -> walker727 fun))
+          in (Maybes.maybe (walker727 arg) (\_ -> walker727 fun) (walker727 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker727 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker727 body) Nothing (\inner -> walker727 inner))
+          in (Maybes.maybe Nothing (\inner -> walker727 inner) (walker727 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13321,13 +13321,13 @@ walker729 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker728 fun) (walker728 arg) (\_ -> walker728 fun))
+          in (Maybes.maybe (walker728 arg) (\_ -> walker728 fun) (walker728 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker728 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker728 body) Nothing (\inner -> walker728 inner))
+          in (Maybes.maybe Nothing (\inner -> walker728 inner) (walker728 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13340,13 +13340,13 @@ walker73 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker72 fun) (walker72 arg) (\_ -> walker72 fun))
+          in (Maybes.maybe (walker72 arg) (\_ -> walker72 fun) (walker72 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker72 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker72 body) Nothing (\inner -> walker72 inner))
+          in (Maybes.maybe Nothing (\inner -> walker72 inner) (walker72 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13359,13 +13359,13 @@ walker730 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker729 fun) (walker729 arg) (\_ -> walker729 fun))
+          in (Maybes.maybe (walker729 arg) (\_ -> walker729 fun) (walker729 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker729 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker729 body) Nothing (\inner -> walker729 inner))
+          in (Maybes.maybe Nothing (\inner -> walker729 inner) (walker729 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13378,13 +13378,13 @@ walker731 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker730 fun) (walker730 arg) (\_ -> walker730 fun))
+          in (Maybes.maybe (walker730 arg) (\_ -> walker730 fun) (walker730 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker730 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker730 body) Nothing (\inner -> walker730 inner))
+          in (Maybes.maybe Nothing (\inner -> walker730 inner) (walker730 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13397,13 +13397,13 @@ walker732 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker731 fun) (walker731 arg) (\_ -> walker731 fun))
+          in (Maybes.maybe (walker731 arg) (\_ -> walker731 fun) (walker731 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker731 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker731 body) Nothing (\inner -> walker731 inner))
+          in (Maybes.maybe Nothing (\inner -> walker731 inner) (walker731 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13416,13 +13416,13 @@ walker733 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker732 fun) (walker732 arg) (\_ -> walker732 fun))
+          in (Maybes.maybe (walker732 arg) (\_ -> walker732 fun) (walker732 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker732 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker732 body) Nothing (\inner -> walker732 inner))
+          in (Maybes.maybe Nothing (\inner -> walker732 inner) (walker732 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13435,13 +13435,13 @@ walker734 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker733 fun) (walker733 arg) (\_ -> walker733 fun))
+          in (Maybes.maybe (walker733 arg) (\_ -> walker733 fun) (walker733 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker733 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker733 body) Nothing (\inner -> walker733 inner))
+          in (Maybes.maybe Nothing (\inner -> walker733 inner) (walker733 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13454,13 +13454,13 @@ walker735 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker734 fun) (walker734 arg) (\_ -> walker734 fun))
+          in (Maybes.maybe (walker734 arg) (\_ -> walker734 fun) (walker734 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker734 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker734 body) Nothing (\inner -> walker734 inner))
+          in (Maybes.maybe Nothing (\inner -> walker734 inner) (walker734 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13473,13 +13473,13 @@ walker736 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker735 fun) (walker735 arg) (\_ -> walker735 fun))
+          in (Maybes.maybe (walker735 arg) (\_ -> walker735 fun) (walker735 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker735 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker735 body) Nothing (\inner -> walker735 inner))
+          in (Maybes.maybe Nothing (\inner -> walker735 inner) (walker735 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13492,13 +13492,13 @@ walker737 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker736 fun) (walker736 arg) (\_ -> walker736 fun))
+          in (Maybes.maybe (walker736 arg) (\_ -> walker736 fun) (walker736 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker736 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker736 body) Nothing (\inner -> walker736 inner))
+          in (Maybes.maybe Nothing (\inner -> walker736 inner) (walker736 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13511,13 +13511,13 @@ walker738 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker737 fun) (walker737 arg) (\_ -> walker737 fun))
+          in (Maybes.maybe (walker737 arg) (\_ -> walker737 fun) (walker737 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker737 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker737 body) Nothing (\inner -> walker737 inner))
+          in (Maybes.maybe Nothing (\inner -> walker737 inner) (walker737 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13530,13 +13530,13 @@ walker739 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker738 fun) (walker738 arg) (\_ -> walker738 fun))
+          in (Maybes.maybe (walker738 arg) (\_ -> walker738 fun) (walker738 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker738 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker738 body) Nothing (\inner -> walker738 inner))
+          in (Maybes.maybe Nothing (\inner -> walker738 inner) (walker738 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13549,13 +13549,13 @@ walker74 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker73 fun) (walker73 arg) (\_ -> walker73 fun))
+          in (Maybes.maybe (walker73 arg) (\_ -> walker73 fun) (walker73 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker73 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker73 body) Nothing (\inner -> walker73 inner))
+          in (Maybes.maybe Nothing (\inner -> walker73 inner) (walker73 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13568,13 +13568,13 @@ walker740 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker739 fun) (walker739 arg) (\_ -> walker739 fun))
+          in (Maybes.maybe (walker739 arg) (\_ -> walker739 fun) (walker739 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker739 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker739 body) Nothing (\inner -> walker739 inner))
+          in (Maybes.maybe Nothing (\inner -> walker739 inner) (walker739 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13587,13 +13587,13 @@ walker741 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker740 fun) (walker740 arg) (\_ -> walker740 fun))
+          in (Maybes.maybe (walker740 arg) (\_ -> walker740 fun) (walker740 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker740 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker740 body) Nothing (\inner -> walker740 inner))
+          in (Maybes.maybe Nothing (\inner -> walker740 inner) (walker740 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13606,13 +13606,13 @@ walker742 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker741 fun) (walker741 arg) (\_ -> walker741 fun))
+          in (Maybes.maybe (walker741 arg) (\_ -> walker741 fun) (walker741 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker741 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker741 body) Nothing (\inner -> walker741 inner))
+          in (Maybes.maybe Nothing (\inner -> walker741 inner) (walker741 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13625,13 +13625,13 @@ walker743 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker742 fun) (walker742 arg) (\_ -> walker742 fun))
+          in (Maybes.maybe (walker742 arg) (\_ -> walker742 fun) (walker742 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker742 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker742 body) Nothing (\inner -> walker742 inner))
+          in (Maybes.maybe Nothing (\inner -> walker742 inner) (walker742 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13644,13 +13644,13 @@ walker744 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker743 fun) (walker743 arg) (\_ -> walker743 fun))
+          in (Maybes.maybe (walker743 arg) (\_ -> walker743 fun) (walker743 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker743 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker743 body) Nothing (\inner -> walker743 inner))
+          in (Maybes.maybe Nothing (\inner -> walker743 inner) (walker743 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13663,13 +13663,13 @@ walker745 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker744 fun) (walker744 arg) (\_ -> walker744 fun))
+          in (Maybes.maybe (walker744 arg) (\_ -> walker744 fun) (walker744 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker744 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker744 body) Nothing (\inner -> walker744 inner))
+          in (Maybes.maybe Nothing (\inner -> walker744 inner) (walker744 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13682,13 +13682,13 @@ walker746 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker745 fun) (walker745 arg) (\_ -> walker745 fun))
+          in (Maybes.maybe (walker745 arg) (\_ -> walker745 fun) (walker745 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker745 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker745 body) Nothing (\inner -> walker745 inner))
+          in (Maybes.maybe Nothing (\inner -> walker745 inner) (walker745 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13701,13 +13701,13 @@ walker747 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker746 fun) (walker746 arg) (\_ -> walker746 fun))
+          in (Maybes.maybe (walker746 arg) (\_ -> walker746 fun) (walker746 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker746 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker746 body) Nothing (\inner -> walker746 inner))
+          in (Maybes.maybe Nothing (\inner -> walker746 inner) (walker746 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13720,13 +13720,13 @@ walker748 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker747 fun) (walker747 arg) (\_ -> walker747 fun))
+          in (Maybes.maybe (walker747 arg) (\_ -> walker747 fun) (walker747 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker747 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker747 body) Nothing (\inner -> walker747 inner))
+          in (Maybes.maybe Nothing (\inner -> walker747 inner) (walker747 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13739,13 +13739,13 @@ walker749 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker748 fun) (walker748 arg) (\_ -> walker748 fun))
+          in (Maybes.maybe (walker748 arg) (\_ -> walker748 fun) (walker748 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker748 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker748 body) Nothing (\inner -> walker748 inner))
+          in (Maybes.maybe Nothing (\inner -> walker748 inner) (walker748 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13758,13 +13758,13 @@ walker75 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker74 fun) (walker74 arg) (\_ -> walker74 fun))
+          in (Maybes.maybe (walker74 arg) (\_ -> walker74 fun) (walker74 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker74 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker74 body) Nothing (\inner -> walker74 inner))
+          in (Maybes.maybe Nothing (\inner -> walker74 inner) (walker74 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13777,13 +13777,13 @@ walker750 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker749 fun) (walker749 arg) (\_ -> walker749 fun))
+          in (Maybes.maybe (walker749 arg) (\_ -> walker749 fun) (walker749 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker749 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker749 body) Nothing (\inner -> walker749 inner))
+          in (Maybes.maybe Nothing (\inner -> walker749 inner) (walker749 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13796,13 +13796,13 @@ walker751 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker750 fun) (walker750 arg) (\_ -> walker750 fun))
+          in (Maybes.maybe (walker750 arg) (\_ -> walker750 fun) (walker750 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker750 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker750 body) Nothing (\inner -> walker750 inner))
+          in (Maybes.maybe Nothing (\inner -> walker750 inner) (walker750 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13815,13 +13815,13 @@ walker752 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker751 fun) (walker751 arg) (\_ -> walker751 fun))
+          in (Maybes.maybe (walker751 arg) (\_ -> walker751 fun) (walker751 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker751 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker751 body) Nothing (\inner -> walker751 inner))
+          in (Maybes.maybe Nothing (\inner -> walker751 inner) (walker751 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13834,13 +13834,13 @@ walker753 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker752 fun) (walker752 arg) (\_ -> walker752 fun))
+          in (Maybes.maybe (walker752 arg) (\_ -> walker752 fun) (walker752 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker752 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker752 body) Nothing (\inner -> walker752 inner))
+          in (Maybes.maybe Nothing (\inner -> walker752 inner) (walker752 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13853,13 +13853,13 @@ walker754 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker753 fun) (walker753 arg) (\_ -> walker753 fun))
+          in (Maybes.maybe (walker753 arg) (\_ -> walker753 fun) (walker753 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker753 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker753 body) Nothing (\inner -> walker753 inner))
+          in (Maybes.maybe Nothing (\inner -> walker753 inner) (walker753 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13872,13 +13872,13 @@ walker755 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker754 fun) (walker754 arg) (\_ -> walker754 fun))
+          in (Maybes.maybe (walker754 arg) (\_ -> walker754 fun) (walker754 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker754 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker754 body) Nothing (\inner -> walker754 inner))
+          in (Maybes.maybe Nothing (\inner -> walker754 inner) (walker754 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13891,13 +13891,13 @@ walker756 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker755 fun) (walker755 arg) (\_ -> walker755 fun))
+          in (Maybes.maybe (walker755 arg) (\_ -> walker755 fun) (walker755 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker755 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker755 body) Nothing (\inner -> walker755 inner))
+          in (Maybes.maybe Nothing (\inner -> walker755 inner) (walker755 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13910,13 +13910,13 @@ walker757 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker756 fun) (walker756 arg) (\_ -> walker756 fun))
+          in (Maybes.maybe (walker756 arg) (\_ -> walker756 fun) (walker756 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker756 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker756 body) Nothing (\inner -> walker756 inner))
+          in (Maybes.maybe Nothing (\inner -> walker756 inner) (walker756 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13929,13 +13929,13 @@ walker758 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker757 fun) (walker757 arg) (\_ -> walker757 fun))
+          in (Maybes.maybe (walker757 arg) (\_ -> walker757 fun) (walker757 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker757 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker757 body) Nothing (\inner -> walker757 inner))
+          in (Maybes.maybe Nothing (\inner -> walker757 inner) (walker757 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13948,13 +13948,13 @@ walker759 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker758 fun) (walker758 arg) (\_ -> walker758 fun))
+          in (Maybes.maybe (walker758 arg) (\_ -> walker758 fun) (walker758 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker758 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker758 body) Nothing (\inner -> walker758 inner))
+          in (Maybes.maybe Nothing (\inner -> walker758 inner) (walker758 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13967,13 +13967,13 @@ walker76 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker75 fun) (walker75 arg) (\_ -> walker75 fun))
+          in (Maybes.maybe (walker75 arg) (\_ -> walker75 fun) (walker75 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker75 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker75 body) Nothing (\inner -> walker75 inner))
+          in (Maybes.maybe Nothing (\inner -> walker75 inner) (walker75 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -13986,13 +13986,13 @@ walker760 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker759 fun) (walker759 arg) (\_ -> walker759 fun))
+          in (Maybes.maybe (walker759 arg) (\_ -> walker759 fun) (walker759 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker759 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker759 body) Nothing (\inner -> walker759 inner))
+          in (Maybes.maybe Nothing (\inner -> walker759 inner) (walker759 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14005,13 +14005,13 @@ walker761 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker760 fun) (walker760 arg) (\_ -> walker760 fun))
+          in (Maybes.maybe (walker760 arg) (\_ -> walker760 fun) (walker760 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker760 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker760 body) Nothing (\inner -> walker760 inner))
+          in (Maybes.maybe Nothing (\inner -> walker760 inner) (walker760 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14024,13 +14024,13 @@ walker762 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker761 fun) (walker761 arg) (\_ -> walker761 fun))
+          in (Maybes.maybe (walker761 arg) (\_ -> walker761 fun) (walker761 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker761 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker761 body) Nothing (\inner -> walker761 inner))
+          in (Maybes.maybe Nothing (\inner -> walker761 inner) (walker761 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14043,13 +14043,13 @@ walker763 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker762 fun) (walker762 arg) (\_ -> walker762 fun))
+          in (Maybes.maybe (walker762 arg) (\_ -> walker762 fun) (walker762 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker762 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker762 body) Nothing (\inner -> walker762 inner))
+          in (Maybes.maybe Nothing (\inner -> walker762 inner) (walker762 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14062,13 +14062,13 @@ walker764 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker763 fun) (walker763 arg) (\_ -> walker763 fun))
+          in (Maybes.maybe (walker763 arg) (\_ -> walker763 fun) (walker763 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker763 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker763 body) Nothing (\inner -> walker763 inner))
+          in (Maybes.maybe Nothing (\inner -> walker763 inner) (walker763 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14081,13 +14081,13 @@ walker765 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker764 fun) (walker764 arg) (\_ -> walker764 fun))
+          in (Maybes.maybe (walker764 arg) (\_ -> walker764 fun) (walker764 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker764 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker764 body) Nothing (\inner -> walker764 inner))
+          in (Maybes.maybe Nothing (\inner -> walker764 inner) (walker764 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14100,13 +14100,13 @@ walker766 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker765 fun) (walker765 arg) (\_ -> walker765 fun))
+          in (Maybes.maybe (walker765 arg) (\_ -> walker765 fun) (walker765 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker765 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker765 body) Nothing (\inner -> walker765 inner))
+          in (Maybes.maybe Nothing (\inner -> walker765 inner) (walker765 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14119,13 +14119,13 @@ walker767 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker766 fun) (walker766 arg) (\_ -> walker766 fun))
+          in (Maybes.maybe (walker766 arg) (\_ -> walker766 fun) (walker766 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker766 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker766 body) Nothing (\inner -> walker766 inner))
+          in (Maybes.maybe Nothing (\inner -> walker766 inner) (walker766 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14138,13 +14138,13 @@ walker768 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker767 fun) (walker767 arg) (\_ -> walker767 fun))
+          in (Maybes.maybe (walker767 arg) (\_ -> walker767 fun) (walker767 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker767 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker767 body) Nothing (\inner -> walker767 inner))
+          in (Maybes.maybe Nothing (\inner -> walker767 inner) (walker767 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14157,13 +14157,13 @@ walker769 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker768 fun) (walker768 arg) (\_ -> walker768 fun))
+          in (Maybes.maybe (walker768 arg) (\_ -> walker768 fun) (walker768 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker768 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker768 body) Nothing (\inner -> walker768 inner))
+          in (Maybes.maybe Nothing (\inner -> walker768 inner) (walker768 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14176,13 +14176,13 @@ walker77 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker76 fun) (walker76 arg) (\_ -> walker76 fun))
+          in (Maybes.maybe (walker76 arg) (\_ -> walker76 fun) (walker76 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker76 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker76 body) Nothing (\inner -> walker76 inner))
+          in (Maybes.maybe Nothing (\inner -> walker76 inner) (walker76 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14195,13 +14195,13 @@ walker770 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker769 fun) (walker769 arg) (\_ -> walker769 fun))
+          in (Maybes.maybe (walker769 arg) (\_ -> walker769 fun) (walker769 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker769 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker769 body) Nothing (\inner -> walker769 inner))
+          in (Maybes.maybe Nothing (\inner -> walker769 inner) (walker769 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14214,13 +14214,13 @@ walker771 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker770 fun) (walker770 arg) (\_ -> walker770 fun))
+          in (Maybes.maybe (walker770 arg) (\_ -> walker770 fun) (walker770 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker770 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker770 body) Nothing (\inner -> walker770 inner))
+          in (Maybes.maybe Nothing (\inner -> walker770 inner) (walker770 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14233,13 +14233,13 @@ walker772 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker771 fun) (walker771 arg) (\_ -> walker771 fun))
+          in (Maybes.maybe (walker771 arg) (\_ -> walker771 fun) (walker771 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker771 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker771 body) Nothing (\inner -> walker771 inner))
+          in (Maybes.maybe Nothing (\inner -> walker771 inner) (walker771 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14252,13 +14252,13 @@ walker773 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker772 fun) (walker772 arg) (\_ -> walker772 fun))
+          in (Maybes.maybe (walker772 arg) (\_ -> walker772 fun) (walker772 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker772 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker772 body) Nothing (\inner -> walker772 inner))
+          in (Maybes.maybe Nothing (\inner -> walker772 inner) (walker772 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14271,13 +14271,13 @@ walker774 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker773 fun) (walker773 arg) (\_ -> walker773 fun))
+          in (Maybes.maybe (walker773 arg) (\_ -> walker773 fun) (walker773 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker773 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker773 body) Nothing (\inner -> walker773 inner))
+          in (Maybes.maybe Nothing (\inner -> walker773 inner) (walker773 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14290,13 +14290,13 @@ walker775 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker774 fun) (walker774 arg) (\_ -> walker774 fun))
+          in (Maybes.maybe (walker774 arg) (\_ -> walker774 fun) (walker774 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker774 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker774 body) Nothing (\inner -> walker774 inner))
+          in (Maybes.maybe Nothing (\inner -> walker774 inner) (walker774 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14309,13 +14309,13 @@ walker776 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker775 fun) (walker775 arg) (\_ -> walker775 fun))
+          in (Maybes.maybe (walker775 arg) (\_ -> walker775 fun) (walker775 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker775 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker775 body) Nothing (\inner -> walker775 inner))
+          in (Maybes.maybe Nothing (\inner -> walker775 inner) (walker775 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14328,13 +14328,13 @@ walker777 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker776 fun) (walker776 arg) (\_ -> walker776 fun))
+          in (Maybes.maybe (walker776 arg) (\_ -> walker776 fun) (walker776 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker776 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker776 body) Nothing (\inner -> walker776 inner))
+          in (Maybes.maybe Nothing (\inner -> walker776 inner) (walker776 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14347,13 +14347,13 @@ walker778 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker777 fun) (walker777 arg) (\_ -> walker777 fun))
+          in (Maybes.maybe (walker777 arg) (\_ -> walker777 fun) (walker777 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker777 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker777 body) Nothing (\inner -> walker777 inner))
+          in (Maybes.maybe Nothing (\inner -> walker777 inner) (walker777 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14366,13 +14366,13 @@ walker779 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker778 fun) (walker778 arg) (\_ -> walker778 fun))
+          in (Maybes.maybe (walker778 arg) (\_ -> walker778 fun) (walker778 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker778 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker778 body) Nothing (\inner -> walker778 inner))
+          in (Maybes.maybe Nothing (\inner -> walker778 inner) (walker778 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14385,13 +14385,13 @@ walker78 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker77 fun) (walker77 arg) (\_ -> walker77 fun))
+          in (Maybes.maybe (walker77 arg) (\_ -> walker77 fun) (walker77 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker77 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker77 body) Nothing (\inner -> walker77 inner))
+          in (Maybes.maybe Nothing (\inner -> walker77 inner) (walker77 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14404,13 +14404,13 @@ walker780 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker779 fun) (walker779 arg) (\_ -> walker779 fun))
+          in (Maybes.maybe (walker779 arg) (\_ -> walker779 fun) (walker779 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker779 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker779 body) Nothing (\inner -> walker779 inner))
+          in (Maybes.maybe Nothing (\inner -> walker779 inner) (walker779 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14423,13 +14423,13 @@ walker781 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker780 fun) (walker780 arg) (\_ -> walker780 fun))
+          in (Maybes.maybe (walker780 arg) (\_ -> walker780 fun) (walker780 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker780 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker780 body) Nothing (\inner -> walker780 inner))
+          in (Maybes.maybe Nothing (\inner -> walker780 inner) (walker780 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14442,13 +14442,13 @@ walker782 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker781 fun) (walker781 arg) (\_ -> walker781 fun))
+          in (Maybes.maybe (walker781 arg) (\_ -> walker781 fun) (walker781 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker781 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker781 body) Nothing (\inner -> walker781 inner))
+          in (Maybes.maybe Nothing (\inner -> walker781 inner) (walker781 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14461,13 +14461,13 @@ walker783 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker782 fun) (walker782 arg) (\_ -> walker782 fun))
+          in (Maybes.maybe (walker782 arg) (\_ -> walker782 fun) (walker782 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker782 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker782 body) Nothing (\inner -> walker782 inner))
+          in (Maybes.maybe Nothing (\inner -> walker782 inner) (walker782 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14480,13 +14480,13 @@ walker784 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker783 fun) (walker783 arg) (\_ -> walker783 fun))
+          in (Maybes.maybe (walker783 arg) (\_ -> walker783 fun) (walker783 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker783 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker783 body) Nothing (\inner -> walker783 inner))
+          in (Maybes.maybe Nothing (\inner -> walker783 inner) (walker783 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14499,13 +14499,13 @@ walker785 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker784 fun) (walker784 arg) (\_ -> walker784 fun))
+          in (Maybes.maybe (walker784 arg) (\_ -> walker784 fun) (walker784 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker784 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker784 body) Nothing (\inner -> walker784 inner))
+          in (Maybes.maybe Nothing (\inner -> walker784 inner) (walker784 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14518,13 +14518,13 @@ walker786 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker785 fun) (walker785 arg) (\_ -> walker785 fun))
+          in (Maybes.maybe (walker785 arg) (\_ -> walker785 fun) (walker785 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker785 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker785 body) Nothing (\inner -> walker785 inner))
+          in (Maybes.maybe Nothing (\inner -> walker785 inner) (walker785 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14537,13 +14537,13 @@ walker787 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker786 fun) (walker786 arg) (\_ -> walker786 fun))
+          in (Maybes.maybe (walker786 arg) (\_ -> walker786 fun) (walker786 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker786 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker786 body) Nothing (\inner -> walker786 inner))
+          in (Maybes.maybe Nothing (\inner -> walker786 inner) (walker786 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14556,13 +14556,13 @@ walker788 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker787 fun) (walker787 arg) (\_ -> walker787 fun))
+          in (Maybes.maybe (walker787 arg) (\_ -> walker787 fun) (walker787 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker787 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker787 body) Nothing (\inner -> walker787 inner))
+          in (Maybes.maybe Nothing (\inner -> walker787 inner) (walker787 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14575,13 +14575,13 @@ walker789 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker788 fun) (walker788 arg) (\_ -> walker788 fun))
+          in (Maybes.maybe (walker788 arg) (\_ -> walker788 fun) (walker788 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker788 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker788 body) Nothing (\inner -> walker788 inner))
+          in (Maybes.maybe Nothing (\inner -> walker788 inner) (walker788 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14594,13 +14594,13 @@ walker79 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker78 fun) (walker78 arg) (\_ -> walker78 fun))
+          in (Maybes.maybe (walker78 arg) (\_ -> walker78 fun) (walker78 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker78 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker78 body) Nothing (\inner -> walker78 inner))
+          in (Maybes.maybe Nothing (\inner -> walker78 inner) (walker78 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14613,13 +14613,13 @@ walker790 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker789 fun) (walker789 arg) (\_ -> walker789 fun))
+          in (Maybes.maybe (walker789 arg) (\_ -> walker789 fun) (walker789 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker789 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker789 body) Nothing (\inner -> walker789 inner))
+          in (Maybes.maybe Nothing (\inner -> walker789 inner) (walker789 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14632,13 +14632,13 @@ walker791 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker790 fun) (walker790 arg) (\_ -> walker790 fun))
+          in (Maybes.maybe (walker790 arg) (\_ -> walker790 fun) (walker790 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker790 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker790 body) Nothing (\inner -> walker790 inner))
+          in (Maybes.maybe Nothing (\inner -> walker790 inner) (walker790 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14651,13 +14651,13 @@ walker792 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker791 fun) (walker791 arg) (\_ -> walker791 fun))
+          in (Maybes.maybe (walker791 arg) (\_ -> walker791 fun) (walker791 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker791 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker791 body) Nothing (\inner -> walker791 inner))
+          in (Maybes.maybe Nothing (\inner -> walker791 inner) (walker791 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14670,13 +14670,13 @@ walker793 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker792 fun) (walker792 arg) (\_ -> walker792 fun))
+          in (Maybes.maybe (walker792 arg) (\_ -> walker792 fun) (walker792 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker792 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker792 body) Nothing (\inner -> walker792 inner))
+          in (Maybes.maybe Nothing (\inner -> walker792 inner) (walker792 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14689,13 +14689,13 @@ walker794 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker793 fun) (walker793 arg) (\_ -> walker793 fun))
+          in (Maybes.maybe (walker793 arg) (\_ -> walker793 fun) (walker793 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker793 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker793 body) Nothing (\inner -> walker793 inner))
+          in (Maybes.maybe Nothing (\inner -> walker793 inner) (walker793 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14708,13 +14708,13 @@ walker795 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker794 fun) (walker794 arg) (\_ -> walker794 fun))
+          in (Maybes.maybe (walker794 arg) (\_ -> walker794 fun) (walker794 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker794 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker794 body) Nothing (\inner -> walker794 inner))
+          in (Maybes.maybe Nothing (\inner -> walker794 inner) (walker794 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14727,13 +14727,13 @@ walker796 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker795 fun) (walker795 arg) (\_ -> walker795 fun))
+          in (Maybes.maybe (walker795 arg) (\_ -> walker795 fun) (walker795 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker795 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker795 body) Nothing (\inner -> walker795 inner))
+          in (Maybes.maybe Nothing (\inner -> walker795 inner) (walker795 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14746,13 +14746,13 @@ walker797 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker796 fun) (walker796 arg) (\_ -> walker796 fun))
+          in (Maybes.maybe (walker796 arg) (\_ -> walker796 fun) (walker796 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker796 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker796 body) Nothing (\inner -> walker796 inner))
+          in (Maybes.maybe Nothing (\inner -> walker796 inner) (walker796 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14765,13 +14765,13 @@ walker798 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker797 fun) (walker797 arg) (\_ -> walker797 fun))
+          in (Maybes.maybe (walker797 arg) (\_ -> walker797 fun) (walker797 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker797 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker797 body) Nothing (\inner -> walker797 inner))
+          in (Maybes.maybe Nothing (\inner -> walker797 inner) (walker797 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14784,13 +14784,13 @@ walker799 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker798 fun) (walker798 arg) (\_ -> walker798 fun))
+          in (Maybes.maybe (walker798 arg) (\_ -> walker798 fun) (walker798 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker798 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker798 body) Nothing (\inner -> walker798 inner))
+          in (Maybes.maybe Nothing (\inner -> walker798 inner) (walker798 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14803,13 +14803,13 @@ walker8 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker7 fun) (walker7 arg) (\_ -> walker7 fun))
+          in (Maybes.maybe (walker7 arg) (\_ -> walker7 fun) (walker7 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker7 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker7 body) Nothing (\inner -> walker7 inner))
+          in (Maybes.maybe Nothing (\inner -> walker7 inner) (walker7 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14822,13 +14822,13 @@ walker80 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker79 fun) (walker79 arg) (\_ -> walker79 fun))
+          in (Maybes.maybe (walker79 arg) (\_ -> walker79 fun) (walker79 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker79 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker79 body) Nothing (\inner -> walker79 inner))
+          in (Maybes.maybe Nothing (\inner -> walker79 inner) (walker79 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14841,13 +14841,13 @@ walker81 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker80 fun) (walker80 arg) (\_ -> walker80 fun))
+          in (Maybes.maybe (walker80 arg) (\_ -> walker80 fun) (walker80 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker80 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker80 body) Nothing (\inner -> walker80 inner))
+          in (Maybes.maybe Nothing (\inner -> walker80 inner) (walker80 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14860,13 +14860,13 @@ walker82 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker81 fun) (walker81 arg) (\_ -> walker81 fun))
+          in (Maybes.maybe (walker81 arg) (\_ -> walker81 fun) (walker81 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker81 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker81 body) Nothing (\inner -> walker81 inner))
+          in (Maybes.maybe Nothing (\inner -> walker81 inner) (walker81 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14879,13 +14879,13 @@ walker83 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker82 fun) (walker82 arg) (\_ -> walker82 fun))
+          in (Maybes.maybe (walker82 arg) (\_ -> walker82 fun) (walker82 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker82 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker82 body) Nothing (\inner -> walker82 inner))
+          in (Maybes.maybe Nothing (\inner -> walker82 inner) (walker82 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14898,13 +14898,13 @@ walker84 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker83 fun) (walker83 arg) (\_ -> walker83 fun))
+          in (Maybes.maybe (walker83 arg) (\_ -> walker83 fun) (walker83 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker83 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker83 body) Nothing (\inner -> walker83 inner))
+          in (Maybes.maybe Nothing (\inner -> walker83 inner) (walker83 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14917,13 +14917,13 @@ walker85 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker84 fun) (walker84 arg) (\_ -> walker84 fun))
+          in (Maybes.maybe (walker84 arg) (\_ -> walker84 fun) (walker84 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker84 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker84 body) Nothing (\inner -> walker84 inner))
+          in (Maybes.maybe Nothing (\inner -> walker84 inner) (walker84 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14936,13 +14936,13 @@ walker86 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker85 fun) (walker85 arg) (\_ -> walker85 fun))
+          in (Maybes.maybe (walker85 arg) (\_ -> walker85 fun) (walker85 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker85 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker85 body) Nothing (\inner -> walker85 inner))
+          in (Maybes.maybe Nothing (\inner -> walker85 inner) (walker85 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14955,13 +14955,13 @@ walker87 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker86 fun) (walker86 arg) (\_ -> walker86 fun))
+          in (Maybes.maybe (walker86 arg) (\_ -> walker86 fun) (walker86 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker86 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker86 body) Nothing (\inner -> walker86 inner))
+          in (Maybes.maybe Nothing (\inner -> walker86 inner) (walker86 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14974,13 +14974,13 @@ walker88 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker87 fun) (walker87 arg) (\_ -> walker87 fun))
+          in (Maybes.maybe (walker87 arg) (\_ -> walker87 fun) (walker87 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker87 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker87 body) Nothing (\inner -> walker87 inner))
+          in (Maybes.maybe Nothing (\inner -> walker87 inner) (walker87 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -14993,13 +14993,13 @@ walker89 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker88 fun) (walker88 arg) (\_ -> walker88 fun))
+          in (Maybes.maybe (walker88 arg) (\_ -> walker88 fun) (walker88 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker88 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker88 body) Nothing (\inner -> walker88 inner))
+          in (Maybes.maybe Nothing (\inner -> walker88 inner) (walker88 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15012,13 +15012,13 @@ walker9 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker8 fun) (walker8 arg) (\_ -> walker8 fun))
+          in (Maybes.maybe (walker8 arg) (\_ -> walker8 fun) (walker8 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker8 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker8 body) Nothing (\inner -> walker8 inner))
+          in (Maybes.maybe Nothing (\inner -> walker8 inner) (walker8 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15031,13 +15031,13 @@ walker90 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker89 fun) (walker89 arg) (\_ -> walker89 fun))
+          in (Maybes.maybe (walker89 arg) (\_ -> walker89 fun) (walker89 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker89 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker89 body) Nothing (\inner -> walker89 inner))
+          in (Maybes.maybe Nothing (\inner -> walker89 inner) (walker89 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15050,13 +15050,13 @@ walker91 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker90 fun) (walker90 arg) (\_ -> walker90 fun))
+          in (Maybes.maybe (walker90 arg) (\_ -> walker90 fun) (walker90 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker90 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker90 body) Nothing (\inner -> walker90 inner))
+          in (Maybes.maybe Nothing (\inner -> walker90 inner) (walker90 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15069,13 +15069,13 @@ walker92 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker91 fun) (walker91 arg) (\_ -> walker91 fun))
+          in (Maybes.maybe (walker91 arg) (\_ -> walker91 fun) (walker91 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker91 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker91 body) Nothing (\inner -> walker91 inner))
+          in (Maybes.maybe Nothing (\inner -> walker91 inner) (walker91 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15088,13 +15088,13 @@ walker93 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker92 fun) (walker92 arg) (\_ -> walker92 fun))
+          in (Maybes.maybe (walker92 arg) (\_ -> walker92 fun) (walker92 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker92 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker92 body) Nothing (\inner -> walker92 inner))
+          in (Maybes.maybe Nothing (\inner -> walker92 inner) (walker92 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15107,13 +15107,13 @@ walker94 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker93 fun) (walker93 arg) (\_ -> walker93 fun))
+          in (Maybes.maybe (walker93 arg) (\_ -> walker93 fun) (walker93 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker93 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker93 body) Nothing (\inner -> walker93 inner))
+          in (Maybes.maybe Nothing (\inner -> walker93 inner) (walker93 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15126,13 +15126,13 @@ walker95 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker94 fun) (walker94 arg) (\_ -> walker94 fun))
+          in (Maybes.maybe (walker94 arg) (\_ -> walker94 fun) (walker94 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker94 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker94 body) Nothing (\inner -> walker94 inner))
+          in (Maybes.maybe Nothing (\inner -> walker94 inner) (walker94 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15145,13 +15145,13 @@ walker96 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker95 fun) (walker95 arg) (\_ -> walker95 fun))
+          in (Maybes.maybe (walker95 arg) (\_ -> walker95 fun) (walker95 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker95 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker95 body) Nothing (\inner -> walker95 inner))
+          in (Maybes.maybe Nothing (\inner -> walker95 inner) (walker95 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15164,13 +15164,13 @@ walker97 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker96 fun) (walker96 arg) (\_ -> walker96 fun))
+          in (Maybes.maybe (walker96 arg) (\_ -> walker96 fun) (walker96 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker96 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker96 body) Nothing (\inner -> walker96 inner))
+          in (Maybes.maybe Nothing (\inner -> walker96 inner) (walker96 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15183,13 +15183,13 @@ walker98 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker97 fun) (walker97 arg) (\_ -> walker97 fun))
+          in (Maybes.maybe (walker97 arg) (\_ -> walker97 fun) (walker97 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker97 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker97 body) Nothing (\inner -> walker97 inner))
+          in (Maybes.maybe Nothing (\inner -> walker97 inner) (walker97 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -15202,13 +15202,13 @@ walker99 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (walker98 fun) (walker98 arg) (\_ -> walker98 fun))
+          in (Maybes.maybe (walker98 arg) (\_ -> walker98 fun) (walker98 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (walker98 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (walker98 body) Nothing (\inner -> walker98 inner))
+          in (Maybes.maybe Nothing (\inner -> walker98 inner) (walker98 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped

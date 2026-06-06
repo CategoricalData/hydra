@@ -147,6 +147,15 @@ done
 # needed; pg/rdf/ext are no longer in scope (the rollup-everything design
 # in hydra-java's build was retired in #309's bindings refactor).
 echo ""
+echo "[Pre-sync] Overlaying hand-written Haskell runtime onto dist/haskell/..."
+# Hydra.Haskell.Lib.* (and the umbrella Hydra.hs, Hydra.Dsl.*) live in
+# overlay/haskell/ and are required by dist/haskell/hydra-ext/...
+# at GHC time. The bin/sync.sh call below skips Haskell entirely when
+# --hosts doesn't include haskell, so the overlay would be missing for
+# non-Haskell-host runs (TS, Scala, Lisp hosts) — yet downstream stack
+# builds still touch hydra-ext and fail. Always overlay before sync.
+"$HYDRA_ROOT/heads/haskell/bin/overlay-kernel-runtime.sh"
+echo ""
 echo "[Pre-sync] Ensuring dist/ is fresh for the selected hosts × targets..."
 "$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests
 echo ""

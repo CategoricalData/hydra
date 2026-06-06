@@ -11,7 +11,7 @@ import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Haskell.Lib.Maybes as Maybes
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -40,13 +40,13 @@ fanWalker1 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker0 fun) (fanWalker0 arg) (\_ -> fanWalker0 fun))
+          in (Maybes.maybe (fanWalker0 arg) (\_ -> fanWalker0 fun) (fanWalker0 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker0 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker0 body) Nothing (\inner -> fanWalker0 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker0 inner) (fanWalker0 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -59,13 +59,13 @@ fanWalker10 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker9 fun) (fanWalker9 arg) (\_ -> fanWalker9 fun))
+          in (Maybes.maybe (fanWalker9 arg) (\_ -> fanWalker9 fun) (fanWalker9 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker5 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker7 body) Nothing (\inner -> fanWalker7 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker7 inner) (fanWalker7 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -78,13 +78,13 @@ fanWalker100 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker99 fun) (fanWalker99 arg) (\_ -> fanWalker99 fun))
+          in (Maybes.maybe (fanWalker99 arg) (\_ -> fanWalker99 fun) (fanWalker99 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker50 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker67 body) Nothing (\inner -> fanWalker67 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker67 inner) (fanWalker67 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -97,13 +97,13 @@ fanWalker101 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker100 fun) (fanWalker100 arg) (\_ -> fanWalker100 fun))
+          in (Maybes.maybe (fanWalker100 arg) (\_ -> fanWalker100 fun) (fanWalker100 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker51 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker68 body) Nothing (\inner -> fanWalker68 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker68 inner) (fanWalker68 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -116,13 +116,13 @@ fanWalker102 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker101 fun) (fanWalker101 arg) (\_ -> fanWalker101 fun))
+          in (Maybes.maybe (fanWalker101 arg) (\_ -> fanWalker101 fun) (fanWalker101 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker51 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker68 body) Nothing (\inner -> fanWalker68 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker68 inner) (fanWalker68 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -135,13 +135,13 @@ fanWalker103 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker102 fun) (fanWalker102 arg) (\_ -> fanWalker102 fun))
+          in (Maybes.maybe (fanWalker102 arg) (\_ -> fanWalker102 fun) (fanWalker102 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker52 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker69 body) Nothing (\inner -> fanWalker69 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker69 inner) (fanWalker69 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -154,13 +154,13 @@ fanWalker104 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker103 fun) (fanWalker103 arg) (\_ -> fanWalker103 fun))
+          in (Maybes.maybe (fanWalker103 arg) (\_ -> fanWalker103 fun) (fanWalker103 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker52 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker70 body) Nothing (\inner -> fanWalker70 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker70 inner) (fanWalker70 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -173,13 +173,13 @@ fanWalker105 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker104 fun) (fanWalker104 arg) (\_ -> fanWalker104 fun))
+          in (Maybes.maybe (fanWalker104 arg) (\_ -> fanWalker104 fun) (fanWalker104 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker53 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker70 body) Nothing (\inner -> fanWalker70 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker70 inner) (fanWalker70 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -192,13 +192,13 @@ fanWalker106 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker105 fun) (fanWalker105 arg) (\_ -> fanWalker105 fun))
+          in (Maybes.maybe (fanWalker105 arg) (\_ -> fanWalker105 fun) (fanWalker105 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker53 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker71 body) Nothing (\inner -> fanWalker71 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker71 inner) (fanWalker71 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -211,13 +211,13 @@ fanWalker107 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker106 fun) (fanWalker106 arg) (\_ -> fanWalker106 fun))
+          in (Maybes.maybe (fanWalker106 arg) (\_ -> fanWalker106 fun) (fanWalker106 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker54 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker72 body) Nothing (\inner -> fanWalker72 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker72 inner) (fanWalker72 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -230,13 +230,13 @@ fanWalker108 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker107 fun) (fanWalker107 arg) (\_ -> fanWalker107 fun))
+          in (Maybes.maybe (fanWalker107 arg) (\_ -> fanWalker107 fun) (fanWalker107 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker54 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker72 body) Nothing (\inner -> fanWalker72 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker72 inner) (fanWalker72 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -249,13 +249,13 @@ fanWalker109 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker108 fun) (fanWalker108 arg) (\_ -> fanWalker108 fun))
+          in (Maybes.maybe (fanWalker108 arg) (\_ -> fanWalker108 fun) (fanWalker108 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker55 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker73 body) Nothing (\inner -> fanWalker73 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker73 inner) (fanWalker73 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -268,13 +268,13 @@ fanWalker11 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker10 fun) (fanWalker10 arg) (\_ -> fanWalker10 fun))
+          in (Maybes.maybe (fanWalker10 arg) (\_ -> fanWalker10 fun) (fanWalker10 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker6 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker8 body) Nothing (\inner -> fanWalker8 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker8 inner) (fanWalker8 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -287,13 +287,13 @@ fanWalker110 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker109 fun) (fanWalker109 arg) (\_ -> fanWalker109 fun))
+          in (Maybes.maybe (fanWalker109 arg) (\_ -> fanWalker109 fun) (fanWalker109 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker55 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker74 body) Nothing (\inner -> fanWalker74 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker74 inner) (fanWalker74 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -306,13 +306,13 @@ fanWalker111 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker110 fun) (fanWalker110 arg) (\_ -> fanWalker110 fun))
+          in (Maybes.maybe (fanWalker110 arg) (\_ -> fanWalker110 fun) (fanWalker110 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker56 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker74 body) Nothing (\inner -> fanWalker74 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker74 inner) (fanWalker74 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -325,13 +325,13 @@ fanWalker112 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker111 fun) (fanWalker111 arg) (\_ -> fanWalker111 fun))
+          in (Maybes.maybe (fanWalker111 arg) (\_ -> fanWalker111 fun) (fanWalker111 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker56 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker75 body) Nothing (\inner -> fanWalker75 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker75 inner) (fanWalker75 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -344,13 +344,13 @@ fanWalker113 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker112 fun) (fanWalker112 arg) (\_ -> fanWalker112 fun))
+          in (Maybes.maybe (fanWalker112 arg) (\_ -> fanWalker112 fun) (fanWalker112 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker57 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker76 body) Nothing (\inner -> fanWalker76 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker76 inner) (fanWalker76 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -363,13 +363,13 @@ fanWalker114 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker113 fun) (fanWalker113 arg) (\_ -> fanWalker113 fun))
+          in (Maybes.maybe (fanWalker113 arg) (\_ -> fanWalker113 fun) (fanWalker113 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker57 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker76 body) Nothing (\inner -> fanWalker76 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker76 inner) (fanWalker76 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -382,13 +382,13 @@ fanWalker115 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker114 fun) (fanWalker114 arg) (\_ -> fanWalker114 fun))
+          in (Maybes.maybe (fanWalker114 arg) (\_ -> fanWalker114 fun) (fanWalker114 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker58 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker77 body) Nothing (\inner -> fanWalker77 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker77 inner) (fanWalker77 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -401,13 +401,13 @@ fanWalker116 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker115 fun) (fanWalker115 arg) (\_ -> fanWalker115 fun))
+          in (Maybes.maybe (fanWalker115 arg) (\_ -> fanWalker115 fun) (fanWalker115 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker58 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker78 body) Nothing (\inner -> fanWalker78 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker78 inner) (fanWalker78 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -420,13 +420,13 @@ fanWalker117 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker116 fun) (fanWalker116 arg) (\_ -> fanWalker116 fun))
+          in (Maybes.maybe (fanWalker116 arg) (\_ -> fanWalker116 fun) (fanWalker116 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker59 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker78 body) Nothing (\inner -> fanWalker78 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker78 inner) (fanWalker78 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -439,13 +439,13 @@ fanWalker118 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker117 fun) (fanWalker117 arg) (\_ -> fanWalker117 fun))
+          in (Maybes.maybe (fanWalker117 arg) (\_ -> fanWalker117 fun) (fanWalker117 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker59 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker79 body) Nothing (\inner -> fanWalker79 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker79 inner) (fanWalker79 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -458,13 +458,13 @@ fanWalker119 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker118 fun) (fanWalker118 arg) (\_ -> fanWalker118 fun))
+          in (Maybes.maybe (fanWalker118 arg) (\_ -> fanWalker118 fun) (fanWalker118 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker60 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker80 body) Nothing (\inner -> fanWalker80 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker80 inner) (fanWalker80 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -477,13 +477,13 @@ fanWalker12 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker11 fun) (fanWalker11 arg) (\_ -> fanWalker11 fun))
+          in (Maybes.maybe (fanWalker11 arg) (\_ -> fanWalker11 fun) (fanWalker11 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker6 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker8 body) Nothing (\inner -> fanWalker8 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker8 inner) (fanWalker8 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -496,13 +496,13 @@ fanWalker120 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker119 fun) (fanWalker119 arg) (\_ -> fanWalker119 fun))
+          in (Maybes.maybe (fanWalker119 arg) (\_ -> fanWalker119 fun) (fanWalker119 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker60 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker80 body) Nothing (\inner -> fanWalker80 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker80 inner) (fanWalker80 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -515,13 +515,13 @@ fanWalker121 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker120 fun) (fanWalker120 arg) (\_ -> fanWalker120 fun))
+          in (Maybes.maybe (fanWalker120 arg) (\_ -> fanWalker120 fun) (fanWalker120 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker61 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker81 body) Nothing (\inner -> fanWalker81 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker81 inner) (fanWalker81 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -534,13 +534,13 @@ fanWalker122 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker121 fun) (fanWalker121 arg) (\_ -> fanWalker121 fun))
+          in (Maybes.maybe (fanWalker121 arg) (\_ -> fanWalker121 fun) (fanWalker121 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker61 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker82 body) Nothing (\inner -> fanWalker82 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker82 inner) (fanWalker82 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -553,13 +553,13 @@ fanWalker123 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker122 fun) (fanWalker122 arg) (\_ -> fanWalker122 fun))
+          in (Maybes.maybe (fanWalker122 arg) (\_ -> fanWalker122 fun) (fanWalker122 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker62 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker82 body) Nothing (\inner -> fanWalker82 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker82 inner) (fanWalker82 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -572,13 +572,13 @@ fanWalker124 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker123 fun) (fanWalker123 arg) (\_ -> fanWalker123 fun))
+          in (Maybes.maybe (fanWalker123 arg) (\_ -> fanWalker123 fun) (fanWalker123 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker62 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker83 body) Nothing (\inner -> fanWalker83 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker83 inner) (fanWalker83 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -591,13 +591,13 @@ fanWalker125 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker124 fun) (fanWalker124 arg) (\_ -> fanWalker124 fun))
+          in (Maybes.maybe (fanWalker124 arg) (\_ -> fanWalker124 fun) (fanWalker124 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker63 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker84 body) Nothing (\inner -> fanWalker84 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker84 inner) (fanWalker84 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -610,13 +610,13 @@ fanWalker126 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker125 fun) (fanWalker125 arg) (\_ -> fanWalker125 fun))
+          in (Maybes.maybe (fanWalker125 arg) (\_ -> fanWalker125 fun) (fanWalker125 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker63 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker84 body) Nothing (\inner -> fanWalker84 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker84 inner) (fanWalker84 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -629,13 +629,13 @@ fanWalker127 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker126 fun) (fanWalker126 arg) (\_ -> fanWalker126 fun))
+          in (Maybes.maybe (fanWalker126 arg) (\_ -> fanWalker126 fun) (fanWalker126 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker64 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker85 body) Nothing (\inner -> fanWalker85 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker85 inner) (fanWalker85 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -648,13 +648,13 @@ fanWalker128 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker127 fun) (fanWalker127 arg) (\_ -> fanWalker127 fun))
+          in (Maybes.maybe (fanWalker127 arg) (\_ -> fanWalker127 fun) (fanWalker127 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker64 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker86 body) Nothing (\inner -> fanWalker86 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker86 inner) (fanWalker86 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -667,13 +667,13 @@ fanWalker129 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker128 fun) (fanWalker128 arg) (\_ -> fanWalker128 fun))
+          in (Maybes.maybe (fanWalker128 arg) (\_ -> fanWalker128 fun) (fanWalker128 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker65 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker86 body) Nothing (\inner -> fanWalker86 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker86 inner) (fanWalker86 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -686,13 +686,13 @@ fanWalker13 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker12 fun) (fanWalker12 arg) (\_ -> fanWalker12 fun))
+          in (Maybes.maybe (fanWalker12 arg) (\_ -> fanWalker12 fun) (fanWalker12 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker7 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker9 body) Nothing (\inner -> fanWalker9 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker9 inner) (fanWalker9 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -705,13 +705,13 @@ fanWalker130 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker129 fun) (fanWalker129 arg) (\_ -> fanWalker129 fun))
+          in (Maybes.maybe (fanWalker129 arg) (\_ -> fanWalker129 fun) (fanWalker129 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker65 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker87 body) Nothing (\inner -> fanWalker87 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker87 inner) (fanWalker87 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -724,13 +724,13 @@ fanWalker131 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker130 fun) (fanWalker130 arg) (\_ -> fanWalker130 fun))
+          in (Maybes.maybe (fanWalker130 arg) (\_ -> fanWalker130 fun) (fanWalker130 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker66 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker88 body) Nothing (\inner -> fanWalker88 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker88 inner) (fanWalker88 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -743,13 +743,13 @@ fanWalker132 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker131 fun) (fanWalker131 arg) (\_ -> fanWalker131 fun))
+          in (Maybes.maybe (fanWalker131 arg) (\_ -> fanWalker131 fun) (fanWalker131 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker66 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker88 body) Nothing (\inner -> fanWalker88 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker88 inner) (fanWalker88 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -762,13 +762,13 @@ fanWalker133 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker132 fun) (fanWalker132 arg) (\_ -> fanWalker132 fun))
+          in (Maybes.maybe (fanWalker132 arg) (\_ -> fanWalker132 fun) (fanWalker132 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker67 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker89 body) Nothing (\inner -> fanWalker89 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker89 inner) (fanWalker89 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -781,13 +781,13 @@ fanWalker134 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker133 fun) (fanWalker133 arg) (\_ -> fanWalker133 fun))
+          in (Maybes.maybe (fanWalker133 arg) (\_ -> fanWalker133 fun) (fanWalker133 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker67 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker90 body) Nothing (\inner -> fanWalker90 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker90 inner) (fanWalker90 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -800,13 +800,13 @@ fanWalker135 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker134 fun) (fanWalker134 arg) (\_ -> fanWalker134 fun))
+          in (Maybes.maybe (fanWalker134 arg) (\_ -> fanWalker134 fun) (fanWalker134 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker68 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker90 body) Nothing (\inner -> fanWalker90 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker90 inner) (fanWalker90 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -819,13 +819,13 @@ fanWalker136 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker135 fun) (fanWalker135 arg) (\_ -> fanWalker135 fun))
+          in (Maybes.maybe (fanWalker135 arg) (\_ -> fanWalker135 fun) (fanWalker135 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker68 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker91 body) Nothing (\inner -> fanWalker91 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker91 inner) (fanWalker91 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -838,13 +838,13 @@ fanWalker137 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker136 fun) (fanWalker136 arg) (\_ -> fanWalker136 fun))
+          in (Maybes.maybe (fanWalker136 arg) (\_ -> fanWalker136 fun) (fanWalker136 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker69 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker92 body) Nothing (\inner -> fanWalker92 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker92 inner) (fanWalker92 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -857,13 +857,13 @@ fanWalker138 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker137 fun) (fanWalker137 arg) (\_ -> fanWalker137 fun))
+          in (Maybes.maybe (fanWalker137 arg) (\_ -> fanWalker137 fun) (fanWalker137 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker69 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker92 body) Nothing (\inner -> fanWalker92 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker92 inner) (fanWalker92 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -876,13 +876,13 @@ fanWalker139 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker138 fun) (fanWalker138 arg) (\_ -> fanWalker138 fun))
+          in (Maybes.maybe (fanWalker138 arg) (\_ -> fanWalker138 fun) (fanWalker138 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker70 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker93 body) Nothing (\inner -> fanWalker93 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker93 inner) (fanWalker93 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -895,13 +895,13 @@ fanWalker14 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker13 fun) (fanWalker13 arg) (\_ -> fanWalker13 fun))
+          in (Maybes.maybe (fanWalker13 arg) (\_ -> fanWalker13 fun) (fanWalker13 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker7 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker10 body) Nothing (\inner -> fanWalker10 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker10 inner) (fanWalker10 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -914,13 +914,13 @@ fanWalker140 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker139 fun) (fanWalker139 arg) (\_ -> fanWalker139 fun))
+          in (Maybes.maybe (fanWalker139 arg) (\_ -> fanWalker139 fun) (fanWalker139 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker70 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker94 body) Nothing (\inner -> fanWalker94 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker94 inner) (fanWalker94 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -933,13 +933,13 @@ fanWalker141 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker140 fun) (fanWalker140 arg) (\_ -> fanWalker140 fun))
+          in (Maybes.maybe (fanWalker140 arg) (\_ -> fanWalker140 fun) (fanWalker140 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker71 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker94 body) Nothing (\inner -> fanWalker94 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker94 inner) (fanWalker94 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -952,13 +952,13 @@ fanWalker142 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker141 fun) (fanWalker141 arg) (\_ -> fanWalker141 fun))
+          in (Maybes.maybe (fanWalker141 arg) (\_ -> fanWalker141 fun) (fanWalker141 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker71 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker95 body) Nothing (\inner -> fanWalker95 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker95 inner) (fanWalker95 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -971,13 +971,13 @@ fanWalker143 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker142 fun) (fanWalker142 arg) (\_ -> fanWalker142 fun))
+          in (Maybes.maybe (fanWalker142 arg) (\_ -> fanWalker142 fun) (fanWalker142 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker72 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker96 body) Nothing (\inner -> fanWalker96 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker96 inner) (fanWalker96 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -990,13 +990,13 @@ fanWalker144 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker143 fun) (fanWalker143 arg) (\_ -> fanWalker143 fun))
+          in (Maybes.maybe (fanWalker143 arg) (\_ -> fanWalker143 fun) (fanWalker143 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker72 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker96 body) Nothing (\inner -> fanWalker96 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker96 inner) (fanWalker96 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1009,13 +1009,13 @@ fanWalker145 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker144 fun) (fanWalker144 arg) (\_ -> fanWalker144 fun))
+          in (Maybes.maybe (fanWalker144 arg) (\_ -> fanWalker144 fun) (fanWalker144 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker73 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker97 body) Nothing (\inner -> fanWalker97 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker97 inner) (fanWalker97 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1028,13 +1028,13 @@ fanWalker146 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker145 fun) (fanWalker145 arg) (\_ -> fanWalker145 fun))
+          in (Maybes.maybe (fanWalker145 arg) (\_ -> fanWalker145 fun) (fanWalker145 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker73 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker98 body) Nothing (\inner -> fanWalker98 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker98 inner) (fanWalker98 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1047,13 +1047,13 @@ fanWalker147 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker146 fun) (fanWalker146 arg) (\_ -> fanWalker146 fun))
+          in (Maybes.maybe (fanWalker146 arg) (\_ -> fanWalker146 fun) (fanWalker146 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker74 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker98 body) Nothing (\inner -> fanWalker98 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker98 inner) (fanWalker98 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1066,13 +1066,13 @@ fanWalker148 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker147 fun) (fanWalker147 arg) (\_ -> fanWalker147 fun))
+          in (Maybes.maybe (fanWalker147 arg) (\_ -> fanWalker147 fun) (fanWalker147 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker74 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker99 body) Nothing (\inner -> fanWalker99 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker99 inner) (fanWalker99 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1085,13 +1085,13 @@ fanWalker149 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker148 fun) (fanWalker148 arg) (\_ -> fanWalker148 fun))
+          in (Maybes.maybe (fanWalker148 arg) (\_ -> fanWalker148 fun) (fanWalker148 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker75 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker100 body) Nothing (\inner -> fanWalker100 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker100 inner) (fanWalker100 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1104,13 +1104,13 @@ fanWalker15 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker14 fun) (fanWalker14 arg) (\_ -> fanWalker14 fun))
+          in (Maybes.maybe (fanWalker14 arg) (\_ -> fanWalker14 fun) (fanWalker14 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker8 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker10 body) Nothing (\inner -> fanWalker10 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker10 inner) (fanWalker10 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1123,13 +1123,13 @@ fanWalker150 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker149 fun) (fanWalker149 arg) (\_ -> fanWalker149 fun))
+          in (Maybes.maybe (fanWalker149 arg) (\_ -> fanWalker149 fun) (fanWalker149 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker75 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker100 body) Nothing (\inner -> fanWalker100 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker100 inner) (fanWalker100 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1142,13 +1142,13 @@ fanWalker151 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker150 fun) (fanWalker150 arg) (\_ -> fanWalker150 fun))
+          in (Maybes.maybe (fanWalker150 arg) (\_ -> fanWalker150 fun) (fanWalker150 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker76 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker101 body) Nothing (\inner -> fanWalker101 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker101 inner) (fanWalker101 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1161,13 +1161,13 @@ fanWalker152 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker151 fun) (fanWalker151 arg) (\_ -> fanWalker151 fun))
+          in (Maybes.maybe (fanWalker151 arg) (\_ -> fanWalker151 fun) (fanWalker151 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker76 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker102 body) Nothing (\inner -> fanWalker102 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker102 inner) (fanWalker102 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1180,13 +1180,13 @@ fanWalker153 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker152 fun) (fanWalker152 arg) (\_ -> fanWalker152 fun))
+          in (Maybes.maybe (fanWalker152 arg) (\_ -> fanWalker152 fun) (fanWalker152 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker77 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker102 body) Nothing (\inner -> fanWalker102 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker102 inner) (fanWalker102 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1199,13 +1199,13 @@ fanWalker154 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker153 fun) (fanWalker153 arg) (\_ -> fanWalker153 fun))
+          in (Maybes.maybe (fanWalker153 arg) (\_ -> fanWalker153 fun) (fanWalker153 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker77 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker103 body) Nothing (\inner -> fanWalker103 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker103 inner) (fanWalker103 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1218,13 +1218,13 @@ fanWalker155 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker154 fun) (fanWalker154 arg) (\_ -> fanWalker154 fun))
+          in (Maybes.maybe (fanWalker154 arg) (\_ -> fanWalker154 fun) (fanWalker154 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker78 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker104 body) Nothing (\inner -> fanWalker104 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker104 inner) (fanWalker104 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1237,13 +1237,13 @@ fanWalker156 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker155 fun) (fanWalker155 arg) (\_ -> fanWalker155 fun))
+          in (Maybes.maybe (fanWalker155 arg) (\_ -> fanWalker155 fun) (fanWalker155 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker78 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker104 body) Nothing (\inner -> fanWalker104 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker104 inner) (fanWalker104 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1256,13 +1256,13 @@ fanWalker157 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker156 fun) (fanWalker156 arg) (\_ -> fanWalker156 fun))
+          in (Maybes.maybe (fanWalker156 arg) (\_ -> fanWalker156 fun) (fanWalker156 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker79 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker105 body) Nothing (\inner -> fanWalker105 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker105 inner) (fanWalker105 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1275,13 +1275,13 @@ fanWalker158 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker157 fun) (fanWalker157 arg) (\_ -> fanWalker157 fun))
+          in (Maybes.maybe (fanWalker157 arg) (\_ -> fanWalker157 fun) (fanWalker157 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker79 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker106 body) Nothing (\inner -> fanWalker106 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker106 inner) (fanWalker106 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1294,13 +1294,13 @@ fanWalker159 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker158 fun) (fanWalker158 arg) (\_ -> fanWalker158 fun))
+          in (Maybes.maybe (fanWalker158 arg) (\_ -> fanWalker158 fun) (fanWalker158 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker80 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker106 body) Nothing (\inner -> fanWalker106 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker106 inner) (fanWalker106 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1313,13 +1313,13 @@ fanWalker16 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker15 fun) (fanWalker15 arg) (\_ -> fanWalker15 fun))
+          in (Maybes.maybe (fanWalker15 arg) (\_ -> fanWalker15 fun) (fanWalker15 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker8 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker11 body) Nothing (\inner -> fanWalker11 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker11 inner) (fanWalker11 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1332,13 +1332,13 @@ fanWalker160 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker159 fun) (fanWalker159 arg) (\_ -> fanWalker159 fun))
+          in (Maybes.maybe (fanWalker159 arg) (\_ -> fanWalker159 fun) (fanWalker159 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker80 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker107 body) Nothing (\inner -> fanWalker107 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker107 inner) (fanWalker107 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1351,13 +1351,13 @@ fanWalker161 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker160 fun) (fanWalker160 arg) (\_ -> fanWalker160 fun))
+          in (Maybes.maybe (fanWalker160 arg) (\_ -> fanWalker160 fun) (fanWalker160 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker81 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker108 body) Nothing (\inner -> fanWalker108 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker108 inner) (fanWalker108 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1370,13 +1370,13 @@ fanWalker162 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker161 fun) (fanWalker161 arg) (\_ -> fanWalker161 fun))
+          in (Maybes.maybe (fanWalker161 arg) (\_ -> fanWalker161 fun) (fanWalker161 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker81 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker108 body) Nothing (\inner -> fanWalker108 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker108 inner) (fanWalker108 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1389,13 +1389,13 @@ fanWalker163 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker162 fun) (fanWalker162 arg) (\_ -> fanWalker162 fun))
+          in (Maybes.maybe (fanWalker162 arg) (\_ -> fanWalker162 fun) (fanWalker162 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker82 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker109 body) Nothing (\inner -> fanWalker109 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker109 inner) (fanWalker109 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1408,13 +1408,13 @@ fanWalker164 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker163 fun) (fanWalker163 arg) (\_ -> fanWalker163 fun))
+          in (Maybes.maybe (fanWalker163 arg) (\_ -> fanWalker163 fun) (fanWalker163 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker82 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker110 body) Nothing (\inner -> fanWalker110 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker110 inner) (fanWalker110 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1427,13 +1427,13 @@ fanWalker165 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker164 fun) (fanWalker164 arg) (\_ -> fanWalker164 fun))
+          in (Maybes.maybe (fanWalker164 arg) (\_ -> fanWalker164 fun) (fanWalker164 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker83 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker110 body) Nothing (\inner -> fanWalker110 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker110 inner) (fanWalker110 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1446,13 +1446,13 @@ fanWalker166 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker165 fun) (fanWalker165 arg) (\_ -> fanWalker165 fun))
+          in (Maybes.maybe (fanWalker165 arg) (\_ -> fanWalker165 fun) (fanWalker165 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker83 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker111 body) Nothing (\inner -> fanWalker111 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker111 inner) (fanWalker111 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1465,13 +1465,13 @@ fanWalker167 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker166 fun) (fanWalker166 arg) (\_ -> fanWalker166 fun))
+          in (Maybes.maybe (fanWalker166 arg) (\_ -> fanWalker166 fun) (fanWalker166 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker84 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker112 body) Nothing (\inner -> fanWalker112 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker112 inner) (fanWalker112 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1484,13 +1484,13 @@ fanWalker168 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker167 fun) (fanWalker167 arg) (\_ -> fanWalker167 fun))
+          in (Maybes.maybe (fanWalker167 arg) (\_ -> fanWalker167 fun) (fanWalker167 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker84 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker112 body) Nothing (\inner -> fanWalker112 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker112 inner) (fanWalker112 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1503,13 +1503,13 @@ fanWalker169 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker168 fun) (fanWalker168 arg) (\_ -> fanWalker168 fun))
+          in (Maybes.maybe (fanWalker168 arg) (\_ -> fanWalker168 fun) (fanWalker168 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker85 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker113 body) Nothing (\inner -> fanWalker113 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker113 inner) (fanWalker113 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1522,13 +1522,13 @@ fanWalker17 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker16 fun) (fanWalker16 arg) (\_ -> fanWalker16 fun))
+          in (Maybes.maybe (fanWalker16 arg) (\_ -> fanWalker16 fun) (fanWalker16 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker9 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker12 body) Nothing (\inner -> fanWalker12 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker12 inner) (fanWalker12 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1541,13 +1541,13 @@ fanWalker170 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker169 fun) (fanWalker169 arg) (\_ -> fanWalker169 fun))
+          in (Maybes.maybe (fanWalker169 arg) (\_ -> fanWalker169 fun) (fanWalker169 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker85 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker114 body) Nothing (\inner -> fanWalker114 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker114 inner) (fanWalker114 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1560,13 +1560,13 @@ fanWalker171 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker170 fun) (fanWalker170 arg) (\_ -> fanWalker170 fun))
+          in (Maybes.maybe (fanWalker170 arg) (\_ -> fanWalker170 fun) (fanWalker170 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker86 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker114 body) Nothing (\inner -> fanWalker114 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker114 inner) (fanWalker114 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1579,13 +1579,13 @@ fanWalker172 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker171 fun) (fanWalker171 arg) (\_ -> fanWalker171 fun))
+          in (Maybes.maybe (fanWalker171 arg) (\_ -> fanWalker171 fun) (fanWalker171 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker86 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker115 body) Nothing (\inner -> fanWalker115 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker115 inner) (fanWalker115 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1598,13 +1598,13 @@ fanWalker173 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker172 fun) (fanWalker172 arg) (\_ -> fanWalker172 fun))
+          in (Maybes.maybe (fanWalker172 arg) (\_ -> fanWalker172 fun) (fanWalker172 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker87 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker116 body) Nothing (\inner -> fanWalker116 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker116 inner) (fanWalker116 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1617,13 +1617,13 @@ fanWalker174 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker173 fun) (fanWalker173 arg) (\_ -> fanWalker173 fun))
+          in (Maybes.maybe (fanWalker173 arg) (\_ -> fanWalker173 fun) (fanWalker173 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker87 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker116 body) Nothing (\inner -> fanWalker116 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker116 inner) (fanWalker116 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1636,13 +1636,13 @@ fanWalker175 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker174 fun) (fanWalker174 arg) (\_ -> fanWalker174 fun))
+          in (Maybes.maybe (fanWalker174 arg) (\_ -> fanWalker174 fun) (fanWalker174 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker88 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker117 body) Nothing (\inner -> fanWalker117 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker117 inner) (fanWalker117 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1655,13 +1655,13 @@ fanWalker176 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker175 fun) (fanWalker175 arg) (\_ -> fanWalker175 fun))
+          in (Maybes.maybe (fanWalker175 arg) (\_ -> fanWalker175 fun) (fanWalker175 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker88 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker118 body) Nothing (\inner -> fanWalker118 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker118 inner) (fanWalker118 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1674,13 +1674,13 @@ fanWalker177 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker176 fun) (fanWalker176 arg) (\_ -> fanWalker176 fun))
+          in (Maybes.maybe (fanWalker176 arg) (\_ -> fanWalker176 fun) (fanWalker176 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker89 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker118 body) Nothing (\inner -> fanWalker118 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker118 inner) (fanWalker118 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1693,13 +1693,13 @@ fanWalker178 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker177 fun) (fanWalker177 arg) (\_ -> fanWalker177 fun))
+          in (Maybes.maybe (fanWalker177 arg) (\_ -> fanWalker177 fun) (fanWalker177 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker89 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker119 body) Nothing (\inner -> fanWalker119 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker119 inner) (fanWalker119 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1712,13 +1712,13 @@ fanWalker179 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker178 fun) (fanWalker178 arg) (\_ -> fanWalker178 fun))
+          in (Maybes.maybe (fanWalker178 arg) (\_ -> fanWalker178 fun) (fanWalker178 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker90 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker120 body) Nothing (\inner -> fanWalker120 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker120 inner) (fanWalker120 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1731,13 +1731,13 @@ fanWalker18 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker17 fun) (fanWalker17 arg) (\_ -> fanWalker17 fun))
+          in (Maybes.maybe (fanWalker17 arg) (\_ -> fanWalker17 fun) (fanWalker17 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker9 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker12 body) Nothing (\inner -> fanWalker12 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker12 inner) (fanWalker12 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1750,13 +1750,13 @@ fanWalker180 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker179 fun) (fanWalker179 arg) (\_ -> fanWalker179 fun))
+          in (Maybes.maybe (fanWalker179 arg) (\_ -> fanWalker179 fun) (fanWalker179 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker90 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker120 body) Nothing (\inner -> fanWalker120 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker120 inner) (fanWalker120 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1769,13 +1769,13 @@ fanWalker181 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker180 fun) (fanWalker180 arg) (\_ -> fanWalker180 fun))
+          in (Maybes.maybe (fanWalker180 arg) (\_ -> fanWalker180 fun) (fanWalker180 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker91 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker121 body) Nothing (\inner -> fanWalker121 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker121 inner) (fanWalker121 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1788,13 +1788,13 @@ fanWalker182 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker181 fun) (fanWalker181 arg) (\_ -> fanWalker181 fun))
+          in (Maybes.maybe (fanWalker181 arg) (\_ -> fanWalker181 fun) (fanWalker181 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker91 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker122 body) Nothing (\inner -> fanWalker122 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker122 inner) (fanWalker122 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1807,13 +1807,13 @@ fanWalker183 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker182 fun) (fanWalker182 arg) (\_ -> fanWalker182 fun))
+          in (Maybes.maybe (fanWalker182 arg) (\_ -> fanWalker182 fun) (fanWalker182 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker92 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker122 body) Nothing (\inner -> fanWalker122 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker122 inner) (fanWalker122 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1826,13 +1826,13 @@ fanWalker184 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker183 fun) (fanWalker183 arg) (\_ -> fanWalker183 fun))
+          in (Maybes.maybe (fanWalker183 arg) (\_ -> fanWalker183 fun) (fanWalker183 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker92 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker123 body) Nothing (\inner -> fanWalker123 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker123 inner) (fanWalker123 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1845,13 +1845,13 @@ fanWalker185 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker184 fun) (fanWalker184 arg) (\_ -> fanWalker184 fun))
+          in (Maybes.maybe (fanWalker184 arg) (\_ -> fanWalker184 fun) (fanWalker184 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker93 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker124 body) Nothing (\inner -> fanWalker124 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker124 inner) (fanWalker124 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1864,13 +1864,13 @@ fanWalker186 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker185 fun) (fanWalker185 arg) (\_ -> fanWalker185 fun))
+          in (Maybes.maybe (fanWalker185 arg) (\_ -> fanWalker185 fun) (fanWalker185 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker93 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker124 body) Nothing (\inner -> fanWalker124 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker124 inner) (fanWalker124 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1883,13 +1883,13 @@ fanWalker187 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker186 fun) (fanWalker186 arg) (\_ -> fanWalker186 fun))
+          in (Maybes.maybe (fanWalker186 arg) (\_ -> fanWalker186 fun) (fanWalker186 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker94 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker125 body) Nothing (\inner -> fanWalker125 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker125 inner) (fanWalker125 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1902,13 +1902,13 @@ fanWalker188 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker187 fun) (fanWalker187 arg) (\_ -> fanWalker187 fun))
+          in (Maybes.maybe (fanWalker187 arg) (\_ -> fanWalker187 fun) (fanWalker187 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker94 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker126 body) Nothing (\inner -> fanWalker126 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker126 inner) (fanWalker126 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1921,13 +1921,13 @@ fanWalker189 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker188 fun) (fanWalker188 arg) (\_ -> fanWalker188 fun))
+          in (Maybes.maybe (fanWalker188 arg) (\_ -> fanWalker188 fun) (fanWalker188 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker95 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker126 body) Nothing (\inner -> fanWalker126 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker126 inner) (fanWalker126 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1940,13 +1940,13 @@ fanWalker19 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker18 fun) (fanWalker18 arg) (\_ -> fanWalker18 fun))
+          in (Maybes.maybe (fanWalker18 arg) (\_ -> fanWalker18 fun) (fanWalker18 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker10 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker13 body) Nothing (\inner -> fanWalker13 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker13 inner) (fanWalker13 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1959,13 +1959,13 @@ fanWalker190 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker189 fun) (fanWalker189 arg) (\_ -> fanWalker189 fun))
+          in (Maybes.maybe (fanWalker189 arg) (\_ -> fanWalker189 fun) (fanWalker189 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker95 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker127 body) Nothing (\inner -> fanWalker127 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker127 inner) (fanWalker127 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1978,13 +1978,13 @@ fanWalker191 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker190 fun) (fanWalker190 arg) (\_ -> fanWalker190 fun))
+          in (Maybes.maybe (fanWalker190 arg) (\_ -> fanWalker190 fun) (fanWalker190 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker96 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker128 body) Nothing (\inner -> fanWalker128 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker128 inner) (fanWalker128 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -1997,13 +1997,13 @@ fanWalker192 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker191 fun) (fanWalker191 arg) (\_ -> fanWalker191 fun))
+          in (Maybes.maybe (fanWalker191 arg) (\_ -> fanWalker191 fun) (fanWalker191 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker96 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker128 body) Nothing (\inner -> fanWalker128 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker128 inner) (fanWalker128 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2016,13 +2016,13 @@ fanWalker193 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker192 fun) (fanWalker192 arg) (\_ -> fanWalker192 fun))
+          in (Maybes.maybe (fanWalker192 arg) (\_ -> fanWalker192 fun) (fanWalker192 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker97 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker129 body) Nothing (\inner -> fanWalker129 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker129 inner) (fanWalker129 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2035,13 +2035,13 @@ fanWalker194 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker193 fun) (fanWalker193 arg) (\_ -> fanWalker193 fun))
+          in (Maybes.maybe (fanWalker193 arg) (\_ -> fanWalker193 fun) (fanWalker193 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker97 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker130 body) Nothing (\inner -> fanWalker130 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker130 inner) (fanWalker130 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2054,13 +2054,13 @@ fanWalker195 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker194 fun) (fanWalker194 arg) (\_ -> fanWalker194 fun))
+          in (Maybes.maybe (fanWalker194 arg) (\_ -> fanWalker194 fun) (fanWalker194 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker98 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker130 body) Nothing (\inner -> fanWalker130 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker130 inner) (fanWalker130 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2073,13 +2073,13 @@ fanWalker196 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker195 fun) (fanWalker195 arg) (\_ -> fanWalker195 fun))
+          in (Maybes.maybe (fanWalker195 arg) (\_ -> fanWalker195 fun) (fanWalker195 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker98 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker131 body) Nothing (\inner -> fanWalker131 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker131 inner) (fanWalker131 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2092,13 +2092,13 @@ fanWalker197 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker196 fun) (fanWalker196 arg) (\_ -> fanWalker196 fun))
+          in (Maybes.maybe (fanWalker196 arg) (\_ -> fanWalker196 fun) (fanWalker196 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker99 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker132 body) Nothing (\inner -> fanWalker132 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker132 inner) (fanWalker132 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2111,13 +2111,13 @@ fanWalker198 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker197 fun) (fanWalker197 arg) (\_ -> fanWalker197 fun))
+          in (Maybes.maybe (fanWalker197 arg) (\_ -> fanWalker197 fun) (fanWalker197 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker99 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker132 body) Nothing (\inner -> fanWalker132 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker132 inner) (fanWalker132 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2130,13 +2130,13 @@ fanWalker199 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker198 fun) (fanWalker198 arg) (\_ -> fanWalker198 fun))
+          in (Maybes.maybe (fanWalker198 arg) (\_ -> fanWalker198 fun) (fanWalker198 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker100 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker133 body) Nothing (\inner -> fanWalker133 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker133 inner) (fanWalker133 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2149,13 +2149,13 @@ fanWalker2 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker1 fun) (fanWalker1 arg) (\_ -> fanWalker1 fun))
+          in (Maybes.maybe (fanWalker1 arg) (\_ -> fanWalker1 fun) (fanWalker1 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker1 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker1 body) Nothing (\inner -> fanWalker1 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker1 inner) (fanWalker1 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2168,13 +2168,13 @@ fanWalker20 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker19 fun) (fanWalker19 arg) (\_ -> fanWalker19 fun))
+          in (Maybes.maybe (fanWalker19 arg) (\_ -> fanWalker19 fun) (fanWalker19 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker10 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker14 body) Nothing (\inner -> fanWalker14 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker14 inner) (fanWalker14 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2187,13 +2187,13 @@ fanWalker200 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker199 fun) (fanWalker199 arg) (\_ -> fanWalker199 fun))
+          in (Maybes.maybe (fanWalker199 arg) (\_ -> fanWalker199 fun) (fanWalker199 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker100 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker134 body) Nothing (\inner -> fanWalker134 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker134 inner) (fanWalker134 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2206,13 +2206,13 @@ fanWalker201 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker200 fun) (fanWalker200 arg) (\_ -> fanWalker200 fun))
+          in (Maybes.maybe (fanWalker200 arg) (\_ -> fanWalker200 fun) (fanWalker200 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker101 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker134 body) Nothing (\inner -> fanWalker134 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker134 inner) (fanWalker134 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2225,13 +2225,13 @@ fanWalker202 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker201 fun) (fanWalker201 arg) (\_ -> fanWalker201 fun))
+          in (Maybes.maybe (fanWalker201 arg) (\_ -> fanWalker201 fun) (fanWalker201 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker101 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker135 body) Nothing (\inner -> fanWalker135 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker135 inner) (fanWalker135 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2244,13 +2244,13 @@ fanWalker203 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker202 fun) (fanWalker202 arg) (\_ -> fanWalker202 fun))
+          in (Maybes.maybe (fanWalker202 arg) (\_ -> fanWalker202 fun) (fanWalker202 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker102 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker136 body) Nothing (\inner -> fanWalker136 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker136 inner) (fanWalker136 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2263,13 +2263,13 @@ fanWalker204 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker203 fun) (fanWalker203 arg) (\_ -> fanWalker203 fun))
+          in (Maybes.maybe (fanWalker203 arg) (\_ -> fanWalker203 fun) (fanWalker203 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker102 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker136 body) Nothing (\inner -> fanWalker136 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker136 inner) (fanWalker136 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2282,13 +2282,13 @@ fanWalker205 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker204 fun) (fanWalker204 arg) (\_ -> fanWalker204 fun))
+          in (Maybes.maybe (fanWalker204 arg) (\_ -> fanWalker204 fun) (fanWalker204 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker103 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker137 body) Nothing (\inner -> fanWalker137 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker137 inner) (fanWalker137 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2301,13 +2301,13 @@ fanWalker206 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker205 fun) (fanWalker205 arg) (\_ -> fanWalker205 fun))
+          in (Maybes.maybe (fanWalker205 arg) (\_ -> fanWalker205 fun) (fanWalker205 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker103 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker138 body) Nothing (\inner -> fanWalker138 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker138 inner) (fanWalker138 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2320,13 +2320,13 @@ fanWalker207 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker206 fun) (fanWalker206 arg) (\_ -> fanWalker206 fun))
+          in (Maybes.maybe (fanWalker206 arg) (\_ -> fanWalker206 fun) (fanWalker206 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker104 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker138 body) Nothing (\inner -> fanWalker138 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker138 inner) (fanWalker138 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2339,13 +2339,13 @@ fanWalker208 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker207 fun) (fanWalker207 arg) (\_ -> fanWalker207 fun))
+          in (Maybes.maybe (fanWalker207 arg) (\_ -> fanWalker207 fun) (fanWalker207 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker104 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker139 body) Nothing (\inner -> fanWalker139 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker139 inner) (fanWalker139 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2358,13 +2358,13 @@ fanWalker209 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker208 fun) (fanWalker208 arg) (\_ -> fanWalker208 fun))
+          in (Maybes.maybe (fanWalker208 arg) (\_ -> fanWalker208 fun) (fanWalker208 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker105 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker140 body) Nothing (\inner -> fanWalker140 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker140 inner) (fanWalker140 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2377,13 +2377,13 @@ fanWalker21 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker20 fun) (fanWalker20 arg) (\_ -> fanWalker20 fun))
+          in (Maybes.maybe (fanWalker20 arg) (\_ -> fanWalker20 fun) (fanWalker20 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker11 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker14 body) Nothing (\inner -> fanWalker14 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker14 inner) (fanWalker14 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2396,13 +2396,13 @@ fanWalker210 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker209 fun) (fanWalker209 arg) (\_ -> fanWalker209 fun))
+          in (Maybes.maybe (fanWalker209 arg) (\_ -> fanWalker209 fun) (fanWalker209 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker105 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker140 body) Nothing (\inner -> fanWalker140 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker140 inner) (fanWalker140 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2415,13 +2415,13 @@ fanWalker211 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker210 fun) (fanWalker210 arg) (\_ -> fanWalker210 fun))
+          in (Maybes.maybe (fanWalker210 arg) (\_ -> fanWalker210 fun) (fanWalker210 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker106 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker141 body) Nothing (\inner -> fanWalker141 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker141 inner) (fanWalker141 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2434,13 +2434,13 @@ fanWalker212 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker211 fun) (fanWalker211 arg) (\_ -> fanWalker211 fun))
+          in (Maybes.maybe (fanWalker211 arg) (\_ -> fanWalker211 fun) (fanWalker211 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker106 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker142 body) Nothing (\inner -> fanWalker142 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker142 inner) (fanWalker142 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2453,13 +2453,13 @@ fanWalker213 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker212 fun) (fanWalker212 arg) (\_ -> fanWalker212 fun))
+          in (Maybes.maybe (fanWalker212 arg) (\_ -> fanWalker212 fun) (fanWalker212 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker107 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker142 body) Nothing (\inner -> fanWalker142 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker142 inner) (fanWalker142 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2472,13 +2472,13 @@ fanWalker214 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker213 fun) (fanWalker213 arg) (\_ -> fanWalker213 fun))
+          in (Maybes.maybe (fanWalker213 arg) (\_ -> fanWalker213 fun) (fanWalker213 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker107 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker143 body) Nothing (\inner -> fanWalker143 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker143 inner) (fanWalker143 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2491,13 +2491,13 @@ fanWalker215 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker214 fun) (fanWalker214 arg) (\_ -> fanWalker214 fun))
+          in (Maybes.maybe (fanWalker214 arg) (\_ -> fanWalker214 fun) (fanWalker214 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker108 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker144 body) Nothing (\inner -> fanWalker144 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker144 inner) (fanWalker144 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2510,13 +2510,13 @@ fanWalker216 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker215 fun) (fanWalker215 arg) (\_ -> fanWalker215 fun))
+          in (Maybes.maybe (fanWalker215 arg) (\_ -> fanWalker215 fun) (fanWalker215 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker108 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker144 body) Nothing (\inner -> fanWalker144 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker144 inner) (fanWalker144 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2529,13 +2529,13 @@ fanWalker217 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker216 fun) (fanWalker216 arg) (\_ -> fanWalker216 fun))
+          in (Maybes.maybe (fanWalker216 arg) (\_ -> fanWalker216 fun) (fanWalker216 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker109 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker145 body) Nothing (\inner -> fanWalker145 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker145 inner) (fanWalker145 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2548,13 +2548,13 @@ fanWalker218 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker217 fun) (fanWalker217 arg) (\_ -> fanWalker217 fun))
+          in (Maybes.maybe (fanWalker217 arg) (\_ -> fanWalker217 fun) (fanWalker217 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker109 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker146 body) Nothing (\inner -> fanWalker146 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker146 inner) (fanWalker146 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2567,13 +2567,13 @@ fanWalker219 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker218 fun) (fanWalker218 arg) (\_ -> fanWalker218 fun))
+          in (Maybes.maybe (fanWalker218 arg) (\_ -> fanWalker218 fun) (fanWalker218 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker110 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker146 body) Nothing (\inner -> fanWalker146 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker146 inner) (fanWalker146 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2586,13 +2586,13 @@ fanWalker22 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker21 fun) (fanWalker21 arg) (\_ -> fanWalker21 fun))
+          in (Maybes.maybe (fanWalker21 arg) (\_ -> fanWalker21 fun) (fanWalker21 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker11 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker15 body) Nothing (\inner -> fanWalker15 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker15 inner) (fanWalker15 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2605,13 +2605,13 @@ fanWalker220 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker219 fun) (fanWalker219 arg) (\_ -> fanWalker219 fun))
+          in (Maybes.maybe (fanWalker219 arg) (\_ -> fanWalker219 fun) (fanWalker219 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker110 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker147 body) Nothing (\inner -> fanWalker147 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker147 inner) (fanWalker147 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2624,13 +2624,13 @@ fanWalker221 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker220 fun) (fanWalker220 arg) (\_ -> fanWalker220 fun))
+          in (Maybes.maybe (fanWalker220 arg) (\_ -> fanWalker220 fun) (fanWalker220 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker111 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker148 body) Nothing (\inner -> fanWalker148 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker148 inner) (fanWalker148 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2643,13 +2643,13 @@ fanWalker222 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker221 fun) (fanWalker221 arg) (\_ -> fanWalker221 fun))
+          in (Maybes.maybe (fanWalker221 arg) (\_ -> fanWalker221 fun) (fanWalker221 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker111 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker148 body) Nothing (\inner -> fanWalker148 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker148 inner) (fanWalker148 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2662,13 +2662,13 @@ fanWalker223 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker222 fun) (fanWalker222 arg) (\_ -> fanWalker222 fun))
+          in (Maybes.maybe (fanWalker222 arg) (\_ -> fanWalker222 fun) (fanWalker222 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker112 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker149 body) Nothing (\inner -> fanWalker149 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker149 inner) (fanWalker149 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2681,13 +2681,13 @@ fanWalker224 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker223 fun) (fanWalker223 arg) (\_ -> fanWalker223 fun))
+          in (Maybes.maybe (fanWalker223 arg) (\_ -> fanWalker223 fun) (fanWalker223 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker112 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker150 body) Nothing (\inner -> fanWalker150 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker150 inner) (fanWalker150 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2700,13 +2700,13 @@ fanWalker225 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker224 fun) (fanWalker224 arg) (\_ -> fanWalker224 fun))
+          in (Maybes.maybe (fanWalker224 arg) (\_ -> fanWalker224 fun) (fanWalker224 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker113 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker150 body) Nothing (\inner -> fanWalker150 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker150 inner) (fanWalker150 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2719,13 +2719,13 @@ fanWalker226 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker225 fun) (fanWalker225 arg) (\_ -> fanWalker225 fun))
+          in (Maybes.maybe (fanWalker225 arg) (\_ -> fanWalker225 fun) (fanWalker225 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker113 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker151 body) Nothing (\inner -> fanWalker151 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker151 inner) (fanWalker151 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2738,13 +2738,13 @@ fanWalker227 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker226 fun) (fanWalker226 arg) (\_ -> fanWalker226 fun))
+          in (Maybes.maybe (fanWalker226 arg) (\_ -> fanWalker226 fun) (fanWalker226 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker114 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker152 body) Nothing (\inner -> fanWalker152 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker152 inner) (fanWalker152 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2757,13 +2757,13 @@ fanWalker228 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker227 fun) (fanWalker227 arg) (\_ -> fanWalker227 fun))
+          in (Maybes.maybe (fanWalker227 arg) (\_ -> fanWalker227 fun) (fanWalker227 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker114 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker152 body) Nothing (\inner -> fanWalker152 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker152 inner) (fanWalker152 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2776,13 +2776,13 @@ fanWalker229 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker228 fun) (fanWalker228 arg) (\_ -> fanWalker228 fun))
+          in (Maybes.maybe (fanWalker228 arg) (\_ -> fanWalker228 fun) (fanWalker228 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker115 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker153 body) Nothing (\inner -> fanWalker153 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker153 inner) (fanWalker153 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2795,13 +2795,13 @@ fanWalker23 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker22 fun) (fanWalker22 arg) (\_ -> fanWalker22 fun))
+          in (Maybes.maybe (fanWalker22 arg) (\_ -> fanWalker22 fun) (fanWalker22 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker12 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker16 body) Nothing (\inner -> fanWalker16 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker16 inner) (fanWalker16 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2814,13 +2814,13 @@ fanWalker230 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker229 fun) (fanWalker229 arg) (\_ -> fanWalker229 fun))
+          in (Maybes.maybe (fanWalker229 arg) (\_ -> fanWalker229 fun) (fanWalker229 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker115 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker154 body) Nothing (\inner -> fanWalker154 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker154 inner) (fanWalker154 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2833,13 +2833,13 @@ fanWalker231 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker230 fun) (fanWalker230 arg) (\_ -> fanWalker230 fun))
+          in (Maybes.maybe (fanWalker230 arg) (\_ -> fanWalker230 fun) (fanWalker230 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker116 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker154 body) Nothing (\inner -> fanWalker154 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker154 inner) (fanWalker154 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2852,13 +2852,13 @@ fanWalker232 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker231 fun) (fanWalker231 arg) (\_ -> fanWalker231 fun))
+          in (Maybes.maybe (fanWalker231 arg) (\_ -> fanWalker231 fun) (fanWalker231 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker116 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker155 body) Nothing (\inner -> fanWalker155 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker155 inner) (fanWalker155 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2871,13 +2871,13 @@ fanWalker233 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker232 fun) (fanWalker232 arg) (\_ -> fanWalker232 fun))
+          in (Maybes.maybe (fanWalker232 arg) (\_ -> fanWalker232 fun) (fanWalker232 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker117 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker156 body) Nothing (\inner -> fanWalker156 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker156 inner) (fanWalker156 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2890,13 +2890,13 @@ fanWalker234 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker233 fun) (fanWalker233 arg) (\_ -> fanWalker233 fun))
+          in (Maybes.maybe (fanWalker233 arg) (\_ -> fanWalker233 fun) (fanWalker233 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker117 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker156 body) Nothing (\inner -> fanWalker156 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker156 inner) (fanWalker156 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2909,13 +2909,13 @@ fanWalker235 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker234 fun) (fanWalker234 arg) (\_ -> fanWalker234 fun))
+          in (Maybes.maybe (fanWalker234 arg) (\_ -> fanWalker234 fun) (fanWalker234 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker118 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker157 body) Nothing (\inner -> fanWalker157 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker157 inner) (fanWalker157 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2928,13 +2928,13 @@ fanWalker236 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker235 fun) (fanWalker235 arg) (\_ -> fanWalker235 fun))
+          in (Maybes.maybe (fanWalker235 arg) (\_ -> fanWalker235 fun) (fanWalker235 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker118 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker158 body) Nothing (\inner -> fanWalker158 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker158 inner) (fanWalker158 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2947,13 +2947,13 @@ fanWalker237 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker236 fun) (fanWalker236 arg) (\_ -> fanWalker236 fun))
+          in (Maybes.maybe (fanWalker236 arg) (\_ -> fanWalker236 fun) (fanWalker236 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker119 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker158 body) Nothing (\inner -> fanWalker158 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker158 inner) (fanWalker158 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2966,13 +2966,13 @@ fanWalker238 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker237 fun) (fanWalker237 arg) (\_ -> fanWalker237 fun))
+          in (Maybes.maybe (fanWalker237 arg) (\_ -> fanWalker237 fun) (fanWalker237 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker119 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker159 body) Nothing (\inner -> fanWalker159 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker159 inner) (fanWalker159 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -2985,13 +2985,13 @@ fanWalker239 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker238 fun) (fanWalker238 arg) (\_ -> fanWalker238 fun))
+          in (Maybes.maybe (fanWalker238 arg) (\_ -> fanWalker238 fun) (fanWalker238 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker120 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker160 body) Nothing (\inner -> fanWalker160 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker160 inner) (fanWalker160 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3004,13 +3004,13 @@ fanWalker24 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker23 fun) (fanWalker23 arg) (\_ -> fanWalker23 fun))
+          in (Maybes.maybe (fanWalker23 arg) (\_ -> fanWalker23 fun) (fanWalker23 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker12 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker16 body) Nothing (\inner -> fanWalker16 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker16 inner) (fanWalker16 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3023,13 +3023,13 @@ fanWalker240 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker239 fun) (fanWalker239 arg) (\_ -> fanWalker239 fun))
+          in (Maybes.maybe (fanWalker239 arg) (\_ -> fanWalker239 fun) (fanWalker239 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker120 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker160 body) Nothing (\inner -> fanWalker160 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker160 inner) (fanWalker160 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3042,13 +3042,13 @@ fanWalker241 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker240 fun) (fanWalker240 arg) (\_ -> fanWalker240 fun))
+          in (Maybes.maybe (fanWalker240 arg) (\_ -> fanWalker240 fun) (fanWalker240 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker121 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker161 body) Nothing (\inner -> fanWalker161 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker161 inner) (fanWalker161 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3061,13 +3061,13 @@ fanWalker242 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker241 fun) (fanWalker241 arg) (\_ -> fanWalker241 fun))
+          in (Maybes.maybe (fanWalker241 arg) (\_ -> fanWalker241 fun) (fanWalker241 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker121 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker162 body) Nothing (\inner -> fanWalker162 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker162 inner) (fanWalker162 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3080,13 +3080,13 @@ fanWalker243 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker242 fun) (fanWalker242 arg) (\_ -> fanWalker242 fun))
+          in (Maybes.maybe (fanWalker242 arg) (\_ -> fanWalker242 fun) (fanWalker242 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker122 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker162 body) Nothing (\inner -> fanWalker162 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker162 inner) (fanWalker162 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3099,13 +3099,13 @@ fanWalker244 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker243 fun) (fanWalker243 arg) (\_ -> fanWalker243 fun))
+          in (Maybes.maybe (fanWalker243 arg) (\_ -> fanWalker243 fun) (fanWalker243 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker122 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker163 body) Nothing (\inner -> fanWalker163 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker163 inner) (fanWalker163 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3118,13 +3118,13 @@ fanWalker245 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker244 fun) (fanWalker244 arg) (\_ -> fanWalker244 fun))
+          in (Maybes.maybe (fanWalker244 arg) (\_ -> fanWalker244 fun) (fanWalker244 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker123 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker164 body) Nothing (\inner -> fanWalker164 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker164 inner) (fanWalker164 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3137,13 +3137,13 @@ fanWalker246 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker245 fun) (fanWalker245 arg) (\_ -> fanWalker245 fun))
+          in (Maybes.maybe (fanWalker245 arg) (\_ -> fanWalker245 fun) (fanWalker245 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker123 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker164 body) Nothing (\inner -> fanWalker164 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker164 inner) (fanWalker164 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3156,13 +3156,13 @@ fanWalker247 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker246 fun) (fanWalker246 arg) (\_ -> fanWalker246 fun))
+          in (Maybes.maybe (fanWalker246 arg) (\_ -> fanWalker246 fun) (fanWalker246 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker124 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker165 body) Nothing (\inner -> fanWalker165 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker165 inner) (fanWalker165 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3175,13 +3175,13 @@ fanWalker248 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker247 fun) (fanWalker247 arg) (\_ -> fanWalker247 fun))
+          in (Maybes.maybe (fanWalker247 arg) (\_ -> fanWalker247 fun) (fanWalker247 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker124 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker166 body) Nothing (\inner -> fanWalker166 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker166 inner) (fanWalker166 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3194,13 +3194,13 @@ fanWalker249 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker248 fun) (fanWalker248 arg) (\_ -> fanWalker248 fun))
+          in (Maybes.maybe (fanWalker248 arg) (\_ -> fanWalker248 fun) (fanWalker248 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker125 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker166 body) Nothing (\inner -> fanWalker166 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker166 inner) (fanWalker166 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3213,13 +3213,13 @@ fanWalker25 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker24 fun) (fanWalker24 arg) (\_ -> fanWalker24 fun))
+          in (Maybes.maybe (fanWalker24 arg) (\_ -> fanWalker24 fun) (fanWalker24 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker13 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker17 body) Nothing (\inner -> fanWalker17 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker17 inner) (fanWalker17 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3232,13 +3232,13 @@ fanWalker250 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker249 fun) (fanWalker249 arg) (\_ -> fanWalker249 fun))
+          in (Maybes.maybe (fanWalker249 arg) (\_ -> fanWalker249 fun) (fanWalker249 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker125 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker167 body) Nothing (\inner -> fanWalker167 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker167 inner) (fanWalker167 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3251,13 +3251,13 @@ fanWalker251 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker250 fun) (fanWalker250 arg) (\_ -> fanWalker250 fun))
+          in (Maybes.maybe (fanWalker250 arg) (\_ -> fanWalker250 fun) (fanWalker250 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker126 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker168 body) Nothing (\inner -> fanWalker168 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker168 inner) (fanWalker168 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3270,13 +3270,13 @@ fanWalker252 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker251 fun) (fanWalker251 arg) (\_ -> fanWalker251 fun))
+          in (Maybes.maybe (fanWalker251 arg) (\_ -> fanWalker251 fun) (fanWalker251 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker126 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker168 body) Nothing (\inner -> fanWalker168 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker168 inner) (fanWalker168 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3289,13 +3289,13 @@ fanWalker253 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker252 fun) (fanWalker252 arg) (\_ -> fanWalker252 fun))
+          in (Maybes.maybe (fanWalker252 arg) (\_ -> fanWalker252 fun) (fanWalker252 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker127 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker169 body) Nothing (\inner -> fanWalker169 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker169 inner) (fanWalker169 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3308,13 +3308,13 @@ fanWalker254 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker253 fun) (fanWalker253 arg) (\_ -> fanWalker253 fun))
+          in (Maybes.maybe (fanWalker253 arg) (\_ -> fanWalker253 fun) (fanWalker253 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker127 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker170 body) Nothing (\inner -> fanWalker170 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker170 inner) (fanWalker170 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3327,13 +3327,13 @@ fanWalker255 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker254 fun) (fanWalker254 arg) (\_ -> fanWalker254 fun))
+          in (Maybes.maybe (fanWalker254 arg) (\_ -> fanWalker254 fun) (fanWalker254 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker128 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker170 body) Nothing (\inner -> fanWalker170 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker170 inner) (fanWalker170 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3346,13 +3346,13 @@ fanWalker256 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker255 fun) (fanWalker255 arg) (\_ -> fanWalker255 fun))
+          in (Maybes.maybe (fanWalker255 arg) (\_ -> fanWalker255 fun) (fanWalker255 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker128 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker171 body) Nothing (\inner -> fanWalker171 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker171 inner) (fanWalker171 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3365,13 +3365,13 @@ fanWalker257 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker256 fun) (fanWalker256 arg) (\_ -> fanWalker256 fun))
+          in (Maybes.maybe (fanWalker256 arg) (\_ -> fanWalker256 fun) (fanWalker256 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker129 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker172 body) Nothing (\inner -> fanWalker172 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker172 inner) (fanWalker172 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3384,13 +3384,13 @@ fanWalker258 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker257 fun) (fanWalker257 arg) (\_ -> fanWalker257 fun))
+          in (Maybes.maybe (fanWalker257 arg) (\_ -> fanWalker257 fun) (fanWalker257 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker129 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker172 body) Nothing (\inner -> fanWalker172 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker172 inner) (fanWalker172 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3403,13 +3403,13 @@ fanWalker259 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker258 fun) (fanWalker258 arg) (\_ -> fanWalker258 fun))
+          in (Maybes.maybe (fanWalker258 arg) (\_ -> fanWalker258 fun) (fanWalker258 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker130 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker173 body) Nothing (\inner -> fanWalker173 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker173 inner) (fanWalker173 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3422,13 +3422,13 @@ fanWalker26 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker25 fun) (fanWalker25 arg) (\_ -> fanWalker25 fun))
+          in (Maybes.maybe (fanWalker25 arg) (\_ -> fanWalker25 fun) (fanWalker25 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker13 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker18 body) Nothing (\inner -> fanWalker18 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker18 inner) (fanWalker18 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3441,13 +3441,13 @@ fanWalker260 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker259 fun) (fanWalker259 arg) (\_ -> fanWalker259 fun))
+          in (Maybes.maybe (fanWalker259 arg) (\_ -> fanWalker259 fun) (fanWalker259 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker130 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker174 body) Nothing (\inner -> fanWalker174 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker174 inner) (fanWalker174 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3460,13 +3460,13 @@ fanWalker261 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker260 fun) (fanWalker260 arg) (\_ -> fanWalker260 fun))
+          in (Maybes.maybe (fanWalker260 arg) (\_ -> fanWalker260 fun) (fanWalker260 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker131 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker174 body) Nothing (\inner -> fanWalker174 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker174 inner) (fanWalker174 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3479,13 +3479,13 @@ fanWalker262 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker261 fun) (fanWalker261 arg) (\_ -> fanWalker261 fun))
+          in (Maybes.maybe (fanWalker261 arg) (\_ -> fanWalker261 fun) (fanWalker261 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker131 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker175 body) Nothing (\inner -> fanWalker175 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker175 inner) (fanWalker175 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3498,13 +3498,13 @@ fanWalker263 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker262 fun) (fanWalker262 arg) (\_ -> fanWalker262 fun))
+          in (Maybes.maybe (fanWalker262 arg) (\_ -> fanWalker262 fun) (fanWalker262 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker132 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker176 body) Nothing (\inner -> fanWalker176 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker176 inner) (fanWalker176 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3517,13 +3517,13 @@ fanWalker264 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker263 fun) (fanWalker263 arg) (\_ -> fanWalker263 fun))
+          in (Maybes.maybe (fanWalker263 arg) (\_ -> fanWalker263 fun) (fanWalker263 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker132 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker176 body) Nothing (\inner -> fanWalker176 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker176 inner) (fanWalker176 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3536,13 +3536,13 @@ fanWalker265 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker264 fun) (fanWalker264 arg) (\_ -> fanWalker264 fun))
+          in (Maybes.maybe (fanWalker264 arg) (\_ -> fanWalker264 fun) (fanWalker264 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker133 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker177 body) Nothing (\inner -> fanWalker177 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker177 inner) (fanWalker177 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3555,13 +3555,13 @@ fanWalker266 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker265 fun) (fanWalker265 arg) (\_ -> fanWalker265 fun))
+          in (Maybes.maybe (fanWalker265 arg) (\_ -> fanWalker265 fun) (fanWalker265 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker133 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker178 body) Nothing (\inner -> fanWalker178 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker178 inner) (fanWalker178 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3574,13 +3574,13 @@ fanWalker267 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker266 fun) (fanWalker266 arg) (\_ -> fanWalker266 fun))
+          in (Maybes.maybe (fanWalker266 arg) (\_ -> fanWalker266 fun) (fanWalker266 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker134 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker178 body) Nothing (\inner -> fanWalker178 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker178 inner) (fanWalker178 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3593,13 +3593,13 @@ fanWalker268 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker267 fun) (fanWalker267 arg) (\_ -> fanWalker267 fun))
+          in (Maybes.maybe (fanWalker267 arg) (\_ -> fanWalker267 fun) (fanWalker267 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker134 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker179 body) Nothing (\inner -> fanWalker179 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker179 inner) (fanWalker179 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3612,13 +3612,13 @@ fanWalker269 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker268 fun) (fanWalker268 arg) (\_ -> fanWalker268 fun))
+          in (Maybes.maybe (fanWalker268 arg) (\_ -> fanWalker268 fun) (fanWalker268 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker135 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker180 body) Nothing (\inner -> fanWalker180 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker180 inner) (fanWalker180 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3631,13 +3631,13 @@ fanWalker27 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker26 fun) (fanWalker26 arg) (\_ -> fanWalker26 fun))
+          in (Maybes.maybe (fanWalker26 arg) (\_ -> fanWalker26 fun) (fanWalker26 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker14 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker18 body) Nothing (\inner -> fanWalker18 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker18 inner) (fanWalker18 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3650,13 +3650,13 @@ fanWalker270 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker269 fun) (fanWalker269 arg) (\_ -> fanWalker269 fun))
+          in (Maybes.maybe (fanWalker269 arg) (\_ -> fanWalker269 fun) (fanWalker269 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker135 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker180 body) Nothing (\inner -> fanWalker180 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker180 inner) (fanWalker180 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3669,13 +3669,13 @@ fanWalker271 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker270 fun) (fanWalker270 arg) (\_ -> fanWalker270 fun))
+          in (Maybes.maybe (fanWalker270 arg) (\_ -> fanWalker270 fun) (fanWalker270 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker136 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker181 body) Nothing (\inner -> fanWalker181 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker181 inner) (fanWalker181 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3688,13 +3688,13 @@ fanWalker272 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker271 fun) (fanWalker271 arg) (\_ -> fanWalker271 fun))
+          in (Maybes.maybe (fanWalker271 arg) (\_ -> fanWalker271 fun) (fanWalker271 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker136 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker182 body) Nothing (\inner -> fanWalker182 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker182 inner) (fanWalker182 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3707,13 +3707,13 @@ fanWalker273 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker272 fun) (fanWalker272 arg) (\_ -> fanWalker272 fun))
+          in (Maybes.maybe (fanWalker272 arg) (\_ -> fanWalker272 fun) (fanWalker272 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker137 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker182 body) Nothing (\inner -> fanWalker182 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker182 inner) (fanWalker182 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3726,13 +3726,13 @@ fanWalker274 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker273 fun) (fanWalker273 arg) (\_ -> fanWalker273 fun))
+          in (Maybes.maybe (fanWalker273 arg) (\_ -> fanWalker273 fun) (fanWalker273 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker137 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker183 body) Nothing (\inner -> fanWalker183 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker183 inner) (fanWalker183 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3745,13 +3745,13 @@ fanWalker275 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker274 fun) (fanWalker274 arg) (\_ -> fanWalker274 fun))
+          in (Maybes.maybe (fanWalker274 arg) (\_ -> fanWalker274 fun) (fanWalker274 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker138 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker184 body) Nothing (\inner -> fanWalker184 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker184 inner) (fanWalker184 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3764,13 +3764,13 @@ fanWalker276 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker275 fun) (fanWalker275 arg) (\_ -> fanWalker275 fun))
+          in (Maybes.maybe (fanWalker275 arg) (\_ -> fanWalker275 fun) (fanWalker275 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker138 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker184 body) Nothing (\inner -> fanWalker184 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker184 inner) (fanWalker184 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3783,13 +3783,13 @@ fanWalker277 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker276 fun) (fanWalker276 arg) (\_ -> fanWalker276 fun))
+          in (Maybes.maybe (fanWalker276 arg) (\_ -> fanWalker276 fun) (fanWalker276 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker139 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker185 body) Nothing (\inner -> fanWalker185 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker185 inner) (fanWalker185 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3802,13 +3802,13 @@ fanWalker278 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker277 fun) (fanWalker277 arg) (\_ -> fanWalker277 fun))
+          in (Maybes.maybe (fanWalker277 arg) (\_ -> fanWalker277 fun) (fanWalker277 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker139 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker186 body) Nothing (\inner -> fanWalker186 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker186 inner) (fanWalker186 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3821,13 +3821,13 @@ fanWalker279 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker278 fun) (fanWalker278 arg) (\_ -> fanWalker278 fun))
+          in (Maybes.maybe (fanWalker278 arg) (\_ -> fanWalker278 fun) (fanWalker278 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker140 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker186 body) Nothing (\inner -> fanWalker186 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker186 inner) (fanWalker186 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3840,13 +3840,13 @@ fanWalker28 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker27 fun) (fanWalker27 arg) (\_ -> fanWalker27 fun))
+          in (Maybes.maybe (fanWalker27 arg) (\_ -> fanWalker27 fun) (fanWalker27 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker14 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker19 body) Nothing (\inner -> fanWalker19 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker19 inner) (fanWalker19 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3859,13 +3859,13 @@ fanWalker280 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker279 fun) (fanWalker279 arg) (\_ -> fanWalker279 fun))
+          in (Maybes.maybe (fanWalker279 arg) (\_ -> fanWalker279 fun) (fanWalker279 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker140 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker187 body) Nothing (\inner -> fanWalker187 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker187 inner) (fanWalker187 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3878,13 +3878,13 @@ fanWalker281 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker280 fun) (fanWalker280 arg) (\_ -> fanWalker280 fun))
+          in (Maybes.maybe (fanWalker280 arg) (\_ -> fanWalker280 fun) (fanWalker280 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker141 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker188 body) Nothing (\inner -> fanWalker188 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker188 inner) (fanWalker188 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3897,13 +3897,13 @@ fanWalker282 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker281 fun) (fanWalker281 arg) (\_ -> fanWalker281 fun))
+          in (Maybes.maybe (fanWalker281 arg) (\_ -> fanWalker281 fun) (fanWalker281 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker141 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker188 body) Nothing (\inner -> fanWalker188 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker188 inner) (fanWalker188 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3916,13 +3916,13 @@ fanWalker283 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker282 fun) (fanWalker282 arg) (\_ -> fanWalker282 fun))
+          in (Maybes.maybe (fanWalker282 arg) (\_ -> fanWalker282 fun) (fanWalker282 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker142 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker189 body) Nothing (\inner -> fanWalker189 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker189 inner) (fanWalker189 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3935,13 +3935,13 @@ fanWalker284 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker283 fun) (fanWalker283 arg) (\_ -> fanWalker283 fun))
+          in (Maybes.maybe (fanWalker283 arg) (\_ -> fanWalker283 fun) (fanWalker283 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker142 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker190 body) Nothing (\inner -> fanWalker190 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker190 inner) (fanWalker190 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3954,13 +3954,13 @@ fanWalker285 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker284 fun) (fanWalker284 arg) (\_ -> fanWalker284 fun))
+          in (Maybes.maybe (fanWalker284 arg) (\_ -> fanWalker284 fun) (fanWalker284 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker143 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker190 body) Nothing (\inner -> fanWalker190 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker190 inner) (fanWalker190 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3973,13 +3973,13 @@ fanWalker286 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker285 fun) (fanWalker285 arg) (\_ -> fanWalker285 fun))
+          in (Maybes.maybe (fanWalker285 arg) (\_ -> fanWalker285 fun) (fanWalker285 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker143 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker191 body) Nothing (\inner -> fanWalker191 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker191 inner) (fanWalker191 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -3992,13 +3992,13 @@ fanWalker287 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker286 fun) (fanWalker286 arg) (\_ -> fanWalker286 fun))
+          in (Maybes.maybe (fanWalker286 arg) (\_ -> fanWalker286 fun) (fanWalker286 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker144 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker192 body) Nothing (\inner -> fanWalker192 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker192 inner) (fanWalker192 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4011,13 +4011,13 @@ fanWalker288 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker287 fun) (fanWalker287 arg) (\_ -> fanWalker287 fun))
+          in (Maybes.maybe (fanWalker287 arg) (\_ -> fanWalker287 fun) (fanWalker287 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker144 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker192 body) Nothing (\inner -> fanWalker192 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker192 inner) (fanWalker192 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4030,13 +4030,13 @@ fanWalker289 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker288 fun) (fanWalker288 arg) (\_ -> fanWalker288 fun))
+          in (Maybes.maybe (fanWalker288 arg) (\_ -> fanWalker288 fun) (fanWalker288 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker145 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker193 body) Nothing (\inner -> fanWalker193 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker193 inner) (fanWalker193 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4049,13 +4049,13 @@ fanWalker29 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker28 fun) (fanWalker28 arg) (\_ -> fanWalker28 fun))
+          in (Maybes.maybe (fanWalker28 arg) (\_ -> fanWalker28 fun) (fanWalker28 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker15 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker20 body) Nothing (\inner -> fanWalker20 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker20 inner) (fanWalker20 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4068,13 +4068,13 @@ fanWalker290 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker289 fun) (fanWalker289 arg) (\_ -> fanWalker289 fun))
+          in (Maybes.maybe (fanWalker289 arg) (\_ -> fanWalker289 fun) (fanWalker289 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker145 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker194 body) Nothing (\inner -> fanWalker194 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker194 inner) (fanWalker194 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4087,13 +4087,13 @@ fanWalker291 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker290 fun) (fanWalker290 arg) (\_ -> fanWalker290 fun))
+          in (Maybes.maybe (fanWalker290 arg) (\_ -> fanWalker290 fun) (fanWalker290 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker146 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker194 body) Nothing (\inner -> fanWalker194 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker194 inner) (fanWalker194 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4106,13 +4106,13 @@ fanWalker292 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker291 fun) (fanWalker291 arg) (\_ -> fanWalker291 fun))
+          in (Maybes.maybe (fanWalker291 arg) (\_ -> fanWalker291 fun) (fanWalker291 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker146 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker195 body) Nothing (\inner -> fanWalker195 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker195 inner) (fanWalker195 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4125,13 +4125,13 @@ fanWalker293 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker292 fun) (fanWalker292 arg) (\_ -> fanWalker292 fun))
+          in (Maybes.maybe (fanWalker292 arg) (\_ -> fanWalker292 fun) (fanWalker292 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker147 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker196 body) Nothing (\inner -> fanWalker196 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker196 inner) (fanWalker196 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4144,13 +4144,13 @@ fanWalker294 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker293 fun) (fanWalker293 arg) (\_ -> fanWalker293 fun))
+          in (Maybes.maybe (fanWalker293 arg) (\_ -> fanWalker293 fun) (fanWalker293 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker147 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker196 body) Nothing (\inner -> fanWalker196 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker196 inner) (fanWalker196 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4163,13 +4163,13 @@ fanWalker295 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker294 fun) (fanWalker294 arg) (\_ -> fanWalker294 fun))
+          in (Maybes.maybe (fanWalker294 arg) (\_ -> fanWalker294 fun) (fanWalker294 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker148 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker197 body) Nothing (\inner -> fanWalker197 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker197 inner) (fanWalker197 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4182,13 +4182,13 @@ fanWalker296 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker295 fun) (fanWalker295 arg) (\_ -> fanWalker295 fun))
+          in (Maybes.maybe (fanWalker295 arg) (\_ -> fanWalker295 fun) (fanWalker295 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker148 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker198 body) Nothing (\inner -> fanWalker198 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker198 inner) (fanWalker198 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4201,13 +4201,13 @@ fanWalker297 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker296 fun) (fanWalker296 arg) (\_ -> fanWalker296 fun))
+          in (Maybes.maybe (fanWalker296 arg) (\_ -> fanWalker296 fun) (fanWalker296 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker149 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker198 body) Nothing (\inner -> fanWalker198 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker198 inner) (fanWalker198 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4220,13 +4220,13 @@ fanWalker298 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker297 fun) (fanWalker297 arg) (\_ -> fanWalker297 fun))
+          in (Maybes.maybe (fanWalker297 arg) (\_ -> fanWalker297 fun) (fanWalker297 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker149 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker199 body) Nothing (\inner -> fanWalker199 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker199 inner) (fanWalker199 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4239,13 +4239,13 @@ fanWalker299 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker298 fun) (fanWalker298 arg) (\_ -> fanWalker298 fun))
+          in (Maybes.maybe (fanWalker298 arg) (\_ -> fanWalker298 fun) (fanWalker298 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker150 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker200 body) Nothing (\inner -> fanWalker200 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker200 inner) (fanWalker200 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4258,13 +4258,13 @@ fanWalker3 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker2 fun) (fanWalker2 arg) (\_ -> fanWalker2 fun))
+          in (Maybes.maybe (fanWalker2 arg) (\_ -> fanWalker2 fun) (fanWalker2 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker2 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker2 body) Nothing (\inner -> fanWalker2 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker2 inner) (fanWalker2 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4277,13 +4277,13 @@ fanWalker30 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker29 fun) (fanWalker29 arg) (\_ -> fanWalker29 fun))
+          in (Maybes.maybe (fanWalker29 arg) (\_ -> fanWalker29 fun) (fanWalker29 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker15 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker20 body) Nothing (\inner -> fanWalker20 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker20 inner) (fanWalker20 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4296,13 +4296,13 @@ fanWalker300 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker299 fun) (fanWalker299 arg) (\_ -> fanWalker299 fun))
+          in (Maybes.maybe (fanWalker299 arg) (\_ -> fanWalker299 fun) (fanWalker299 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker150 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker200 body) Nothing (\inner -> fanWalker200 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker200 inner) (fanWalker200 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4315,13 +4315,13 @@ fanWalker301 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker300 fun) (fanWalker300 arg) (\_ -> fanWalker300 fun))
+          in (Maybes.maybe (fanWalker300 arg) (\_ -> fanWalker300 fun) (fanWalker300 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker151 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker201 body) Nothing (\inner -> fanWalker201 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker201 inner) (fanWalker201 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4334,13 +4334,13 @@ fanWalker302 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker301 fun) (fanWalker301 arg) (\_ -> fanWalker301 fun))
+          in (Maybes.maybe (fanWalker301 arg) (\_ -> fanWalker301 fun) (fanWalker301 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker151 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker202 body) Nothing (\inner -> fanWalker202 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker202 inner) (fanWalker202 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4353,13 +4353,13 @@ fanWalker303 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker302 fun) (fanWalker302 arg) (\_ -> fanWalker302 fun))
+          in (Maybes.maybe (fanWalker302 arg) (\_ -> fanWalker302 fun) (fanWalker302 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker152 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker202 body) Nothing (\inner -> fanWalker202 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker202 inner) (fanWalker202 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4372,13 +4372,13 @@ fanWalker304 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker303 fun) (fanWalker303 arg) (\_ -> fanWalker303 fun))
+          in (Maybes.maybe (fanWalker303 arg) (\_ -> fanWalker303 fun) (fanWalker303 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker152 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker203 body) Nothing (\inner -> fanWalker203 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker203 inner) (fanWalker203 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4391,13 +4391,13 @@ fanWalker305 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker304 fun) (fanWalker304 arg) (\_ -> fanWalker304 fun))
+          in (Maybes.maybe (fanWalker304 arg) (\_ -> fanWalker304 fun) (fanWalker304 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker153 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker204 body) Nothing (\inner -> fanWalker204 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker204 inner) (fanWalker204 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4410,13 +4410,13 @@ fanWalker306 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker305 fun) (fanWalker305 arg) (\_ -> fanWalker305 fun))
+          in (Maybes.maybe (fanWalker305 arg) (\_ -> fanWalker305 fun) (fanWalker305 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker153 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker204 body) Nothing (\inner -> fanWalker204 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker204 inner) (fanWalker204 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4429,13 +4429,13 @@ fanWalker307 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker306 fun) (fanWalker306 arg) (\_ -> fanWalker306 fun))
+          in (Maybes.maybe (fanWalker306 arg) (\_ -> fanWalker306 fun) (fanWalker306 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker154 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker205 body) Nothing (\inner -> fanWalker205 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker205 inner) (fanWalker205 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4448,13 +4448,13 @@ fanWalker308 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker307 fun) (fanWalker307 arg) (\_ -> fanWalker307 fun))
+          in (Maybes.maybe (fanWalker307 arg) (\_ -> fanWalker307 fun) (fanWalker307 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker154 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker206 body) Nothing (\inner -> fanWalker206 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker206 inner) (fanWalker206 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4467,13 +4467,13 @@ fanWalker309 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker308 fun) (fanWalker308 arg) (\_ -> fanWalker308 fun))
+          in (Maybes.maybe (fanWalker308 arg) (\_ -> fanWalker308 fun) (fanWalker308 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker155 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker206 body) Nothing (\inner -> fanWalker206 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker206 inner) (fanWalker206 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4486,13 +4486,13 @@ fanWalker31 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker30 fun) (fanWalker30 arg) (\_ -> fanWalker30 fun))
+          in (Maybes.maybe (fanWalker30 arg) (\_ -> fanWalker30 fun) (fanWalker30 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker16 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker21 body) Nothing (\inner -> fanWalker21 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker21 inner) (fanWalker21 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4505,13 +4505,13 @@ fanWalker310 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker309 fun) (fanWalker309 arg) (\_ -> fanWalker309 fun))
+          in (Maybes.maybe (fanWalker309 arg) (\_ -> fanWalker309 fun) (fanWalker309 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker155 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker207 body) Nothing (\inner -> fanWalker207 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker207 inner) (fanWalker207 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4524,13 +4524,13 @@ fanWalker311 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker310 fun) (fanWalker310 arg) (\_ -> fanWalker310 fun))
+          in (Maybes.maybe (fanWalker310 arg) (\_ -> fanWalker310 fun) (fanWalker310 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker156 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker208 body) Nothing (\inner -> fanWalker208 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker208 inner) (fanWalker208 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4543,13 +4543,13 @@ fanWalker312 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker311 fun) (fanWalker311 arg) (\_ -> fanWalker311 fun))
+          in (Maybes.maybe (fanWalker311 arg) (\_ -> fanWalker311 fun) (fanWalker311 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker156 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker208 body) Nothing (\inner -> fanWalker208 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker208 inner) (fanWalker208 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4562,13 +4562,13 @@ fanWalker313 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker312 fun) (fanWalker312 arg) (\_ -> fanWalker312 fun))
+          in (Maybes.maybe (fanWalker312 arg) (\_ -> fanWalker312 fun) (fanWalker312 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker157 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker209 body) Nothing (\inner -> fanWalker209 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker209 inner) (fanWalker209 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4581,13 +4581,13 @@ fanWalker314 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker313 fun) (fanWalker313 arg) (\_ -> fanWalker313 fun))
+          in (Maybes.maybe (fanWalker313 arg) (\_ -> fanWalker313 fun) (fanWalker313 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker157 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker210 body) Nothing (\inner -> fanWalker210 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker210 inner) (fanWalker210 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4600,13 +4600,13 @@ fanWalker315 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker314 fun) (fanWalker314 arg) (\_ -> fanWalker314 fun))
+          in (Maybes.maybe (fanWalker314 arg) (\_ -> fanWalker314 fun) (fanWalker314 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker158 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker210 body) Nothing (\inner -> fanWalker210 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker210 inner) (fanWalker210 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4619,13 +4619,13 @@ fanWalker316 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker315 fun) (fanWalker315 arg) (\_ -> fanWalker315 fun))
+          in (Maybes.maybe (fanWalker315 arg) (\_ -> fanWalker315 fun) (fanWalker315 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker158 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker211 body) Nothing (\inner -> fanWalker211 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker211 inner) (fanWalker211 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4638,13 +4638,13 @@ fanWalker317 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker316 fun) (fanWalker316 arg) (\_ -> fanWalker316 fun))
+          in (Maybes.maybe (fanWalker316 arg) (\_ -> fanWalker316 fun) (fanWalker316 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker159 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker212 body) Nothing (\inner -> fanWalker212 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker212 inner) (fanWalker212 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4657,13 +4657,13 @@ fanWalker318 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker317 fun) (fanWalker317 arg) (\_ -> fanWalker317 fun))
+          in (Maybes.maybe (fanWalker317 arg) (\_ -> fanWalker317 fun) (fanWalker317 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker159 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker212 body) Nothing (\inner -> fanWalker212 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker212 inner) (fanWalker212 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4676,13 +4676,13 @@ fanWalker319 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker318 fun) (fanWalker318 arg) (\_ -> fanWalker318 fun))
+          in (Maybes.maybe (fanWalker318 arg) (\_ -> fanWalker318 fun) (fanWalker318 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker160 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker213 body) Nothing (\inner -> fanWalker213 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker213 inner) (fanWalker213 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4695,13 +4695,13 @@ fanWalker32 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker31 fun) (fanWalker31 arg) (\_ -> fanWalker31 fun))
+          in (Maybes.maybe (fanWalker31 arg) (\_ -> fanWalker31 fun) (fanWalker31 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker16 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker22 body) Nothing (\inner -> fanWalker22 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker22 inner) (fanWalker22 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4714,13 +4714,13 @@ fanWalker320 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker319 fun) (fanWalker319 arg) (\_ -> fanWalker319 fun))
+          in (Maybes.maybe (fanWalker319 arg) (\_ -> fanWalker319 fun) (fanWalker319 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker160 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker214 body) Nothing (\inner -> fanWalker214 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker214 inner) (fanWalker214 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4733,13 +4733,13 @@ fanWalker321 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker320 fun) (fanWalker320 arg) (\_ -> fanWalker320 fun))
+          in (Maybes.maybe (fanWalker320 arg) (\_ -> fanWalker320 fun) (fanWalker320 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker161 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker214 body) Nothing (\inner -> fanWalker214 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker214 inner) (fanWalker214 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4752,13 +4752,13 @@ fanWalker322 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker321 fun) (fanWalker321 arg) (\_ -> fanWalker321 fun))
+          in (Maybes.maybe (fanWalker321 arg) (\_ -> fanWalker321 fun) (fanWalker321 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker161 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker215 body) Nothing (\inner -> fanWalker215 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker215 inner) (fanWalker215 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4771,13 +4771,13 @@ fanWalker323 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker322 fun) (fanWalker322 arg) (\_ -> fanWalker322 fun))
+          in (Maybes.maybe (fanWalker322 arg) (\_ -> fanWalker322 fun) (fanWalker322 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker162 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker216 body) Nothing (\inner -> fanWalker216 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker216 inner) (fanWalker216 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4790,13 +4790,13 @@ fanWalker324 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker323 fun) (fanWalker323 arg) (\_ -> fanWalker323 fun))
+          in (Maybes.maybe (fanWalker323 arg) (\_ -> fanWalker323 fun) (fanWalker323 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker162 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker216 body) Nothing (\inner -> fanWalker216 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker216 inner) (fanWalker216 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4809,13 +4809,13 @@ fanWalker325 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker324 fun) (fanWalker324 arg) (\_ -> fanWalker324 fun))
+          in (Maybes.maybe (fanWalker324 arg) (\_ -> fanWalker324 fun) (fanWalker324 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker163 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker217 body) Nothing (\inner -> fanWalker217 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker217 inner) (fanWalker217 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4828,13 +4828,13 @@ fanWalker326 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker325 fun) (fanWalker325 arg) (\_ -> fanWalker325 fun))
+          in (Maybes.maybe (fanWalker325 arg) (\_ -> fanWalker325 fun) (fanWalker325 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker163 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker218 body) Nothing (\inner -> fanWalker218 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker218 inner) (fanWalker218 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4847,13 +4847,13 @@ fanWalker327 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker326 fun) (fanWalker326 arg) (\_ -> fanWalker326 fun))
+          in (Maybes.maybe (fanWalker326 arg) (\_ -> fanWalker326 fun) (fanWalker326 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker164 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker218 body) Nothing (\inner -> fanWalker218 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker218 inner) (fanWalker218 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4866,13 +4866,13 @@ fanWalker328 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker327 fun) (fanWalker327 arg) (\_ -> fanWalker327 fun))
+          in (Maybes.maybe (fanWalker327 arg) (\_ -> fanWalker327 fun) (fanWalker327 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker164 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker219 body) Nothing (\inner -> fanWalker219 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker219 inner) (fanWalker219 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4885,13 +4885,13 @@ fanWalker329 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker328 fun) (fanWalker328 arg) (\_ -> fanWalker328 fun))
+          in (Maybes.maybe (fanWalker328 arg) (\_ -> fanWalker328 fun) (fanWalker328 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker165 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker220 body) Nothing (\inner -> fanWalker220 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker220 inner) (fanWalker220 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4904,13 +4904,13 @@ fanWalker33 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker32 fun) (fanWalker32 arg) (\_ -> fanWalker32 fun))
+          in (Maybes.maybe (fanWalker32 arg) (\_ -> fanWalker32 fun) (fanWalker32 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker17 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker22 body) Nothing (\inner -> fanWalker22 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker22 inner) (fanWalker22 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4923,13 +4923,13 @@ fanWalker330 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker329 fun) (fanWalker329 arg) (\_ -> fanWalker329 fun))
+          in (Maybes.maybe (fanWalker329 arg) (\_ -> fanWalker329 fun) (fanWalker329 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker165 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker220 body) Nothing (\inner -> fanWalker220 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker220 inner) (fanWalker220 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4942,13 +4942,13 @@ fanWalker331 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker330 fun) (fanWalker330 arg) (\_ -> fanWalker330 fun))
+          in (Maybes.maybe (fanWalker330 arg) (\_ -> fanWalker330 fun) (fanWalker330 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker166 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker221 body) Nothing (\inner -> fanWalker221 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker221 inner) (fanWalker221 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4961,13 +4961,13 @@ fanWalker332 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker331 fun) (fanWalker331 arg) (\_ -> fanWalker331 fun))
+          in (Maybes.maybe (fanWalker331 arg) (\_ -> fanWalker331 fun) (fanWalker331 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker166 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker222 body) Nothing (\inner -> fanWalker222 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker222 inner) (fanWalker222 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4980,13 +4980,13 @@ fanWalker333 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker332 fun) (fanWalker332 arg) (\_ -> fanWalker332 fun))
+          in (Maybes.maybe (fanWalker332 arg) (\_ -> fanWalker332 fun) (fanWalker332 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker167 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker222 body) Nothing (\inner -> fanWalker222 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker222 inner) (fanWalker222 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -4999,13 +4999,13 @@ fanWalker334 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker333 fun) (fanWalker333 arg) (\_ -> fanWalker333 fun))
+          in (Maybes.maybe (fanWalker333 arg) (\_ -> fanWalker333 fun) (fanWalker333 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker167 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker223 body) Nothing (\inner -> fanWalker223 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker223 inner) (fanWalker223 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5018,13 +5018,13 @@ fanWalker335 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker334 fun) (fanWalker334 arg) (\_ -> fanWalker334 fun))
+          in (Maybes.maybe (fanWalker334 arg) (\_ -> fanWalker334 fun) (fanWalker334 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker168 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker224 body) Nothing (\inner -> fanWalker224 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker224 inner) (fanWalker224 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5037,13 +5037,13 @@ fanWalker336 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker335 fun) (fanWalker335 arg) (\_ -> fanWalker335 fun))
+          in (Maybes.maybe (fanWalker335 arg) (\_ -> fanWalker335 fun) (fanWalker335 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker168 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker224 body) Nothing (\inner -> fanWalker224 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker224 inner) (fanWalker224 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5056,13 +5056,13 @@ fanWalker337 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker336 fun) (fanWalker336 arg) (\_ -> fanWalker336 fun))
+          in (Maybes.maybe (fanWalker336 arg) (\_ -> fanWalker336 fun) (fanWalker336 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker169 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker225 body) Nothing (\inner -> fanWalker225 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker225 inner) (fanWalker225 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5075,13 +5075,13 @@ fanWalker338 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker337 fun) (fanWalker337 arg) (\_ -> fanWalker337 fun))
+          in (Maybes.maybe (fanWalker337 arg) (\_ -> fanWalker337 fun) (fanWalker337 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker169 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker226 body) Nothing (\inner -> fanWalker226 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker226 inner) (fanWalker226 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5094,13 +5094,13 @@ fanWalker339 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker338 fun) (fanWalker338 arg) (\_ -> fanWalker338 fun))
+          in (Maybes.maybe (fanWalker338 arg) (\_ -> fanWalker338 fun) (fanWalker338 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker170 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker226 body) Nothing (\inner -> fanWalker226 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker226 inner) (fanWalker226 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5113,13 +5113,13 @@ fanWalker34 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker33 fun) (fanWalker33 arg) (\_ -> fanWalker33 fun))
+          in (Maybes.maybe (fanWalker33 arg) (\_ -> fanWalker33 fun) (fanWalker33 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker17 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker23 body) Nothing (\inner -> fanWalker23 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker23 inner) (fanWalker23 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5132,13 +5132,13 @@ fanWalker340 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker339 fun) (fanWalker339 arg) (\_ -> fanWalker339 fun))
+          in (Maybes.maybe (fanWalker339 arg) (\_ -> fanWalker339 fun) (fanWalker339 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker170 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker227 body) Nothing (\inner -> fanWalker227 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker227 inner) (fanWalker227 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5151,13 +5151,13 @@ fanWalker341 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker340 fun) (fanWalker340 arg) (\_ -> fanWalker340 fun))
+          in (Maybes.maybe (fanWalker340 arg) (\_ -> fanWalker340 fun) (fanWalker340 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker171 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker228 body) Nothing (\inner -> fanWalker228 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker228 inner) (fanWalker228 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5170,13 +5170,13 @@ fanWalker342 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker341 fun) (fanWalker341 arg) (\_ -> fanWalker341 fun))
+          in (Maybes.maybe (fanWalker341 arg) (\_ -> fanWalker341 fun) (fanWalker341 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker171 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker228 body) Nothing (\inner -> fanWalker228 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker228 inner) (fanWalker228 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5189,13 +5189,13 @@ fanWalker343 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker342 fun) (fanWalker342 arg) (\_ -> fanWalker342 fun))
+          in (Maybes.maybe (fanWalker342 arg) (\_ -> fanWalker342 fun) (fanWalker342 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker172 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker229 body) Nothing (\inner -> fanWalker229 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker229 inner) (fanWalker229 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5208,13 +5208,13 @@ fanWalker344 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker343 fun) (fanWalker343 arg) (\_ -> fanWalker343 fun))
+          in (Maybes.maybe (fanWalker343 arg) (\_ -> fanWalker343 fun) (fanWalker343 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker172 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker230 body) Nothing (\inner -> fanWalker230 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker230 inner) (fanWalker230 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5227,13 +5227,13 @@ fanWalker345 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker344 fun) (fanWalker344 arg) (\_ -> fanWalker344 fun))
+          in (Maybes.maybe (fanWalker344 arg) (\_ -> fanWalker344 fun) (fanWalker344 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker173 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker230 body) Nothing (\inner -> fanWalker230 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker230 inner) (fanWalker230 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5246,13 +5246,13 @@ fanWalker346 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker345 fun) (fanWalker345 arg) (\_ -> fanWalker345 fun))
+          in (Maybes.maybe (fanWalker345 arg) (\_ -> fanWalker345 fun) (fanWalker345 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker173 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker231 body) Nothing (\inner -> fanWalker231 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker231 inner) (fanWalker231 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5265,13 +5265,13 @@ fanWalker347 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker346 fun) (fanWalker346 arg) (\_ -> fanWalker346 fun))
+          in (Maybes.maybe (fanWalker346 arg) (\_ -> fanWalker346 fun) (fanWalker346 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker174 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker232 body) Nothing (\inner -> fanWalker232 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker232 inner) (fanWalker232 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5284,13 +5284,13 @@ fanWalker348 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker347 fun) (fanWalker347 arg) (\_ -> fanWalker347 fun))
+          in (Maybes.maybe (fanWalker347 arg) (\_ -> fanWalker347 fun) (fanWalker347 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker174 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker232 body) Nothing (\inner -> fanWalker232 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker232 inner) (fanWalker232 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5303,13 +5303,13 @@ fanWalker349 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker348 fun) (fanWalker348 arg) (\_ -> fanWalker348 fun))
+          in (Maybes.maybe (fanWalker348 arg) (\_ -> fanWalker348 fun) (fanWalker348 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker175 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker233 body) Nothing (\inner -> fanWalker233 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker233 inner) (fanWalker233 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5322,13 +5322,13 @@ fanWalker35 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker34 fun) (fanWalker34 arg) (\_ -> fanWalker34 fun))
+          in (Maybes.maybe (fanWalker34 arg) (\_ -> fanWalker34 fun) (fanWalker34 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker18 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker24 body) Nothing (\inner -> fanWalker24 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker24 inner) (fanWalker24 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5341,13 +5341,13 @@ fanWalker350 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker349 fun) (fanWalker349 arg) (\_ -> fanWalker349 fun))
+          in (Maybes.maybe (fanWalker349 arg) (\_ -> fanWalker349 fun) (fanWalker349 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker175 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker234 body) Nothing (\inner -> fanWalker234 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker234 inner) (fanWalker234 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5360,13 +5360,13 @@ fanWalker351 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker350 fun) (fanWalker350 arg) (\_ -> fanWalker350 fun))
+          in (Maybes.maybe (fanWalker350 arg) (\_ -> fanWalker350 fun) (fanWalker350 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker176 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker234 body) Nothing (\inner -> fanWalker234 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker234 inner) (fanWalker234 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5379,13 +5379,13 @@ fanWalker352 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker351 fun) (fanWalker351 arg) (\_ -> fanWalker351 fun))
+          in (Maybes.maybe (fanWalker351 arg) (\_ -> fanWalker351 fun) (fanWalker351 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker176 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker235 body) Nothing (\inner -> fanWalker235 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker235 inner) (fanWalker235 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5398,13 +5398,13 @@ fanWalker353 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker352 fun) (fanWalker352 arg) (\_ -> fanWalker352 fun))
+          in (Maybes.maybe (fanWalker352 arg) (\_ -> fanWalker352 fun) (fanWalker352 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker177 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker236 body) Nothing (\inner -> fanWalker236 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker236 inner) (fanWalker236 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5417,13 +5417,13 @@ fanWalker354 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker353 fun) (fanWalker353 arg) (\_ -> fanWalker353 fun))
+          in (Maybes.maybe (fanWalker353 arg) (\_ -> fanWalker353 fun) (fanWalker353 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker177 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker236 body) Nothing (\inner -> fanWalker236 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker236 inner) (fanWalker236 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5436,13 +5436,13 @@ fanWalker355 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker354 fun) (fanWalker354 arg) (\_ -> fanWalker354 fun))
+          in (Maybes.maybe (fanWalker354 arg) (\_ -> fanWalker354 fun) (fanWalker354 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker178 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker237 body) Nothing (\inner -> fanWalker237 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker237 inner) (fanWalker237 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5455,13 +5455,13 @@ fanWalker356 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker355 fun) (fanWalker355 arg) (\_ -> fanWalker355 fun))
+          in (Maybes.maybe (fanWalker355 arg) (\_ -> fanWalker355 fun) (fanWalker355 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker178 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker238 body) Nothing (\inner -> fanWalker238 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker238 inner) (fanWalker238 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5474,13 +5474,13 @@ fanWalker357 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker356 fun) (fanWalker356 arg) (\_ -> fanWalker356 fun))
+          in (Maybes.maybe (fanWalker356 arg) (\_ -> fanWalker356 fun) (fanWalker356 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker179 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker238 body) Nothing (\inner -> fanWalker238 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker238 inner) (fanWalker238 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5493,13 +5493,13 @@ fanWalker358 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker357 fun) (fanWalker357 arg) (\_ -> fanWalker357 fun))
+          in (Maybes.maybe (fanWalker357 arg) (\_ -> fanWalker357 fun) (fanWalker357 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker179 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker239 body) Nothing (\inner -> fanWalker239 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker239 inner) (fanWalker239 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5512,13 +5512,13 @@ fanWalker359 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker358 fun) (fanWalker358 arg) (\_ -> fanWalker358 fun))
+          in (Maybes.maybe (fanWalker358 arg) (\_ -> fanWalker358 fun) (fanWalker358 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker180 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker240 body) Nothing (\inner -> fanWalker240 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker240 inner) (fanWalker240 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5531,13 +5531,13 @@ fanWalker36 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker35 fun) (fanWalker35 arg) (\_ -> fanWalker35 fun))
+          in (Maybes.maybe (fanWalker35 arg) (\_ -> fanWalker35 fun) (fanWalker35 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker18 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker24 body) Nothing (\inner -> fanWalker24 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker24 inner) (fanWalker24 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5550,13 +5550,13 @@ fanWalker360 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker359 fun) (fanWalker359 arg) (\_ -> fanWalker359 fun))
+          in (Maybes.maybe (fanWalker359 arg) (\_ -> fanWalker359 fun) (fanWalker359 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker180 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker240 body) Nothing (\inner -> fanWalker240 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker240 inner) (fanWalker240 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5569,13 +5569,13 @@ fanWalker361 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker360 fun) (fanWalker360 arg) (\_ -> fanWalker360 fun))
+          in (Maybes.maybe (fanWalker360 arg) (\_ -> fanWalker360 fun) (fanWalker360 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker181 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker241 body) Nothing (\inner -> fanWalker241 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker241 inner) (fanWalker241 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5588,13 +5588,13 @@ fanWalker362 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker361 fun) (fanWalker361 arg) (\_ -> fanWalker361 fun))
+          in (Maybes.maybe (fanWalker361 arg) (\_ -> fanWalker361 fun) (fanWalker361 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker181 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker242 body) Nothing (\inner -> fanWalker242 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker242 inner) (fanWalker242 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5607,13 +5607,13 @@ fanWalker363 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker362 fun) (fanWalker362 arg) (\_ -> fanWalker362 fun))
+          in (Maybes.maybe (fanWalker362 arg) (\_ -> fanWalker362 fun) (fanWalker362 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker182 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker242 body) Nothing (\inner -> fanWalker242 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker242 inner) (fanWalker242 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5626,13 +5626,13 @@ fanWalker364 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker363 fun) (fanWalker363 arg) (\_ -> fanWalker363 fun))
+          in (Maybes.maybe (fanWalker363 arg) (\_ -> fanWalker363 fun) (fanWalker363 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker182 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker243 body) Nothing (\inner -> fanWalker243 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker243 inner) (fanWalker243 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5645,13 +5645,13 @@ fanWalker365 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker364 fun) (fanWalker364 arg) (\_ -> fanWalker364 fun))
+          in (Maybes.maybe (fanWalker364 arg) (\_ -> fanWalker364 fun) (fanWalker364 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker183 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker244 body) Nothing (\inner -> fanWalker244 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker244 inner) (fanWalker244 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5664,13 +5664,13 @@ fanWalker366 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker365 fun) (fanWalker365 arg) (\_ -> fanWalker365 fun))
+          in (Maybes.maybe (fanWalker365 arg) (\_ -> fanWalker365 fun) (fanWalker365 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker183 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker244 body) Nothing (\inner -> fanWalker244 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker244 inner) (fanWalker244 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5683,13 +5683,13 @@ fanWalker367 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker366 fun) (fanWalker366 arg) (\_ -> fanWalker366 fun))
+          in (Maybes.maybe (fanWalker366 arg) (\_ -> fanWalker366 fun) (fanWalker366 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker184 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker245 body) Nothing (\inner -> fanWalker245 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker245 inner) (fanWalker245 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5702,13 +5702,13 @@ fanWalker368 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker367 fun) (fanWalker367 arg) (\_ -> fanWalker367 fun))
+          in (Maybes.maybe (fanWalker367 arg) (\_ -> fanWalker367 fun) (fanWalker367 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker184 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker246 body) Nothing (\inner -> fanWalker246 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker246 inner) (fanWalker246 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5721,13 +5721,13 @@ fanWalker369 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker368 fun) (fanWalker368 arg) (\_ -> fanWalker368 fun))
+          in (Maybes.maybe (fanWalker368 arg) (\_ -> fanWalker368 fun) (fanWalker368 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker185 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker246 body) Nothing (\inner -> fanWalker246 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker246 inner) (fanWalker246 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5740,13 +5740,13 @@ fanWalker37 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker36 fun) (fanWalker36 arg) (\_ -> fanWalker36 fun))
+          in (Maybes.maybe (fanWalker36 arg) (\_ -> fanWalker36 fun) (fanWalker36 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker19 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker25 body) Nothing (\inner -> fanWalker25 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker25 inner) (fanWalker25 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5759,13 +5759,13 @@ fanWalker370 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker369 fun) (fanWalker369 arg) (\_ -> fanWalker369 fun))
+          in (Maybes.maybe (fanWalker369 arg) (\_ -> fanWalker369 fun) (fanWalker369 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker185 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker247 body) Nothing (\inner -> fanWalker247 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker247 inner) (fanWalker247 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5778,13 +5778,13 @@ fanWalker371 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker370 fun) (fanWalker370 arg) (\_ -> fanWalker370 fun))
+          in (Maybes.maybe (fanWalker370 arg) (\_ -> fanWalker370 fun) (fanWalker370 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker186 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker248 body) Nothing (\inner -> fanWalker248 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker248 inner) (fanWalker248 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5797,13 +5797,13 @@ fanWalker372 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker371 fun) (fanWalker371 arg) (\_ -> fanWalker371 fun))
+          in (Maybes.maybe (fanWalker371 arg) (\_ -> fanWalker371 fun) (fanWalker371 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker186 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker248 body) Nothing (\inner -> fanWalker248 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker248 inner) (fanWalker248 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5816,13 +5816,13 @@ fanWalker373 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker372 fun) (fanWalker372 arg) (\_ -> fanWalker372 fun))
+          in (Maybes.maybe (fanWalker372 arg) (\_ -> fanWalker372 fun) (fanWalker372 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker187 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker249 body) Nothing (\inner -> fanWalker249 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker249 inner) (fanWalker249 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5835,13 +5835,13 @@ fanWalker374 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker373 fun) (fanWalker373 arg) (\_ -> fanWalker373 fun))
+          in (Maybes.maybe (fanWalker373 arg) (\_ -> fanWalker373 fun) (fanWalker373 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker187 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker250 body) Nothing (\inner -> fanWalker250 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker250 inner) (fanWalker250 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5854,13 +5854,13 @@ fanWalker375 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker374 fun) (fanWalker374 arg) (\_ -> fanWalker374 fun))
+          in (Maybes.maybe (fanWalker374 arg) (\_ -> fanWalker374 fun) (fanWalker374 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker188 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker250 body) Nothing (\inner -> fanWalker250 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker250 inner) (fanWalker250 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5873,13 +5873,13 @@ fanWalker376 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker375 fun) (fanWalker375 arg) (\_ -> fanWalker375 fun))
+          in (Maybes.maybe (fanWalker375 arg) (\_ -> fanWalker375 fun) (fanWalker375 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker188 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker251 body) Nothing (\inner -> fanWalker251 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker251 inner) (fanWalker251 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5892,13 +5892,13 @@ fanWalker377 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker376 fun) (fanWalker376 arg) (\_ -> fanWalker376 fun))
+          in (Maybes.maybe (fanWalker376 arg) (\_ -> fanWalker376 fun) (fanWalker376 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker189 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker252 body) Nothing (\inner -> fanWalker252 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker252 inner) (fanWalker252 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5911,13 +5911,13 @@ fanWalker378 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker377 fun) (fanWalker377 arg) (\_ -> fanWalker377 fun))
+          in (Maybes.maybe (fanWalker377 arg) (\_ -> fanWalker377 fun) (fanWalker377 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker189 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker252 body) Nothing (\inner -> fanWalker252 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker252 inner) (fanWalker252 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5930,13 +5930,13 @@ fanWalker379 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker378 fun) (fanWalker378 arg) (\_ -> fanWalker378 fun))
+          in (Maybes.maybe (fanWalker378 arg) (\_ -> fanWalker378 fun) (fanWalker378 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker190 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker253 body) Nothing (\inner -> fanWalker253 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker253 inner) (fanWalker253 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5949,13 +5949,13 @@ fanWalker38 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker37 fun) (fanWalker37 arg) (\_ -> fanWalker37 fun))
+          in (Maybes.maybe (fanWalker37 arg) (\_ -> fanWalker37 fun) (fanWalker37 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker19 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker26 body) Nothing (\inner -> fanWalker26 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker26 inner) (fanWalker26 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5968,13 +5968,13 @@ fanWalker380 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker379 fun) (fanWalker379 arg) (\_ -> fanWalker379 fun))
+          in (Maybes.maybe (fanWalker379 arg) (\_ -> fanWalker379 fun) (fanWalker379 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker190 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker254 body) Nothing (\inner -> fanWalker254 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker254 inner) (fanWalker254 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -5987,13 +5987,13 @@ fanWalker381 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker380 fun) (fanWalker380 arg) (\_ -> fanWalker380 fun))
+          in (Maybes.maybe (fanWalker380 arg) (\_ -> fanWalker380 fun) (fanWalker380 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker191 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker254 body) Nothing (\inner -> fanWalker254 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker254 inner) (fanWalker254 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6006,13 +6006,13 @@ fanWalker382 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker381 fun) (fanWalker381 arg) (\_ -> fanWalker381 fun))
+          in (Maybes.maybe (fanWalker381 arg) (\_ -> fanWalker381 fun) (fanWalker381 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker191 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker255 body) Nothing (\inner -> fanWalker255 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker255 inner) (fanWalker255 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6025,13 +6025,13 @@ fanWalker383 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker382 fun) (fanWalker382 arg) (\_ -> fanWalker382 fun))
+          in (Maybes.maybe (fanWalker382 arg) (\_ -> fanWalker382 fun) (fanWalker382 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker192 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker256 body) Nothing (\inner -> fanWalker256 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker256 inner) (fanWalker256 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6044,13 +6044,13 @@ fanWalker384 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker383 fun) (fanWalker383 arg) (\_ -> fanWalker383 fun))
+          in (Maybes.maybe (fanWalker383 arg) (\_ -> fanWalker383 fun) (fanWalker383 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker192 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker256 body) Nothing (\inner -> fanWalker256 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker256 inner) (fanWalker256 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6063,13 +6063,13 @@ fanWalker385 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker384 fun) (fanWalker384 arg) (\_ -> fanWalker384 fun))
+          in (Maybes.maybe (fanWalker384 arg) (\_ -> fanWalker384 fun) (fanWalker384 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker193 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker257 body) Nothing (\inner -> fanWalker257 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker257 inner) (fanWalker257 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6082,13 +6082,13 @@ fanWalker386 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker385 fun) (fanWalker385 arg) (\_ -> fanWalker385 fun))
+          in (Maybes.maybe (fanWalker385 arg) (\_ -> fanWalker385 fun) (fanWalker385 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker193 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker258 body) Nothing (\inner -> fanWalker258 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker258 inner) (fanWalker258 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6101,13 +6101,13 @@ fanWalker387 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker386 fun) (fanWalker386 arg) (\_ -> fanWalker386 fun))
+          in (Maybes.maybe (fanWalker386 arg) (\_ -> fanWalker386 fun) (fanWalker386 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker194 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker258 body) Nothing (\inner -> fanWalker258 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker258 inner) (fanWalker258 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6120,13 +6120,13 @@ fanWalker388 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker387 fun) (fanWalker387 arg) (\_ -> fanWalker387 fun))
+          in (Maybes.maybe (fanWalker387 arg) (\_ -> fanWalker387 fun) (fanWalker387 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker194 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker259 body) Nothing (\inner -> fanWalker259 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker259 inner) (fanWalker259 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6139,13 +6139,13 @@ fanWalker389 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker388 fun) (fanWalker388 arg) (\_ -> fanWalker388 fun))
+          in (Maybes.maybe (fanWalker388 arg) (\_ -> fanWalker388 fun) (fanWalker388 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker195 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker260 body) Nothing (\inner -> fanWalker260 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker260 inner) (fanWalker260 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6158,13 +6158,13 @@ fanWalker39 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker38 fun) (fanWalker38 arg) (\_ -> fanWalker38 fun))
+          in (Maybes.maybe (fanWalker38 arg) (\_ -> fanWalker38 fun) (fanWalker38 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker20 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker26 body) Nothing (\inner -> fanWalker26 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker26 inner) (fanWalker26 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6177,13 +6177,13 @@ fanWalker390 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker389 fun) (fanWalker389 arg) (\_ -> fanWalker389 fun))
+          in (Maybes.maybe (fanWalker389 arg) (\_ -> fanWalker389 fun) (fanWalker389 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker195 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker260 body) Nothing (\inner -> fanWalker260 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker260 inner) (fanWalker260 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6196,13 +6196,13 @@ fanWalker391 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker390 fun) (fanWalker390 arg) (\_ -> fanWalker390 fun))
+          in (Maybes.maybe (fanWalker390 arg) (\_ -> fanWalker390 fun) (fanWalker390 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker196 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker261 body) Nothing (\inner -> fanWalker261 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker261 inner) (fanWalker261 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6215,13 +6215,13 @@ fanWalker392 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker391 fun) (fanWalker391 arg) (\_ -> fanWalker391 fun))
+          in (Maybes.maybe (fanWalker391 arg) (\_ -> fanWalker391 fun) (fanWalker391 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker196 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker262 body) Nothing (\inner -> fanWalker262 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker262 inner) (fanWalker262 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6234,13 +6234,13 @@ fanWalker393 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker392 fun) (fanWalker392 arg) (\_ -> fanWalker392 fun))
+          in (Maybes.maybe (fanWalker392 arg) (\_ -> fanWalker392 fun) (fanWalker392 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker197 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker262 body) Nothing (\inner -> fanWalker262 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker262 inner) (fanWalker262 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6253,13 +6253,13 @@ fanWalker394 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker393 fun) (fanWalker393 arg) (\_ -> fanWalker393 fun))
+          in (Maybes.maybe (fanWalker393 arg) (\_ -> fanWalker393 fun) (fanWalker393 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker197 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker263 body) Nothing (\inner -> fanWalker263 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker263 inner) (fanWalker263 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6272,13 +6272,13 @@ fanWalker395 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker394 fun) (fanWalker394 arg) (\_ -> fanWalker394 fun))
+          in (Maybes.maybe (fanWalker394 arg) (\_ -> fanWalker394 fun) (fanWalker394 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker198 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker264 body) Nothing (\inner -> fanWalker264 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker264 inner) (fanWalker264 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6291,13 +6291,13 @@ fanWalker396 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker395 fun) (fanWalker395 arg) (\_ -> fanWalker395 fun))
+          in (Maybes.maybe (fanWalker395 arg) (\_ -> fanWalker395 fun) (fanWalker395 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker198 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker264 body) Nothing (\inner -> fanWalker264 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker264 inner) (fanWalker264 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6310,13 +6310,13 @@ fanWalker397 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker396 fun) (fanWalker396 arg) (\_ -> fanWalker396 fun))
+          in (Maybes.maybe (fanWalker396 arg) (\_ -> fanWalker396 fun) (fanWalker396 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker199 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker265 body) Nothing (\inner -> fanWalker265 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker265 inner) (fanWalker265 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6329,13 +6329,13 @@ fanWalker398 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker397 fun) (fanWalker397 arg) (\_ -> fanWalker397 fun))
+          in (Maybes.maybe (fanWalker397 arg) (\_ -> fanWalker397 fun) (fanWalker397 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker199 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker266 body) Nothing (\inner -> fanWalker266 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker266 inner) (fanWalker266 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6348,13 +6348,13 @@ fanWalker399 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker398 fun) (fanWalker398 arg) (\_ -> fanWalker398 fun))
+          in (Maybes.maybe (fanWalker398 arg) (\_ -> fanWalker398 fun) (fanWalker398 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker200 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker266 body) Nothing (\inner -> fanWalker266 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker266 inner) (fanWalker266 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6367,13 +6367,13 @@ fanWalker4 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker3 fun) (fanWalker3 arg) (\_ -> fanWalker3 fun))
+          in (Maybes.maybe (fanWalker3 arg) (\_ -> fanWalker3 fun) (fanWalker3 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker2 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker3 body) Nothing (\inner -> fanWalker3 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker3 inner) (fanWalker3 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6386,13 +6386,13 @@ fanWalker40 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker39 fun) (fanWalker39 arg) (\_ -> fanWalker39 fun))
+          in (Maybes.maybe (fanWalker39 arg) (\_ -> fanWalker39 fun) (fanWalker39 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker20 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker27 body) Nothing (\inner -> fanWalker27 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker27 inner) (fanWalker27 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6405,13 +6405,13 @@ fanWalker41 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker40 fun) (fanWalker40 arg) (\_ -> fanWalker40 fun))
+          in (Maybes.maybe (fanWalker40 arg) (\_ -> fanWalker40 fun) (fanWalker40 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker21 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker28 body) Nothing (\inner -> fanWalker28 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker28 inner) (fanWalker28 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6424,13 +6424,13 @@ fanWalker42 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker41 fun) (fanWalker41 arg) (\_ -> fanWalker41 fun))
+          in (Maybes.maybe (fanWalker41 arg) (\_ -> fanWalker41 fun) (fanWalker41 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker21 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker28 body) Nothing (\inner -> fanWalker28 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker28 inner) (fanWalker28 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6443,13 +6443,13 @@ fanWalker43 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker42 fun) (fanWalker42 arg) (\_ -> fanWalker42 fun))
+          in (Maybes.maybe (fanWalker42 arg) (\_ -> fanWalker42 fun) (fanWalker42 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker22 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker29 body) Nothing (\inner -> fanWalker29 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker29 inner) (fanWalker29 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6462,13 +6462,13 @@ fanWalker44 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker43 fun) (fanWalker43 arg) (\_ -> fanWalker43 fun))
+          in (Maybes.maybe (fanWalker43 arg) (\_ -> fanWalker43 fun) (fanWalker43 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker22 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker30 body) Nothing (\inner -> fanWalker30 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker30 inner) (fanWalker30 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6481,13 +6481,13 @@ fanWalker45 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker44 fun) (fanWalker44 arg) (\_ -> fanWalker44 fun))
+          in (Maybes.maybe (fanWalker44 arg) (\_ -> fanWalker44 fun) (fanWalker44 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker23 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker30 body) Nothing (\inner -> fanWalker30 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker30 inner) (fanWalker30 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6500,13 +6500,13 @@ fanWalker46 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker45 fun) (fanWalker45 arg) (\_ -> fanWalker45 fun))
+          in (Maybes.maybe (fanWalker45 arg) (\_ -> fanWalker45 fun) (fanWalker45 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker23 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker31 body) Nothing (\inner -> fanWalker31 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker31 inner) (fanWalker31 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6519,13 +6519,13 @@ fanWalker47 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker46 fun) (fanWalker46 arg) (\_ -> fanWalker46 fun))
+          in (Maybes.maybe (fanWalker46 arg) (\_ -> fanWalker46 fun) (fanWalker46 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker24 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker32 body) Nothing (\inner -> fanWalker32 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker32 inner) (fanWalker32 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6538,13 +6538,13 @@ fanWalker48 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker47 fun) (fanWalker47 arg) (\_ -> fanWalker47 fun))
+          in (Maybes.maybe (fanWalker47 arg) (\_ -> fanWalker47 fun) (fanWalker47 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker24 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker32 body) Nothing (\inner -> fanWalker32 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker32 inner) (fanWalker32 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6557,13 +6557,13 @@ fanWalker49 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker48 fun) (fanWalker48 arg) (\_ -> fanWalker48 fun))
+          in (Maybes.maybe (fanWalker48 arg) (\_ -> fanWalker48 fun) (fanWalker48 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker25 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker33 body) Nothing (\inner -> fanWalker33 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker33 inner) (fanWalker33 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6576,13 +6576,13 @@ fanWalker5 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker4 fun) (fanWalker4 arg) (\_ -> fanWalker4 fun))
+          in (Maybes.maybe (fanWalker4 arg) (\_ -> fanWalker4 fun) (fanWalker4 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker3 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker4 body) Nothing (\inner -> fanWalker4 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker4 inner) (fanWalker4 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6595,13 +6595,13 @@ fanWalker50 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker49 fun) (fanWalker49 arg) (\_ -> fanWalker49 fun))
+          in (Maybes.maybe (fanWalker49 arg) (\_ -> fanWalker49 fun) (fanWalker49 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker25 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker34 body) Nothing (\inner -> fanWalker34 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker34 inner) (fanWalker34 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6614,13 +6614,13 @@ fanWalker51 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker50 fun) (fanWalker50 arg) (\_ -> fanWalker50 fun))
+          in (Maybes.maybe (fanWalker50 arg) (\_ -> fanWalker50 fun) (fanWalker50 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker26 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker34 body) Nothing (\inner -> fanWalker34 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker34 inner) (fanWalker34 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6633,13 +6633,13 @@ fanWalker52 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker51 fun) (fanWalker51 arg) (\_ -> fanWalker51 fun))
+          in (Maybes.maybe (fanWalker51 arg) (\_ -> fanWalker51 fun) (fanWalker51 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker26 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker35 body) Nothing (\inner -> fanWalker35 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker35 inner) (fanWalker35 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6652,13 +6652,13 @@ fanWalker53 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker52 fun) (fanWalker52 arg) (\_ -> fanWalker52 fun))
+          in (Maybes.maybe (fanWalker52 arg) (\_ -> fanWalker52 fun) (fanWalker52 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker27 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker36 body) Nothing (\inner -> fanWalker36 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker36 inner) (fanWalker36 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6671,13 +6671,13 @@ fanWalker54 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker53 fun) (fanWalker53 arg) (\_ -> fanWalker53 fun))
+          in (Maybes.maybe (fanWalker53 arg) (\_ -> fanWalker53 fun) (fanWalker53 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker27 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker36 body) Nothing (\inner -> fanWalker36 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker36 inner) (fanWalker36 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6690,13 +6690,13 @@ fanWalker55 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker54 fun) (fanWalker54 arg) (\_ -> fanWalker54 fun))
+          in (Maybes.maybe (fanWalker54 arg) (\_ -> fanWalker54 fun) (fanWalker54 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker28 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker37 body) Nothing (\inner -> fanWalker37 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker37 inner) (fanWalker37 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6709,13 +6709,13 @@ fanWalker56 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker55 fun) (fanWalker55 arg) (\_ -> fanWalker55 fun))
+          in (Maybes.maybe (fanWalker55 arg) (\_ -> fanWalker55 fun) (fanWalker55 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker28 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker38 body) Nothing (\inner -> fanWalker38 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker38 inner) (fanWalker38 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6728,13 +6728,13 @@ fanWalker57 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker56 fun) (fanWalker56 arg) (\_ -> fanWalker56 fun))
+          in (Maybes.maybe (fanWalker56 arg) (\_ -> fanWalker56 fun) (fanWalker56 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker29 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker38 body) Nothing (\inner -> fanWalker38 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker38 inner) (fanWalker38 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6747,13 +6747,13 @@ fanWalker58 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker57 fun) (fanWalker57 arg) (\_ -> fanWalker57 fun))
+          in (Maybes.maybe (fanWalker57 arg) (\_ -> fanWalker57 fun) (fanWalker57 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker29 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker39 body) Nothing (\inner -> fanWalker39 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker39 inner) (fanWalker39 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6766,13 +6766,13 @@ fanWalker59 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker58 fun) (fanWalker58 arg) (\_ -> fanWalker58 fun))
+          in (Maybes.maybe (fanWalker58 arg) (\_ -> fanWalker58 fun) (fanWalker58 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker30 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker40 body) Nothing (\inner -> fanWalker40 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker40 inner) (fanWalker40 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6785,13 +6785,13 @@ fanWalker6 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker5 fun) (fanWalker5 arg) (\_ -> fanWalker5 fun))
+          in (Maybes.maybe (fanWalker5 arg) (\_ -> fanWalker5 fun) (fanWalker5 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker3 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker4 body) Nothing (\inner -> fanWalker4 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker4 inner) (fanWalker4 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6804,13 +6804,13 @@ fanWalker60 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker59 fun) (fanWalker59 arg) (\_ -> fanWalker59 fun))
+          in (Maybes.maybe (fanWalker59 arg) (\_ -> fanWalker59 fun) (fanWalker59 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker30 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker40 body) Nothing (\inner -> fanWalker40 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker40 inner) (fanWalker40 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6823,13 +6823,13 @@ fanWalker61 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker60 fun) (fanWalker60 arg) (\_ -> fanWalker60 fun))
+          in (Maybes.maybe (fanWalker60 arg) (\_ -> fanWalker60 fun) (fanWalker60 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker31 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker41 body) Nothing (\inner -> fanWalker41 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker41 inner) (fanWalker41 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6842,13 +6842,13 @@ fanWalker62 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker61 fun) (fanWalker61 arg) (\_ -> fanWalker61 fun))
+          in (Maybes.maybe (fanWalker61 arg) (\_ -> fanWalker61 fun) (fanWalker61 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker31 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker42 body) Nothing (\inner -> fanWalker42 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker42 inner) (fanWalker42 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6861,13 +6861,13 @@ fanWalker63 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker62 fun) (fanWalker62 arg) (\_ -> fanWalker62 fun))
+          in (Maybes.maybe (fanWalker62 arg) (\_ -> fanWalker62 fun) (fanWalker62 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker32 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker42 body) Nothing (\inner -> fanWalker42 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker42 inner) (fanWalker42 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6880,13 +6880,13 @@ fanWalker64 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker63 fun) (fanWalker63 arg) (\_ -> fanWalker63 fun))
+          in (Maybes.maybe (fanWalker63 arg) (\_ -> fanWalker63 fun) (fanWalker63 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker32 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker43 body) Nothing (\inner -> fanWalker43 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker43 inner) (fanWalker43 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6899,13 +6899,13 @@ fanWalker65 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker64 fun) (fanWalker64 arg) (\_ -> fanWalker64 fun))
+          in (Maybes.maybe (fanWalker64 arg) (\_ -> fanWalker64 fun) (fanWalker64 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker33 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker44 body) Nothing (\inner -> fanWalker44 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker44 inner) (fanWalker44 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6918,13 +6918,13 @@ fanWalker66 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker65 fun) (fanWalker65 arg) (\_ -> fanWalker65 fun))
+          in (Maybes.maybe (fanWalker65 arg) (\_ -> fanWalker65 fun) (fanWalker65 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker33 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker44 body) Nothing (\inner -> fanWalker44 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker44 inner) (fanWalker44 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6937,13 +6937,13 @@ fanWalker67 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker66 fun) (fanWalker66 arg) (\_ -> fanWalker66 fun))
+          in (Maybes.maybe (fanWalker66 arg) (\_ -> fanWalker66 fun) (fanWalker66 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker34 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker45 body) Nothing (\inner -> fanWalker45 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker45 inner) (fanWalker45 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6956,13 +6956,13 @@ fanWalker68 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker67 fun) (fanWalker67 arg) (\_ -> fanWalker67 fun))
+          in (Maybes.maybe (fanWalker67 arg) (\_ -> fanWalker67 fun) (fanWalker67 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker34 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker46 body) Nothing (\inner -> fanWalker46 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker46 inner) (fanWalker46 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6975,13 +6975,13 @@ fanWalker69 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker68 fun) (fanWalker68 arg) (\_ -> fanWalker68 fun))
+          in (Maybes.maybe (fanWalker68 arg) (\_ -> fanWalker68 fun) (fanWalker68 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker35 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker46 body) Nothing (\inner -> fanWalker46 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker46 inner) (fanWalker46 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6994,13 +6994,13 @@ fanWalker7 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker6 fun) (fanWalker6 arg) (\_ -> fanWalker6 fun))
+          in (Maybes.maybe (fanWalker6 arg) (\_ -> fanWalker6 fun) (fanWalker6 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker4 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker5 body) Nothing (\inner -> fanWalker5 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker5 inner) (fanWalker5 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7013,13 +7013,13 @@ fanWalker70 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker69 fun) (fanWalker69 arg) (\_ -> fanWalker69 fun))
+          in (Maybes.maybe (fanWalker69 arg) (\_ -> fanWalker69 fun) (fanWalker69 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker35 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker47 body) Nothing (\inner -> fanWalker47 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker47 inner) (fanWalker47 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7032,13 +7032,13 @@ fanWalker71 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker70 fun) (fanWalker70 arg) (\_ -> fanWalker70 fun))
+          in (Maybes.maybe (fanWalker70 arg) (\_ -> fanWalker70 fun) (fanWalker70 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker36 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker48 body) Nothing (\inner -> fanWalker48 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker48 inner) (fanWalker48 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7051,13 +7051,13 @@ fanWalker72 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker71 fun) (fanWalker71 arg) (\_ -> fanWalker71 fun))
+          in (Maybes.maybe (fanWalker71 arg) (\_ -> fanWalker71 fun) (fanWalker71 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker36 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker48 body) Nothing (\inner -> fanWalker48 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker48 inner) (fanWalker48 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7070,13 +7070,13 @@ fanWalker73 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker72 fun) (fanWalker72 arg) (\_ -> fanWalker72 fun))
+          in (Maybes.maybe (fanWalker72 arg) (\_ -> fanWalker72 fun) (fanWalker72 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker37 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker49 body) Nothing (\inner -> fanWalker49 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker49 inner) (fanWalker49 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7089,13 +7089,13 @@ fanWalker74 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker73 fun) (fanWalker73 arg) (\_ -> fanWalker73 fun))
+          in (Maybes.maybe (fanWalker73 arg) (\_ -> fanWalker73 fun) (fanWalker73 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker37 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker50 body) Nothing (\inner -> fanWalker50 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker50 inner) (fanWalker50 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7108,13 +7108,13 @@ fanWalker75 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker74 fun) (fanWalker74 arg) (\_ -> fanWalker74 fun))
+          in (Maybes.maybe (fanWalker74 arg) (\_ -> fanWalker74 fun) (fanWalker74 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker38 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker50 body) Nothing (\inner -> fanWalker50 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker50 inner) (fanWalker50 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7127,13 +7127,13 @@ fanWalker76 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker75 fun) (fanWalker75 arg) (\_ -> fanWalker75 fun))
+          in (Maybes.maybe (fanWalker75 arg) (\_ -> fanWalker75 fun) (fanWalker75 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker38 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker51 body) Nothing (\inner -> fanWalker51 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker51 inner) (fanWalker51 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7146,13 +7146,13 @@ fanWalker77 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker76 fun) (fanWalker76 arg) (\_ -> fanWalker76 fun))
+          in (Maybes.maybe (fanWalker76 arg) (\_ -> fanWalker76 fun) (fanWalker76 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker39 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker52 body) Nothing (\inner -> fanWalker52 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker52 inner) (fanWalker52 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7165,13 +7165,13 @@ fanWalker78 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker77 fun) (fanWalker77 arg) (\_ -> fanWalker77 fun))
+          in (Maybes.maybe (fanWalker77 arg) (\_ -> fanWalker77 fun) (fanWalker77 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker39 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker52 body) Nothing (\inner -> fanWalker52 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker52 inner) (fanWalker52 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7184,13 +7184,13 @@ fanWalker79 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker78 fun) (fanWalker78 arg) (\_ -> fanWalker78 fun))
+          in (Maybes.maybe (fanWalker78 arg) (\_ -> fanWalker78 fun) (fanWalker78 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker40 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker53 body) Nothing (\inner -> fanWalker53 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker53 inner) (fanWalker53 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7203,13 +7203,13 @@ fanWalker8 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker7 fun) (fanWalker7 arg) (\_ -> fanWalker7 fun))
+          in (Maybes.maybe (fanWalker7 arg) (\_ -> fanWalker7 fun) (fanWalker7 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker4 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker6 body) Nothing (\inner -> fanWalker6 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker6 inner) (fanWalker6 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7222,13 +7222,13 @@ fanWalker80 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker79 fun) (fanWalker79 arg) (\_ -> fanWalker79 fun))
+          in (Maybes.maybe (fanWalker79 arg) (\_ -> fanWalker79 fun) (fanWalker79 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker40 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker54 body) Nothing (\inner -> fanWalker54 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker54 inner) (fanWalker54 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7241,13 +7241,13 @@ fanWalker81 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker80 fun) (fanWalker80 arg) (\_ -> fanWalker80 fun))
+          in (Maybes.maybe (fanWalker80 arg) (\_ -> fanWalker80 fun) (fanWalker80 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker41 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker54 body) Nothing (\inner -> fanWalker54 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker54 inner) (fanWalker54 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7260,13 +7260,13 @@ fanWalker82 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker81 fun) (fanWalker81 arg) (\_ -> fanWalker81 fun))
+          in (Maybes.maybe (fanWalker81 arg) (\_ -> fanWalker81 fun) (fanWalker81 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker41 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker55 body) Nothing (\inner -> fanWalker55 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker55 inner) (fanWalker55 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7279,13 +7279,13 @@ fanWalker83 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker82 fun) (fanWalker82 arg) (\_ -> fanWalker82 fun))
+          in (Maybes.maybe (fanWalker82 arg) (\_ -> fanWalker82 fun) (fanWalker82 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker42 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker56 body) Nothing (\inner -> fanWalker56 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker56 inner) (fanWalker56 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7298,13 +7298,13 @@ fanWalker84 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker83 fun) (fanWalker83 arg) (\_ -> fanWalker83 fun))
+          in (Maybes.maybe (fanWalker83 arg) (\_ -> fanWalker83 fun) (fanWalker83 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker42 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker56 body) Nothing (\inner -> fanWalker56 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker56 inner) (fanWalker56 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7317,13 +7317,13 @@ fanWalker85 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker84 fun) (fanWalker84 arg) (\_ -> fanWalker84 fun))
+          in (Maybes.maybe (fanWalker84 arg) (\_ -> fanWalker84 fun) (fanWalker84 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker43 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker57 body) Nothing (\inner -> fanWalker57 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker57 inner) (fanWalker57 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7336,13 +7336,13 @@ fanWalker86 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker85 fun) (fanWalker85 arg) (\_ -> fanWalker85 fun))
+          in (Maybes.maybe (fanWalker85 arg) (\_ -> fanWalker85 fun) (fanWalker85 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker43 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker58 body) Nothing (\inner -> fanWalker58 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker58 inner) (fanWalker58 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7355,13 +7355,13 @@ fanWalker87 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker86 fun) (fanWalker86 arg) (\_ -> fanWalker86 fun))
+          in (Maybes.maybe (fanWalker86 arg) (\_ -> fanWalker86 fun) (fanWalker86 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker44 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker58 body) Nothing (\inner -> fanWalker58 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker58 inner) (fanWalker58 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7374,13 +7374,13 @@ fanWalker88 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker87 fun) (fanWalker87 arg) (\_ -> fanWalker87 fun))
+          in (Maybes.maybe (fanWalker87 arg) (\_ -> fanWalker87 fun) (fanWalker87 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker44 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker59 body) Nothing (\inner -> fanWalker59 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker59 inner) (fanWalker59 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7393,13 +7393,13 @@ fanWalker89 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker88 fun) (fanWalker88 arg) (\_ -> fanWalker88 fun))
+          in (Maybes.maybe (fanWalker88 arg) (\_ -> fanWalker88 fun) (fanWalker88 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker45 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker60 body) Nothing (\inner -> fanWalker60 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker60 inner) (fanWalker60 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7412,13 +7412,13 @@ fanWalker9 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker8 fun) (fanWalker8 arg) (\_ -> fanWalker8 fun))
+          in (Maybes.maybe (fanWalker8 arg) (\_ -> fanWalker8 fun) (fanWalker8 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker5 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker6 body) Nothing (\inner -> fanWalker6 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker6 inner) (fanWalker6 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7431,13 +7431,13 @@ fanWalker90 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker89 fun) (fanWalker89 arg) (\_ -> fanWalker89 fun))
+          in (Maybes.maybe (fanWalker89 arg) (\_ -> fanWalker89 fun) (fanWalker89 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker45 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker60 body) Nothing (\inner -> fanWalker60 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker60 inner) (fanWalker60 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7450,13 +7450,13 @@ fanWalker91 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker90 fun) (fanWalker90 arg) (\_ -> fanWalker90 fun))
+          in (Maybes.maybe (fanWalker90 arg) (\_ -> fanWalker90 fun) (fanWalker90 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker46 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker61 body) Nothing (\inner -> fanWalker61 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker61 inner) (fanWalker61 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7469,13 +7469,13 @@ fanWalker92 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker91 fun) (fanWalker91 arg) (\_ -> fanWalker91 fun))
+          in (Maybes.maybe (fanWalker91 arg) (\_ -> fanWalker91 fun) (fanWalker91 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker46 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker62 body) Nothing (\inner -> fanWalker62 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker62 inner) (fanWalker62 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7488,13 +7488,13 @@ fanWalker93 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker92 fun) (fanWalker92 arg) (\_ -> fanWalker92 fun))
+          in (Maybes.maybe (fanWalker92 arg) (\_ -> fanWalker92 fun) (fanWalker92 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker47 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker62 body) Nothing (\inner -> fanWalker62 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker62 inner) (fanWalker62 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7507,13 +7507,13 @@ fanWalker94 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker93 fun) (fanWalker93 arg) (\_ -> fanWalker93 fun))
+          in (Maybes.maybe (fanWalker93 arg) (\_ -> fanWalker93 fun) (fanWalker93 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker47 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker63 body) Nothing (\inner -> fanWalker63 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker63 inner) (fanWalker63 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7526,13 +7526,13 @@ fanWalker95 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker94 fun) (fanWalker94 arg) (\_ -> fanWalker94 fun))
+          in (Maybes.maybe (fanWalker94 arg) (\_ -> fanWalker94 fun) (fanWalker94 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker48 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker64 body) Nothing (\inner -> fanWalker64 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker64 inner) (fanWalker64 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7545,13 +7545,13 @@ fanWalker96 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker95 fun) (fanWalker95 arg) (\_ -> fanWalker95 fun))
+          in (Maybes.maybe (fanWalker95 arg) (\_ -> fanWalker95 fun) (fanWalker95 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker48 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker64 body) Nothing (\inner -> fanWalker64 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker64 inner) (fanWalker64 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7564,13 +7564,13 @@ fanWalker97 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker96 fun) (fanWalker96 arg) (\_ -> fanWalker96 fun))
+          in (Maybes.maybe (fanWalker96 arg) (\_ -> fanWalker96 fun) (fanWalker96 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker49 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker65 body) Nothing (\inner -> fanWalker65 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker65 inner) (fanWalker65 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7583,13 +7583,13 @@ fanWalker98 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker97 fun) (fanWalker97 arg) (\_ -> fanWalker97 fun))
+          in (Maybes.maybe (fanWalker97 arg) (\_ -> fanWalker97 fun) (fanWalker97 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker49 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker66 body) Nothing (\inner -> fanWalker66 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker66 inner) (fanWalker66 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7602,13 +7602,13 @@ fanWalker99 t =
         Core.TermApplication v0 ->
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
-          in (Optionals.cases (fanWalker98 fun) (fanWalker98 arg) (\_ -> fanWalker98 fun))
+          in (Maybes.maybe (fanWalker98 arg) (\_ -> fanWalker98 fun) (fanWalker98 fun))
         Core.TermLambda v0 ->
           let body = Core.lambdaBody v0
           in (fanWalker50 body)
         Core.TermLet v0 ->
           let body = Core.letBody v0
-          in (Optionals.cases (fanWalker66 body) Nothing (\inner -> fanWalker66 inner))
+          in (Maybes.maybe Nothing (\inner -> fanWalker66 inner) (fanWalker66 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped

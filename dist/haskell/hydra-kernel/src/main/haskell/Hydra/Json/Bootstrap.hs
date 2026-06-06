@@ -161,6 +161,90 @@ typesByName =
               Core.TermVariable (Core.Name "description"),
               (Core.TermLiteral (Core.LiteralString "A two-level encoder and decoder, operating both at a type level and an instance (data) level")))]))}))),
       (
+        Core.Name "hydra.coders.CaseConventions",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "constant"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for compile-time constant names")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "directory"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for each directory level in the emitted source tree")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "enumValue"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for enum-variant value names")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "field"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Convention for record field names")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "file"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for the source-file basename")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "module"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for a single segment of a module name")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "term"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for top-level term definitions (functions, module-level values)")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "termVariable"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for locally-bound term names (lambda parameters, let-bindings)")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "type"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Convention for type names")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "typeVariable"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.CaseConvention")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Convention for type-level variable names")))]))}))}]),
+          Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+            (
+              Core.TermVariable (Core.Name "description"),
+              (Core.TermLiteral (Core.LiteralString "Per-target case conventions for name forms that vary across emission targets")))]))}))),
+      (
         Core.Name "hydra.coders.Coder",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
@@ -231,11 +315,35 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
-                    (Core.TermLiteral (Core.LiteralString "The constraints which characterize the language")))]))}))}]),
+                    (Core.TermLiteral (Core.LiteralString "Constraints which characterize the language's type and term grammars")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "supportedFeatures"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.coders.LanguageFeature"))),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Target-language or target-runtime capabilities the emitter may assume are available")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "caseConventions"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.coders.CaseConventions")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Per-target case conventions for the various kinds of identifiers emitted by the coder")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "defaultFileExtension"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.FileExtension")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Conventional file extension for emitted source files, without the leading dot (e.g. \"scala\", \"py\")")))]))}))}]),
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),
-              (Core.TermLiteral (Core.LiteralString "A named language together with language-specific constraints")))]))}))),
+              (Core.TermLiteral (Core.LiteralString "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension")))]))}))),
       (
         Core.Name "hydra.coders.LanguageConstraints",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -284,6 +392,38 @@ typesByName =
             (
               Core.TermVariable (Core.Name "description"),
               (Core.TermLiteral (Core.LiteralString "A set of constraints on valid type and term expressions, characterizing a language")))]))}))),
+      (
+        Core.Name "hydra.coders.LanguageFeature",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeUnion [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "partialApplication"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms.")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "nestedCaseStatements"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers.")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "nestedPolymorphicLetBindings"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level.")))]))}))}]),
+          Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+            (
+              Core.TermVariable (Core.Name "description"),
+              (Core.TermLiteral (Core.LiteralString "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability.")))]))}))),
       (
         Core.Name "hydra.coders.LanguageName",
         (Core.TypeAnnotated (Core.AnnotatedType {

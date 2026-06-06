@@ -337,7 +337,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "body": {
-                                                                              "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "0"}}}}, "typeName": "hydra.core.IntegerValue"}},
+                                                                              "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 0}}}}, "typeName": "hydra.core.IntegerValue"}},
                                                                             "domain": {"unit": {}},
                                                                             "parameter": "_"}},
                                                                         "name": "uint32"},

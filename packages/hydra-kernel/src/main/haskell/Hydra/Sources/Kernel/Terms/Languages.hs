@@ -81,3 +81,22 @@ hydraLanguage = definitionInModule module_ "hydraLanguage" $
       (var "termVariants")
       (var "typeVariants")
       (var "types"))
+    -- supportedFeatures: Hydra Core has no restrictions; all features available
+    (Sets.fromList $ list [
+      Coders.languageFeaturePartialApplication,
+      Coders.languageFeatureNestedCaseStatements,
+      Coders.languageFeatureNestedPolymorphicLetBindings])
+    -- caseConventions: Hydra-canonical (camelCase identifiers, PascalCase types)
+    (Coders.caseConventions
+      Util.caseConventionUpperSnake -- constant
+      Util.caseConventionPascal     -- directory
+      Util.caseConventionPascal     -- enumValue
+      Util.caseConventionCamel      -- field
+      Util.caseConventionPascal     -- file
+      Util.caseConventionLowerSnake -- module
+      Util.caseConventionCamel      -- term
+      Util.caseConventionCamel      -- termVariable
+      Util.caseConventionPascal     -- type
+      Util.caseConventionCamel)     -- typeVariable
+    -- defaultFileExtension: Hydra Core is abstract; use empty
+    (wrap _FileExtension (string ""))

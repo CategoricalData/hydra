@@ -202,6 +202,19 @@ lispLanguage = define "lispLanguage" $
         (var "termVariants")
         (var "typeVariants")
         (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeaturePartialApplication,
+        Coders.languageFeatureNestedCaseStatements,
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      -- Lisp dialects share one Language value; the per-dialect file/dir case
+      -- convention (Camel for Clojure, LowerSnake for the others) is applied
+      -- by the host driver's writeLispDialect helper, not from here.
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake)
+      (wrap _FileExtension (string "clj"))
 
 lispReservedWords :: TypedTermDefinition (S.Set String)
 lispReservedWords = define "lispReservedWords" $

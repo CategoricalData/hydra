@@ -57,13 +57,13 @@ encodeInteger iv =
     case iv of
       Core.IntegerValueBigint v0 -> Right (Model.ValueString (LibLiterals.showBigint v0))
       Core.IntegerValueInt64 v0 -> Right (Model.ValueString (LibLiterals.showInt64 v0))
-      Core.IntegerValueUint32 v0 -> Right (Model.ValueString (LibLiterals.showUint32 v0))
       Core.IntegerValueUint64 v0 -> Right (Model.ValueString (LibLiterals.showUint64 v0))
       Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.int8ToBigint v0)))
       Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.int16ToBigint v0)))
       Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.int32ToBigint v0)))
       Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint8ToBigint v0)))
       Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint16ToBigint v0)))
+      Core.IntegerValueUint32 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint32ToBigint v0)))
 -- | Encode a Hydra literal to a JSON value
 encodeLiteral :: Core.Literal -> Either t0 Model.Value
 encodeLiteral lit =

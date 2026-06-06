@@ -1598,7 +1598,7 @@
                                                                             "field": {
                                                                               "name": "integer",
                                                                               "term": {
-                                                                                "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "0"}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 0}}}}, "typeName": "hydra.core.IntegerValue"}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {"variable": "hydra.show.core.term"}}},
@@ -1707,7 +1707,7 @@
                                                                               "name": "integer",
                                                                               "term": {
                                                                                 "inject": {
-                                                                                  "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "100000"}}}},
+                                                                                  "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 100000}}}},
                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
@@ -3700,7 +3700,7 @@
                                                                                               "field": {
                                                                                                 "name": "integer",
                                                                                                 "term": {
-                                                                                                  "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "0"}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                  "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 0}}}}, "typeName": "hydra.core.IntegerValue"}}},
                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                 "typeName": "hydra.core.Application"}}},
@@ -3807,7 +3807,7 @@
                                                                                                 "name": "integer",
                                                                                                 "term": {
                                                                                                   "inject": {
-                                                                                                    "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "100000"}}}},
+                                                                                                    "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 100000}}}},
                                                                                                     "typeName": "hydra.core.IntegerValue"}}},
                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                         "typeName": "hydra.core.Term"}}}],
@@ -9172,7 +9172,7 @@
                                                                                               "field": {
                                                                                                 "name": "integer",
                                                                                                 "term": {
-                                                                                                  "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "0"}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                  "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 0}}}}, "typeName": "hydra.core.IntegerValue"}}},
                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                 "typeName": "hydra.core.Application"}}},
@@ -9273,7 +9273,7 @@
                                                                                                 "name": "integer",
                                                                                                 "term": {
                                                                                                   "inject": {
-                                                                                                    "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "100000"}}}},
+                                                                                                    "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 100000}}}},
                                                                                                     "typeName": "hydra.core.IntegerValue"}}},
                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                         "typeName": "hydra.core.Term"}}}],
@@ -15516,7 +15516,7 @@
                                                                                     "field": {
                                                                                       "name": "integer",
                                                                                       "term": {
-                                                                                        "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "0"}}}}, "typeName": "hydra.core.IntegerValue"}}},
+                                                                                        "inject": {"field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 0}}}}, "typeName": "hydra.core.IntegerValue"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}},
                                                                       "typeName": "hydra.core.Term"}},
@@ -15623,7 +15623,7 @@
                                                                                       "name": "integer",
                                                                                       "term": {
                                                                                         "inject": {
-                                                                                          "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": "100000"}}}},
+                                                                                          "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 100000}}}},
                                                                                           "typeName": "hydra.core.IntegerValue"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}},

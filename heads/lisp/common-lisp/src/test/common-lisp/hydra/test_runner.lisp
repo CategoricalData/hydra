@@ -159,23 +159,86 @@
     ((listp m) (mapcar (lambda (pair) (cons (first pair) (second pair))) m))
     (t nil)))
 
+(defun unwrap-term-variable-key (k)
+  "After #386, annotation map keys are wrapped as TermVariable terms.
+   Two encodings appear: the Inject form
+   (:inject Injection{type_name=\"hydra.core.Term\" field={name=\"variable\" term=NameTerm}})
+   and the struct-compat short form (:variable NameTerm). Peel one level to
+   return the underlying Name term. Other key shapes pass through."
+  (cond
+    ((and (consp k) (eq (first k) :inject)
+          (let* ((inj (second k))
+                 (tn (cdr (assoc :type_name inj)))
+                 (fld (cdr (assoc :field inj))))
+            (and (equal tn "hydra.core.Term")
+                 (equal (cdr (assoc :name fld)) "variable"))))
+     (let* ((inj (second k))
+            (fld (cdr (assoc :field inj))))
+       (cdr (assoc :term fld))))
+    ((and (consp k) (eq (first k) :variable))
+     (second k))
+    (t k)))
+
+(defun unwrap-term-annotation (ann)
+  "Project the annotation Term (#386: a TermMap whose keys are TermVariables
+   wrapping Names) to a plain alist of (NameTerm . ValueTerm) pairs.
+   Handles three encodings:
+     - Inject form: Inject{Term, map = (:map alist)} — canonical post-#386
+     - Short form:  (:map (:map alist)) — the struct-compat view of the same
+     - Legacy:      a bare (:map alist), RB-tree, or alist (pre-#386)
+   In all cases, each key is run through unwrap-term-variable-key so a Name
+   term ends up as the alist key."
+  (cond
+    ;; Inject{Term, map = ...}
+    ((and (consp ann) (eq (first ann) :inject)
+          (let* ((inj (second ann))
+                 (tn (cdr (assoc :type_name inj)))
+                 (fld (cdr (assoc :field inj))))
+            (and (equal tn "hydra.core.Term")
+                 (equal (cdr (assoc :name fld)) "map"))))
+     (let* ((inj (second ann))
+            (fld (cdr (assoc :field inj)))
+            (inner (cdr (assoc :term fld))))
+       (unwrap-pairs-from-map-term inner)))
+    ;; Short Term-variant form: (:map <map-term>) where the inner is itself
+    ;; (:map alist) (since the Term :map variant's payload is a map term).
+    ((and (consp ann) (eq (first ann) :map)
+          (consp (second ann)) (eq (first (second ann)) :map))
+     (unwrap-pairs-from-map-term (second ann)))
+    ;; Legacy / fallback shapes.
+    ((rbnode-p ann) (map-term-to-alist ann))
+    ((and (consp ann) (eq (first ann) :map))
+     (mapcar (lambda (pair)
+               (cons (unwrap-term-variable-key (car pair)) (cdr pair)))
+             (map-term-to-alist (second ann))))
+    ((and (consp ann) (consp (first ann)))
+     (map-term-to-alist ann))
+    (t nil)))
+
+(defun unwrap-pairs-from-map-term (m)
+  "Given a map term — (:map alist), an RB-tree, or a raw alist — return an
+   alist of (NameTerm . ValueTerm) pairs with each key TermVariable-peeled."
+  (let ((raw-pairs (cond
+                     ((rbnode-p m) (map-term-to-alist m))
+                     ((and (consp m) (eq (first m) :map))
+                      (map-term-to-alist (second m)))
+                     ((and (consp m) (consp (first m)))
+                      (map-term-to-alist m))
+                     (t nil))))
+    (mapcar (lambda (pair)
+              (cons (unwrap-term-variable-key (car pair)) (cdr pair)))
+            raw-pairs)))
+
 (defun term-annotation-internal (term)
-  "Extract annotation map from an annotated term (struct-compat format). Returns an alist."
+  "Extract annotation alist from an annotated term, peeling the post-#386
+   TermMap-with-TermVariable-keys shape from AnnotatedTerm.annotation."
   (labels ((recur (t_ pairs)
              (if (is-meta-annotated-p t_)
                  (let* ((at (second t_))
                         (ann (annotated_term-annotation at))
-                        (body (annotated_term-body at)))
-                   ;; ann is either a map term (:map ...), an RB-tree map
-                   ;; struct, or a legacy alist.
-                   (let ((ann-pairs (cond
-                                     ((rbnode-p ann) (map-term-to-alist ann))
-                                     ((and (consp ann) (eq (first ann) :map))
-                                      (map-term-to-alist (second ann)))
-                                     ((and (consp ann) (consp (first ann)))
-                                      (map-term-to-alist ann))
-                                     (t nil))))
-                     (recur body (cons ann-pairs pairs))))
+                        (body (annotated_term-body at))
+                        (ann-pairs (unwrap-term-annotation ann)))
+                   (recur body (cons ann-pairs pairs)))
                  (apply #'append pairs))))
     (recur term nil)))
 
@@ -234,17 +297,47 @@
   "Sort map alist entries by key using generic-compare."
   (sort (copy-list entries) (lambda (a b) (< (generic-compare (car a) (car b)) 0))))
 
+(defun wrap-key-as-term-variable (k)
+  "Lift a Name term (typically (:wrap WrappedTerm) for hydra.core.Name) to
+   the Term-encoded TermVariable form expected by AnnotatedTerm.annotation
+   after #386: Inject{Term, variable = NameTerm}. Keys already in that
+   shape pass through."
+  (cond
+    ((and (consp k) (eq (first k) :inject)
+          (let* ((inj (second k))
+                 (tn (cdr (assoc :type_name inj)))
+                 (fld (cdr (assoc :field inj))))
+            (and (equal tn "hydra.core.Term")
+                 (equal (cdr (assoc :name fld)) "variable"))))
+     k)
+    (t
+     (list :inject (make-injection "hydra.core.Term"
+                     (make-field "variable" k))))))
+
+(defun wrap-annotation-alist-as-term (anns-alist)
+  "Wrap a (NameTerm . ValueTerm) alist as a Term-encoded annotation map per
+   #386: Inject{Term, map = (:map ((TermVariable . ValueTerm) ...))}, sorted
+   for determinism."
+  (let ((wrapped (mapcar (lambda (pair)
+                           (cons (wrap-key-as-term-variable (car pair))
+                                 (cdr pair)))
+                         anns-alist)))
+    (list :inject (make-injection "hydra.core.Term"
+                    (make-field "map"
+                      (list :map (sort-map-entries wrapped)))))))
+
 (defun make-meta-annotated (body anns-alist)
   "Build an annotated term in Inject form, which is the canonical
    in-memory shape used by the kernel for all Term variants. The
    short :annotated form is also a valid variant tag, but the kernel's
-   reducer/show pipeline emits and matches against the Inject form."
+   reducer/show pipeline emits and matches against the Inject form.
+   The annotation field is wrapped as a TermMap per #386."
   (list :inject (make-injection "hydra.core.Term"
                   (make-field "annotated"
                     (list :record (make-record "hydra.core.AnnotatedTerm"
                                     (list (make-field "body" body)
                                           (make-field "annotation"
-                                            (list :map (sort-map-entries anns-alist))))))))))
+                                            (wrap-annotation-alist-as-term anns-alist)))))))))
 
 (defun term-as-inject (term)
   "Convert a Term in short variant form (e.g., (:literal ...) or (:application ...))
@@ -340,15 +433,14 @@
            (let* ((rec (second field-term))
                   (fields (cdr (assoc :fields rec)))
                   (body (meta-field-value fields "body"))
-                  (ann (meta-field-value fields "annotation")))
-             ;; ann is a map term (:map alist)
-             (let ((ann-pairs (cond
-                                ((and (consp ann) (eq (first ann) :map))
-                                 (map-term-to-alist (second ann)))
-                                (t nil)))
-                   ;; Recurse into body for layered annotations
-                   (inner-anns (extract-annotations-any body)))
-               (append ann-pairs inner-anns)))
+                  (ann (meta-field-value fields "annotation"))
+                  ;; #386: ann is a Term — typically Inject{Term, map = ...} with
+                  ;; TermVariable keys. unwrap-term-annotation handles both new
+                  ;; and legacy shapes.
+                  (ann-pairs (unwrap-term-annotation ann))
+                  ;; Recurse into body for layered annotations
+                  (inner-anns (extract-annotations-any body)))
+             (append ann-pairs inner-anns))
            nil)))
     (t nil)))
 
@@ -649,12 +741,30 @@
           (let* ((at (second term))
                  (body (annotated_term-body at))
                  (ann (annotated_term-annotation at))
-                 (ann-term (if (and (consp ann) (eq (first ann) :map)) ann (list :map ann))))
+                 ;; #386: AnnotatedTerm.annotation is a Term. If the runtime
+                 ;; produced one (Inject{Term, map=...}), keep it; otherwise
+                 ;; treat the value as a raw (NameTerm . ValueTerm) alist and
+                 ;; wrap it canonically.
+                 (ann-meta
+                   (cond
+                     ;; Already a Term (Inject{Term, ...}): recurse meta-fully.
+                     ((and (consp ann) (eq (first ann) :inject)
+                           (let* ((inj (second ann))
+                                  (tn (cdr (assoc :type_name inj))))
+                             (equal tn "hydra.core.Term")))
+                      (term-to-meta ann))
+                     ;; Bare (:map alist) — wrap as TermMap with TermVariable keys.
+                     ((and (consp ann) (eq (first ann) :map))
+                      (term-to-meta (wrap-annotation-alist-as-term (second ann))))
+                     ;; Legacy alist — same treatment.
+                     ((and (consp ann) (consp (first ann)))
+                      (term-to-meta (wrap-annotation-alist-as-term ann)))
+                     (t (term-to-meta ann)))))
             (list :inject (make-injection "hydra.core.Term"
                     (make-field "annotated"
                       (list :record (make-record "hydra.core.AnnotatedTerm"
                         (list (make-field "body" (term-to-meta body))
-                              (make-field "annotation" (term-to-meta-map ann-term))))))))))
+                              (make-field "annotation" ann-meta)))))))))
         (:literal
           (let ((lit (second term)))
             (list :inject (make-injection "hydra.core.Term"
