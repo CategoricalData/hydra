@@ -4652,73 +4652,101 @@ public class Coder {
                                                     proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                                 field("cod",
                                                     proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
+                                                // BUG #438: defaultExpr and elimBranch used to be let-bound
+                                                // as plain values here. That works in lazy Haskell (let
+                                                // bindings aren't forced unless used) but BREAKS in eager
+                                                // Clojure: both branches evaluate even though only one is
+                                                // selected. When lhs is a CASES/PROJECT/UNWRAP, the unused
+                                                // defaultExpr still evaluates `encodeTerm env lhs`, which
+                                                // routes back through encodeFunction →
+                                                // encodeElimination(:nothing, …) → typedLambda →
+                                                // encodeApplication_fallback again on the same lhs —
+                                                // unbounded recursion.
+                                                //
+                                                // Fix: thunk each binding behind `lambda("_", …)` so it
+                                                // is only evaluated when explicitly applied in the
+                                                // matching casesWithDefault branch. This preserves the
+                                                // original Haskell-lazy semantics under Clojure-strict
+                                                // evaluation without restructuring the call site.
                                                 field("defaultExpr",
-                                                    Eithers.bind(
-                                                        apply(
-                                                            ref(Coder.encodeTerm),
-                                                            var("env"),
-                                                            var("lhs"),
-                                                            var("cx"),
-                                                            var("g")),
-                                                        lambda("jfun",
-                                                            Eithers.bind(
-                                                                apply(
-                                                                    ref(Coder.encodeTerm),
-                                                                    var("env"),
-                                                                    var("rhs"),
-                                                                    var("cx"),
-                                                                    var("g")),
-                                                                lambda("jarg",
-                                                                    right(
-                                                                        apply(
-                                                                            ref(Coder.applyJavaArg),
-                                                                            var("jfun"),
-                                                                            var("jarg")))))))),
+                                                    lambda("__bug438_dflt",
+                                                        Eithers.bind(
+                                                            apply(
+                                                                ref(Coder.encodeTerm),
+                                                                var("env"),
+                                                                var("lhs"),
+                                                                var("cx"),
+                                                                var("g")),
+                                                            lambda("jfun",
+                                                                Eithers.bind(
+                                                                    apply(
+                                                                        ref(Coder.encodeTerm),
+                                                                        var("env"),
+                                                                        var("rhs"),
+                                                                        var("cx"),
+                                                                        var("g")),
+                                                                    lambda("jarg",
+                                                                        right(
+                                                                            apply(
+                                                                                ref(Coder.applyJavaArg),
+                                                                                var("jfun"),
+                                                                                var("jarg"))))))))),
                                                 field("elimBranch",
-                                                    Eithers.bind(
-                                                        apply(
-                                                            ref(Coder.encodeTerm),
-                                                            var("env"),
-                                                            var("rhs"),
-                                                            var("cx"),
-                                                            var("g")),
-                                                        lambda("jarg",
-                                                            Eithers.bind(
-                                                                Logic.ifElse(
-                                                                    Logic.not_(
-                                                                        Lists.null_(
-                                                                            apply(
-                                                                                ref(Coder.javaTypeArgumentsForType),
-                                                                                var("dom")))),
-                                                                    right(var("dom")),
-                                                                    Eithers.bind(
-                                                                        Eithers.bimap(
-                                                                            lambda("__de",
-                                                                                inject(
-                                                                                    Error_.TYPE_,
-                                                                                    Error_.OTHER,
-                                                                                    wrap(
-                                                                                        OtherError.TYPE_,
-                                                                                        apply(
-                                                                                            unwrap(DecodingError.TYPE_),
-                                                                                            var("__de"))))),
-                                                                            lambda("__a",
-                                                                                var("__a")),
-                                                                            apply(
-                                                                                var("hydra.annotations.getType"),
-                                                                                var("g"),
+                                                    lambda("__bug438_elim",
+                                                        Eithers.bind(
+                                                            apply(
+                                                                ref(Coder.encodeTerm),
+                                                                var("env"),
+                                                                var("rhs"),
+                                                                var("cx"),
+                                                                var("g")),
+                                                            lambda("jarg",
+                                                                Eithers.bind(
+                                                                    Logic.ifElse(
+                                                                        Logic.not_(
+                                                                            Lists.null_(
                                                                                 apply(
-                                                                                    var("hydra.annotations.termAnnotationInternal"),
-                                                                                    var("rhs")))),
-                                                                        lambda("mrt",
-                                                                            Maybes.cases(
-                                                                                var("mrt"),
-                                                                                Eithers.bind(
+                                                                                    ref(Coder.javaTypeArgumentsForType),
+                                                                                    var("dom")))),
+                                                                        right(var("dom")),
+                                                                        Eithers.bind(
+                                                                            Eithers.bimap(
+                                                                                lambda("__de",
+                                                                                    inject(
+                                                                                        Error_.TYPE_,
+                                                                                        Error_.OTHER,
+                                                                                        wrap(
+                                                                                            OtherError.TYPE_,
+                                                                                            apply(
+                                                                                                unwrap(DecodingError.TYPE_),
+                                                                                                var("__de"))))),
+                                                                                lambda("__a",
+                                                                                    var("__a")),
+                                                                                apply(
+                                                                                    var("hydra.annotations.getType"),
+                                                                                    var("g"),
                                                                                     apply(
-                                                                                        var("hydra.checking.typeOfTerm"),
-                                                                                        var("cx"),
-                                                                                        var("g"),
-                                                                                        var("rhs")),
+                                                                                        var("hydra.annotations.termAnnotationInternal"),
+                                                                                        var("rhs")))),
+                                                                            lambda("mrt",
+                                                                                Maybes.cases(
+                                                                                    var("mrt"),
+                                                                                    Eithers.bind(
+                                                                                        apply(
+                                                                                            var("hydra.checking.typeOfTerm"),
+                                                                                            var("cx"),
+                                                                                            var("g"),
+                                                                                            var("rhs")),
+                                                                                        lambda("rt",
+                                                                                            right(
+                                                                                                Logic.ifElse(
+                                                                                                    Logic.not_(
+                                                                                                        Lists.null_(
+                                                                                                            apply(
+                                                                                                                ref(Coder.javaTypeArgumentsForType),
+                                                                                                                var("rt")))),
+                                                                                                    var("rt"),
+                                                                                                    var("dom"))))),
                                                                                     lambda("rt",
                                                                                         right(
                                                                                             Logic.ifElse(
@@ -4728,43 +4756,33 @@ public class Coder {
                                                                                                             ref(Coder.javaTypeArgumentsForType),
                                                                                                             var("rt")))),
                                                                                                 var("rt"),
-                                                                                                var("dom"))))),
-                                                                                lambda("rt",
-                                                                                    right(
-                                                                                        Logic.ifElse(
-                                                                                            Logic.not_(
-                                                                                                Lists.null_(
-                                                                                                    apply(
-                                                                                                        ref(Coder.javaTypeArgumentsForType),
-                                                                                                        var("rt")))),
-                                                                                            var("rt"),
-                                                                                            var("dom")))))))),
-                                                                lambda("enrichedDom",
-                                                                    apply(
-                                                                        ref(Coder.encodeElimination),
-                                                                        var("env"),
-                                                                        just(var("jarg")),
-                                                                        var("enrichedDom"),
-                                                                        var("cod"),
+                                                                                                var("dom")))))))),
+                                                                    lambda("enrichedDom",
                                                                         apply(
-                                                                            var("hydra.strip.deannotateTerm"),
-                                                                            var("lhs")),
-                                                                        var("cx"),
-                                                                        var("g"))))))),
+                                                                            ref(Coder.encodeElimination),
+                                                                            var("env"),
+                                                                            just(var("jarg")),
+                                                                            var("enrichedDom"),
+                                                                            var("cod"),
+                                                                            apply(
+                                                                                var("hydra.strip.deannotateTerm"),
+                                                                                var("lhs")),
+                                                                            var("cx"),
+                                                                            var("g")))))))),
                                                 casesWithDefault(Term.TYPE_,
                                                     apply(
                                                         var("hydra.strip.deannotateAndDetypeTerm"),
                                                         var("lhs")),
-                                                    var("defaultExpr"),
+                                                    apply(var("defaultExpr"), unit()),
                                                     field(
                                                         Term.PROJECT,
-                                                        constant(var("elimBranch"))),
+                                                        constant(apply(var("elimBranch"), unit()))),
                                                     field(
                                                         Term.CASES,
-                                                        constant(var("elimBranch"))),
+                                                        constant(apply(var("elimBranch"), unit()))),
                                                     field(
                                                         Term.UNWRAP,
-                                                        constant(var("elimBranch"))))))))))))));
+                                                        constant(apply(var("elimBranch"), unit()))))))))))))));
 
     public static final Def encodeDefinitions = def(
         "encodeDefinitions",
