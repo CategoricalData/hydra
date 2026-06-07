@@ -112,14 +112,14 @@
     (define hydra_lib_eithers_map_optional
       (lambda (f)
         (lambda (m)
-          (if (or (null? m) (and (pair? m) (eq? (car m) 'nothing)))
-              (list 'right (list 'nothing))
-              (let ((val (if (and (pair? m) (or (eq? (car m) 'just) (eq? (car m) 'maybe)))
+          (if (or (null? m) (and (pair? m) (eq? (car m) 'none)))
+              (list 'right (list 'none))
+              (let ((val (if (and (pair? m) (or (eq? (car m) 'given) (eq? (car m) 'maybe)))
                              (cadr m) m)))
                 (let ((result (f val)))
                   (if (eq? (either-tag result) 'left)
                       result
-                      (list 'right (list 'just (either-val result))))))))))
+                      (list 'right (list 'given (either-val result))))))))))
 
     ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
     ;; Iterates the input set via the public sets API (vlist/vhash-aware) and

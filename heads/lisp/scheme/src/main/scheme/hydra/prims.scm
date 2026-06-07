@@ -94,15 +94,15 @@
       (let* ((constraints (if (pair? rest) (car rest) #f))
              (ts (build-type-scheme variables inputs output constraints))
              (sig (hydra_scoping_type_scheme_to_term_signature ts)))
-        (make-hydra_packaging_primitive_definition pname (list 'nothing) sig #t #t (list 'nothing))))
+        (make-hydra_packaging_primitive_definition pname (list 'none) sig #t #t (list 'none))))
 
     ;; Convert an alist of (varname . TypeVariableConstraints) into the wrapped
     ;; Option[Map[Name, TypeVariableConstraints]] shape that TypeScheme expects.
     ;; Returns (nothing) for no constraints or (just <map>).
     (define (alist->maybe-constraints alist)
       (if (or (not alist) (null? alist))
-          (list 'nothing)
-          (list 'just (hydra_lib_maps_from_list alist))))
+          (list 'none)
+          (list 'given (hydra_lib_maps_from_list alist))))
 
     ;; ============================================================================
     ;; Error helpers
@@ -284,9 +284,9 @@
         (lambda (cx)
           (lambda (mv)
             (cond
-              ((null? mv) (list 'right (list 'maybe (list 'nothing))))
-              ((and (pair? mv) (eq? (car mv) 'nothing)) (list 'right (list 'maybe (list 'nothing))))
-              ((and (pair? mv) (eq? (car mv) 'just))
+              ((null? mv) (list 'right (list 'maybe (list 'none))))
+              ((and (pair? mv) (eq? (car mv) 'none)) (list 'right (list 'maybe (list 'none))))
+              ((and (pair? mv) (eq? (car mv) 'given))
                (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (cadr mv))))
                  (if (eq? (car r) 'left) r (list 'right (list 'maybe (cadr r))))))
               (else

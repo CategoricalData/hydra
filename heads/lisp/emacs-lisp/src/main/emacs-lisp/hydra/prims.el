@@ -14,13 +14,13 @@
     (list :function (make-hydra_core_function_type (list :unit) (make-arity-type (1- n))))))
 
 (defun make-prim-type-scheme (arity)
-  (make-hydra_core_type_scheme nil (make-arity-type arity) (list :nothing)))
+  (make-hydra_core_type_scheme nil (make-arity-type arity) (list :none)))
 
 (defun make-prim-def-from-arity (name arity)
   "Build a PrimitiveDefinition (#156 shape) from name + arity (for annotation primitives)."
   (let* ((ts (make-prim-type-scheme arity))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition name (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition name (list :none) sig t t (list :none))))
 
 (defun collect-type-vars-ordered (typ)
   "Collect type variable names from a Hydra type in order of first appearance."
@@ -81,17 +81,17 @@
                                      (make-hydra_core_type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
          (maybe-constraints (if constraint-map
-                                (list :just constraint-map)
-                                (list :nothing))))
+                                (list :given constraint-map)
+                                (list :none))))
     (make-hydra_core_type_scheme vars fun-type maybe-constraints)))
 
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
 ;; ============================================================================
 ;; Error helpers
@@ -239,8 +239,8 @@
     (lambda (cx) (lambda (mv)
       (cond
        ((null mv) (list :right (list :maybe nil)))
-       ((and (consp mv) (eq (car mv) :nothing)) (list :right (list :maybe nil)))
-       ((and (consp mv) (eq (car mv) :just))
+       ((and (consp mv) (eq (car mv) :none)) (list :right (list :maybe nil)))
+       ((and (consp mv) (eq (car mv) :given))
         (let ((r (funcall (funcall (hydra_graph_term_coder-decode el-coder) cx) (cadr mv))))
           (if (eq (car r) :left) r (list :right (list :maybe (cadr r))))))
        (t (let ((r (funcall (funcall (hydra_graph_term_coder-decode el-coder) cx) mv)))

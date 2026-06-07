@@ -245,18 +245,18 @@
 (defun maybe-nothing-p (val)
   (or (null val)
       (and (consp val) (null (cdr val)) (null (car val)))
-      (and (consp val) (eq (first val) :nothing))
+      (and (consp val) (eq (first val) :none))
       (and (consp val) (eq (first val) :maybe)
            (or (< (length val) 2)
                (null (second val))
-               (and (consp (second val)) (eq (first (second val)) :nothing))))))
+               (and (consp (second val)) (eq (first (second val)) :none))))))
 
 (defun ann-maybe-value (val)
   (cond
-    ((and (consp val) (eq (first val) :just)) (second val))
+    ((and (consp val) (eq (first val) :given)) (second val))
     ((and (consp val) (eq (first val) :maybe))
      (let ((body (second val)))
-       (if (and (consp body) (eq (first body) :just))
+       (if (and (consp body) (eq (first body) :given))
            (second body)
            body)))
     (t val)))
@@ -385,13 +385,13 @@
   (labels ((make-type (n)
              (if (<= n 0) (list :unit)
                  (list :function (make-function_type (list :unit) (make-type (1- n)))))))
-    (make-type_scheme nil (make-type arity) (list :nothing))))
+    (make-type_scheme nil (make-type arity) (list :none))))
 
 (defun make-ann-prim-def (pname arity)
   "Build a PrimitiveDefinition (#156 shape) for an annotation primitive."
   (let* ((ts (make-ann-type-scheme arity))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
 (defun make-annotation-primitive (pname arity impl-fn)
   "Create a Primitive for annotation operations."
@@ -506,7 +506,7 @@
              (term-as-inject (ann-maybe-value d))))
          (desc-key (list :wrap (make-wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
-         (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))
+         (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :none)))))
     (prim-set-term-annotation cx g (list desc-key maybe-val term))))
 
 ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)

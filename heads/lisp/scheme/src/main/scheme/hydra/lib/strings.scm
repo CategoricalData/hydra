@@ -139,8 +139,8 @@
       (lambda (n)
         (lambda (s)
           (if (and (>= n 0) (< n (string-length s)))
-              (list 'just (char->int (string-ref s n)))
-              (list 'nothing)))))
+              (list 'given (char->int (string-ref s n)))
+              (list 'none)))))
 
     ;; Check whether a string is empty.
     (define hydra_lib_strings_null

@@ -45,7 +45,7 @@
 (defun hydra--t-left (v) (list :either (list :left v)))
 (defun hydra--t-just (v) (list :maybe (hydra--t-inject "hydra.core.Term" "literal"
                      (hydra--t-inject "hydra.core.Literal" "string" v))))
-(defun hydra--t-nothing () (list :maybe (list :nothing nil)))
+(defun hydra--t-nothing () (list :maybe (list :none nil)))
 ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
 (defun hydra--t-pair (a b) (list :pair (list a b)))
 
@@ -75,7 +75,7 @@
     (list "hydra.rewriting.deannotateTerm"
           (hydra--t-lam "t"
             (hydra--t-app
-              (hydra--t-match "hydra.core.Term" (list :just (hydra--t-var "t"))
+              (hydra--t-match "hydra.core.Term" (list :given (hydra--t-var "t"))
                 (hydra--t-field "annotated"
                   (hydra--t-lam "at"
                     (hydra--t-app (hydra--t-var "hydra.rewriting.deannotateTerm")
@@ -88,7 +88,7 @@
     (list "hydra.annotations.getAnnotationMap"
           (hydra--t-lam "t"
             (hydra--t-app
-              (hydra--t-match "hydra.core.Term" (list :just (hydra--t-app (hydra--t-prim "hydra.lib.maps.empty") (hydra--t-var "t")))
+              (hydra--t-match "hydra.core.Term" (list :given (hydra--t-app (hydra--t-prim "hydra.lib.maps.empty") (hydra--t-var "t")))
                 (hydra--t-field "map"
                   (hydra--t-lam "m"
                     (hydra--t-app (hydra--t-prim "hydra.lib.maps.fromList")
@@ -97,7 +97,7 @@
                           (hydra--t-lam "pair"
                             (hydra--t-app
                               (hydra--t-match "hydra.core.Term"
-                                (list :just (hydra--t-var "acc"))
+                                (list :given (hydra--t-var "acc"))
                                 (hydra--t-field "variable"
                                   (hydra--t-lam "n"
                                     (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.lists.cons")
@@ -137,7 +137,7 @@
               (hydra--t-lam "rest"
                 (hydra--t-lam "t"
                   (hydra--t-app
-                    (hydra--t-match "hydra.core.Term" (list :just (hydra--t-var "rest"))
+                    (hydra--t-match "hydra.core.Term" (list :given (hydra--t-var "rest"))
                       (hydra--t-field "annotated"
                         (hydra--t-lam "at"
                           (hydra--t-app
@@ -232,17 +232,17 @@
                     (hydra--t-var "hydra.constants.keyDescription"))
                     (hydra--t-var "anns")))
                   ;; default: right(nothing)
-                  (hydra--t-right (list :maybe (list :nothing nil))))
+                  (hydra--t-right (list :maybe (list :none nil))))
                   ;; \descTerm -> case match to extract string
                   (hydra--t-lam "descTerm"
                     (hydra--t-app
                       (hydra--t-match "hydra.core.Term"
-                        (list :just (hydra--t-right (list :maybe (list :nothing nil))))
+                        (list :given (hydra--t-right (list :maybe (list :none nil))))
                         (hydra--t-field "literal"
                           (hydra--t-lam "lit"
                             (hydra--t-app
                               (hydra--t-match "hydra.core.Literal"
-                                (list :just (hydra--t-right (list :maybe (list :nothing nil))))
+                                (list :given (hydra--t-right (list :maybe (list :none nil))))
                                 (hydra--t-field "string"
                                   (hydra--t-lam "s"
                                     (hydra--t-right (list :maybe (hydra--t-var "s"))))))
@@ -262,7 +262,7 @@
                 (hydra--t-let "peel"
                   (hydra--t-lam "t"
                     (hydra--t-app
-                      (hydra--t-match "hydra.core.Term" (list :just (hydra--t-var "t"))
+                      (hydra--t-match "hydra.core.Term" (list :given (hydra--t-var "t"))
                         (hydra--t-field "typeLambda"
                           (hydra--t-lam "tl"
                             (hydra--t-app (hydra--t-var "peel")

@@ -1,16 +1,16 @@
 (in-package :cl-user)
 
-;; Maybe representation: (list :just val) or (list :nothing)
+;; Maybe representation: (list :given val) or (list :none)
 
 ;; Do NOT treat (:maybe ...) as native maybe — that is Hydra's term-level
 ;; representation and collides with nested optionals like maybe<maybe<string>>.
 (defun maybe-nothing-p (m)
   (or (null m)
-      (and (consp m) (eq (first m) :nothing))))
+      (and (consp m) (eq (first m) :none))))
 
 (defun maybe-value (m)
   (cond
-    ((and (consp m) (eq (first m) :just)) (second m))
+    ((and (consp m) (eq (first m) :given)) (second m))
     (t m)))
 
 ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
@@ -18,17 +18,17 @@
   (lambda (mf)
     (lambda (mx)
       (if (maybe-nothing-p mf)
-          (list :nothing)
+          (list :none)
           (if (maybe-nothing-p mx)
-              (list :nothing)
-              (list :just (funcall (maybe-value mf) (maybe-value mx))))))))
+              (list :none)
+              (list :given (funcall (maybe-value mf) (maybe-value mx))))))))
 
 ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
 (defvar hydra_lib_optionals_bind
   (lambda (m)
     (lambda (f)
       (if (maybe-nothing-p m)
-          (list :nothing)
+          (list :none)
           (funcall f (maybe-value m))))))
 
 ;; cases :: Maybe a -> b -> (a -> b) -> b
@@ -55,7 +55,7 @@
       (lambda (x)
         (let ((result (funcall f x)))
           (if (maybe-nothing-p result)
-              (list :nothing)
+              (list :none)
               (funcall g (maybe-value result))))))))
 
 ;; from_optional :: a -> Maybe a -> a
@@ -82,8 +82,8 @@
   (lambda (f)
     (lambda (m)
       (if (maybe-nothing-p m)
-          (list :nothing)
-          (list :just (funcall f (maybe-value m)))))))
+          (list :none)
+          (list :given (funcall f (maybe-value m)))))))
 
 ;; map_optional :: (a -> Maybe b) -> [a] -> [b]
 (defvar hydra_lib_optionals_map_optional
@@ -97,7 +97,7 @@
 ;; pure :: a -> Maybe a
 (defvar hydra_lib_optionals_pure
   (lambda (x)
-    (list :just x)))
+    (list :given x)))
 
 ;; to_list :: Maybe a -> [a]
 (defvar hydra_lib_optionals_to_list
