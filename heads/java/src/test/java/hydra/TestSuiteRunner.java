@@ -9,7 +9,7 @@ import hydra.testing.*;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -145,7 +145,7 @@ public class TestSuiteRunner {
     }
 
     private static void addConstantBinding(List<Binding> bindings, String name, Term value) {
-        bindings.add(new Binding(new Name(name), value, Maybe.nothing()));
+        bindings.add(new Binding(new Name(name), value, Optional.none()));
     }
 
     /**
@@ -177,14 +177,14 @@ public class TestSuiteRunner {
         addConstantBinding(bindings, "hydra.annotations.getAnnotationMap",
             lambda("t",
                 apply(
-                    match("hydra.core.Term", Maybe.just(apply(primitive("hydra.lib.maps.empty"), var("t"))),
+                    match("hydra.core.Term", Optional.given(apply(primitive("hydra.lib.maps.empty"), var("t"))),
                         field("map", lambda("m",
                             apply(primitive("hydra.lib.maps.fromList"),
                                 apply(apply(primitive("hydra.lib.lists.foldl"),
                                     lambda("acc", "pair",
                                         apply(
                                             match("hydra.core.Term",
-                                                Maybe.just(var("acc")),
+                                                Optional.given(var("acc")),
                                                 field("variable", lambda("n",
                                                     apply(apply(primitive("hydra.lib.lists.cons"),
                                                         pair(
@@ -214,7 +214,7 @@ public class TestSuiteRunner {
         addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
             lambda("t",
                 apply(
-                    match("hydra.core.Term", Maybe.just(var("t")),
+                    match("hydra.core.Term", Optional.given(var("t")),
                         field("annotated", lambda("at",
                             apply(var("hydra.rewriting.deannotateTerm"),
                                 apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
@@ -227,7 +227,7 @@ public class TestSuiteRunner {
                     lambda("rest", "t",
                         apply(
                             match("hydra.core.Term",
-                                Maybe.just(var("rest")),
+                                Optional.given(var("rest")),
                                 field("annotated", lambda("at",
                                     apply(apply(var("toPairs"),
                                         apply(apply(primitive("hydra.lib.lists.cons"),
@@ -291,11 +291,11 @@ public class TestSuiteRunner {
                             right(nothing())),
                             lambda("descTerm",
                                 apply(
-                                    match("hydra.core.Term", Maybe.just(
+                                    match("hydra.core.Term", Optional.given(
                                         left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
                                         field("literal", lambda("lit",
                                             apply(
-                                                match("hydra.core.Literal", Maybe.just(
+                                                match("hydra.core.Literal", Optional.given(
                                                     left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
@@ -308,7 +308,7 @@ public class TestSuiteRunner {
                         let_("peel",
                             lambda("t",
                                 apply(
-                                    match("hydra.core.Term", Maybe.just(var("t")),
+                                    match("hydra.core.Term", Optional.given(var("t")),
                                         field("typeLambda", lambda("tl",
                                             apply(var("peel"),
                                                 apply(project("hydra.core.TypeLambda", "body"), var("tl"))))),

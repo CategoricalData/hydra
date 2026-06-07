@@ -14,7 +14,7 @@ public class PersistentMapTest {
         PersistentMap<String, Integer> m = PersistentMap.empty();
         assertTrue(m.isEmpty());
         assertEquals(0, m.size());
-        assertTrue(m.lookup("a").isNothing());
+        assertTrue(m.lookup("a").isNone());
         assertNull(m.get("a"));
         assertFalse(m.containsKey("a"));
     }
@@ -238,17 +238,17 @@ public class PersistentMapTest {
 
         // Modify existing
         PersistentMap<String, Integer> m2 = m.alter(
-                mv -> mv.isJust() ? Maybe.just(mv.fromJust() + 10) : Maybe.nothing(), "a");
+                mv -> mv.isGiven() ? Optional.given(mv.fromGiven() + 10) : Optional.none(), "a");
         assertEquals(11, (int) m2.get("a"));
 
         // Insert new
         PersistentMap<String, Integer> m3 = m.alter(
-                mv -> Maybe.just(99), "b");
+                mv -> Optional.given(99), "b");
         assertEquals(99, (int) m3.get("b"));
 
         // Delete existing
         PersistentMap<String, Integer> m4 = m.alter(
-                mv -> Maybe.nothing(), "a");
+                mv -> Optional.none(), "a");
         assertEquals(0, m4.size());
     }
 

@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -41,13 +41,13 @@ public class MaybeSucc extends PrimitiveFunction {
     /**
      * Returns the successor of the value.
      * @param num the value
-     * @return a Maybe containing the successor, or empty if the value is Integer.MAX_VALUE
+     * @return a Optional containing the successor, or empty if the value is Integer.MAX_VALUE
      */
-    public static Maybe<Integer> apply(Integer num) {
+    public static Optional<Integer> apply(Integer num) {
         if (num == Integer.MAX_VALUE) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(num + 1);
+            return Optional.given(num + 1);
         }
     }
 }

@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -21,7 +21,7 @@ import hydra.errors.Error_;
 import hydra.util.Either;
 
 /**
- * Map a function that may fail over a Maybe, collecting results or returning the first error.
+ * Map a function that may fail over a Optional, collecting results or returning the first error.
  */
 public class MapOptional extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra.lib.eithers.mapOptional");
@@ -43,10 +43,10 @@ public class MapOptional extends PrimitiveFunction {
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(1)), maybe -> {
                 Term fn = args.get(0);
-                if (maybe.isNothing()) {
-                    return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.optional(Maybe.nothing()))));
+                if (maybe.isNone()) {
+                    return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.optional(Optional.none()))));
                 }
-                Term val = maybe.fromJust();
+                Term val = maybe.fromGiven();
                 Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                     hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(fn, val));
                 if (r.isLeft()) return (Either) r;
@@ -61,32 +61,32 @@ public class MapOptional extends PrimitiveFunction {
                         ((hydra.util.Either.Left<Term, Term>) inner).value)));
                 }
                 return Either.right(new Term.Either(new hydra.util.Either.Right<>(
-                    Terms.optional(Maybe.just(((hydra.util.Either.Right<Term, Term>) inner).value)))));
+                    Terms.optional(Optional.given(((hydra.util.Either.Right<Term, Term>) inner).value)))));
             });
     }
 
     /**
-     * Map a function over a Maybe, returning Left on failure or Right with the result.
+     * Map a function over a Optional, returning Left on failure or Right with the result.
      */
-    public static <A, B, Z> hydra.util.Either<Z, Maybe<B>> apply(
+    public static <A, B, Z> hydra.util.Either<Z, Optional<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
-            Maybe<A> maybe) {
-        if (maybe.isNothing()) {
-            return new hydra.util.Either.Right<>(Maybe.nothing());
+            Optional<A> maybe) {
+        if (maybe.isNone()) {
+            return new hydra.util.Either.Right<>(Optional.none());
         } else {
             A val = maybe.orElse(null);
             hydra.util.Either<Z, B> result = fn.apply(val);
             if (result.isLeft()) {
                 return new hydra.util.Either.Left<>(((hydra.util.Either.Left<Z, B>) result).value);
             }
-            return new hydra.util.Either.Right<>(Maybe.just(((hydra.util.Either.Right<Z, B>) result).value));
+            return new hydra.util.Either.Right<>(Optional.given(((hydra.util.Either.Right<Z, B>) result).value));
         }
     }
 
     /**
      * Curried version for method references.
      */
-    public static <A, B, Z> Function<Maybe<A>, hydra.util.Either<Z, Maybe<B>>> apply(
+    public static <A, B, Z> Function<Optional<A>, hydra.util.Either<Z, Optional<B>>> apply(
             Function<A, hydra.util.Either<Z, B>> fn) {
         return maybe -> apply(fn, maybe);
     }

@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -56,7 +56,7 @@ public class IsGiven extends PrimitiveFunction {
      * @param opt the optional value to check
      * @return true if the optional contains a value, false otherwise
      */
-    public static <X> boolean apply(Maybe<X> opt) {
-        return opt.isJust();
+    public static <X> boolean apply(Optional<X> opt) {
+        return opt.isGiven();
     }
 }

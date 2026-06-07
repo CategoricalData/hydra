@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -43,15 +43,15 @@ public class Find extends PrimitiveFunction {
                 hydra.extract.Core.string(graph, args.get(1))));
     }
 
-    public static Function<String, Maybe<String>> apply(String pattern) {
+    public static Function<String, Optional<String>> apply(String pattern) {
         return input -> apply(pattern, input);
     }
 
-    public static Maybe<String> apply(String pattern, String input) {
+    public static Optional<String> apply(String pattern, String input) {
         Matcher m = Pattern.compile(pattern).matcher(input);
         if (m.find()) {
-            return Maybe.just(m.group());
+            return Optional.given(m.group());
         }
-        return Maybe.nothing();
+        return Optional.none();
     }
 }
