@@ -67,9 +67,9 @@
                           case-fields))))
     (define (t-right v) (list 'either (list 'right v)))
     (define (t-left v) (list 'either (list 'left v)))
-    (define (t-just v) (list 'maybe (t-inject "hydra.core.Term" "literal"
+    (define (t-just v) (list 'optional (t-inject "hydra.core.Term" "literal"
                          (t-inject "hydra.core.Literal" "string" v))))
-    (define (t-nothing) (list 'maybe (list 'none '())))
+    (define (t-nothing) (list 'optional (list 'none '())))
     ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
     (define (t-pair a b) (list 'pair (list a b)))
 
@@ -227,19 +227,19 @@
                       (t-app (t-app (t-prim "hydra.lib.maps.lookup")
                         (t-var "hydra.constants.keyDescription"))
                         (t-var "anns")))
-                      (t-right (list 'maybe (list 'none '()))))
+                      (t-right (list 'optional (list 'none '()))))
                       (t-lam "descTerm"
                         (t-app
                           (t-match "hydra.core.Term"
-                            (list 'given (t-right (list 'maybe (list 'none '()))))
+                            (list 'given (t-right (list 'optional (list 'none '()))))
                             (t-field "literal"
                               (t-lam "lit"
                                 (t-app
                                   (t-match "hydra.core.Literal"
-                                    (list 'given (t-right (list 'maybe (list 'none '()))))
+                                    (list 'given (t-right (list 'optional (list 'none '()))))
                                     (t-field "string"
                                       (t-lam "s"
-                                        (t-right (list 'maybe (t-var "s"))))))
+                                        (t-right (list 'optional (t-var "s"))))))
                                   (t-var "lit")))))
                           (t-var "descTerm"))))))))
 

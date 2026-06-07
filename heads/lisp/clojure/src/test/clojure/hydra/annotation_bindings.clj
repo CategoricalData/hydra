@@ -35,9 +35,9 @@
                  (map (fn [f] (->hydra_core_case_alternative (:name f) (:term f))) case-fields))))
 (defn- t-right [v] (list :either (list :right v)))
 (defn- t-left [v] (list :either (list :left v)))
-(defn- t-just [v] (list :maybe (t-inject "hydra.core.Term" "literal"
+(defn- t-just [v] (list :optional (t-inject "hydra.core.Term" "literal"
                      (t-inject "hydra.core.Literal" "string" v))))
-(defn- t-nothing [] (list :maybe (list :none nil)))
+(defn- t-nothing [] (list :optional (list :none nil)))
 ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
 (defn- t-pair [a b] (list :pair (list a b)))
 
@@ -223,20 +223,20 @@
                     (t-var "hydra.constants.keyDescription"))
                     (t-var "anns")))
                   ;; default: right(nothing)
-                  (t-right (list :maybe (list :none nil))))
+                  (t-right (list :optional (list :none nil))))
                   ;; \descTerm -> case match to extract string
                   (t-lam "descTerm"
                     (t-app
                       (t-match "hydra.core.Term"
-                        (list :given (t-right (list :maybe (list :none nil))))
+                        (list :given (t-right (list :optional (list :none nil))))
                         (t-field "literal"
                           (t-lam "lit"
                             (t-app
                               (t-match "hydra.core.Literal"
-                                (list :given (t-right (list :maybe (list :none nil))))
+                                (list :given (t-right (list :optional (list :none nil))))
                                 (t-field "string"
                                   (t-lam "s"
-                                    (t-right (list :maybe (t-var "s"))))))
+                                    (t-right (list :optional (t-var "s"))))))
                               (t-var "lit")))))
                       (t-var "descTerm"))))))))
 
