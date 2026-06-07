@@ -50,7 +50,6 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Eithers as DefaultEithers
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Lists as DefaultLists
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Maybes as DefaultMaybes
@@ -72,7 +71,6 @@ define = definitionInModuleName ns
 -- native Haskell implementations registered via DefaultsPrimitives.
 defaultLibModules :: [Module]
 defaultLibModules = [
-  DefaultEithers.module_,
   DefaultLists.module_,
   DefaultMaps.module_,
   DefaultMaybes.module_,

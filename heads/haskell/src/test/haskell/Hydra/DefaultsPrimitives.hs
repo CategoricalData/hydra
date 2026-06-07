@@ -10,7 +10,6 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Prims as Prims
 
-import qualified Hydra.Lib.Defaults.Eithers as DefaultEithers
 import qualified Hydra.Lib.Defaults.Lists as DefaultLists
 import qualified Hydra.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
@@ -20,7 +19,6 @@ import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
 -- | All default-library implementations, to be used as replacements for standard libraries in test mode.
 defaultLibraries :: [Library]
 defaultLibraries = [
-  defaultLibEithers,
   defaultLibLists,
   defaultLibMaps,
   defaultLibMaybes,
@@ -54,35 +52,6 @@ funType a b = TypeFunction (FunctionType a b)
 coerceError :: Either e Term -> Either Error Term
 coerceError (Right t) = Right t
 coerceError (Left _) = error "coerceError: impossible Left from always-Right eval primitive"
-
--- ---- Eithers ----
-
-defaultLibEithers :: Library
-defaultLibEithers = standardLibrary _hydra_lib_eithers [
-  mkPrim _eithers_either 3 $ \cx g args -> case args of
-    [lf, rf, t] -> DefaultEithers.either cx g lf rf t
-    _ -> unexpected cx "eithers.either" 3,
-  mkPrim _eithers_foldl 3 $ \cx g args -> case args of
-    [f, init_, lt] -> DefaultEithers.foldl cx g f init_ lt
-    _ -> unexpected cx "eithers.foldl" 3,
-  mkPrim _eithers_lefts 1 $ \cx g args -> case args of
-    [t] -> DefaultEithers.lefts cx g t
-    _ -> unexpected cx "eithers.lefts" 1,
-  mkPrim _eithers_mapList 2 $ \cx g args -> case args of
-    [f, lt] -> DefaultEithers.mapList cx g f lt
-    _ -> unexpected cx "eithers.mapList" 2,
-  mkPrim _eithers_mapMaybe 2 $ \cx g args -> case args of
-    [f, mt] -> DefaultEithers.mapMaybe cx g f mt
-    _ -> unexpected cx "eithers.mapMaybe" 2,
-  mkPrim _eithers_mapSet 2 $ \cx g args -> case args of
-    [f, st] -> DefaultEithers.mapSet cx g f st
-    _ -> unexpected cx "eithers.mapSet" 2,
-  mkPrim _eithers_partitionEithers 1 $ \cx g args -> case args of
-    [t] -> fmap (\(ls, rs) -> TermPair (TermList ls, TermList rs)) (DefaultEithers.partitionEithers cx g t)
-    _ -> unexpected cx "eithers.partitionEithers" 1,
-  mkPrim _eithers_rights 1 $ \cx g args -> case args of
-    [t] -> DefaultEithers.rights cx g t
-    _ -> unexpected cx "eithers.rights" 1]
 
 -- ---- Lists ----
 

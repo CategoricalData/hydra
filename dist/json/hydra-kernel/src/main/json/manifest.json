@@ -1,10 +1,5 @@
 {
-  "defaultLibModules": [
-    "hydra.lib.defaults.eithers",
-    "hydra.lib.defaults.lists",
-    "hydra.lib.defaults.maps",
-    "hydra.lib.defaults.maybes",
-    "hydra.lib.defaults.pairs"],
+  "defaultLibModules": ["hydra.lib.defaults.lists", "hydra.lib.defaults.maps", "hydra.lib.defaults.maybes", "hydra.lib.defaults.pairs"],
   "dslModules": [
     "hydra.dsl.ast",
     "hydra.dsl.coders",
@@ -107,7 +102,6 @@
     "hydra.languages",
     "hydra.lexical",
     "hydra.lib.chars",
-    "hydra.lib.defaults.eithers",
     "hydra.lib.defaults.lists",
     "hydra.lib.defaults.maps",
     "hydra.lib.defaults.maybes",

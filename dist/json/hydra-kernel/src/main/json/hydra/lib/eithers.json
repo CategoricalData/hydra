@@ -120,6 +120,47 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Either-short-circuiting left fold, defined in terms of bind."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "xs"},
+                            "function": {
+                              "application": {
+                                "argument": {"either": {"right": {"variable": "acc0"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "lambda": {
+                                        "body": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "el"},
+                                                        "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "f"}}}}},
+                                                    "parameter": "a"}},
+                                                "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.eithers.bind"}}}}},
+                                            "parameter": "el"}},
+                                        "parameter": "acc"}},
+                                    "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
+                        "parameter": "xs"}},
+                    "parameter": "acc0"}},
+                "parameter": "f"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
@@ -296,6 +337,47 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract all Left values from a list of eithers, defined in terms of either + foldr."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "xs"},
+                    "function": {
+                      "application": {
+                        "argument": {"list": []},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "e"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"lambda": {"body": {"variable": "acc"}, "parameter": "_"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "acc"},
+                                                        "function": {"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
+                                                    "parameter": "l"}},
+                                                "function": {"variable": "hydra.lib.eithers.either"}}}}}}},
+                                    "parameter": "acc"}},
+                                "parameter": "e"}},
+                            "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
+                "parameter": "xs"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
@@ -356,6 +438,56 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Traverse a list with an Either-returning function, short-circuiting on Left."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "xs"},
+                        "function": {
+                          "application": {
+                            "argument": {"either": {"right": {"list": []}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "ys"},
+                                                                "function": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
+                                                            "parameter": "ys"}},
+                                                        "function": {"variable": "hydra.lib.eithers.map"}}}}},
+                                                "parameter": "y"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
+                                                "function": {"variable": "hydra.lib.eithers.bind"}}}}},
+                                        "parameter": "acc"}},
+                                    "parameter": "x"}},
+                                "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
+                    "parameter": "xs"}},
+                "parameter": "f"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
@@ -377,6 +509,36 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Traverse a Maybe with an Either-returning function."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "m"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"lambda": {"body": {"maybe": {"variable": "y"}}, "parameter": "y"}},
+                                        "function": {"variable": "hydra.lib.eithers.map"}}}}},
+                                "parameter": "x"}},
+                            "function": {
+                              "application": {"argument": {"either": {"right": {"maybe": null}}}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                    "parameter": "m"}},
+                "parameter": "f"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
@@ -398,6 +560,65 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Traverse a Set with an Either-returning function, defined via list+set conversion."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.sets.toList"}}},
+                            "function": {
+                              "application": {
+                                "argument": {"either": {"right": {"list": []}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "lambda": {
+                                        "body": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "acc"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "ys"},
+                                                                    "function": {"application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
+                                                                "parameter": "ys"}},
+                                                            "function": {"variable": "hydra.lib.eithers.map"}}}}},
+                                                    "parameter": "y"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
+                                                    "function": {"variable": "hydra.lib.eithers.bind"}}}}},
+                                            "parameter": "acc"}},
+                                        "parameter": "x"}},
+                                    "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {"application": {"argument": {"variable": "ys"}, "function": {"variable": "hydra.lib.sets.fromList"}}},
+                                "parameter": "ys"}},
+                            "function": {"variable": "hydra.lib.eithers.map"}}}}},
+                    "parameter": "s"}},
+                "parameter": "f"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
@@ -419,6 +640,59 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Partition a list of eithers into (lefts, rights), defined in terms of either + foldr."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "xs"},
+                    "function": {
+                      "application": {
+                        "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "e"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.pairs.first"}}},
+                                                    "second": {
+                                                      "application": {
+                                                        "argument": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.pairs.second"}}},
+                                                        "function": {"application": {"argument": {"variable": "r"}, "function": {"variable": "hydra.lib.lists.cons"}}}}}}},
+                                                "parameter": "r"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "pair": {
+                                                        "first": {
+                                                          "application": {
+                                                            "argument": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.pairs.first"}}},
+                                                            "function": {"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
+                                                        "second": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.pairs.second"}}}}},
+                                                    "parameter": "l"}},
+                                                "function": {"variable": "hydra.lib.eithers.either"}}}}}}},
+                                    "parameter": "acc"}},
+                                "parameter": "e"}},
+                            "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
+                "parameter": "xs"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
@@ -435,6 +709,47 @@
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
     {
       "primitive": {
+        "defaultImplementation": {
+          "annotated": {
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract all Right values from a list of eithers, defined in terms of either + foldr."}}}]},
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "xs"},
+                    "function": {
+                      "application": {
+                        "argument": {"list": []},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "e"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {"application": {"argument": {"variable": "r"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
+                                                "parameter": "r"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"lambda": {"body": {"variable": "acc"}, "parameter": "_"}},
+                                                "function": {"variable": "hydra.lib.eithers.either"}}}}}}},
+                                    "parameter": "acc"}},
+                                "parameter": "e"}},
+                            "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
+                "parameter": "xs"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {

@@ -5,6 +5,10 @@ module Hydra.Sources.Kernel.Lib.Eithers where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
@@ -41,14 +45,14 @@ module_ = Module {
         "The fundamental eliminator for the either type; every other primitive in this namespace can be\
         \ derived from it.",
         "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
-      primNoDef "foldl" "Left-fold over a list with an Either-returning function, short-circuiting on Left." foldlSig [
+      toPrimitive "Left-fold over a list with an Either-returning function, short-circuiting on Left." foldlSig [
         "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each\
         \ application may fail with Left e: foldl iterates while f returns Right, propagates Left on the\
         \ first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to\
         \ chaining bind over the list.",
         "Total in the sense that it terminates on finite inputs; the result is a Left whenever any\
         \ application of f returns one.",
-        "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
+        "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."] foldl_,
       toPrimitive "Extract the Left value, or return a default." fromLeftSig [
         "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right.",
         "Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."] fromLeft_,
@@ -61,37 +65,37 @@ module_ = Module {
       toPrimitive "Check whether an either is a Right value." isRightSig [
         "True if the argument is a Right variant, false if a Left.",
         "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."] isRight_,
-      primNoDef "lefts" "Extract all Left values from a list of either values." leftsSig [
+      toPrimitive "Extract all Left values from a list of either values." leftsSig [
         "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values\
         \ discarded.",
-        "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
+        "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."] lefts_,
       toPrimitive "Map a function over the Right side of an either (standard functor map)." mapSig [
         "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
         "The functor instance for either; treats the Right variant as the focus and leaves the Left variant\
         \ alone.",
         "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."] map_,
-      primNoDef "mapList" "Map a function returning either over a list, collecting results or short-circuiting on Left." mapListSig [
+      toPrimitive "Map a function returning either over a list, collecting results or short-circuiting on Left." mapListSig [
         "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is\
         \ Right of the list of contained values, in original order. The first application that returns Left\
         \ short-circuits the whole result to that Left.",
-        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
-      primNoDef "mapMaybe" "Map a function returning either over a maybe, or return Right Nothing if Nothing." mapMaybeSig [
+        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."] mapList_,
+      toPrimitive "Map a function returning either over a maybe, or return Right Nothing if Nothing." mapMaybeSig [
         "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value\
         \ and returns the result with Right wrapped around Just.",
-        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
-      primNoDef "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left." mapSetSig [
+        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."] mapMaybe_,
+      toPrimitive "Map a function returning either over a set, collecting results or short-circuiting on Left." mapSetSig [
         "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns\
         \ Right, the result is Right of the set of contained values (deduplicated by the result type's\
         \ ordering); the first application returning Left short-circuits the whole result to that Left.",
-        "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
-      primNoDef "partitionEithers" "Partition a list of either values into lefts and rights." partitionEithersSig [
+        "Total. Corresponds to Haskell's traverse-style operation specialised to Set."] mapSet_,
+      toPrimitive "Partition a list of either values into lefts and rights." partitionEithersSig [
         "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs\
         \ in original order and rights contains every Right value from xs in original order.",
-        "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
-      primNoDef "rights" "Extract all Right values from a list of either values." rightsSig [
+        "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."] partitionEithers_,
+      toPrimitive "Extract all Right values from a list of either values." rightsSig [
         "rights(xs) returns a list containing every Right value in xs, in original order, with Left values\
         \ discarded.",
-        "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."]]
+        "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."] rights_]
 
 -- Shared type variables.
 tx, ty, tz, tw :: Type
@@ -261,3 +265,93 @@ map_ = define "map" $
       ("x" ~> left (var "x"))
       ("y" ~> right (var "f" @@ var "y"))
       (var "e")
+
+-- foldl f acc0 xs = foldl' (\acc el -> bind acc (\a -> f a el)) (Right acc0) xs
+-- Short-circuits on Left: bind on a Left propagates without calling f.
+foldl_ :: TypedTermDefinition ((a -> b -> Either c a) -> a -> [b] -> Either c a)
+foldl_ = define "foldl" $
+  doc "Either-short-circuiting left fold, defined in terms of bind." $
+  "f" ~> "acc0" ~> "xs" ~>
+    Lists.foldl
+      ("acc" ~> "el" ~>
+        Eithers.bind (var "acc") ("a" ~> var "f" @@ var "a" @@ var "el"))
+      (right (var "acc0"))
+      (var "xs")
+
+-- lefts xs = foldr (\e acc -> either (\l -> cons l acc) (\_ -> acc) e) [] xs
+lefts_ :: TypedTermDefinition ([Either a b] -> [a])
+lefts_ = define "lefts" $
+  doc "Extract all Left values from a list of eithers, defined in terms of either + foldr." $
+  "xs" ~>
+    Lists.foldr
+      ("e" ~> "acc" ~>
+        Eithers.either_
+          ("l" ~> Lists.cons (var "l") (var "acc" :: TypedTerm [a]))
+          ("_" ~> (var "acc" :: TypedTerm [a]))
+          (var "e"))
+      (list ([] :: [TypedTerm a]))
+      (var "xs")
+
+-- rights xs = foldr (\e acc -> either (\_ -> acc) (\r -> cons r acc) e) [] xs
+rights_ :: TypedTermDefinition ([Either a b] -> [b])
+rights_ = define "rights" $
+  doc "Extract all Right values from a list of eithers, defined in terms of either + foldr." $
+  "xs" ~>
+    Lists.foldr
+      ("e" ~> "acc" ~>
+        Eithers.either_
+          ("_" ~> (var "acc" :: TypedTerm [b]))
+          ("r" ~> Lists.cons (var "r") (var "acc" :: TypedTerm [b]))
+          (var "e"))
+      (list ([] :: [TypedTerm b]))
+      (var "xs")
+
+-- partitionEithers xs = foldr (\e (ls, rs) -> either (\l -> (cons l ls, rs)) (\r -> (ls, cons r rs)) e) ([],[]) xs
+partitionEithers_ :: TypedTermDefinition ([Either a b] -> ([a], [b]))
+partitionEithers_ = define "partitionEithers" $
+  doc "Partition a list of eithers into (lefts, rights), defined in terms of either + foldr." $
+  "xs" ~>
+    Lists.foldr
+      ("e" ~> "acc" ~>
+        Eithers.either_
+          ("l" ~> pair (Lists.cons (var "l") (Pairs.first $ var "acc")) (Pairs.second $ var "acc"))
+          ("r" ~> pair (Pairs.first $ var "acc") (Lists.cons (var "r") (Pairs.second $ var "acc")))
+          (var "e"))
+      (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm b])))
+      (var "xs")
+
+-- mapList f xs = foldr (\x acc -> bind (f x) (\y -> map (cons y) acc)) (Right []) xs
+mapList_ :: TypedTermDefinition ((a -> Either c b) -> [a] -> Either c [b])
+mapList_ = define "mapList" $
+  doc "Traverse a list with an Either-returning function, short-circuiting on Left." $
+  "f" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~>
+        Eithers.bind (var "f" @@ var "x") $
+          "y" ~> Eithers.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
+      (right (list ([] :: [TypedTerm b])))
+      (var "xs")
+
+-- mapMaybe f m = maybe (Right Nothing) (\x -> map Just (f x)) m
+mapMaybe_ :: TypedTermDefinition ((a -> Either c b) -> Maybe a -> Either c (Maybe b))
+mapMaybe_ = define "mapMaybe" $
+  doc "Traverse a Maybe with an Either-returning function." $
+  "f" ~> "m" ~>
+    Maybes.maybe
+      (right nothing)
+      ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x"))
+      (var "m")
+
+-- mapSet f s = map fromList (mapList f (toList s))
+mapSet_ :: TypedTermDefinition ((a -> Either c b) -> S.Set a -> Either c (S.Set b))
+mapSet_ = define "mapSet" $
+  doc "Traverse a Set with an Either-returning function, defined via list+set conversion." $
+  "f" ~> "s" ~>
+    Eithers.map
+      ("ys" ~> Sets.fromList (var "ys"))
+      (Lists.foldr
+        ("x" ~> "acc" ~>
+          Eithers.bind (var "f" @@ var "x") $
+            "y" ~> Eithers.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
+        (right (list ([] :: [TypedTerm b])))
+        (Sets.toList (var "s")))
