@@ -153,17 +153,17 @@
 
 (defun hydra--maybe-nothing-p (val)
   (or (null val)
-      (and (consp val) (eq (car val) :nothing))
+      (and (consp val) (eq (car val) :none))
       (and (consp val) (eq (car val) :maybe)
            (or (< (length val) 2) (null (cadr val))
-               (and (consp (cadr val)) (eq (car (cadr val)) :nothing))))))
+               (and (consp (cadr val)) (eq (car (cadr val)) :none))))))
 
 (defun hydra--maybe-value (val)
   (cond
-   ((and (consp val) (eq (car val) :just)) (cadr val))
+   ((and (consp val) (eq (car val) :given)) (cadr val))
    ((and (consp val) (eq (car val) :maybe))
     (let ((body (cadr val)))
-      (if (and (consp body) (eq (car body) :just))
+      (if (and (consp body) (eq (car body) :given))
           (cadr body)
         body)))
    (t val)))
@@ -348,12 +348,12 @@
 
 (defun hydra--unwrap-maybe-string (d)
   "Extract the string from a Maybe String in various encodings.
-   Handles: (:just \"s\"), (:maybe (:just \"s\")),
-            (:just (:literal (:string \"s\"))), etc."
+   Handles: (:given \"s\"), (:maybe (:given \"s\")),
+            (:given (:literal (:string \"s\"))), etc."
   (when (not (hydra--maybe-nothing-p d))
     (let ((inner (hydra--maybe-value d)))
-      ;; If inner is itself a :just wrapper, unwrap again
-      (when (and (consp inner) (eq (car inner) :just))
+      ;; If inner is itself a :given wrapper, unwrap again
+      (when (and (consp inner) (eq (car inner) :given))
         (setq inner (cadr inner)))
       (cond
        ;; Plain string
@@ -370,7 +370,7 @@
          (term-val (when s (list :literal (list :string s))))
          (desc-key (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
-         (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))
+         (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :none)))))
     (hydra--prim-set-term-annotation _cx _g (list desc-key maybe-val term))))
 
 (defun hydra--prim-get-term-description (_cx _g args)

@@ -54,8 +54,8 @@
   "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
   (fn [n] (fn [s]
     (if (and (>= n 0) (< n (.codePointCount s 0 (.length s))))
-      (list :just (.codePointAt s (int (.offsetByCodePoints s 0 (int n)))))
-      (list :nothing)))))
+      (list :given (.codePointAt s (int (.offsetByCodePoints s 0 (int n)))))
+      (list :none)))))
 
 ;; null :: String -> Bool
 (def hydra_lib_strings_null

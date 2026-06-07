@@ -43,7 +43,7 @@
 (define (t-left v) (list 'either (list 'left v)))
 (define (t-just v) (list 'maybe (t-inject "hydra.core.Term" "literal"
                      (t-inject "hydra.core.Literal" "string" v))))
-(define (t-nothing) (list 'maybe (list 'nothing '())))
+(define (t-nothing) (list 'maybe (list 'none '())))
 
 ;; Annotation term-level bindings (mirrors Java TestSuiteRunner.addAnnotationsBindings)
 (define (annotation-bindings)
@@ -71,7 +71,7 @@
     (list "hydra.rewriting.deannotateTerm"
           (t-lam "t"
             (t-app
-              (t-match "hydra.core.Term" (list 'just (t-var "t"))
+              (t-match "hydra.core.Term" (list 'given (t-var "t"))
                 (t-field "annotated"
                   (t-lam "at"
                     (t-app (t-var "hydra.rewriting.deannotateTerm")
@@ -90,7 +90,7 @@
               (t-lam "rest"
                 (t-lam "t"
                   (t-app
-                    (t-match "hydra.core.Term" (list 'just (t-var "rest"))
+                    (t-match "hydra.core.Term" (list 'given (t-var "rest"))
                       (t-field "annotated"
                         (t-lam "at"
                           (t-app
@@ -179,17 +179,17 @@
                     (t-var "hydra.constants.keyDescription"))
                     (t-var "anns")))
                   ;; default: right(nothing)
-                  (t-right (list 'maybe (list 'nothing '()))))
+                  (t-right (list 'maybe (list 'none '()))))
                   ;; \descTerm -> case match to extract string
                   (t-lam "descTerm"
                     (t-app
                       (t-match "hydra.core.Term"
-                        (list 'just (t-right (list 'maybe (list 'nothing '()))))
+                        (list 'given (t-right (list 'maybe (list 'none '()))))
                         (t-field "literal"
                           (t-lam "lit"
                             (t-app
                               (t-match "hydra.core.Literal"
-                                (list 'just (t-right (list 'maybe (list 'nothing '()))))
+                                (list 'given (t-right (list 'maybe (list 'none '()))))
                                 (t-field "string"
                                   (t-lam "s"
                                     (t-right (list 'maybe (t-var "s"))))))
@@ -209,7 +209,7 @@
                 (t-let "peel"
                   (t-lam "t"
                     (t-app
-                      (t-match "hydra.core.Term" (list 'just (t-var "t"))
+                      (t-match "hydra.core.Term" (list 'given (t-var "t"))
                         (t-field "typeLambda"
                           (t-lam "tl"
                             (t-app (t-var "peel")

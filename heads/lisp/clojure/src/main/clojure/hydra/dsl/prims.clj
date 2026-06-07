@@ -87,10 +87,10 @@
                           (into {} (map (fn [[k v]]
                                          [k (->hydra_core_type_variable_constraints (wrap-constraints v))])
                                        constraints)))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
          maybe-constraints (if constraint-map
-                             (list :just constraint-map)
-                             (list :nothing))]
+                             (list :given constraint-map)
+                             (list :none))]
      (->hydra_core_type_scheme vars fun-type maybe-constraints))))
 
 (defn- build-prim-def
@@ -98,7 +98,7 @@
   [pname variables inputs output constraints]
   (let [ts (build-type-scheme variables inputs output constraints)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition pname (list :nothing) sig true true (list :nothing))))
+    (->hydra_packaging_primitive_definition pname (list :none) sig true true (list :none))))
 
 (defn lazy-args
   "Mirror of Hydra.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
@@ -285,10 +285,10 @@
      (cond
        ;; nil or empty list → Nothing
        (or (nil? mv) (and (sequential? mv) (empty? mv))) (list :right (list :maybe nil))
-       ;; (:nothing) → Nothing
-       (and (sequential? mv) (= (first mv) :nothing)) (list :right (list :maybe nil))
-       ;; (:just val) → Just val
-       (and (sequential? mv) (= (first mv) :just))
+       ;; (:none) → Nothing
+       (and (sequential? mv) (= (first mv) :none)) (list :right (list :maybe nil))
+       ;; (:given val) → Just val
+       (and (sequential? mv) (= (first mv) :given))
        (let [r ((.decode el-coder) cx (second mv))]
          (if (= (first r) :left) r (list :right (list :maybe (second r)))))
        ;; bare value → Just val

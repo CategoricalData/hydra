@@ -37,7 +37,7 @@
 (defn- t-left [v] (list :either (list :left v)))
 (defn- t-just [v] (list :maybe (t-inject "hydra.core.Term" "literal"
                      (t-inject "hydra.core.Literal" "string" v))))
-(defn- t-nothing [] (list :maybe (list :nothing nil)))
+(defn- t-nothing [] (list :maybe (list :none nil)))
 ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
 (defn- t-pair [a b] (list :pair (list a b)))
 
@@ -67,7 +67,7 @@
     (vector "hydra.rewriting.deannotateTerm"
           (t-lam "t"
             (t-app
-              (t-match "hydra.core.Term" (list :just (t-var "t"))
+              (t-match "hydra.core.Term" (list :given (t-var "t"))
                 (t-field "annotated"
                   (t-lam "at"
                     (t-app (t-var "hydra.rewriting.deannotateTerm")
@@ -80,7 +80,7 @@
     (vector "hydra.annotations.getAnnotationMap"
           (t-lam "t"
             (t-app
-              (t-match "hydra.core.Term" (list :just (t-app (t-prim "hydra.lib.maps.empty") (t-var "t")))
+              (t-match "hydra.core.Term" (list :given (t-app (t-prim "hydra.lib.maps.empty") (t-var "t")))
                 (t-field "map"
                   (t-lam "m"
                     (t-app (t-prim "hydra.lib.maps.fromList")
@@ -89,7 +89,7 @@
                           (t-lam "pair"
                             (t-app
                               (t-match "hydra.core.Term"
-                                (list :just (t-var "acc"))
+                                (list :given (t-var "acc"))
                                 (t-field "variable"
                                   (t-lam "n"
                                     (t-app (t-app (t-prim "hydra.lib.lists.cons")
@@ -128,7 +128,7 @@
               (t-lam "rest"
                 (t-lam "t"
                   (t-app
-                    (t-match "hydra.core.Term" (list :just (t-var "rest"))
+                    (t-match "hydra.core.Term" (list :given (t-var "rest"))
                       (t-field "annotated"
                         (t-lam "at"
                           (t-app
@@ -223,17 +223,17 @@
                     (t-var "hydra.constants.keyDescription"))
                     (t-var "anns")))
                   ;; default: right(nothing)
-                  (t-right (list :maybe (list :nothing nil))))
+                  (t-right (list :maybe (list :none nil))))
                   ;; \descTerm -> case match to extract string
                   (t-lam "descTerm"
                     (t-app
                       (t-match "hydra.core.Term"
-                        (list :just (t-right (list :maybe (list :nothing nil))))
+                        (list :given (t-right (list :maybe (list :none nil))))
                         (t-field "literal"
                           (t-lam "lit"
                             (t-app
                               (t-match "hydra.core.Literal"
-                                (list :just (t-right (list :maybe (list :nothing nil))))
+                                (list :given (t-right (list :maybe (list :none nil))))
                                 (t-field "string"
                                   (t-lam "s"
                                     (t-right (list :maybe (t-var "s"))))))
@@ -253,7 +253,7 @@
                 (t-let "peel"
                   (t-lam "t"
                     (t-app
-                      (t-match "hydra.core.Term" (list :just (t-var "t"))
+                      (t-match "hydra.core.Term" (list :given (t-var "t"))
                         (t-field "typeLambda"
                           (t-lam "tl"
                             (t-app (t-var "peel")

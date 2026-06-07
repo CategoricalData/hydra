@@ -567,27 +567,27 @@
 ;; ============================================================================
 
 (defun term-maybe-to-native (m)
-  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:just val) / (:nothing)."
+  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:given val) / (:none)."
   (cond
-    ((null m) (list :nothing))
-    ((not (consp m)) (list :just m))
-    ((eq (first m) :nothing) (list :nothing))
-    ((eq (first m) :just) m)
+    ((null m) (list :none))
+    ((not (consp m)) (list :given m))
+    ((eq (first m) :none) (list :none))
+    ((eq (first m) :given) m)
     ((eq (first m) :maybe)
      (let ((inner (second m)))
        (if (or (null inner)
-               (and (consp inner) (eq (first inner) :nothing)))
-           (list :nothing)
-           (list :just inner))))
-    (t (list :just m))))
+               (and (consp inner) (eq (first inner) :none)))
+           (list :none)
+           (list :given inner))))
+    (t (list :given m))))
 
 (defun native-maybe-to-term (m)
-  "Convert a native maybe (:just val) / (:nothing) to term-level (:maybe val_or_nil)."
+  "Convert a native maybe (:given val) / (:none) to term-level (:maybe val_or_nil)."
   (cond
     ((null m) (list :maybe nil))
     ((not (consp m)) (list :maybe m))
-    ((eq (first m) :just) (list :maybe (second m)))
-    ((eq (first m) :nothing) (list :maybe nil))
+    ((eq (first m) :given) (list :maybe (second m)))
+    ((eq (first m) :none) (list :maybe nil))
     (t (list :maybe m))))
 
 (defun register-annotations ()
@@ -618,11 +618,11 @@
                        (let* ((native-d (term-maybe-to-native d))
                               (native-str-d
                                 (cond
-                                  ((eq (first native-d) :nothing) (list :nothing))
+                                  ((eq (first native-d) :none) (list :none))
                                   (t (let ((inner (second native-d)))
                                        (if (and (consp inner) (eq (first inner) :literal)
                                                 (consp (second inner)) (eq (first (second inner)) :string))
-                                           (list :just (second (second inner)))
+                                           (list :given (second (second inner)))
                                            native-d))))))
                          (funcall (funcall hydra_annotations_set_term_description native-str-d) term))))
                    nil t_ t_ t_))
@@ -640,8 +640,8 @@
                                       (term-maybe
                                         (cond
                                           ((null maybe-str) (list :maybe nil))
-                                          ((eq (first maybe-str) :nothing) (list :maybe nil))
-                                          ((eq (first maybe-str) :just)
+                                          ((eq (first maybe-str) :none) (list :maybe nil))
+                                          ((eq (first maybe-str) :given)
                                            (list :maybe (list :literal (list :string (second maybe-str)))))
                                           (t (list :maybe maybe-str)))))
                                  (list :either (list :right term-maybe))))))))

@@ -1,24 +1,24 @@
 (ns hydra.lib.optionals)
 
-;; Maybe representation: nil, (:just val), or (:nothing) for native maybes.
+;; Maybe representation: nil, (:given val), or (:none) for native maybes.
 ;; IMPORTANT: Do NOT treat (:maybe ...) as a native maybe — that's
 ;; the Hydra Term.Maybe term constructor, not a maybe value.
 
 (defn maybe-nothing? [m]
   (or (nil? m)
       (and (sequential? m) (empty? m))
-      (and (sequential? m) (= (first m) :nothing))))
+      (and (sequential? m) (= (first m) :none))))
 
 (defn maybe-value [m]
   (cond
-    (and (sequential? m) (= (first m) :just)) (second m)
+    (and (sequential? m) (= (first m) :given)) (second m)
     :else m))
 
 ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
 (def hydra_lib_optionals_bind
   (fn [m] (fn [f]
     (if (maybe-nothing? m)
-      (list :nothing)
+      (list :none)
       (f (maybe-value m))))))
 
 ;; cat :: [Maybe a] -> [a]
@@ -54,10 +54,10 @@
     (if (maybe-nothing? m)
       (if (or (nil? m) (and (sequential? m) (empty? m)))
         nil  ;; preserve nil/empty representation for term-level
-        (list :nothing))
+        (list :none))
       (let [result (f (maybe-value m))]
-        (if (and (sequential? m) (= (first m) :just))
-          (list :just result)
+        (if (and (sequential? m) (= (first m) :given))
+          (list :given result)
           result))))))
 
 ;; map_optional :: (a -> Maybe b) -> [a] -> [b]
@@ -75,10 +75,10 @@
 (def hydra_lib_optionals_apply
   (fn [mf] (fn [ma]
     (if (maybe-nothing? mf)
-      (list :nothing)
+      (list :none)
       (if (maybe-nothing? ma)
-        (list :nothing)
-        (list :just ((maybe-value mf) (maybe-value ma))))))))
+        (list :none)
+        (list :given ((maybe-value mf) (maybe-value ma))))))))
 
 ;; cases :: Maybe a -> b -> (a -> b) -> b
 ;; Thunk-aware: if nothing-val is a zero-arg fn, only called when Maybe is Nothing
@@ -93,12 +93,12 @@
   (fn [f] (fn [g] (fn [x]
     (let [result (f x)]
       (if (maybe-nothing? result)
-        (list :nothing)
+        (list :none)
         (g (maybe-value result))))))))
 
 ;; pure :: a -> Maybe a
 (def hydra_lib_optionals_pure
-  (fn [x] (list :just x)))
+  (fn [x] (list :given x)))
 
 ;; to_list :: Maybe a -> [a]
 (def hydra_lib_optionals_to_list
