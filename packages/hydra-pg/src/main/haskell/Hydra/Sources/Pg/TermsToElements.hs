@@ -530,4 +530,4 @@ termToString = define "termToString" $
             cases _FloatValue (var "f") (Just $ ShowCore.term @@ var "term") [
               _FloatValue_float64>>: "n" ~> Literals.showFloat64 (var "n")]],
       _Term_optional>>: "mt" ~>
-        Optionals.cases (var "mt") (string "nothing") ("t" ~> termToString @@ var "t")]
+        Optionals.cases (var "mt") (string "none") ("t" ~> termToString @@ var "t")]
