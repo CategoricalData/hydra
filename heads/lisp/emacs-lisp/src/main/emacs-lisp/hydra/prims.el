@@ -233,7 +233,7 @@
 (defun tc-optional (el-coder)
   (make-hydra_graph_term_coder (list :maybe (hydra_graph_term_coder-type el-coder))
     (lambda (cx) (lambda (g) (lambda (t_)
-      (funcall (funcall (funcall hydra_extract_core_maybe_term
+      (funcall (funcall (funcall hydra_extract_core_optional_term
                                  (lambda (term) (funcall (funcall (funcall (hydra_graph_term_coder-encode el-coder) cx) g) term)))
                         g) t_))))
     (lambda (cx) (lambda (mv)

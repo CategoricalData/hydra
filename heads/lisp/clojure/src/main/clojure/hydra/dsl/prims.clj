@@ -278,7 +278,7 @@
   (->hydra_graph_term_coder
    (list :maybe (:type el-coder))
    (fn [cx g t]
-     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_maybe_term)
+     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_optional_term)
         (fn [term] ((.encode el-coder) cx g term)))
        g) t))
    (fn [cx mv]

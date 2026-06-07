@@ -394,7 +394,7 @@ def map_(keys: TermCoder[X], values: TermCoder[Y]) -> TermCoder[FrozenDict[X, Y]
 
 def optional(mel: TermCoder[X]) -> TermCoder[Optional[X]]:
     def encode(cx, g, t):
-        return extract.maybe_term(lambda term: mel.encode(cx, g, term), g, t)
+        return extract.optional_term(lambda term: mel.encode(cx, g, term), g, t)
     def decode(cx, mv):
         match mv:
             case None_():

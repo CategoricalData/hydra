@@ -178,13 +178,13 @@ evaluateEdge = define "evaluateEdge" $
           (Eithers.bind
             (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "outSpec") (var "record")))
             ("__term" ~>
-              ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+              ExtractCore.optionalTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
           ("mOutId" ~>
             Eithers.bind
               (Eithers.bind
                 (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "inSpec") (var "record")))
                 ("__term" ~>
-                  ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+                  ExtractCore.optionalTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
               ("mInId" ~>
                 Eithers.bind
                   (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
@@ -214,7 +214,7 @@ evaluateVertex = define "evaluateVertex" $
       (Eithers.bind
         (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
         ("__term" ~>
-          ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+          ExtractCore.optionalTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
       ("mId" ~>
         Eithers.bind
           (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")

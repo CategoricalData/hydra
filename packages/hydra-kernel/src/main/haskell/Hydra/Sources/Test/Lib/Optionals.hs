@@ -59,10 +59,10 @@ showIntList :: TypedTerm ([Int] -> String)
 showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showMaybeInt :: TypedTerm (Maybe Int -> String)
-showMaybeInt = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showInt32 @@ Phantoms.var "mx"
+showMaybeInt = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
 
 showMaybeString :: TypedTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ ShowCore.optional_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
 
 -- Test groups
 

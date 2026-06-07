@@ -41,11 +41,11 @@ public class Compose extends PrimitiveFunction {
             Function<Term, Either<Error_, Optional<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), val)),
-                    reduced -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, reduced));
+                    reduced -> hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, reduced));
             Function<Term, Either<Error_, Optional<Term>>> nativeG = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val)),
-                    reduced -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, reduced));
+                    reduced -> hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, reduced));
             return hydra.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
                 if (!maybeB.isGiven()) {
                     return Either.right(Terms.optional(Optional.none()));

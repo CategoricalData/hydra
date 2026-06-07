@@ -28,8 +28,8 @@ evaluate cx g term = reduceTerm cx g True term
 evaluateEdge :: InferenceContext -> Graph -> Pg.Edge Term -> Term -> Result (Maybe (Pg.Edge Term))
 evaluateEdge cx g (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
     id <- evaluate cx g $ Terms.apply idSpec term
-    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.maybeTerm Right g
-    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.maybeTerm Right g
+    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.optionalTerm Right g
+    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.optionalTerm Right g
     props <- evaluateProperties cx g propSpecs term
     return $ case mOutId of
       Nothing -> Nothing
@@ -50,7 +50,7 @@ evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM for
 
 evaluateVertex :: InferenceContext -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
 evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
-  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.maybeTerm Right g
+  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.optionalTerm Right g
   props <- evaluateProperties cx g propSpecs record
   return $ case mId of
     Nothing -> Nothing
