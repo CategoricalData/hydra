@@ -67,8 +67,8 @@ public final class Helpers {
         TypeScheme ts = new TypeScheme(
             Collections.emptyList(),
             typ,
-            Optional.<Map<Name, TypeVariableConstraints>>nothing());
-        return new Definition.Type(new TypeDefinition(fqName, Optional.<EntityMetadata>nothing(), ts));
+            Optional.<Map<Name, TypeVariableConstraints>>none());
+        return new Definition.Type(new TypeDefinition(fqName, Optional.<EntityMetadata>none(), ts));
     }
 
     /**
@@ -79,8 +79,8 @@ public final class Helpers {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
-            Optional.<EntityMetadata>nothing(),
-            Optional.<TermSignature>nothing(),
+            Optional.<EntityMetadata>none(),
+            Optional.<TermSignature>none(),
             term));
     }
 
@@ -89,8 +89,8 @@ public final class Helpers {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
-            Optional.<EntityMetadata>nothing(),
-            Optional.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts)),
+            Optional.<EntityMetadata>none(),
+            Optional.<TermSignature>given(Scoping.typeSchemeToTermSignature(ts)),
             term));
     }
 
@@ -99,6 +99,6 @@ public final class Helpers {
         return new TypeScheme(
             variables,
             body,
-            Optional.<Map<Name, TypeVariableConstraints>>nothing());
+            Optional.<Map<Name, TypeVariableConstraints>>none());
     }
 }
