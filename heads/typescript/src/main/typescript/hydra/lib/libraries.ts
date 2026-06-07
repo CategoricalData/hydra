@@ -184,7 +184,7 @@ type Impl = (cx: InferenceContext, g: Graph, args: readonly Term[]) => Either<Hy
 const prim = (qname: string, ts: TypeScheme, impl: Impl): Primitive => ({
   definition: {
     name: { value: qname } as Name,
-    description: "",
+    metadata: { tag: "none" },
     signature: scoping.typeSchemeToTermSignature(ts as any) as any,
     isPure: true,
     isTotal: true,

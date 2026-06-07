@@ -120,7 +120,7 @@
   (or (nil? val)
       (and (sequential? val) (empty? val))
       (and (sequential? val) (= (first val) :none))
-      (and (sequential? val) (= (first val) :maybe)
+      (and (sequential? val) (= (first val) :optional)
            (or (< (count val) 2)
                (nil? (second val))
                (and (sequential? (second val)) (= (first (second val)) :none))))))
@@ -128,7 +128,7 @@
 (defn- maybe-value [val]
   (cond
     (and (sequential? val) (= (first val) :given)) (second val)
-    (and (sequential? val) (= (first val) :maybe))
+    (and (sequential? val) (= (first val) :optional))
       (let [body (second val)]
         (cond
           (and (sequential? body) (= (first body) :given)) (second body)
@@ -148,7 +148,7 @@
     :else false))
 
 (defn- set-annotation [key val m]
-  ;; val is Maybe Term: (:maybe term) for Just, nil/(:none) for Nothing
+  ;; val is Maybe Term: (:optional term) for Just, nil/(:none) for Nothing
   (if (maybe-nothing? val)
     ;; Remove key using structural comparison
     (into {} (remove (fn [[k _]] (deep-equal? k key)) m))
@@ -233,12 +233,12 @@
         result (get anns key)]
     (list :right
       (if result
-        (list :maybe result)
-        (list :maybe nil)))))
+        (list :optional result)
+        (list :optional nil)))))
 
 ;; setTermDescription :: Maybe String -> Term -> Term
-;; d is Maybe String. The reducer extracts it to (:maybe (:literal (:string S))) for Just,
-;; or (:maybe (:none)) for Nothing.
+;; d is Maybe String. The reducer extracts it to (:optional (:literal (:string S))) for Just,
+;; or (:optional (:none)) for Nothing.
 ;; We need to convert the string to a meta-encoded literal string Term for the annotation value.
 (defn- prim-set-term-description [_cx _g args]
   (let [d (first args)
@@ -257,7 +257,7 @@
                                               (list :literal (list :string s))))))))))
         desc-key (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                                (list :literal (list :string "description"))))
-        maybe-val (if term-val (list :maybe term-val) (list :maybe (list :none)))]
+        maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))]
     (prim-set-term-annotation _cx _g [desc-key maybe-val term])))
 
 ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
@@ -314,9 +314,9 @@
                                              (sequential? (second inner)) (= (first (second inner)) :string))
                                     (second (second inner))))))))]
         (if-let [s (extract-str desc-term)]
-          (list :right (list :either (list :right (list :maybe (list :literal (list :string s))))))
-          (list :right (list :either (list :right (list :maybe nil))))))
-      (list :right (list :either (list :right (list :maybe nil)))))))
+          (list :right (list :either (list :right (list :optional (list :literal (list :string s))))))
+          (list :right (list :either (list :right (list :optional nil))))))
+      (list :right (list :either (list :right (list :optional nil)))))))
 
 ;; ==========================================================================
 ;; Graph construction

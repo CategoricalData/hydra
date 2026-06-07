@@ -96,9 +96,9 @@
         (list 'union (make-hydra_core_case_statement type-name default case-fields)))))
     (define (t-right v) (list 'either (list 'right v)))
     (define (t-left v) (list 'either (list 'left v)))
-    (define (t-just v) (list 'maybe (t-inject "hydra.core.Term" "literal"
+    (define (t-just v) (list 'optional (t-inject "hydra.core.Term" "literal"
                          (t-inject "hydra.core.Literal" "string" v))))
-    (define (t-nothing) (list 'maybe (list 'none '())))
+    (define (t-nothing) (list 'optional (list 'none '())))
     ;; Build a Term.pair value at Term-AST level: a 2-element pair payload.
     ;; Mirrors Java's hydra.dsl.Terms.pair helper.
     (define (t-pair a b) (list 'pair (list a b)))
@@ -287,20 +287,20 @@
                         (t-var "hydra.constants.keyDescription"))
                         (t-var "anns")))
                       ;; default: right(nothing)
-                      (t-right (list 'maybe (list 'none '()))))
+                      (t-right (list 'optional (list 'none '()))))
                       ;; \descTerm -> case match to extract string
                       (t-lam "descTerm"
                         (t-app
                           (t-match "hydra.core.Term"
-                            (list 'given (t-right (list 'maybe (list 'none '()))))
+                            (list 'given (t-right (list 'optional (list 'none '()))))
                             (t-field "literal"
                               (t-lam "lit"
                                 (t-app
                                   (t-match "hydra.core.Literal"
-                                    (list 'given (t-right (list 'maybe (list 'none '()))))
+                                    (list 'given (t-right (list 'optional (list 'none '()))))
                                     (t-field "string"
                                       (t-lam "s"
-                                        (t-right (list 'maybe (t-var "s"))))))
+                                        (t-right (list 'optional (t-var "s"))))))
                                   (t-var "lit")))))
                           (t-var "descTerm"))))))))
 
@@ -569,12 +569,12 @@
                                (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                                  (list 'literal (list 'string (hydra_core_wrapped_term-type_name wt))))))
                              (make-hydra_core_field "body" (term-to-meta (hydra_core_wrapped_term-body wt)))))))))))
-              ((eq? tag 'maybe)
+              ((eq? tag 'optional)
                (list 'inject (make-hydra_core_injection "hydra.core.Term"
                  (make-hydra_core_field "optional"
                    (if (cadr term)
-                       (list 'maybe (term-to-meta (cadr term)))
-                       (list 'maybe '()))))))
+                       (list 'optional (term-to-meta (cadr term)))
+                       (list 'optional '()))))))
               ((eq? tag 'list)
                (list 'inject (make-hydra_core_injection "hydra.core.Term"
                  (make-hydra_core_field "list"
@@ -648,10 +648,10 @@
                            (or (equal? a-str e-str)
                                (equal? (normalize-show a-str) (normalize-show e-str)))))))))
           ;; Try converting Maybe-wrapped struct-compat terms
-          (and (pair? actual) (eq? (car actual) 'maybe)
+          (and (pair? actual) (eq? (car actual) 'optional)
                (pair? (cadr actual)) (eq? (caadr actual) 'annotated)
                (guard (exn (#t #f))
-                 (let ((meta-actual (list 'maybe (term-to-meta (cadr actual)))))
+                 (let ((meta-actual (list 'optional (term-to-meta (cadr actual)))))
                    (or (equal? meta-actual expected)
                        (guard (exn (#t #f))
                          (let ((a-str (show-term meta-actual))

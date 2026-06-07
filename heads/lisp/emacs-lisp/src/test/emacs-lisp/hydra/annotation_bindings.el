@@ -43,9 +43,9 @@
                           case-fields))))
 (defun hydra--t-right (v) (list :either (list :right v)))
 (defun hydra--t-left (v) (list :either (list :left v)))
-(defun hydra--t-just (v) (list :maybe (hydra--t-inject "hydra.core.Term" "literal"
+(defun hydra--t-just (v) (list :optional (hydra--t-inject "hydra.core.Term" "literal"
                      (hydra--t-inject "hydra.core.Literal" "string" v))))
-(defun hydra--t-nothing () (list :maybe (list :none nil)))
+(defun hydra--t-nothing () (list :optional (list :none nil)))
 ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
 (defun hydra--t-pair (a b) (list :pair (list a b)))
 
@@ -232,20 +232,20 @@
                     (hydra--t-var "hydra.constants.keyDescription"))
                     (hydra--t-var "anns")))
                   ;; default: right(nothing)
-                  (hydra--t-right (list :maybe (list :none nil))))
+                  (hydra--t-right (list :optional (list :none nil))))
                   ;; \descTerm -> case match to extract string
                   (hydra--t-lam "descTerm"
                     (hydra--t-app
                       (hydra--t-match "hydra.core.Term"
-                        (list :given (hydra--t-right (list :maybe (list :none nil))))
+                        (list :given (hydra--t-right (list :optional (list :none nil))))
                         (hydra--t-field "literal"
                           (hydra--t-lam "lit"
                             (hydra--t-app
                               (hydra--t-match "hydra.core.Literal"
-                                (list :given (hydra--t-right (list :maybe (list :none nil))))
+                                (list :given (hydra--t-right (list :optional (list :none nil))))
                                 (hydra--t-field "string"
                                   (hydra--t-lam "s"
-                                    (hydra--t-right (list :maybe (hydra--t-var "s"))))))
+                                    (hydra--t-right (list :optional (hydra--t-var "s"))))))
                               (hydra--t-var "lit")))))
                       (hydra--t-var "descTerm"))))))))
 
