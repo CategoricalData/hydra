@@ -117,8 +117,8 @@ subtermStep = define "SubtermStep" $
     "mapValue">:
       doc "Access a value in a map by index"
       T.int32,
-    "maybeTerm">:
-      doc "Access the term inside a Just value"
+    "optionalTerm">:
+      doc "Access the term inside a given (present) optional value"
       T.unit,
     "productTerm">:
       doc "Access an element of a product (tuple) by index"
