@@ -47,7 +47,7 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
     }
 
     /**

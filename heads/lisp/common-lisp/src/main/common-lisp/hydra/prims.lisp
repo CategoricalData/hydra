@@ -256,7 +256,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall hydra_extract_core_maybe_term
+          (funcall (funcall (funcall hydra_extract_core_optional_term
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)

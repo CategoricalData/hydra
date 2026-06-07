@@ -47,7 +47,7 @@ public class IsNone extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(x -> Terms.boolean_(IsNone.apply(x)), hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(x -> Terms.boolean_(IsNone.apply(x)), hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)));
     }
 
     /**
