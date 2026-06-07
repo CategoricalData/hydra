@@ -48,7 +48,7 @@ public class Bind extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)), arg -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), arg -> {
                 if (arg.isNone()) {
                     return Either.right(Terms.optional(Optional.none()));
                 }
@@ -56,7 +56,7 @@ public class Bind extends PrimitiveFunction {
                 Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                     hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
-                Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.maybeTerm(
+                Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.optionalTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 return Either.right(Terms.optional(((Either.Right<Error_, Optional<Term>>) maybeResult).value));

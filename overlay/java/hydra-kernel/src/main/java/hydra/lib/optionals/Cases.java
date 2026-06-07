@@ -52,7 +52,7 @@ public class Cases extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)), opt ->
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), opt ->
             opt.isGiven()
                 ? Either.right(Terms.apply(args.get(2), opt.fromGiven()))
                 : Either.right(args.get(1)));

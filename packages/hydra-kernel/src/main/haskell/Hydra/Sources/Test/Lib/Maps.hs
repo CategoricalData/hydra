@@ -64,7 +64,7 @@ showIntStringMap :: TypedTerm (M.Map Int String -> String)
 showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ @@ showInt32 @@ showString' @@ Phantoms.var "m"
 
 showMaybeString :: TypedTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showString' @@ Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showString' @@ Phantoms.var "mx"
 
 showPairList :: TypedTerm ([(Int, String)] -> String)
 showPairList = Phantoms.lambda "xs" $ ShowCore.list_ @@ (Phantoms.lambda "p" $ ShowCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"

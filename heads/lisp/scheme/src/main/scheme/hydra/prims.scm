@@ -278,7 +278,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((hydra_extract_core_maybe_term
+              (((hydra_extract_core_optional_term
                  (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)

@@ -48,7 +48,7 @@ public class Cat extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Optional<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(x -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Optional<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(x -> hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
     }
 
     /**

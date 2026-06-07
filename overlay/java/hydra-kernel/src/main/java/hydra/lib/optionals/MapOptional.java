@@ -55,7 +55,7 @@ public class MapOptional extends PrimitiveFunction {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
-                    Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.maybeTerm(
+                    Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.optionalTerm(
                         t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                     if (maybeResult.isLeft()) return (Either) maybeResult;
                     Optional<Term> maybe = ((Either.Right<Error_, Optional<Term>>) maybeResult).value;
