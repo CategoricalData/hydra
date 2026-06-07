@@ -46,7 +46,7 @@ Require hydra.test.lib.lists.
 Require hydra.test.lib.literals.
 Require hydra.test.lib.logic.
 Require hydra.test.lib.math.
-Require hydra.test.lib.maybes.
+Require hydra.test.lib.optionals.
 Require hydra.test.lib.pairs.
 Require hydra.test.lib.regex.
 Require hydra.test.lib.strings.
@@ -121,7 +121,7 @@ Definition allIncludedModules : list TestGroup := [
   hydra.test.lib.literals.allTests;
   hydra.test.lib.logic.allTests;
   hydra.test.lib.math.allTests;
-  hydra.test.lib.maybes.allTests;
+  hydra.test.lib.optionals.allTests;
   hydra.test.lib.pairs.allTests;
   hydra.test.lib.regex.allTests;
   hydra.test.lib.strings.allTests;
