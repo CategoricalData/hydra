@@ -121,7 +121,7 @@ object Libraries:
     case _ => throw new RuntimeException(s"expected map, got $t")
 
   private def exMaybe(t: Term): Option[Term] = strip(t) match
-    case Term.maybe(opt) => opt
+    case Term.optional(opt) => opt
     case _ => throw new RuntimeException(s"expected maybe, got $t")
 
   private def exEither(t: Term): Either[Term, Term] = strip(t) match
@@ -152,7 +152,7 @@ object Libraries:
   private def mkList(items: Seq[Term]): Term = Term.list(items)
   private def mkSet(items: Set[Term]): Term = Term.set(items)
   private def mkMapTerm(entries: Map[Term, Term]): Term = Term.map(entries)
-  private def mkMaybe(opt: Option[Term]): Term = Term.maybe(opt)
+  private def mkMaybe(opt: Option[Term]): Term = Term.optional(opt)
   private def mkEither(e: Either[Term, Term]): Term = Term.either(e)
   private def mkPairTerm(a: Term, b: Term): Term = Term.pair((a, b))
   private val mkUnit: Term = Term.unit
@@ -218,7 +218,7 @@ object Libraries:
   private def tList(t: Type): Type = Type.list(t)
   private def tSet(t: Type): Type = Type.set(t)
   private def tMap(k: Type, v: Type): Type = Type.map(MapType(k, v))
-  private def tOpt(t: Type): Type = Type.maybe(t)
+  private def tOpt(t: Type): Type = Type.optional(t)
   private def tEither(l: Type, r: Type): Type = Type.either(EitherType(l, r))
   private def tPair(a: Type, b: Type): Type = Type.pair(PairType(a, b))
   private val tString: Type = Type.literal(LiteralType.string)
