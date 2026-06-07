@@ -33,28 +33,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | Interpreter-friendly bimap for Either terms.
-bimap :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-bimap cx g leftFun rightFun eitherTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left (Core.TermApplication (Core.Application {
-        Core.applicationFunction = leftFun,
-        Core.applicationArgument = val})))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
-        Core.applicationFunction = rightFun,
-        Core.applicationArgument = val})))) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
--- | Interpreter-friendly bind for Either terms.
-bind :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-bind cx g eitherTerm funTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = funTerm,
-        Core.applicationArgument = val})) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
 -- | Interpreter-friendly case analysis for Either terms.
 either :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 either cx g leftFun rightFun eitherTerm =
@@ -87,54 +65,12 @@ foldl cx g funTerm initTerm listTerm =
               Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
             Core.applicationArgument = el}))}))})),
       Core.applicationArgument = acc})) (Core.TermEither (Right initTerm)) elements))
--- | Interpreter-friendly fromLeft for Either terms.
-fromLeft :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-fromLeft cx g defaultTerm eitherTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\val -> val) (\_ -> defaultTerm) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
--- | Interpreter-friendly fromRight for Either terms.
-fromRight :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-fromRight cx g defaultTerm eitherTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\_ -> defaultTerm) (\val -> val) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
--- | Interpreter-friendly isLeft for Either terms.
-isLeft :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
-isLeft cx g eitherTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\_ -> Core.TermLiteral (Core.LiteralBoolean True)) (\_ -> Core.TermLiteral (Core.LiteralBoolean False)) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
--- | Interpreter-friendly isRight for Either terms.
-isRight :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
-isRight cx g eitherTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\_ -> Core.TermLiteral (Core.LiteralBoolean False)) (\_ -> Core.TermLiteral (Core.LiteralBoolean True)) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
 -- | Interpreter-friendly lefts for list of Either terms.
 lefts :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 lefts cx g listTerm =
     Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermList (Lists.foldl (\acc -> \el -> case el of
       Core.TermEither v0 -> Eithers.either (\val -> Lists.concat2 acc (Lists.pure val)) (\_ -> acc) v0
       _ -> acc) [] elements)))
--- | Interpreter-friendly map for Either terms.
-map :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-map cx g rightFun eitherTerm =
-    case eitherTerm of
-      Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
-        Core.applicationFunction = rightFun,
-        Core.applicationArgument = val})))) v0)
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term eitherTerm)})))
 -- | Interpreter-friendly mapList for Either (traverse).
 mapList :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 mapList cx g funTerm listTerm =
