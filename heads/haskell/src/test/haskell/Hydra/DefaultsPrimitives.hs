@@ -11,26 +11,20 @@ import Hydra.Sources.Libraries
 import Hydra.Dsl.Prims as Prims
 
 import qualified Hydra.Lib.Defaults.Eithers as DefaultEithers
-import qualified Hydra.Lib.Defaults.Equality as DefaultEquality
 import qualified Hydra.Lib.Defaults.Lists as DefaultLists
 import qualified Hydra.Lib.Defaults.Maps as DefaultMaps
-import qualified Hydra.Lib.Defaults.Math as DefaultMath
 import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
 import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
-import qualified Hydra.Lib.Defaults.Sets as DefaultSets
 
 
 -- | All default-library implementations, to be used as replacements for standard libraries in test mode.
 defaultLibraries :: [Library]
 defaultLibraries = [
   defaultLibEithers,
-  defaultLibEquality,
   defaultLibLists,
   defaultLibMaps,
-  defaultLibMath,
   defaultLibMaybes,
-  defaultLibPairs,
-  defaultLibSets]
+  defaultLibPairs]
 
 -- Helpers
 
@@ -112,18 +106,6 @@ defaultLibEithers = standardLibrary _hydra_lib_eithers [
     _ -> unexpected cx "eithers.rights" 1]
 
 -- ---- Equality ----
-
-defaultLibEquality :: Library
-defaultLibEquality = standardLibrary _hydra_lib_equality [
-  mkPrim _equality_identity 1 $ \cx g args -> case args of
-    [x] -> coerceError $ DefaultEquality.identity cx g x
-    _ -> unexpected cx "equality.identity" 1,
-  mkPrim _equality_max 2 $ \cx g args -> case args of
-    [x, y] -> coerceError $ DefaultEquality.max cx g x y
-    _ -> unexpected cx "equality.max" 2,
-  mkPrim _equality_min 2 $ \cx g args -> case args of
-    [x, y] -> coerceError $ DefaultEquality.min cx g x y
-    _ -> unexpected cx "equality.min" 2]
 
 -- ---- Lists ----
 
@@ -225,17 +207,6 @@ defaultLibMaps = standardLibrary _hydra_lib_maps [
     [kf, mt] -> DefaultMaps.mapKeys cx g kf mt
     _ -> unexpected cx "maps.mapKeys" 2]
 
--- ---- Math ----
-
-defaultLibMath :: Library
-defaultLibMath = standardLibrary _hydra_lib_math [
-  mkPrim _math_even 1 $ \cx g args -> case args of
-    [x] -> coerceError $ DefaultMath.even cx g x
-    _ -> unexpected cx "math.even" 1,
-  mkPrim _math_odd 1 $ \cx g args -> case args of
-    [x] -> coerceError $ DefaultMath.odd cx g x
-    _ -> unexpected cx "math.odd" 1]
-
 -- ---- Maybes ----
 
 defaultLibMaybes :: Library
@@ -294,25 +265,6 @@ defaultLibPairs = standardLibrary _hydra_lib_pairs [
     [p] -> DefaultPairs.second cx g p
     _ -> unexpected cx "pairs.second" 1]
 
--- ---- Sets ----
-
-defaultLibSets :: Library
-defaultLibSets = standardLibrary _hydra_lib_sets [
-  mkPrim _sets_difference 2 $ \cx g args -> case args of
-    [s1, s2] -> DefaultSets.difference cx g s1 s2
-    _ -> unexpected cx "sets.difference" 2,
-  mkPrim _sets_intersection 2 $ \cx g args -> case args of
-    [s1, s2] -> DefaultSets.intersection cx g s1 s2
-    _ -> unexpected cx "sets.intersection" 2,
-  mkPrim _sets_map 2 $ \cx g args -> case args of
-    [f, st] -> DefaultSets.map cx g f st
-    _ -> unexpected cx "sets.map" 2,
-  mkPrim _sets_union 2 $ \cx g args -> case args of
-    [s1, s2] -> DefaultSets.union cx g s1 s2
-    _ -> unexpected cx "sets.union" 2,
-  mkPrim _sets_unions 1 $ \cx g args -> case args of
-    [lt] -> DefaultSets.unions cx g lt
-    _ -> unexpected cx "sets.unions" 1]
 
 -- | Error helper for wrong argument count
 unexpected :: InferenceContext -> String -> Int -> Either Error Term
