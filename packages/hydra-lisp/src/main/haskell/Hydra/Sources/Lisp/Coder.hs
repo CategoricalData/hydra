@@ -169,7 +169,7 @@ encodeApplication = def "encodeApplication" $
        "dMidFun" <~ (Strip.deannotateTerm @@ var "midFun") $
        -- 2-deep: dFun = App(midFun, midArg), applied to rawArg.
        -- midFun is the head; midArg is its first (position 0) argument. If the
-       -- primitive is lazy in parameter 0 (e.g. fromLeft/fromRight/fromMaybe),
+       -- primitive is lazy in parameter 0 (e.g. fromLeft/fromRight/fromOptional),
        -- thunk midArg. Decision comes from isLazy metadata, not a name table (#391).
        "isLazy2" <~ (primIsLazyAt @@ var "g" @@ var "dMidFun" @@ int32 0) $
        Logic.ifElse (var "isLazy2")
