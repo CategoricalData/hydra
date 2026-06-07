@@ -161,29 +161,29 @@ def map(f: Callable[[A], B], values: Sequence[A]) -> Sequence[B]:
 
 
 def maybe_at(i: int, values: Sequence[A]) -> Optional[A]:
-    """Get the element at a specified index, returning Nothing if out of bounds."""
+    """Get the element at a specified index, returning none if out of bounds."""
     return Given(values[i]) if 0 <= i < len(values) else None_()
 
 
 def maybe_head(values: Sequence[A]) -> Optional[A]:
-    """Get the first element of a list, returning Nothing if the list is empty."""
+    """Get the first element of a list, returning none if the list is empty."""
     return Given(values[0]) if len(values) > 0 else None_()
 
 
 def maybe_init(values: Sequence[A]) -> Optional[Sequence[A]]:
-    """Return all elements except the last, returning Nothing if empty."""
+    """Return all elements except the last, returning none if empty."""
     if len(values) == 0:
         return None_()
     return Given(_to_cons(values).init())
 
 
 def maybe_last(values: Sequence[A]) -> Optional[A]:
-    """Get the last element of a list, returning Nothing if the list is empty."""
+    """Get the last element of a list, returning none if the list is empty."""
     return Given(values[-1]) if len(values) > 0 else None_()
 
 
 def maybe_tail(values: Sequence[A]) -> Optional[Sequence[A]]:
-    """Get all elements except the first, returning Nothing if empty."""
+    """Get all elements except the first, returning none if empty."""
     if len(values) == 0:
         return None_()
     return Given(_to_cons(values).tail)
@@ -290,7 +290,7 @@ def transpose(values: Sequence[Sequence[A]]) -> Sequence[Sequence[A]]:
 
 
 def uncons(values: Sequence[A]) -> Optional[tuple[A, Sequence[A]]]:
-    """Split a list into its head and tail, returning Nothing if empty."""
+    """Split a list into its head and tail, returning none if empty."""
     if len(values) == 0:
         return None_()
     cl = _to_cons(values)
