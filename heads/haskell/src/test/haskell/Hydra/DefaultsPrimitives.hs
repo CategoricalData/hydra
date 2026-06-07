@@ -13,7 +13,6 @@ import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Lib.Defaults.Eithers as DefaultEithers
 import qualified Hydra.Lib.Defaults.Equality as DefaultEquality
 import qualified Hydra.Lib.Defaults.Lists as DefaultLists
-import qualified Hydra.Lib.Defaults.Logic as DefaultLogic
 import qualified Hydra.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Lib.Defaults.Math as DefaultMath
 import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
@@ -27,7 +26,6 @@ defaultLibraries = [
   defaultLibEithers,
   defaultLibEquality,
   defaultLibLists,
-  defaultLibLogic,
   defaultLibMaps,
   defaultLibMath,
   defaultLibMaybes,
@@ -200,20 +198,6 @@ defaultLibLists = standardLibrary _hydra_lib_lists [
   mkPrim _lists_zipWith 3 $ \cx g args -> case args of
     [f, lt1, lt2] -> DefaultLists.zipWith cx g f lt1 lt2
     _ -> unexpected cx "lists.zipWith" 3]
-
--- ---- Logic ----
-
-defaultLibLogic :: Library
-defaultLibLogic = standardLibrary _hydra_lib_logic [
-  mkPrim _logic_and 2 $ \cx g args -> case args of
-    [a, b] -> coerceError $ DefaultLogic.and cx g a b
-    _ -> unexpected cx "logic.and" 2,
-  mkPrim _logic_not 1 $ \cx g args -> case args of
-    [a] -> coerceError $ DefaultLogic.not cx g a
-    _ -> unexpected cx "logic.not" 1,
-  mkPrim _logic_or 2 $ \cx g args -> case args of
-    [a, b] -> coerceError $ DefaultLogic.or cx g a b
-    _ -> unexpected cx "logic.or" 2]
 
 -- ---- Maps ----
 
