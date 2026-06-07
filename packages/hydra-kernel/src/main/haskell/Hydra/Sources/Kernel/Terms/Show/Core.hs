@@ -82,7 +82,7 @@ module_ = Module {
      toDefinition literal,
      toDefinition literalType,
      toDefinition map_,
-     toDefinition maybe_,
+     toDefinition optional_,
      toDefinition pair_,
      toDefinition projection,
      toDefinition readTerm,
@@ -290,11 +290,11 @@ map_ = define "map" $
     Strings.intercalate (string ", ") (var "pairStrs"),
     string "}"]
 
-maybe_ :: TypedTermDefinition ((a -> String) -> Maybe a -> String)
-maybe_ = define "maybe" $
-  doc "Show a Maybe value using a given function to show the element" $
+optional_ :: TypedTermDefinition ((a -> String) -> Maybe a -> String)
+optional_ = define "optional" $
+  doc "Show an optional value using a given function to show the element" $
   "f" ~> "mx" ~>
-  Optionals.cases (var "mx") (string "nothing") ("x" ~> Strings.cat2 (string "just(") (Strings.cat2 (var "f" @@ var "x") (string ")")))
+  Optionals.cases (var "mx") (string "none") ("x" ~> Strings.cat2 (string "given(") (Strings.cat2 (var "f" @@ var "x") (string ")")))
 
 pair_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
 pair_ = define "pair" $
@@ -383,8 +383,8 @@ term = define "term" $
         string "{",
         Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
         string "}"],
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "nothing") ("t" ~> Strings.cat $ list [
-        string "just(",
+    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "none") ("t" ~> Strings.cat $ list [
+        string "given(",
         term @@ var "t",
         string ")"]),
     _Term_pair>>: "p" ~> Strings.cat $ list [
