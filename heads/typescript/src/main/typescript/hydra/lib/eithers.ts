@@ -7,8 +7,8 @@
 // typed as `any`. Tightening these wastes type-checker time on synthesized
 // code without catching real bugs; the runtime checks `tag` directly.
 
-import type { Either, Maybe } from "../runtime.js";
-import { Left, Right, Just, Nothing } from "../runtime.js";
+import type { Either, Optional } from "../runtime.js";
+import { Left, Right, Given, None } from "../runtime.js";
 
 export const bimap = (fl: (l: any) => any, fr: (r: any) => any, e: any): Either<any, any> =>
   e.tag === "left" ? Left(fl(e.value)) : Right(fr(e.value));
@@ -62,11 +62,11 @@ export const rights = <L, R>(es: readonly Either<L, R>[]): readonly R[] => {
   return out;
 };
 
-export const mapOptional = (f: (a: any) => any, m: any): Either<any, Maybe<any>> => {
-  if (m.tag === "nothing") return Right(Nothing);
+export const mapOptional = (f: (a: any) => any, m: any): Either<any, Optional<any>> => {
+  if (m.tag === "none") return Right(None);
   const r = f(m.value);
-  if (r.tag === "left") return r as unknown as Either<any, Maybe<any>>;
-  return Right(Just(r.value));
+  if (r.tag === "left") return r as unknown as Either<any, Optional<any>>;
+  return Right(Given(r.value));
 };
 
 export const mapSet = <A, L, B>(f: (a: A) => Either<L, B>, s: ReadonlySet<A>): Either<L, ReadonlySet<B>> => {
