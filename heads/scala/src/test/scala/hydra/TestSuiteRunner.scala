@@ -190,10 +190,10 @@ object TestSuiteRunner {
     Term.either(Left(t))
 
   private def just(t: Term): Term =
-    Term.maybe(Some(t))
+    Term.optional(Some(t))
 
   private def nothing(): Term =
-    Term.maybe(None)
+    Term.optional(None)
 
   private def string(s: String): Term =
     Term.literal(Literal.string(s))
