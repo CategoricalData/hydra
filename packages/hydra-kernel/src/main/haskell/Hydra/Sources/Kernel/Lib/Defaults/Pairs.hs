@@ -68,25 +68,8 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Default term-level implementations of Pair functions for the Hydra interpreter."))}
   where
     definitions = [
-      toDefinition bimap_,
       toDefinition first_,
       toDefinition second_]
-
--- | Interpreter-friendly bimap for Pair terms.
--- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
-bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Pair terms." $
-  "cx" ~> "g" ~>
-  "firstFun" ~> "secondFun" ~> "pairTerm" ~>
-  cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
-    _Term_pair>>: "p" ~>
-      "fst" <~ Pairs.first (var "p") $
-      "snd" <~ Pairs.second (var "p") $
-      right $ Core.termPair $ pair
-        (Core.termApplication $ Core.application (var "firstFun") (var "fst"))
-        (Core.termApplication $ Core.application (var "secondFun") (var "snd"))]
 
 -- | Interpreter-friendly first for Pair terms.
 -- Extracts the first element of a pair.
