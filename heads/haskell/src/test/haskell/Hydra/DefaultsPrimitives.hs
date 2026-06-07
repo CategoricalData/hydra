@@ -59,36 +59,15 @@ coerceError (Left _) = error "coerceError: impossible Left from always-Right eva
 
 defaultLibEithers :: Library
 defaultLibEithers = standardLibrary _hydra_lib_eithers [
-  mkPrim _eithers_bimap 3 $ \cx g args -> case args of
-    [lf, rf, t] -> DefaultEithers.bimap cx g lf rf t
-    _ -> unexpected cx "eithers.bimap" 3,
-  mkPrim _eithers_bind 2 $ \cx g args -> case args of
-    [t, f] -> DefaultEithers.bind cx g t f
-    _ -> unexpected cx "eithers.bind" 2,
   mkPrim _eithers_either 3 $ \cx g args -> case args of
     [lf, rf, t] -> DefaultEithers.either cx g lf rf t
     _ -> unexpected cx "eithers.either" 3,
   mkPrim _eithers_foldl 3 $ \cx g args -> case args of
     [f, init_, lt] -> DefaultEithers.foldl cx g f init_ lt
     _ -> unexpected cx "eithers.foldl" 3,
-  mkPrim _eithers_fromLeft 2 $ \cx g args -> case args of
-    [def, t] -> DefaultEithers.fromLeft cx g def t
-    _ -> unexpected cx "eithers.fromLeft" 2,
-  mkPrim _eithers_fromRight 2 $ \cx g args -> case args of
-    [def, t] -> DefaultEithers.fromRight cx g def t
-    _ -> unexpected cx "eithers.fromRight" 2,
-  mkPrim _eithers_isLeft 1 $ \cx g args -> case args of
-    [t] -> DefaultEithers.isLeft cx g t
-    _ -> unexpected cx "eithers.isLeft" 1,
-  mkPrim _eithers_isRight 1 $ \cx g args -> case args of
-    [t] -> DefaultEithers.isRight cx g t
-    _ -> unexpected cx "eithers.isRight" 1,
   mkPrim _eithers_lefts 1 $ \cx g args -> case args of
     [t] -> DefaultEithers.lefts cx g t
     _ -> unexpected cx "eithers.lefts" 1,
-  mkPrim _eithers_map 2 $ \cx g args -> case args of
-    [f, t] -> DefaultEithers.map cx g f t
-    _ -> unexpected cx "eithers.map" 2,
   mkPrim _eithers_mapList 2 $ \cx g args -> case args of
     [f, lt] -> DefaultEithers.mapList cx g f lt
     _ -> unexpected cx "eithers.mapList" 2,
@@ -104,8 +83,6 @@ defaultLibEithers = standardLibrary _hydra_lib_eithers [
   mkPrim _eithers_rights 1 $ \cx g args -> case args of
     [t] -> DefaultEithers.rights cx g t
     _ -> unexpected cx "eithers.rights" 1]
-
--- ---- Equality ----
 
 -- ---- Lists ----
 
@@ -211,53 +188,17 @@ defaultLibMaps = standardLibrary _hydra_lib_maps [
 
 defaultLibMaybes :: Library
 defaultLibMaybes = standardLibrary _hydra_lib_maybes [
-  mkPrim _maybes_apply 2 $ \cx g args -> case args of
-    [ft, xt] -> DefaultMaybes.apply cx g ft xt
-    _ -> unexpected cx "maybes.apply" 2,
-  mkPrim _maybes_bind 2 $ \cx g args -> case args of
-    [t, f] -> DefaultMaybes.bind cx g t f
-    _ -> unexpected cx "maybes.bind" 2,
   mkPrim _maybes_cases 3 $ \cx g args -> case args of
     [t, def, f] -> DefaultMaybes.cases cx g t def f
     _ -> unexpected cx "maybes.cases" 3,
-  mkPrim _maybes_cat 1 $ \cx g args -> case args of
-    [t] -> fmap TermList (DefaultMaybes.cat cx g t)
-    _ -> unexpected cx "maybes.cat" 1,
-  mkPrim _maybes_compose 3 $ \cx g args -> case args of
-    [f, g_, x] -> coerceError $ DefaultMaybes.compose cx g f g_ x
-    _ -> unexpected cx "maybes.compose" 3,
-  mkPrim _maybes_fromMaybe 2 $ \cx g args -> case args of
-    [def, t] -> DefaultMaybes.fromMaybe cx g def t
-    _ -> unexpected cx "maybes.fromMaybe" 2,
-  mkPrim _maybes_isJust 1 $ \cx g args -> case args of
-    [t] -> DefaultMaybes.isJust cx g t
-    _ -> unexpected cx "maybes.isJust" 1,
-  mkPrim _maybes_isNothing 1 $ \cx g args -> case args of
-    [t] -> DefaultMaybes.isNothing cx g t
-    _ -> unexpected cx "maybes.isNothing" 1,
-  mkPrim _maybes_map 2 $ \cx g args -> case args of
-    [f, t] -> DefaultMaybes.map cx g f t
-    _ -> unexpected cx "maybes.map" 2,
-  mkPrim _maybes_mapMaybe 2 $ \cx g args -> case args of
-    [f, t] -> DefaultMaybes.mapMaybe cx g f t
-    _ -> unexpected cx "maybes.mapMaybe" 2,
   mkPrim _maybes_maybe 3 $ \cx g args -> case args of
     [def, f, t] -> DefaultMaybes.maybe cx g def f t
-    _ -> unexpected cx "maybes.maybe" 3,
-  mkPrim _maybes_pure 1 $ \cx g args -> case args of
-    [x] -> coerceError $ DefaultMaybes.pure cx g x
-    _ -> unexpected cx "maybes.pure" 1,
-  mkPrim _maybes_toList 1 $ \cx g args -> case args of
-    [t] -> DefaultMaybes.toList cx g t
-    _ -> unexpected cx "maybes.toList" 1]
+    _ -> unexpected cx "maybes.maybe" 3]
 
 -- ---- Pairs ----
 
 defaultLibPairs :: Library
 defaultLibPairs = standardLibrary _hydra_lib_pairs [
-  mkPrim _pairs_bimap 3 $ \cx g args -> case args of
-    [ff, sf, p] -> DefaultPairs.bimap cx g ff sf p
-    _ -> unexpected cx "pairs.bimap" 3,
   mkPrim _pairs_first 1 $ \cx g args -> case args of
     [p] -> DefaultPairs.first cx g p
     _ -> unexpected cx "pairs.first" 1,

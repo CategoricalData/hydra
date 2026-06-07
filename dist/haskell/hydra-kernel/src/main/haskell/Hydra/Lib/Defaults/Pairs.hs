@@ -29,23 +29,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | Interpreter-friendly bimap for Pair terms.
-bimap :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-bimap cx g firstFun secondFun pairTerm =
-    case pairTerm of
-      Core.TermPair v0 ->
-        let fst = Pairs.first v0
-            snd = Pairs.second v0
-        in (Right (Core.TermPair (
-          Core.TermApplication (Core.Application {
-            Core.applicationFunction = firstFun,
-            Core.applicationArgument = fst}),
-          (Core.TermApplication (Core.Application {
-            Core.applicationFunction = secondFun,
-            Core.applicationArgument = snd})))))
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "pair value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term pairTerm)})))
 -- | Interpreter-friendly first for Pair terms.
 first :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 first cx g pairTerm =

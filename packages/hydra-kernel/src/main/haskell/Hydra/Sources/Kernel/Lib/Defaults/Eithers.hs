@@ -68,55 +68,14 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Default term-level implementations of Either functions for the Hydra interpreter."))}
   where
     definitions = [
-      toDefinition bimap_,
-      toDefinition bind_,
       toDefinition either_,
       toDefinition foldl_,
-      toDefinition fromLeft_,
-      toDefinition fromRight_,
-      toDefinition isLeft_,
-      toDefinition isRight_,
       toDefinition lefts_,
-      toDefinition map_,
       toDefinition mapList_,
       toDefinition mapMaybe_,
       toDefinition mapSet_,
       toDefinition partitionEithers_,
       toDefinition rights_]
-
--- | Interpreter-friendly bimap for Either terms.
--- Takes two function terms (for left and right) and an Either term, applies
--- the appropriate function to the contained value and re-wraps the result.
-bimap_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
-bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Either terms." $
-  "cx" ~> "g" ~>
-  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
-        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
-        (var "e")]
-
--- | Interpreter-friendly bind for Either terms.
--- Takes an Either term and a function term, applies the function to the Right
--- value and returns the result (which should be an Either), or returns the Left unchanged.
-bind_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-bind_ = define "bind" $
-  doc "Interpreter-friendly bind for Either terms." $
-  "cx" ~> "g" ~>
-  "eitherTerm" ~> "funTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        -- If Left: return the Left unchanged
-        ("val" ~> Core.termEither $ left $ var "val")
-        -- If Right: apply funTerm to the value
-        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
-        (var "e")]
 
 -- | Interpreter-friendly case analysis for Either terms.
 -- Takes two function terms and an Either term, applies the appropriate function
@@ -163,64 +122,6 @@ foldl_ = define "foldl" $
     -- Initial accumulator: Right initTerm
     (Core.termEither $ right $ var "initTerm")
     (var "elements")
-
--- | Interpreter-friendly fromLeft for Either terms.
--- fromLeft default eitherTerm: returns the Left value, or default if Right.
-fromLeft_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-fromLeft_ = define "fromLeft" $
-  doc "Interpreter-friendly fromLeft for Either terms." $
-  "cx" ~> "g" ~>
-  "defaultTerm" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("val" ~> var "val")
-        ("_" ~> var "defaultTerm")
-        (var "e")]
-
--- | Interpreter-friendly fromRight for Either terms.
--- fromRight default eitherTerm: returns the Right value, or default if Left.
-fromRight_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-fromRight_ = define "fromRight" $
-  doc "Interpreter-friendly fromRight for Either terms." $
-  "cx" ~> "g" ~>
-  "defaultTerm" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("_" ~> var "defaultTerm")
-        ("val" ~> var "val")
-        (var "e")]
-
--- | Interpreter-friendly isLeft for Either terms.
-isLeft_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-isLeft_ = define "isLeft" $
-  doc "Interpreter-friendly isLeft for Either terms." $
-  "cx" ~> "g" ~>
-  "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
-        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
-        (var "e")]
-
--- | Interpreter-friendly isRight for Either terms.
-isRight_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error Term)
-isRight_ = define "isRight" $
-  doc "Interpreter-friendly isRight for Either terms." $
-  "cx" ~> "g" ~>
-  "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
-        ("_" ~> Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
-        (var "e")]
 
 -- | Interpreter-friendly lefts for list of Either terms.
 -- Extracts all Left values from a list.
@@ -359,19 +260,6 @@ mapSet_ = define "mapSet" $
     (Core.termEither $ right $ Core.termSet $ Sets.fromList (list ([] :: [TypedTerm Term])))
     -- Convert set elements to list for folding
     (Sets.toList $ var "elements")
-
-map_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Either Error Term)
-map_ = define "map" $
-  doc "Interpreter-friendly map for Either terms." $
-  "cx" ~> "g" ~>
-  "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ var "val")
-        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
-        (var "e")]
 
 -- | Interpreter-friendly partitionEithers for list of Either terms.
 -- Splits a list of Eithers into (lefts, rights).
