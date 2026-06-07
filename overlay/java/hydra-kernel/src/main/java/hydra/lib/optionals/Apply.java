@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -51,9 +51,9 @@ public class Apply extends PrimitiveFunction {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)), optionalF ->
                 hydra.lib.eithers.Map.apply(optionalArg ->
-                    (optionalF.isJust() && optionalArg.isJust())
-                        ? Terms.optional(Maybe.just(Terms.apply(optionalF.fromJust(), optionalArg.fromJust())))
-                        : Terms.optional(Maybe.nothing()),
+                    (optionalF.isGiven() && optionalArg.isGiven())
+                        ? Terms.optional(Optional.given(Terms.apply(optionalF.fromGiven(), optionalArg.fromGiven())))
+                        : Terms.optional(Optional.none()),
                     hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(1))));
     }
 
@@ -64,7 +64,7 @@ public class Apply extends PrimitiveFunction {
      * @param optionalF the optional function to apply
      * @return a function that takes an optional argument and returns an optional result
      */
-    public static <X, Y> Function<Maybe<X>, Maybe<Y>> apply(Maybe<Function<X, Y>> optionalF) {
+    public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Optional<Function<X, Y>> optionalF) {
         return (optionalArg) -> apply(optionalF, optionalArg);
     }
 
@@ -76,14 +76,14 @@ public class Apply extends PrimitiveFunction {
      * @param optionalArg the optional argument
      * @return the optional result of applying the function to the argument, or empty if either is empty
      */
-    public static <X, Y> Maybe<Y> apply(Maybe<Function<X, Y>> optionalF, Maybe<X> optionalArg) {
-        if (!optionalF.isJust() || !optionalArg.isJust()) {
-            return Maybe.nothing();
+    public static <X, Y> Optional<Y> apply(Optional<Function<X, Y>> optionalF, Optional<X> optionalArg) {
+        if (!optionalF.isGiven() || !optionalArg.isGiven()) {
+            return Optional.none();
         }
 
-        Function<X, Y> f = optionalF.fromJust();
-        X arg = optionalArg.fromJust();
+        Function<X, Y> f = optionalF.fromGiven();
+        X arg = optionalArg.fromGiven();
 
-        return Maybe.just(f.apply(arg));
+        return Optional.given(f.apply(arg));
     }
 }

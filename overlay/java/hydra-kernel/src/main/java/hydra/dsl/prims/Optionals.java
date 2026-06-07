@@ -7,7 +7,7 @@ import hydra.lib.optionals.Map;
 import hydra.lib.optionals.Pure;
 
 /**
- * DSL interface providing Maybe/Optional primitive operations for working with optional values.
+ * DSL interface providing optional primitive operations for working with optional values.
  */
 public interface Optionals {
     /**

@@ -35,9 +35,9 @@ public class ConsListTest {
 
     @Test
     public void testSafeHead() {
-        assertTrue(ConsList.empty().safeHead().isNothing());
-        assertTrue(ConsList.singleton("x").safeHead().isJust());
-        assertEquals("x", ConsList.singleton("x").safeHead().fromJust());
+        assertTrue(ConsList.empty().safeHead().isNone());
+        assertTrue(ConsList.singleton("x").safeHead().isGiven());
+        assertEquals("x", ConsList.singleton("x").safeHead().fromGiven());
     }
 
     @Test

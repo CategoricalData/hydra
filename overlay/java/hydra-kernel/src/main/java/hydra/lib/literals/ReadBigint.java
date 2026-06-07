@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -56,13 +56,13 @@ public class ReadBigint extends PrimitiveFunction {
     /**
      * Attempts to parse a string into a BigInteger.
      * @param str the string to parse
-     * @return a Maybe containing the parsed BigInteger, or empty if parsing fails
+     * @return a Optional containing the parsed BigInteger, or empty if parsing fails
      */
-    public static Maybe<BigInteger> apply(String str) {
+    public static Optional<BigInteger> apply(String str) {
         try {
-            return Maybe.just(new BigInteger(str));
+            return Optional.given(new BigInteger(str));
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

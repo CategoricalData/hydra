@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -55,18 +55,18 @@ public class ReadUint16 extends PrimitiveFunction {
     /**
      * Attempts to parse a string into a Character representing uint16 (0-65535).
      * @param str the string to parse
-     * @return a Maybe containing the parsed Character, or empty if parsing fails or value is out of range
+     * @return a Optional containing the parsed Character, or empty if parsing fails or value is out of range
      */
-    public static Maybe<Character> apply(String str) {
+    public static Optional<Character> apply(String str) {
         try {
             long n = Long.parseLong(str);
             if (n >= 0 && n <= 65535) {
-                return Maybe.just((char) n);
+                return Optional.given((char) n);
             } else {
-                return Maybe.nothing();
+                return Optional.none();
             }
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

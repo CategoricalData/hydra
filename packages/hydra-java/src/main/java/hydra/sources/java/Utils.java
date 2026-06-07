@@ -25,7 +25,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -3419,11 +3419,11 @@ public class Utils {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just(new EntityMetadata(
-            Maybe.just("Java utilities for constructing Java syntax trees"),
+        Optional.given(new EntityMetadata(
+            Optional.given("Java utilities for constructing Java syntax trees"),
             java.util.List.of(),
             java.util.List.of(),
-            Maybe.nothing())),
+            Optional.none())),
         DEPENDENCIES,
         DEFINITIONS);
 }

@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -49,17 +49,17 @@ public class Bind extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)), arg -> {
-                if (arg.isNothing()) {
-                    return Either.right(Terms.optional(Maybe.nothing()));
+                if (arg.isNone()) {
+                    return Either.right(Terms.optional(Optional.none()));
                 }
-                Term val = arg.fromJust();
+                Term val = arg.fromGiven();
                 Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                     hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
-                Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
+                Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.maybeTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
-                return Either.right(Terms.optional(((Either.Right<Error_, Maybe<Term>>) maybeResult).value));
+                return Either.right(Terms.optional(((Either.Right<Error_, Optional<Term>>) maybeResult).value));
             });
     }
 
@@ -70,7 +70,7 @@ public class Bind extends PrimitiveFunction {
      * @param optionalArg the optional value to bind
      * @return a function that takes a binding function and returns an optional result
      */
-    public static <X, Y> Function<Function<X, Maybe<Y>>, Maybe<Y>> apply(Maybe<X> optionalArg) {
+    public static <X, Y> Function<Function<X, Optional<Y>>, Optional<Y>> apply(Optional<X> optionalArg) {
         return (f) -> apply(optionalArg, f);
     }
 
@@ -82,9 +82,9 @@ public class Bind extends PrimitiveFunction {
      * @param f the binding function
      * @return the optional result of applying the binding function, or empty if the input is empty
      */
-    public static <X, Y> Maybe<Y> apply(Maybe<X> optionalArg, Function<X, Maybe<Y>> f) {
-        return optionalArg.isJust()
-            ? f.apply(optionalArg.fromJust())
-            : Maybe.nothing();
+    public static <X, Y> Optional<Y> apply(Optional<X> optionalArg, Function<X, Optional<Y>> f) {
+        return optionalArg.isGiven()
+            ? f.apply(optionalArg.fromGiven())
+            : Optional.none();
     }
 }

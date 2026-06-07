@@ -7,7 +7,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -22,7 +22,7 @@ import hydra.util.Either;
 
 
 /**
- * Converts a Maybe to a list: Just x becomes [x], Nothing becomes [].
+ * Converts a Optional to a list: Just x becomes [x], Nothing becomes [].
  */
 public class ToList extends PrimitiveFunction {
     /**
@@ -49,7 +49,7 @@ public class ToList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-            (Function<Maybe<Term>, Term>) opt -> Terms.list(apply(opt)),
+            (Function<Optional<Term>, Term>) opt -> Terms.list(apply(opt)),
             hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)));
     }
 
@@ -59,7 +59,7 @@ public class ToList extends PrimitiveFunction {
      * @param opt the optional value
      * @return a singleton list if Just, an empty list if Nothing
      */
-    public static <X> List<X> apply(Maybe<X> opt) {
-        return opt.isJust() ? ConsList.singleton(opt.fromJust()) : ConsList.empty();
+    public static <X> List<X> apply(Optional<X> opt) {
+        return opt.isGiven() ? ConsList.singleton(opt.fromGiven()) : ConsList.empty();
     }
 }

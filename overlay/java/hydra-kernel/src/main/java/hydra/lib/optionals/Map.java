@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -57,7 +57,7 @@ public class Map extends PrimitiveFunction {
      * @param f the function to map
      * @return a function that takes an optional and returns a mapped optional
      */
-    public static <X, Y> Function<Maybe<X>, Maybe<Y>> apply(Function<X, Y> f) {
+    public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Function<X, Y> f) {
         return (optionalArg) -> apply(f, optionalArg);
     }
 
@@ -69,13 +69,13 @@ public class Map extends PrimitiveFunction {
      * @param optionalArg the optional value to map over
      * @return an optional containing the mapped value if present, otherwise empty
      */
-    public static <X, Y> Maybe<Y> apply(Function<X, Y> f, Maybe<X> optionalArg) {
-        if (!optionalArg.isJust()) {
-            return Maybe.nothing();
+    public static <X, Y> Optional<Y> apply(Function<X, Y> f, Optional<X> optionalArg) {
+        if (!optionalArg.isGiven()) {
+            return Optional.none();
         }
 
-        X arg = optionalArg.fromJust();
+        X arg = optionalArg.fromGiven();
 
-        return Maybe.just(f.apply(arg));
+        return Optional.given(f.apply(arg));
     }
 }

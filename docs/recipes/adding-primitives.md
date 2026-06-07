@@ -97,7 +97,7 @@ Conventions established across the 13 `hydra.lib.*` module names (#319):
   `Data.Char` / `Data.List` / `Data.Map.Strict` / `Data.Set` / `Data.Either` /
   `Data.Maybe` for primitives without a normative external standard.
 - **Hydra type names are lowercase in prose** (`int32`, `float64`, `boolean`,
-  `maybe`, `set`). Use Haskell type names (`Int32`, `Double`, `Bool`, `Maybe`)
+  `optional`, `set`). Use Haskell type names (`Int32`, `Double`, `Bool`, `Maybe`)
   *only* inside `Corresponds to Haskell's <name> :: <Haskell-sig>` cross-references.
 - **Do not mention Haskell typeclasses** (`Num`, `Floating`, `Ord`, `Enum`).
   Hydra does not have typeclasses. The closest Hydra concept is the per-type-var
@@ -176,15 +176,15 @@ declared arguments (no `Context`, no `Graph`) and reduce using only other
 primitives and term-level constructs. For example:
 
 ```haskell
--- maybes.fromMaybe def m = maybe def (\x -> x) m
-fromMaybe_ :: TypedTermDefinition (a -> Maybe a -> a)
-fromMaybe_ = define "fromMaybe" $
-  doc "Return the contained value or a default, defined in terms of maybe." $
-  "def" ~> "m" ~> Maybes.maybe (var "def") ("x" ~> var "x") (var "m")
+-- optionals.fromOptional def m = cases m def (\x -> x)
+fromOptional_ :: TypedTermDefinition (a -> Maybe a -> a)
+fromOptional_ = define "fromOptional" $
+  doc "Return the contained value or a default, defined in terms of cases." $
+  "def" ~> "m" ~> Optionals.cases (var "m") (var "def") ("x" ~> var "x")
 ```
 
 Not every primitive has a meaningful default. Fundamental operations
-(`maybes.maybe`, `pairs.first`, character predicates, arithmetic) cannot be
+(`optionals.cases`, `pairs.first`, character predicates, arithmetic) cannot be
 expressed in terms of other primitives — those use `primNoDef` and rely on the
 host's native implementation.
 
@@ -264,8 +264,10 @@ the variables first appear in the body — **not alphabetical**. Hosts that
 re-register primitives by hand (e.g. `heads/typescript/.../lib/libraries.ts`,
 `overlay/java/hydra-kernel/.../lib/Libraries.java`) must follow the same order: kernel
 typeApps bind positionally to that list, and mis-ordering silently swaps
-domain and codomain in inferred lambda types. For example, `maybes.maybe :
-b → (a → b) → maybe<a> → b` lists vars as `[b, a]`, not `[a, b]`.
+domain and codomain in inferred lambda types. For example, `optionals.fromOptional :
+a → optional<a> → a` lists vars as `[a]`; a polymorphic primitive whose result
+type variable appears before its argument's must list them in that body order, not
+alphabetically.
 
 ```haskell
 
@@ -634,10 +636,10 @@ implementation, each host's native impl + registration + DSL wrapper, and the co
 test group). Two things deserve special care.
 
 **Flip every call site, not just the definition.** Removing a primitive in favour of
-another (e.g. replacing the value-first `maybes.maybe` eliminator with the
-scrutinee-first `maybes.cases`) means rewriting every reference, including ones that
-do not match a simple text search: DSL call sites (`Maybes.maybe`), name-binding
-references (`_maybes_maybe`), hardcoded `Name "hydra.lib.maybes.maybe"` literals in
+another (e.g. the #401 replacement of the value-first `optionals.maybe` eliminator with
+the scrutinee-first `optionals.cases`) means rewriting every reference, including ones that
+do not match a simple text search: DSL call sites (`Optionals.maybe`), name-binding
+references (`_optionals_maybe`), hardcoded `Name "hydra.lib.optionals.maybe"` literals in
 phantom helpers, and the per-host runtime registries (Java `Libraries.java`, Python
 `hydra.sources.libraries`, the four Lisp `lib/libraries.*`, the TypeScript
 `lib/libraries.ts`, and the per-host test runners). When the replacement has a
@@ -707,7 +709,7 @@ failure mode see [troubleshooting](../troubleshooting.md).
 
 ## Higher-order primitives
 
-Primitives that take function arguments (e.g. `lists.map`, `maybes.bind`) are
+Primitives that take function arguments (e.g. `lists.map`, `optionals.bind`) are
 called higher-order. They have the same shape as other primitives at the
 metadata level — they're declared with a function-type signature. Two
 implementation notes:
@@ -723,22 +725,22 @@ implementation notes:
   apply it with `@@` in Haskell DSL:
 
   ```haskell
-  -- maybes.map f m = maybe Nothing (\x -> Just (f x)) m
+  -- optionals.map f m = cases m none (\x -> given (f x))
   map_ :: TypedTermDefinition ((a -> b) -> Maybe a -> Maybe b)
   map_ = define "map" $
-    doc "Map a function over an optional, defined in terms of maybe." $
-    "f" ~> "m" ~> Maybes.maybe nothing ("x" ~> just (var "f" @@ var "x")) (var "m")
+    doc "Map a function over an optional, defined in terms of cases." $
+    "f" ~> "m" ~> Optionals.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x"))
   ```
 
 ## Example: studying an existing migration
 
-The `hydra.lib.maybes` module name is a good case study: 13 primitives, 11 of
-which have default implementations in terms of `maybe`. See:
+The `hydra.lib.optionals` module name is a good case study: 12 primitives, most of
+which have default implementations in terms of `cases`. See:
 
-- Metadata: [Hydra/Sources/Kernel/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Maybes.hs)
-- Haskell native impl: [Hydra/Haskell/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Maybes.hs)
-- Haskell DSL wrapper: [Hydra/Dsl/Meta/Lib/Maybes.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/Maybes.hs)
-- Java native impls: [hydra/lib/maybes/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/lib/maybes)
+- Metadata: [Hydra/Sources/Kernel/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Optionals.hs)
+- Haskell native impl: [Hydra/Haskell/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Optionals.hs)
+- Haskell DSL wrapper: [Hydra/Dsl/Meta/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/Optionals.hs)
+- Java native impls: [hydra/lib/optionals/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/lib/optionals)
 
 ## Further reading
 
