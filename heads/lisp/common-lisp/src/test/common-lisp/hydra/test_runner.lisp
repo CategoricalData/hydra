@@ -103,9 +103,9 @@
     ;; (:list items) -> convert items
     ((and (eq (first term) :list) (listp (second term)))
      (list :list (mapcar #'meta-to-struct (second term))))
-    ;; (:maybe val) -> convert val
-    ((eq (first term) :maybe)
-     (list :maybe (when (second term) (meta-to-struct (second term)))))
+    ;; (:optional val) -> convert val
+    ((eq (first term) :optional)
+     (list :optional (when (second term) (meta-to-struct (second term)))))
     ;; (:literal val) -> pass through
     ((eq (first term) :literal) term)
     ;; (:wrap WrappedTerm) -> pass through
@@ -246,7 +246,7 @@
   (or (null val)
       (and (consp val) (null (cdr val)) (null (car val)))
       (and (consp val) (eq (first val) :none))
-      (and (consp val) (eq (first val) :maybe)
+      (and (consp val) (eq (first val) :optional)
            (or (< (length val) 2)
                (null (second val))
                (and (consp (second val)) (eq (first (second val)) :none))))))
@@ -254,7 +254,7 @@
 (defun ann-maybe-value (val)
   (cond
     ((and (consp val) (eq (first val) :given)) (second val))
-    ((and (consp val) (eq (first val) :maybe))
+    ((and (consp val) (eq (first val) :optional))
      (let ((body (second val)))
        (if (and (consp body) (eq (first body) :given))
            (second body)
@@ -350,11 +350,11 @@
     ;; Short Term variants — wrap in Inject.
     ((and (consp term)
           (member (first term) '(:annotated :application :cases :either :inject
-                                 :lambda :let :list :literal :map :maybe :pair
+                                 :lambda :let :list :literal :map :optional :pair
                                  :project :record :set :type_application
                                  :type_lambda :unit :unwrap :variable :wrap)))
-     (let* ((variant-name (if (eq (first term) :maybe)
-                              ;; Host tag :maybe maps to the kernel Term variant "optional".
+     (let* ((variant-name (if (eq (first term) :optional)
+                              ;; Host tag :optional maps to the kernel Term variant "optional".
                               "optional"
                               (string-downcase (string (first term)))))
             (payload (second term)))
@@ -495,7 +495,7 @@
                    term-anns))
          (result (cdr (assoc key anns :test #'deep-equal-p))))
     (list :right
-          (if result (list :maybe result) (list :maybe nil)))))
+          (if result (list :optional result) (list :optional nil)))))
 
 ;; setTermDescription :: Maybe String -> Term -> Term
 (defun prim-set-term-description (cx g args)
@@ -506,7 +506,7 @@
              (term-as-inject (ann-maybe-value d))))
          (desc-key (list :wrap (make-wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
-         (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :none)))))
+         (maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))))
     (prim-set-term-annotation cx g (list desc-key maybe-val term))))
 
 ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
@@ -556,9 +556,9 @@
                      (t nil))))
           (let ((s (extract-str desc-term)))
             (if s
-                (list :right (list :either (list :right (list :maybe (list :literal (list :string s))))))
-                (list :right (list :either (list :right (list :maybe nil)))))))
-        (list :right (list :either (list :right (list :maybe nil)))))))
+                (list :right (list :either (list :right (list :optional (list :literal (list :string s))))))
+                (list :right (list :either (list :right (list :optional nil)))))))
+        (list :right (list :either (list :right (list :optional nil)))))))
 
 ;; ==========================================================================
 ;; Graph construction
@@ -791,12 +791,12 @@
                                 (list :wrap (make-wrapped_term "hydra.core.Name"
                                         (list :literal (list :string (wrapped_term-type_name wt))))))
                               (make-field "body" (term-to-meta (wrapped_term-body wt)))))))))))
-        (:maybe
+        (:optional
           (list :inject (make-injection "hydra.core.Term"
                   (make-field "optional"
                     (if (second term)
-                        (list :maybe (term-to-meta (second term)))
-                        (list :maybe nil))))))
+                        (list :optional (term-to-meta (second term)))
+                        (list :optional nil))))))
         (:list
           (list :inject (make-injection "hydra.core.Term"
                   (make-field "list"
@@ -903,10 +903,10 @@
                   (error () nil))))
           (error () nil)))
       ;; Try converting Maybe-wrapped struct-compat terms
-      (when (and (consp actual) (eq (first actual) :maybe)
+      (when (and (consp actual) (eq (first actual) :optional)
                  (consp (second actual)) (eq (first (second actual)) :annotated))
         (handler-case
-          (let ((meta-actual (list :maybe (term-to-meta (second actual)))))
+          (let ((meta-actual (list :optional (term-to-meta (second actual)))))
             (or (equal meta-actual expected)
                 (handler-case
                     (let ((a-str (show-term meta-actual))

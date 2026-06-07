@@ -40,9 +40,9 @@
                              case-fields))))
 (cl:defun t-right (v) (cl:list :either (cl:list :right v)))
 (cl:defun t-left (v) (cl:list :either (cl:list :left v)))
-(cl:defun t-just (v) (cl:list :maybe (t-inject "hydra.core.Term" "literal"
+(cl:defun t-just (v) (cl:list :optional (t-inject "hydra.core.Term" "literal"
                        (t-inject "hydra.core.Literal" "string" v))))
-(cl:defun t-nothing () (cl:list :maybe (cl:list :none cl:nil)))
+(cl:defun t-nothing () (cl:list :optional (cl:list :none cl:nil)))
 ;; Build a Term.pair value at Term-AST level: a 2-element pair payload.
 ;; Mirrors Java's hydra.dsl.Terms.pair helper (#443).
 (cl:defun t-pair (a b) (cl:list :pair (cl:list a b)))
@@ -238,20 +238,20 @@
                     (t-var "hydra.constants.keyDescription"))
                     (t-var "anns")))
                   ;; default: right(nothing)
-                  (t-right (cl:list :maybe (cl:list :none cl:nil))))
+                  (t-right (cl:list :optional (cl:list :none cl:nil))))
                   ;; \descTerm -> case match to extract string
                   (t-lam "descTerm"
                     (t-app
                       (t-match "hydra.core.Term"
-                        (cl:list :given (t-right (cl:list :maybe (cl:list :none cl:nil))))
+                        (cl:list :given (t-right (cl:list :optional (cl:list :none cl:nil))))
                         (t-field "literal"
                           (t-lam "lit"
                             (t-app
                               (t-match "hydra.core.Literal"
-                                (cl:list :given (t-right (cl:list :maybe (cl:list :none cl:nil))))
+                                (cl:list :given (t-right (cl:list :optional (cl:list :none cl:nil))))
                                 (t-field "string"
                                   (t-lam "s"
-                                    (t-right (cl:list :maybe (t-var "s"))))))
+                                    (t-right (cl:list :optional (t-var "s"))))))
                               (t-var "lit")))))
                       (t-var "descTerm"))))))))
 
