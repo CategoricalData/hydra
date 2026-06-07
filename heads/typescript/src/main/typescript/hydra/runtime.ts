@@ -31,23 +31,23 @@ export function Name(value: string): Name {
   return { value };
 }
 
-/** Maybe<T> — discriminated union mirroring Hydra's `optional`. */
-export type Maybe<T> =
-  | { readonly tag: "just"; readonly value: T }
-  | { readonly tag: "nothing" };
+/** Optional<T> — discriminated union mirroring Hydra's `optional`. */
+export type Optional<T> =
+  | { readonly tag: "given"; readonly value: T }
+  | { readonly tag: "none" };
 
-export const Nothing: Maybe<never> = Object.freeze({ tag: "nothing" });
+export const None: Optional<never> = Object.freeze({ tag: "none" });
 
-export function Just<T>(value: T): Maybe<T> {
-  return { tag: "just", value };
+export function Given<T>(value: T): Optional<T> {
+  return { tag: "given", value };
 }
 
-export function isJust<T>(m: Maybe<T>): m is { tag: "just"; value: T } {
-  return m.tag === "just";
+export function isGiven<T>(m: Optional<T>): m is { tag: "given"; value: T } {
+  return m.tag === "given";
 }
 
-export function fromMaybe<T>(fallback: T, m: Maybe<T>): T {
-  return m.tag === "just" ? m.value : fallback;
+export function fromOptional<T>(fallback: T, m: Optional<T>): T {
+  return m.tag === "given" ? m.value : fallback;
 }
 
 /** Either<L, R> — discriminated union mirroring Hydra's `either`. */

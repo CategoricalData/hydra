@@ -10,8 +10,8 @@
 // The functions below mirror the Python implementation in
 // heads/python/src/main/python/hydra/lib/literals.py.
 
-import type { Maybe } from "../runtime.js";
-import { Just, Nothing } from "../runtime.js";
+import type { Optional } from "../runtime.js";
+import { Given, None } from "../runtime.js";
 
 // === show family ===
 
@@ -99,31 +99,31 @@ export const showDecimal = (f: number): string => {
 
 // === read family ===
 
-export const readInt = (s: string): Maybe<number> => {
+export const readInt = (s: string): Optional<number> => {
   const n = parseInt(s, 10);
-  return Number.isFinite(n) && /^-?\d+$/.test(s.trim()) ? Just(n) : Nothing;
+  return Number.isFinite(n) && /^-?\d+$/.test(s.trim()) ? Given(n) : None;
 };
 
-export const readUint = (s: string): Maybe<number> => {
+export const readUint = (s: string): Optional<number> => {
   const n = parseInt(s, 10);
-  return Number.isFinite(n) && n >= 0 && /^\d+$/.test(s.trim()) ? Just(n) : Nothing;
+  return Number.isFinite(n) && n >= 0 && /^\d+$/.test(s.trim()) ? Given(n) : None;
 };
 
-export const readBigint = (s: string): Maybe<bigint> => {
+export const readBigint = (s: string): Optional<bigint> => {
   try {
-    return /^-?\d+$/.test(s.trim()) ? Just(BigInt(s.trim())) : Nothing;
-  } catch { return Nothing; }
+    return /^-?\d+$/.test(s.trim()) ? Given(BigInt(s.trim())) : None;
+  } catch { return None; }
 };
 
-export const readFloat = (s: string): Maybe<number> => {
+export const readFloat = (s: string): Optional<number> => {
   // Accept NaN, Infinity, and -Infinity as valid float literals so the
   // JSON decoder's special-float path (parseSpecialFloat) succeeds.
-  if (s === "NaN") return Just(NaN);
-  if (s === "Infinity") return Just(Infinity);
-  if (s === "-Infinity") return Just(-Infinity);
-  if (s === "-0.0") return Just(-0);
+  if (s === "NaN") return Given(NaN);
+  if (s === "Infinity") return Given(Infinity);
+  if (s === "-Infinity") return Given(-Infinity);
+  if (s === "-0.0") return Given(-0);
   const n = parseFloat(s);
-  return Number.isNaN(n) ? Nothing : Just(n);
+  return Number.isNaN(n) ? None : Given(n);
 };
 
 export const readDecimal = readFloat;
@@ -306,9 +306,9 @@ export const decimalToFloat64 = (f: number): number => f;
 // where the result will be stored, not about the parsing rules.
 // `readFloat32` narrows the parsed value to single-precision so the
 // round-tripped string matches what a real float32 would store.
-export const readFloat32 = (s: string): Maybe<number> => {
+export const readFloat32 = (s: string): Optional<number> => {
   const m = readFloat(s);
-  return m.tag === "just" ? { tag: "just" as const, value: Math.fround(m.value) } : m;
+  return m.tag === "given" ? { tag: "given" as const, value: Math.fround(m.value) } : m;
 };
 export const readFloat64 = readFloat;
 export const readInt8 = readInt;

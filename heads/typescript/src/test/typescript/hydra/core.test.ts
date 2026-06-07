@@ -2,17 +2,17 @@ import { describe, expect, it } from "vitest";
 
 import {
   Either,
-  Just,
+  Given,
   Left,
-  Maybe,
   Name,
   Namespace,
-  Nothing,
+  None,
+  Optional,
   Pair,
   Right,
   Unit,
-  fromMaybe,
-  isJust,
+  fromOptional,
+  isGiven,
   isLeft,
   isRight,
 } from "../../../main/typescript/hydra/runtime.js";
@@ -31,14 +31,14 @@ describe("core", () => {
     expect(ns.value).toBe("hydra.core");
   });
 
-  it("constructs and inspects Maybe", () => {
-    const m: Maybe<number> = Just(42);
-    expect(isJust(m)).toBe(true);
-    expect(fromMaybe(0, m)).toBe(42);
+  it("constructs and inspects Optional", () => {
+    const m: Optional<number> = Given(42);
+    expect(isGiven(m)).toBe(true);
+    expect(fromOptional(0, m)).toBe(42);
 
-    const n: Maybe<number> = Nothing;
-    expect(isJust(n)).toBe(false);
-    expect(fromMaybe(0, n)).toBe(0);
+    const n: Optional<number> = None;
+    expect(isGiven(n)).toBe(false);
+    expect(fromOptional(0, n)).toBe(0);
   });
 
   it("constructs and inspects Either", () => {

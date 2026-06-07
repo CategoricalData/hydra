@@ -623,16 +623,16 @@ encodeTerm = def "encodeTerm" $
        tsAsAny @@ (tsArray @@ list [
          encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.first (var "p"),
          encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.second (var "p")]),
-     -- A Hydra Maybe term encodes to the runtime Maybe shape:
-     --   Nothing → ({ tag: "nothing" } as any)
-     --   Just v  → ({ tag: "just", value: <v> } as any)
+     -- A Hydra optional term encodes to the runtime Optional shape:
+     --   None    → ({ tag: "none" } as any)
+     --   Given v → ({ tag: "given", value: <v> } as any)
      -- The `as any` cast lets the literal flow into nominal positions
-     -- typed as `Maybe<X>` / `Term` / `Type` without TS2322 churn.
+     -- typed as `Optional<X>` / `Term` / `Type` without TS2322 churn.
      _Term_optional>>: lambda "mt" $
        Optionals.cases (var "mt")
-         (tsAsAny @@ (tsObject @@ list [pair (string "tag") (tsExprStr @@ string "nothing")]))
+         (tsAsAny @@ (tsObject @@ list [pair (string "tag") (tsExprStr @@ string "none")]))
          (lambda "v" $ tsAsAny @@ (tsObject @@ list [
-           pair (string "tag") (tsExprStr @@ string "just"),
+           pair (string "tag") (tsExprStr @@ string "given"),
            pair (string "value") (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "v")])),
      _Term_record>>: lambda "rec" $
        "fields" <~ Core.recordFields (var "rec") $
@@ -925,10 +925,10 @@ encodeType = def "encodeType" $
         "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
         "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
           right (tsReadonlyMap @@ var "kt" @@ var "vt"),
-      -- Encode `Maybe T` inline as `{tag: "just", value: T} | {tag: "nothing"}`
+      -- Encode `Optional T` inline as `{tag: "given", value: T} | {tag: "none"}`
       -- matching the runtime value encoding, rather than `T | undefined`
-      -- (which mismatched the kernel's `{tag: "just", value: x}` literals).
-      -- Inlining (like Either) avoids needing a Maybe import in every module.
+      -- (which mismatched the kernel's `{tag: "given", value: x}` literals).
+      -- Inlining (like Either) avoids needing an Optional import in every module.
       _Type_optional>>: lambda "inner" $
         Eithers.map (lambda "enc" $
           inject TS._TypeExpression TS._TypeExpression_union (list [
@@ -937,7 +937,7 @@ encodeType = def "encodeType" $
                 @@ (inject TS._TypeExpression TS._TypeExpression_literal $
                       inject TS._Literal TS._Literal_string $
                       record TS._StringLiteral [
-                        TS._StringLiteral_value>>: string "just",
+                        TS._StringLiteral_value>>: string "given",
                         TS._StringLiteral_singleQuote>>: boolean False]),
               tsPropSig @@ string "value" @@ boolean False @@ var "enc"],
             inject TS._TypeExpression TS._TypeExpression_object $ list [
@@ -945,7 +945,7 @@ encodeType = def "encodeType" $
                 @@ (inject TS._TypeExpression TS._TypeExpression_literal $
                       inject TS._Literal TS._Literal_string $
                       record TS._StringLiteral [
-                        TS._StringLiteral_value>>: string "nothing",
+                        TS._StringLiteral_value>>: string "none",
                         TS._StringLiteral_singleQuote>>: boolean False])]]))
           (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
       -- Either is emitted inline as `{ tag: "left", value: L } | { tag: "right", value: R }`
@@ -1845,7 +1845,7 @@ tsArrowTyped = def "tsArrowTyped" $
 -- | Wrap an expression in a TypeScript `as any` cast. Used at sites where
 -- the kernel emits a structural object literal that tsc would reject
 -- against a nominal discriminated-union target (`{tag: "...", value: ...}`
--- vs `Term`/`Type`/`Maybe<T>`). The runtime is unaffected.
+-- vs `Term`/`Type`/`Optional<T>`). The runtime is unaffected.
 tsAsAny :: TypedTermDefinition (TS.Expression -> TS.Expression)
 tsAsAny = def "tsAsAny" $
   lambda "e" $

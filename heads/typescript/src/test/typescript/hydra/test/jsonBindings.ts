@@ -47,8 +47,8 @@ const UNION_ARMS = new Set<string>([
   "uint8", "uint16", "uint32", "uint64",
   // Either
   "left", "right",
-  // Maybe
-  "just", "nothing",
+  // Optional
+  "given", "none",
 ]);
 
 // Locate the dist/json/hydra-kernel directory. Searches upward from the
@@ -73,9 +73,9 @@ const findKernelJsonDir = (): string | null => {
 };
 
 // Convert a CaseStatement JSON record to the runtime shape, with the
-// `default_` field normalized to a Hydra `Maybe<Term>`:
-//   absent or null → { tag: "nothing" }
-//   present value  → { tag: "just", value: <converted> }
+// `default_` field normalized to a Hydra `Optional<Term>`:
+//   absent or null → { tag: "none" }
+//   present value  → { tag: "given", value: <converted> }
 // Also applies the same field-name normalization (`type` → `type_`,
 // Name-wrapping for `typeName`) as the main `convert`.
 const convertCases = (rhs: unknown): unknown => {
@@ -94,9 +94,9 @@ const convertCases = (rhs: unknown): unknown => {
     if (typeof out[k] === "string") out[k] = { value: out[k] };
   }
   if ("default" in obj && obj.default !== null) {
-    out.default_ = { tag: "just", value: convert(obj.default) };
+    out.default_ = { tag: "given", value: convert(obj.default) };
   } else {
-    out.default_ = { tag: "nothing" };
+    out.default_ = { tag: "none" };
   }
   return out;
 };
@@ -117,12 +117,12 @@ const convert = (j: unknown): unknown => {
   const obj = j as Record<string, unknown>;
   const keys = Object.keys(obj);
   // Single-key objects that match a union-arm name encode as {tag,value}.
-  // Special case: `{nothing: null}` should become `{tag: "nothing"}` (no value).
+  // Special case: `{none: null}` should become `{tag: "none"}` (no value).
   if (keys.length === 1 && UNION_ARMS.has(keys[0]!)) {
     const armName = keys[0]!;
     const rhs = obj[armName];
-    // Nullary arms (Unit, Nothing) — the value is meaningless; drop it.
-    if (armName === "unit" || armName === "nothing") {
+    // Nullary arms (Unit, None) — the value is meaningless; drop it.
+    if (armName === "unit" || armName === "none") {
       return { tag: armName };
     }
     // Width-only types (no payload).
@@ -138,24 +138,24 @@ const convert = (j: unknown): unknown => {
     if ((armName === "variable" || armName === "primitive") && typeof rhs === "string") {
       return { tag: armName, value: { value: rhs } };
     }
-    // Hydra optional in a Term position: `{optional: null}` = Nothing,
-    // `{optional: <v>}` = Just v. The runtime expects:
-    //   Nothing → { tag: "optional", value: { tag: "nothing" } }
-    //   Just v  → { tag: "optional", value: { tag: "just", value: <v> } }
+    // Hydra optional in a Term position: `{optional: null}` = None,
+    // `{optional: <v>}` = Given v. The runtime expects:
+    //   None → { tag: "optional", value: { tag: "none" } }
+    //   Given v  → { tag: "optional", value: { tag: "given", value: <v> } }
     if (armName === "optional") {
       if (rhs === null) {
-        return { tag: armName, value: { tag: "nothing" } };
+        return { tag: armName, value: { tag: "none" } };
       }
-      return { tag: armName, value: { tag: "just", value: convert(rhs) } };
+      return { tag: armName, value: { tag: "given", value: convert(rhs) } };
     }
-    // Term_cases: convert and normalize the `default` field to a Maybe<Term>.
-    // Aeson omits Nothing fields, so an absent "default" means no default;
-    // a present "default" is the un-Just'd Term.
+    // Term_cases: convert and normalize the `default` field to a Optional<Term>.
+    // Aeson omits None fields, so an absent "default" means no default;
+    // a present "default" is the un-Given'd Term.
     if (armName === "cases") {
       const cs = convertCases(rhs);
       return { tag: armName, value: cs };
     }
-    // Term_map (and Term_optional/maybe also handled above): the JSON
+    // Term_map (and Term_optional also handled above): the JSON
     // serializes a Map<K,V> as a list of {key, value} objects. The runtime
     // expects a ReadonlyMap. Convert here so primitives like Maps.toList
     // receive the right shape. (#443)
@@ -229,10 +229,10 @@ const stripTypeAbstractions = (t: unknown): unknown => {
 // Convert a JSON TypeScheme to runtime form. The body Type is converted
 // recursively; `variables` is a list of bare strings that need to be
 // wrapped as {value: ...} Names; `constraints` is in Aeson's encoding of
-// `Maybe (Map TypeVariable ConstraintSet)`:
-//   - omitted or `null`     → Nothing → {tag: "nothing"}
-//   - `[]` (empty map)      → Just emptyMap → {tag: "just", value: <empty CanonMap>}
-//   - `[{key, value: {classes}}]` → Just map → {tag: "just", value: <CanonMap>}
+// `Optional (Map TypeVariable ConstraintSet)`:
+//   - omitted or `null`     → None → {tag: "none"}
+//   - `[]` (empty map)      → Given emptyMap → {tag: "given", value: <empty CanonMap>}
+//   - `[{key, value: {classes}}]` → Given map → {tag: "given", value: <CanonMap>}
 const convertTypeScheme = (ts: unknown): unknown => {
   if (ts === null || typeof ts !== "object") return ts;
   const obj = ts as Record<string, unknown>;
@@ -244,7 +244,7 @@ const convertTypeScheme = (ts: unknown): unknown => {
   out.body = obj.body === undefined ? undefined : convert(obj.body);
   const csRaw = obj.constraints;
   if (csRaw === undefined || csRaw === null) {
-    out.constraints = { tag: "nothing" };
+    out.constraints = { tag: "none" };
   } else if (Array.isArray(csRaw)) {
     // List of {key, value: {classes: [...]}} pairs
     const pairs: Array<readonly [Name, unknown]> = [];
@@ -259,7 +259,7 @@ const convertTypeScheme = (ts: unknown): unknown => {
         pairs.push([k, { classes: libSets.fromList(classNames) }] as const);
       }
     }
-    out.constraints = { tag: "just", value: libMaps.fromList(pairs) };
+    out.constraints = { tag: "given", value: libMaps.fromList(pairs) };
   } else {
     out.constraints = convert(csRaw);
   }
