@@ -24,7 +24,7 @@ def apply(f: Optional[Callable[[A], B]], x: Optional[A]) -> Optional[B]:
 
 
 def bind(x: Optional[A], f: Callable[[A], Optional[B]]) -> Optional[B]:
-    """Chain operations on optional values, handling Nothing cases automatically."""
+    """Chain operations on optional values, handling none cases automatically."""
     match x:
         case None_():
             return NONE_
@@ -42,7 +42,7 @@ def cases(m: Optional[A], n: B | Callable[[], B], j: Callable[[A], B]) -> B:
 
 
 def cat(xs: Sequence[Optional[A]]) -> frozenlist[A]:
-    """Filter out Nothing values from a list."""
+    """Filter out none values from a list."""
     result: list[A] = []
     for x in xs:
         match x:
@@ -54,7 +54,7 @@ def cat(xs: Sequence[Optional[A]]) -> frozenlist[A]:
 
 
 def compose(f: Callable[[A], Optional[B]], g: Callable[[B], Optional[C]], x: A) -> Optional[C]:
-    """Compose two Maybe-returning functions (Kleisli composition)."""
+    """Compose two optional-returning functions (Kleisli composition)."""
     return bind(f(x), g)
 
 
@@ -68,12 +68,12 @@ def from_optional(default: A | Callable[[], A], x: Optional[A]) -> A:
 
 
 def is_given(x: Optional[Any]) -> bool:
-    """Check if a value is Just."""
+    """Check if a value is given."""
     return isinstance(x, Given)
 
 
 def is_none(x: Optional[Any]) -> bool:
-    """Check if a value is Nothing."""
+    """Check if a value is none."""
     return isinstance(x, None_)
 
 
@@ -87,7 +87,7 @@ def map(f: Callable[[A], B], x: Optional[A]) -> Optional[B]:
 
 
 def map_optional(f: Callable[[A], Optional[B]], xs: Sequence[A]) -> frozenlist[B]:
-    """Map a function over a list and collect Just results."""
+    """Map a function over a list and collect given results."""
     result: list[B] = []
     for x in xs:
         y = f(x)
@@ -100,12 +100,12 @@ def map_optional(f: Callable[[A], Optional[B]], xs: Sequence[A]) -> frozenlist[B
 
 
 def pure(x: A) -> Optional[A]:
-    """Lift a value into the Maybe type."""
+    """Lift a value into the optional type."""
     return Given(x)
 
 
 def to_list(x: Optional[A]) -> frozenlist[A]:
-    """Convert a Maybe to a list: Just x becomes [x], Nothing becomes []."""
+    """Convert an optional to a list: given x becomes [x], none becomes []."""
     match x:
         case Given(val):
             return (val,)

@@ -46,7 +46,7 @@ def lines(s: TypedTerm) -> TypedTerm:
 
 
 def maybe_char_at(index: TypedTerm, s: TypedTerm) -> TypedTerm:
-    """Get the character at a given index in a string, returning Nothing if out of bounds."""
+    """Get the character at a given index in a string, returning none if out of bounds."""
     return primitive2(index, s)
 
 

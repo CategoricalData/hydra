@@ -45,7 +45,7 @@ from hydra.generation import (
     load_modules_from_json,
     read_manifest_field,
 )
-from hydra.dsl.python import Nothing
+from hydra.dsl.python import None_
 from hydra.packaging import DefinitionTerm, Module, ModuleDependency, ModuleName, TermDefinition
 
 KERNEL_JSON = os.path.join(_ROOT, "dist/json/hydra-kernel/src/main/json")
@@ -109,13 +109,13 @@ def _make_synthetic_module(bench: Module, n: int) -> Module:
             DefinitionTerm(
                 TermDefinition(
                     Name(f"{target_ns.value}.{local}"),
-                    Nothing(),
+                    None_(),
                     td.value.signature,
                     td.value.body,
                 )
             )
         )
-    deps = (ModuleDependency(bench.name, Nothing()),) + tuple(bench.dependencies)
+    deps = (ModuleDependency(bench.name, None_()),) + tuple(bench.dependencies)
     return Module(
         bench.description,
         target_ns,
