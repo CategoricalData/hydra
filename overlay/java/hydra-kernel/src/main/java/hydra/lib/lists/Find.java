@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -47,10 +47,10 @@ public class Find extends PrimitiveFunction {
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (((Either.Right<Error_, Boolean>) b).value) {
-                        return Either.right(Terms.optional(Maybe.just(x)));
+                        return Either.right(Terms.optional(Optional.given(x)));
                     }
                 }
-                return Either.right(Terms.optional(Maybe.nothing()));
+                return Either.right(Terms.optional(Optional.none()));
             });
     }
 
@@ -60,7 +60,7 @@ public class Find extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that finds the first matching element
      */
-    public static <X> Function<List<X>, Maybe<X>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, Optional<X>> apply(Predicate<X> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -71,7 +71,7 @@ public class Find extends PrimitiveFunction {
      * @param lst the list to search
      * @return an optional containing the first matching element, or empty if none found
      */
-    public static <X> Maybe<X> apply(Function<X, Boolean> pred, List<X> lst) {
+    public static <X> Optional<X> apply(Function<X, Boolean> pred, List<X> lst) {
         return apply((Predicate<X>) x -> pred.apply(x), lst);
     }
 
@@ -82,12 +82,12 @@ public class Find extends PrimitiveFunction {
      * @param lst the list to search
      * @return an optional containing the first matching element, or empty if none found
      */
-    public static <X> Maybe<X> apply(Predicate<X> pred, List<X> lst) {
+    public static <X> Optional<X> apply(Predicate<X> pred, List<X> lst) {
         for (X x : lst) {
             if (pred.test(x)) {
-                return Maybe.just(x);
+                return Optional.given(x);
             }
         }
-        return Maybe.nothing();
+        return Optional.none();
     }
 }

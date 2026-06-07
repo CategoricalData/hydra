@@ -7,7 +7,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -22,7 +22,7 @@ import hydra.util.Either;
 
 
 /**
- * Maps a flow function over Maybe.
+ * Maps a flow function over Optional.
  */
 public class MapOptional extends PrimitiveFunction {
     /**
@@ -55,12 +55,12 @@ public class MapOptional extends PrimitiveFunction {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
-                    Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
+                    Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.maybeTerm(
                         t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                     if (maybeResult.isLeft()) return (Either) maybeResult;
-                    Maybe<Term> maybe = ((Either.Right<Error_, Maybe<Term>>) maybeResult).value;
-                    if (maybe.isJust()) {
-                        reversed = ConsList.cons(maybe.fromJust(), reversed);
+                    Optional<Term> maybe = ((Either.Right<Error_, Optional<Term>>) maybeResult).value;
+                    if (maybe.isGiven()) {
+                        reversed = ConsList.cons(maybe.fromGiven(), reversed);
                     }
                 }
                 return Either.right(Terms.list(reversed.reverse()));
@@ -74,7 +74,7 @@ public class MapOptional extends PrimitiveFunction {
      * @param f the optional-returning function to map
      * @return a function that takes a list and returns a list of present values
      */
-    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Maybe<Y>> f) {
+    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Optional<Y>> f) {
         return (list) -> apply(f, list);
     }
 
@@ -86,12 +86,12 @@ public class MapOptional extends PrimitiveFunction {
      * @param list the list to map over
      * @return a list containing only the present values from applying the function
      */
-    public static <X, Y> List<Y> apply(Function<X, Maybe<Y>> f, List<X> list) {
+    public static <X, Y> List<Y> apply(Function<X, Optional<Y>> f, List<X> list) {
         ConsList<Y> reversed = ConsList.empty();
         for (X item : list) {
-            Maybe<Y> maybe = f.apply(item);
-            if (maybe.isJust()) {
-                reversed = ConsList.cons(maybe.fromJust(), reversed);
+            Optional<Y> maybe = f.apply(item);
+            if (maybe.isGiven()) {
+                reversed = ConsList.cons(maybe.fromGiven(), reversed);
             }
         }
         return reversed.reverse();

@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -55,18 +55,18 @@ public class ReadInt8 extends PrimitiveFunction {
     /**
      * Attempts to parse a string into a Byte (8-bit signed).
      * @param str the string to parse
-     * @return a Maybe containing the parsed Byte, or empty if parsing fails or value is out of range
+     * @return a Optional containing the parsed Byte, or empty if parsing fails or value is out of range
      */
-    public static Maybe<Byte> apply(String str) {
+    public static Optional<Byte> apply(String str) {
         try {
             long n = Long.parseLong(str);
             if (n >= -128 && n <= 127) {
-                return Maybe.just((byte) n);
+                return Optional.given((byte) n);
             } else {
-                return Maybe.nothing();
+                return Optional.none();
             }
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

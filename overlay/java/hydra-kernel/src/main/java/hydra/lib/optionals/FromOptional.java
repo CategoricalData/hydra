@@ -5,7 +5,7 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -53,22 +53,22 @@ public class FromOptional extends PrimitiveFunction {
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(Either.right(args.get(0)), defaultTerm ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(1)), opt ->
-                Either.right(opt.isJust() ? opt.fromJust() : defaultTerm)));
+                Either.right(opt.isGiven() ? opt.fromGiven() : defaultTerm)));
     }
 
     /**
-     * @deprecated Use {@link #applyLazy(Supplier, Maybe)} instead. Eager evaluation of the default wastes memory.
+     * @deprecated Use {@link #applyLazy(Supplier, Optional)} instead. Eager evaluation of the default wastes memory.
      */
     @Deprecated
-    public static <X> Function<Maybe<X>, X> apply(X defaultValue) {
+    public static <X> Function<Optional<X>, X> apply(X defaultValue) {
         return (opt) -> apply(defaultValue, opt);
     }
 
     /**
-     * @deprecated Use {@link #applyLazy(Supplier, Maybe)} instead. Eager evaluation of the default wastes memory.
+     * @deprecated Use {@link #applyLazy(Supplier, Optional)} instead. Eager evaluation of the default wastes memory.
      */
     @Deprecated
-    public static <X> X apply(X defaultValue, Maybe<X> opt) {
+    public static <X> X apply(X defaultValue, Optional<X> opt) {
         return opt.orElse(defaultValue);
     }
 
@@ -76,7 +76,7 @@ public class FromOptional extends PrimitiveFunction {
      * Lazily returns the value from an optional or a default value.
      * The default is only evaluated if the optional is empty.
      */
-    public static <X> Function<Maybe<X>, X> applyLazy(Supplier<X> defaultValue) {
+    public static <X> Function<Optional<X>, X> applyLazy(Supplier<X> defaultValue) {
         return (opt) -> applyLazy(defaultValue, opt);
     }
 
@@ -84,7 +84,7 @@ public class FromOptional extends PrimitiveFunction {
      * Lazily returns the value from an optional or a default value.
      * The default is only evaluated if the optional is empty.
      */
-    public static <X> X applyLazy(Supplier<X> defaultValue, Maybe<X> opt) {
-        return opt.isJust() ? opt.fromJust() : defaultValue.get();
+    public static <X> X applyLazy(Supplier<X> defaultValue, Optional<X> opt) {
+        return opt.isGiven() ? opt.fromGiven() : defaultValue.get();
     }
 }

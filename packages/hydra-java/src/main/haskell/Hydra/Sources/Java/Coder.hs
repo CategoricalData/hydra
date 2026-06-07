@@ -2930,27 +2930,27 @@ encodeTermInternal = def "encodeTermInternal" $
                 @@ JavaDsl.identifier (string "ofEntries")
                 @@ var "pairExprs"))),
 
-      -- TermOptional: Maybe.nothing() or Maybe.just(x)
+      -- TermOptional: Optional.none() or Optional.given(x)
       _Term_optional>>: lambda "mt" $
         Optionals.cases (var "mt")
           (Logic.ifElse (Lists.null (var "tyapps"))
             (right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
-                @@ JavaDsl.identifier (string "hydra.util.Maybe")
-                @@ JavaDsl.identifier (string "nothing")
+                @@ JavaDsl.identifier (string "hydra.util.Optional")
+                @@ JavaDsl.identifier (string "none")
                 @@ list ([] :: [TypedTerm Java.Expression]))))
-            ("targs" <<~ (takeTypeArgs @@ string "maybe" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
+            ("targs" <<~ (takeTypeArgs @@ string "optional" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
               right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                 (JavaUtilsSource.methodInvocationStaticWithTypeArgs
-                  @@ JavaDsl.identifier (string "hydra.util.Maybe")
-                  @@ JavaDsl.identifier (string "nothing")
+                  @@ JavaDsl.identifier (string "hydra.util.Optional")
+                  @@ JavaDsl.identifier (string "none")
                   @@ var "targs" @@ list ([] :: [TypedTerm Java.Expression])))))
           (lambda "term1" $
             "expr" <<~ (var "encode" @@ var "term1") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
-                @@ JavaDsl.identifier (string "hydra.util.Maybe")
-                @@ JavaDsl.identifier (string "just")
+                @@ JavaDsl.identifier (string "hydra.util.Optional")
+                @@ JavaDsl.identifier (string "given")
                 @@ list [var "expr"]))),
 
       -- TermPair: new Pair(t1, t2)
@@ -3468,7 +3468,7 @@ encodeType = def "encodeType" $
         right (JavaUtilsSource.javaRefType
           @@ list [var "jot"]
           @@ asTerm JavaNamesSource.hydraUtilPackageName
-          @@ string "Maybe"),
+          @@ string "Optional"),
       _Type_set>>: lambda "st" $
         "jst" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "st" @@ var "cx" @@ var "g")

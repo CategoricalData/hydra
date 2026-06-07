@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -20,7 +20,7 @@ import hydra.util.Either;
 
 
 /**
- * Composes two Maybe-returning functions.
+ * Composes two Optional-returning functions.
  */
 public class Compose extends PrimitiveFunction {
     public Name name() {
@@ -38,39 +38,39 @@ public class Compose extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Function<Term, Either<Error_, Maybe<Term>>> nativeF = val ->
+            Function<Term, Either<Error_, Optional<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), val)),
                     reduced -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, reduced));
-            Function<Term, Either<Error_, Maybe<Term>>> nativeG = val ->
+            Function<Term, Either<Error_, Optional<Term>>> nativeG = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val)),
                     reduced -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, reduced));
             return hydra.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
-                if (!maybeB.isJust()) {
-                    return Either.right(Terms.optional(Maybe.nothing()));
+                if (!maybeB.isGiven()) {
+                    return Either.right(Terms.optional(Optional.none()));
                 }
                 return hydra.lib.eithers.Map.apply(
                     m -> Terms.optional(m),
-                    nativeG.apply(maybeB.fromJust()));
+                    nativeG.apply(maybeB.fromGiven()));
             });
         };
     }
 
     /**
-     * Composes two Maybe-returning functions. Curried version.
+     * Composes two Optional-returning functions. Curried version.
      * @param <A> the input type
      * @param <B> the intermediate type
      * @param <C> the output type
      * @param left the first function to apply
      * @return a function that takes the second function and returns the composed function
      */
-    public static <A, B, C> Function<Function<B, Maybe<C>>, Function<A, Maybe<C>>> apply(Function<A, Maybe<B>> left) {
+    public static <A, B, C> Function<Function<B, Optional<C>>, Function<A, Optional<C>>> apply(Function<A, Optional<B>> left) {
         return right -> apply(left, right);
     }
 
     /**
-     * Composes two Maybe-returning functions.
+     * Composes two Optional-returning functions.
      * @param <A> the input type
      * @param <B> the intermediate type
      * @param <C> the output type
@@ -78,15 +78,15 @@ public class Compose extends PrimitiveFunction {
      * @param right the second function to apply
      * @return a composed function that applies left then right, returning empty if either returns empty
      */
-    public static <A, B, C> Function<A, Maybe<C>> apply(Function<A, Maybe<B>> left, Function<B, Maybe<C>> right) {
+    public static <A, B, C> Function<A, Optional<C>> apply(Function<A, Optional<B>> left, Function<B, Optional<C>> right) {
         return a -> {
-            Maybe<B> ob = left.apply(a);
-            return ob.isJust() ? right.apply(ob.fromJust()) : Maybe.nothing();
+            Optional<B> ob = left.apply(a);
+            return ob.isGiven() ? right.apply(ob.fromGiven()) : Optional.none();
         };
     }
 
     /**
-     * Composes two Maybe-returning functions and applies to a value.
+     * Composes two Optional-returning functions and applies to a value.
      * @param <A> the input type
      * @param <B> the intermediate type
      * @param <C> the output type
@@ -95,7 +95,7 @@ public class Compose extends PrimitiveFunction {
      * @param a the value to apply the composed function to
      * @return the result of applying the composed function to the value
      */
-    public static <A, B, C> Maybe<C> apply(Function<A, Maybe<B>> left, Function<B, Maybe<C>> right, A a) {
+    public static <A, B, C> Optional<C> apply(Function<A, Optional<B>> left, Function<B, Optional<C>> right, A a) {
         return apply(left, right).apply(a);
     }
 }

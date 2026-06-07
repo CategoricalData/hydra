@@ -24,7 +24,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7414,9 +7414,9 @@ public class Coder {
                                                 apply(
                                                     ref(Utils.methodInvocationStatic),
                                                     wrap(Identifier.TYPE_,
-                                                        string("hydra.util.Maybe")),
+                                                        string("hydra.util.Optional")),
                                                     wrap(Identifier.TYPE_,
-                                                        string("nothing")),
+                                                        string("none")),
                                                     list()))),
                                         Eithers.bind(
                                             apply(
@@ -7433,9 +7433,9 @@ public class Coder {
                                                         apply(
                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                             wrap(Identifier.TYPE_,
-                                                                string("hydra.util.Maybe")),
+                                                                string("hydra.util.Optional")),
                                                             wrap(Identifier.TYPE_,
-                                                                string("nothing")),
+                                                                string("none")),
                                                             var("targs"),
                                                             list())))))),
                                     lambda("term1",
@@ -7459,9 +7459,9 @@ public class Coder {
                                                                 apply(
                                                                     ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                     wrap(Identifier.TYPE_,
-                                                                        string("hydra.util.Maybe")),
+                                                                        string("hydra.util.Optional")),
                                                                     wrap(Identifier.TYPE_,
-                                                                        string("just")),
+                                                                        string("given")),
                                                                     var("targs"),
                                                                     list(var("expr"))))))))))))),
                         field(
@@ -9192,7 +9192,7 @@ public class Coder {
                                                 ref(Utils.javaRefType),
                                                 list(var("jot")),
                                                 ref(Names.hydraUtilPackageName),
-                                                string("Maybe"))))))),
+                                                string("Optional"))))))),
                         field(
                             Type.SET,
                             lambda("st",
@@ -14011,7 +14011,7 @@ public class Coder {
     // the success path. Which positions are lazy comes from the primitive's
     // isLazy metadata (issue #391), not a hard-coded name table. Only fires when
     // the primitive is fully applied (argc == parameter count) and has at least
-    // one lazy parameter. The returned Maybe String is the Java method-name
+    // one lazy parameter. The returned Optional String is the Java method-name
     // override: ifElse dispatches to `lazy`, the others to `applyLazy`.
     public static final Def wrapLazyArguments = def(
         "wrapLazyArguments",
@@ -14309,11 +14309,11 @@ public class Coder {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just(new EntityMetadata(
-            Maybe.just("Java code generator: converts Hydra modules to Java source code"),
+        Optional.given(new EntityMetadata(
+            Optional.given("Java code generator: converts Hydra modules to Java source code"),
             List.of(),
             List.of(),
-            Maybe.nothing())),
+            Optional.none())),
         DEPENDENCIES,
         DEFINITIONS);
 }

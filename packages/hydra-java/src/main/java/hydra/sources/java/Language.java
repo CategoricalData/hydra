@@ -25,7 +25,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -331,11 +331,11 @@ public class Language {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just(new EntityMetadata(
-            Maybe.just("Language constraints and reserved words for Java"),
+        Optional.given(new EntityMetadata(
+            Optional.given("Language constraints and reserved words for Java"),
             java.util.List.of(),
             java.util.List.of(),
-            Maybe.nothing())),
+            Optional.none())),
         DEPENDENCIES,
         DEFINITIONS);
 }

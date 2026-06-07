@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -55,7 +55,7 @@ public class Pure extends PrimitiveFunction {
      * @param arg the value to wrap
      * @return an optional containing the value
      */
-    public static <X> Maybe<X> apply(X arg) {
-        return Maybe.just(arg);
+    public static <X> Optional<X> apply(X arg) {
+        return Optional.given(arg);
     }
 }
