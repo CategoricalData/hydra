@@ -10,7 +10,7 @@ def apply(f: TypedTerm, x: TypedTerm) -> TypedTerm:
 
 
 def bind(x: TypedTerm, f: TypedTerm) -> TypedTerm:
-    """Chain operations on optional values, handling Nothing cases automatically."""
+    """Chain operations on optional values, handling none cases automatically."""
     return primitive2(x, f)
 
 
@@ -20,7 +20,7 @@ def cases(m: TypedTerm, n: TypedTerm, j: TypedTerm) -> TypedTerm:
 
 
 def cat(xs: TypedTerm) -> TypedTerm:
-    """Filter out Nothing values from a list."""
+    """Filter out none values from a list."""
     return primitive1(xs)
 
 
@@ -30,7 +30,7 @@ def compose(f: TypedTerm, g: TypedTerm) -> TypedTerm:
 
 
 def from_just(x: TypedTerm) -> TypedTerm:
-    """Extract value from Maybe, assuming it's Just (unsafe)."""
+    """Extract value from optional, assuming it is given (unsafe)."""
     return primitive1(x)
 
 
@@ -40,12 +40,12 @@ def from_optional(default: TypedTerm, x: TypedTerm) -> TypedTerm:
 
 
 def is_given(x: TypedTerm) -> TypedTerm:
-    """Check if a value is Just."""
+    """Check if a value is given."""
     return primitive1(x)
 
 
 def is_none(x: TypedTerm) -> TypedTerm:
-    """Check if a value is Nothing."""
+    """Check if a value is none."""
     return primitive1(x)
 
 
@@ -55,15 +55,15 @@ def map(f: TypedTerm, x: TypedTerm) -> TypedTerm:
 
 
 def map_optional(f: TypedTerm, xs: TypedTerm) -> TypedTerm:
-    """Map a function over a list and collect Just results."""
+    """Map a function over a list and collect given results."""
     return primitive2(f, xs)
 
 
 def pure(x: TypedTerm) -> TypedTerm:
-    """Lift a value into the Maybe type."""
+    """Lift a value into the optional type."""
     return primitive1(x)
 
 
 def to_list(x: TypedTerm) -> TypedTerm:
-    """Convert a Maybe to a list: Just x becomes [x], Nothing becomes []."""
+    """Convert an optional to a list: given x becomes [x], none becomes []."""
     return primitive1(x)

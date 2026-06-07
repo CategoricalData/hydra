@@ -121,7 +121,7 @@ def map_list(f: Callable[[A], Either[C, B]], xs: frozenlist[A]) -> Either[C, fro
 
 
 def map_optional(f: Callable[[A], Either[C, B]], mx: Optional[A]) -> Either[C, Optional[B]]:
-    """Map a function returning Either over an optional, or return Right(Nothing) if Nothing."""
+    """Map a function returning Either over an optional, or return Right(none) if none."""
     match mx:
         case Given(val):
             match f(val):

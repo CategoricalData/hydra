@@ -150,8 +150,8 @@ def binary_function(f) -> TypedTerm[A]:
 def cases(name, arg: TypedTerm[A], dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[B]:
     """Apply a named case match to an argument.
 
-    Accepts a str or Name. Without a default, pass `dflt=None` (treated as Nothing()).
-    With a default, pass `dflt=Just(default_tterm)` or use `cases_with_default(...)`.
+    Accepts a str or Name. Without a default, pass `dflt=None` (treated as None_()).
+    With a default, pass `dflt=Given(default_tterm)` or use `cases_with_default(...)`.
     """
     if dflt is None:
         dflt_term = None_()
@@ -168,7 +168,7 @@ def cases(name, arg: TypedTerm[A], dflt: Optional[TypedTerm[B]] = None, fields: 
 def cases_with_default(name, arg: TypedTerm[A], default: TypedTerm[B], *fields: Field) -> TypedTerm[B]:
     """Apply a named case match with a default branch.
 
-    Java-style alternative to `cases(name, arg, Just(default), [f1, f2, ...])`.
+    Java-style alternative to `cases(name, arg, Given(default), [f1, f2, ...])`.
     Accepts variadic field args for ergonomics.
     """
     return TypedTerm[B](terms.apply(
@@ -351,12 +351,12 @@ def inject_lambda(name, fname) -> TypedTerm[A]:
 
 
 def just(term: TypedTerm[A]) -> TypedTerm[Optional[A]]:
-    """Create a 'Just' optional value."""
+    """Create a 'Given' optional value."""
     return TypedTerm[Optional[A]](terms.just(un_tterm(term)))
 
 
 def just_() -> TypedTerm[A]:
-    """Function that wraps a value in 'Just'."""
+    """Function that wraps a value in 'Given'."""
     return TypedTerm[A](terms.lambda_("just_", terms.just(terms.var("just_"))))
 
 
@@ -619,12 +619,12 @@ def module_name(mod: Module) -> ModuleName:
 
 
 def nothing() -> TypedTerm[Optional[A]]:
-    """Create a 'Nothing' optional value."""
+    """Create a 'None_' optional value."""
     return TypedTerm[Optional[A]](terms.nothing())
 
 
 def opt(mc: Optional[TypedTerm[A]]) -> TypedTerm[Optional[A]]:
-    """Create an optional value from a Maybe."""
+    """Create an optional value from an optional."""
     match mc:
         case Given(c):
             return TypedTerm[Optional[A]](terms.optional(Given(un_tterm(c))))

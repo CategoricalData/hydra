@@ -168,7 +168,7 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         qname(namespace, "mapList"), eithers.map_list, [_x, _y, _z],
         fun(x, prims.either(z, y)), prims.list_(x), prims.either(z, prims.list_(y))
     )
-    # mapOptional :: (x -> Either z y) -> Maybe x -> Either z (Maybe y)
+    # mapOptional :: (x -> Either z y) -> optional x -> Either z (optional y)
     primitives[qname(namespace, "mapOptional")] = prims.prim2(
         qname(namespace, "mapOptional"), eithers.map_optional, [_x, _y, _z],
         fun(x, prims.either(z, y)), prims.optional(x), prims.either(z, prims.optional(y))
@@ -252,7 +252,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "filter"), lists.filter, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
-    # prim2: find :: (a -> Bool) -> [a] -> Maybe a
+    # prim2: find :: (a -> Bool) -> [a] -> optional a
     primitives[qname(namespace, "find")] = prims.prim2(
         qname(namespace, "find"), lists.find, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.optional(a)
@@ -291,27 +291,27 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "map"), lists.map, [_a, _b],
         fun(a, b), prims.list_(a), prims.list_(b)
     )
-    # prim2: maybeAt :: Int32 -> [a] -> Maybe a
+    # prim2: maybeAt :: Int32 -> [a] -> optional a
     primitives[qname(namespace, "maybeAt")] = prims.prim2(
         qname(namespace, "maybeAt"), lists.maybe_at, [_a],
         prims.int32(), prims.list_(a), prims.optional(a)
     )
-    # prim1: maybeHead :: [a] -> Maybe a
+    # prim1: maybeHead :: [a] -> optional a
     primitives[qname(namespace, "maybeHead")] = prims.prim1(
         qname(namespace, "maybeHead"), lists.maybe_head, [_a],
         prims.list_(a), prims.optional(a)
     )
-    # prim1: maybeInit :: [a] -> Maybe [a]
+    # prim1: maybeInit :: [a] -> optional [a]
     primitives[qname(namespace, "maybeInit")] = prims.prim1(
         qname(namespace, "maybeInit"), lists.maybe_init, [_a],
         prims.list_(a), prims.optional(prims.list_(a))
     )
-    # prim1: maybeLast :: [a] -> Maybe a
+    # prim1: maybeLast :: [a] -> optional a
     primitives[qname(namespace, "maybeLast")] = prims.prim1(
         qname(namespace, "maybeLast"), lists.maybe_last, [_a],
         prims.list_(a), prims.optional(a)
     )
-    # prim1: maybeTail :: [a] -> Maybe [a]
+    # prim1: maybeTail :: [a] -> optional [a]
     primitives[qname(namespace, "maybeTail")] = prims.prim1(
         qname(namespace, "maybeTail"), lists.maybe_tail, [_a],
         prims.list_(a), prims.optional(prims.list_(a))
@@ -375,7 +375,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "transpose"), lists.transpose, [_a],
         prims.list_(prims.list_(a)), prims.list_(prims.list_(a))
     )
-    # prim1: uncons :: [a] -> Maybe (a, [a])
+    # prim1: uncons :: [a] -> optional (a, [a])
     primitives[qname(namespace, "uncons")] = prims.prim1(
         qname(namespace, "uncons"), lists.uncons, [_a],
         prims.list_(a), prims.optional(prims.pair(a, prims.list_(a)))
@@ -443,7 +443,7 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     _k1Ord = prims.v_ord("k1")
     _k2Ord = prims.v_ord("k2")
 
-    # prim3: alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
+    # prim3: alter :: Ord k => (optional v -> optional v) -> k -> Map k v -> Map k v
     primitives[qname(namespace, "alter")] = prims.prim3(
         qname(namespace, "alter"), maps.alter, [_v, _kOrd],
         fun(prims.optional(v), prims.optional(v)), k, map_kv, map_kv
@@ -499,7 +499,7 @@ def register_maps_primitives() -> dict[Name, Primitive]:
         qname(namespace, "keys"), maps.keys, [_kOrd, _v],
         map_kv, prims.list_(k)
     )
-    # prim2: lookup :: Ord k => k -> Map k v -> Maybe v
+    # prim2: lookup :: Ord k => k -> Map k v -> optional v
     primitives[qname(namespace, "lookup")] = prims.prim2(
         qname(namespace, "lookup"), maps.lookup, [_kOrd, _v],
         k, map_kv, prims.optional(v)
@@ -714,28 +714,28 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
     _b = prims.v("b")
     _c = prims.v("c")
 
-    # apply :: Maybe (a -> b) -> Maybe a -> Maybe b
+    # apply :: optional (a -> b) -> optional a -> optional b
     primitives[qname(namespace, "apply")] = prims.prim2(
         qname(namespace, "apply"), optionals.apply, [_a, _b],
         prims.optional(fun(a, b)), prims.optional(a), prims.optional(b)
     )
-    # bind :: Maybe a -> (a -> Maybe b) -> Maybe b
+    # bind :: optional a -> (a -> optional b) -> optional b
     primitives[qname(namespace, "bind")] = prims.prim2(
         qname(namespace, "bind"), optionals.bind, [_a, _b],
         prims.optional(a), fun(a, prims.optional(b)), prims.optional(b)
     )
-    # cases :: Maybe a -> b -> (a -> b) -> b
+    # cases :: optional a -> b -> (a -> b) -> b
     primitives[qname(namespace, "cases")] = prims.prim3(
         qname(namespace, "cases"), optionals.cases, [_a, _b],
         prims.optional(a), b, fun(a, b), b,
         lazy_args=[1]
     )
-    # cat :: [Maybe a] -> [a]
+    # cat :: [optional a] -> [a]
     primitives[qname(namespace, "cat")] = prims.prim1(
         qname(namespace, "cat"), optionals.cat, [_a],
         prims.list_(prims.optional(a)), prims.list_(a)
     )
-    # compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
+    # compose :: (a -> optional b) -> (b -> optional c) -> a -> optional c
     primitives[qname(namespace, "compose")] = prims.prim3(
         qname(namespace, "compose"), optionals.compose, [_a, _b, _c],
         fun(a, prims.optional(b)), fun(b, prims.optional(c)),
@@ -754,12 +754,12 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "isNone"), optionals.is_none, [_a],
         prims.optional(a), prims.boolean()
     )
-    # map :: (a -> b) -> Maybe a -> Maybe b
+    # map :: (a -> b) -> optional a -> optional b
     primitives[qname(namespace, "map")] = prims.prim2(
         qname(namespace, "map"), optionals.map, [_a, _b],
         fun(a, b), prims.optional(a), prims.optional(b)
     )
-    # mapOptional :: (a -> Maybe b) -> [a] -> [b]
+    # mapOptional :: (a -> optional b) -> [a] -> [b]
     primitives[qname(namespace, "mapOptional")] = prims.prim2(
         qname(namespace, "mapOptional"), optionals.map_optional, [_a, _b],
         fun(a, prims.optional(b)), prims.list_(a), prims.list_(b)
@@ -768,7 +768,7 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "pure"), optionals.pure, [_a],
         a, prims.optional(a)
     )
-    # toList :: Maybe a -> [a]
+    # toList :: optional a -> [a]
     primitives[qname(namespace, "toList")] = prims.prim1(
         qname(namespace, "toList"), optionals.to_list, [_a],
         prims.optional(a), prims.list_(a)

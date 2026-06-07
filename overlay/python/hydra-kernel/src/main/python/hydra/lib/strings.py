@@ -43,7 +43,7 @@ def lines(s: str) -> frozenlist[str]:
 
 
 def maybe_char_at(i: int, s: str) -> Optional[int]:
-    """Get the Unicode code point at a specific index, returning Nothing if out of bounds."""
+    """Get the Unicode code point at a specific index, returning none if out of bounds."""
     return Given(ord(s[i])) if 0 <= i < len(s) else None_()
 
 

@@ -139,22 +139,22 @@ def log_base(base: float, x: float) -> float:
 
 
 def maybe_div(x: int, y: int) -> Optional[int]:
-    """Divide two integers, returning Nothing if the divisor is zero."""
+    """Divide two integers, returning none if the divisor is zero."""
     return None_() if y == 0 else Given(x // y)
 
 
 def maybe_mod(x: int, y: int) -> Optional[int]:
-    """Mathematical modulo, returning Nothing if the divisor is zero."""
+    """Mathematical modulo, returning none if the divisor is zero."""
     return None_() if y == 0 else Given(x % y)
 
 
 def maybe_pred(x: int) -> Optional[int]:
-    """Return the predecessor, returning Nothing if x is minBound."""
+    """Return the predecessor, returning none if x is minBound."""
     return None_() if x == -2147483648 else Given(x - 1)
 
 
 def maybe_rem(x: int, y: int) -> Optional[int]:
-    """Integer remainder, returning Nothing if the divisor is zero."""
+    """Integer remainder, returning none if the divisor is zero."""
     if y == 0:
         return None_()
     q = int(x / y)
@@ -162,7 +162,7 @@ def maybe_rem(x: int, y: int) -> Optional[int]:
 
 
 def maybe_succ(x: int) -> Optional[int]:
-    """Return the successor, returning Nothing if x is maxBound."""
+    """Return the successor, returning none if x is maxBound."""
     return None_() if x == 2147483647 else Given(x + 1)
 
 

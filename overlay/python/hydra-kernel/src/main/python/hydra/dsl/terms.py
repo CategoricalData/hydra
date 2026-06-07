@@ -288,7 +288,7 @@ def integer(value: IntegerValue) -> Term:
 
 
 def just(term: Term) -> Term:
-    """Create a 'Just' optional value.
+    """Create a 'Given' optional value.
 
     Example: just(string("found"))
     """
@@ -400,7 +400,7 @@ def map_term(terms: Mapping[Term, Term]) -> Term:
 def match(tname: Name, def_: Optional[Term], fields: Sequence[Field]) -> Term:
     """Create a pattern match on a union type.
 
-    Example: match(Name("Result"), Just(string("unknown")),
+    Example: match(Name("Result"), Given(string("unknown")),
                    [field("success", lambda_("s", apply(var("processSuccess"), var("s")))),
                     field("error", lambda_("e", apply(var("handleError"), var("e"))))])
     This allows handling different cases of a union type with specific logic for each variant.
@@ -426,14 +426,14 @@ def match_with_variants(
 
 
 def nothing() -> Term:
-    """Create a 'Nothing' optional value."""
+    """Create a 'None_' optional value."""
     return optional(None_())
 
 
 def optional(term: Optional[Term]) -> Term:
     """Create an optional (nullable) term.
 
-    Example: optional(Just(string("found")))
+    Example: optional(Given(string("found")))
     """
     return TermOptional(term)
 
