@@ -127,9 +127,9 @@ module_ = Module {
      toDefinition literal,
      toDefinition map,
      toDefinition mapType,
-     toDefinition maybeTerm,
-     toDefinition maybeType,
      toDefinition nArgs,
+     toDefinition optionalTerm,
+     toDefinition optionalType,
      toDefinition pair,
      toDefinition record,
      toDefinition recordType,
@@ -670,24 +670,24 @@ mapType = define "mapType" $
 
 -- TODO: nonstandard; move me
 
-maybeTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
-maybeTerm = define "maybeTerm" $
+optionalTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
+optionalTerm = define "optionalTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
   "f" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected
-      (Phantoms.string "maybe value")
+      (Phantoms.string "optional value")
       (ShowCore.term @@ var "term"))) [
     _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (right nothing) ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))]
 
-maybeType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
-maybeType = define "maybeType" $
+optionalType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
+optionalType = define "optionalType" $
   doc "Extract the base type from an optional type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (unexpected(Phantoms.string "maybe type") (ShowCore.type_ @@ var "typ"))) [
+    (Just (unexpected(Phantoms.string "optional type") (ShowCore.type_ @@ var "typ"))) [
     _Type_optional>>: "t" ~> right (var "t")]
 
 -- TODO: nonstandard; move me

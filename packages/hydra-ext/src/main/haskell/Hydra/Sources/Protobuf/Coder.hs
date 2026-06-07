@@ -809,7 +809,7 @@ structuralTypeName = def "structuralTypeName" $
         _Type_list>>: constant $ string "list",
         _Type_set>>: constant $ string "set",
         _Type_map>>: constant $ string "map",
-        _Type_optional>>: constant $ string "maybe"]] $
+        _Type_optional>>: constant $ string "optional"]] $
     wrap P3._TypeName $
       match _StructuralTypeRef Nothing [
         (Name "either")>>: "p" ~>
