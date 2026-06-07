@@ -414,20 +414,25 @@ for H in $HOSTS; do
     # gradle compile (Phase 5 native DSL→JSON, test runs, etc.). The Layer-1
     # assembler is cheap (JSON→target transform, no host compile required)
     # and digest-skips on warm runs, so we always pre-assemble these here.
-    # Audit follow-up needed for other hosts (#409 finding #2).
+    #
+    # Each host's source set imports five sibling-language packages
+    # (verified by grep of heads/<H>/src/main/<H>/): hydra-haskell,
+    # hydra-java, hydra-python, hydra-scala, hydra-lisp. The Java head
+    # additionally imports hydra-typescript. Listing all five (or six)
+    # here ensures any --hosts H bootstrap-demo run finds a fresh
+    # dist/<H>/hydra-* regardless of --targets — closing #445.
     case "$H" in
         java)
-            STATIC_DEPS="hydra-lisp hydra-typescript"
+            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript"
+            ;;
+        python)
+            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         scala)
-            STATIC_DEPS="hydra-haskell hydra-java hydra-python"
+            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         typescript)
-            # Generated dist/typescript/hydra-scala/.../serde.ts imports
-            # '../java/serde.js' — TS host's hydra-scala output depends on
-            # hydra-java in dist/typescript/. Without this pre-assembly,
-            # ts-to-scala fails immediately with "Cannot find module".
-            STATIC_DEPS="hydra-java"
+            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         *)
             STATIC_DEPS=""
