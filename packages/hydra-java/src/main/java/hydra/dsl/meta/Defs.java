@@ -86,8 +86,8 @@ public final class Defs {
                     if (d == null) {
                         d = new Definition.Term(new TermDefinition(
                             fqName,
-                            Optional.<EntityMetadata>nothing(),
-                            Optional.<TermSignature>nothing(),
+                            Optional.<EntityMetadata>none(),
+                            Optional.<TermSignature>none(),
                             bodySupplier.get()));
                         cached = d;
                     }
@@ -127,7 +127,7 @@ public final class Defs {
 
     /** Construct a {@link ModuleDependency} on the given module, without a package qualifier. */
     public static ModuleDependency unqualifiedDep(ModuleName module) {
-        return new ModuleDependency(module, Optional.<PackageName>nothing());
+        return new ModuleDependency(module, Optional.<PackageName>none());
     }
 
     /** Wrap a list of {@link ModuleName}s as a list of unqualified {@link ModuleDependency} values. */
