@@ -51,13 +51,10 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Eithers as DefaultEithers
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Equality as DefaultEquality
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Lists as DefaultLists
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Maps as DefaultMaps
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Math as DefaultMath
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Maybes as DefaultMaybes
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Pairs as DefaultPairs
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Sets as DefaultSets
 
 
 ns :: ModuleName
@@ -76,13 +73,10 @@ define = definitionInModuleName ns
 defaultLibModules :: [Module]
 defaultLibModules = [
   DefaultEithers.module_,
-  DefaultEquality.module_,
   DefaultLists.module_,
   DefaultMaps.module_,
-  DefaultMath.module_,
   DefaultMaybes.module_,
-  DefaultPairs.module_,
-  DefaultSets.module_
+  DefaultPairs.module_
   ]
 
 -- | Module names of all default library modules
