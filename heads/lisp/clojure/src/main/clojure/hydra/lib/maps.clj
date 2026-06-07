@@ -24,13 +24,13 @@
   (fn [f] (fn [k] (fn [m]
     (let [hm (to-hash-map m)
           old-maybe (if (contains? hm k)
-                      (list :just (get hm k))
-                      (list :nothing))
+                      (list :given (get hm k))
+                      (list :none))
           new-maybe (f old-maybe)]
       (if (maybe-nothing? new-maybe)
         (dissoc hm k)
         (let [v (cond
-                  (and (sequential? new-maybe) (= (first new-maybe) :just)) (second new-maybe)
+                  (and (sequential? new-maybe) (= (first new-maybe) :given)) (second new-maybe)
                   (and (sequential? new-maybe) (= (first new-maybe) :maybe)) (second new-maybe)
                   :else new-maybe)]
           (assoc hm k v))))))))
@@ -101,8 +101,8 @@
   (fn [k] (fn [m]
     (let [hm (to-hash-map m)]
       (if (contains? hm k)
-        (list :just (get hm k))
-        (list :nothing))))))
+        (list :given (get hm k))
+        (list :none))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
 (def hydra_lib_maps_map

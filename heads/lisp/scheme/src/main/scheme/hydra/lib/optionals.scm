@@ -16,17 +16,17 @@
           maybe-value)
   (begin
 
-    ;; Maybe representation: (list 'just val) or (list 'nothing)
+    ;; Maybe representation: (list 'given val) or (list 'none)
     ;; Also handles: bare value for Just, '() for Nothing, (maybe val)/(maybe '())
 
     (define (maybe-nothing? m)
       (or (null? m)
           (eq? m #f)
-          (and (pair? m) (eq? (car m) 'nothing))))
+          (and (pair? m) (eq? (car m) 'none))))
 
     (define (maybe-value m)
       (cond
-        ((and (pair? m) (eq? (car m) 'just)) (cadr m))
+        ((and (pair? m) (eq? (car m) 'given)) (cadr m))
         (else m)))
 
     ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
@@ -34,17 +34,17 @@
       (lambda (mf)
         (lambda (mx)
           (if (maybe-nothing? mf)
-              (list 'nothing)
+              (list 'none)
               (if (maybe-nothing? mx)
-                  (list 'nothing)
-                  (list 'just ((maybe-value mf) (maybe-value mx))))))))
+                  (list 'none)
+                  (list 'given ((maybe-value mf) (maybe-value mx))))))))
 
     ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
     (define hydra_lib_optionals_bind
       (lambda (m)
         (lambda (f)
           (if (maybe-nothing? m)
-              (list 'nothing)
+              (list 'none)
               (f (maybe-value m))))))
 
     ;; cases :: Maybe a -> b -> (a -> b) -> b
@@ -74,7 +74,7 @@
           (lambda (x)
             (let ((result (g x)))
               (if (maybe-nothing? result)
-                  (list 'nothing)
+                  (list 'none)
                   (f (maybe-value result))))))))
 
     ;; from_optional :: a -> Maybe a -> a
@@ -101,8 +101,8 @@
       (lambda (f)
         (lambda (m)
           (if (maybe-nothing? m)
-              (list 'nothing)
-              (list 'just (f (maybe-value m)))))))
+              (list 'none)
+              (list 'given (f (maybe-value m)))))))
 
     ;; map_optional :: (a -> Maybe b) -> [a] -> [b]
     (define hydra_lib_optionals_map_optional
@@ -119,7 +119,7 @@
     ;; pure :: a -> Maybe a
     (define hydra_lib_optionals_pure
       (lambda (x)
-        (list 'just x)))
+        (list 'given x)))
 
     ;; to_list :: Maybe a -> [a]
     (define hydra_lib_optionals_to_list

@@ -48,14 +48,14 @@
     (cond
       (or (nil? m)
           (and (sequential? m) (empty? m))
-          (and (sequential? m) (= (first m) :nothing)))
-      (list :right (list :nothing))
+          (and (sequential? m) (= (first m) :none)))
+      (list :right (list :none))
 
-      (and (sequential? m) (= (first m) :just))
+      (and (sequential? m) (= (first m) :given))
       (let [result (f (second m))]
         (if (= (first result) :left)
           result
-          (list :right (list :just (second result)))))
+          (list :right (list :given (second result)))))
 
       (and (sequential? m) (= (first m) :maybe)
            (>= (count m) 2) (not (nil? (second m))))

@@ -39,8 +39,8 @@
   (fn [pred_] (fn [xs]
     (loop [rest_ (seq xs)]
       (cond
-        (nil? rest_) (list :nothing)
-        (pred_ (first rest_)) (list :just (first rest_))
+        (nil? rest_) (list :none)
+        (pred_ (first rest_)) (list :given (first rest_))
         :else (recur (next rest_)))))))
 
 ;; foldl :: (b -> a -> b) -> b -> [a] -> b
@@ -88,36 +88,36 @@
 (def hydra_lib_lists_maybe_at
   (fn [n] (fn [xs]
     (if (and (>= n 0) (< n (count xs)))
-      (list :just (nth xs n))
-      (list :nothing)))))
+      (list :given (nth xs n))
+      (list :none)))))
 
 ;; maybe_head :: [a] -> Maybe a
 (def hydra_lib_lists_maybe_head
   (fn [xs]
     (if (empty? xs)
-      (list :nothing)
-      (list :just (first xs)))))
+      (list :none)
+      (list :given (first xs)))))
 
 ;; maybe_init :: [a] -> Maybe [a]
 (def hydra_lib_lists_maybe_init
   (fn [xs]
     (if (empty? xs)
-      (list :nothing)
-      (list :just (or (butlast xs) ())))))
+      (list :none)
+      (list :given (or (butlast xs) ())))))
 
 ;; maybe_last :: [a] -> Maybe a
 (def hydra_lib_lists_maybe_last
   (fn [xs]
     (if (empty? xs)
-      (list :nothing)
-      (list :just (last xs)))))
+      (list :none)
+      (list :given (last xs)))))
 
 ;; maybe_tail :: [a] -> Maybe [a]
 (def hydra_lib_lists_maybe_tail
   (fn [xs]
     (if (empty? xs)
-      (list :nothing)
-      (list :just (rest xs)))))
+      (list :none)
+      (list :given (rest xs)))))
 
 ;; nub :: [a] -> [a]  (remove duplicates, preserve order)
 (def hydra_lib_lists_nub
@@ -206,8 +206,8 @@
 (def hydra_lib_lists_uncons
   (fn [xs]
     (if (empty? xs)
-      (list :nothing)
-      (list :just (list (first xs) (rest xs))))))
+      (list :none)
+      (list :given (list (first xs) (rest xs))))))
 
 ;; apply :: [a -> b] -> [a] -> [b]
 (def hydra_lib_lists_apply

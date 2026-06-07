@@ -351,7 +351,7 @@ libPairs = [
   (Eithers.ns, Eithers.allTests),
   (Lists.ns, Lists.allTests),
   (Strings.ns, Strings.allTests),
-  -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Maybes, Pairs, Sets
+  -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Optionals, Pairs, Sets
   ]
 
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]

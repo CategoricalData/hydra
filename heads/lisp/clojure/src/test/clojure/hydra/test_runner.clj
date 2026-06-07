@@ -119,19 +119,19 @@
 (defn- maybe-nothing? [val]
   (or (nil? val)
       (and (sequential? val) (empty? val))
-      (and (sequential? val) (= (first val) :nothing))
+      (and (sequential? val) (= (first val) :none))
       (and (sequential? val) (= (first val) :maybe)
            (or (< (count val) 2)
                (nil? (second val))
-               (and (sequential? (second val)) (= (first (second val)) :nothing))))))
+               (and (sequential? (second val)) (= (first (second val)) :none))))))
 
 (defn- maybe-value [val]
   (cond
-    (and (sequential? val) (= (first val) :just)) (second val)
+    (and (sequential? val) (= (first val) :given)) (second val)
     (and (sequential? val) (= (first val) :maybe))
       (let [body (second val)]
         (cond
-          (and (sequential? body) (= (first body) :just)) (second body)
+          (and (sequential? body) (= (first body) :given)) (second body)
           :else body))
     :else val))
 
@@ -148,7 +148,7 @@
     :else false))
 
 (defn- set-annotation [key val m]
-  ;; val is Maybe Term: (:maybe term) for Just, nil/(:nothing) for Nothing
+  ;; val is Maybe Term: (:maybe term) for Just, nil/(:none) for Nothing
   (if (maybe-nothing? val)
     ;; Remove key using structural comparison
     (into {} (remove (fn [[k _]] (deep-equal? k key)) m))
@@ -191,14 +191,14 @@
   (let [make-type (fn make-type [n]
                     (if (<= n 0) (list :unit)
                         (list :function {:domain (list :unit) :codomain (make-type (dec n))})))]
-    (->hydra_core_type_scheme [] (make-type arity) (list :nothing))))
+    (->hydra_core_type_scheme [] (make-type arity) (list :none))))
 
 (defn- make-prim-def
   "Build a PrimitiveDefinition (#156 shape) from name + arity."
   [name arity]
   (let [ts (make-type-scheme arity)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition name (list :nothing) sig true true (list :nothing))))
+    (->hydra_packaging_primitive_definition name (list :none) sig true true (list :none))))
 
 (defn- make-annotation-primitive
   "Create a Primitive that takes raw term arguments and returns a term result.
@@ -238,7 +238,7 @@
 
 ;; setTermDescription :: Maybe String -> Term -> Term
 ;; d is Maybe String. The reducer extracts it to (:maybe (:literal (:string S))) for Just,
-;; or (:maybe (:nothing)) for Nothing.
+;; or (:maybe (:none)) for Nothing.
 ;; We need to convert the string to a meta-encoded literal string Term for the annotation value.
 (defn- prim-set-term-description [_cx _g args]
   (let [d (first args)
@@ -257,7 +257,7 @@
                                               (list :literal (list :string s))))))))))
         desc-key (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                                (list :literal (list :string "description"))))
-        maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))]
+        maybe-val (if term-val (list :maybe term-val) (list :maybe (list :none)))]
     (prim-set-term-annotation _cx _g [desc-key maybe-val term])))
 
 ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)

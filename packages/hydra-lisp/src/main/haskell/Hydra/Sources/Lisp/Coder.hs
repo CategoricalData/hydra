@@ -542,14 +542,14 @@ encodeTerm = def "encodeTerm" $
 
      _Term_optional>>: lambda "mt" $
        Optionals.cases (var "mt")
-         -- Nothing -> (list :nothing)
+         -- None -> (list :none)
          (right (lispApp @@ (lispVar @@ string "list") @@ list [
-           lispKeyword @@ string "nothing"]))
-         -- Just val -> (list :just encodedVal)
+           lispKeyword @@ string "none"]))
+         -- Given val -> (list :given encodedVal)
          (lambda "val" $
            "sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "val") $
              right (lispApp @@ (lispVar @@ string "list") @@ list [
-               lispKeyword @@ string "just",
+               lispKeyword @@ string "given",
                var "sval"])),
 
      _Term_pair>>: lambda "p" $

@@ -600,33 +600,33 @@
 ;; ============================================================
 
 (defn- term-maybe-to-native
-  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:just val) / (:nothing)"
+  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:given val) / (:none)"
   [m]
   (cond
-    (nil? m) (list :nothing)
-    (not (sequential? m)) (list :just m)
-    (= (first m) :nothing) (list :nothing)
-    (= (first m) :just) m
+    (nil? m) (list :none)
+    (not (sequential? m)) (list :given m)
+    (= (first m) :none) (list :none)
+    (= (first m) :given) m
     (= (first m) :maybe)
     (let [inner (second m)]
       (cond
         (or (nil? inner)
-            (and (sequential? inner) (= (first inner) :nothing)))
-        (list :nothing)
-        (and (sequential? inner) (= (first inner) :just))
-        inner  ;; (:just val) — already in native format
+            (and (sequential? inner) (= (first inner) :none)))
+        (list :none)
+        (and (sequential? inner) (= (first inner) :given))
+        inner  ;; (:given val) — already in native format
         :else
-        (list :just inner)))
-    :else (list :just m)))
+        (list :given inner)))
+    :else (list :given m)))
 
 (defn- native-maybe-to-term
-  "Convert a native maybe (:just val) / (:nothing) to term-level (:maybe val_or_nil)"
+  "Convert a native maybe (:given val) / (:none) to term-level (:maybe val_or_nil)"
   [m]
   (cond
     (nil? m) (list :maybe nil)
     (not (sequential? m)) (list :maybe m)
-    (= (first m) :just) (list :maybe (second m))
-    (= (first m) :nothing) (list :maybe nil)
+    (= (first m) :given) (list :maybe (second m))
+    (= (first m) :none) (list :maybe nil)
     :else (list :maybe m)))
 
 (defn register-annotations []
@@ -652,11 +652,11 @@
                 (let [native-d (term-maybe-to-native d)
                       ;; Extract string from (:literal (:string "...")) wrapper if present
                       native-str-d (cond
-                                     (= (first native-d) :nothing) (list :nothing)
+                                     (= (first native-d) :none) (list :none)
                                      :else (let [inner (second native-d)]
                                              (if (and (sequential? inner) (= (first inner) :literal)
                                                       (sequential? (second inner)) (= (first (second inner)) :string))
-                                               (list :just (second (second inner)))
+                                               (list :given (second (second inner)))
                                                native-d)))]
                   (((deref (or (resolve 'hydra_annotations_set_term_description) (ns-resolve 'hydra.annotations 'hydra_annotations_set_term_description))) native-str-d) term)))
               [] t t t)
@@ -672,8 +672,8 @@
                     (let [maybe-str (second result)
                           term-maybe (cond
                                        (nil? maybe-str) (list :maybe nil)
-                                       (= (first maybe-str) :nothing) (list :maybe nil)
-                                       (= (first maybe-str) :just)
+                                       (= (first maybe-str) :none) (list :maybe nil)
+                                       (= (first maybe-str) :given)
                                        (list :maybe (list :literal (list :string (second maybe-str))))
                                        :else (list :maybe maybe-str))]
                       (list :either (list :right term-maybe))))))

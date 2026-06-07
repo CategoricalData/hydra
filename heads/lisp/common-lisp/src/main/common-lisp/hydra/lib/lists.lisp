@@ -105,8 +105,8 @@
     (lambda (xs)
       (let ((found (find-if pred xs)))
         (if found
-            (list :just found)
-            (list :nothing))))))
+            (list :given found)
+            (list :none))))))
 
 ;; foldl :: (b -> a -> b) -> b -> [a] -> b
 ;; Fold a list from the left.
@@ -188,40 +188,40 @@
   (lambda (n)
     (lambda (xs)
       (if (and (>= n 0) (< n (length xs)))
-          (list :just (nth n xs))
-          (list :nothing)))))
+          (list :given (nth n xs))
+          (list :none)))))
 
 ;; maybe_head :: [a] -> Maybe a
 ;; Get the first element of a list, returning Nothing if the list is empty.
 (defvar hydra_lib_lists_maybe_head
   (lambda (xs)
     (if (null xs)
-        (list :nothing)
-        (list :just (car xs)))))
+        (list :none)
+        (list :given (car xs)))))
 
 ;; maybe_init :: [a] -> Maybe [a]
 ;; Return all elements except the last, returning Nothing if the list is empty.
 (defvar hydra_lib_lists_maybe_init
   (lambda (xs)
     (if (null xs)
-        (list :nothing)
-        (list :just (butlast xs)))))
+        (list :none)
+        (list :given (butlast xs)))))
 
 ;; maybe_last :: [a] -> Maybe a
 ;; Get the last element of a list, returning Nothing if the list is empty.
 (defvar hydra_lib_lists_maybe_last
   (lambda (xs)
     (if (null xs)
-        (list :nothing)
-        (list :just (car (last xs))))))
+        (list :none)
+        (list :given (car (last xs))))))
 
 ;; maybe_tail :: [a] -> Maybe [a]
 ;; Get all elements except the first, returning Nothing if the list is empty.
 (defvar hydra_lib_lists_maybe_tail
   (lambda (xs)
     (if (null xs)
-        (list :nothing)
-        (list :just (cdr xs)))))
+        (list :none)
+        (list :given (cdr xs)))))
 
 ;; nub :: [a] -> [a]
 ;; Remove duplicate elements from a list.
@@ -322,8 +322,8 @@
 (defvar hydra_lib_lists_uncons
   (lambda (xs)
     (if (null xs)
-        (list :nothing)
-        (list :just (list (car xs) (cdr xs))))))
+        (list :none)
+        (list :given (list (car xs) (cdr xs))))))
 
 ;; zip :: [a] -> [b] -> [Pair a b]
 ;; Zip two lists into pairs.

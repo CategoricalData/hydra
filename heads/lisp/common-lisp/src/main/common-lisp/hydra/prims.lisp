@@ -84,17 +84,17 @@
                                      (make-type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
          (maybe-constraints (if constraint-map
-                                (list :just constraint-map)
-                                (list :nothing))))
+                                (list :given constraint-map)
+                                (list :none))))
     (make-type_scheme vars fun-type maybe-constraints)))
 
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
 ;; ============================================================================
 ;; Error helpers
@@ -263,8 +263,8 @@
       (lambda (mv)
         (cond
           ((null mv) (list :right (list :maybe nil)))
-          ((and (consp mv) (eq (first mv) :nothing)) (list :right (list :maybe nil)))
-          ((and (consp mv) (eq (first mv) :just))
+          ((and (consp mv) (eq (first mv) :none)) (list :right (list :maybe nil)))
+          ((and (consp mv) (eq (first mv) :given))
            (let ((r (funcall (funcall (term_coder-decode el-coder) cx) (second mv))))
              (if (eq (first r) :left) r (list :right (list :maybe (second r))))))
           (t

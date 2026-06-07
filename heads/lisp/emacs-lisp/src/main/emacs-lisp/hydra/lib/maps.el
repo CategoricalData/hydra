@@ -101,16 +101,16 @@
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
 (defun alter-is-nothing-p (m)
   (or (null m)
-      (and (consp m) (eq (car m) :nothing))
+      (and (consp m) (eq (car m) :none))
       (and (consp m) (eq (car m) :maybe)
            (or (null (cdr m)) (null (cadr m))))))
 
 (defun alter-get-value (m)
   (cond
-    ((and (consp m) (eq (car m) :just)) (cadr m))
+    ((and (consp m) (eq (car m) :given)) (cadr m))
     ((and (consp m) (eq (car m) :maybe))
      (let ((body (cadr m)))
-       (if (and (consp body) (eq (car body) :just))
+       (if (and (consp body) (eq (car body) :given))
            (cadr body)
          body)))
     (t m)))
@@ -122,8 +122,8 @@
       (lambda (m)
         (let* ((existing (hydra-map-lookup k m))
                (old-maybe (if existing
-                              (list :just (cdr existing))
-                              (list :nothing)))
+                              (list :given (cdr existing))
+                              (list :none)))
                (new-maybe (funcall f old-maybe)))
           (if (alter-is-nothing-p new-maybe)
               (alist-delete k m)
@@ -220,8 +220,8 @@
     (lambda (m)
       (let ((entry (hydra-map-lookup k m)))
         (if entry
-            (list :just (cdr entry))
-            (list :nothing))))))
+            (list :given (cdr entry))
+            (list :none))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
 (defvar hydra_lib_maps_map

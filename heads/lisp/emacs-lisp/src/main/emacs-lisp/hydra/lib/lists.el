@@ -99,8 +99,8 @@
     (lambda (xs)
       (let ((found (cl-find-if pred xs)))
         (if found
-            (list :just found)
-            (list :nothing))))))
+            (list :given found)
+            (list :none))))))
 
 ;; foldl :: (b -> a -> b) -> b -> [a] -> b
 (defvar hydra_lib_lists_foldl
@@ -184,40 +184,40 @@
     "Get the element at a specified index, returning Nothing if the index is out of bounds."
     (lambda (xs)
       (if (and (>= n 0) (< n (length xs)))
-          (list :just (nth n xs))
-          (list :nothing)))))
+          (list :given (nth n xs))
+          (list :none)))))
 
 ;; maybe_head :: [a] -> Maybe a
 (defvar hydra_lib_lists_maybe_head
   (lambda (xs)
     "Get the first element of a list, returning Nothing if the list is empty."
     (if (null xs)
-        (list :nothing)
-        (list :just (car xs)))))
+        (list :none)
+        (list :given (car xs)))))
 
 ;; maybe_init :: [a] -> Maybe [a]
 (defvar hydra_lib_lists_maybe_init
   (lambda (xs)
     "Return all elements except the last, returning Nothing if the list is empty."
     (if (null xs)
-        (list :nothing)
-        (list :just (butlast xs)))))
+        (list :none)
+        (list :given (butlast xs)))))
 
 ;; maybe_last :: [a] -> Maybe a
 (defvar hydra_lib_lists_maybe_last
   (lambda (xs)
     "Get the last element of a list, returning Nothing if the list is empty."
     (if (null xs)
-        (list :nothing)
-        (list :just (car (last xs))))))
+        (list :none)
+        (list :given (car (last xs))))))
 
 ;; maybe_tail :: [a] -> Maybe [a]
 (defvar hydra_lib_lists_maybe_tail
   (lambda (xs)
     "Get all elements except the first, returning Nothing if the list is empty."
     (if (null xs)
-        (list :nothing)
-        (list :just (cdr xs)))))
+        (list :none)
+        (list :given (cdr xs)))))
 
 ;; nub :: [a] -> [a]  (remove duplicates, keeping first occurrence)
 (defvar hydra_lib_lists_nub
@@ -333,8 +333,8 @@
   (lambda (xs)
     "Split a list into its head and tail, returning Nothing if the list is empty."
     (if (null xs)
-        (list :nothing)
-        (list :just (list (car xs) (cdr xs))))))
+        (list :none)
+        (list :given (list (car xs) (cdr xs))))))
 
 ;; zip :: [a] -> [b] -> [Pair a b]
 (defvar hydra_lib_lists_zip

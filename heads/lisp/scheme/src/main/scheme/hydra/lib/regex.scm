@@ -19,14 +19,14 @@
             (if m #t #f)))))
 
     ;; find :: String -> String -> Maybe String
-    ;; Returns (list 'just match) or (list 'nothing)
+    ;; Returns (list 'given match) or (list 'none)
     (define hydra_lib_regex_find
       (lambda (pattern)
         (lambda (input)
           (let ((m (string-match pattern input)))
             (if m
-                (list 'just (match:substring m))
-                (list 'nothing))))))
+                (list 'given (match:substring m))
+                (list 'none))))))
 
     ;; findAll :: String -> String -> [String]
     (define hydra_lib_regex_find_all
