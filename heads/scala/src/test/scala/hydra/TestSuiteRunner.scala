@@ -153,6 +153,12 @@ object TestSuiteRunner {
   private def apply(f: Term, a: Term): Term =
     Term.application(Application(f, a))
 
+  // Variadic curried application, mirroring hydra.dsl.Terms.apply(func, args...)
+  // in the Java head. Lets the #386/#443 annotation helpers below pass 3+ args
+  // (e.g. foldl(fn, init, list)) the same way the Java TestSuiteRunner does.
+  private def apply(f: Term, a: Term, rest: Term*): Term =
+    rest.foldLeft(apply(f, a))((acc, t) => apply(acc, t))
+
   private def variable(name: String): Term =
     Term.variable(name)
 
@@ -196,8 +202,10 @@ object TestSuiteRunner {
     Term.list(terms.toSeq)
 
   // Build a Term.pair value (mirrors hydra.dsl.Terms.pair, #443).
+  // Term.pair wraps a Tuple2[Term, Term] in generated Scala core (there is no
+  // hydra.core.Pair term constructor — only PairType at the type level).
   private def pair(a: Term, b: Term): Term =
-    Term.pair(hydra.core.Pair(a, b))
+    Term.pair((a, b))
 
   private def wrap(typeName: String, term: Term): Term =
     Term.wrap(WrappedTerm(typeName, term))
