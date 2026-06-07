@@ -91,7 +91,7 @@ subtermStep = define "subtermStep" $
     _SubtermStep_listElement>>: "i" ~> var "idx" @@ var "i",
     _SubtermStep_mapKey>>: "i" ~> var "idxSuff" @@ (string ".key") @@ var "i",
     _SubtermStep_mapValue>>: "i" ~> var "idxSuff" @@ (string ".value") @@ var "i",
-    _SubtermStep_maybeTerm>>: constant (just (string "just")),
+    _SubtermStep_optionalTerm>>: constant (just (string "given")),
     _SubtermStep_productTerm>>: "i" ~> var "idx" @@ var "i",
     _SubtermStep_recordField>>: "name" ~> just (Strings.cat2 (string ".") (Core.unName (var "name"))),
     _SubtermStep_setElement>>: "i" ~> var "idx" @@ var "i",

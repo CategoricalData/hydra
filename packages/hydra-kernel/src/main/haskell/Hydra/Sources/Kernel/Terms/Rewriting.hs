@@ -547,7 +547,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         ("t" ~> var "forSingleWithAccessor"
           @@ var "recurse"
           @@ ("t1" ~> Core.termOptional $ just $ var "t1")
-          @@ Paths.subtermStepMaybeTerm
+          @@ Paths.subtermStepOptionalTerm
           @@ var "val0"
           @@ var "t"),
       _Term_pair>>: "p" ~>
@@ -1168,7 +1168,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
           result (Paths.subtermStepMapKey $ int32 0) $ Pairs.first $ var "p",
           result (Paths.subtermStepMapValue $ int32 0) $ Pairs.second $ var "p"])
         (Maps.toList $ var "m")),
-    _Term_optional>>: "m" ~> Optionals.cases (var "m") none ("t" ~> single Paths.subtermStepMaybeTerm $ var "t"),
+    _Term_optional>>: "m" ~> Optionals.cases (var "m") none ("t" ~> single Paths.subtermStepOptionalTerm $ var "t"),
     _Term_pair>>: "p" ~> none, -- TODO: add steps when SubtermStep type is updated
     _Term_project>>: constant none,
     _Term_record>>: "rt" ~> Lists.map
