@@ -177,7 +177,7 @@ public class BenchInference {
                 String local = td.name.value.substring(td.name.value.lastIndexOf('.') + 1);
                 Name newName = new Name(targetNs.value + "." + local);
                 renamed.add(new Definition.Term(
-                        new TermDefinition(newName, hydra.util.Optional.nothing(), td.signature, td.body)));
+                        new TermDefinition(newName, hydra.util.Optional.none(), td.signature, td.body)));
             } else {
                 renamed.add(d);
             }
@@ -185,7 +185,7 @@ public class BenchInference {
         // Inject the bench module's namespace as an explicit dependency
         // so walker_(k-1) lookups resolve via the universe.
         List<ModuleDependency> deps = new ArrayList<>();
-        deps.add(new ModuleDependency(benchMod.name, hydra.util.Optional.<hydra.packaging.PackageName>nothing()));
+        deps.add(new ModuleDependency(benchMod.name, hydra.util.Optional.<hydra.packaging.PackageName>none()));
         deps.addAll(benchMod.dependencies);
         return new Module(targetNs, benchMod.metadata, deps, renamed);
     }

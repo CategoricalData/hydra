@@ -378,50 +378,50 @@ public final class Phantoms {
 
     /** {@code cases TypeName x Nothing [branches]} — pattern match on union. */
     public static <A> TypedTerm<A> cases(String typeName, TypedTerm<?> arg, Field... branches) {
-        Term match = Terms.match(typeName, Optional.<Term>nothing(), branches);
+        Term match = Terms.match(typeName, Optional.<Term>none(), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code cases TypeName x Nothing [branches]} — Name overload. */
     public static <A> TypedTerm<A> cases(Name typeName, TypedTerm<?> arg, Field... branches) {
-        Term match = Terms.match(typeName.value, Optional.<Term>nothing(), branches);
+        Term match = Terms.match(typeName.value, Optional.<Term>none(), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code cases TypeName x (Just default) [branches]} — pattern match with default. */
     public static <A> TypedTerm<A> casesWithDefault(String typeName, TypedTerm<?> arg,
                                                  TypedTerm<?> defaultBranch, Field... branches) {
-        Term match = Terms.match(typeName, Optional.<Term>just(defaultBranch.value), branches);
+        Term match = Terms.match(typeName, Optional.<Term>given(defaultBranch.value), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code cases TypeName x (Just default) [branches]} — Name overload. */
     public static <A> TypedTerm<A> casesWithDefault(Name typeName, TypedTerm<?> arg,
                                                  TypedTerm<?> defaultBranch, Field... branches) {
-        Term match = Terms.match(typeName.value, Optional.<Term>just(defaultBranch.value), branches);
+        Term match = Terms.match(typeName.value, Optional.<Term>given(defaultBranch.value), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code match TypeName Nothing [branches]} — match function (not yet applied). */
     public static <A> TypedTerm<A> match(String typeName, Field... branches) {
-        return tterm(Terms.match(typeName, Optional.<Term>nothing(), branches));
+        return tterm(Terms.match(typeName, Optional.<Term>none(), branches));
     }
 
     /** {@code match TypeName Nothing [branches]} — Name overload. */
     public static <A> TypedTerm<A> match(Name typeName, Field... branches) {
-        return tterm(Terms.match(typeName.value, Optional.<Term>nothing(), branches));
+        return tterm(Terms.match(typeName.value, Optional.<Term>none(), branches));
     }
 
     /** {@code match TypeName (Just default) [branches]}. */
     public static <A> TypedTerm<A> matchWithDefault(String typeName, TypedTerm<?> defaultBranch,
                                                  Field... branches) {
-        return tterm(Terms.match(typeName, Optional.<Term>just(defaultBranch.value), branches));
+        return tterm(Terms.match(typeName, Optional.<Term>given(defaultBranch.value), branches));
     }
 
     /** {@code match TypeName (Just default) [branches]} — Name overload. */
     public static <A> TypedTerm<A> matchWithDefault(Name typeName, TypedTerm<?> defaultBranch,
                                                  Field... branches) {
-        return tterm(Terms.match(typeName.value, Optional.<Term>just(defaultBranch.value), branches));
+        return tterm(Terms.match(typeName.value, Optional.<Term>given(defaultBranch.value), branches));
     }
 
     // ---- Type application / type lambda ----
@@ -471,8 +471,8 @@ public final class Phantoms {
     public static <A> Definition toDefinition(TypedBinding<A> tb) {
         return new Definition.Term(new TermDefinition(
             tb.name,
-            Optional.<EntityMetadata>nothing(),
-            Optional.<TermSignature>nothing(),
+            Optional.<EntityMetadata>none(),
+            Optional.<TermSignature>none(),
             tb.term.value));
     }
 
@@ -481,8 +481,8 @@ public final class Phantoms {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
-            Optional.<EntityMetadata>nothing(),
-            Optional.<TermSignature>nothing(),
+            Optional.<EntityMetadata>none(),
+            Optional.<TermSignature>none(),
             term.value));
     }
 
@@ -492,8 +492,8 @@ public final class Phantoms {
         Name fqName = new Name(ns.value + "." + localName);
         return new Definition.Term(new TermDefinition(
             fqName,
-            Optional.<EntityMetadata>nothing(),
-            Optional.<TermSignature>just(Scoping.typeSchemeToTermSignature(ts)),
+            Optional.<EntityMetadata>none(),
+            Optional.<TermSignature>given(Scoping.typeSchemeToTermSignature(ts)),
             term.value));
     }
 }

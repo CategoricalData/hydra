@@ -19,7 +19,7 @@ public final class Optionals {
         return Phantoms.var("hydra.lib.optionals." + name);
     }
 
-    /** {@code Optionals.apply f x} — apply a function in Maybe context (applicative). */
+    /** {@code Optionals.apply f x} — apply a function in optional context (applicative). */
     public static <A> TypedTerm<A> apply(TypedTerm<?> f, TypedTerm<?> x) {
         return Phantoms.apply(prim("apply"), f, x);
     }
@@ -29,12 +29,12 @@ public final class Optionals {
         return Phantoms.apply(prim("bind"), x, f);
     }
 
-    /** {@code Optionals.cases m default just_handler}. */
-    public static <A> TypedTerm<A> cases(TypedTerm<?> m, TypedTerm<?> defaultBranch, TypedTerm<?> justBranch) {
-        return Phantoms.apply(prim("cases"), m, defaultBranch, justBranch);
+    /** {@code Optionals.cases m default given_handler}. */
+    public static <A> TypedTerm<A> cases(TypedTerm<?> m, TypedTerm<?> defaultBranch, TypedTerm<?> givenBranch) {
+        return Phantoms.apply(prim("cases"), m, defaultBranch, givenBranch);
     }
 
-    /** {@code Optionals.cat xs} — keep only Just values from a list. */
+    /** {@code Optionals.cat xs} — keep only given values from a list. */
     public static <A> TypedTerm<A> cat(TypedTerm<?> xs) {
         return Phantoms.apply(prim("cat"), xs);
     }
@@ -42,11 +42,6 @@ public final class Optionals {
     /** {@code Optionals.compose f g}. */
     public static <A> TypedTerm<A> compose(TypedTerm<?> f, TypedTerm<?> g) {
         return Phantoms.apply(prim("compose"), f, g);
-    }
-
-    /** {@code Optionals.fromJust x} — extract value (unsafe if Nothing). */
-    public static <A> TypedTerm<A> fromJust(TypedTerm<?> x) {
-        return Phantoms.apply(prim("fromJust"), x);
     }
 
     /** {@code Optionals.fromOptional default x} — get the value or default. */

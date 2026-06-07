@@ -545,7 +545,7 @@ public class Generation {
                     TermDefinition t = td.value;
                     Term newTerm = Strip.removeTypesFromTerm(t.body);
                     Optional<TermSignature> newType = Optional.none();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Optional.nothing(), newType, newTerm)));
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Optional.none(), newType, newTerm)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {
