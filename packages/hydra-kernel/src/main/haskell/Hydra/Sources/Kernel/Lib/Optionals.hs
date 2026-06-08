@@ -27,51 +27,51 @@ module_ = Module {
   where
     definitions = [
       toPrimitive "Applicative apply for optionals: combine an optional function and an optional argument." applySig [
-        "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is\
-        \ Nothing.",
+        "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is\
+        \ none.",
         "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
         "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."] apply_,
       toPrimitive "Monadic bind for optionals." bindSig [
-        "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing.",
+        "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
         "The monadic bind for optionals; used to chain computations that may be absent.",
         "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."] bind_,
       primNoDef "cases" "Case analysis on an optional, with cases-style argument order." casesSig [
-        "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
+        "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
         "The fundamental eliminator for the optional type; every other primitive in this namespace can be\
         \ derived from it. The optional value is the first argument, matching the convention for\
         \ case-statement-like elimination.",
         "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
       toPrimitive "Concatenate optionals, keeping only the present values." catSig [
-        "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing\
+        "cat(xs) returns the list of contained values from given elements of xs, in original order; none\
         \ elements are discarded.",
         "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."] cat_,
       toPrimitive "Kleisli composition for optionals." composeSig [
         "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
-        "If either f or the second stage produces Nothing, the result is Nothing.",
+        "If either f or the second stage produces none, the result is none.",
         "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b ->\
         \ Maybe c) -> a -> Maybe c."] compose_,
       toPrimitive "Return the value contained in an optional, falling back to a default if absent." fromOptionalSig [
-        "fromOptional(def, m) returns x when m is Just(x), and def when m is Nothing.",
+        "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
         "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."] fromOptional_,
-      toPrimitive "Test whether an optional is present (Just)." isGivenSig [
-        "isGiven(m) returns true iff m is a Just variant.",
+      toPrimitive "Test whether an optional is present (given)." isGivenSig [
+        "isGiven(m) returns true iff m is a given variant.",
         "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."] isGiven_,
-      toPrimitive "Test whether an optional is absent (Nothing)." isNoneSig [
-        "isNone(m) returns true iff m is the Nothing variant.",
+      toPrimitive "Test whether an optional is absent (none)." isNoneSig [
+        "isNone(m) returns true iff m is the none variant.",
         "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."] isNone_,
       toPrimitive "Map a function over an optional." mapSig [
-        "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing.",
+        "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
         "The functor instance for optionals.",
         "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."] map_,
       toPrimitive "Map a partial function over a list, keeping only the present results." mapOptionalSig [
-        "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from Just\
-        \ results in original order; Nothing results are discarded.",
+        "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given\
+        \ results in original order; none results are discarded.",
         "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."] mapOptional_,
-      toPrimitive "Wrap a value in Just." pureSig [
-        "pure(x) = Just(x). The applicative pure for optionals.",
+      toPrimitive "Wrap a value in given." pureSig [
+        "pure(x) = given(x). The applicative pure for optionals.",
         "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."] pure_,
-      toPrimitive "Convert an optional to a list: Just x maps to [x], Nothing to []." toListSig [
-        "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing.",
+      toPrimitive "Convert an optional to a list: given x maps to [x], none to []." toListSig [
+        "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
         "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."] toList_]
 primNoDef :: String -> String -> TermSignature -> [String] -> Definition
 primNoDef localName description s comments =
@@ -246,7 +246,7 @@ map_ = define "map" $
 -- pure x = Just x
 pure_ :: TypedTermDefinition (a -> Maybe a)
 pure_ = define "pure" $
-  doc "Wrap a value in Just." $
+  doc "Wrap a value in given." $
   "x" ~> just (var "x")
 
 -- toList m = cases m [] (\x -> [x])
