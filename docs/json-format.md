@@ -157,25 +157,25 @@ A consumer that reproduces the encoding for a digest must emit record-term keys 
 
 ## Optional fields
 
-`Maybe`-typed fields use one of three shapes, depending on context:
+`Optional`-typed fields use one of three shapes, depending on context:
 
-1. **Standalone `Maybe T` value** (T is not itself `Maybe`):
-   - `Nothing` → `null`
-   - `Just v` → encoded value of `v`
-2. **Standalone `Maybe (Maybe T)` value** (nested `Maybe`):
-   - `Nothing` → `null`
-   - `Just v` → `[<encoded v>]` (array wrapper to disambiguate from the inner `Nothing`)
-3. **Record field of simple `Maybe T` type**:
-   - `Nothing` → field is **omitted entirely** from the record-term object
-   - `Just v` → `<field-name>: <encoded v>` (no wrapper)
+1. **Standalone `Optional T` value** (T is not itself `Optional`):
+   - `none` → `null`
+   - `given v` → encoded value of `v`
+2. **Standalone `Optional (Optional T)` value** (nested `Optional`):
+   - `none` → `null`
+   - `given v` → `[<encoded v>]` (array wrapper to disambiguate from the inner `none`)
+3. **Record field of simple `Optional T` type**:
+   - `none` → field is **omitted entirely** from the record-term object
+   - `given v` → `<field-name>: <encoded v>` (no wrapper)
 
-`null` only ever encodes a `Maybe.Nothing`. It is never used as a generic sentinel,
-never used to mean "missing value" in any other context, and never appears for a non-`Maybe` type.
+`null` only ever encodes an `Optional.none`. It is never used as a generic sentinel,
+never used to mean "missing value" in any other context, and never appears for a non-`Optional` type.
 
 Each rule exists to eliminate an ambiguity the previous one would create if
-extended naively. Rule 1 works because no Hydra value other than `Maybe.Nothing`
+extended naively. Rule 1 works because no Hydra value other than `Optional.none`
 encodes to bare `null`. Rule 2 needs the array wrapper because without it the
-outer `Nothing` and the inner `Nothing` would both be bare `null` and a
+outer `none` and the inner `none` would both be bare `null` and a
 consumer couldn't tell them apart. Rule 3 omits the field in records because
 the absent key is unambiguous (record-term keys are never bound to `null`
 elsewhere), and the omission is more compact than encoding `null`.
@@ -450,7 +450,7 @@ A conforming encoder must:
 - Preserve field (declaration) order in record-term object keys (see [Records](#records)).
 - Sort plain JSON-object keys lexicographically (e.g., `digest.json`'s `hashes`)
   and `manifest.json` array values lexicographically (see [Stability of byte order](#stability-of-byte-order)).
-- Emit `null` only for `Maybe.Nothing`; never as a generic sentinel.
+- Emit `null` only for `Optional.none`; never as a generic sentinel.
 
 A conforming decoder must:
 
