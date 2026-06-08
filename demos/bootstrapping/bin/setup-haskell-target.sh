@@ -170,7 +170,6 @@ mkdir -p "$OUTPUT_DIR/src/test/haskell/Hydra"
 cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/TestSuiteSpec.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/TestUtils.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
-cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/DefaultsPrimitives.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 
 # TestEnv: provides the real test graph with primitives and kernel term bindings.
 # Must be copied to src/test (where the generated TestGraph.hs imports it).
