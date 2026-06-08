@@ -13,12 +13,22 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
+HYDRA_SCHEME_DIR="$HYDRA_ROOT/heads/lisp/scheme"
+
+# Defensive re-copy of static resources that setup-scheme-target.sh laid down.
+# In the typescript-host cells (#444 sibling), run-tests.scm was observed missing
+# at test time, even though the setup script ran. Root cause is unidentified;
+# this guarantees the test step has the runner regardless. Idempotent.
+# Mirrors test-clojure-target.sh:19-39 (the bug_444 fix for clojure/common-lisp).
+if [ ! -f "$OUTPUT_DIR/run-tests.scm" ]; then
+    cp "$HYDRA_SCHEME_DIR/run-tests.scm" "$OUTPUT_DIR/"
+fi
 
 # test_graph.scm post-generation patch removed. The DSL emits
 # (import (hydra test test_env)) and references hydra_test_test_env_test_*
 # directly. Copy the hand-written test_env.scm into the dist tree so the
 # generated import resolves (load path includes src/test/scheme).
-TEST_ENV_SRC="$HYDRA_ROOT/heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm"
+TEST_ENV_SRC="$HYDRA_SCHEME_DIR/src/test/scheme/hydra/test/test_env.scm"
 TEST_ENV_DST="$OUTPUT_DIR/src/test/scheme/hydra/test/test_env.scm"
 if [ -f "$TEST_ENV_SRC" ]; then
     mkdir -p "$(dirname "$TEST_ENV_DST")"
