@@ -100,8 +100,8 @@ def _python_to_hydra_json(obj):
     elif isinstance(obj, list):
         return JsonModel.ValueArray(tuple(_python_to_hydra_json(item) for item in obj))
     elif isinstance(obj, dict):
-        return JsonModel.ValueObject(FrozenDict(
-            {k: _python_to_hydra_json(v) for k, v in obj.items()}))
+        return JsonModel.ValueObject(
+            tuple((k, _python_to_hydra_json(v)) for k, v in obj.items()))
     else:
         raise ValueError(f"Unexpected JSON type: {type(obj)}")
 

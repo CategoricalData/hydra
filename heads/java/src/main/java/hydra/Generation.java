@@ -110,7 +110,11 @@ public class Generation {
                 }
             }
             expect('}');
-            return new Value.Object_(map);
+            List<Pair<String, Value>> pairs = new ArrayList<>();
+            for (Map.Entry<String, Value> entry : map.entrySet()) {
+                pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
+            }
+            return new Value.Object_(pairs);
         }
 
         private void parseKeyValue(Map<String, Value> map) {
@@ -339,7 +343,11 @@ public class Generation {
 
     private static Map<String, Value> expectObject(Value val, String context) {
         if (val instanceof Value.Object_) {
-            return ((Value.Object_) val).value;
+            Map<String, Value> map = new java.util.LinkedHashMap<>();
+            for (Pair<String, Value> p : ((Value.Object_) val).value) {
+                map.put(p.first, p.second);
+            }
+            return map;
         }
         throw new RuntimeException("Expected JSON object for " + context + ", got " + val.getClass().getSimpleName());
     }
@@ -777,8 +785,8 @@ public class Generation {
             Value v = parseJsonFile(path.toString());
             if (!(v instanceof Value.Object_)) return java.util.Collections.emptyList();
             Value deps = null;
-            for (Map.Entry<String, Value> e : ((Value.Object_) v).value.entrySet()) {
-                if ("dependencies".equals(e.getKey())) { deps = e.getValue(); break; }
+            for (Pair<String, Value> p : ((Value.Object_) v).value) {
+                if ("dependencies".equals(p.first)) { deps = p.second; break; }
             }
             if (!(deps instanceof Value.Array)) return java.util.Collections.emptyList();
             List<String> out = new ArrayList<>();

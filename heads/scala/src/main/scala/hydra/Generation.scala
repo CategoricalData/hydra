@@ -120,7 +120,8 @@ object Generation:
     val manifestJson = parseJsonFile(manifestPath)
     manifestJson match
       case Value.`object`(m) =>
-        m.get(fieldName) match
+        // The object payload is now an ordered list of key/value pairs; look the field up by name.
+        m.find(_._1 == fieldName).map(_._2) match
           case Some(Value.array(items)) =>
             items.collect { case Value.string(s) => s }
           case _ => throw new RuntimeException(s"manifest field '$fieldName' not found or not an array")
@@ -257,22 +258,23 @@ object Generation:
     private def parseObject(): Value =
       expect('{')
       skipWhitespace()
-      var map = Map.empty[String, Value]
+      // The object payload is an ordered list of key/value pairs; preserve insertion order.
+      var pairs = Seq.empty[(String, Value)]
       if pos < input.length && input.charAt(pos) != '}' then
-        map = parseKeyValue(map)
+        pairs = pairs :+ parseKeyValue()
         while pos < input.length && input.charAt(pos) == ',' do
           pos += 1
-          map = parseKeyValue(map)
+          pairs = pairs :+ parseKeyValue()
       expect('}')
-      Value.`object`(map)
+      Value.`object`(pairs)
 
-    private def parseKeyValue(map: Map[String, Value]): Map[String, Value] =
+    private def parseKeyValue(): (String, Value) =
       skipWhitespace()
       val key = parseRawString()
       skipWhitespace()
       expect(':')
       val v = parseValue()
-      map + (key -> v)
+      (key, v)
 
     private def parseArray(): Value =
       expect('[')

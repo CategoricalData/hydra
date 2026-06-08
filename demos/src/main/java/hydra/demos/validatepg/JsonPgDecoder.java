@@ -205,7 +205,13 @@ class JsonPgDecoder {
 
     private static Map<String, Value> expectObject(Value json) {
         if (json instanceof Value.Object_) {
-            return ((Value.Object_) json).value;
+            // The object payload is now an ordered list of key/value pairs; decoding looks
+            // fields up by name, so collapse it into a name-keyed map at the boundary.
+            Map<String, Value> result = new LinkedHashMap<String, Value>();
+            for (hydra.util.Pair<String, Value> pair : ((Value.Object_) json).value) {
+                result.put(pair.first, pair.second);
+            }
+            return result;
         }
         throw new RuntimeException("Expected JSON object, got " + json.getClass().getSimpleName());
     }
