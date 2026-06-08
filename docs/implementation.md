@@ -595,7 +595,7 @@ def "PrimitiveDefinition" $
     "isPure">:                doc "Purity flag (defaults to True)" $ core "Boolean",
     "isTotal">:               doc "Totality flag (defaults to True)" $ core "Boolean",
     "defaultImplementation">: doc "Optional reference implementation in Hydra terms" $
-                                T.maybe (core "Term")
+                                T.optional (core "Term")
   ]
 ```
 
@@ -702,7 +702,7 @@ eliminate this duplication.
 
 ### Default implementations
 
-`PrimitiveDefinition.defaultImplementation : Maybe Term` carries an optional
+`PrimitiveDefinition.defaultImplementation : optional<Term>` carries an optional
 declarative reference implementation in pure Hydra terms. Two uses:
 
 - **Fallback for minimal interpreters.** A host that doesn't ship a native
@@ -834,7 +834,7 @@ The same primitive works with any type supporting equality.
 
 #### Pattern 2: Default implementations
 
-A `PrimitiveDefinition` carries an optional `defaultImplementation : Maybe Term`
+A `PrimitiveDefinition` carries an optional `defaultImplementation : optional<Term>`
 — a declarative reference implementation in pure Hydra terms. The kernel
 registry declares each primitive with one of two helpers:
 

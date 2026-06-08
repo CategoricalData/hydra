@@ -1005,8 +1005,8 @@ T.list T.int32
 -- Map type
 T.map T.string T.int32
 
--- Maybe (optional) type
-T.maybe T.int32
+-- Optional type
+T.optional T.int32
 
 -- Either type
 T.either_ T.string T.int32  -- Either String Int32
