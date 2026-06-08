@@ -228,7 +228,7 @@ subtypeStep = define "SubtypeStep" $
     "mapValues">:
       doc "Access the value type of a map type"
       T.unit,
-    "maybeElement">:
+    "optionalElement">:
       doc "Access the element type of an optional type"
       T.unit,
     "pairFirst">:

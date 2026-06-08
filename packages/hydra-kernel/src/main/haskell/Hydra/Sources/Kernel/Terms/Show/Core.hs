@@ -548,7 +548,7 @@ type_ = define "type" $
         type_ @@ var "valTyp",
         string ">"],
     _Type_optional>>: "etyp" ~> Strings.cat $ list [
-      string "maybe<",
+      string "optional<",
       type_ @@ var "etyp",
       string ">"],
     _Type_pair>>: "pt" ~>
