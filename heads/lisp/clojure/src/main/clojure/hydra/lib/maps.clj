@@ -31,7 +31,7 @@
         (dissoc hm k)
         (let [v (cond
                   (and (sequential? new-maybe) (= (first new-maybe) :given)) (second new-maybe)
-                  (and (sequential? new-maybe) (= (first new-maybe) :maybe)) (second new-maybe)
+                  (and (sequential? new-maybe) (= (first new-maybe) :optional)) (second new-maybe)
                   :else new-maybe)]
           (assoc hm k v))))))))
 

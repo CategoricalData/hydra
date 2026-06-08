@@ -57,14 +57,14 @@
           result
           (list :right (list :given (second result)))))
 
-      (and (sequential? m) (= (first m) :maybe)
+      (and (sequential? m) (= (first m) :optional)
            (>= (count m) 2) (not (nil? (second m))))
       (let [result (f (second m))]
         (if (= (first result) :left)
           result
-          (list :right (list :maybe (second result)))))
+          (list :right (list :optional (second result)))))
 
-      ;; bare value (term-level maybe: (:maybe val) where val is not wrapped)
+      ;; bare value (term-level maybe: (:optional val) where val is not wrapped)
       :else
       (let [result (f m)]
         (if (= (first result) :left)

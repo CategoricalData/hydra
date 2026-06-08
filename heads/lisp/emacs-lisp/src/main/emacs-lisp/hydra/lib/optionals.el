@@ -4,7 +4,7 @@
 
 ;; Maybe representation: (list :given val) or (list :none)
 
-;; Do NOT treat (:maybe ...) as native maybe — that is Hydra's term-level
+;; Do NOT treat (:optional ...) as native maybe — that is Hydra's term-level
 ;; representation and collides with nested optionals like maybe<maybe<string>>.
 (defun maybe-nothing-p (m)
   (or (null m)

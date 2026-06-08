@@ -39,7 +39,7 @@
                         (visit (function_type-codomain ft))))
                      ((eq tag :list) (visit (second t_)))
                      ((eq tag :set) (visit (second t_)))
-                     ((eq tag :maybe) (visit (second t_)))
+                     ((eq tag :optional) (visit (second t_)))
                      ((eq tag :map)
                       (let ((mt (second t_)))
                         (visit (map_type-keys mt))
@@ -252,7 +252,7 @@
             (list :right (list :map (funcall hydra_lib_maps_from_list (nreverse result))))))))))
 
 (defun tc-optional (el-coder)
-  (make-term_coder (list :maybe (term_coder-type el-coder))
+  (make-term_coder (list :optional (term_coder-type el-coder))
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
@@ -262,14 +262,14 @@
     (lambda (cx)
       (lambda (mv)
         (cond
-          ((null mv) (list :right (list :maybe nil)))
-          ((and (consp mv) (eq (first mv) :none)) (list :right (list :maybe nil)))
+          ((null mv) (list :right (list :optional nil)))
+          ((and (consp mv) (eq (first mv) :none)) (list :right (list :optional nil)))
           ((and (consp mv) (eq (first mv) :given))
            (let ((r (funcall (funcall (term_coder-decode el-coder) cx) (second mv))))
-             (if (eq (first r) :left) r (list :right (list :maybe (second r))))))
+             (if (eq (first r) :left) r (list :right (list :optional (second r))))))
           (t
            (let ((r (funcall (funcall (term_coder-decode el-coder) cx) mv)))
-             (if (eq (first r) :left) r (list :right (list :maybe (second r)))))))))))
+             (if (eq (first r) :left) r (list :right (list :optional (second r)))))))))))
 
 (defun tc-either (left-coder right-coder)
   (make-term_coder (list :either (make-either_type (term_coder-type left-coder) (term_coder-type right-coder)))
