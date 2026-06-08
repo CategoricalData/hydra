@@ -304,7 +304,7 @@ jsonNumber = define "jsonNumber" $
 jsonObject :: TypedTermDefinition (Parser J.Value)
 jsonObject = define "jsonObject" $
   doc "Parse a JSON object" $
-  Parsers.map @@ (reify Json.valueObject <.> reify Maps.fromList) @@
+  Parsers.map @@ (reify Json.valueObject) @@
     (Parsers.between
       @@ (token @@ (Parsers.char @@ braceOpenCode))
       @@ (token @@ (Parsers.char @@ braceCloseCode))

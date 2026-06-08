@@ -178,7 +178,7 @@ pgElementToJson = define "pgElementToJson" $
             "labelJson">: Json.valueString (unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"))] $
             Eithers.map
               ("propsJson" ~>
-                Json.valueObject (Maps.fromList $ Optionals.cat $ list [
+                Json.valueObject (Optionals.cat $ list [
                   just (pair (string "label") (var "labelJson")),
                   just (pair (string "id") (Json.valueString $ ShowCore.term @@ var "term")),
                   var "propsJson"]))
@@ -191,7 +191,7 @@ pgElementToJson = define "pgElementToJson" $
                 "labelJson">: Json.valueString (unwrap PG._EdgeLabel @@ (project PG._Edge PG._Edge_label @@ var "edge"))] $
                 Eithers.map
                   ("propsJson" ~>
-                    Json.valueObject (Maps.fromList $ Optionals.cat $ list [
+                    Json.valueObject (Optionals.cat $ list [
                       just (pair (string "label") (var "labelJson")),
                       just (pair (string "id") (Json.valueString $ ShowCore.term @@ var "term")),
                       just (pair (string "out") (Json.valueString $ ShowCore.term @@ var "termOut")),
@@ -222,7 +222,7 @@ propsToJson = "schema" ~> "cx" ~> "pairs" ~>
   Logic.ifElse (Maps.null $ var "pairs")
     (right nothing)
     (Eithers.map
-      ("p" ~> just (pair (string "properties") (Json.valueObject $ Maps.fromList $ var "p")))
+      ("p" ~> just (pair (string "properties") (Json.valueObject $ var "p")))
       (Eithers.mapList
         ("pair" ~> lets [
           "key">: Pairs.first $ var "pair",
