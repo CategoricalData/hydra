@@ -51,7 +51,6 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Lists as DefaultLists
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Maybes as DefaultMaybes
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Pairs as DefaultPairs
 
@@ -72,7 +71,6 @@ define = definitionInModuleName ns
 defaultLibModules :: [Module]
 defaultLibModules = [
   DefaultLists.module_,
-  DefaultMaps.module_,
   DefaultMaybes.module_,
   DefaultPairs.module_
   ]

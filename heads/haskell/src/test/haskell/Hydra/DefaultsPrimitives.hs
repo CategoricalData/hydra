@@ -11,7 +11,6 @@ import Hydra.Sources.Libraries
 import Hydra.Dsl.Prims as Prims
 
 import qualified Hydra.Lib.Defaults.Lists as DefaultLists
-import qualified Hydra.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
 import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
 
@@ -20,7 +19,6 @@ import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
 defaultLibraries :: [Library]
 defaultLibraries = [
   defaultLibLists,
-  defaultLibMaps,
   defaultLibMaybes,
   defaultLibPairs]
 
@@ -128,30 +126,6 @@ defaultLibLists = standardLibrary _hydra_lib_lists [
     _ -> unexpected cx "lists.zipWith" 3]
 
 -- ---- Maps ----
-
-defaultLibMaps :: Library
-defaultLibMaps = standardLibrary _hydra_lib_maps [
-  mkPrim _maps_alter 3 $ \cx g args -> case args of
-    [f, k, mt] -> DefaultMaps.alter cx g f k mt
-    _ -> unexpected cx "maps.alter" 3,
-  mkPrim _maps_bimap 3 $ \cx g args -> case args of
-    [kf, vf, mt] -> DefaultMaps.bimap cx g kf vf mt
-    _ -> unexpected cx "maps.bimap" 3,
-  mkPrim _maps_filter 2 $ \cx g args -> case args of
-    [p, mt] -> DefaultMaps.filter cx g p mt
-    _ -> unexpected cx "maps.filter" 2,
-  mkPrim _maps_filterWithKey 2 $ \cx g args -> case args of
-    [p, mt] -> DefaultMaps.filterWithKey cx g p mt
-    _ -> unexpected cx "maps.filterWithKey" 2,
-  mkPrim _maps_findWithDefault 3 $ \cx g args -> case args of
-    [def, k, mt] -> coerceError $ DefaultMaps.findWithDefault cx g def k mt
-    _ -> unexpected cx "maps.findWithDefault" 3,
-  mkPrim _maps_map 2 $ \cx g args -> case args of
-    [vf, mt] -> DefaultMaps.map cx g vf mt
-    _ -> unexpected cx "maps.map" 2,
-  mkPrim _maps_mapKeys 2 $ \cx g args -> case args of
-    [kf, mt] -> DefaultMaps.mapKeys cx g kf mt
-    _ -> unexpected cx "maps.mapKeys" 2]
 
 -- ---- Maybes ----
 
