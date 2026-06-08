@@ -51,8 +51,11 @@ fi
 TOOLS=(
     "kernel,triad,full,go|Haskell Stack|stack|stack --numeric-version|brew install haskell-stack  |  curl -sSL https://get.haskellstack.org/ | sh"
     "kernel,triad,full,go|Python 3|python3|python3 --version|brew install python@3.12  |  apt install python3"
+    "kernel,triad,full|Python 3.12+ on PATH (required for generated PEP 695 syntax in test_json.py)|__python_312__|__python_312__|brew install python@3.12  |  apt install python3.12, or 'uv python install 3.12 && ln -s ~/.local/share/uv/python/cpython-3.12-*/bin/python3.12 ~/.local/bin/python3'"
     "triad,full,go|JDK (>=11)|java|java -version|brew install --cask temurin@17  |  apt install openjdk-17-jdk"
+    "triad,full,go|JAVA_HOME set + valid (bin/sync.sh requires it)|__java_home__|__java_home__|export JAVA_HOME=\$(brew --prefix temurin)/Contents/Home  |  export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 (or your distro's path)"
     "triad,full|uv (Python tool; required when Python is host)|uv|uv --version|curl -LsSf https://astral.sh/uv/install.sh | sh"
+    "triad,full|pytest on PATH running on Python 3.12+ (demo runner uses bare \`pytest\`)|__pytest_312__|__pytest_312__|pip install pytest (into a Python 3.12+ env)  |  source heads/python/.venv/bin/activate after a first 'uv run pytest' from heads/python/"
     "full|Scala sbt|sbt|sbt --numeric-version|brew install sbt  |  see https://www.scala-sbt.org/download.html"
     "full|Clojure CLI|clojure|clojure --version|brew install clojure/tools/clojure  |  see https://clojure.org/guides/install_clojure"
     "full|SBCL (Common Lisp)|sbcl|sbcl --version|brew install sbcl  |  apt install sbcl"
@@ -76,6 +79,9 @@ scope_match() {
 
 # Resolve a tool's version. Returns "missing" if the binary is not on PATH.
 # Special-case Scheme: try guile first, then chibi-scheme.
+# Special-case __java_home__: validate JAVA_HOME is exported and $JAVA_HOME/bin/java runs.
+# Special-case __python_312__: validate `python3` is Python 3.12+.
+# Special-case __pytest_312__: validate the `pytest` on PATH runs against Python 3.12+.
 resolve_tool() {
     local bin="$1" version_cmd="$2"
     if [ "$bin" = "__scheme__" ]; then
@@ -91,6 +97,54 @@ resolve_tool() {
         fi
         REAL_BIN=""; REAL_VERSION=""
         return 1
+    fi
+    if [ "$bin" = "__java_home__" ]; then
+        if [ -z "${JAVA_HOME:-}" ]; then
+            REAL_BIN=""; REAL_VERSION="JAVA_HOME is not set"
+            return 1
+        fi
+        if [ ! -x "$JAVA_HOME/bin/java" ]; then
+            REAL_BIN="$JAVA_HOME"; REAL_VERSION="JAVA_HOME/bin/java is not executable"
+            return 1
+        fi
+        REAL_BIN="$JAVA_HOME"
+        REAL_VERSION="$("$JAVA_HOME/bin/java" -version 2>&1 | head -n1)"
+        return 0
+    fi
+    if [ "$bin" = "__python_312__" ]; then
+        if ! command -v python3 >/dev/null 2>&1; then
+            REAL_BIN=""; REAL_VERSION="python3 not on PATH"
+            return 1
+        fi
+        REAL_BIN="$(command -v python3)"
+        REAL_VERSION="$(python3 --version 2>&1 | head -n1)"
+        local v
+        v="$(python3 -c 'import sys; print(sys.version_info[0]*100+sys.version_info[1])' 2>/dev/null)"
+        if [ -z "$v" ] || [ "$v" -lt 312 ]; then
+            return 1
+        fi
+        return 0
+    fi
+    if [ "$bin" = "__pytest_312__" ]; then
+        if ! command -v pytest >/dev/null 2>&1; then
+            REAL_BIN=""; REAL_VERSION="pytest not on PATH"
+            return 1
+        fi
+        REAL_BIN="$(command -v pytest)"
+        REAL_VERSION="$(pytest --version 2>&1 | head -n1)"
+        local v
+        v="$(pytest --version 2>&1 | grep -oE 'Python [0-9]+\.[0-9]+' | head -n1 | awk '{print $2}' | awk -F. '{print $1*100+$2}')"
+        if [ -z "$v" ]; then
+            v="$(pytest -c /dev/null --co -q 2>&1 | grep -oE 'Python [0-9]+\.[0-9]+' | head -n1 | awk '{print $2}' | awk -F. '{print $1*100+$2}')"
+        fi
+        if [ -z "$v" ]; then
+            v="$(python3 -c 'import pytest, sys; print(sys.version_info[0]*100+sys.version_info[1])' 2>/dev/null)"
+        fi
+        if [ -z "$v" ] || [ "$v" -lt 312 ]; then
+            REAL_VERSION="$REAL_VERSION (running on Python <3.12)"
+            return 1
+        fi
+        return 0
     fi
     if ! command -v "$bin" >/dev/null 2>&1; then
         REAL_BIN=""; REAL_VERSION=""
