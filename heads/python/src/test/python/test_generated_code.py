@@ -68,7 +68,7 @@ pyright src/main/python/hydra/lib/literals.py
 pyright src/main/python/hydra/lib/logic.py
 pyright src/main/python/hydra/lib/maps.py
 pyright src/main/python/hydra/lib/math.py
-pyright src/main/python/hydra.lib.maybes.py
+pyright src/main/python/hydra.lib.optionals.py
 pyright src/main/python/hydra/lib/sets.py
 pyright src/main/python/hydra/lib/strings.py
 

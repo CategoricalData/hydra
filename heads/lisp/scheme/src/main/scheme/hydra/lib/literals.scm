@@ -239,77 +239,77 @@
       (lambda (s)
         (let ((n (string->number s)))
           (if n
-              (list 'just (inexact n))
-              (list 'nothing)))))
+              (list 'given (inexact n))
+              (list 'none)))))
 
     ;; read_bigint :: String -> Maybe BigInteger
     (define hydra_lib_literals_read_bigint
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_float :: String -> Maybe Double
     (define hydra_lib_literals_read_float
       (lambda (s)
         (let ((n (string->number s)))
           (if n
-              (list 'just (inexact n))
-              (list 'nothing)))))
+              (list 'given (inexact n))
+              (list 'none)))))
 
     ;; read_float32 :: String -> Maybe Float
     ;; Round to float32 precision
     (define hydra_lib_literals_read_float32
       (lambda (s)
         (cond
-          ((string=? s "NaN") (list 'just +nan.0))
-          ((string=? s "Infinity") (list 'just +inf.0))
-          ((string=? s "-Infinity") (list 'just -inf.0))
+          ((string=? s "NaN") (list 'given +nan.0))
+          ((string=? s "Infinity") (list 'given +inf.0))
+          ((string=? s "-Infinity") (list 'given -inf.0))
           (else (let ((n (string->number s)))
                   (if n
-                      (list 'just (float32-approx n))
-                      (list 'nothing)))))))
+                      (list 'given (float32-approx n))
+                      (list 'none)))))))
 
     ;; read_int :: String -> Maybe Int
     (define hydra_lib_literals_read_int
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_int64 :: String -> Maybe Int64
     (define hydra_lib_literals_read_int64
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_uint :: String -> Maybe Uint
     (define hydra_lib_literals_read_uint
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_uint32 :: String -> Maybe Uint32
     (define hydra_lib_literals_read_uint32
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_uint64 :: String -> Maybe Uint64
     (define hydra_lib_literals_read_uint64
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; Haskell-compatible float formatting helper
     ;; Format a float matching Haskell's Show instance: scientific notation for
@@ -565,45 +565,45 @@
     (define hydra_lib_literals_read_boolean
       (lambda (s)
         (cond
-          ((string=? s "true") (list 'just #t))
-          ((string=? s "false") (list 'just #f))
-          (else (list 'nothing)))))
+          ((string=? s "true") (list 'given #t))
+          ((string=? s "false") (list 'given #f))
+          (else (list 'none)))))
 
     ;; read_float64 :: String -> Maybe Float64
     (define hydra_lib_literals_read_float64
       (lambda (s)
         (cond
-          ((string=? s "NaN") (list 'just +nan.0))
-          ((string=? s "Infinity") (list 'just +inf.0))
-          ((string=? s "-Infinity") (list 'just -inf.0))
+          ((string=? s "NaN") (list 'given +nan.0))
+          ((string=? s "Infinity") (list 'given +inf.0))
+          ((string=? s "-Infinity") (list 'given -inf.0))
           (else (let ((n (string->number s)))
                   (if n
-                      (list 'just (inexact n))
-                      (list 'nothing)))))))
+                      (list 'given (inexact n))
+                      (list 'none)))))))
 
     ;; read_int8 :: String -> Maybe Int8
     (define hydra_lib_literals_read_int8
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n -128) (<= n 127))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_int16 :: String -> Maybe Int16
     (define hydra_lib_literals_read_int16
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n -32768) (<= n 32767))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_int32 :: String -> Maybe Int32
     (define hydra_lib_literals_read_int32
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_string :: String -> Maybe String
     (define hydra_lib_literals_read_string
@@ -615,7 +615,7 @@
               (let ((inner (substring s 1 (- len 1))))
                 (let loop ((i 0) (acc '()))
                   (if (>= i (string-length inner))
-                      (list 'just (list->string (reverse acc)))
+                      (list 'given (list->string (reverse acc)))
                       (if (and (char=? (string-ref inner i) #\\)
                                (< (+ i 1) (string-length inner)))
                           (let ((c (string-ref inner (+ i 1))))
@@ -627,23 +627,23 @@
                               ((char=? c #\r) (loop (+ i 2) (cons #\return acc)))
                               (else (loop (+ i 2) (cons c (cons #\\ acc))))))
                           (loop (+ i 1) (cons (string-ref inner i) acc))))))
-              (list 'nothing)))))
+              (list 'none)))))
 
     ;; read_uint8 :: String -> Maybe Uint8
     (define hydra_lib_literals_read_uint8
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0) (<= n 255))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; read_uint16 :: String -> Maybe Uint16
     (define hydra_lib_literals_read_uint16
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0) (<= n 65535))
-              (list 'just (exact n))
-              (list 'nothing)))))
+              (list 'given (exact n))
+              (list 'none)))))
 
     ;; show_boolean :: Bool -> String
     (define hydra_lib_literals_show_boolean

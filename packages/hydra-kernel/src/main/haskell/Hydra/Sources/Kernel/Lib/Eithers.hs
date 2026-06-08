@@ -75,8 +75,8 @@ module_ = Module {
         \ Right of the list of contained values, in original order. The first application that returns Left\
         \ short-circuits the whole result to that Left.",
         "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
-      primNoDef "mapMaybe" "Map a function returning either over a maybe, or return Right Nothing if Nothing." mapMaybeSig [
-        "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value\
+      primNoDef "mapOptional" "Map a function returning either over an optional, or return Right Nothing if Nothing." mapOptionalSig [
+        "mapOptional(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value\
         \ and returns the result with Right wrapped around Just.",
         "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
       primNoDef "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left." mapSetSig [
@@ -177,9 +177,9 @@ mapListSig :: TermSignature
 mapListSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ee tz ty) Types.~> Types.list tx Types.~> ee tz (Types.list ty)) Nothing
 
--- mapMaybe : forall a b c. (a -> Either c b) -> Maybe a -> Either c (Maybe b)
-mapMaybeSig :: TermSignature
-mapMaybeSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
+-- mapOptional : forall a b c. (a -> Either c b) -> Maybe a -> Either c (Maybe b)
+mapOptionalSig :: TermSignature
+mapOptionalSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ee tz ty) Types.~> Types.optional tx Types.~> ee tz (Types.optional ty)) Nothing
 
 -- mapSet : forall a b c. ordering y => (a -> Either c b) -> Set a -> Either c (Set b)

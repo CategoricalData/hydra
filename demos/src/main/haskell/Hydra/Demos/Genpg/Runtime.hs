@@ -28,8 +28,8 @@ evaluate cx g term = reduceTerm cx g True term
 evaluateEdge :: InferenceContext -> Graph -> Pg.Edge Term -> Term -> Result (Maybe (Pg.Edge Term))
 evaluateEdge cx g (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
     id <- evaluate cx g $ Terms.apply idSpec term
-    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.maybeTerm Right g
-    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.maybeTerm Right g
+    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.optionalTerm Right g
+    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.optionalTerm Right g
     props <- evaluateProperties cx g propSpecs term
     return $ case mOutId of
       Nothing -> Nothing
@@ -43,14 +43,14 @@ evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM for
     forPair (k, spec) = do
       value <- evaluate cx g $ Terms.apply spec record
       case deannotateTerm value of
-        TermMaybe mv -> case mv of
+        TermOptional mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
         _ -> Left $ ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value)
 
 evaluateVertex :: InferenceContext -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
 evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
-  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.maybeTerm Right g
+  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.optionalTerm Right g
   props <- evaluateProperties cx g propSpecs record
   return $ case mId of
     Nothing -> Nothing
@@ -105,7 +105,7 @@ termRowToRecord :: TableType -> DataRow Term -> Term
 termRowToRecord (TableType (RelationName tname) colTypes) (DataRow cells) = TermRecord $ Record (Name tname) $
     L.zipWith toField colTypes cells
   where
-    toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermMaybe mvalue
+    toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermOptional mvalue
 
 transformRecord :: InferenceContext -> Graph -> [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Result ([Pg.Vertex Term], [Pg.Edge Term])
 transformRecord cx g vspecs especs term = do

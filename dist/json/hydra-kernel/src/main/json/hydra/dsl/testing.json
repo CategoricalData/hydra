@@ -231,7 +231,7 @@
                                     {
                                       "key": {"variable": "description"},
                                       "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                                "body": {"maybe": {"literal": {"string": {}}}}}},
+                                "body": {"optional": {"literal": {"string": {}}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "description"}},
                     "domain": {
@@ -285,7 +285,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -485,7 +485,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -1050,7 +1050,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -1076,7 +1076,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1347,7 +1347,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "description"}},
                 "domain": {
@@ -1383,7 +1383,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1532,7 +1532,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -1983,7 +1983,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2009,7 +2009,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {

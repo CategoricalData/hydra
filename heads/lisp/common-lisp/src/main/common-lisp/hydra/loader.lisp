@@ -46,7 +46,7 @@
 ;; Load hand-written native library implementations (before gen-main)
 (dolist (f '("lib/chars.lisp" "lib/eithers.lisp" "lib/equality.lisp"
              "lib/lists.lisp" "lib/literals.lisp" "lib/logic.lisp"
-             "lib/maps.lisp" "lib/math.lisp" "lib/maybes.lisp"
+             "lib/maps.lisp" "lib/math.lisp" "lib/optionals.lisp"
              "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp" "lib/strings.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
@@ -670,7 +670,7 @@
            "test/lib/logic.lisp"
            "test/lib/maps.lisp"
            "test/lib/math.lisp"
-           "test/lib/maybes.lisp"
+           "test/lib/optionals.lisp"
            "test/lib/pairs.lisp"
            "test/lib/regex.lisp"
            "test/lib/sets.lisp"

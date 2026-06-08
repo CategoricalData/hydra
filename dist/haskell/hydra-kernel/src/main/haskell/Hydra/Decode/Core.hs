@@ -9,7 +9,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -129,10 +129,10 @@ floatType cx raw =
                     Maps.fromList [
                       (Core.Name "float32", (\input -> Eithers.map (\t -> Core.FloatTypeFloat32) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "float64", (\input -> Eithers.map (\t -> Core.FloatTypeFloat64) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.FloatValue
 floatValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatValue
@@ -162,10 +162,10 @@ floatValue cx raw =
                               _ -> Left (Errors.DecodingError "expected float64 value")
                             _ -> Left (Errors.DecodingError "expected float64 literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.ForallType
 forallType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ForallType
@@ -216,10 +216,10 @@ integerType cx raw =
                       (Core.Name "uint16", (\input -> Eithers.map (\t -> Core.IntegerTypeUint16) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "uint32", (\input -> Eithers.map (\t -> Core.IntegerTypeUint32) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "uint64", (\input -> Eithers.map (\t -> Core.IntegerTypeUint64) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.IntegerValue
 integerValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerValue
@@ -312,10 +312,10 @@ integerValue cx raw =
                               _ -> Left (Errors.DecodingError "expected uint64 value")
                             _ -> Left (Errors.DecodingError "expected uint64 literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Lambda
 lambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Lambda
@@ -378,10 +378,10 @@ literal cx raw =
                             Core.LiteralString v2 -> Right v2
                             _ -> Left (Errors.DecodingError "expected string literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.LiteralType
 literalType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.LiteralType
@@ -399,10 +399,10 @@ literalType cx raw =
                       (Core.Name "float", (\input -> Eithers.map (\t -> Core.LiteralTypeFloat t) (floatType cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Core.LiteralTypeInteger t) (integerType cx input))),
                       (Core.Name "string", (\input -> Eithers.map (\t -> Core.LiteralTypeString) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.MapType
 mapType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.MapType
@@ -474,7 +474,7 @@ term cx raw =
                       (Core.Name "list", (\input -> Eithers.map (\t -> Core.TermList t) (ExtractCore.decodeList term cx input))),
                       (Core.Name "literal", (\input -> Eithers.map (\t -> Core.TermLiteral t) (literal cx input))),
                       (Core.Name "map", (\input -> Eithers.map (\t -> Core.TermMap t) (ExtractCore.decodeMap term term cx input))),
-                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Core.TermMaybe t) (ExtractCore.decodeMaybe term cx input))),
+                      (Core.Name "optional", (\input -> Eithers.map (\t -> Core.TermOptional t) (ExtractCore.decodeMaybe term cx input))),
                       (Core.Name "pair", (\input -> Eithers.map (\t -> Core.TermPair t) (ExtractCore.decodePair term term cx input))),
                       (Core.Name "project", (\input -> Eithers.map (\t -> Core.TermProject t) (projection cx input))),
                       (Core.Name "record", (\input -> Eithers.map (\t -> Core.TermRecord t) (record cx input))),
@@ -485,10 +485,10 @@ term cx raw =
                       (Core.Name "unwrap", (\input -> Eithers.map (\t -> Core.TermUnwrap t) (name cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Core.TermVariable t) (name cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TermWrap t) (wrappedTerm cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.Type
 type_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Type
@@ -508,7 +508,7 @@ type_ cx raw =
                       (Core.Name "list", (\input -> Eithers.map (\t -> Core.TypeList t) (type_ cx input))),
                       (Core.Name "literal", (\input -> Eithers.map (\t -> Core.TypeLiteral t) (literalType cx input))),
                       (Core.Name "map", (\input -> Eithers.map (\t -> Core.TypeMap t) (mapType cx input))),
-                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Core.TypeMaybe t) (type_ cx input))),
+                      (Core.Name "optional", (\input -> Eithers.map (\t -> Core.TypeOptional t) (type_ cx input))),
                       (Core.Name "pair", (\input -> Eithers.map (\t -> Core.TypePair t) (pairType cx input))),
                       (Core.Name "record", (\input -> Eithers.map (\t -> Core.TypeRecord t) (ExtractCore.decodeList fieldType cx input))),
                       (Core.Name "set", (\input -> Eithers.map (\t -> Core.TypeSet t) (type_ cx input))),
@@ -517,10 +517,10 @@ type_ cx raw =
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Core.TypeVariable t) (name cx input))),
                       (Core.Name "void", (\input -> Eithers.map (\t -> Core.TypeVoid) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TypeWrap t) (type_ cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeApplicationTerm
 typeApplicationTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeApplicationTerm
@@ -543,10 +543,10 @@ typeClassConstraint cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "simple", (\input -> Eithers.map (\t -> Core.TypeClassConstraintSimple t) (name cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.core.TypeLambda
 typeLambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeLambda

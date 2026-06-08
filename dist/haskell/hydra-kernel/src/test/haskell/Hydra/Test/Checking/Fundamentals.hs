@@ -208,7 +208,7 @@ applicationsWithComplexArgumentsTests =
                 Core.applicationArgument = (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "first"),
                   (Core.TermLiteral (Core.LiteralString "second"))])}))})))),
-            Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))})),
+            Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 binaryPrimitivesTests :: Testing.TestGroup
@@ -541,22 +541,22 @@ higherOrderPrimitivesTests =
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "optionals maybe",
+          Testing.testCaseWithMetadataName = "optionals cases",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")))),
+            Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
                 Core.forallTypeParameter = (Core.Name "t1"),
                 Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                  Core.functionTypeDomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0"))),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t1"))),
-                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}))}))})))})),
+                      Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))})),
+                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 integerLiteralsTests :: Testing.TestGroup
@@ -1247,7 +1247,7 @@ mutualRecursionTests =
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                       Core.Field {
                         Core.fieldName = (Core.Name "tail"),
-                        Core.fieldTerm = (Core.TermMaybe (Just (Core.TermVariable (Core.Name "listB"))))}]})),
+                        Core.fieldTerm = (Core.TermOptional (Just (Core.TermVariable (Core.Name "listB"))))}]})),
                   Core.bindingTypeScheme = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "listB"),
@@ -1259,7 +1259,7 @@ mutualRecursionTests =
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))},
                       Core.Field {
                         Core.fieldName = (Core.Name "tail"),
-                        Core.fieldTerm = (Core.TermMaybe Nothing)}]})),
+                        Core.fieldTerm = (Core.TermOptional Nothing)}]})),
                   Core.bindingTypeScheme = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "listA"))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeApplication (Core.ApplicationType {
@@ -2151,7 +2151,7 @@ unaryPrimitivesTests =
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}))})))})),
+                Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -2346,12 +2346,12 @@ variablesInComplexContextsTests =
             Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermMaybe (Just (Core.TermVariable (Core.Name "x"))))})))),
+              Core.lambdaBody = (Core.TermOptional (Just (Core.TermVariable (Core.Name "x"))))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}))})))})),
+                Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 variablesTests :: Testing.TestGroup

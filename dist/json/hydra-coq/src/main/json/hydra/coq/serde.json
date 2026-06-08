@@ -198,21 +198,21 @@
                           "lambda": {
                             "body": {
                               "application": {
-                                "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                    "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                    "parameter": "i"}},
                                 "function": {
                                   "application": {
-                                    "argument": {
-                                      "lambda": {
-                                        "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                        "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                        "parameter": "i"}},
+                                    "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                        "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                            "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                             "domain": {"variable": "hydra.coq.syntax.Name"},
                             "parameter": "n"}},
                         "name": "name"},
@@ -236,21 +236,21 @@
                                               "lambda": {
                                                 "body": {
                                                   "application": {
-                                                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                        "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                        "parameter": "i"}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                            "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                            "parameter": "i"}},
+                                                        "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                                 "domain": {"variable": "hydra.coq.syntax.Name"},
                                                 "parameter": "n"}},
                                             "function": {
@@ -293,52 +293,52 @@
                                     "term": {
                                       "application": {
                                         "argument": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "lb"},
-                                                "function": {"project": {"fieldName": "name", "typeName": "hydra.coq.syntax.LetBinder"}}}},
-                                            "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                          "lambda": {
+                                            "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                            "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                            "parameter": "i"}},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "lambda": {
-                                                "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                "parameter": "i"}},
+                                            "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "lb"},
+                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.coq.syntax.LetBinder"}}}},
+                                                    "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                    "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                   {
                                     "name": "ty",
                                     "term": {
                                       "application": {
                                         "argument": {
-                                          "application": {
-                                            "argument": {"variable": "lb"},
-                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.LetBinder"}}}},
+                                          "lambda": {
+                                            "body": {
+                                              "list": [
+                                                {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                                            "domain": {"variable": "hydra.coq.syntax.Type"},
+                                            "parameter": "t"}},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "lambda": {
-                                                "body": {
-                                                  "list": [
-                                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                    {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                                "domain": {"variable": "hydra.coq.syntax.Type"},
-                                                "parameter": "t"}},
+                                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "lb"},
+                                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.LetBinder"}}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                                    "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                                   {
                                     "name": "body",
@@ -399,21 +399,21 @@
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
-                                                                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                                        "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                                        "parameter": "i"}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "lambda": {
-                                                                            "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                                            "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                                            "parameter": "i"}},
+                                                                        "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                                "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                                                 "domain": {"variable": "hydra.coq.syntax.Name"},
                                                                 "parameter": "n"}},
                                                             "function": {
@@ -469,21 +469,21 @@
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
-                                                                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                                        "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                                        "parameter": "i"}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "lambda": {
-                                                                            "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                                            "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                                            "parameter": "i"}},
+                                                                        "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                                "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                                                 "domain": {"variable": "hydra.coq.syntax.Name"},
                                                                 "parameter": "n"}},
                                                             "function": {
@@ -675,26 +675,26 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "c"},
-                            "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.Constructor"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Type"},
+                            "parameter": "t"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Type"},
-                                "parameter": "t"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "c"},
+                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.Constructor"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                 "body": {
                   "application": {
@@ -729,23 +729,24 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "d"},
-                            "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.Definition"}}}},
+                          "lambda": {
+                            "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Locality"},
+                            "parameter": "l"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Locality"},
-                                "parameter": "l"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "d"},
+                                    "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.Definition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Locality"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Locality"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "name",
@@ -782,26 +783,26 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "d"},
-                            "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.Definition"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Type"},
+                            "parameter": "t"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Type"},
-                                "parameter": "t"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "d"},
+                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.Definition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "body",
@@ -886,23 +887,24 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "fd"},
-                            "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.FixpointDefinition"}}}},
+                          "lambda": {
+                            "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Locality"},
+                            "parameter": "l"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Locality"},
-                                "parameter": "l"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "fd"},
+                                    "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.FixpointDefinition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Locality"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Locality"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "name",
@@ -939,26 +941,26 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "fd"},
-                            "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.FixpointDefinition"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Type"},
+                            "parameter": "t"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Type"},
-                                "parameter": "t"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "fd"},
+                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.FixpointDefinition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "body",
@@ -1059,26 +1061,26 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "ib"},
-                            "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.InductiveBody"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Type"},
+                            "parameter": "t"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Type"},
-                                "parameter": "t"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "ib"},
+                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.InductiveBody"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "constrs",
@@ -1143,23 +1145,24 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "id"},
-                            "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.InductiveDefinition"}}}},
+                          "lambda": {
+                            "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Locality"},
+                            "parameter": "l"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Locality"},
-                                "parameter": "l"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "id"},
+                                    "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.InductiveDefinition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Locality"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Locality"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "kwPart",
@@ -1210,7 +1213,7 @@
                         "function": {
                           "application": {
                             "argument": {"application": {"argument": {"literal": {"string": ""}}, "function": {"variable": "hydra.serialization.cst"}}},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
                     "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                   {
                     "name": "restBodies",
@@ -1340,40 +1343,40 @@
                                         "term": {
                                           "application": {
                                             "argument": {
-                                              "application": {"argument": {"variable": "ci"}, "function": {"project": {"fieldName": "as", "typeName": "hydra.coq.syntax.CaseItem"}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "list": [
-                                                        {"application": {"argument": {"literal": {"string": "as"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                        {
+                                              "lambda": {
+                                                "body": {
+                                                  "list": [
+                                                    {"application": {"argument": {"literal": {"string": "as"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                    {
+                                                      "application": {
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                            "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                            "parameter": "i"}},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                            "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                                    "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                                    "parameter": "i"}},
+                                                                "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                                 "function": {
-                                                                  "application": {
-                                                                    "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                        "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}}]},
-                                                    "domain": {"variable": "hydra.coq.syntax.Name"},
-                                                    "parameter": "n"}},
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}]},
+                                                "domain": {"variable": "hydra.coq.syntax.Name"},
+                                                "parameter": "n"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                    "argument": {
+                                                      "application": {"argument": {"variable": "ci"}, "function": {"project": {"fieldName": "as", "typeName": "hydra.coq.syntax.CaseItem"}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                                        "type": {"variable": "hydra.coq.syntax.Name"}}}}}}}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Name"}}},
+                                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1394,24 +1397,25 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "return", "typeName": "hydra.coq.syntax.Match"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": "return"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "r"}, "function": {"variable": "hydra.coq.serde.term100ToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Term100"},
+                            "parameter": "r"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": "return"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "r"}, "function": {"variable": "hydra.coq.serde.term100ToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Term100"},
-                                "parameter": "r"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "return", "typeName": "hydra.coq.syntax.Match"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Term100"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Term100"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "eqs",
@@ -1738,26 +1742,26 @@
                                     {
                                       "application": {
                                         "argument": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "pa"},
-                                                "function": {"project": {"fieldName": "as", "typeName": "hydra.coq.syntax.Pattern10_As"}}}},
-                                            "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                          "lambda": {
+                                            "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                            "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                            "parameter": "i"}},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "lambda": {
-                                                "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                "parameter": "i"}},
+                                            "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "pa"},
+                                                        "function": {"project": {"fieldName": "as", "typeName": "hydra.coq.syntax.Pattern10_As"}}}},
+                                                    "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                    "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}}]},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}]},
                                 "function": {"variable": "hydra.serialization.spaceSep"}}},
                             "domain": {"variable": "hydra.coq.syntax.Pattern10_As"},
                             "parameter": "pa"}},
@@ -1919,7 +1923,7 @@
                         "handler": {
                           "lambda": {
                             "body": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                            "domain": {"maybe": {"variable": "hydra.coq.syntax.Term"}},
+                            "domain": {"optional": {"variable": "hydra.coq.syntax.Term"}},
                             "parameter": "_"}},
                         "name": "term"}],
                     "typeName": "hydra.coq.syntax.Pattern"}}}},
@@ -2013,23 +2017,24 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "rd"},
-                            "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.RecordDefinition"}}}},
+                          "lambda": {
+                            "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Locality"},
+                            "parameter": "l"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {"list": [{"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.coq.serde.localityToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Locality"},
-                                "parameter": "l"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "rd"},
+                                    "function": {"project": {"fieldName": "locality", "typeName": "hydra.coq.syntax.RecordDefinition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Locality"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Locality"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "name",
@@ -2066,26 +2071,26 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "rd"},
-                            "function": {"project": {"fieldName": "sort", "typeName": "hydra.coq.syntax.RecordDefinition"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.coq.serde.sortToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Sort"},
+                            "parameter": "s"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.coq.serde.sortToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Sort"},
-                                "parameter": "s"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "rd"},
+                                    "function": {"project": {"fieldName": "sort", "typeName": "hydra.coq.syntax.RecordDefinition"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Sort"}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Sort"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "body",
@@ -2099,23 +2104,23 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "body"},
-                            "function": {"project": {"fieldName": "constructor", "typeName": "hydra.coq.syntax.RecordBody"}}}},
+                          "lambda": {
+                            "body": {"list": [{"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Ident"},
+                            "parameter": "c"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {"list": [{"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                "parameter": "c"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "body"},
+                                    "function": {"project": {"fieldName": "constructor", "typeName": "hydra.coq.syntax.RecordBody"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "fields",
@@ -2225,26 +2230,27 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "ri"},
-                            "function": {"project": {"fieldName": "from", "typeName": "hydra.coq.syntax.RequireImport"}}}},
+                          "lambda": {
+                            "body": {
+                              "list": [
+                                {"application": {"argument": {"literal": {"string": "From"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"application": {"argument": {"variable": "q"}, "function": {"variable": "hydra.coq.serde.qualidToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Qualid"},
+                            "parameter": "q"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": "From"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "q"}, "function": {"variable": "hydra.coq.serde.qualidToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Qualid"},
-                                "parameter": "q"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "ri"},
+                                    "function": {"project": {"fieldName": "from", "typeName": "hydra.coq.syntax.RequireImport"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Qualid"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Qualid"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "requirePart",
@@ -2268,45 +2274,46 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "ri"},
-                            "function": {"project": {"fieldName": "qualification", "typeName": "hydra.coq.syntax.RequireImport"}}}},
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "q"},
+                                "function": {
+                                  "cases": {
+                                    "cases": [
+                                      {
+                                        "handler": {
+                                          "lambda": {
+                                            "body": {
+                                              "list": [{"application": {"argument": {"literal": {"string": "Import"}}, "function": {"variable": "hydra.serialization.cst"}}}]},
+                                            "domain": {"unit": {}},
+                                            "parameter": "_"}},
+                                        "name": "import"},
+                                      {
+                                        "handler": {
+                                          "lambda": {
+                                            "body": {
+                                              "list": [{"application": {"argument": {"literal": {"string": "Export"}}, "function": {"variable": "hydra.serialization.cst"}}}]},
+                                            "domain": {"unit": {}},
+                                            "parameter": "_"}},
+                                        "name": "export"}],
+                                    "typeName": "hydra.coq.syntax.ImportQualification"}}}},
+                            "domain": {"variable": "hydra.coq.syntax.ImportQualification"},
+                            "parameter": "q"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "q"},
-                                    "function": {
-                                      "cases": {
-                                        "cases": [
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "list": [{"application": {"argument": {"literal": {"string": "Import"}}, "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                "domain": {"unit": {}},
-                                                "parameter": "_"}},
-                                            "name": "import"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "list": [{"application": {"argument": {"literal": {"string": "Export"}}, "function": {"variable": "hydra.serialization.cst"}}}]},
-                                                "domain": {"unit": {}},
-                                                "parameter": "_"}},
-                                            "name": "export"}],
-                                        "typeName": "hydra.coq.syntax.ImportQualification"}}}},
-                                "domain": {"variable": "hydra.coq.syntax.ImportQualification"},
-                                "parameter": "q"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "ri"},
+                                    "function": {"project": {"fieldName": "qualification", "typeName": "hydra.coq.syntax.RequireImport"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.ImportQualification"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.ImportQualification"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "mods",
@@ -2523,23 +2530,24 @@
                     "term": {
                       "application": {
                         "argument": {
-                          "application": {
-                            "argument": {"variable": "s"},
-                            "function": {"project": {"fieldName": "comment", "typeName": "hydra.coq.syntax.Sentence"}}}},
+                          "lambda": {
+                            "body": {"list": [{"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.coq.serde.commentToExpr"}}}]},
+                            "domain": {"variable": "hydra.coq.syntax.Comment"},
+                            "parameter": "c"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {"list": [{"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.coq.serde.commentToExpr"}}}]},
-                                "domain": {"variable": "hydra.coq.syntax.Comment"},
-                                "parameter": "c"}},
+                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "s"},
+                                    "function": {"project": {"fieldName": "comment", "typeName": "hydra.coq.syntax.Sentence"}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                    "type": {"variable": "hydra.coq.syntax.Comment"}}}}}}}}},
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Comment"}}},
+                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                     "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                   {
                     "name": "content",
@@ -2688,21 +2696,21 @@
                                                                                       "lambda": {
                                                                                         "body": {
                                                                                           "application": {
-                                                                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                                                                "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                                                                "parameter": "i"}},
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "argument": {
-                                                                                                  "lambda": {
-                                                                                                    "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                                                                    "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                                                                    "parameter": "i"}},
+                                                                                                "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                                                                     "function": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                                                        "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                                                                         "domain": {"variable": "hydra.coq.syntax.Name"},
                                                                                         "parameter": "n"}},
                                                                                     "function": {
@@ -2808,21 +2816,21 @@
                                                                                       "lambda": {
                                                                                         "body": {
                                                                                           "application": {
-                                                                                            "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                                                                "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                                                                "parameter": "i"}},
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "argument": {
-                                                                                                  "lambda": {
-                                                                                                    "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                                                                    "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                                                                    "parameter": "i"}},
+                                                                                                "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                                                                     "function": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                                                        "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                                                                         "domain": {"variable": "hydra.coq.syntax.Name"},
                                                                                         "parameter": "n"}},
                                                                                     "function": {
@@ -2940,26 +2948,26 @@
                                                         "term": {
                                                           "application": {
                                                             "argument": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "binder"},
-                                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.coq.syntax.LetBinder"}}}},
-                                                                "function": {"unwrap": "hydra.coq.syntax.Name"}}},
+                                                              "lambda": {
+                                                                "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
+                                                                "domain": {"variable": "hydra.coq.syntax.Ident"},
+                                                                "parameter": "i"}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "body": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.coq.serde.identToExpr"}}},
-                                                                    "domain": {"variable": "hydra.coq.syntax.Ident"},
-                                                                    "parameter": "i"}},
+                                                                "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"application": {"argument": {"literal": {"string": "_"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "binder"},
+                                                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.coq.syntax.LetBinder"}}}},
+                                                                        "function": {"unwrap": "hydra.coq.syntax.Name"}}},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                                        "type": {"variable": "hydra.coq.syntax.Ident"}}}}}}}}},
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Ident"}}},
+                                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                                                       {
                                                         "name": "binders",
@@ -2986,26 +2994,26 @@
                                                         "term": {
                                                           "application": {
                                                             "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "binder"},
-                                                                "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.LetBinder"}}}},
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "list": [
+                                                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                                                                "domain": {"variable": "hydra.coq.syntax.Type"},
+                                                                "parameter": "t2"}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "list": [
-                                                                        {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                                        {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                                                    "domain": {"variable": "hydra.coq.syntax.Type"},
-                                                                    "parameter": "t2"}},
+                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "binder"},
+                                                                        "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.LetBinder"}}}},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                                                        "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                                                       {
                                                         "name": "val",
@@ -3164,24 +3172,24 @@
                                                             "term": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "application": {"argument": {"variable": "d"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.Fix_Decl"}}}},
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "list": [
+                                                                        {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
+                                                                    "domain": {"variable": "hydra.coq.syntax.Type"},
+                                                                    "parameter": "t"}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "list": [
-                                                                            {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                                            {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coq.serde.typeToExpr"}}}]},
-                                                                        "domain": {"variable": "hydra.coq.syntax.Type"},
-                                                                        "parameter": "t"}},
+                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                                        "argument": {
+                                                                          "application": {"argument": {"variable": "d"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.coq.syntax.Fix_Decl"}}}},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                                                            "type": {"variable": "hydra.coq.syntax.Type"}}}}}}}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.coq.syntax.Type"}}},
+                                                                            "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                                                             "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                                                           {
                                                             "name": "body",
@@ -3214,7 +3222,7 @@
                                         "handler": {
                                           "lambda": {
                                             "body": {"application": {"argument": {"literal": {"string": "fix"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                            "domain": {"maybe": {"variable": "hydra.coq.syntax.Fix_Qual"}},
+                                            "domain": {"optional": {"variable": "hydra.coq.syntax.Fix_Qual"}},
                                             "parameter": "q"}},
                                         "name": "qual"}],
                                     "typeName": "hydra.coq.syntax.Fix"}}}},

@@ -61,7 +61,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The return type of the function (if type inference succeeded)"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
+                            "body": {"optional": {"variable": "hydra.core.Type"}}}}},
                       {
                         "name": "environment",
                         "type": {
@@ -197,7 +197,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An optional human-readable description of the parameter"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "type",
                     "type": {
@@ -239,7 +239,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An optional human-readable description of the result"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "type",
                     "type": {

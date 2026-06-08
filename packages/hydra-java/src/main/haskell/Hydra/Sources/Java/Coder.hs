@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
@@ -335,12 +335,12 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
       -- Look up the type scheme from either elements or primitives
       ("mts" <<~ (
         "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "cname") $
-        Maybes.cases (var "mel")
-          (right (Maybes.map
+        Optionals.cases (var "mel")
+          (right (Optionals.map
               (lambda "prim" $ Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))
               (Maps.lookup (var "cname") (Graph.graphPrimitives (var "g")))))
           (lambda "el" $ right (Core.bindingTypeScheme (var "el")))) $
-      Maybes.cases (var "mts")
+      Optionals.cases (var "mts")
         (right (var "argTerms"))
         (lambda "ts" $
           "schemeType" <~ Core.typeSchemeBody (var "ts") $
@@ -412,7 +412,7 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
       _Term_annotated>>: lambda "at" $
         "inner" <~ Core.annotatedTermBody (var "at") $
         "ann" <~ (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")) $
-        "ann'" <~ Maybes.cases (Maps.lookup Constants.keyType (var "ann"))
+        "ann'" <~ Optionals.cases (Maps.lookup Constants.keyType (var "ann"))
           (var "ann")
           (lambda "typeTerm" $
             Eithers.either_
@@ -431,12 +431,12 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
       _Term_lambda>>: lambda "lam" $
         Core.termLambda (Core.lambda
           (Core.lambdaParameter (var "lam"))
-          (Maybes.map (lambda "d" $ substituteTypeVarsWithTypes @@ var "subst" @@ var "d") (Core.lambdaDomain (var "lam")))
+          (Optionals.map (lambda "d" $ substituteTypeVarsWithTypes @@ var "subst" @@ var "d") (Core.lambdaDomain (var "lam")))
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.lambdaBody (var "lam"))),
       _Term_cases>>: lambda "cs" $
         Core.termCases (Core.caseStatement
           (Core.caseStatementTypeName (var "cs"))
-          (Maybes.map (lambda "d" $ applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "d") (Core.caseStatementDefault (var "cs")))
+          (Optionals.map (lambda "d" $ applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "d") (Core.caseStatementDefault (var "cs")))
           (Lists.map (lambda "fld" $ Core.caseAlternative (Core.caseAlternativeName (var "fld")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.caseAlternativeHandler (var "fld"))) (Core.caseStatementCases (var "cs")))),
       _Term_let>>: lambda "lt" $
         Core.termLet (Core.let_
@@ -473,8 +473,8 @@ applySubstFull = def "applySubstFull" $
       Core.typeList (applySubstFull @@ var "s" @@ var "inner"),
     _Type_set>>: lambda "inner" $
       Core.typeSet (applySubstFull @@ var "s" @@ var "inner"),
-    _Type_maybe>>: lambda "inner" $
-      Core.typeMaybe (applySubstFull @@ var "s" @@ var "inner"),
+    _Type_optional>>: lambda "inner" $
+      Core.typeOptional (applySubstFull @@ var "s" @@ var "inner"),
     _Type_map>>: lambda "mt" $
       Core.typeMap (Core.mapType
         (applySubstFull @@ var "s" @@ Core.mapTypeKeys (var "mt"))
@@ -574,7 +574,8 @@ bigintAsInt = coerce
 bindingIsFunctionType :: TypedTermDefinition (Binding -> Bool)
 bindingIsFunctionType = def "bindingIsFunctionType" $
   lambda "b" $
-    Maybes.maybe
+    Optionals.cases
+      (Core.bindingTypeScheme (var "b"))
       -- No type scheme: check term structure
       (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
         (Just $ boolean False) [
@@ -591,7 +592,6 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
             cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
               (Just $ boolean False) [
               _Type_function>>: lambda "_ft2" $ boolean True]])
-      (Core.bindingTypeScheme (var "b"))
 
 -- | Decode a Type from its term encoding (limited subset).
 
@@ -641,16 +641,13 @@ bindingsToStatements = def "bindingsToStatements" $
     "recursiveVars" <~ Sets.fromList (Lists.concat (Lists.map
       (lambda "names" $
         Logic.ifElse (Equality.equal (Lists.length (var "names")) (int32 1))
-          (Maybes.maybe
-            (list ([] :: [TypedTerm Name]))
-            (lambda "singleName" $
-              Maybes.cases (Maps.lookup (var "singleName") (var "allDeps"))
+          (Optionals.cases (Lists.maybeHead (var "names")) (list ([] :: [TypedTerm Name])) (lambda "singleName" $
+              Optionals.cases (Maps.lookup (var "singleName") (var "allDeps"))
                 (list ([] :: [TypedTerm Name]))
                 (lambda "deps" $
                   Logic.ifElse (Sets.member (var "singleName") (var "deps"))
                     (list [var "singleName"])
-                    (list ([] :: [TypedTerm Name]))))
-            (Lists.maybeHead (var "names")))
+                    (list ([] :: [TypedTerm Name])))))
           (var "names"))
       (var "sorted"))) $
     -- Identify thunked vars. Mirror the Python coder's rule
@@ -718,7 +715,7 @@ bindingsToStatements = def "bindingsToStatements" $
           -- For each group: generate init statements (for recursive vars) and decl statements
           "inits" <<~ (Eithers.mapList (lambda "n" $ toDeclInit @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "flatBindings" @@ var "n" @@ var "cx" @@ var "g") (var "names")) $
           "decls" <<~ (Eithers.mapList (lambda "n" $ toDeclStatement @@ var "envExtended" @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "thunkedVars" @@ var "flatBindings" @@ var "n" @@ var "cx" @@ var "g") (var "names")) $
-          right (Lists.concat2 (Maybes.cat (var "inits")) (var "decls")))
+          right (Lists.concat2 (Optionals.cat (var "inits")) (var "decls")))
         (var "sorted")) $
         right (pair (Lists.concat (var "groups")) (var "envExtended")))
 
@@ -782,7 +779,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
         "body" <~ Core.annotatedTermBody (var "at") $
         "anns" <~ (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")) $
         "bodySubst" <~ (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "body") $
-        "annSubst" <~ Maybes.cases (Maps.lookup Constants.keyType (var "anns"))
+        "annSubst" <~ Optionals.cases (Maps.lookup Constants.keyType (var "anns"))
           Maps.empty
           (lambda "typeTerm" $
             Eithers.either_
@@ -791,7 +788,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
                 cases _Term (Strip.deannotateTerm @@ var "body")
                   (Just Maps.empty) [
                   _Term_lambda>>: lambda "lam" $
-                    Maybes.cases (Core.lambdaDomain (var "lam"))
+                    Optionals.cases (Core.lambdaDomain (var "lam"))
                       Maps.empty
                       (lambda "dom" $
                         cases _Type (Strip.deannotateType @@ var "annType")
@@ -809,7 +806,7 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
       _Term_lambda>>: lambda "lam" $
         buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.lambdaBody (var "lam"),
       _Term_cases>>: lambda "cs" $
-        "defSubst" <~ Maybes.cases (Core.caseStatementDefault (var "cs"))
+        "defSubst" <~ Optionals.cases (Core.caseStatementDefault (var "cs"))
           Maps.empty
           (lambda "d" $ buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "d") $
         "caseSubsts" <~ Lists.foldl
@@ -831,8 +828,8 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
             Maps.union (var "acc") (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "t"))
           Maps.empty
           (var "terms"),
-      _Term_maybe>>: lambda "mt" $
-        Maybes.cases (var "mt")
+      _Term_optional>>: lambda "mt" $
+        Optionals.cases (var "mt")
           Maps.empty
           (lambda "t" $ buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "t"),
       _Term_pair>>: lambda "p" $
@@ -911,10 +908,10 @@ buildTypeSubst_go = def "buildTypeSubst_go" $
           (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
           _Type_set>>: lambda "as'" $
             var "goSub" @@ var "ss" @@ var "as'"],
-      _Type_maybe>>: lambda "sm" $
+      _Type_optional>>: lambda "sm" $
         cases _Type (var "at")
           (Just (Maps.empty :: TypedTerm (M.Map Name Type))) [
-          _Type_maybe>>: lambda "am" $
+          _Type_optional>>: lambda "am" $
             var "goSub" @@ var "sm" @@ var "am"],
       _Type_map>>: lambda "smt" $
         cases _Type (var "at")
@@ -1003,10 +1000,10 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
           (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
           _Type_set>>: lambda "cs" $
             var "goSub" @@ var "fs" @@ var "cs"],
-      _Type_maybe>>: lambda "fm" $
+      _Type_optional>>: lambda "fm" $
         cases _Type (var "ct")
           (Just (Maps.empty :: TypedTerm (M.Map Name Name))) [
-          _Type_maybe>>: lambda "cm" $
+          _Type_optional>>: lambda "cm" $
             var "goSub" @@ var "fm" @@ var "cm"],
       _Type_map>>: lambda "fmt" $
         cases _Type (var "ct")
@@ -1048,11 +1045,11 @@ classifyDataReference = def "classifyDataReference" $
   lambda "name" $
     "cx" ~> "g" ~>
     "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "name") $
-    Maybes.cases (var "mel")
+    Optionals.cases (var "mel")
       -- Not found: treat as local variable
       (right $ inject JavaHelpers._JavaSymbolClass JavaHelpers._JavaSymbolClass_localVariable unit)
       (lambda "el" $
-        Maybes.cases (Core.bindingTypeScheme (var "el"))
+        Optionals.cases (Core.bindingTypeScheme (var "el"))
           (left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "no type scheme for element ") ((unwrap _Name @@ Core.bindingName (var "el")))))
           (lambda "ts" $
             right $ classifyDataTerm @@ var "ts" @@ Core.bindingTerm (var "el")))
@@ -1136,7 +1133,7 @@ collectLambdaDomains = def "collectLambdaDomains" $
     cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (list ([] :: [TypedTerm Type])) (var "t")) [
       _Term_lambda>>: lambda "lam" $
-        Maybes.cases (Core.lambdaDomain (var "lam"))
+        Optionals.cases (Core.lambdaDomain (var "lam"))
           (pair (list ([] :: [TypedTerm Type])) (var "t"))
           (lambda "dom" $
             "rest" <~ (collectLambdaDomains @@ Core.lambdaBody (var "lam")) $
@@ -1189,7 +1186,7 @@ collectTypeVars_go = def "collectTypeVars_go" $
       collectTypeVars_go @@ (Strip.deannotateType @@ var "inner"),
     _Type_set>>: lambda "inner" $
       collectTypeVars_go @@ (Strip.deannotateType @@ var "inner"),
-    _Type_maybe>>: lambda "inner" $
+    _Type_optional>>: lambda "inner" $
       collectTypeVars_go @@ (Strip.deannotateType @@ var "inner"),
     _Type_map>>: lambda "mt" $
       Sets.union
@@ -1250,7 +1247,7 @@ compareToBody :: TypedTermDefinition (JavaHelpers.Aliases -> String -> [FieldTyp
 compareToBody = def "compareToBody" $
   lambda "aliases" $ lambda "otherVar" $ lambda "fields" $ lets [
     "zeroStmts">: list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0)))]] $
-    Maybes.fromMaybe (var "zeroStmts") (Maybes.map
+    Optionals.fromOptional (var "zeroStmts") (Optionals.map
       (lambda "p" $ lets [
         "firstField">: Pairs.first (var "p"),
         "restFields">: Pairs.second (var "p")] $
@@ -1259,8 +1256,8 @@ compareToBody = def "compareToBody" $
           (Lists.concat2
             (list [cmpDeclStatement @@ var "aliases"])
             (Lists.concat2
-              (Lists.concat (Lists.map (lambda "f" $ compareAndReturnStmts @@ var "otherVar" @@ var "f") (Lists.cons (var "firstField") (Maybes.fromMaybe (list ([] :: [TypedTerm FieldType])) (Lists.maybeInit (var "restFields"))))))
-              (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ (Maybes.fromMaybe (var "firstField") (Lists.maybeLast (var "restFields")))))]))))
+              (Lists.concat (Lists.map (lambda "f" $ compareAndReturnStmts @@ var "otherVar" @@ var "f") (Lists.cons (var "firstField") (Optionals.fromOptional (list ([] :: [TypedTerm FieldType])) (Lists.maybeInit (var "restFields"))))))
+              (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ (Optionals.fromOptional (var "firstField") (Lists.maybeLast (var "restFields")))))]))))
       (Lists.uncons (var "fields")))
 
 -- | this.field.compareTo(other.field) == 0 for BigDecimal/BigInteger fields
@@ -1342,7 +1339,7 @@ constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
     "ns">: Packaging.moduleName (var "mod"),
     "parentNs">: namespaceParent @@ var "ns",
-    "pkg">: Maybes.cases (var "parentNs")
+    "pkg">: Optionals.cases (var "parentNs")
       (JavaUtilsSource.javaPackageDeclaration @@ var "ns")
       (lambda "pns" $ JavaUtilsSource.javaPackageDeclaration @@ var "pns"),
     "mods">: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
@@ -1364,7 +1361,7 @@ constructElementsInterface = def "constructElementsInterface" $
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
     "decl">: record Java._TopLevelClassOrInterfaceDeclarationWithComments [
       Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: var "itf",
-      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: (Maybes.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))]] $
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: (Optionals.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em")))]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [
@@ -1386,8 +1383,8 @@ correctCastType = def "correctCastType" $
       _Term_pair>>: lambda "_p" $
         Logic.ifElse (Equality.equal (Lists.length (var "typeArgs")) (int32 2))
           (right (inject _Type _Type_pair (Core.pairType
-            (Maybes.fromMaybe (var "fallback") (Lists.maybeAt (int32 0) (var "typeArgs")))
-            (Maybes.fromMaybe (var "fallback") (Lists.maybeAt (int32 1) (var "typeArgs"))))))
+            (Optionals.fromOptional (var "fallback") (Lists.maybeAt (int32 0) (var "typeArgs")))
+            (Optionals.fromOptional (var "fallback") (Lists.maybeAt (int32 1) (var "typeArgs"))))))
           (right (var "fallback"))]
 
 -- | Compute corrected type applications for a function call.
@@ -1396,10 +1393,10 @@ correctTypeApps = def "correctTypeApps" $
   lambda "gr" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
     "cx" ~> "g" ~>
     "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "name") $
-    Maybes.cases (var "mel")
+    Optionals.cases (var "mel")
       (right (var "fallbackTypeApps"))
       (lambda "el" $
-        Maybes.cases (Core.bindingTypeScheme (var "el"))
+        Optionals.cases (Core.bindingTypeScheme (var "el"))
           (right (var "fallbackTypeApps"))
           (lambda "ts" $
             "schemeType" <~ Core.typeSchemeBody (var "ts") $
@@ -1446,10 +1443,10 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
         getTypeE (var "cx") (var "g") ((Annotations.termAnnotationInternal @@ var "arg")))
       (var "args") $
     Logic.ifElse
-      (Logic.not (Lists.null (Lists.filter (lambda "m" $ Maybes.isNothing (var "m")) (var "mArgTypes"))))
+      (Logic.not (Lists.null (Lists.filter (lambda "m" $ Optionals.isNone (var "m")) (var "mArgTypes"))))
       (right (var "fallbackTypeApps"))
       ("argTypes" <~ Lists.bind (var "mArgTypes")
-        (lambda "m" $ Maybes.cases (var "m") (list ([] :: [TypedTerm Type])) (lambda "x" $ Lists.pure (var "x"))) $
+        (lambda "m" $ Optionals.cases (var "m") (list ([] :: [TypedTerm Type])) (lambda "x" $ Lists.pure (var "x"))) $
       "irDoms" <~ Lists.map (lambda "d" $ applySubstSimple @@ var "irSubst" @@ var "d") (var "schemeDoms") $
       "domsMatch" <~ Lists.null (Lists.filter
         (lambda "p" $ Logic.not (typesMatch @@ (Strip.deannotateType @@ Pairs.first (var "p"))
@@ -1504,14 +1501,11 @@ declarationForRecordType' = def "declarationForRecordType'" $
     "paramLines" <<~ (Eithers.mapList (lambda "f" $
       "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
       "mDoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "f") $
-      right (Maybes.maybe
-        (string "")
-        (lambda "d" $ Strings.cat (list [
+      right (Optionals.cases (var "mDoc") (string "") (lambda "d" $ Strings.cat (list [
           string "@param ",
           var "fname",
           string " ",
-          var "d"]))
-        (var "mDoc")))
+          var "d"]))))
       (var "fields")) $
     "nonEmptyParamLines" <~ Lists.filter
       (lambda "l" $ Logic.not (Equality.equal (var "l") (string "")))
@@ -1532,7 +1526,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
       ("d" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
         "dfields" <<~ (Eithers.mapList (lambda "f" $ constantDeclForFieldType @@ var "elName" @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
         right (Lists.cons (var "d") (var "dfields")))) $
-    "comparableMethods" <~ (Maybes.cases (var "parentName")
+    "comparableMethods" <~ (Optionals.cases (var "parentName")
       (Logic.ifElse (Logic.and (Logic.not (var "isInner")) (var "isSer"))
         (list [recordCompareToMethod @@ var "aliases" @@ var "tparams" @@ var "elName" @@ var "fields"])
         (list ([] :: [TypedTerm Java.ClassBodyDeclaration])))
@@ -1732,7 +1726,7 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                (cases _Term (var "fterm")
                  (Just nothing) [
                  _Term_record>>: lambda "rec" $
-                   Maybes.bind
+                   Optionals.bind
                      (Lists.maybeHead (Lists.filter
                        (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "body")))
                        (Core.recordFields (var "rec"))))
@@ -1743,18 +1737,18 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                  (cases _Term (var "fterm")
                    (Just nothing) [
                    _Term_record>>: lambda "rec" $
-                     Maybes.bind
+                     Optionals.bind
                        (Lists.maybeHead (Lists.filter
                          (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "function")))
                          (Core.recordFields (var "rec"))))
                        (lambda "funcField" $
-                         Maybes.bind (decodeTypeFromTerm @@ Core.fieldTerm (var "funcField")) (lambda "func" $
-                           Maybes.bind
+                         Optionals.bind (decodeTypeFromTerm @@ Core.fieldTerm (var "funcField")) (lambda "func" $
+                           Optionals.bind
                              (Lists.maybeHead (Lists.filter
                                (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "argument")))
                                (Core.recordFields (var "rec"))))
                              (lambda "argField" $
-                               Maybes.map
+                               Optionals.map
                                  (lambda "arg" $ Core.typeApplication (Core.applicationType (var "func") (var "arg")))
                                  (decodeTypeFromTerm @@ Core.fieldTerm (var "argField")))))])
                  (Logic.ifElse
@@ -1762,18 +1756,18 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                    (cases _Term (var "fterm")
                      (Just nothing) [
                      _Term_record>>: lambda "rec" $
-                       Maybes.bind
+                       Optionals.bind
                          (Lists.maybeHead (Lists.filter
                            (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "domain")))
                            (Core.recordFields (var "rec"))))
                          (lambda "domField" $
-                           Maybes.bind (decodeTypeFromTerm @@ Core.fieldTerm (var "domField")) (lambda "dom" $
-                             Maybes.bind
+                           Optionals.bind (decodeTypeFromTerm @@ Core.fieldTerm (var "domField")) (lambda "dom" $
+                             Optionals.bind
                                (Lists.maybeHead (Lists.filter
                                  (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "codomain")))
                                  (Core.recordFields (var "rec"))))
                                (lambda "codField" $
-                                 Maybes.map
+                                 Optionals.map
                                    (lambda "cod" $ Core.typeFunction (Core.functionType (var "dom") (var "cod")))
                                    (decodeTypeFromTerm @@ Core.fieldTerm (var "codField")))))])
                    (Logic.ifElse
@@ -1792,7 +1786,7 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
 dedupBindings :: TypedTermDefinition (S.Set Name -> [Binding] -> [Binding])
 dedupBindings = def "dedupBindings" $
   lambda "inScope" $ lambda "bs" $
-    Maybes.fromMaybe (list ([] :: [TypedTerm Binding])) (Maybes.map
+    Optionals.fromOptional (list ([] :: [TypedTerm Binding])) (Optionals.map
       (lambda "p" $
         "b" <~ Pairs.first (var "p") $
         "rest" <~ Pairs.second (var "p") $
@@ -1832,33 +1826,21 @@ detectAccumulatorUnification = def "detectAccumulatorUnification" $
       (Just nothing) [
       _Type_variable>>: lambda "v" $ just (var "v")]) $
     "directRefSubst" <~ (directRefSubstitution @@ var "directInputVars" @@ var "codVar" @@ var "groupedDirect") $
-    "codSubst" <~ (Maybes.maybe
-      (Maps.empty)
-      (lambda "cv" $
+    "codSubst" <~ (Optionals.cases (findPairFirst @@ var "cod") (Maps.empty) (lambda "cv" $
         Logic.ifElse
           (Maps.member (var "cv") (var "selfRefSubst"))
           (Maps.empty)
-          (Maybes.maybe
-            (Maps.empty)
-            (lambda "refVar" $
+          (Optionals.cases (findSelfRefVar @@ var "groupedByInput") (Maps.empty) (lambda "refVar" $
               Logic.ifElse
                 (Equality.equal (var "cv") (var "refVar"))
                 (Maps.empty)
-                (Maps.singleton (var "cv") (var "refVar")))
-            (findSelfRefVar @@ var "groupedByInput")))
-      (findPairFirst @@ var "cod")) $
+                (Maps.singleton (var "cv") (var "refVar")))))) $
     "domVars" <~ Sets.fromList (Lists.bind (var "doms") (lambda "d" $ Sets.toList (collectTypeVars @@ var "d"))) $
-    "danglingSubst" <~ (Maybes.maybe
-      (Maps.empty)
-      (lambda "cv" $
+    "danglingSubst" <~ (Optionals.cases (findPairFirst @@ var "cod") (Maps.empty) (lambda "cv" $
         Logic.ifElse
           (Sets.member (var "cv") (var "domVars"))
           (Maps.empty)
-          (Maybes.maybe
-            (Maps.empty)
-            (lambda "refVar" $ Maps.singleton (var "cv") (Core.typeVariable (var "refVar")))
-            (findSelfRefVar @@ var "groupedByInput")))
-      (findPairFirst @@ var "cod")) $
+          (Optionals.cases (findSelfRefVar @@ var "groupedByInput") (Maps.empty) (lambda "refVar" $ Maps.singleton (var "cv") (Core.typeVariable (var "refVar")))))) $
     Maps.union (Maps.union (Maps.union
       (nameMapToTypeMap @@ var "selfRefSubst")
       (nameMapToTypeMap @@ var "codSubst"))
@@ -1928,7 +1910,7 @@ elementJavaIdentifier = def "elementJavaIdentifier" $
             @@ (Formatting.capitalize @@ var "local"))
           (string "."))
         (asTerm JavaNamesSource.applyMethodName)))
-      (Maybes.cases (var "ns_")
+      (Optionals.cases (var "ns_")
         (wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ var "local"))
         (lambda "n" $ wrap Java._Identifier (Strings.cat2
           (Strings.cat2
@@ -1951,7 +1933,7 @@ elementsClassName = def "elementsClassName" $
     "nsStr">: unwrap _ModuleName @@ var "ns",
     "parts">: Strings.splitOn (string ".") (var "nsStr")] $
     Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords
-      @@ (Formatting.capitalize @@ (Maybes.fromMaybe (var "nsStr") (Lists.maybeLast (var "parts"))))
+      @@ (Formatting.capitalize @@ (Optionals.fromOptional (var "nsStr") (Lists.maybeLast (var "parts"))))
 
 -- | Produce the qualified name for a term module's elements interface.
 -- Uses the parent namespace so that e.g. "hydra.formatting" -> "hydra.Formatting" (not "hydra.formatting.Formatting").
@@ -1977,7 +1959,7 @@ encodeApplication = def "encodeApplication" $
     "typeApps" <~ Pairs.second (Pairs.second (var "gathered")) $
     -- Get the function's arity from its type
     "mfunTyp" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "fun")) $
-    "funTyp" <<~ (Maybes.cases (var "mfunTyp")
+    "funTyp" <<~ (Optionals.cases (var "mfunTyp")
       (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "fun")
       (lambda "t" $ right (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
@@ -1987,7 +1969,7 @@ encodeApplication = def "encodeApplication" $
       (Just nothing) [
       _Term_variable>>: lambda "n" $ just (var "n")]) $
     -- Annotate lambda args if we have a callee name
-    "annotatedArgs" <<~ (Maybes.cases (var "calleeName")
+    "annotatedArgs" <<~ (Optionals.cases (var "calleeName")
       (right (var "args"))
       (lambda "cname" $ annotateLambdaArgs @@ var "cname" @@ var "typeApps" @@ var "args" @@ var "cx" @@ var "g")) $
     -- Dispatch based on the deannotated function form
@@ -1996,7 +1978,7 @@ encodeApplication = def "encodeApplication" $
         @@ (Core.applicationFunction (var "app")) @@ (Core.applicationArgument (var "app")) @@ var "cx" @@ var "g") [
       _Term_variable>>: lambda "name" $
         -- If the variable resolves to a primitive, handle it like FunctionPrimitive
-        Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (Graph.graphPrimitives (var "g"))))
+        Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name") (Graph.graphPrimitives (var "g"))))
           ("hargs" <~ Lists.take (var "arity") (var "annotatedArgs") $
            "rargs" <~ Lists.drop (var "arity") (var "annotatedArgs") $
            "initialCall" <<~ (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TypedTerm Type])) @@ var "cx" @@ var "g") $
@@ -2047,7 +2029,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
   lambda "env" $ lambda "aliases" $ lambda "gr" $ lambda "typeApps" $ lambda "lhs" $ lambda "rhs" $
     "cx" ~> "g" ~>
     ("mt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "lhs")) $
-    "t" <<~ (Maybes.cases (var "mt")
+    "t" <<~ (Optionals.cases (var "mt")
       (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "lhs")
       (lambda "typ" $ right (var "typ"))) $
     cases _Type (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "t"))
@@ -2070,7 +2052,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
               (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "dom")))
               (right (var "dom"))
               ("mrt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "rhs")) $
-                Maybes.cases (var "mrt")
+                Optionals.cases (var "mrt")
                   ("rt" <<~ (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
                     right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
                       (var "rt")
@@ -2132,7 +2114,7 @@ encodeElimination = def "encodeElimination" $
         "fname" <~ (Core.projectionFieldName (var "proj")) $
         "jdom0" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "dom" @@ var "cx" @@ var "g") $
         "jdomr" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jdom0" @@ var "cx") $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- No arg: generate lambda for projection
           ("projVar" <~ wrap _Name (string "projected") $
             "jbody" <~ (JavaUtilsSource.javaExpressionNameToJavaExpression @@
@@ -2152,7 +2134,7 @@ encodeElimination = def "encodeElimination" $
         "tname" <~ (project _CaseStatement _CaseStatement_typeName @@ var "cs") $
         "def_" <~ (project _CaseStatement _CaseStatement_default @@ var "cs") $
         "fields" <~ (project _CaseStatement _CaseStatement_cases @@ var "cs") $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- No arg: wrap elimination in a lambda. We need the inner application
           -- `App elimTerm u` to typecheck: elimTerm's case-statement domain (the
           -- bare nominal `tname`) must match the wrapper lambda's parameter `u`,
@@ -2196,7 +2178,7 @@ encodeElimination = def "encodeElimination" $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jcod" @@ var "cx") $
             "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $
             "targs" <~ (typeArgsOrDiamond @@ (Lists.concat2 (var "domArgs") (list [JavaDsl.typeArgumentReference (var "rt")]))) $
-            "otherwiseBranches" <<~ (Maybes.cases (var "def_")
+            "otherwiseBranches" <<~ (Optionals.cases (var "def_")
               (right (list ([] :: [TypedTerm Java.ClassBodyDeclarationWithComments])))
               (lambda "d" $
                 "b" <<~ (otherwiseBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "cod" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "d" @@ var "cx" @@ var "g") $
@@ -2215,7 +2197,7 @@ encodeElimination = def "encodeElimination" $
             Java._FieldAccess_qualifier>>: inject Java._FieldAccess_Qualifier Java._FieldAccess_Qualifier_primary
               (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "ja"),
             Java._FieldAccess_identifier>>: JavaUtilsSource.javaIdentifier @@ asTerm JavaNamesSource.valueFieldName])) $
-        right (Maybes.cases (var "marg")
+        right (Optionals.cases (var "marg")
           -- No arg: generate lambda for unwrapping
           ("wVar" <~ wrap _Name (string "wrapped") $
             "wArg" <~ (JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "wVar")) $
@@ -2296,8 +2278,8 @@ encodeFunctionFormTerm = def "encodeFunctionFormTerm" $
     "cx" ~> "g" ~>
     "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
     "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-    "typ" <<~ (Maybes.cases (var "mt")
-      (Maybes.cases (tryInferFunctionType @@ var "term")
+    "typ" <<~ (Optionals.cases (var "mt")
+      (Optionals.cases (tryInferFunctionType @@ var "term")
         (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
         (lambda "inferredType" $ right (var "inferredType")))
       (lambda "t" $ right (var "t"))) $
@@ -2586,7 +2568,7 @@ encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeAr
         "jlt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "lt_" @@ var "cx" @@ var "g") $
         "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jlt" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rt")]),
-      _Type_maybe>>: "mt" ~>
+      _Type_optional>>: "mt" ~>
         "jmt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "mt" @@ var "cx" @@ var "g") $
         "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jmt" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rt")]),
@@ -2614,8 +2596,8 @@ encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
            Java._MethodInvocation_arguments>>: list ([] :: [TypedTerm Java.Expression])])))
       ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
        "parts" <~ Strings.splitOn (string ".") (var "fullName") $
-       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")))) $
-       "methodName" <~ JavaDsl.identifier (Maybes.fromMaybe (var "fullName") (Lists.maybeLast (var "parts"))) $
+       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")))) $
+       "methodName" <~ JavaDsl.identifier (Optionals.fromOptional (var "fullName") (Lists.maybeLast (var "parts"))) $
        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
          (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TypedTerm Java.Expression])))))
 
@@ -2637,10 +2619,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ (project _TermDefinition _TermDefinition_name @@ var "tdef") $
     "term0" <~ (project _TermDefinition _TermDefinition_body @@ var "tdef") $
     "mDoc" <<~ (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term0") $
-    "ts" <~ Maybes.maybe
-      (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
-      ("x" ~> var "x")
-      (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "tdef")) $
+    "ts" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "tdef")) (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing) ("x" ~> var "x") $
     -- Unshadow variables
     ("term" <~ (Variables.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
@@ -2668,7 +2647,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
         (buildSubstFromAnnotations @@ var "schemeVarSet" @@ var "term" @@ var "cx" @@ var "g") $
       -- Fix over-generalized type variables
       "overgenSubst" <~ (detectAccumulatorUnification @@ var "schemeDoms" @@ var "cod" @@ var "tparams") $
-      "overgenVarSubst" <~ Maps.fromList (Maybes.cat (Lists.map
+      "overgenVarSubst" <~ Maps.fromList (Optionals.cat (Lists.map
         (lambda "entry" $
           "k" <~ Pairs.first (var "entry") $
           "v" <~ Pairs.second (var "entry") $
@@ -2682,7 +2661,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
         (Lists.map (lambda "d" $ substituteTypeVarsWithTypes @@ var "overgenSubst" @@ var "d") (var "schemeDoms")) $
       "fixedTparams" <~ Logic.ifElse (Maps.null (var "overgenSubst")) (var "tparams")
         (Lists.filter (lambda "v" $ Logic.not (Maps.member (var "v") (var "overgenSubst"))) (var "tparams")) $
-      "constraints" <~ Maybes.fromMaybe (Maps.empty) (Core.typeSchemeConstraints (var "ts")) $
+      "constraints" <~ Optionals.fromOptional (Maps.empty) (Core.typeSchemeConstraints (var "ts")) $
       "jparams" <~ Lists.map (lambda "v" $
         JavaUtilsSource.javaTypeParameter @@ (Formatting.capitalize @@ (Core.unName (var "v"))))
         (var "fixedTparams") $
@@ -2785,10 +2764,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       "imdMember" <~ (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
         @@ var "jname" @@ var "jformalParams" @@ var "result"
         @@ just (var "methodBody")) $
-      right (Maybes.maybe
-        (noInterfaceComment @@ var "imdMember")
-        (lambda "doc" $ withInterfaceCommentString @@ var "doc" @@ var "imdMember")
-        (var "mDoc")))
+      right (Optionals.cases (var "mDoc") (noInterfaceComment @@ var "imdMember") (lambda "doc" $ withInterfaceCommentString @@ var "doc" @@ var "imdMember")))
 
 -- | Internal term encoder with annotation and type-application accumulators.
 encodeTermInternal :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> InferenceContext -> Graph -> Either Error Java.Expression)
@@ -2824,7 +2800,7 @@ encodeTermInternal = def "encodeTermInternal" $
             right (just (var "ta")))) $
         "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mEitherType" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-        "branchTypes" <~ (Maybes.bind (var "mEitherType") (lambda "etyp" $
+        "branchTypes" <~ (Optionals.bind (var "mEitherType") (lambda "etyp" $
           cases _Type (Strip.deannotateType @@ var "etyp")
             (Just nothing) [
             _Type_either>>: lambda "et2" $
@@ -2834,7 +2810,7 @@ encodeTermInternal = def "encodeTermInternal" $
             @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
           encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TypedTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
         "eitherCall" <~ (lambda "methodName" $ lambda "expr" $
-          Maybes.cases (var "mtargs")
+          Optionals.cases (var "mtargs")
             (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
                 @@ JavaDsl.identifier (string "hydra.util.Either")
@@ -2847,12 +2823,12 @@ encodeTermInternal = def "encodeTermInternal" $
                 @@ var "targs" @@ list [var "expr"]))) $
         Eithers.either_
           (lambda "term1" $
-            "expr" <<~ (Maybes.cases (var "branchTypes")
+            "expr" <<~ (Optionals.cases (var "branchTypes")
               (var "encode" @@ var "term1")
               (lambda "bt" $ var "encodeWithType" @@ Pairs.first (var "bt") @@ var "term1")) $
             right (var "eitherCall" @@ string "left" @@ var "expr"))
           (lambda "term1" $
-            "expr" <<~ (Maybes.cases (var "branchTypes")
+            "expr" <<~ (Optionals.cases (var "branchTypes")
               (var "encode" @@ var "term1")
               (lambda "bt" $ var "encodeWithType" @@ Pairs.second (var "bt") @@ var "term1")) $
             right (var "eitherCall" @@ string "right" @@ var "expr"))
@@ -2884,7 +2860,7 @@ encodeTermInternal = def "encodeTermInternal" $
             "g2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env2") $
             "aliases2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env2") $
             "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-            "letType" <<~ (Maybes.cases (var "mt")
+            "letType" <<~ (Optionals.cases (var "mt")
               (Checking.typeOfTerm @@ var "cx" @@ var "g2" @@ var "body")
               (lambda "t" $ right (var "t"))) $
             "jLetType" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "letType" @@ var "cx" @@ var "g") $
@@ -2954,27 +2930,27 @@ encodeTermInternal = def "encodeTermInternal" $
                 @@ JavaDsl.identifier (string "ofEntries")
                 @@ var "pairExprs"))),
 
-      -- TermMaybe: Maybe.nothing() or Maybe.just(x)
-      _Term_maybe>>: lambda "mt" $
-        Maybes.cases (var "mt")
+      -- TermOptional: Optional.none() or Optional.given(x)
+      _Term_optional>>: lambda "mt" $
+        Optionals.cases (var "mt")
           (Logic.ifElse (Lists.null (var "tyapps"))
             (right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
-                @@ JavaDsl.identifier (string "hydra.util.Maybe")
-                @@ JavaDsl.identifier (string "nothing")
+                @@ JavaDsl.identifier (string "hydra.util.Optional")
+                @@ JavaDsl.identifier (string "none")
                 @@ list ([] :: [TypedTerm Java.Expression]))))
-            ("targs" <<~ (takeTypeArgs @@ string "maybe" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
+            ("targs" <<~ (takeTypeArgs @@ string "optional" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
               right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                 (JavaUtilsSource.methodInvocationStaticWithTypeArgs
-                  @@ JavaDsl.identifier (string "hydra.util.Maybe")
-                  @@ JavaDsl.identifier (string "nothing")
+                  @@ JavaDsl.identifier (string "hydra.util.Optional")
+                  @@ JavaDsl.identifier (string "none")
                   @@ var "targs" @@ list ([] :: [TypedTerm Java.Expression])))))
           (lambda "term1" $
             "expr" <<~ (var "encode" @@ var "term1") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
-                @@ JavaDsl.identifier (string "hydra.util.Maybe")
-                @@ JavaDsl.identifier (string "just")
+                @@ JavaDsl.identifier (string "hydra.util.Optional")
+                @@ JavaDsl.identifier (string "given")
                 @@ list [var "expr"]))),
 
       -- TermPair: new Pair(t1, t2)
@@ -3002,9 +2978,9 @@ encodeTermInternal = def "encodeTermInternal" $
         -- type variable concretization in polymorphic lambdas (e.g. Coder encode/decode fields).
         "mRecordType" <~ Eithers.either_ (constant nothing) ("t" ~> just (var "t"))
           (Resolution.requireType @@ var "cx" @@ var "g" @@ var "recName") $
-        "strippedRecTyp" <~ Maybes.map (lambda "recTyp" $ stripForalls @@ (Strip.deannotateType @@ var "recTyp"))
+        "strippedRecTyp" <~ Optionals.map (lambda "recTyp" $ stripForalls @@ (Strip.deannotateType @@ var "recTyp"))
           (var "mRecordType") $
-        "mFieldTypeMap" <~ (Maybes.bind (var "strippedRecTyp") (lambda "bodyTyp" $
+        "mFieldTypeMap" <~ (Optionals.bind (var "strippedRecTyp") (lambda "bodyTyp" $
           cases _Type (var "bodyTyp")
             (Just nothing) [
             _Type_record>>: lambda "rt" $
@@ -3014,8 +2990,8 @@ encodeTermInternal = def "encodeTermInternal" $
         -- Build type variable substitution from the annotation type's type arguments
         "combinedAnnsRec" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mAnnotType" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnnsRec")) $
-        "mTypeSubst" <~ (Maybes.bind (var "mAnnotType") (lambda "annTyp" $
-          Maybes.bind (var "mRecordType") (lambda "recTyp" $
+        "mTypeSubst" <~ (Optionals.bind (var "mAnnotType") (lambda "annTyp" $
+          Optionals.bind (var "mRecordType") (lambda "recTyp" $
             -- Extract type args from annotation and type params from definition
             "args" <~ (extractTypeApplicationArgs @@ (Strip.deannotateType @@ var "annTyp")) $
             "params" <~ (collectForallParams @@ (Strip.deannotateType @@ var "recTyp")) $
@@ -3023,15 +2999,15 @@ encodeTermInternal = def "encodeTermInternal" $
               nothing
               (just (Maps.fromList (Lists.zip (var "params") (var "args"))))))) $
         "encodeField" <~ (lambda "fld" $
-          Maybes.cases (var "mFieldTypeMap")
+          Optionals.cases (var "mFieldTypeMap")
             (var "encode" @@ Core.fieldTerm (var "fld"))
             (lambda "ftmap" $
               "mftyp" <~ Maps.lookup (Core.fieldName (var "fld")) (var "ftmap") $
-              Maybes.cases (var "mftyp")
+              Optionals.cases (var "mftyp")
                 (var "encode" @@ Core.fieldTerm (var "fld"))
                 (lambda "ftyp" $
                   -- Apply type substitution to the field type if available
-                  "resolvedType" <~ Maybes.cases (var "mTypeSubst")
+                  "resolvedType" <~ Optionals.cases (var "mTypeSubst")
                     (var "ftyp")
                     (lambda "subst" $ applySubstFull @@ var "subst" @@ var "ftyp") $
                   -- Annotate the field term with the resolved type before encoding
@@ -3047,7 +3023,7 @@ encodeTermInternal = def "encodeTermInternal" $
           -- tyapps is empty: try to extract type args from annotation
           ("combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
            "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-           Maybes.cases (var "mtyp")
+           Optionals.cases (var "mtyp")
              (right nothing)
              (lambda "annTyp" $
                "typeArgs" <~ (extractTypeApplicationArgs @@ (Strip.deannotateType @@ var "annTyp")) $
@@ -3090,7 +3066,7 @@ encodeTermInternal = def "encodeTermInternal" $
         withTypeLambda @@ var "env" @@ var "tl" @@ (lambda "env2" $
           "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
           "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-          "annotatedBody" <~ (Maybes.cases (var "mtyp")
+          "annotatedBody" <~ (Optionals.cases (var "mtyp")
             (Core.typeLambdaBody (var "tl"))
             (lambda "t" $ cases _Type (var "t") (Just $ Core.typeLambdaBody (var "tl")) [
               _Type_forall>>: lambda "fa" $
@@ -3118,12 +3094,12 @@ encodeTermInternal = def "encodeTermInternal" $
 
       -- TermVariable: encode variable reference, or handle as primitive if it resolves to one
       _Term_variable>>: lambda "name" $
-        Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+        Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
           (encodeVariable @@ var "env" @@ var "name" @@ var "cx" @@ var "g")
           (lambda "_prim" $
             "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
             "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-            "typ" <<~ (Maybes.cases (var "mt")
+            "typ" <<~ (Optionals.cases (var "mt")
               (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
               (lambda "t" $ right (var "t"))) $
             cases _Type (Strip.deannotateType @@ var "typ")
@@ -3149,7 +3125,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "jatyp" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "atyp" @@ var "cx" @@ var "g") $
         "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-        "typ" <<~ (Maybes.cases (var "mtyp")
+        "typ" <<~ (Optionals.cases (var "mtyp")
           (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
           (lambda "t" $ right (var "t"))) $
         -- Collect all nested type applications (preserving annotations)
@@ -3181,8 +3157,8 @@ encodeTermInternal = def "encodeTermInternal" $
               --   outer TypeApp has typeR (right branch type), inner has typeL (left branch type)
               --   collectTypeApps starts with [atyp] and prepends, so allTypeArgs = [typeL, typeR]
               ("eitherBranchTypes" <~ pair
-                  (Maybes.fromMaybe (var "correctedTyp") (Lists.maybeAt (int32 0) (var "allTypeArgs")))
-                  (Maybes.fromMaybe (var "correctedTyp") (Lists.maybeAt (int32 1) (var "allTypeArgs"))) $
+                  (Optionals.fromOptional (var "correctedTyp") (Lists.maybeAt (int32 0) (var "allTypeArgs")))
+                  (Optionals.fromOptional (var "correctedTyp") (Lists.maybeAt (int32 1) (var "allTypeArgs"))) $
                 "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
                   "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
                   JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "allTypeArgs")) $
@@ -3299,7 +3275,7 @@ encodeTermTCO = def "encodeTermTCO" $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
-          ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args2")) $
+          ("arg" <~ (Optionals.fromOptional Core.termUnit (Lists.maybeHead $ var "args2")) $
             cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
@@ -3374,7 +3350,7 @@ encodeTermTCO = def "encodeTermTCO" $
                                     (JavaDsl.statementIfThen (JavaDsl.ifThenStatement (var "condExpr") (var "ifBody"))))])
                           (var "cases_")) $
                         -- Default: return the expression (or the arg for otherwise)
-                        "defaultStmt" <<~ (Maybes.cases (var "dflt")
+                        "defaultStmt" <<~ (Optionals.cases (var "dflt")
                           -- No default: return the argument unchanged
                           (right $ list [JavaDsl.blockStatementStatement
                             (JavaUtilsSource.javaReturnStatement @@ just (var "jArg"))])
@@ -3485,14 +3461,14 @@ encodeType = def "encodeType" $
             @@ asTerm JavaNamesSource.javaLangPackageName
             @@ string "Void"))
           (left (Error.errorOther $ Error.otherError (string "unexpected anonymous record type"))),
-      _Type_maybe>>: lambda "ot" $
+      _Type_optional>>: lambda "ot" $
         "jot" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "ot" @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
           @@ list [var "jot"]
           @@ asTerm JavaNamesSource.hydraUtilPackageName
-          @@ string "Maybe"),
+          @@ string "Optional"),
       _Type_set>>: lambda "st" $
         "jst" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "st" @@ var "cx" @@ var "g")
@@ -3505,10 +3481,10 @@ encodeType = def "encodeType" $
         left (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")),
       _Type_variable>>: lambda "name0" $
         -- Apply type variable substitution
-        "name" <~ Maybes.fromMaybe (var "name0") (Maps.lookup (var "name0") (var "typeVarSubst")) $
+        "name" <~ Optionals.fromOptional (var "name0") (Maps.lookup (var "name0") (var "typeVarSubst")) $
         -- Check if it's a typedef that should be resolved
         "resolved" <<~ (encodeType_resolveIfTypedef @@ var "aliases" @@ var "boundVars" @@ var "inScopeTypeParams" @@ var "name" @@ var "cx" @@ var "g") $
-        Maybes.cases (var "resolved")
+        Optionals.cases (var "resolved")
           -- Not a typedef: determine reference kind
           (right $
             Logic.ifElse (Logic.or (Sets.member (var "name") (var "boundVars")) (Sets.member (var "name") (var "inScopeTypeParams")))
@@ -3577,7 +3553,7 @@ encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
       (Logic.ifElse (isLambdaBoundVariable @@ var "name")
         (right nothing)
         ("schemaTypes" <~ Graph.graphSchemaTypes (var "g") $
-          Maybes.cases (Maps.lookup (var "name") (var "schemaTypes"))
+          Optionals.cases (Maps.lookup (var "name") (var "schemaTypes"))
             (right nothing)
             (lambda "ts" $
               Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables (var "ts"))))
@@ -3659,7 +3635,7 @@ encodeVariable = def "encodeVariable" $
 encodeVariable_buildCurried :: TypedTermDefinition ([Name] -> Java.Expression -> Java.Expression)
 encodeVariable_buildCurried = def "encodeVariable_buildCurried" $
   lambda "params" $ lambda "inner" $
-    Maybes.fromMaybe (var "inner") (Maybes.map
+    Optionals.fromOptional (var "inner") (Optionals.map
       (lambda "p" $
         JavaUtilsSource.javaLambda @@ Pairs.first (var "p") @@
           (encodeVariable_buildCurried @@
@@ -3684,10 +3660,10 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
     "lam" <~ encodeVariable_buildCurried @@ var "paramNames" @@ var "call" $
     -- Try to cast to the function's curried type
     "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "name") $
-    Maybes.cases (var "mel")
+    Optionals.cases (var "mel")
       (right (var "lam"))
       (lambda "el" $
-        Maybes.cases (Core.bindingTypeScheme (var "el"))
+        Optionals.cases (Core.bindingTypeScheme (var "el"))
           (right (var "lam"))
           (lambda "ts" $
             "typ" <~ Core.typeSchemeBody (var "ts") $
@@ -3849,10 +3825,10 @@ filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
   lambda "calleeName" $ lambda "allTypeArgs" $
     "cx" ~> "g" ~>
     "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "calleeName") $
-    Maybes.cases (var "mel")
+    Optionals.cases (var "mel")
       (right (var "allTypeArgs"))
       (lambda "el" $
-        Maybes.cases (Core.bindingTypeScheme (var "el"))
+        Optionals.cases (Core.bindingTypeScheme (var "el"))
           (right (var "allTypeArgs"))
           (lambda "ts" $
             "schemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
@@ -3893,7 +3869,7 @@ findMatchingLambdaVar = def "findMatchingLambdaVar" $
     Logic.ifElse (Sets.member (var "name") (var "lambdaVars"))
       (var "name")
       (Logic.ifElse (isLambdaBoundIn_isQualified @@ var "name")
-        (Maybes.fromMaybe (var "name")
+        (Optionals.fromOptional (var "name")
           (Lists.find
             (lambda "lv" $ Logic.and
               (isLambdaBoundIn_isQualified @@ var "lv")
@@ -3924,7 +3900,7 @@ findSelfRefVar = def "findSelfRefVar" $
     "selfRefs" <~ Lists.filter
       (lambda "entry" $ (Lists.elem :: TypedTerm Name -> TypedTerm [Name] -> TypedTerm Bool) (Pairs.first (var "entry")) (Pairs.second (var "entry")))
       (Maps.toList (var "grouped")) $
-    Maybes.map (lambda "entry" $ Pairs.first (var "entry")) (Lists.maybeHead (var "selfRefs"))
+    Optionals.map (lambda "entry" $ Pairs.first (var "entry")) (Lists.maybeHead (var "selfRefs"))
 
 -- | First 20 prime numbers used as hash code multipliers.
 first20Primes :: TypedTermDefinition [Int]
@@ -3991,7 +3967,7 @@ functionCall = def "functionCall" $
               (var "baseExpr") (var "jargs")))
           -- Module-level functions: call with all args directly
           ("overrideMethodName" <~ (lambda "jid" $
-              Maybes.cases (var "mMethodOverride")
+              Optionals.cases (var "mMethodOverride")
                 (var "jid")
                 (lambda "m" $
                   "s" <~ (JavaDsl.unIdentifier (var "jid")) $
@@ -4010,7 +3986,7 @@ functionCall = def "functionCall" $
               ("qn" <~ (Names.qualifyName @@ var "name") $
                 "mns" <~ (Util.qualifiedNameModuleName (var "qn")) $
                 "localName" <~ (Util.qualifiedNameLocal (var "qn")) $
-                Maybes.cases (var "mns")
+                Optionals.cases (var "mns")
                   -- No namespace: simple header
                   ("header" <~ JavaDsl.methodInvocationHeaderSimple
                     (wrap Java._MethodName (var "overrideMethodName" @@ (elementJavaIdentifier @@ var "isPrim" @@ false @@ var "aliases" @@ var "name"))) $
@@ -4046,7 +4022,7 @@ getFunctionType = def "getFunctionType" $
   lambda "ann" $
     "cx" ~> "g" ~>
     "mt" <<~ (getTypeE (var "cx") (var "g") (var "ann")) $
-    Maybes.cases (var "mt")
+    Optionals.cases (var "mt")
       (left (Error.errorOther $ Error.otherError $ string "type annotation is required for function and elimination terms in Java"))
       (lambda "t" $ cases _Type (var "t")
         (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type, got: ") (ShowCore.type_ @@ var "t"))) [
@@ -4069,10 +4045,7 @@ groupPairsByFirst = def "groupPairsByFirst" $
         "v" <~ Pairs.second (var "p") $
         Maps.alter
           (lambda "mv" $
-            Maybes.maybe
-              (just (list [var "v"]))
-              (lambda "vs" $ just (Lists.concat2 (var "vs") (list [var "v"])))
-              (var "mv"))
+            Optionals.cases (var "mv") (just (list [var "v"])) (lambda "vs" $ just (Lists.concat2 (var "vs") (list [var "v"]))))
           (var "k")
           (var "m"))
       (Maps.empty)
@@ -4223,13 +4196,13 @@ isFieldUnitType = def "isFieldUnitType" $
   lambda "typeName" $ lambda "fieldName" $
     "cx" ~> "g" ~>
     "schemaTypes" <~ Graph.graphSchemaTypes (var "g") $
-    Maybes.cases (Maps.lookup (var "typeName") (var "schemaTypes"))
+    Optionals.cases (Maps.lookup (var "typeName") (var "schemaTypes"))
       (right false)
       (lambda "ts" $
         cases _Type (Strip.deannotateType @@ Core.typeSchemeBody (var "ts"))
           (Just $ right false) [
           _Type_union>>: lambda "rt" $
-            right (Maybes.cases
+            right (Optionals.cases
               (Lists.find (lambda "ft" $ Equality.equal (Core.fieldTypeName (var "ft")) (var "fieldName"))
                 (var "rt"))
               false
@@ -4243,7 +4216,7 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
       (Logic.or
         -- For qualified names, check if any qualified lambda var has the same local name
         (Logic.and (isLambdaBoundIn_isQualified @@ var "name")
-          (Maybes.isJust (Lists.find
+          (Optionals.isGiven (Lists.find
             (lambda "lv" $ Logic.and
               (isLambdaBoundIn_isQualified @@ var "lv")
               (Equality.equal
@@ -4257,7 +4230,7 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
 -- | Helper: check if a name is qualified (has a namespace)
 isLambdaBoundIn_isQualified :: TypedTermDefinition (Name -> Bool)
 isLambdaBoundIn_isQualified = def "isLambdaBoundIn_isQualified" $
-  lambda "n" $ Maybes.isJust (Util.qualifiedNameModuleName (Names.qualifyName @@ var "n"))
+  lambda "n" $ Optionals.isGiven (Util.qualifiedNameModuleName (Names.qualifyName @@ var "n"))
 
 -- | Check if a name (possibly qualified) is lambda-bound
 
@@ -4269,7 +4242,7 @@ isLambdaBoundVariable = def "isLambdaBoundVariable" $
 
 isLocalVariable :: TypedTermDefinition (Name -> Bool)
 isLocalVariable = def "isLocalVariable" $
-  lambda "name" $ Maybes.isNothing
+  lambda "name" $ Optionals.isNone
     (Util.qualifiedNameModuleName (Names.qualifyName @@ var "name"))
 
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
@@ -4314,7 +4287,7 @@ isUnresolvedInferenceVar :: TypedTermDefinition (Name -> Bool)
 isUnresolvedInferenceVar = def "isUnresolvedInferenceVar" $
   lambda "name" $
     "chars" <~ Strings.toList (unwrap _Name @@ var "name") $
-    Maybes.fromMaybe (boolean False) (Maybes.map
+    Optionals.fromOptional (boolean False) (Optionals.map
       (lambda "p" $ lets [
         "firstCh">: Pairs.first (var "p"),
         "rest">: Pairs.second (var "p")] $
@@ -4441,7 +4414,7 @@ namespaceParent :: TypedTermDefinition (ModuleName -> Maybe ModuleName)
 namespaceParent = def "namespaceParent" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"),
-    "initParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))] $
+    "initParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))] $
     Logic.ifElse (Lists.null (var "initParts"))
       nothing
       (just (wrap _ModuleName (Strings.intercalate (string ".") (var "initParts"))))
@@ -4654,7 +4627,7 @@ rebuildApps = def "rebuildApps" $
           inject _Term _Term_application (Core.application (var "acc") (var "a")))
           (var "f") (var "args")) [
         _Type_function>>: lambda "ft" $
-          Maybes.fromMaybe (var "f") (Maybes.map
+          Optionals.fromOptional (var "f") (Optionals.map
             (lambda "p" $
               "arg" <~ Pairs.first (var "p") $
               "rest" <~ Pairs.second (var "p") $
@@ -4865,7 +4838,7 @@ splitConstantInitializer_splitVar = def "splitConstantInitializer_splitVar" $
   lambda "mods" $ lambda "utype" $ lambda "vd" $ lets [
     "vid">: project Java._VariableDeclarator Java._VariableDeclarator_id @@ var "vd",
     "mInit">: project Java._VariableDeclarator Java._VariableDeclarator_initializer @@ var "vd"] $
-    Maybes.cases (var "mInit")
+    Optionals.cases (var "mInit")
       -- No initializer: keep as-is
       (list [inject Java._InterfaceMemberDeclaration Java._InterfaceMemberDeclaration_constant
         (record Java._ConstantDeclaration [
@@ -4930,7 +4903,7 @@ substituteTypeVarsWithTypes_go = def "substituteTypeVarsWithTypes_go" $
   lambda "subst" $ lambda "t" $ cases _Type (Strip.deannotateType @@ var "t")
     (Just $ var "t") [
     _Type_variable>>: lambda "v" $
-      Maybes.cases (Maps.lookup (var "v") (var "subst")) (var "t") (lambda "rep" $ var "rep"),
+      Optionals.cases (Maps.lookup (var "v") (var "subst")) (var "t") (lambda "rep" $ var "rep"),
     _Type_function>>: lambda "ft" $
       Core.typeFunction (Core.functionType
         (substituteTypeVarsWithTypes_go @@ var "subst" @@ Core.functionTypeDomain (var "ft"))
@@ -4943,8 +4916,8 @@ substituteTypeVarsWithTypes_go = def "substituteTypeVarsWithTypes_go" $
       Core.typeList (substituteTypeVarsWithTypes_go @@ var "subst" @@ var "inner"),
     _Type_set>>: lambda "inner" $
       Core.typeSet (substituteTypeVarsWithTypes_go @@ var "subst" @@ var "inner"),
-    _Type_maybe>>: lambda "inner" $
-      Core.typeMaybe (substituteTypeVarsWithTypes_go @@ var "subst" @@ var "inner"),
+    _Type_optional>>: lambda "inner" $
+      Core.typeOptional (substituteTypeVarsWithTypes_go @@ var "subst" @@ var "inner"),
     _Type_map>>: lambda "mt" $
       Core.typeMap (Core.mapType
         (substituteTypeVarsWithTypes_go @@ var "subst" @@ Core.mapTypeKeys (var "mt"))
@@ -5059,9 +5032,9 @@ toDeclInit = def "toDeclInit" $
   lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
     Logic.ifElse (Sets.member (var "name") (var "recursiveVars"))
-      ("binding" <~ Maybes.fromMaybe (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
+      ("binding" <~ Optionals.fromOptional (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
         "value" <~ Core.bindingTerm (var "binding") $
-        "typ" <<~ Maybes.cases (Core.bindingTypeScheme (var "binding"))
+        "typ" <<~ Optionals.cases (Core.bindingTypeScheme (var "binding"))
           (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
           (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
         "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
@@ -5084,9 +5057,9 @@ toDeclStatement :: TypedTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpe
 toDeclStatement = def "toDeclStatement" $
   lambda "envExt" $ lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "thunkedVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
-    "binding" <~ Maybes.fromMaybe (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
+    "binding" <~ Optionals.fromOptional (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
     "value" <~ Core.bindingTerm (var "binding") $
-    "typ" <<~ Maybes.cases (Core.bindingTypeScheme (var "binding"))
+    "typ" <<~ Optionals.cases (Core.bindingTypeScheme (var "binding"))
       (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
       (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
     "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
@@ -5125,17 +5098,17 @@ tryInferFunctionType = def "tryInferFunctionType" $
     cases _Term (Strip.deannotateTerm @@ var "funTerm")
       (Just nothing) [
       _Term_lambda>>: lambda "lam" $
-        Maybes.bind (Core.lambdaDomain (var "lam")) (lambda "dom" $
+        Optionals.bind (Core.lambdaDomain (var "lam")) (lambda "dom" $
           "mCod" <~ (cases _Term (Core.lambdaBody (var "lam"))
             (Just nothing) [
             _Term_annotated>>: lambda "at" $
-              Maybes.bind
+              Optionals.bind
                 (Maps.lookup (Constants.keyType) (Annotations.getAnnotationMap @@ Core.annotatedTermAnnotation (var "at")))
                 (lambda "typeTerm" $
                   decodeTypeFromTerm @@ var "typeTerm"),
             _Term_lambda>>: lambda "_innerLam" $
               tryInferFunctionType @@ (Core.lambdaBody (var "lam"))]) $
-          Maybes.map (lambda "cod" $
+          Optionals.map (lambda "cod" $
             Core.typeFunction (Core.functionType (var "dom") (var "cod")))
             (var "mCod"))]
 
@@ -5170,7 +5143,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
             @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g") [
           JavaHelpers._JavaSymbolClass_nullaryFunction>>: lambda "_u" $
-            Maybes.cases (var "mns")
+            Optionals.cases (var "mns")
               (typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
                 @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g")
               (lambda "ns_" $
@@ -5187,7 +5160,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
                   (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "classId" @@ var "methodId"
                     @@ var "jTypeArgs" @@ list ([] :: [TypedTerm Java.Expression])))),
           JavaHelpers._JavaSymbolClass_hoistedLambda>>: lambda "arity" $
-            Maybes.cases (var "mns")
+            Optionals.cases (var "mns")
               (typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
                 @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g")
               (lambda "ns_" $
@@ -5394,7 +5367,7 @@ wrapInSupplierLambda = def "wrapInSupplierLambda" $
 lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
 lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
   lambda "g" $ lambda "name" $
-    Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+    Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
       (list ([] :: [TypedTerm Bool]))
       (lambda "prim" $
         Lists.map (lambda "p" $ Typing.parameterIsLazy (var "p"))

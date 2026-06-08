@@ -184,7 +184,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.core.Type"}}}}},
                   {
                     "name": "thunkedVars",
                     "type": {

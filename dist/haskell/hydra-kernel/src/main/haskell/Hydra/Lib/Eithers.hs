@@ -661,14 +661,14 @@ mapList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
-mapMaybe :: Packaging.PrimitiveDefinition
-mapMaybe =
+mapOptional :: Packaging.PrimitiveDefinition
+mapOptional =
     Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapMaybe"),
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapOptional"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function returning either over a maybe, or return Right Nothing if Nothing."),
+        Packaging.entityMetadataDescription = (Just "Map a function returning either over an optional, or return Right Nothing if Nothing."),
         Packaging.entityMetadataComments = [
-          "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
+          "mapOptional(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
           "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -696,13 +696,13 @@ mapMaybe =
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "x"))),
+            Typing.parameterType = (Core.TypeOptional (Core.TypeVariable (Core.Name "x"))),
             Typing.parameterIsLazy = False}],
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
-            Core.eitherTypeRight = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}))}},
+            Core.eitherTypeRight = (Core.TypeOptional (Core.TypeVariable (Core.Name "y")))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

@@ -11,8 +11,8 @@
 //
 // All operations are non-mutating: each modifier returns a fresh map.
 
-import type { Maybe } from "../runtime.js";
-import { Just, Nothing } from "../runtime.js";
+import type { Optional } from "../runtime.js";
+import { Given, None } from "../runtime.js";
 
 const canon = (k: unknown): string => {
   switch (typeof k) {
@@ -104,10 +104,10 @@ export const delete_ = <K, V>(k: K, m: any): any => {
   return mkCanon(next) as unknown as ReadonlyMap<K, V>;
 };
 
-export const lookup = (k: any, m: any): Maybe<any> => {
+export const lookup = (k: any, m: any): Optional<any> => {
   const c = toCanon(m);
   const e = c._internal.get(canon(k));
-  return e === undefined ? Nothing : Just(e.value);
+  return e === undefined ? None : Given(e.value);
 };
 
 export const member = <K, V>(k: K, m: any): boolean =>
@@ -158,17 +158,17 @@ export const singleton = <K, V>(k: K, v: V): any => {
   return mkCanon(next) as unknown as ReadonlyMap<K, V>;
 };
 
-// `f` is typed `(m: any) => any` (not `(Maybe<any>) => Maybe<any>`) so
+// `f` is typed `(m: any) => any` (not `(Optional<any>) => Optional<any>`) so
 // kernel-generated callsites that wrap an unknown value back into a
-// Maybe-shaped object literal pass type-check; the runtime only reads
+// Optional-shaped object literal pass type-check; the runtime only reads
 // `f(cur).tag`, which works for any object-shaped return value.
 export const alter = (f: (m: any) => any, k: any, m: any): any => {
   const c = toCanon(m);
   const ck = canon(k);
-  const cur: Maybe<any> = c._internal.has(ck) ? Just(c._internal.get(ck)!.value) : Nothing;
+  const cur: Optional<any> = c._internal.has(ck) ? Given(c._internal.get(ck)!.value) : None;
   const nextVal = f(cur);
   const next: any = new Map(c._internal);
-  if (nextVal.tag === "just") next.set(ck, { key: k, value: nextVal.value }); else next.delete(ck);
+  if (nextVal.tag === "given") next.set(ck, { key: k, value: nextVal.value }); else next.delete(ck);
   return mkCanon(next);
 };
 

@@ -40,27 +40,27 @@ alter cx g funTerm keyTerm mapTerm =
             newVal =
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = funTerm,
-                      Core.applicationArgument = (Core.TermMaybe currentVal)})
+                      Core.applicationArgument = (Core.TermOptional currentVal)})
         in (Right (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-              Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+              Core.applicationArgument = newVal})),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
+                Core.applicationArgument = keyTerm})),
+              Core.applicationArgument = mapTerm}))})),
+          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "newV"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
                   Core.applicationArgument = keyTerm})),
-                Core.applicationArgument = mapTerm}))})),
-            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "newV"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
-                    Core.applicationArgument = keyTerm})),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "newV"))})),
-                Core.applicationArgument = mapTerm}))}))})),
-          Core.applicationArgument = newVal})))
+                Core.applicationArgument = (Core.TermVariable (Core.Name "newV"))})),
+              Core.applicationArgument = mapTerm}))}))})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
@@ -139,7 +139,7 @@ findWithDefault :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 
 findWithDefault cx g defaultTerm keyTerm mapTerm =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.fromMaybe")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
         Core.applicationArgument = defaultTerm})),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {

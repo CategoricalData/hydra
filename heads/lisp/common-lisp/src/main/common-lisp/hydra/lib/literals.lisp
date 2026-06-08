@@ -166,8 +166,8 @@
     (let* ((*read-default-float-format* 'double-float)
            (n (ignore-errors (read-from-string s))))
       (if (and n (numberp n))
-          (list :just (float n 1.0d0))
-          (list :nothing)))))
+          (list :given (float n 1.0d0))
+          (list :none)))))
 
 ;; read_bigint :: String -> Maybe BigInteger
 ;; Parse a string to a bigint (Integer).
@@ -175,17 +175,17 @@
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
-          (list :just n)
-          (list :nothing)))))
+          (list :given n)
+          (list :none)))))
 
 ;; read_boolean :: String -> Maybe Bool
 ;; Parse a string to a boolean.
 (defvar hydra_lib_literals_read_boolean
   (lambda (s)
     (cond
-      ((string= s "true") (list :just t))
-      ((string= s "false") (list :just nil))
-      (t (list :nothing)))))
+      ((string= s "true") (list :given t))
+      ((string= s "false") (list :given nil))
+      (t (list :none)))))
 
 ;; read_float :: String -> Maybe Double
 ;; Parse a string to a float (Double).
@@ -193,33 +193,33 @@
   (lambda (s)
     (let ((n (ignore-errors (read-from-string s))))
       (if (and n (numberp n))
-          (list :just (float n 1.0d0))
-          (list :nothing)))))
+          (list :given (float n 1.0d0))
+          (list :none)))))
 
 ;; read_float32 :: String -> Maybe Float
 ;; Parse a string to a float32 (Float). Handles NaN/Infinity sentinels.
 (defvar hydra_lib_literals_read_float32
   (lambda (s)
     (cond
-      ((string= s "NaN") (list :just +hydra-nan+))
-      ((string= s "Infinity") (list :just +hydra-pos-inf+))
-      ((string= s "-Infinity") (list :just +hydra-neg-inf+))
+      ((string= s "NaN") (list :given +hydra-nan+))
+      ((string= s "Infinity") (list :given +hydra-pos-inf+))
+      ((string= s "-Infinity") (list :given +hydra-neg-inf+))
       (t (let ((n (ignore-errors (read-from-string s))))
            (if (and n (numberp n))
-               (list :just (float (float n 1.0f0) 1.0d0))
-               (list :nothing)))))))
+               (list :given (float (float n 1.0f0) 1.0d0))
+               (list :none)))))))
 
 ;; read_float64 :: String -> Maybe Float64
 ;; Parse a string to a float64 (Double). Handles NaN/Infinity sentinels.
 (defvar hydra_lib_literals_read_float64
   (lambda (s)
     (cond
-      ((string= s "NaN") (list :just +hydra-nan+))
-      ((string= s "Infinity") (list :just +hydra-pos-inf+))
-      ((string= s "-Infinity") (list :just +hydra-neg-inf+))
+      ((string= s "NaN") (list :given +hydra-nan+))
+      ((string= s "Infinity") (list :given +hydra-pos-inf+))
+      ((string= s "-Infinity") (list :given +hydra-neg-inf+))
       (t (handler-case (let ((*read-default-float-format* 'double-float))
-                         (list :just (coerce (read-from-string s) 'double-float)))
-           (error () (list :nothing)))))))
+                         (list :given (coerce (read-from-string s) 'double-float)))
+           (error () (list :none)))))))
 
 ;; read_int :: String -> Maybe Int
 ;; Parse a string to an int.
@@ -227,8 +227,8 @@
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
-          (list :just n)
-          (list :nothing)))))
+          (list :given n)
+          (list :none)))))
 
 ;; read_int8 :: String -> Maybe Int8
 ;; Parse a string to an int8 (-128 to 127).
@@ -236,8 +236,8 @@
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
-          (if (and (>= n -128) (<= n 127)) (list :just n) (list :nothing)))
-      (error () (list :nothing)))))
+          (if (and (>= n -128) (<= n 127)) (list :given n) (list :none)))
+      (error () (list :none)))))
 
 ;; read_int16 :: String -> Maybe Int16
 ;; Parse a string to an int16 (-32768 to 32767).
@@ -245,15 +245,15 @@
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
-          (if (and (>= n -32768) (<= n 32767)) (list :just n) (list :nothing)))
-      (error () (list :nothing)))))
+          (if (and (>= n -32768) (<= n 32767)) (list :given n) (list :none)))
+      (error () (list :none)))))
 
 ;; read_int32 :: String -> Maybe Int32
 ;; Parse a string to an int32.
 (defvar hydra_lib_literals_read_int32
   (lambda (s)
-    (handler-case (list :just (parse-integer s))
-      (error () (list :nothing)))))
+    (handler-case (list :given (parse-integer s))
+      (error () (list :none)))))
 
 ;; read_int64 :: String -> Maybe Int64
 ;; Parse a string to an int64.
@@ -261,8 +261,8 @@
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
-          (list :just n)
-          (list :nothing)))))
+          (list :given n)
+          (list :none)))))
 
 ;; read_string :: String -> Maybe String
 ;; Parse a string literal.
@@ -291,8 +291,8 @@
                        (progn
                          (vector-push-extend (char inner i) result)
                          (incf i))))
-          (list :just (coerce result 'string)))
-        (list :nothing))))
+          (list :given (coerce result 'string)))
+        (list :none))))
 
 ;; read_uint :: String -> Maybe Uint
 ;; Parse a string to a uint (non-negative integer).
@@ -300,8 +300,8 @@
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
-          (list :just n)
-          (list :nothing)))))
+          (list :given n)
+          (list :none)))))
 
 ;; read_uint8 :: String -> Maybe Uint8
 ;; Parse a string to a uint8 (0 to 255).
@@ -309,8 +309,8 @@
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
-          (if (and (>= n 0) (<= n 255)) (list :just n) (list :nothing)))
-      (error () (list :nothing)))))
+          (if (and (>= n 0) (<= n 255)) (list :given n) (list :none)))
+      (error () (list :none)))))
 
 ;; read_uint16 :: String -> Maybe Uint16
 ;; Parse a string to a uint16 (0 to 65535).
@@ -318,8 +318,8 @@
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
-          (if (and (>= n 0) (<= n 65535)) (list :just n) (list :nothing)))
-      (error () (list :nothing)))))
+          (if (and (>= n 0) (<= n 65535)) (list :given n) (list :none)))
+      (error () (list :none)))))
 
 ;; read_uint32 :: String -> Maybe Uint32
 ;; Parse a string to a uint32 (0 to 4294967295).
@@ -327,8 +327,8 @@
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
-          (list :just n)
-          (list :nothing)))))
+          (list :given n)
+          (list :none)))))
 
 ;; read_uint64 :: String -> Maybe Uint64
 ;; Parse a string to a uint64 (0 to 18446744073709551615).
@@ -336,8 +336,8 @@
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
-          (list :just n)
-          (list :nothing)))))
+          (list :given n)
+          (list :none)))))
 
 ;; Helper to strip CL float type suffixes (d0, f0, etc.) from write-to-string output
 (defun strip-float-suffix (s)

@@ -14,7 +14,7 @@ import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -175,10 +175,9 @@ dslBindingName = define "dslBindingName" $
   -- nsParts = parts minus the last element (the namespace components).
   -- Nothing means parts was empty (unreachable for a valid name);
   -- Just [] means the name has no namespace (local type).
-  Maybes.maybe
-    (var "localResult")
-    ("nsParts" ~>
-      Maybes.maybe
+  Optionals.cases (Lists.maybeInit (var "parts")) (var "localResult") ("nsParts" ~>
+      Optionals.cases
+        (Lists.uncons (var "nsParts"))
         -- single-element parts: local type, no namespace
         (var "localResult")
         ("nsHeadTail" ~>
@@ -189,9 +188,7 @@ dslBindingName = define "dslBindingName" $
             -- openGql.grammar.Foo -> [hydra, dsl] ++ nsParts
             (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
           Core.name (Strings.intercalate (string ".")
-            (Lists.concat2 (var "dslNsParts") (list [var "localPart"]))))
-        (Lists.uncons (var "nsParts")))
-    (Lists.maybeInit (var "parts"))
+            (Lists.concat2 (var "dslNsParts") (list [var "localPart"])))))
 
 -- | Generate a DSL element name from a type name and a local element name.
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
@@ -204,10 +201,9 @@ dslDefinitionName = define "dslDefinitionName" $
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "typeName"))) $
   -- Extract namespace parts (all but last); fall back to the bare local name
   -- when the type name has no namespace (unreachable for well-formed inputs).
-  Maybes.maybe
-    (Core.name (var "localName"))
-    ("nsParts" ~>
-      "dslNsParts" <~ (Maybes.maybe
+  Optionals.cases (Lists.maybeInit (var "parts")) (Core.name (var "localName")) ("nsParts" ~>
+      "dslNsParts" <~ (Optionals.cases
+        (Lists.uncons (var "nsParts"))
         -- nsParts empty: just prepend hydra.dsl
         (list [string "hydra", string "dsl"])
         ("nsHeadTail" ~> Logic.ifElse
@@ -215,11 +211,9 @@ dslDefinitionName = define "dslDefinitionName" $
           -- hydra.core -> hydra.dsl.core (drop the leading "hydra", keep the rest)
           (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
           -- openGql.grammar -> hydra.dsl.openGql.grammar
-          (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts")))
-        (Lists.uncons (var "nsParts"))) $
+          (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts")))) $
       Core.name (Strings.intercalate (string ".")
         (Lists.concat2 (var "dslNsParts") (list [var "localName"]))))
-    (Lists.maybeInit (var "parts"))
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
@@ -234,7 +228,7 @@ dslModule = define "dslModule" $
   doc "Transform a type module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Maybes.cat $ Lists.map
+      (Optionals.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -264,7 +258,7 @@ dslModule = define "dslModule" $
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b")
             nothing
-            (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
             (Core.bindingTerm $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
 -- | Generate a DSL module name from a source module name
@@ -281,15 +275,12 @@ dslModuleName = define "dslModuleName" $
   -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
   -- An empty parts list is unreachable for a well-formed namespace; fall back
   -- to the full-prefix form.
-  Maybes.maybe
-    (var "prefixFull")
-    ("ht" ~>
+  Optionals.cases (Lists.uncons (var "parts")) (var "prefixFull") ("ht" ~>
       Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
         (Packaging.moduleName2 (Strings.cat $ list [
           string "hydra.dsl.",
           Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
         (var "prefixFull"))
-    (Lists.uncons (var "parts"))
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -314,7 +305,7 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-    Eithers.map (primitive _maybes_cat) $
+    Eithers.map (primitive _optionals_cat) $
       Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
@@ -617,7 +608,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.moduleNameOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unModuleName) (var "ns")) (string "hydra.typed"))
+  Logic.ifElse (Equality.equal (Optionals.cases (var "ns") (string "") (reify Packaging.unModuleName)) (string "hydra.typed"))
     (right nothing)
     (right (just (var "b")))
 

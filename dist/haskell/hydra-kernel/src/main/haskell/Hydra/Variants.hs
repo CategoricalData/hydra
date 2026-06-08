@@ -33,7 +33,7 @@ data TermVariant =
   TermVariantList |
   TermVariantLiteral |
   TermVariantMap |
-  TermVariantMaybe |
+  TermVariantOptional |
   TermVariantPair |
   TermVariantProject |
   TermVariantRecord |
@@ -56,7 +56,7 @@ _TermVariant_let = Core.Name "let"
 _TermVariant_list = Core.Name "list"
 _TermVariant_literal = Core.Name "literal"
 _TermVariant_map = Core.Name "map"
-_TermVariant_maybe = Core.Name "maybe"
+_TermVariant_optional = Core.Name "optional"
 _TermVariant_pair = Core.Name "pair"
 _TermVariant_project = Core.Name "project"
 _TermVariant_record = Core.Name "record"
@@ -77,7 +77,7 @@ data TypeVariant =
   TypeVariantList |
   TypeVariantLiteral |
   TypeVariantMap |
-  TypeVariantMaybe |
+  TypeVariantOptional |
   TypeVariantPair |
   TypeVariantRecord |
   TypeVariantSet |
@@ -96,7 +96,7 @@ _TypeVariant_function = Core.Name "function"
 _TypeVariant_list = Core.Name "list"
 _TypeVariant_literal = Core.Name "literal"
 _TypeVariant_map = Core.Name "map"
-_TypeVariant_maybe = Core.Name "maybe"
+_TypeVariant_optional = Core.Name "optional"
 _TypeVariant_pair = Core.Name "pair"
 _TypeVariant_record = Core.Name "record"
 _TypeVariant_set = Core.Name "set"

@@ -103,7 +103,7 @@ qualifiedName = define "QualifiedName" $
   T.record [
     "moduleName">:
       doc "The optional module name" $
-      T.maybe Packaging.moduleNameDef,
+      T.optional Packaging.moduleNameDef,
     "local">:
       doc "The local name"
       T.string]

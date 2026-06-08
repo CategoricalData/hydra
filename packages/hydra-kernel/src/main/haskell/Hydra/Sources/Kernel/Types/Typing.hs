@@ -109,7 +109,7 @@ parameter = define "Parameter" $
       Core.name,
     "description">:
       doc "An optional human-readable description of the parameter" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "The type of the parameter"
       Core.type_,
@@ -123,7 +123,7 @@ result = define "Result" $
   T.record [
     "description">:
       doc "An optional human-readable description of the result" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "The type of the result"
       Core.type_]

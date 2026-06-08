@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Dsl.Meta.Lib.Chars as Chars
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -64,7 +64,7 @@ showIntStringMap :: TypedTerm (M.Map Int String -> String)
 showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ @@ showInt32 @@ showString' @@ Phantoms.var "m"
 
 showMaybeString :: TypedTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showString' @@ Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showString' @@ Phantoms.var "mx"
 
 showPairList :: TypedTerm ([(Int, String)] -> String)
 showPairList = Phantoms.lambda "xs" $ ShowCore.list_ @@ (Phantoms.lambda "p" $ ShowCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"
@@ -157,8 +157,8 @@ mapsFilter = subgroup "filter" [
     test name m result = evalPair name showIntStringMap
       (Maps.filter
         (Phantoms.lambda "v" $ Equality.equal
-          (Maybes.fromMaybe (Phantoms.int32 0)
-            (Maybes.map (Phantoms.lambda "c" $ Chars.toLower (Phantoms.var "c"))
+          (Optionals.fromOptional (Phantoms.int32 0)
+            (Optionals.map (Phantoms.lambda "c" $ Chars.toLower (Phantoms.var "c"))
               (Strings.maybeCharAt (Phantoms.int32 0) (Phantoms.var "v"))))
           (Phantoms.int32 97))
         (pMap m))

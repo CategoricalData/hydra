@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class FindWithDefault extends PrimitiveFunction {
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 (Function<Map<Term, Term>, Term>) mp -> {
-                    Maybe<Term> result = Lookup.apply(args.get(1), mp);
+                    Optional<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
                 },
                 hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));

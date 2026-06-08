@@ -67,9 +67,9 @@
                           case-fields))))
     (define (t-right v) (list 'either (list 'right v)))
     (define (t-left v) (list 'either (list 'left v)))
-    (define (t-just v) (list 'maybe (t-inject "hydra.core.Term" "literal"
+    (define (t-just v) (list 'optional (t-inject "hydra.core.Term" "literal"
                          (t-inject "hydra.core.Literal" "string" v))))
-    (define (t-nothing) (list 'maybe (list 'nothing '())))
+    (define (t-nothing) (list 'optional (list 'none '())))
     ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
     (define (t-pair a b) (list 'pair (list a b)))
 
@@ -95,7 +95,7 @@
         (list "hydra.rewriting.deannotateTerm"
               (t-lam "t"
                 (t-app
-                  (t-match "hydra.core.Term" (list 'just (t-var "t"))
+                  (t-match "hydra.core.Term" (list 'given (t-var "t"))
                     (t-field "annotated"
                       (t-lam "at"
                         (t-app (t-var "hydra.rewriting.deannotateTerm")
@@ -108,7 +108,7 @@
         (list "hydra.annotations.getAnnotationMap"
               (t-lam "t"
                 (t-app
-                  (t-match "hydra.core.Term" (list 'just (t-app (t-prim "hydra.lib.maps.empty") (t-var "t")))
+                  (t-match "hydra.core.Term" (list 'given (t-app (t-prim "hydra.lib.maps.empty") (t-var "t")))
                     (t-field "map"
                       (t-lam "m"
                         (t-app (t-prim "hydra.lib.maps.fromList")
@@ -117,7 +117,7 @@
                               (t-lam "pair"
                                 (t-app
                                   (t-match "hydra.core.Term"
-                                    (list 'just (t-var "acc"))
+                                    (list 'given (t-var "acc"))
                                     (t-field "variable"
                                       (t-lam "n"
                                         (t-app (t-app (t-prim "hydra.lib.lists.cons")
@@ -150,7 +150,7 @@
                   (t-lam "rest"
                     (t-lam "t"
                       (t-app
-                        (t-match "hydra.core.Term" (list 'just (t-var "rest"))
+                        (t-match "hydra.core.Term" (list 'given (t-var "rest"))
                           (t-field "annotated"
                             (t-lam "at"
                               (t-app
@@ -173,12 +173,12 @@
               (t-lam "key"
                 (t-lam "val"
                   (t-lam "m"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.maybe")
+                    (t-app (t-app (t-app (t-prim "hydra.lib.optionals.cases")
+                      (t-var "val"))
                       (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
                       (t-lam "v"
                         (t-app (t-app (t-app (t-prim "hydra.lib.maps.insert")
-                          (t-var "key")) (t-var "v")) (t-var "m"))))
-                      (t-var "val"))))))
+                          (t-var "key")) (t-var "v")) (t-var "m"))))))))
 
         ;; After #386: wrap the annotations map via wrapAnnotationMap before
         ;; storing in AnnotatedTerm.annotation (which is now a Term).
@@ -206,7 +206,7 @@
               (t-lam "d"
                 (t-app (t-app (t-var "hydra.annotations.setTermAnnotation")
                   (t-var "hydra.constants.keyDescription"))
-                  (t-app (t-app (t-prim "hydra.lib.maybes.map")
+                  (t-app (t-app (t-prim "hydra.lib.optionals.map")
                     (t-lam "s"
                       (t-inject "hydra.core.Term" "literal"
                         (t-inject "hydra.core.Literal" "string" (t-var "s")))))
@@ -223,25 +223,25 @@
               (t-lam "cx"
                 (t-lam "g"
                   (t-lam "anns"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maybes.maybe")
-                      (t-right (list 'maybe (list 'nothing '()))))
+                    (t-app (t-app (t-app (t-prim "hydra.lib.optionals.cases")
+                      (t-app (t-app (t-prim "hydra.lib.maps.lookup")
+                        (t-var "hydra.constants.keyDescription"))
+                        (t-var "anns")))
+                      (t-right (list 'optional (list 'none '()))))
                       (t-lam "descTerm"
                         (t-app
                           (t-match "hydra.core.Term"
-                            (list 'just (t-right (list 'maybe (list 'nothing '()))))
+                            (list 'given (t-right (list 'optional (list 'none '()))))
                             (t-field "literal"
                               (t-lam "lit"
                                 (t-app
                                   (t-match "hydra.core.Literal"
-                                    (list 'just (t-right (list 'maybe (list 'nothing '()))))
+                                    (list 'given (t-right (list 'optional (list 'none '()))))
                                     (t-field "string"
                                       (t-lam "s"
-                                        (t-right (list 'maybe (t-var "s"))))))
+                                        (t-right (list 'optional (t-var "s"))))))
                                   (t-var "lit")))))
-                          (t-var "descTerm"))))
-                      (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                        (t-var "hydra.constants.keyDescription"))
-                        (t-var "anns")))))))
+                          (t-var "descTerm"))))))))
 
         (list "hydra.annotations.getTermDescription"
               (t-lam "cx"
@@ -250,7 +250,7 @@
                     (t-let "peel"
                       (t-lam "t"
                         (t-app
-                          (t-match "hydra.core.Term" (list 'just (t-var "t"))
+                          (t-match "hydra.core.Term" (list 'given (t-var "t"))
                             (t-field "typeLambda"
                               (t-lam "tl"
                                 (t-app (t-var "peel")

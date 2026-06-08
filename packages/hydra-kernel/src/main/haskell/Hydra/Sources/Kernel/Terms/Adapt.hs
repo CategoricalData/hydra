@@ -30,7 +30,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -318,12 +318,12 @@ adaptLiteralType = define "adaptLiteralType" $
   "forUnsupported" <~ ("lt" ~> cases _LiteralType (var "lt")
     (Just nothing) [
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
-    _LiteralType_boolean>>: constant $ Maybes.map (reify Core.literalTypeInteger) $
+    _LiteralType_boolean>>: constant $ Optionals.map (reify Core.literalTypeInteger) $
       adaptIntegerType @@ var "constraints" @@ Core.integerTypeInt8,
     _LiteralType_decimal>>: constant $ just $ Core.literalTypeFloat Core.floatTypeFloat64,
-    _LiteralType_float>>: "ft" ~> Maybes.map (reify Core.literalTypeFloat) $
+    _LiteralType_float>>: "ft" ~> Optionals.map (reify Core.literalTypeFloat) $
       adaptFloatType @@ var "constraints" @@ var "ft",
-    _LiteralType_integer>>: "it" ~> Maybes.map (reify Core.literalTypeInteger) $
+    _LiteralType_integer>>: "it" ~> Optionals.map (reify Core.literalTypeInteger) $
       adaptIntegerType @@ var "constraints" @@ var "it"]) $
   Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
     nothing
@@ -336,7 +336,7 @@ adaptLiteralTypesMap = define "adaptLiteralTypesMap" $
   "tryType" <~ ("lt" ~> optCases (adaptLiteralType @@ var "constraints" @@ var "lt")
     nothing
     ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
-  Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (Reflect.literalTypes)
+  Maps.fromList $ Optionals.cat $ Lists.map (var "tryType") (Reflect.literalTypes)
 
 adaptLiteralValue :: TypedTermDefinition (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
 adaptLiteralValue = define "adaptLiteralValue" $
@@ -406,14 +406,11 @@ adaptTerm = define "adaptTerm" $
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
       "tryAlts">: ("alts" ~>
-        Maybes.maybe
-          (right nothing)
-          ("uc" ~>
+        Optionals.cases (Lists.uncons $ var "alts") (right nothing) ("uc" ~>
             "mterm" <<~ var "tryTerm" @@ (Pairs.first $ var "uc") $
             optCases (var "mterm")
               (var "tryAlts" @@ (Pairs.second $ var "uc"))
-              ("t" ~> right $ just $ var "t"))
-          (Lists.uncons $ var "alts"))] $
+              ("t" ~> right $ just $ var "t")))] $
       "alts0" <<~ termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
       var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
@@ -489,7 +486,7 @@ adaptType = define "adaptType" $
         ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]),
   "forUnsupported">: ("typ" ~>
     "tryAlts" <~ ("alts" ~>
-      Maybes.bind (Lists.uncons $ var "alts") $
+      Optionals.bind (Lists.uncons $ var "alts") $
         "uc" ~> optCases (var "tryType" @@ (Pairs.first $ var "uc"))
           (var "tryAlts" @@ (Pairs.second $ var "uc"))
           ("t" ~> just $ var "t")) $
@@ -602,7 +599,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ns" ~> Strings.concat [Packaging.unModuleName (var "ns"), string " :: ", var "nm"])) $
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
     "untypedBindings" <~ Lists.map (var "qualifyUntyped")
-      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
+      (Lists.filter ("b" ~> Logic.not $ Optionals.isGiven (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat [
@@ -691,7 +688,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
         ("a" ~> just $ var "a"))
       ("a" ~> just $ var "a")) $
   "originalAnnotations" <~ Maps.fromList
-    (Maybes.cat (Lists.map
+    (Optionals.cat (Lists.map
       ("b" ~> optCases (var "findAnn" @@ (Core.bindingTerm $ var "b"))
         nothing
         ("ann" ~> just $ pair (Core.bindingName $ var "b") (var "ann")))
@@ -718,7 +715,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>
-    Maybes.map
+    Optionals.map
       ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
         nothing
@@ -737,15 +734,15 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
-          "existing" <~ Maybes.maybe (list ([] :: [TypedTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "acc")) $
+          "existing" <~ Optionals.cases (Maps.lookup (var "ns") (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
           Maps.insert (var "ns") (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
     Maps.empty
     (var "selectedElements") $
   -- Produce definitions in the order of the input namespaces
   "defsGrouped" <~ Lists.map
     ("ns" ~>
-      "elsForNs" <~ Maybes.maybe (list ([] :: [TypedTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "elementsByNamespace")) $
-      Maybes.cat (Lists.map (var "toDef") (var "elsForNs")))
+      "elsForNs" <~ Optionals.cases (Maps.lookup (var "ns") (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
+      Optionals.cat (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 
   "g" <~ (Lexical.buildGraph @@ var "bins5" @@ Maps.empty @@ Graph.graphPrimitives (var "adapted")) $
@@ -957,7 +954,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (var "go" @@ (Core.applicationArgument $ var "a")),
       _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
-        (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
+        (Optionals.map (var "go") (Core.caseStatementDefault $ var "cs"))
         (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "go" @@ var "l")
@@ -971,7 +968,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "go") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
-      _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "go") (var "m"),
+      _Term_optional>>: "m" ~> Core.termOptional $ Optionals.map (var "go") (var "m"),
       _Term_pair>>: "p" ~> Core.termPair $ pair
         (var "go" @@ (Pairs.first $ var "p"))
         (var "go" @@ (Pairs.second $ var "p")),
@@ -1013,8 +1010,8 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
         -- Drop names that aren't present in tmap1. The caller is expected to
         -- pass only names that exist in the schema graph, so the filter is
         -- a no-op in practice.
-        Maybes.mapMaybe
-          ("n" ~> Maybes.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n") (var "tmap1")))
+        Optionals.mapOptional
+          ("n" ~> Optionals.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n") (var "tmap1")))
           (var "names"))
       (var "nameLists"))
 simpleLanguageAdapter :: TypedTermDefinition (Language -> InferenceContext -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term))
@@ -1057,7 +1054,7 @@ termAlternatives = define "termAlternatives" $
                       -- termVariantAnnotated. dataGraphToDefinitions
                       -- re-attaches the description annotation post-adaptation
                       -- so coders can emit it as documentation. See #349.
-    _Term_maybe>>: "ot" ~> right $ list [
+    _Term_optional>>: "ot" ~> right $ list [
       Core.termList $ optCases (var "ot")
         (list ([] :: [TypedTerm Term]))
         ("term2" ~> list [var "term2"])],
@@ -1074,7 +1071,7 @@ termAlternatives = define "termAlternatives" $
       "fterm" <~ Core.fieldTerm (var "field") $
       "forFieldType" <~ ("ft" ~>
         "ftname" <~ Core.fieldTypeName (var "ft") $
-        Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
+        Core.field (var "fname") $ Core.termOptional $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
       "rt" <<~ Resolution.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname" $
@@ -1094,7 +1091,7 @@ typeAlternatives = define "typeAlternatives" $
     _Type_annotated>>: "at" ~>
       "type2" <~ Core.annotatedTypeBody (var "at") $
        list [var "type2"], -- TODO: lossy
-    _Type_maybe>>: "ot" ~> list [
+    _Type_optional>>: "ot" ~> list [
       Core.typeList $ var "ot"],
     _Type_union>>: "rt" ~>
       "toOptField" <~ ("f" ~> Core.fieldType (Core.fieldTypeName $ var "f") (MetaTypes.optional $ Core.fieldTypeType $ var "f")) $

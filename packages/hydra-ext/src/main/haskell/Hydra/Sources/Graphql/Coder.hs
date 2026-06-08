@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -123,7 +123,7 @@ descriptionFromType :: TypedTermDefinition (InferenceContext -> Graph -> Type ->
 descriptionFromType = define "descriptionFromType" $
   "cx" ~> "g" ~> lambda "typ" $
     Eithers.map
-      (lambda "mval" $ Maybes.map
+      (lambda "mval" $ Optionals.map
         (lambda "s" $ wrap G._Description (wrap G._StringValue (var "s")))
         (var "mval"))
       (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
@@ -262,7 +262,7 @@ encodeType = define "encodeType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "typ"))) [
-      _Type_maybe>>: lambda "et" $
+      _Type_optional>>: lambda "et" $
         cases _Type (Strip.deannotateType @@ var "et")
           (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "et"))) [
           _Type_list>>: lambda "et2" $
@@ -351,9 +351,7 @@ encodeTypeName = define "encodeTypeName" $
     "qualName">: Names.qualifyName @@ var "name",
     "local">: Util.qualifiedNameLocal (var "qualName"),
     "mns">: Util.qualifiedNameModuleName (var "qualName"),
-    "prefix">: Maybes.maybe (string "")
-      (lambda "ns_" $ Maybes.maybe (string "") ("p" ~> var "p") (Maps.lookup (var "ns_") (var "prefixes")))
-      (var "mns")] $
+    "prefix">: Optionals.cases (var "mns") (string "") (lambda "ns_" $ Optionals.cases (Maps.lookup (var "ns_") (var "prefixes")) (string "") ("p" ~> var "p"))] $
     wrap G._Name (Strings.cat2 (var "prefix") (sanitize @@ var "local"))
 
 -- | Encode a union variant field type to a nullable GraphQL FieldDefinition.
@@ -379,7 +377,7 @@ encodeUnionFieldType = define "encodeUnionFieldType" $
 -- | Helper: find namespace prefixes from type definitions
 findPrefixes :: TypedTerm (ModuleName -> [TypeDefinition] -> M.Map ModuleName String)
 findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
-  "namespaces">: (Lists.nub :: TypedTerm [ModuleName] -> TypedTerm [ModuleName]) $ Maybes.cat $ Lists.map
+  "namespaces">: (Lists.nub :: TypedTerm [ModuleName] -> TypedTerm [ModuleName]) $ Optionals.cat $ Lists.map
     (lambda "td" $ Names.moduleNameOf @@ (Packaging.typeDefinitionName $ var "td"))
     (var "tdefs")] $
   Maps.fromList $ Lists.map

@@ -14,7 +14,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -54,7 +54,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -115,7 +115,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -181,7 +181,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -261,7 +261,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]
@@ -346,7 +346,7 @@ allTests =
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
                     " :: ",
-                    (Maybes.maybe "<no scheme>" (\ts -> ShowCore.typeScheme ts) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))),
+                    (Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) "<no scheme>" (\ts -> ShowCore.typeScheme ts)),
                     " = ",
                     (ShowCore.term (Packaging.termDefinitionBody v0)),
                     "\n"]

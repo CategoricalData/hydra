@@ -4,14 +4,14 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Just, Nothing  # noqa: F401
+from hydra.dsl.python import Given, None_  # noqa: F401
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.logic as Logic
 import hydra.dsl.meta.lib.maps as Maps
-import hydra.dsl.meta.lib.maybes as Maybes
+import hydra.dsl.meta.lib.optionals as Optionals
 import hydra.dsl.meta.lib.pairs as Pairs
 import hydra.dsl.meta.lib.sets as Sets
 import hydra.dsl.meta.lib.strings as Strings
@@ -83,11 +83,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just(EntityMetadata(
-        Just("Python code generator: converts Hydra modules to Python source code"),
+    Given(EntityMetadata(
+        Given("Python code generator: converts Hydra modules to Python source code"),
         (),
         (),
-        Nothing,
+        None_,
     )),
     DEPENDENCIES,
     (),
@@ -158,7 +158,7 @@ def _meta_record_with_field_set(set_field: str, set_value, m_var: str = "m"):
 
 def _type_cases_with_one_branch(arg_term, default_result, branch_field,
                                  other_variants_in_order):
-    """Build cases _Type arg Nothing [<branch>, ...other_variants -> default_result].
+    """Build cases _Type arg none [<branch>, ...other_variants -> default_result].
 
     The branch_field is emitted first; the remaining variants in
     `other_variants_in_order` each get `constant default_result`. The order is
@@ -171,7 +171,7 @@ def _type_cases_with_one_branch(arg_term, default_result, branch_field,
         )
     return cases("hydra.core.Type",
         _kref.strip_deannotate_type(arg_term),
-        Nothing(),
+        None_(),
         fields,
     )
 
@@ -527,16 +527,14 @@ def _deduplicate_case_variables():
             ("mdom", Core.lambda_domain(var("lam"))),
             ("body", Core.lambda_body(var("lam"))),
         ],
-        Maybes.maybe(
-            pair(
+        Optionals.cases(Maps.lookup(var("v"), var("countByName")), pair(
                 Maps.insert(
                     var("v"),
                     int32(1),
                     var("countByName"),
                 ),
                 Lists.cons(var("field"), var("done")),
-            ),
-            lam(
+            ), lam(
                 "count",
                 let_chain(
                     [
@@ -583,9 +581,7 @@ def _deduplicate_case_variables():
                         Lists.cons(var("newField"), var("done")),
                     ),
                 ),
-            ),
-            Maps.lookup(var("v"), var("countByName")),
-        ),
+            ),),
     )
     rewrite_case = lambdas(
         ["state", "field"],
@@ -736,7 +732,7 @@ def _eliminate_unit_var():
                 Core.term_cases(
                     Core.case_statement(
                         Core.case_statement_type_name(var("cs")),
-                        Maybes.map(
+                        Optionals.map(
                             var("recurse"),
                             Core.case_statement_default(var("cs")),
                         ),
@@ -822,11 +818,11 @@ def _eliminate_unit_var():
                 ),
             ),
         ),
-        field("maybe",
+        field("optional",
             lam(
                 "mt",
-                Core.term_maybe(
-                    Maybes.map(var("recurse"), var("mt"))
+                Core.term_optional(
+                    Optionals.map(var("recurse"), var("mt"))
                 ),
             ),
         ),
@@ -891,7 +887,7 @@ def _eliminate_unit_var():
         ["recurse", "term"],
         cases("hydra.core.Term",
             _kref.strip_deannotate_and_detype_term(var("term")),
-            Just(var("term")),
+            Given(var("term")),
             rewrite_body_fields,
         ),
     )
@@ -1189,8 +1185,7 @@ def _encode_application_inner():
     )
     in_graph_branch = lam(
         "el",
-        Maybes.maybe(
-            Eithers.bind(
+        Optionals.cases(Core.binding_type_scheme(var("el")), Eithers.bind(
                 _local("encodeVariable")(var("cx"), var("env"), var("name"), var("hargs")),
                 lam(
                     "expr",
@@ -1200,16 +1195,9 @@ def _encode_application_inner():
                         )
                     ),
                 ),
-            ),
-            has_ts_branch,
-            Core.binding_type_scheme(var("el")),
-        ),
+            ), has_ts_branch,),
     )
-    not_primitive_branch = Maybes.maybe(
-        not_in_graph_branch,
-        in_graph_branch,
-        _kref.lexical_lookup_binding(var("g"), var("name")),
-    )
+    not_primitive_branch = Optionals.cases(_kref.lexical_lookup_binding(var("g"), var("name")), not_in_graph_branch, in_graph_branch,)
     is_primitive_branch = lam(
         "_prim",
         let_chain(
@@ -1246,7 +1234,7 @@ def _encode_application_inner():
                 ),
                 ("inlineVars", _env("inlineVariables", "env")),
             ],
-            Maybes.cases(
+            Optionals.cases(
                 Maps.lookup(
                     var("name"),
                     Graph_dsl.graph_primitives(var("g")),
@@ -1262,7 +1250,7 @@ def _encode_application_inner():
             [
                 (
                     "firstArg",
-                    Maybes.from_maybe(
+                    Optionals.from_optional(
                         _kref.utils_py_name_to_py_expression(_py_name("")),
                         Lists.maybe_head(var("hargs")),
                     ),
@@ -1304,7 +1292,7 @@ def _encode_application_type():
                 ),
             ),
             ["annotated", "function", "forall", "list", "literal", "map",
-             "maybe", "either", "pair", "record", "set", "union", "unit",
+             "optional", "either", "pair", "record", "set", "union", "unit",
              "variable", "void", "wrap"],
         ),
     )
@@ -1549,8 +1537,7 @@ def _encode_binding_as():
         _local("encodeTermMultiline")(var("cx"), var("env"), var("term1")),
         lam(
             "stmts",
-            Maybes.maybe(
-                left(
+            Optionals.cases(Lists.maybe_head(var("stmts")), left(
                     Errors_dsl.error_other(
                         Errors_dsl.other_error(
                             string(
@@ -1558,10 +1545,7 @@ def _encode_binding_as():
                             )
                         )
                     )
-                ),
-                lam("x", right(var("x"))),
-                Lists.maybe_head(var("stmts")),
-            ),
+                ), lam("x", right(var("x"))),),
         ),
     )
 
@@ -1569,7 +1553,7 @@ def _encode_binding_as():
         [
             ("mcs", _local("extractCaseElimination")(var("term1"))),
         ],
-        Maybes.maybe(fallback, lam("cs", case_elim_fn("cs")), var("mcs")),
+        Optionals.cases(var("mcs"), fallback, lam("cs", case_elim_fn("cs"))),
     )
 
     # Hoisted binding branch: with lambda params, use captured + match params
@@ -1602,14 +1586,14 @@ def _encode_binding_as():
                                 ),
                                 (
                                     "capturedVarNames",
-                                    Maybes.from_maybe(
+                                    Optionals.from_optional(
                                         list_([]),
                                         Lists.maybe_init(var("lambdaParams")),
                                     ),
                                 ),
                                 (
                                     "matchLambdaParam",
-                                    Maybes.from_maybe(
+                                    Optionals.from_optional(
                                         wrap("hydra.core.Name",
                                             string(""),
                                         ),
@@ -1854,7 +1838,7 @@ def _encode_binding_as():
                 _local("isCaseStatementApplication")(var("innerBody")),
             ),
         ],
-        Maybes.maybe(no_ts_no_csa_branch, hoisted_branch, var("mcsa")),
+        Optionals.cases(var("mcsa"), no_ts_no_csa_branch, hoisted_branch),
     )
 
     has_ts_branch = lam(
@@ -1867,7 +1851,7 @@ def _encode_binding_as():
                     [
                         (
                             "normComment",
-                            Maybes.map(
+                            Optionals.map(
                                 _kref.formatting_normalize_comment,
                                 var("comment"),
                             ),
@@ -1891,7 +1875,7 @@ def _encode_binding_as():
                     _kref.names_encode_name(true(), _kref.util_case_convention_lower_snake, var("env"), var("name1")),
                 ),
             ],
-            Maybes.maybe(no_ts_branch, has_ts_branch, var("mts")),
+            Optionals.cases(var("mts"), no_ts_branch, has_ts_branch),
         ),
     )
     return _def(
@@ -1940,15 +1924,13 @@ def _encode_binding_as_assignment():
                                 Logic.if_else(
                                     var("isTrivial"),
                                     boolean(False),
-                                    Maybes.maybe(
-                                        Logic.and_(
+                                    Optionals.cases(var("mts"), Logic.and_(
                                             var("allowThunking"),
                                             Logic.or_(
                                                 var("isComplexVar"),
                                                 var("termIsComplex"),
                                             ),
-                                        ),
-                                        lam(
+                                        ), lam(
                                             "ts",
                                             Logic.and_(
                                                 var("allowThunking"),
@@ -1963,9 +1945,7 @@ def _encode_binding_as_assignment():
                                                     ),
                                                 ),
                                             ),
-                                        ),
-                                        var("mts"),
-                                    ),
+                                        ),),
                                 ),
                             ),
                             # Always wrap walrus values in Lazy(...) so the
@@ -2014,8 +1994,7 @@ def _encode_default_case_block():
     body = lambdas(
         ["termToExpr", "isFull", "mdflt", "tname"],
         Eithers.bind(
-            Maybes.maybe(
-                right(
+            Optionals.cases(var("mdflt"), right(
                     Logic.if_else(
                         var("isFull"),
                         _kref.utils_raise_assertion_error(string("Unreachable: all variants handled")),
@@ -2024,8 +2003,7 @@ def _encode_default_case_block():
                                 _kref.names_local_name_of(var("tname")),
                             )),
                     )
-                ),
-                lam(
+                ), lam(
                     "d",
                     Eithers.bind(
                         var("termToExpr")(var("d")),
@@ -2036,9 +2014,7 @@ def _encode_default_case_block():
                             ),
                         ),
                     ),
-                ),
-                var("mdflt"),
-            ),
+                ),),
             lam(
                 "stmt",
                 let_chain(
@@ -2084,8 +2060,7 @@ def _encode_definition():
             ("term", _proj("hydra.packaging.TermDefinition", "body", "td")),
             (
                 "typ",
-                Maybes.maybe(
-                    Core.type_scheme(
+                Optionals.cases(_proj("hydra.packaging.TermDefinition", "signature", "td"), Core.type_scheme(
                         list_([]),
                         Core.type_variable(
                             wrap("hydra.core.Name",
@@ -2093,10 +2068,7 @@ def _encode_definition():
                             )
                         ),
                         nothing(),
-                    ),
-                    lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),
-                    _proj("hydra.packaging.TermDefinition", "signature", "td"),
-                ),
+                    ), lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),),
             ),
         ],
         Eithers.bind(
@@ -2107,7 +2079,7 @@ def _encode_definition():
                     [
                         (
                             "normComment",
-                            Maybes.map(
+                            Optionals.map(
                                 _kref.formatting_normalize_comment,
                                 var("comment"),
                             ),
@@ -2146,7 +2118,7 @@ def _encode_definition():
                     [
                         (
                             "normComment",
-                            Maybes.map(
+                            Optionals.map(
                                 _kref.formatting_normalize_comment,
                                 var("comment"),
                             ),
@@ -2161,7 +2133,7 @@ def _encode_definition():
         ["cx", "env", "def_"],
         cases("hydra.packaging.Definition",
             var("def_"),
-            Nothing(),
+            None_(),
             [
                 field("term",
                     lam("td", term_branch),
@@ -2211,9 +2183,7 @@ def _encode_enum_value_assignment():
                             ),
                         ],
                         right(
-                            Maybes.maybe(
-                                list_([var("assignStmt")]),
-                                lam(
+                            Optionals.cases(var("mcomment"), list_([var("assignStmt")]), lam(
                                     "c",
                                     list_(
                                         [
@@ -2221,9 +2191,7 @@ def _encode_enum_value_assignment():
                                             _kref.utils_py_expression_to_py_statement(_kref.utils_triple_quoted_string(var("c"))),
                                         ]
                                     ),
-                                ),
-                                var("mcomment"),
-                            )
+                                ),)
                         ),
                     ),
                 ),
@@ -2331,7 +2299,7 @@ def _encode_float_value():
         ["fv"],
         cases("hydra.core.FloatValue",
             var("fv"),
-            Nothing(),
+            None_(),
             [
                 field("float32",
                     lam(
@@ -2529,24 +2497,20 @@ def _encode_python_module():
             ),
             (
                 "commentStmts",
-                Maybes.maybe(
-                    list_([]),
-                    lam(
+                Optionals.cases(Optionals.map(
+                        _kref.formatting_normalize_comment,
+                        Optionals.bind(
+                            Pkg.module_metadata(var("mod")),
+                            lam("em", Pkg.entity_metadata_description(var("em"))),
+                        ),
+                    ), list_([]), lam(
                         "c",
                         list_(
                             [
                                 _kref.utils_comment_statement(var("c"))
                             ]
                         ),
-                    ),
-                    Maybes.map(
-                        _kref.formatting_normalize_comment,
-                        Maybes.bind(
-                            Pkg.module_metadata(var("mod")),
-                            lam("em", Pkg.entity_metadata_description(var("em"))),
-                        ),
-                    ),
-                ),
+                    ),),
             ),
             (
                 "importStmts",
@@ -2683,16 +2647,12 @@ def _encode_record_type():
                         ),
                         (
                             "args",
-                            Maybes.maybe(
-                                nothing(),
-                                lam(
+                            Optionals.cases(var("mGenericArg"), nothing(), lam(
                                     "a",
                                     just(
                                         _kref.utils_py_expressions_to_py_args(list_([var("a")]))
                                     ),
-                                ),
-                                var("mGenericArg"),
-                            ),
+                                ),),
                         ),
                         (
                             "decs",
@@ -3348,22 +3308,18 @@ def _encode_term_inline():
     )
     maybe_branch = lam(
         "mt",
-        Maybes.maybe(
-            right(
-                _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("Nothing")), list_([]))
-            ),
-            lam(
+        Optionals.cases(var("mt"), right(
+                _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("None_")), list_([]))
+            ), lam(
                 "t1",
                 Eithers.bind(
                     var("encode")(var("t1")),
                     lam(
                         "pyexp",
-                        var("withCast")(_kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("Just")), list_([var("pyexp")]))),
+                        var("withCast")(_kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("Given")), list_([var("pyexp")]))),
                     ),
                 ),
-            ),
-            var("mt"),
-        ),
+            ),),
     )
     pair_branch = lam(
         "p",
@@ -3498,15 +3454,7 @@ def _encode_term_inline():
                                 ("fname", Core.field_name(var("field"))),
                                 (
                                     "isUnitVariant",
-                                    Maybes.maybe(
-                                        false(),
-                                        lam(
-                                            "ft",
-                                            _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(
-                                                        var("ft")
-                                                    ))),
-                                        ),
-                                        Lists.find(
+                                    Optionals.cases(Lists.find(
                                             lam(
                                                 "ft",
                                                 MetaCore.equal_name(
@@ -3517,8 +3465,12 @@ def _encode_term_inline():
                                                 ),
                                             ),
                                             var("rt"),
-                                        ),
-                                    ),
+                                        ), false(), lam(
+                                            "ft",
+                                            _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(
+                                                        var("ft")
+                                                    ))),
+                                        ),),
                                 ),
                             ],
                             Eithers.bind(
@@ -3601,7 +3553,7 @@ def _encode_term_inline():
             ],
             cases("hydra.core.Term",
                 _kref.strip_deannotate_and_detype_term(var("term")),
-                Nothing(),
+                None_(),
                 [
                     field("application", application_branch),
                     field("either", either_branch),
@@ -3613,7 +3565,7 @@ def _encode_term_inline():
                     field("list", list_branch),
                     field("literal", literal_branch),
                     field("map", map_branch),
-                    field("maybe", maybe_branch),
+                    field("optional", maybe_branch),
                     field("pair", pair_branch),
                     field("record", record_branch),
                     field("set", set_branch),
@@ -3809,7 +3761,7 @@ def _encode_term_multiline():
                     [
                         (
                             "arg",
-                            Maybes.from_maybe(
+                            Optionals.from_optional(
                                 Core.term_unit,
                                 Lists.maybe_head(var("args")),
                             ),
@@ -3950,7 +3902,7 @@ def _encode_term_multiline_tco():
                 [
                     (
                         "arg",
-                        Maybes.from_maybe(
+                        Optionals.from_optional(
                             Core.term_unit,
                             Lists.maybe_head(var("args2")),
                         ),
@@ -4177,7 +4129,7 @@ def _encode_type():
                 _local("encodeLiteralType")(var("lt")),
             ),
         ),
-        field("maybe",
+        field("optional",
             lam(
                 "et",
                 Eithers.bind(
@@ -4186,7 +4138,7 @@ def _encode_type():
                         "ptype",
                         right(
                             primary_with_expr_slices_inline_named(
-                                "Maybe",
+                                "Optional",
                                 list_([var("ptype")]),
                             )
                         ),
@@ -4314,7 +4266,7 @@ def _encode_type():
             ],
             cases("hydra.core.Type",
                 _kref.strip_deannotate_type(var("typ")),
-                Nothing(),
+                None_(),
                 fields,
             ),
         ),
@@ -4559,18 +4511,14 @@ def _encode_union_elimination_inline():
                             ),
                         ],
                         Eithers.bind(
-                            Maybes.maybe(
-                                right(
+                            Optionals.cases(var("mdefault"), right(
                                     _local("unsupportedExpression")(string(
                                             "no matching case in inline union elimination"
                                         ))
-                                ),
-                                lam(
+                                ), lam(
                                     "dflt",
                                     _local("encodeTermInline")(var("cx"), var("env"), false(), var("dflt")),
-                                ),
-                                var("mdefault"),
-                            ),
+                                ),),
                             lam(
                                 "pyDefault",
                                 let_chain(
@@ -4774,7 +4722,7 @@ def _encode_forall_type():
                 ),
             ),
             ["annotated", "application", "function", "list", "literal", "map",
-             "maybe", "either", "pair", "record", "set", "union", "unit",
+             "optional", "either", "pair", "record", "set", "union", "unit",
              "variable", "void", "wrap"],
         ),
     )
@@ -4849,7 +4797,7 @@ def _encode_function_type():
                     ),
                 ),
                 ["annotated", "application", "forall", "list", "literal", "map",
-                 "maybe", "either", "pair", "record", "set", "union", "unit",
+                 "optional", "either", "pair", "record", "set", "union", "unit",
                  "variable", "void", "wrap"],
             ),
         ),
@@ -4929,7 +4877,7 @@ def _encode_integer_value():
             [("toPyInt", to_py_int)],
             cases("hydra.core.IntegerValue",
                 var("iv"),
-                Nothing(),
+                None_(),
                 [
                     field("bigint",
                         lam(
@@ -4960,7 +4908,7 @@ def _encode_literal():
         ["lit"],
         cases("hydra.core.Literal",
             var("lit"),
-            Nothing(),
+            None_(),
             [
                 field("binary",
                     lam(
@@ -5053,7 +5001,7 @@ def _encode_literal_type():
                     "findName",
                     cases("hydra.core.LiteralType",
                         var("lt"),
-                        Nothing(),
+                        None_(),
                         [
                             field("binary",
                                 constant(string("bytes")),
@@ -5069,7 +5017,7 @@ def _encode_literal_type():
                                     "ft",
                                     cases("hydra.core.FloatType",
                                         var("ft"),
-                                        Nothing(),
+                                        None_(),
                                         [
                                             field("float32",
                                                 constant(string("float")),
@@ -5386,8 +5334,7 @@ def _encode_variable():
                     _kref.predicates_is_trivial_term(Core.binding_term(var("el"))),
                 ),
             ],
-            Maybes.maybe(
-                Logic.if_else(
+            Optionals.cases(Core.binding_type_scheme(var("el")), Logic.if_else(
                     Logic.and_(
                         Equality.equal(
                             _kref.arity_type_arity(var("typ")),
@@ -5400,20 +5347,13 @@ def _encode_variable():
                         [("asFunctionRef", as_function_ref("typ"))],
                         right(var("asFunctionRef")),
                     ),
-                ),
-                el_typed_branch,
-                Core.binding_type_scheme(var("el")),
-            ),
+                ), el_typed_branch,),
         ),
     )
-    not_in_metadata_branch = Maybes.maybe(
-        let_chain(
+    not_in_metadata_branch = Optionals.cases(_kref.lexical_lookup_binding(var("g"), var("name")), let_chain(
             [("asFunctionRef", as_function_ref("typ"))],
             right(var("asFunctionRef")),
-        ),
-        el_branch,
-        _kref.lexical_lookup_binding(var("g"), var("name")),
-    )
+        ), el_branch,)
 
     has_typ_branch = lam(
         "typ",
@@ -5501,16 +5441,10 @@ def _encode_variable():
                     _kref.predicates_is_trivial_term(Core.binding_term(var("el"))),
                 ),
             ],
-            Maybes.maybe(
-                right(var("asVariable")),
-                el_branch_no_typ_inner,
-                Core.binding_type_scheme(var("el")),
-            ),
+            Optionals.cases(Core.binding_type_scheme(var("el")), right(var("asVariable")), el_branch_no_typ_inner,),
         ),
     )
-    not_in_graphBoundTypes_no_prim = Maybes.maybe(
-        Maybes.maybe(
-            left(
+    not_in_graphBoundTypes_no_prim = Optionals.cases(_kref.lexical_lookup_binding(var("g"), var("name")), Optionals.cases(Maps.lookup(var("name"), var("tcMetadata")), left(
                 Errors_dsl.error_other(
                     Errors_dsl.other_error(
                         Strings.cat2(
@@ -5519,13 +5453,7 @@ def _encode_variable():
                         )
                     )
                 )
-            ),
-            constant(right(var("asFunctionCall"))),
-            Maps.lookup(var("name"), var("tcMetadata")),
-        ),
-        no_prim_no_typ_el_branch,
-        _kref.lexical_lookup_binding(var("g"), var("name")),
-    )
+            ), constant(right(var("asFunctionCall"))),), no_prim_no_typ_el_branch,)
     is_prim_no_typ_branch = lam(
         "prim",
         let_chain(
@@ -5574,17 +5502,11 @@ def _encode_variable():
             right(
                 _local("lazyDotGet")(var("asVariable"))
             ),
-            Maybes.maybe(
-                not_in_graphBoundTypes_no_prim,
-                is_prim_no_typ_branch,
-                _kref.lexical_lookup_primitive(var("g"), var("name")),
-            ),
+            Optionals.cases(_kref.lexical_lookup_primitive(var("g"), var("name")), not_in_graphBoundTypes_no_prim, is_prim_no_typ_branch,),
         ),
     )
 
-    empty_args_branch = Maybes.maybe(
-        no_typ_branch, has_typ_branch, var("mTyp")
-    )
+    empty_args_branch = Optionals.cases(var("mTyp"), no_typ_branch, has_typ_branch)
 
     # Non-empty args branch: primitive lookup
     prim_branch = lam(
@@ -5655,11 +5577,7 @@ def _encode_variable():
             ),
         ),
     )
-    nonempty_args_branch = Maybes.maybe(
-        right(var("asFunctionCall")),
-        prim_branch,
-        _kref.lexical_lookup_primitive(var("g"), var("name")),
-    )
+    nonempty_args_branch = Optionals.cases(_kref.lexical_lookup_primitive(var("g"), var("name")), right(var("asFunctionCall")), prim_branch,)
 
     body = lambdas(
         ["cx", "env", "name", "args"],
@@ -5683,7 +5601,7 @@ def _encode_variable():
                 ),
                 (
                     "mTyp",
-                    Maybes.map(
+                    Optionals.map(
                         lam(
                             "ts_", Core.type_scheme_body(var("ts_"))
                         ),
@@ -5840,18 +5758,14 @@ def _extend_meta_for_term():
             field("lambda",
                     lam(
                         "lam",
-                        Maybes.maybe(
-                            var("meta"),
-                            lam(
+                        Optionals.cases(Core.lambda_domain(var("lam")), var("meta"), lam(
                                 "dom",
                                 Logic.if_else(
                                     var("topLevel"),
                                     _local("extendMetaForType")(true(), false(), var("dom"), var("meta")),
                                     var("meta"),
                                 ),
-                            ),
-                            Core.lambda_domain(var("lam")),
-                        ),
+                            ),),
                     ),
                 ),
             field("let",
@@ -5871,9 +5785,9 @@ def _extend_meta_for_term():
                                             "forBinding",
                                             lambdas(
                                                 ["m", "b"],
-                                                Maybes.maybe(
-                                                    var("m"),
-                                                    lam(
+                                                Optionals.cases(Core.binding_type_scheme(
+                                                        var("b")
+                                                    ), var("m"), lam(
                                                         "ts",
                                                         let_chain(
                                                             [
@@ -5892,11 +5806,7 @@ def _extend_meta_for_term():
                                                                     ), var("m")),
                                                             ),
                                                         ),
-                                                    ),
-                                                    Core.binding_type_scheme(
-                                                        var("b")
-                                                    ),
-                                                ),
+                                                    ),),
                                             ),
                                         ),
                                     ],
@@ -5934,16 +5844,12 @@ def _extend_meta_for_term():
                         _local("setMetaUsesFrozenSet")(var("meta"), true())
                     ),
                 ),
-            field("maybe",
+            field("optional",
                     lam(
                         "m",
-                        Maybes.maybe(
-                            _local("setMetaUsesNothing")(var("meta"), true()),
-                            constant(
+                        Optionals.cases(var("m"), _local("setMetaUsesNothing")(var("meta"), true()), constant(
                                 _local("setMetaUsesJust")(var("meta"), true())
-                            ),
-                            var("m"),
-                        ),
+                            ),),
                     ),
                 ),
             # Union injections require cast() for proper typing
@@ -6000,7 +5906,7 @@ def _extend_meta_for_type():
                 _local("setMetaUsesFrozenSet")(var("metaWithSubtypes"), true())
             ),
         ),
-        field("maybe",
+        field("optional",
             constant(
                 _local("setMetaUsesMaybe")(var("metaWithSubtypes"), true())
             ),
@@ -6130,7 +6036,7 @@ def _extend_meta_for_type():
             ],
             cases("hydra.core.Type",
                 _kref.strip_deannotate_type(var("typ")),
-                Just(var("metaWithSubtypes")),
+                Given(var("metaWithSubtypes")),
                 case_fields,
             ),
         ),
@@ -6210,7 +6116,7 @@ def _find_type_params():
                     "isBound",
                     lam(
                         "v",
-                        Maybes.is_just(Maps.lookup(var("v"), var("boundVars"))),
+                        Optionals.is_given(Maps.lookup(var("v"), var("boundVars"))),
                     ),
                 ),
             ],
@@ -6357,9 +6263,7 @@ def _function_definition_to_expr():
                         lam(
                             "block",
                             Eithers.bind(
-                                Maybes.maybe(
-                                    right(nothing()),
-                                    lam(
+                                Optionals.cases(var("mcod"), right(nothing()), lam(
                                         "cod",
                                         Eithers.bind(
                                             _local("encodeType")(var("env"), var("cod")),
@@ -6372,9 +6276,7 @@ def _function_definition_to_expr():
                                                 ),
                                             ),
                                         ),
-                                    ),
-                                    var("mcod"),
-                                ),
+                                    ),),
                                 lam(
                                     "mreturnType",
                                     let_chain(
@@ -6490,7 +6392,7 @@ def _gather_metadata():
         ["meta", "def"],
         cases("hydra.packaging.Definition",
             var("def"),
-            Nothing(),
+            None_(),
             [
                 field("term",
                     lam(
@@ -6503,21 +6405,17 @@ def _gather_metadata():
                                 ),
                                 (
                                     "typ",
-                                    Maybes.maybe(
-                                        Core.type_variable(
+                                    Optionals.cases(Pkg.term_definition_signature(
+                                            var("termDef")
+                                        ), Core.type_variable(
                                             wrap("hydra.core.Name",
                                                 string("hydra.core.Unit"),
                                             )
-                                        ),
-                                        lam("sig",
+                                        ), lam("sig",
                                             Core.type_scheme_body(
                                                 _kref.scoping_term_signature_to_type_scheme(var("sig"))
                                             )
-                                        ),
-                                        Pkg.term_definition_signature(
-                                            var("termDef")
-                                        ),
-                                    ),
+                                        ),),
                                 ),
                                 (
                                     "meta2",
@@ -6677,7 +6575,7 @@ def _is_case_statement_application():
                     [
                         (
                             "arg",
-                            Maybes.from_maybe(
+                            Optionals.from_optional(
                                 Core.term_unit,
                                 Lists.maybe_head(var("args")),
                             ),
@@ -6789,9 +6687,9 @@ def _is_variant_unit_type():
                     ),
                 ),
             ],
-            Maybes.from_maybe(
+            Optionals.from_optional(
                 false(),
-                Maybes.map(
+                Optionals.map(
                     lam(
                         "ft",
                         _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(var("ft")))),
@@ -7058,11 +6956,11 @@ def _module_standard_imports():
             list_(
                 [
                     cond("Either", "usesEither"),
-                    cond("Just", "usesJust"),
+                    cond("Given", "usesJust"),
                     cond("Left", "usesLeft"),
-                    cond("Maybe", "usesMaybe"),
                     cond("Node", "usesNode"),
-                    cond("Nothing", "usesNothing"),
+                    cond("None_", "usesNothing"),
+                    cond("Optional", "usesMaybe"),
                     cond("Right", "usesRight"),
                 ]
             ),
@@ -7101,7 +6999,7 @@ def _module_standard_imports():
                 ("pairs", list_(pairs)),
                 (
                     "simplified",
-                    Maybes.cat(
+                    Optionals.cat(
                         Lists.map(
                             lam(
                                 "p",
@@ -7110,7 +7008,7 @@ def _module_standard_imports():
                                         ("modName", Pairs.first(var("p"))),
                                         (
                                             "symbols",
-                                            Maybes.cat(Pairs.second(var("p"))),
+                                            Optionals.cat(Pairs.second(var("p"))),
                                         ),
                                     ],
                                     Logic.if_else(
@@ -7565,21 +7463,13 @@ def _term_arity_with_primitives():
             field("variable",
                     lam(
                         "name",
-                        Maybes.maybe(
-                            int_(0),
-                            lam(
+                        Optionals.cases(_kref.lexical_lookup_binding(var("graph"), var("name")), int_(0), lam(
                                 "el",
-                                Maybes.maybe(
-                                    _kref.arity_term_arity(Core.binding_term(var("el"))),
-                                    lam(
+                                Optionals.cases(Core.binding_type_scheme(var("el")), _kref.arity_term_arity(Core.binding_term(var("el"))), lam(
                                         "ts",
                                         _kref.arity_type_scheme_arity(var("ts")),
-                                    ),
-                                    Core.binding_type_scheme(var("el")),
-                                ),
-                            ),
-                            _kref.lexical_lookup_binding(var("graph"), var("name")),
-                        ),
+                                    ),),
+                            ),),
                     ),
                 )),
     )
@@ -7664,7 +7554,7 @@ def _unsupported_expression():
 def _variant_args():
     body = lambdas(
         ["ptype", "tparams"],
-        _kref.utils_py_expressions_to_py_args(Maybes.cat(
+        _kref.utils_py_expressions_to_py_args(Optionals.cat(
                 list_(
                     [
                         just(
@@ -7736,7 +7626,7 @@ def _with_definitions():
             [
                 (
                     "bindings",
-                    Maybes.cat(
+                    Optionals.cat(
                         Lists.map(
                             lam(
                                 "def_",
@@ -7756,7 +7646,7 @@ def _with_definitions():
                                                             "body",
                                                             "td",
                                                         ),
-                                                        Maybes.map(
+                                                        Optionals.map(
                                                             lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),
                                                             _proj(
                                                                 "hydra.packaging.TermDefinition",
@@ -7879,7 +7769,7 @@ def _with_type_lambda():
 def _lazy_flags_for_primitive():
     body = lambdas(
         ["g", "name"],
-        Maybes.cases(
+        Optionals.cases(
             Maps.lookup(var("name"), Graph_dsl.graph_primitives(var("g"))),
             list_([]),
             lam(

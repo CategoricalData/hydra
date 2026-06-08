@@ -199,38 +199,38 @@
       (lambda (a)
         (lambda (b)
           (if (= b 0)
-              (list 'nothing)
-              (list 'just (floor-quotient a b))))))
+              (list 'none)
+              (list 'given (floor-quotient a b))))))
 
     ;; maybe_mod :: Int -> Int -> Maybe Int
     (define hydra_lib_math_maybe_mod
       (lambda (a)
         (lambda (b)
           (if (= b 0)
-              (list 'nothing)
-              (list 'just (floor-remainder a b))))))
+              (list 'none)
+              (list 'given (floor-remainder a b))))))
 
     ;; maybe_pred :: Int -> Maybe Int
     (define hydra_lib_math_maybe_pred
       (lambda (n)
         (if (= n -2147483648)
-            (list 'nothing)
-            (list 'just (- n 1)))))
+            (list 'none)
+            (list 'given (- n 1)))))
 
     ;; maybe_rem :: Int -> Int -> Maybe Int
     (define hydra_lib_math_maybe_rem
       (lambda (a)
         (lambda (b)
           (if (= b 0)
-              (list 'nothing)
-              (list 'just (truncate-remainder a b))))))
+              (list 'none)
+              (list 'given (truncate-remainder a b))))))
 
     ;; maybe_succ :: Int -> Maybe Int
     (define hydra_lib_math_maybe_succ
       (lambda (n)
         (if (= n 2147483647)
-            (list 'nothing)
-            (list 'just (+ n 1)))))
+            (list 'none)
+            (list 'given (+ n 1)))))
 
     ;; min :: Int -> Int -> Int
     (define hydra_lib_math_min

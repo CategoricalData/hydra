@@ -8,7 +8,7 @@
             [hydra.lib.logic :as logic]
             [hydra.lib.maps :as maps]
             [hydra.lib.math :as math]
-            [hydra.lib.maybes :as maybes]
+            [hydra.lib.optionals :as optionals]
             [hydra.lib.pairs :as pairs]
             [hydra.lib.regex :as regex]
             [hydra.lib.sets :as sets]
@@ -92,8 +92,8 @@
      (qname ns_ "mapList") (p/prim2 (qname ns_ "mapList")
                                      (fn [f xs] ((eithers/hydra_lib_eithers_map_list f) xs))
                                      ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-list x) (p/tc-either z (p/tc-list y)))
-     (qname ns_ "mapMaybe") (p/prim2 (qname ns_ "mapMaybe")
-                                      (fn [f mx] ((eithers/hydra_lib_eithers_map_maybe f) mx))
+     (qname ns_ "mapOptional") (p/prim2 (qname ns_ "mapOptional")
+                                      (fn [f mx] ((eithers/hydra_lib_eithers_map_optional f) mx))
                                       ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-optional x) (p/tc-either z (p/tc-optional y)))
      (qname ns_ "mapSet")  (p/prim2 (qname ns_ "mapSet")
                                      (fn [f s] ((eithers/hydra_lib_eithers_map_set f) s))
@@ -363,40 +363,37 @@
 ;; Maybes
 ;; ============================================================
 
-(defn register-maybes []
-  (let [ns_ "hydra.lib.maybes"
+(defn register-optionals []
+  (let [ns_ "hydra.lib.optionals"
         a (p/tc-variable "a")
         b (p/tc-variable "b")
         c (p/tc-variable "c")]
     {(qname ns_ "apply")    (p/prim2 (qname ns_ "apply")
-                                      (fn [mf mx] ((maybes/hydra_lib_maybes_apply mf) mx))
+                                      (fn [mf mx] ((optionals/hydra_lib_optionals_apply mf) mx))
                                       [] (p/tc-optional (fun a b)) (p/tc-optional a) (p/tc-optional b))
      (qname ns_ "bind")     (p/prim2 (qname ns_ "bind")
-                                      (fn [mx f] ((maybes/hydra_lib_maybes_bind mx) f))
+                                      (fn [mx f] ((optionals/hydra_lib_optionals_bind mx) f))
                                       [] (p/tc-optional a) (fun a (p/tc-optional b)) (p/tc-optional b))
      (qname ns_ "cases")    (p/lazy-args [1] (p/prim3 (qname ns_ "cases")
-                                      (fn [mx dflt f] (((maybes/hydra_lib_maybes_cases mx) dflt) f))
+                                      (fn [mx dflt f] (((optionals/hydra_lib_optionals_cases mx) dflt) f))
                                       [] (p/tc-optional a) b (fun a b) b))
-     (qname ns_ "cat")      (p/prim1 (qname ns_ "cat")      maybes/hydra_lib_maybes_cat      [] (p/tc-list (p/tc-optional a)) (p/tc-list a))
+     (qname ns_ "cat")      (p/prim1 (qname ns_ "cat")      optionals/hydra_lib_optionals_cat      [] (p/tc-list (p/tc-optional a)) (p/tc-list a))
      (qname ns_ "compose")  (p/prim3 (qname ns_ "compose")
-                                      (fn [f g x] (((maybes/hydra_lib_maybes_compose f) g) x))
+                                      (fn [f g x] (((optionals/hydra_lib_optionals_compose f) g) x))
                                       [] (fun a (p/tc-optional b)) (fun b (p/tc-optional c)) a (p/tc-optional c))
-     (qname ns_ "fromMaybe") (p/lazy-args [0] (p/prim2 (qname ns_ "fromMaybe")
-                                       (fn [dflt mx] ((maybes/hydra_lib_maybes_from_maybe dflt) mx))
+     (qname ns_ "fromOptional") (p/lazy-args [0] (p/prim2 (qname ns_ "fromOptional")
+                                       (fn [dflt mx] ((optionals/hydra_lib_optionals_from_optional dflt) mx))
                                        [] a (p/tc-optional a) a))
-     (qname ns_ "isJust")    (p/prim1 (qname ns_ "isJust")    maybes/hydra_lib_maybes_is_just    [] (p/tc-optional a) (p/tc-boolean))
-     (qname ns_ "isNothing") (p/prim1 (qname ns_ "isNothing") maybes/hydra_lib_maybes_is_nothing [] (p/tc-optional a) (p/tc-boolean))
+     (qname ns_ "isGiven")    (p/prim1 (qname ns_ "isGiven")    optionals/hydra_lib_optionals_is_given    [] (p/tc-optional a) (p/tc-boolean))
+     (qname ns_ "isNone") (p/prim1 (qname ns_ "isNone") optionals/hydra_lib_optionals_is_none [] (p/tc-optional a) (p/tc-boolean))
      (qname ns_ "map")       (p/prim2 (qname ns_ "map")
-                                       (fn [f mx] ((maybes/hydra_lib_maybes_map f) mx))
+                                       (fn [f mx] ((optionals/hydra_lib_optionals_map f) mx))
                                        [] (fun a b) (p/tc-optional a) (p/tc-optional b))
-     (qname ns_ "mapMaybe")  (p/prim2 (qname ns_ "mapMaybe")
-                                       (fn [f xs] ((maybes/hydra_lib_maybes_map_maybe f) xs))
+     (qname ns_ "mapOptional")  (p/prim2 (qname ns_ "mapOptional")
+                                       (fn [f xs] ((optionals/hydra_lib_optionals_map_optional f) xs))
                                        [] (fun a (p/tc-optional b)) (p/tc-list a) (p/tc-list b))
-     (qname ns_ "maybe")     (p/lazy-args [0] (p/prim3 (qname ns_ "maybe")
-                                       (fn [dflt f mx] (((maybes/hydra_lib_maybes_maybe dflt) f) mx))
-                                       [] b (fun a b) (p/tc-optional a) b))
-     (qname ns_ "pure")      (p/prim1 (qname ns_ "pure")      maybes/hydra_lib_maybes_pure      [] a (p/tc-optional a))
-     (qname ns_ "toList")    (p/prim1 (qname ns_ "toList")    maybes/hydra_lib_maybes_to_list   [] (p/tc-optional a) (p/tc-list a))}))
+     (qname ns_ "pure")      (p/prim1 (qname ns_ "pure")      optionals/hydra_lib_optionals_pure      [] a (p/tc-optional a))
+     (qname ns_ "toList")    (p/prim1 (qname ns_ "toList")    optionals/hydra_lib_optionals_to_list   [] (p/tc-optional a) (p/tc-list a))}))
 
 ;; ============================================================
 ;; Pairs
@@ -603,34 +600,34 @@
 ;; ============================================================
 
 (defn- term-maybe-to-native
-  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:just val) / (:nothing)"
+  "Convert a term-level maybe (:optional val_or_nil) to native maybe (:given val) / (:none)"
   [m]
   (cond
-    (nil? m) (list :nothing)
-    (not (sequential? m)) (list :just m)
-    (= (first m) :nothing) (list :nothing)
-    (= (first m) :just) m
-    (= (first m) :maybe)
+    (nil? m) (list :none)
+    (not (sequential? m)) (list :given m)
+    (= (first m) :none) (list :none)
+    (= (first m) :given) m
+    (= (first m) :optional)
     (let [inner (second m)]
       (cond
         (or (nil? inner)
-            (and (sequential? inner) (= (first inner) :nothing)))
-        (list :nothing)
-        (and (sequential? inner) (= (first inner) :just))
-        inner  ;; (:just val) — already in native format
+            (and (sequential? inner) (= (first inner) :none)))
+        (list :none)
+        (and (sequential? inner) (= (first inner) :given))
+        inner  ;; (:given val) — already in native format
         :else
-        (list :just inner)))
-    :else (list :just m)))
+        (list :given inner)))
+    :else (list :given m)))
 
 (defn- native-maybe-to-term
-  "Convert a native maybe (:just val) / (:nothing) to term-level (:maybe val_or_nil)"
+  "Convert a native maybe (:given val) / (:none) to term-level (:optional val_or_nil)"
   [m]
   (cond
-    (nil? m) (list :maybe nil)
-    (not (sequential? m)) (list :maybe m)
-    (= (first m) :just) (list :maybe (second m))
-    (= (first m) :nothing) (list :maybe nil)
-    :else (list :maybe m)))
+    (nil? m) (list :optional nil)
+    (not (sequential? m)) (list :optional m)
+    (= (first m) :given) (list :optional (second m))
+    (= (first m) :none) (list :optional nil)
+    :else (list :optional m)))
 
 (defn register-annotations []
   (let [t (p/tc-term)]
@@ -655,11 +652,11 @@
                 (let [native-d (term-maybe-to-native d)
                       ;; Extract string from (:literal (:string "...")) wrapper if present
                       native-str-d (cond
-                                     (= (first native-d) :nothing) (list :nothing)
+                                     (= (first native-d) :none) (list :none)
                                      :else (let [inner (second native-d)]
                                              (if (and (sequential? inner) (= (first inner) :literal)
                                                       (sequential? (second inner)) (= (first (second inner)) :string))
-                                               (list :just (second (second inner)))
+                                               (list :given (second (second inner)))
                                                native-d)))]
                   (((deref (or (resolve 'hydra_annotations_set_term_description) (ns-resolve 'hydra.annotations 'hydra_annotations_set_term_description))) native-str-d) term)))
               [] t t t)
@@ -669,16 +666,16 @@
               (fn [cx graph term]
                 (let [result ((((deref (or (resolve 'hydra_annotations_get_term_description) (ns-resolve 'hydra.annotations 'hydra_annotations_get_term_description))) cx) graph) term)]
                   ;; Result is Either Error (Maybe String)
-                  ;; Convert to term-level: (:either (:right (:maybe (:literal (:string "...")))))
+                  ;; Convert to term-level: (:either (:right (:optional (:literal (:string "...")))))
                   (if (= (first result) :left)
                     (list :either result)
                     (let [maybe-str (second result)
                           term-maybe (cond
-                                       (nil? maybe-str) (list :maybe nil)
-                                       (= (first maybe-str) :nothing) (list :maybe nil)
-                                       (= (first maybe-str) :just)
-                                       (list :maybe (list :literal (list :string (second maybe-str))))
-                                       :else (list :maybe maybe-str))]
+                                       (nil? maybe-str) (list :optional nil)
+                                       (= (first maybe-str) :none) (list :optional nil)
+                                       (= (first maybe-str) :given)
+                                       (list :optional (list :literal (list :string (second maybe-str))))
+                                       :else (list :optional maybe-str))]
                       (list :either (list :right term-maybe))))))
               [] t t t t)}))
 
@@ -697,7 +694,7 @@
    (register-logic)
    (register-maps)
    (register-math)
-   (register-maybes)
+   (register-optionals)
    (register-pairs)
    (register-regex)
    (register-sets)

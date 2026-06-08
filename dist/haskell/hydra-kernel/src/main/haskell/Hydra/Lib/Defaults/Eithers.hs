@@ -14,7 +14,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Packaging as Packaging
@@ -169,11 +169,11 @@ mapList cx g funTerm listTerm =
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) (Lists.reverse elements)))
--- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
-mapMaybe :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
-mapMaybe cx g funTerm maybeTerm =
+-- | Interpreter-friendly mapOptional for Either (traverse over an optional).
+mapOptional :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
+mapOptional cx g funTerm maybeTerm =
     case maybeTerm of
-      Core.TermMaybe v0 -> Right (Maybes.maybe (Core.TermEither (Right (Core.TermMaybe Nothing))) (\val -> Core.TermApplication (Core.Application {
+      Core.TermOptional v0 -> Right (Optionals.cases v0 (Core.TermEither (Right (Core.TermOptional Nothing))) (\val -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.either")),
@@ -184,10 +184,10 @@ mapMaybe cx g funTerm maybeTerm =
           Core.applicationArgument = (Core.TermLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "y"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermEither (Right (Core.TermMaybe (Just (Core.TermVariable (Core.Name "y"))))))}))})),
+            Core.lambdaBody = (Core.TermEither (Right (Core.TermOptional (Just (Core.TermVariable (Core.Name "y"))))))}))})),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = funTerm,
-          Core.applicationArgument = val}))})) v0)
+          Core.applicationArgument = val}))})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "maybe value",
         Errors.unexpectedShapeErrorActual = (ShowCore.term maybeTerm)})))

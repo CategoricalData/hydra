@@ -111,7 +111,7 @@ blockInstruction = define "BlockInstruction" $
   T.record [
     "label">:
       doc "Optional block label" $
-      T.maybe T.string,
+      T.optional T.string,
     "blockType">:
       doc "The block's result type" $
       wasm "BlockType",
@@ -178,7 +178,7 @@ dataSegment = define "DataSegment" $
   T.record [
     "name">:
       doc "Optional data segment name" $
-      T.maybe T.string,
+      T.optional T.string,
     "mode">:
       doc "Whether this is an active or passive data segment" $
       wasm "DataMode",
@@ -217,7 +217,7 @@ elemSegment = define "ElemSegment" $
   T.record [
     "name">:
       doc "Optional element segment name" $
-      T.maybe T.string,
+      T.optional T.string,
     "mode">:
       doc "Whether this is an active or passive element segment" $
       wasm "ElemMode",
@@ -267,7 +267,7 @@ func = define "Func" $
   T.record [
     "name">:
       doc "Optional function name" $
-      T.maybe T.string,
+      T.optional T.string,
     "typeUse">:
       doc "The function's type signature" $
       wasm "TypeUse",
@@ -284,7 +284,7 @@ funcLocal = define "FuncLocal" $
   T.record [
     "name">:
       doc "Optional local name" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "The local's value type" $
       wasm "ValType"]
@@ -317,7 +317,7 @@ globalDef = define "GlobalDef" $
   T.record [
     "name">:
       doc "Optional global name" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "The global's type (value type and mutability)" $
       wasm "GlobalType",
@@ -347,7 +347,7 @@ ifInstruction = define "IfInstruction" $
   T.record [
     "label">:
       doc "Optional label for the if block" $
-      T.maybe T.string,
+      T.optional T.string,
     "blockType">:
       doc "The result type of the if" $
       wasm "BlockType",
@@ -400,7 +400,7 @@ importFunc = define "ImportFunc" $
   T.record [
     "name">:
       doc "Optional local name for the imported function" $
-      T.maybe T.string,
+      T.optional T.string,
     "typeUse">:
       doc "The function's type" $
       wasm "TypeUse"]
@@ -411,7 +411,7 @@ importGlobal = define "ImportGlobal" $
   T.record [
     "name">:
       doc "Optional local name" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "Global type" $
       wasm "GlobalType"]
@@ -422,7 +422,7 @@ importMemory = define "ImportMemory" $
   T.record [
     "name">:
       doc "Optional local name" $
-      T.maybe T.string,
+      T.optional T.string,
     "limits">:
       doc "Memory limits" $
       wasm "Limits"]
@@ -433,7 +433,7 @@ importTable = define "ImportTable" $
   T.record [
     "name">:
       doc "Optional local name" $
-      T.maybe T.string,
+      T.optional T.string,
     "refType">:
       doc "Reference type" $
       wasm "RefType",
@@ -548,7 +548,7 @@ limits = define "Limits" $
       T.int32,
     "max">:
       doc "Optional maximum size" $
-      T.maybe T.int32]
+      T.optional T.int32]
 
 
 -- ================================================================================================
@@ -572,7 +572,7 @@ memoryDef = define "MemoryDef" $
   T.record [
     "name">:
       doc "Optional memory name" $
-      T.maybe T.string,
+      T.optional T.string,
     "limits">:
       doc "Memory size limits (in pages of 64KB)" $
       wasm "Limits"]
@@ -645,7 +645,7 @@ param = define "Param" $
   T.record [
     "name">:
       doc "Optional parameter name" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "The parameter's value type" $
       wasm "ValType"]
@@ -677,7 +677,7 @@ tableDef = define "TableDef" $
   T.record [
     "name">:
       doc "Optional table name" $
-      T.maybe T.string,
+      T.optional T.string,
     "refType">:
       doc "The reference type of table elements" $
       wasm "RefType",
@@ -691,7 +691,7 @@ typeDef = define "TypeDef" $
   T.record [
     "name">:
       doc "Optional type name" $
-      T.maybe T.string,
+      T.optional T.string,
     "type">:
       doc "The function type" $
       wasm "FuncType"]
@@ -707,7 +707,7 @@ typeUse = define "TypeUse" $
   T.record [
     "index">:
       doc "Optional type index reference" $
-      T.maybe T.string,
+      T.optional T.string,
     "params">:
       doc "Explicit parameter declarations (may augment or override type index)" $
       T.list (wasm "Param"),
@@ -747,7 +747,7 @@ wasmModule = define "Module" $
   T.record [
     "name">:
       doc "Optional module name" $
-      T.maybe T.string,
+      T.optional T.string,
     "fields">:
       doc "The module's fields (types, functions, memories, tables, globals, imports, exports, etc.)" $
       T.list moduleField]

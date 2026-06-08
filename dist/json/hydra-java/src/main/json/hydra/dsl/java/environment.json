@@ -631,7 +631,7 @@
                                                                         {
                                                                           "key": {"variable": "description"},
                                                                           "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
-                                                                    "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                                                                    "body": {"optional": {"variable": "hydra.core.Type"}}}},
                                                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                                                             "parameter": "methodCodomain"}},
                                                         "domain": {
@@ -909,7 +909,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1709,7 +1709,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                    "body": {"optional": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -7811,7 +7811,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Type"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -7837,7 +7837,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {

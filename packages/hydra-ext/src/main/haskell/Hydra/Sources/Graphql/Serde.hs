@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -147,10 +147,7 @@ enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
     "desc">: project G._EnumTypeDefinition G._EnumTypeDefinition_Description @@ var "def",
     "name">: project G._EnumTypeDefinition G._EnumTypeDefinition_Name @@ var "def",
     "values">: project G._EnumTypeDefinition G._EnumTypeDefinition_EnumValuesDefinition @@ var "def",
-    "valuesExpr">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "vs" $ Lists.map enumValueDefinitionToExpr (unwrap G._EnumValuesDefinition @@ var "vs"))
-      (var "values")] $
+    "valuesExpr">: Optionals.cases (var "values") (list ([] :: [TypedTerm Expr])) (lambda "vs" $ Lists.map enumValueDefinitionToExpr (unwrap G._EnumValuesDefinition @@ var "vs"))] $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "enum",
@@ -216,10 +213,7 @@ objectTypeDefinitionToExpr = define "objectTypeDefinitionToExpr" $
     "desc">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Description @@ var "def",
     "name">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Name @@ var "def",
     "fields">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_FieldsDefinition @@ var "def",
-    "fieldsExpr">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "fs" $ Lists.map fieldDefinitionToExpr (unwrap G._FieldsDefinition @@ var "fs"))
-      (var "fields")] $
+    "fieldsExpr">: Optionals.cases (var "fields") (list ([] :: [TypedTerm Expr])) (lambda "fs" $ Lists.map fieldDefinitionToExpr (unwrap G._FieldsDefinition @@ var "fs"))] $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "type",
@@ -276,6 +270,6 @@ withDescription :: TypedTermDefinition (Maybe G.Description -> Expr -> Expr)
 withDescription = define "withDescription" $
   doc "Prepend an optional description to an expression" $
   lambda "mdesc" $ lambda "expr" $
-    Serialization.newlineSep @@ (Maybes.cat $ list [
-      Maybes.map descriptionToExpr (var "mdesc"),
-      Maybes.pure (var "expr")])
+    Serialization.newlineSep @@ (Optionals.cat $ list [
+      Optionals.map descriptionToExpr (var "mdesc"),
+      Optionals.pure (var "expr")])

@@ -24,7 +24,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module/namespace declaration"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}}},
                   {
                     "name": "imports",
                     "type": {
@@ -108,13 +108,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation string"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}}},
                   {
                     "name": "comment",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comment"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}}}},
                   {
                     "name": "form",
                     "type": {
@@ -154,13 +154,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest/variadic parameter"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "doc",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}}},
                   {
                     "name": "typeHints",
                     "type": {
@@ -211,7 +211,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.VariableDefinition"}},
     {
@@ -245,7 +245,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.ConstantDefinition"}},
     {
@@ -279,7 +279,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.RecordTypeDefinition"}},
     {
@@ -301,7 +301,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.FieldDefinition"}},
     {
@@ -335,7 +335,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -566,7 +566,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Optional name for self-referential lambdas (Clojure named fn)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "params",
                     "type": {
@@ -578,7 +578,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -701,7 +701,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional else branch"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.IfExpression"}},
     {
@@ -729,7 +729,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.CondExpression"}},
     {
@@ -785,7 +785,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.CaseExpression"}},
     {
@@ -1347,7 +1347,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.FloatLiteral"}},
     {
@@ -1430,7 +1430,7 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.Keyword"}},
     {
@@ -1751,7 +1751,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module documentation"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []},
         "name": "hydra.lisp.syntax.ModuleDeclaration"}},
     {

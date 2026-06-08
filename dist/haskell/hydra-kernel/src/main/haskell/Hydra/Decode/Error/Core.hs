@@ -13,7 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -180,10 +180,10 @@ invalidLiteralError cx raw =
                       (
                         Core.Name "typeMismatch",
                         (\input -> Eithers.map (\t -> ErrorCore.InvalidLiteralErrorTypeMismatch t) (literalTypeMismatchError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.core.InvalidTermError
 invalidTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTermError
@@ -261,10 +261,10 @@ invalidTermError cx raw =
                       (
                         Core.Name "untypedTermVariable",
                         (\input -> Eithers.map (\t -> ErrorCore.InvalidTermErrorUntypedTermVariable t) (untypedTermVariableError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.core.InvalidTypeError
 invalidTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTypeError
@@ -318,10 +318,10 @@ invalidTypeError cx raw =
                       (
                         Core.Name "voidInNonBottomPosition",
                         (\input -> Eithers.map (\t -> ErrorCore.InvalidTypeErrorVoidInNonBottomPosition t) (voidInNonBottomPositionError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.core.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTypeLambdaParameterNameError

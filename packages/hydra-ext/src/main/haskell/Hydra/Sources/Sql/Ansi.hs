@@ -224,7 +224,7 @@ unsignedInteger = define "UnsignedInteger" $ T.wrap T.string
 approximateNumericType :: TypeDefinition
 approximateNumericType = define "ApproximateNumericType" $
   T.union [
-    "float">: T.maybe (sql "Precision"),
+    "float">: T.optional (sql "Precision"),
     "real">: T.unit,
     "double">: T.unit]
 
@@ -271,13 +271,13 @@ attributeOrMethodReference = define "AttributeOrMethodReference" $ T.wrap T.unit
 binaryLargeObjectStringType :: TypeDefinition
 binaryLargeObjectStringType = define "BinaryLargeObjectStringType" $
   T.union [
-    "binary">: T.maybe (sql "LargeObjectLength"),
-    "blob">: T.maybe (sql "LargeObjectLength")]
+    "binary">: T.optional (sql "LargeObjectLength"),
+    "blob">: T.optional (sql "LargeObjectLength")]
 
 booleanFactor :: TypeDefinition
 booleanFactor = define "BooleanFactor" $
   T.record [
-    "NOT">: T.maybe T.unit,
+    "NOT">: T.optional T.unit,
     "BooleanTest">: sql "BooleanTest"]
 
 booleanLiteral :: TypeDefinition
@@ -312,12 +312,12 @@ booleanTest :: TypeDefinition
 booleanTest = define "BooleanTest" $
   T.record [
     "BooleanPrimary">: sql "BooleanPrimary",
-    "Sequence">: T.maybe (sql "BooleanTest_Sequence_Option")]
+    "Sequence">: T.optional (sql "BooleanTest_Sequence_Option")]
 
 booleanTest_Sequence_Option :: TypeDefinition
 booleanTest_Sequence_Option = define "BooleanTest_Sequence_Option" $
   T.record [
-    "NOT">: T.maybe T.unit,
+    "NOT">: T.optional T.unit,
     "TruthValue">: sql "TruthValue"]
 
 booleanType :: TypeDefinition
@@ -347,14 +347,14 @@ characterSetSpecification = define "CharacterSetSpecification" $ T.wrap T.unit
 characterStringType :: TypeDefinition
 characterStringType = define "CharacterStringType" $
   T.union [
-    "character">: T.maybe (sql "Length"),
-    "char">: T.maybe (sql "Length"),
+    "character">: T.optional (sql "Length"),
+    "char">: T.optional (sql "Length"),
     "characterVarying">: sql "Length",
     "charVarying">: sql "Length",
     "varchar">: sql "Length",
-    "characterLargeObject">: T.maybe (sql "LargeObjectLength"),
-    "charLargeObject">: T.maybe (sql "LargeObjectLength"),
-    "clob">: T.maybe (sql "LargeObjectLength")]
+    "characterLargeObject">: T.optional (sql "LargeObjectLength"),
+    "charLargeObject">: T.optional (sql "LargeObjectLength"),
+    "clob">: T.optional (sql "LargeObjectLength")]
 
 collateClause :: TypeDefinition
 collateClause = define "CollateClause" $ T.wrap T.unit
@@ -384,11 +384,11 @@ columnDefinition :: TypeDefinition
 columnDefinition = define "ColumnDefinition" $
   T.record [
     "name">: sql "ColumnName",
-    "typeOrDomain">: T.maybe (sql "ColumnDefinition_TypeOrDomain_Option"),
-    "refScope">: T.maybe (sql "ReferenceScopeCheck"),
-    "defaultOrIdentityOrGeneration">: T.maybe (sql "ColumnDefinition_DefaultOrIdentityOrGeneration_Option"),
+    "typeOrDomain">: T.optional (sql "ColumnDefinition_TypeOrDomain_Option"),
+    "refScope">: T.optional (sql "ReferenceScopeCheck"),
+    "defaultOrIdentityOrGeneration">: T.optional (sql "ColumnDefinition_DefaultOrIdentityOrGeneration_Option"),
     "constraints">: T.list (sql "ColumnConstraintDefinition"),
-    "collate">: T.maybe (sql "CollateClause")]
+    "collate">: T.optional (sql "CollateClause")]
 
 columnDefinition_DefaultOrIdentityOrGeneration_Option :: TypeDefinition
 columnDefinition_DefaultOrIdentityOrGeneration_Option = define "ColumnDefinition_DefaultOrIdentityOrGeneration_Option" $
@@ -476,9 +476,9 @@ defaultClause = define "DefaultClause" $ T.wrap T.unit
 exactNumericType :: TypeDefinition
 exactNumericType = define "ExactNumericType" $
   T.union [
-    "numeric">: T.maybe (sql "ExactNumericType_Numeric_Option"),
-    "decimal">: T.maybe (sql "ExactNumericType_Decimal_Option"),
-    "dec">: T.maybe (sql "ExactNumericType_Dec_Option"),
+    "numeric">: T.optional (sql "ExactNumericType_Numeric_Option"),
+    "decimal">: T.optional (sql "ExactNumericType_Decimal_Option"),
+    "dec">: T.optional (sql "ExactNumericType_Dec_Option"),
     "smallint">: T.unit,
     "integer">: T.unit,
     "int">: T.unit,
@@ -488,19 +488,19 @@ exactNumericType_Dec_Option :: TypeDefinition
 exactNumericType_Dec_Option = define "ExactNumericType_Dec_Option" $
   T.record [
     "Precision">: sql "Precision",
-    "Sequence">: T.maybe (sql "Scale")]
+    "Sequence">: T.optional (sql "Scale")]
 
 exactNumericType_Decimal_Option :: TypeDefinition
 exactNumericType_Decimal_Option = define "ExactNumericType_Decimal_Option" $
   T.record [
     "Precision">: sql "Precision",
-    "Sequence">: T.maybe (sql "Scale")]
+    "Sequence">: T.optional (sql "Scale")]
 
 exactNumericType_Numeric_Option :: TypeDefinition
 exactNumericType_Numeric_Option = define "ExactNumericType_Numeric_Option" $
   T.record [
     "Precision">: sql "Precision",
-    "Sequence">: T.maybe (sql "Scale")]
+    "Sequence">: T.optional (sql "Scale")]
 
 fieldReference :: TypeDefinition
 fieldReference = define "FieldReference" $ T.wrap T.unit
@@ -508,8 +508,8 @@ fieldReference = define "FieldReference" $ T.wrap T.unit
 fromConstructor :: TypeDefinition
 fromConstructor = define "FromConstructor" $
   T.record [
-    "columns">: T.maybe (sql "InsertColumnList"),
-    "override">: T.maybe (sql "OverrideClause"),
+    "columns">: T.optional (sql "InsertColumnList"),
+    "override">: T.optional (sql "OverrideClause"),
     "values">: sql "ContextuallyTypedTableValueConstructor"]
 
 fromDefault :: TypeDefinition
@@ -665,14 +665,14 @@ predefinedType_NationalString :: TypeDefinition
 predefinedType_NationalString = define "PredefinedType_NationalString" $
   T.record [
     "type">: sql "NationalCharacterStringType",
-    "collate">: T.maybe (sql "CollateClause")]
+    "collate">: T.optional (sql "CollateClause")]
 
 predefinedType_String :: TypeDefinition
 predefinedType_String = define "PredefinedType_String" $
   T.record [
     "type">: sql "CharacterStringType",
-    "characters">: T.maybe (sql "CharacterSetSpecification"),
-    "collate">: T.maybe (sql "CollateClause")]
+    "characters">: T.optional (sql "CharacterSetSpecification"),
+    "collate">: T.optional (sql "CollateClause")]
 
 predicate :: TypeDefinition
 predicate = define "Predicate" $ T.wrap T.unit
@@ -753,16 +753,16 @@ tableContentsSource_Subtable :: TypeDefinition
 tableContentsSource_Subtable = define "TableContentsSource_Subtable" $
   T.record [
     "type">: sql "PathResolvedUserDefinedTypeName",
-    "subtable">: T.maybe (sql "SubtableClause"),
-    "elements">: T.maybe (sql "TableElementList")]
+    "subtable">: T.optional (sql "SubtableClause"),
+    "elements">: T.optional (sql "TableElementList")]
 
 tableDefinition :: TypeDefinition
 tableDefinition = define "TableDefinition" $
   T.record [
-    "scope">: T.maybe (sql "TableScope"),
+    "scope">: T.optional (sql "TableScope"),
     "name">: sql "TableName",
     "source">: sql "TableContentsSource",
-    "commitActions">: T.maybe (sql "TableCommitAction")]
+    "commitActions">: T.optional (sql "TableCommitAction")]
 
 tableElement :: TypeDefinition
 tableElement = define "TableElement" $

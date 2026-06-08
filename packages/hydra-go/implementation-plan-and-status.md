@@ -169,11 +169,11 @@ Progress:
 - [x] lists (apply, at, bind, concat, concat2, cons, drop, dropWhile, elem, filter, find, foldl, group, head, init, intercalate, intersperse, last, length, map, nub, null, partition, pure, replicate, reverse, safeHead, singleton, sort, sortOn, span, tail, take, transpose, zip, zipWith)
 - [x] maps (alter, bimap, delete, elems, empty, filter, filterWithKey, findWithDefault, fromList, insert, keys, lookup, lookupMaybe, map, mapKeys, member, null, singleton, size, toList, union)
 - [x] sets (delete, difference, empty, fromList, insert, intersection, map, member, null, singleton, size, toList, union, unions)
-- [x] maybes (apply, bind, cases, cat, catMaybes, compose, fromJust, fromMaybe, isJust, isNothing, map, mapMaybe, maybe, pure)
-- [x] eithers (bimap, bind, either, fromLeft, fromRight, isLeft, isRight, lefts, map, mapLeft, mapList, mapMaybe, mapRight, partitionEithers, rights)
+- [x] optionals (apply, bind, cases, cat, compose, fromOptional, isGiven, isNone, map, mapOptional, pure, toList)
+- [x] eithers (bimap, bind, either, fromLeft, fromRight, isLeft, isRight, lefts, map, mapLeft, mapList, mapOptional, mapRight, partitionEithers, rights)
 - [x] pairs (bimap, curry, first, mapFirst, mapSecond, second, swap, uncurry)
 - [x] chars (isAlphaNum, isLower, isSpace, isUpper, toLower, toUpper) - using Int32 as per Haskell convention
-- [x] flows (apply, bind, fail, foldl, map, mapElems, mapKeys, mapList, mapMaybe, mapSet, pure, sequence)
+- [x] flows (apply, bind, fail, foldl, map, mapElems, mapKeys, mapList, mapOptional, mapSet, pure, sequence)
 - [x] literals (all type conversions: bigfloat/bigint/int8-64/uint8-64/float32-64/binary/string, read/show functions)
 
 ### Step 8: Implement Essential Utilities

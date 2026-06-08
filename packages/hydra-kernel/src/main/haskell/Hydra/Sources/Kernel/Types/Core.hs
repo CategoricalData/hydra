@@ -135,7 +135,7 @@ binding = define "Binding" $
       term,
     "typeScheme">:
       doc "The optional type scheme of the bound term" $
-      T.maybe typeScheme]
+      T.optional typeScheme]
 
 caseAlternative :: TypeDefinition
 caseAlternative = define "CaseAlternative" $
@@ -157,7 +157,7 @@ caseStatement = define "CaseStatement" $
       name,
     "default">:
       doc "An optional default case, used if none of the explicit cases match" $
-      T.maybe term,
+      T.optional term,
     "cases">:
       doc "A list of case alternatives, one per union variant being handled" $
       T.list caseAlternative]
@@ -312,7 +312,7 @@ lambda = define "Lambda" $
       name,
     "domain">:
       doc "An optional domain type for the lambda" $
-      T.maybe type_,
+      T.optional type_,
     "body">:
       doc "The body of the lambda"
       term]
@@ -449,9 +449,9 @@ term = define "Term" $
     "map">:
       doc "A map of keys to values" $
       T.map term term,
-    "maybe">:
+    "optional">:
       doc "An optional value" $
-      T.maybe term,
+      T.optional term,
     "pair">:
       doc "A pair (2-tuple)" $
       T.pair term term,
@@ -512,7 +512,7 @@ type_ = define "Type" $
     "map">:
       doc "A map type"
       mapType,
-    "maybe">:
+    "optional">:
       doc "An optional type"
       type_,
     "pair">:
@@ -586,7 +586,7 @@ typeScheme = define "TypeScheme" $
       type_,
     "constraints">:
       doc "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names." $
-      T.maybe $ T.map name typeVariableConstraints]
+      T.optional $ T.map name typeVariableConstraints]
 
 typeVariableConstraints :: TypeDefinition
 typeVariableConstraints = define "TypeVariableConstraints" $

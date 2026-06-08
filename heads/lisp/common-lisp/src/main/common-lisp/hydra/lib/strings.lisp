@@ -109,8 +109,8 @@
   (lambda (n)
     (lambda (s)
       (if (and (>= n 0) (< n (length s)))
-          (list :just (char-code (char s n)))
-          (list :nothing)))))
+          (list :given (char-code (char s n)))
+          (list :none)))))
 
 ;; null :: String -> Bool
 ;; Check whether a string is empty.

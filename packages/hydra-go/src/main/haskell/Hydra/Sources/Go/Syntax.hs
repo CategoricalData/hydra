@@ -209,7 +209,7 @@ annotatedDeclaration = define "AnnotatedDeclaration" $ T.record [
 -- Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .
 arguments :: TypeDefinition
 arguments = define "Arguments" $ T.record [
-  "typeArg">: T.maybe $ go "Type",
+  "typeArg">: T.optional $ go "Type",
   "expressions">: T.list $ go "Expression",
   "ellipsis">: T.boolean]
 
@@ -288,7 +288,7 @@ block = define "Block" $ T.wrap $ T.list $ go "Statement"
 
 -- BreakStmt = "break" [ Label ] .
 breakStmt :: TypeDefinition
-breakStmt = define "BreakStmt" $ T.wrap $ T.maybe $ go "Identifier"
+breakStmt = define "BreakStmt" $ T.wrap $ T.optional $ go "Identifier"
 
 -- Hydra: Call expression (f(args))
 callExpr :: TypeDefinition
@@ -341,12 +341,12 @@ constDecl = define "ConstDecl" $ T.wrap $ nonemptyList $ go "ConstSpec"
 constSpec :: TypeDefinition
 constSpec = define "ConstSpec" $ T.record [
   "names">: nonemptyList $ go "Identifier",
-  "type">: T.maybe $ go "Type",
+  "type">: T.optional $ go "Type",
   "values">: T.list $ go "Expression"]
 
 -- ContinueStmt = "continue" [ Label ] .
 continueStmt :: TypeDefinition
-continueStmt = define "ContinueStmt" $ T.wrap $ T.maybe $ go "Identifier"
+continueStmt = define "ContinueStmt" $ T.wrap $ T.optional $ go "Identifier"
 
 -- Conversion = Type "(" Expression [ "," ] ")" .
 conversion :: TypeDefinition
@@ -390,7 +390,7 @@ embeddedField :: TypeDefinition
 embeddedField = define "EmbeddedField" $ T.record [
   "pointer">: T.boolean,
   "type">: go "TypeName",
-  "tag">: T.maybe $ go "Tag"]
+  "tag">: T.optional $ go "Tag"]
 
 -- EmptyStmt = .
 emptyStmt :: TypeDefinition
@@ -400,14 +400,14 @@ emptyStmt = define "EmptyStmt" $ T.wrap T.unit
 -- ExprSwitchCase = "case" ExpressionList | "default" .
 exprCaseClause :: TypeDefinition
 exprCaseClause = define "ExprCaseClause" $ T.record [
-  "case">: T.maybe $ nonemptyList $ go "Expression", -- Nothing for default
+  "case">: T.optional $ nonemptyList $ go "Expression", -- Nothing for default
   "statements">: T.list $ go "Statement"]
 
 -- ExprSwitchStmt = "switch" [ SimpleStmt ";" ] [ Expression ] "{" { ExprCaseClause } "}" .
 exprSwitchStmt :: TypeDefinition
 exprSwitchStmt = define "ExprSwitchStmt" $ T.record [
-  "init">: T.maybe $ go "SimpleStmt",
-  "expression">: T.maybe $ go "Expression",
+  "init">: T.optional $ go "SimpleStmt",
+  "expression">: T.optional $ go "Expression",
   "cases">: T.list $ go "ExprCaseClause"]
 
 -- Expression = UnaryExpr | Expression binary_op Expression .
@@ -444,9 +444,9 @@ floatLit = define "FloatLit" $ T.wrap T.float64
 -- PostStmt = SimpleStmt .
 forClause :: TypeDefinition
 forClause = define "ForClause" $ T.record [
-  "init">: T.maybe $ go "SimpleStmt",
-  "condition">: T.maybe $ go "Expression",
-  "post">: T.maybe $ go "SimpleStmt"]
+  "init">: T.optional $ go "SimpleStmt",
+  "condition">: T.optional $ go "Expression",
+  "post">: T.optional $ go "SimpleStmt"]
 
 -- Hydra: Either a for clause, range clause, or simple condition
 forClauseOrRange :: TypeDefinition
@@ -459,13 +459,13 @@ forClauseOrRange = define "ForClauseOrRange" $ T.union [
 -- Condition = Expression .
 forStmt :: TypeDefinition
 forStmt = define "ForStmt" $ T.record [
-  "clause">: T.maybe $ go "ForClauseOrRange",
+  "clause">: T.optional $ go "ForClauseOrRange",
   "body">: go "Block"]
 
 -- Hydra: Full slice [lo:hi:max]
 fullSlice :: TypeDefinition
 fullSlice = define "FullSlice" $ T.record [
-  "low">: T.maybe $ go "Expression",
+  "low">: T.optional $ go "Expression",
   "high">: go "Expression",
   "max">: go "Expression"]
 
@@ -478,9 +478,9 @@ functionBody = define "FunctionBody" $ T.wrap $ go "Block"
 functionDecl :: TypeDefinition
 functionDecl = define "FunctionDecl" $ T.record [
   "name">: go "Identifier",
-  "typeParams">: T.maybe $ go "TypeParameters",
+  "typeParams">: T.optional $ go "TypeParameters",
   "signature">: go "Signature",
-  "body">: T.maybe $ go "FunctionBody"]
+  "body">: T.optional $ go "FunctionBody"]
 
 -- FunctionLit = "func" Signature FunctionBody .
 functionLit :: TypeDefinition
@@ -520,10 +520,10 @@ identifier = define "Identifier" $ T.wrap T.string
 -- IfStmt = "if" [ SimpleStmt ";" ] Expression Block [ "else" ( IfStmt | Block ) ] .
 ifStmt :: TypeDefinition
 ifStmt = define "IfStmt" $ T.record [
-  "init">: T.maybe $ go "SimpleStmt",
+  "init">: T.optional $ go "SimpleStmt",
   "condition">: go "Expression",
   "then">: go "Block",
-  "else">: T.maybe $ go "ElseClause"]
+  "else">: T.optional $ go "ElseClause"]
 
 -- imaginary_lit = (decimal_digits | int_lit | float_lit) "i" .
 imaginaryLit :: TypeDefinition
@@ -551,7 +551,7 @@ importPath = define "ImportPath" $ T.wrap $ go "StringLit"
 -- ImportSpec       = [ "." | PackageName ] ImportPath .
 importSpec :: TypeDefinition
 importSpec = define "ImportSpec" $ T.record [
-  "alias">: T.maybe $ go "ImportAlias",
+  "alias">: T.optional $ go "ImportAlias",
   "path">: go "ImportPath"]
 
 -- IncDecStmt = Expression ( "++" | "--" ) .
@@ -607,7 +607,7 @@ key = define "Key" $ T.union [
 -- KeyedElement  = [ Key ":" ] Element .
 keyedElement :: TypeDefinition
 keyedElement = define "KeyedElement" $ T.record [
-  "key">: T.maybe $ go "Key",
+  "key">: T.optional $ go "Key",
   "element">: go "Element"]
 
 -- LabeledStmt = Label ":" Statement .
@@ -653,7 +653,7 @@ methodDecl = define "MethodDecl" $ T.record [
   "receiver">: go "Receiver",
   "name">: go "Identifier",
   "signature">: go "Signature",
-  "body">: T.maybe $ go "FunctionBody"]
+  "body">: T.optional $ go "FunctionBody"]
 
 -- MethodElem     = MethodName Signature .
 methodElem :: TypeDefinition
@@ -684,7 +684,7 @@ namedField :: TypeDefinition
 namedField = define "NamedField" $ T.record [
   "names">: nonemptyList $ go "Identifier",
   "type">: go "Type",
-  "tag">: T.maybe $ go "Tag"]
+  "tag">: T.optional $ go "Tag"]
 
 -- Operand     = Literal | OperandName [ TypeArgs ] | "(" Expression ")" .
 -- OperandName = identifier | QualifiedIdent .
@@ -745,13 +745,13 @@ primaryExpr = define "PrimaryExpr" $ T.union [
 -- QualifiedIdent = PackageName "." identifier .
 qualifiedIdent :: TypeDefinition
 qualifiedIdent = define "QualifiedIdent" $ T.record [
-  "package">: T.maybe $ go "Identifier",
+  "package">: T.optional $ go "Identifier",
   "name">: go "Identifier"]
 
 -- RangeClause = [ ExpressionList "=" | IdentifierList ":=" ] "range" Expression .
 rangeClause :: TypeDefinition
 rangeClause = define "RangeClause" $ T.record [
-  "vars">: T.maybe $ go "RangeVars",
+  "vars">: T.optional $ go "RangeVars",
   "expression">: go "Expression"]
 
 -- Hydra: Range variables (either assignment or short declaration)
@@ -767,14 +767,14 @@ rawStringLit = define "RawStringLit" $ T.wrap T.string
 -- Hydra: Receive case with optional assignment
 receiveCase :: TypeDefinition
 receiveCase = define "ReceiveCase" $ T.record [
-  "vars">: T.maybe $ go "RangeVars", -- reuse RangeVars type
+  "vars">: T.optional $ go "RangeVars", -- reuse RangeVars type
   "expression">: go "Expression"]
 
 -- Receiver       = Parameters .
 -- (Note: Go spec says the receiver must be a single non-variadic parameter)
 receiver :: TypeDefinition
 receiver = define "Receiver" $ T.record [
-  "name">: T.maybe $ go "Identifier",
+  "name">: T.optional $ go "Identifier",
   "type">: go "Type"]
 
 -- ============================================================================
@@ -836,13 +836,13 @@ shortVarDecl = define "ShortVarDecl" $ T.record [
 signature :: TypeDefinition
 signature = define "Signature" $ T.record [
   "parameters">: go "Parameters",
-  "result">: T.maybe $ go "Result"]
+  "result">: T.optional $ go "Result"]
 
 -- Hydra: Simple slice [lo:hi]
 simpleSlice :: TypeDefinition
 simpleSlice = define "SimpleSlice" $ T.record [
-  "low">: T.maybe $ go "Expression",
-  "high">: T.maybe $ go "Expression"]
+  "low">: T.optional $ go "Expression",
+  "high">: T.optional $ go "Expression"]
 
 -- SimpleStmt = EmptyStmt | ExpressionStmt | SendStmt | IncDecStmt | Assignment | ShortVarDecl .
 simpleStmt :: TypeDefinition
@@ -943,7 +943,7 @@ typeAssertionExpr = define "TypeAssertionExpr" $ T.record [
 -- TypeList        = Type { "," Type } .
 typeCaseClause :: TypeDefinition
 typeCaseClause = define "TypeCaseClause" $ T.record [
-  "case">: T.maybe $ nonemptyList $ go "Type", -- Nothing for default
+  "case">: T.optional $ nonemptyList $ go "Type", -- Nothing for default
   "statements">: T.list $ go "Statement"]
 
 -- TypeConstraint = TypeElem .
@@ -958,7 +958,7 @@ typeDecl = define "TypeDecl" $ T.wrap $ nonemptyList $ go "TypeSpec"
 typeDef :: TypeDefinition
 typeDef = define "TypeDef" $ T.record [
   "name">: go "Identifier",
-  "typeParams">: T.maybe $ go "TypeParameters",
+  "typeParams">: T.optional $ go "TypeParameters",
   "type">: go "Type"]
 
 -- TypeElem       = TypeTerm { "|" TypeTerm } .
@@ -1004,13 +1004,13 @@ typeSpec = define "TypeSpec" $ T.union [
 -- TypeSwitchGuard = [ identifier ":=" ] PrimaryExpr "." "(" "type" ")" .
 typeSwitchGuard :: TypeDefinition
 typeSwitchGuard = define "TypeSwitchGuard" $ T.record [
-  "name">: T.maybe $ go "Identifier",
+  "name">: T.optional $ go "Identifier",
   "expression">: go "PrimaryExpr"]
 
 -- TypeSwitchStmt  = "switch" [ SimpleStmt ";" ] TypeSwitchGuard "{" { TypeCaseClause } "}" .
 typeSwitchStmt :: TypeDefinition
 typeSwitchStmt = define "TypeSwitchStmt" $ T.record [
-  "init">: T.maybe $ go "SimpleStmt",
+  "init">: T.optional $ go "SimpleStmt",
   "guard">: go "TypeSwitchGuard",
   "cases">: T.list $ go "TypeCaseClause"]
 
@@ -1059,5 +1059,5 @@ varDecl = define "VarDecl" $ T.wrap $ nonemptyList $ go "VarSpec"
 varSpec :: TypeDefinition
 varSpec = define "VarSpec" $ T.record [
   "names">: nonemptyList $ go "Identifier",
-  "type">: T.maybe $ go "Type",
+  "type">: T.optional $ go "Type",
   "values">: T.list $ go "Expression"]

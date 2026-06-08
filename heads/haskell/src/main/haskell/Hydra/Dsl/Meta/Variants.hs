@@ -33,7 +33,7 @@ termVariant v = injectUnit _TermVariant $ case v of
   TermVariantList -> _TermVariant_list
   TermVariantLiteral -> _TermVariant_literal
   TermVariantMap -> _TermVariant_map
-  TermVariantMaybe -> _TermVariant_maybe
+  TermVariantOptional -> _TermVariant_optional
   TermVariantPair -> _TermVariant_pair
   TermVariantProject -> _TermVariant_project
   TermVariantRecord -> _TermVariant_record
@@ -57,7 +57,7 @@ typeVariant v = injectUnit _TypeVariant $ case v of
   TypeVariantList -> _TypeVariant_list
   TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantMap -> _TypeVariant_map
-  TypeVariantMaybe -> _TypeVariant_maybe
+  TypeVariantOptional -> _TypeVariant_optional
   TypeVariantPair -> _TypeVariant_pair
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set

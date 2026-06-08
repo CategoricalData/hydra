@@ -381,11 +381,11 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
+            "mapOptional(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
             "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
-          "description": "Map a function returning either over a maybe, or return Right Nothing if Nothing.",
+          "description": "Map a function returning either over an optional, or return Right Nothing if Nothing.",
           "seeAlso": []},
-        "name": "hydra.lib.eithers.mapMaybe",
+        "name": "hydra.lib.eithers.mapOptional",
         "signature": {
           "parameters": [
             {
@@ -393,8 +393,8 @@
               "name": "arg0",
               "type": {
                 "function": {"codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "y"}}}, "domain": {"variable": "x"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "x"}}}],
-          "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"maybe": {"variable": "y"}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "x"}}}],
+          "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"optional": {"variable": "y"}}}}},
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {

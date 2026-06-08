@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -115,7 +115,7 @@ appendFinding :: TypedTermDefinition (
 appendFinding = define "appendFinding" $
   doc "Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Maybes.cases (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -145,7 +145,7 @@ appendFindingType :: TypedTermDefinition (
 appendFindingType = define "appendFindingType" $
   doc "Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Maybes.cases (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -173,7 +173,7 @@ checkDuplicateBindings = define "checkDuplicateBindings" $
   "path" ~> "bindings" ~>
   "names" <~ Lists.map (reify Core.bindingName) (var "bindings") $
   "dup" <~ findDuplicate @@ var "names" $
-  Maybes.map ("name" ~>
+  Optionals.map ("name" ~>
     inject _InvalidTermError _InvalidTermError_duplicateBinding $
       record _DuplicateBindingError [
         _DuplicateBindingError_location>>: var "path",
@@ -189,7 +189,7 @@ checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
   "fields" ~> "mkError" ~>
   "names" <~ Lists.map (reify Core.fieldTypeName) (var "fields") $
   "dup" <~ findDuplicateFieldType @@ var "names" $
-  Maybes.cases (var "dup")
+  Optionals.cases (var "dup")
     noTypeError
     ("name" ~> var "mkError" @@ var "name")
 
@@ -200,7 +200,7 @@ checkDuplicateFields = define "checkDuplicateFields" $
   doc "Check for duplicate field names in a list of fields" $
   "path" ~> "names" ~>
   "dup" <~ findDuplicate @@ var "names" $
-  Maybes.map ("name" ~>
+  Optionals.map ("name" ~>
     inject _InvalidTermError _InvalidTermError_duplicateField $
       record _DuplicateFieldError [
         _DuplicateFieldError_location>>: var "path",
@@ -229,10 +229,10 @@ checkShadowing = define "checkShadowing" $
   -- Find the first name that is already bound
   "result" <~ Lists.foldl
     ("acc" ~> "name" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         (Logic.ifElse
           (Logic.or
-            (Maybes.isJust $ Maps.lookup (var "name") (Graph.graphBoundTerms $ var "cx"))
+            (Optionals.isGiven $ Maps.lookup (var "name") (Graph.graphBoundTerms $ var "cx"))
             (Sets.member (var "name") (Graph.graphLambdaVariables $ var "cx")))
           (mkJust $ inject _InvalidTermError _InvalidTermError_termVariableShadowing $
             record _TermVariableShadowingError [
@@ -387,7 +387,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTypeVariableInBindingType
           (Logic.ifElse (var "typed")
             (firstError @@ (Lists.map
-              ("b" ~> Maybes.cases (Core.bindingTypeScheme $ var "b")
+              ("b" ~> Optionals.cases (Core.bindingTypeScheme $ var "b")
                 noError
                 ("ts" ~> checkUndefinedTypeVariablesInTypeScheme
                   @@ var "path" @@ var "cx" @@ var "ts"
@@ -419,7 +419,7 @@ checkTerm = define "checkTerm" $
         -- Lambda-to-lambda shadowing is not detected here due to the pre-extension.
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_termVariableShadowing
           (Logic.ifElse
-            (Maybes.isJust $ Maps.lookup (var "paramName") (Graph.graphBoundTerms $ var "cx"))
+            (Optionals.isGiven $ Maps.lookup (var "paramName") (Graph.graphBoundTerms $ var "cx"))
             (mkJust $ inject _InvalidTermError _InvalidTermError_termVariableShadowing $
               record _TermVariableShadowingError [
                 _TermVariableShadowingError_location>>: var "path",
@@ -436,7 +436,7 @@ checkTerm = define "checkTerm" $
         -- T8. UndefinedTypeVariableInLambdaDomainError (typed mode only)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTypeVariableInLambdaDomain
           (Logic.ifElse (var "typed")
-            (Maybes.cases (Core.lambdaDomain $ var "lam")
+            (Optionals.cases (Core.lambdaDomain $ var "lam")
               noError
               ("dom" ~> checkUndefinedTypeVariablesInType
                 @@ var "path" @@ var "cx" @@ var "dom"
@@ -471,7 +471,7 @@ checkTerm = define "checkTerm" $
         -- T6. EmptyCaseStatementError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyCaseStatement
           (Logic.ifElse
-            (Logic.and (Lists.null $ var "csCases") (Maybes.isNothing $ var "csDefault"))
+            (Logic.and (Lists.null $ var "csCases") (Optionals.isNone $ var "csDefault"))
             (mkJust $ inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
               record _EmptyCaseStatementError [
                 _EmptyCaseStatementError_location>>: var "path",
@@ -524,10 +524,10 @@ checkTerm = define "checkTerm" $
       guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTermVariable
         (Logic.ifElse
           (Logic.or
-            (Maybes.isJust $ Maps.lookup (var "varName") (Graph.graphBoundTerms $ var "cx"))
+            (Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphBoundTerms $ var "cx"))
             (Logic.or
               (Sets.member (var "varName") (Graph.graphLambdaVariables $ var "cx"))
-              (Maybes.isJust $ Maps.lookup (var "varName") (Graph.graphPrimitives $ var "cx"))))
+              (Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphPrimitives $ var "cx"))))
           noError
           (mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTermVariable $
             record _UndefinedTermVariableError [
@@ -554,10 +554,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
-  Maybes.maybe
-    noError
-    ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
-    (Lists.maybeHead $ Sets.toList $ var "undefined")
+  Optionals.cases (Lists.maybeHead $ Sets.toList $ var "undefined") noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
@@ -569,10 +566,7 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInTypeScheme @@ var "ts" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
-  Maybes.maybe
-    noError
-    ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
-    (Lists.maybeHead $ Sets.toList $ var "undefined")
+  Optionals.cases (Lists.maybeHead $ Sets.toList $ var "undefined") noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- ============================================================================
 -- Type validation
@@ -614,7 +608,7 @@ guardedTermRule
   -> TypedTerm (Maybe (Name, InvalidTermError))
 guardedTermRule profile unionName variantName findingExpr =
   Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    (Optionals.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
     nothing
   where
     ruleNameTerm = nameLift (qualifiedRule unionName variantName)
@@ -628,7 +622,7 @@ guardedTypeRule
   -> TypedTerm (Maybe (Name, InvalidTypeError))
 guardedTypeRule profile unionName variantName findingExpr =
   Logic.ifElse (enabled @@ profile @@ ruleNameTerm)
-    (Maybes.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
+    (Optionals.map ("f" ~> pair ruleNameTerm (var "f")) findingExpr)
     nothing
   where
     ruleNameTerm = nameLift (qualifiedRule unionName variantName)
@@ -656,7 +650,7 @@ findDuplicate = define "findDuplicate" $
     ("acc" ~> "name" ~>
       "seen" <~ Pairs.first (var "acc") $
       "dup" <~ Pairs.second (var "acc") $
-      Maybes.cases (var "dup")
+      Optionals.cases (var "dup")
         (Logic.ifElse (Sets.member (var "name") (var "seen"))
           (pair (var "seen") (just $ var "name"))
           (pair (Sets.insert (var "name") (var "seen")) nothing))
@@ -676,7 +670,7 @@ findDuplicateFieldType = define "findDuplicateFieldType" $
     ("acc" ~> "name" ~>
       "seen" <~ Pairs.first (var "acc") $
       "dup" <~ Pairs.second (var "acc") $
-      Maybes.cases (var "dup")
+      Optionals.cases (var "dup")
         (Logic.ifElse (Sets.member (var "name") (var "seen"))
           (pair (var "seen") (just $ var "name"))
           (pair (Sets.insert (var "name") (var "seen")) nothing))
@@ -691,7 +685,7 @@ firstError = define "firstError" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         (var "check")
         (constant $ var "acc"))
     noError
@@ -705,7 +699,7 @@ firstFinding = define "firstFinding" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         (var "check")
         (constant $ var "acc"))
     nothing
@@ -718,7 +712,7 @@ firstFindingType = define "firstFindingType" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         (var "check")
         (constant $ var "acc"))
     nothing
@@ -731,7 +725,7 @@ firstTypeError = define "firstTypeError" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Maybes.cases (var "acc")
+      Optionals.cases (var "acc")
         (var "check")
         (constant $ var "acc"))
     noTypeError
@@ -749,7 +743,7 @@ isValidName = define "isValidName" $
 
 -- | A Just of type InvalidTermError -> Maybe InvalidTermError
 justError :: TypedTerm InvalidTermError -> TypedTerm (Maybe InvalidTermError)
-justError (TypedTerm t) = TypedTerm $ TermMaybe $ Just t
+justError (TypedTerm t) = TypedTerm $ TermOptional $ Just t
 
 -- | The default validation profile for hydra.validate.core (term and type
 -- validators). Every check currently wired up is in 'errorRules' except
@@ -819,10 +813,10 @@ mkJustType = just
 
 -- | A Nothing of type Maybe InvalidTermError
 noError :: TypedTerm (Maybe InvalidTermError)
-noError = TypedTerm $ TermMaybe Nothing
+noError = TypedTerm $ TermOptional Nothing
 
 noTypeError :: TypedTerm (Maybe InvalidTypeError)
-noTypeError = TypedTerm $ TermMaybe Nothing
+noTypeError = TypedTerm $ TermOptional Nothing
 
 -- | Compose a fully qualified rule identifier from a union-type qualified
 -- name and a variant local name, joined with '.'. Used at profile-construction
@@ -926,7 +920,7 @@ type_ = define "type" $
           _Type_map>>: "mt" ~>
             "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.mapTypeKeys $ var "mt") $
             type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.mapTypeValues $ var "mt"),
-          _Type_maybe>>: "mt" ~>
+          _Type_optional>>: "mt" ~>
             type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "mt",
           _Type_pair>>: "pt" ~>
             "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.pairTypeFirst $ var "pt") $
@@ -1094,14 +1088,11 @@ validateTypeNode = define "validateTypeNode" $
         -- adding a second variant is a non-breaking change).
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_singleVariantUnion
           (Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
-            (Maybes.maybe
-              noTypeError
-              ("singleField" ~>
+            (Optionals.cases (Lists.maybeHead $ var "fields") noTypeError ("singleField" ~>
                 mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
                   record _SingleVariantUnionError [
                     _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
-                    _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")])
-              (Lists.maybeHead $ var "fields"))
+                    _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")]))
             noTypeError),
         -- Y5. DuplicateUnionTypeFieldNamesError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_duplicateUnionTypeFieldNames

@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,13 +42,13 @@ public class MaybeLast extends PrimitiveFunction {
      * Apply the function to its single argument.
      * @param <X> the element type
      * @param list the list to get the last element from
-     * @return a Maybe containing the last element, or empty if the list is empty
+     * @return a Optional containing the last element, or empty if the list is empty
      */
-    public static <X> Maybe<X> apply(List<X> list) {
+    public static <X> Optional<X> apply(List<X> list) {
         if (list.isEmpty()) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(list.get(list.size() - 1));
+            return Optional.given(list.get(list.size() - 1));
         }
     }
 }

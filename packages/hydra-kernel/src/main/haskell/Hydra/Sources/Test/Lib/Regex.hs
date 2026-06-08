@@ -81,7 +81,7 @@ allTests = define "allTests" $
         test2 "full match" ".*" "hello" (Just "hello")]
         where
           test2 name pat input result =
-            primCase name _regex_find [string pat, string input] (Core.termMaybe $ optStr result)
+            primCase name _regex_find [string pat, string input] (Core.termOptional $ optStr result)
           optStr Nothing = nothing
           optStr (Just s) = just (string s)
 

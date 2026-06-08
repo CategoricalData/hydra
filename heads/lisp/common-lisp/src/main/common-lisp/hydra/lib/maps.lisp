@@ -323,16 +323,16 @@
 
 (defun alter-is-nothing-p (m)
   (or (null m)
-      (and (consp m) (eq (first m) :nothing))
-      (and (consp m) (eq (first m) :maybe)
+      (and (consp m) (eq (first m) :none))
+      (and (consp m) (eq (first m) :optional)
            (or (null (cdr m)) (null (second m))))))
 
 (defun alter-get-value (m)
   (cond
-    ((and (consp m) (eq (first m) :just)) (second m))
-    ((and (consp m) (eq (first m) :maybe))
+    ((and (consp m) (eq (first m) :given)) (second m))
+    ((and (consp m) (eq (first m) :optional))
      (let ((body (second m)))
-       (if (and (consp body) (eq (first body) :just))
+       (if (and (consp body) (eq (first body) :given))
            (second body)
          body)))
     (t m)))
@@ -347,7 +347,7 @@
     (lambda (k)
       (lambda (m)
         (multiple-value-bind (v found) (maps-lookup-raw k m)
-          (let* ((old-maybe (if found (list :just v) (list :nothing)))
+          (let* ((old-maybe (if found (list :given v) (list :none)))
                  (new-maybe (funcall f old-maybe)))
             (cond
               ((alter-is-nothing-p new-maybe)
@@ -470,7 +470,7 @@
   (lambda (k)
     (lambda (m)
       (multiple-value-bind (v found) (maps-lookup-raw k m)
-        (if found (list :just v) (list :nothing))))))
+        (if found (list :given v) (list :none))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
 (defvar hydra_lib_maps_map

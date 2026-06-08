@@ -173,11 +173,6 @@ literal = typeLiteral
 map :: TypedTerm Type -> TypedTerm Type -> TypedTerm Type
 map k v = typeMap $ mapType k v
 
--- | Create a term-encoded maybe (optional/nullable) type
--- Example: maybe string
-maybe :: TypedTerm Type -> TypedTerm Type
-maybe = typeMaybe
-
 -- | Create a term-encoded monomorphic type scheme
 -- Example: mono int32
 mono :: TypedTerm Type -> TypedTerm TypeScheme
@@ -193,10 +188,10 @@ mono t = Phantoms.record _TypeScheme [
 nonNegativeInt32 :: TypedTerm Type
 nonNegativeInt32 = Hydra.Dsl.Meta.Types.int32
 
--- | Create a term-encoded optional (nullable) type (alias for 'maybe')
+-- | Create a term-encoded optional (nullable) type
 -- Example: optional string
 optional :: TypedTerm Type -> TypedTerm Type
-optional = maybe
+optional = typeOptional
 
 -- | Create a term-encoded pair type
 -- Example: pair string int32

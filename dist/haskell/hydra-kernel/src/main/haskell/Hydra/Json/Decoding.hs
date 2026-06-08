@@ -13,7 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -46,7 +46,7 @@ decodeBoolean x =
 -- | Decode a required field from a JSON object
 decodeField :: (t0 -> Either String t1) -> String -> M.Map String t0 -> Either String t1
 decodeField decodeValue name m =
-    Eithers.bind (decodeOptionalField decodeValue name m) (Maybes.maybe (Left (Strings.cat2 "missing field: " name)) (\f -> Right f))
+    Eithers.bind (decodeOptionalField decodeValue name m) (\mf -> Optionals.cases mf (Left (Strings.cat2 "missing field: " name)) (\f -> Right f))
 -- | Decode a JSON object value
 decodeObject :: Model.Value -> Either String (M.Map String Model.Value)
 decodeObject x =
@@ -56,7 +56,7 @@ decodeObject x =
 -- | Decode an optional field from a JSON object
 decodeOptionalField :: Ord t3 => ((t0 -> Either t1 t2) -> t3 -> M.Map t3 t0 -> Either t1 (Maybe t2))
 decodeOptionalField decodeValue name m =
-    Maybes.maybe (Right Nothing) (\v -> Eithers.map (\x -> Just x) (decodeValue v)) (Maps.lookup name m)
+    Optionals.cases (Maps.lookup name m) (Right Nothing) (\v -> Eithers.map (\x -> Just x) (decodeValue v))
 -- | Decode a JSON string value
 decodeString :: Model.Value -> Either String String
 decodeString x =

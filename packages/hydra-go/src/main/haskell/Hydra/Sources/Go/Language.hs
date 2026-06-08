@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -131,7 +131,7 @@ goLanguage = define "goLanguage" $
       Variants.termVariantList, -- slices []T
       Variants.termVariantLiteral,
       Variants.termVariantMap, -- map[K]V
-      Variants.termVariantMaybe, -- *T (pointer) or custom Maybe type
+      Variants.termVariantOptional, -- *T (pointer) or custom Maybe type
       Variants.termVariantPair, -- struct{First T; Second U}
       Variants.termVariantRecord, -- struct
       Variants.termVariantSet, -- map[T]struct{} or custom Set type
@@ -151,7 +151,7 @@ goLanguage = define "goLanguage" $
       Variants.typeVariantList, -- []T
       Variants.typeVariantLiteral,
       Variants.typeVariantMap, -- map[K]V
-      Variants.typeVariantMaybe, -- *T
+      Variants.typeVariantOptional, -- *T
       Variants.typeVariantPair, -- struct{First T; Second U}
       Variants.typeVariantRecord, -- struct
       Variants.typeVariantSet, -- map[T]struct{}

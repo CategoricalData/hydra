@@ -112,7 +112,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
           "typeParameters": []}}},
     {
       "primitive": {

@@ -18,7 +18,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Regex as Regex
 import qualified Hydra.Haskell.Lib.Sets as Sets
@@ -42,7 +42,7 @@ import qualified Data.Scientific as Sci
 -- | Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingModule :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingModule p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -55,7 +55,7 @@ appendFindingModule p acc finding =
 -- | Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingPackage :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingPackage p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -73,11 +73,11 @@ checkConflictingModuleNames pkg =
               Lists.foldl (\acc -> \mod ->
                 let seen = Pairs.first acc
                     err = Pairs.second acc
-                in (Maybes.cases err (
+                in (Optionals.cases err (
                   let ns = Packaging.moduleName mod
                       key = Strings.toLower (Packaging.unModuleName ns)
                       existing = Maps.lookup key seen
-                  in (Maybes.cases existing (Maps.insert key ns seen, Nothing) (\first -> (
+                  in (Optionals.cases existing (Maps.insert key ns seen, Nothing) (\first -> (
                     seen,
                     (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleName (ErrorPackaging.ConflictingModuleNameError {
                       ErrorPackaging.conflictingModuleNameErrorFirst = first,
@@ -90,13 +90,13 @@ checkConflictingVariantNames mod =
       let ns = Packaging.moduleName mod
           defs = Packaging.moduleDefinitions mod
           defNames = Lists.foldl (\acc -> \def -> Sets.insert (Names.localNameOf (definitionName def)) acc) Sets.empty defs
-      in (Lists.foldl (\acc -> \def -> Maybes.cases acc (case def of
+      in (Lists.foldl (\acc -> \def -> Optionals.cases acc (case def of
         Packaging.DefinitionType v0 ->
           let typeName = Packaging.typeDefinitionName v0
               localTypeName = Names.localNameOf typeName
               typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
           in case typ of
-            Core.TypeUnion v1 -> Lists.foldl (\innerAcc -> \field -> Maybes.cases innerAcc (
+            Core.TypeUnion v1 -> Lists.foldl (\innerAcc -> \field -> Optionals.cases innerAcc (
               let fieldName = Core.fieldTypeName field
                   localFieldName = Names.localNameOf fieldName
                   constructorName = Strings.cat2 (Formatting.capitalize localTypeName) (Formatting.capitalize localFieldName)
@@ -112,7 +112,7 @@ checkDefinitionDocumentation :: Packaging.Module -> Maybe ErrorPackaging.Invalid
 checkDefinitionDocumentation mod =
 
       let ns = Packaging.moduleName mod
-      in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
+      in (Lists.foldl (\acc -> \def -> Optionals.cases acc (
         let name = definitionName def
             documented =
                     case def of
@@ -126,7 +126,7 @@ checkDefinitionDocumentation mod =
                         in case typ of
                           Core.TypeAnnotated v1 -> Annotations.hasDescription (Annotations.getAnnotationMap (Core.annotatedTypeAnnotation v1))
                           _ -> False
-                      Packaging.DefinitionPrimitive v0 -> Maybes.maybe False (\em -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Packaging.entityMetadataDescription em)) "")) (Packaging.primitiveDefinitionMetadata v0)
+                      Packaging.DefinitionPrimitive v0 -> Optionals.cases (Packaging.primitiveDefinitionMetadata v0) False (\em -> Logic.not (Equality.equal (Optionals.fromOptional "" (Packaging.entityMetadataDescription em)) ""))
                       _ -> False
         in (Logic.ifElse documented Nothing (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
           ErrorPackaging.missingDocumentationErrorModuleName = ns,
@@ -138,7 +138,7 @@ checkDefinitionModuleNames mod =
       let ns = Packaging.moduleName mod
           prefix = Strings.cat2 (Packaging.unModuleName ns) "."
           prefixLen = Strings.length prefix
-      in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
+      in (Lists.foldl (\acc -> \def -> Optionals.cases acc (
         let name = definitionName def
             nameStr = Core.unName name
             namePrefix = Lists.take prefixLen (Strings.toList nameStr)
@@ -150,7 +150,7 @@ checkDefinitionNameConvention :: Packaging.Module -> Maybe ErrorPackaging.Invali
 checkDefinitionNameConvention mod =
 
       let ns = Packaging.moduleName mod
-      in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
+      in (Lists.foldl (\acc -> \def -> Optionals.cases acc (
         let name = definitionName def
             local = Names.localNameOf name
             expected =
@@ -178,10 +178,10 @@ checkDefinitionOrdering mod =
                   Lists.foldl (\acc -> \def ->
                     let prev = Pairs.first acc
                         err = Pairs.second acc
-                    in (Maybes.cases err (
+                    in (Optionals.cases err (
                       let currName = definitionName def
                           currLocal = Names.localNameOf currName
-                      in (Maybes.cases prev (Just currName, Nothing) (\prevName ->
+                      in (Optionals.cases prev (Just currName, Nothing) (\prevName ->
                         let prevLocal = Names.localNameOf prevName
                         in (Logic.ifElse (Equality.lt prevLocal currLocal) (Just currName, Nothing) (
                           Just currName,
@@ -199,7 +199,7 @@ checkDuplicateDefinitionNames mod =
                   Lists.foldl (\acc -> \def ->
                     let seen = Pairs.first acc
                         err = Pairs.second acc
-                    in (Maybes.cases err (
+                    in (Optionals.cases err (
                       let name = definitionName def
                       in (Logic.ifElse (Sets.member name seen) (
                         seen,
@@ -215,7 +215,7 @@ checkDuplicateModuleNames pkg =
               Lists.foldl (\acc -> \mod ->
                 let seen = Pairs.first acc
                     err = Pairs.second acc
-                in (Maybes.cases err (
+                in (Optionals.cases err (
                   let ns = Packaging.moduleName mod
                   in (Logic.ifElse (Sets.member ns seen) (
                     seen,
@@ -281,22 +281,22 @@ kernelPackage pkg =
 module_ :: Validation.ValidationProfile -> Validation.ValidationResult ErrorPackaging.InvalidModuleError -> Packaging.Module -> Validation.ValidationResult ErrorPackaging.InvalidModuleError
 module_ p acc0 mod =
     Lists.foldl (\acc -> \guarded -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (appendFindingModule p acc guarded)) acc0 [
-      Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName", f)) (checkConflictingVariantNames mod)) Nothing,
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation", f)) (checkDefinitionDocumentation mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName", f)) (checkDefinitionNameConvention mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName", f)) (checkDefinitionModuleNames mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder", f)) (checkDefinitionOrdering mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName", f)) (checkDuplicateDefinitionNames mod)) Nothing),
-      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention", f)) (checkModuleNameConvention mod)) Nothing)]
+      Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName", f)) (checkConflictingVariantNames mod)) Nothing,
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation", f)) (checkDefinitionDocumentation mod)) Nothing),
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName", f)) (checkDefinitionNameConvention mod)) Nothing),
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName", f)) (checkDefinitionModuleNames mod)) Nothing),
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder", f)) (checkDefinitionOrdering mod)) Nothing),
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName", f)) (checkDuplicateDefinitionNames mod)) Nothing),
+      (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention", f)) (checkModuleNameConvention mod)) Nothing)]
 -- | Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached.
 package :: Validation.ValidationProfile -> Validation.ValidationResult ErrorPackaging.InvalidPackageError -> Packaging.Package -> Validation.ValidationResult ErrorPackaging.InvalidPackageError
 package p acc0 pkg =
 
       let accPkg =
               Lists.foldl (\acc -> \guarded -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (appendFindingPackage p acc guarded)) acc0 [
-                Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName", f)) (checkConflictingModuleNames pkg)) Nothing,
-                (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName", f)) (checkDuplicateModuleNames pkg)) Nothing),
-                (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName")) (Maybes.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName", f)) (checkPackageNameConvention pkg)) Nothing)]
+                Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName", f)) (checkConflictingModuleNames pkg)) Nothing,
+                (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName", f)) (checkDuplicateModuleNames pkg)) Nothing),
+                (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName", f)) (checkPackageNameConvention pkg)) Nothing)]
       in (Lists.foldl (\acc -> \mod -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (
         let mr =
                 module_ p (Validation.ValidationResult {

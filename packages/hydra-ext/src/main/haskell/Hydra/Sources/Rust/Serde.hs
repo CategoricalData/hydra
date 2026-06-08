@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -241,7 +241,7 @@ attributeToExpr = define "attributeToExpr" $
     "tokens">: project R._Attribute R._Attribute_tokens @@ var "attr",
     "prefix">: Logic.ifElse (var "inner") (string "#![") (string "#["),
     "pathStr">: Strings.intercalate (string "::") (var "path"),
-    "tokensPart">: Maybes.maybe (string "") (lambda "t" $ Strings.cat (list [string "(", var "t", string ")"])) (var "tokens")] $
+    "tokensPart">: Optionals.cases (var "tokens") (string "") (lambda "t" $ Strings.cat (list [string "(", var "t", string ")"]))] $
     Serialization.cst @@ (Strings.cat (list [var "prefix", var "pathStr", var "tokensPart", string "]"]))
 
 binaryExprToExpr :: TypedTermDefinition (R.BinaryExpr -> Expr)
@@ -287,7 +287,7 @@ blockToExpr = define "blockToExpr" $
     "stmts">: project R._Block R._Block_statements @@ var "b",
     "expr">: project R._Block R._Block_expression @@ var "b",
     "stmtExprs">: Lists.map (statementToExpr) (var "stmts"),
-    "exprPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "e"]) (var "expr"),
+    "exprPart">: Optionals.cases (var "expr") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "e"]),
     "allParts">: Lists.concat2 (var "stmtExprs") (var "exprPart")] $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "allParts"
 
@@ -329,10 +329,10 @@ closureExprToExpr = define "closureExprToExpr" $
       string "|",
       Strings.intercalate (string ", ") (Lists.map (closureParamToStr) (var "params")),
       string "|"]),
-    "retPart">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+    "retPart">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
-      typeToExpr @@ var "t"]) (var "retType")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      typeToExpr @@ var "t"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       var "moveKw",
       just $ Serialization.cst @@ var "paramsStr",
       var "retPart",
@@ -345,10 +345,7 @@ closureParamToStr = define "closureParamToStr" $
     "pat">: project R._ClosureParam R._ClosureParam_pattern @@ var "cp",
     "typ">: project R._ClosureParam R._ClosureParam_type @@ var "cp",
     "patStr">: Serialization.printExpr @@ (patternToExpr @@ var "pat")] $
-    Maybes.maybe
-      (var "patStr")
-      (lambda "t" $ Strings.cat (list [var "patStr", string ": ", Serialization.printExpr @@ (typeToExpr @@ var "t")]))
-      (var "typ")
+    Optionals.cases (var "typ") (var "patStr") (lambda "t" $ Strings.cat (list [var "patStr", string ": ", Serialization.printExpr @@ (typeToExpr @@ var "t")]))
 
 compoundAssignExprToExpr :: TypedTermDefinition (R.CompoundAssignExpr -> Expr)
 compoundAssignExprToExpr = define "compoundAssignExprToExpr" $
@@ -421,18 +418,18 @@ enumDefToExpr = define "enumDefToExpr" $
     "derives">: project R._EnumDef R._EnumDef_derives @@ var "e",
     "docC">: project R._EnumDef R._EnumDef_doc @@ var "e",
     "derivesAttr">: derivesToExpr @@ var "derives",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "enum",
       just $ Serialization.cst @@ var "name",
       genericParamsToExpr @@ var "generics"]),
-    "wherePart">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC"),
+    "wherePart">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w"),
     "body">: Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
       (Lists.map (enumVariantToExpr) (var "variants"))] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
-      Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]) (var "derivesAttr"),
-      list [Serialization.spaceSep @@ Maybes.cat (list [
+      Optionals.cases (var "derivesAttr") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]),
+      list [Serialization.spaceSep @@ Optionals.cat (list [
         just $ var "header",
         var "wherePart",
         just $ var "body"])]])
@@ -460,7 +457,7 @@ enumVariantToExpr = define "enumVariantToExpr" $
     "name">: project R._EnumVariant R._EnumVariant_name @@ var "v",
     "body">: project R._EnumVariant R._EnumVariant_body @@ var "v",
     "docC">: project R._EnumVariant R._EnumVariant_doc @@ var "v",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")])] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
       list [Serialization.spaceSep @@ list [
@@ -504,14 +501,8 @@ expressionToExpr = define "expressionToExpr" $
       R._Expression_array>>: lambda "a" $ arrayExprToExpr @@ var "a",
       R._Expression_index>>: lambda "i" $ indexExprToExpr @@ var "i",
       R._Expression_range>>: lambda "r" $ rangeExprToExpr @@ var "r",
-      R._Expression_return>>: lambda "mr" $ Maybes.maybe
-        (Serialization.cst @@ string "return")
-        (lambda "e" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "return", expressionToExpr @@ var "e"])
-        (var "mr"),
-      R._Expression_break>>: lambda "mb" $ Maybes.maybe
-        (Serialization.cst @@ string "break")
-        (lambda "e" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "break", expressionToExpr @@ var "e"])
-        (var "mb"),
+      R._Expression_return>>: lambda "mr" $ Optionals.cases (var "mr") (Serialization.cst @@ string "return") (lambda "e" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "return", expressionToExpr @@ var "e"]),
+      R._Expression_break>>: lambda "mb" $ Optionals.cases (var "mb") (Serialization.cst @@ string "break") (lambda "e" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "break", expressionToExpr @@ var "e"]),
       R._Expression_continue>>: constant $ Serialization.cst @@ string "continue",
       R._Expression_try>>: lambda "e" $ Serialization.cst @@ (Strings.cat2 (Serialization.printExpr @@ (expressionToExpr @@ var "e")) (string "?")),
       R._Expression_cast>>: lambda "c" $ castExprToExpr @@ var "c",
@@ -539,12 +530,9 @@ fieldPatternToExpr = define "fieldPatternToExpr" $
   lambda "fp" $ lets [
     "name">: project R._FieldPattern R._FieldPattern_name @@ var "fp",
     "pat">: project R._FieldPattern R._FieldPattern_pattern @@ var "fp"] $
-    Maybes.maybe
-      (Serialization.cst @@ var "name")
-      (lambda "p" $ Serialization.spaceSep @@ list [
+    Optionals.cases (var "pat") (Serialization.cst @@ var "name") (lambda "p" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ (Strings.cat2 (var "name") (string ":")),
         patternToExpr @@ var "p"])
-      (var "pat")
 
 fieldValueToExpr :: TypedTermDefinition (R.FieldValue -> Expr)
 fieldValueToExpr = define "fieldValueToExpr" $
@@ -552,12 +540,9 @@ fieldValueToExpr = define "fieldValueToExpr" $
   lambda "fv" $ lets [
     "name">: project R._FieldValue R._FieldValue_name @@ var "fv",
     "val">: project R._FieldValue R._FieldValue_value @@ var "fv"] $
-    Maybes.maybe
-      (Serialization.cst @@ var "name")
-      (lambda "v" $ Serialization.spaceSep @@ list [
+    Optionals.cases (var "val") (Serialization.cst @@ var "name") (lambda "v" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ (Strings.cat2 (var "name") (string ":")),
         expressionToExpr @@ var "v"])
-      (var "val")
 
 floatLiteralToExpr :: TypedTermDefinition (R.FloatLiteral -> Expr)
 floatLiteralToExpr = define "floatLiteralToExpr" $
@@ -566,7 +551,7 @@ floatLiteralToExpr = define "floatLiteralToExpr" $
     "val">: project R._FloatLiteral R._FloatLiteral_value @@ var "fl",
     "suf">: project R._FloatLiteral R._FloatLiteral_suffix @@ var "fl",
     "valStr">: Literals.showFloat64 $ var "val",
-    "sufStr">: Maybes.maybe (string "") (lambda "s" $ var "s") (var "suf")] $
+    "sufStr">: Optionals.cases (var "suf") (string "") (lambda "s" $ var "s")] $
     Serialization.cst @@ (Strings.cat2 (var "valStr") (var "sufStr"))
 
 -- =============================================================================
@@ -587,7 +572,7 @@ fnDefToExpr = define "fnDefToExpr" $
     "isConst">: project R._FnDef R._FnDef_const @@ var "f",
     "isUnsafe">: project R._FnDef R._FnDef_unsafe @@ var "f",
     "docC">: project R._FnDef R._FnDef_doc @@ var "f",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
     "asyncKw">: Logic.ifElse (var "isAsync") (just $ Serialization.cst @@ string "async") nothing,
     "constKw">: Logic.ifElse (var "isConst") (just $ Serialization.cst @@ string "const") nothing,
     "unsafeKw">: Logic.ifElse (var "isUnsafe") (just $ Serialization.cst @@ string "unsafe") nothing,
@@ -595,11 +580,11 @@ fnDefToExpr = define "fnDefToExpr" $
     "nameExpr">: Serialization.cst @@ var "name",
     "genericsExpr">: genericParamsToExpr @@ var "generics",
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (fnParamToExpr) (var "params")),
-    "retTypeExpr">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+    "retTypeExpr">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
-      typeToExpr @@ var "t"]) (var "retType"),
-    "whereExpr">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+      typeToExpr @@ var "t"]),
+    "whereExpr">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w"),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       var "asyncKw", var "constKw", var "unsafeKw",
       just $ var "fnKw", just $ var "nameExpr", var "genericsExpr",
       just $ var "paramsExpr", var "retTypeExpr", var "whereExpr"])] $
@@ -625,8 +610,8 @@ forExprToExpr = define "forExprToExpr" $
     "pat">: project R._ForExpr R._ForExpr_pattern @@ var "f",
     "iter">: project R._ForExpr R._ForExpr_iter @@ var "f",
     "body">: project R._ForExpr R._ForExpr_body @@ var "f",
-    "labelPart">: Maybes.maybe nothing (lambda "lbl" $ just $ Serialization.cst @@ (Strings.cat2 (string "'") (Strings.cat2 (var "lbl") (string ":")))) (var "label")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    "labelPart">: Optionals.cases (var "label") nothing (lambda "lbl" $ just $ Serialization.cst @@ (Strings.cat2 (string "'") (Strings.cat2 (var "lbl") (string ":"))))] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       var "labelPart",
       just $ Serialization.cst @@ string "for",
       just $ patternToExpr @@ var "pat",
@@ -664,10 +649,10 @@ genericArgumentsToExpr = define "genericArgumentsToExpr" $
         "inputs">: project R._ParenthesizedArgs R._ParenthesizedArgs_inputs @@ var "pa",
         "output">: project R._ParenthesizedArgs R._ParenthesizedArgs_output @@ var "pa",
         "inputPart">: Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "inputs")),
-        "outputPart">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+        "outputPart">: Optionals.cases (var "output") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
           Serialization.cst @@ string "->",
-          typeToExpr @@ var "t"]) (var "output")] $
-        just $ Serialization.spaceSep @@ Maybes.cat (list [just $ var "inputPart", var "outputPart"])]
+          typeToExpr @@ var "t"])] $
+        just $ Serialization.spaceSep @@ Optionals.cat (list [just $ var "inputPart", var "outputPart"])]
 
 genericParamToExpr :: TypedTermDefinition (R.GenericParam -> Expr)
 genericParamToExpr = define "genericParamToExpr" $
@@ -697,10 +682,10 @@ identifierPatternToExpr = define "identifierPatternToExpr" $
     "mut">: project R._IdentifierPattern R._IdentifierPattern_mutable @@ var "ip",
     "atPat">: project R._IdentifierPattern R._IdentifierPattern_atPattern @@ var "ip",
     "mutKw">: Logic.ifElse (var "mut") (just $ Serialization.cst @@ string "mut") nothing,
-    "atPart">: Maybes.maybe nothing (lambda "p" $ just $ Serialization.spaceSep @@ list [
+    "atPart">: Optionals.cases (var "atPat") nothing (lambda "p" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "@",
-      patternToExpr @@ var "p"]) (var "atPat")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      patternToExpr @@ var "p"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       var "mutKw",
       just $ Serialization.cst @@ var "name",
       var "atPart"])
@@ -722,10 +707,10 @@ ifExprToExpr = define "ifExprToExpr" $
           patternToExpr @@ var "pat",
           Serialization.cst @@ string "=",
           expressionToExpr @@ var "expr"]],
-    "elsePart">: Maybes.maybe nothing (lambda "e" $ just $ Serialization.spaceSep @@ list [
+    "elsePart">: Optionals.cases (var "elseB") nothing (lambda "e" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "else",
-      expressionToExpr @@ var "e"]) (var "elseB")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      expressionToExpr @@ var "e"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "if",
       just $ var "condExpr",
       just $ blockToExpr @@ var "thenB",
@@ -741,11 +726,11 @@ implBlockToExpr = define "implBlockToExpr" $
     "selfType">: project R._ImplBlock R._ImplBlock_selfType @@ var "i",
     "items">: project R._ImplBlock R._ImplBlock_items @@ var "i",
     "genericsExpr">: genericParamsToExpr @@ var "generics",
-    "traitPart">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+    "traitPart">: Optionals.cases (var "trait") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       typePathToExpr @@ var "t",
-      Serialization.cst @@ string "for"]) (var "trait"),
-    "wherePart">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+      Serialization.cst @@ string "for"]),
+    "wherePart">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w"),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "impl",
       var "genericsExpr",
       var "traitPart",
@@ -776,15 +761,15 @@ implMethodToExpr = define "implMethodToExpr" $
     "body">: project R._ImplMethod R._ImplMethod_body @@ var "m",
     "pub">: project R._ImplMethod R._ImplMethod_public @@ var "m",
     "docC">: project R._ImplMethod R._ImplMethod_doc @@ var "m",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
     "pubKw">: Logic.ifElse (var "pub") (just $ Serialization.cst @@ string "pub") nothing,
     "genericsExpr">: genericParamsToExpr @@ var "generics",
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (methodParamToExpr) (var "params")),
-    "retTypeExpr">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+    "retTypeExpr">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
-      typeToExpr @@ var "t"]) (var "retType"),
-    "whereExpr">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+      typeToExpr @@ var "t"]),
+    "whereExpr">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w"),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       var "pubKw",
       just $ Serialization.cst @@ string "fn",
       just $ Serialization.cst @@ var "name",
@@ -819,7 +804,7 @@ integerLiteralToExpr = define "integerLiteralToExpr" $
     "val">: project R._IntegerLiteral R._IntegerLiteral_value @@ var "il",
     "suf">: project R._IntegerLiteral R._IntegerLiteral_suffix @@ var "il",
     "valStr">: Literals.showBigint $ var "val",
-    "sufStr">: Maybes.maybe (string "") (lambda "s" $ var "s") (var "suf")] $
+    "sufStr">: Optionals.cases (var "suf") (string "") (lambda "s" $ var "s")] $
     Serialization.cst @@ (Strings.cat2 (var "valStr") (var "sufStr"))
 
 itemToExpr :: TypedTermDefinition (R.Item -> Expr)
@@ -850,14 +835,11 @@ itemWithCommentsToExpr = define "itemWithCommentsToExpr" $
     "doc">: project R._ItemWithComments R._ItemWithComments_doc @@ var "iwc",
     "vis">: project R._ItemWithComments R._ItemWithComments_visibility @@ var "iwc",
     "item">: project R._ItemWithComments R._ItemWithComments_item @@ var "iwc",
-    "docPart">: Maybes.maybe
-      (list ([] :: [TypedTerm Expr]))
-      (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")])
-      (var "doc"),
+    "docPart">: Optionals.cases (var "doc") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
     "visPart">: visibilityToExpr @@ var "vis",
     "itemPart">: itemToExpr @@ var "item"] $
     Serialization.newlineSep @@ Lists.concat (list [var "docPart", list [
-      Serialization.spaceSep @@ Maybes.cat (list [var "visPart", just (var "itemPart")])]])
+      Serialization.spaceSep @@ Optionals.cat (list [var "visPart", just (var "itemPart")])]])
 
 letStatementToExpr :: TypedTermDefinition (R.LetStatement -> Expr)
 letStatementToExpr = define "letStatementToExpr" $
@@ -868,13 +850,13 @@ letStatementToExpr = define "letStatementToExpr" $
     "typ">: project R._LetStatement R._LetStatement_type @@ var "l",
     "init">: project R._LetStatement R._LetStatement_init @@ var "l",
     "mutKw">: Logic.ifElse (var "mut") (just $ Serialization.cst @@ string "mut") nothing,
-    "typPart">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+    "typPart">: Optionals.cases (var "typ") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string ":",
-      typeToExpr @@ var "t"]) (var "typ"),
-    "initPart">: Maybes.maybe nothing (lambda "e" $ just $ Serialization.spaceSep @@ list [
+      typeToExpr @@ var "t"]),
+    "initPart">: Optionals.cases (var "init") nothing (lambda "e" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "=",
-      expressionToExpr @@ var "e"]) (var "init")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      expressionToExpr @@ var "e"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "let",
       var "mutKw",
       just $ patternToExpr @@ var "pat",
@@ -902,8 +884,8 @@ loopExprToExpr = define "loopExprToExpr" $
   lambda "l" $ lets [
     "label">: project R._LoopExpr R._LoopExpr_label @@ var "l",
     "body">: project R._LoopExpr R._LoopExpr_body @@ var "l",
-    "labelPart">: Maybes.maybe nothing (lambda "lbl" $ just $ Serialization.cst @@ (Strings.cat2 (string "'") (Strings.cat2 (var "lbl") (string ":")))) (var "label")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    "labelPart">: Optionals.cases (var "label") nothing (lambda "lbl" $ just $ Serialization.cst @@ (Strings.cat2 (string "'") (Strings.cat2 (var "lbl") (string ":"))))] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       var "labelPart",
       just $ Serialization.cst @@ string "loop",
       just $ blockToExpr @@ var "body"])
@@ -937,10 +919,10 @@ matchArmToExpr = define "matchArmToExpr" $
     "pat">: project R._MatchArm R._MatchArm_pattern @@ var "arm",
     "guard">: project R._MatchArm R._MatchArm_guard @@ var "arm",
     "body">: project R._MatchArm R._MatchArm_body @@ var "arm",
-    "guardPart">: Maybes.maybe nothing (lambda "g" $ just $ Serialization.spaceSep @@ list [
+    "guardPart">: Optionals.cases (var "guard") nothing (lambda "g" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "if",
-      expressionToExpr @@ var "g"]) (var "guard")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      expressionToExpr @@ var "g"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ patternToExpr @@ var "pat",
       var "guardPart",
       just $ Serialization.cst @@ string "=>",
@@ -1004,17 +986,14 @@ modDefToExpr = define "modDefToExpr" $
   lambda "m" $ lets [
     "name">: project R._ModDef R._ModDef_name @@ var "m",
     "body">: project R._ModDef R._ModDef_body @@ var "m"] $
-    Maybes.maybe
-      (Serialization.spaceSep @@ list [
+    Optionals.cases (var "body") (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "mod",
         Serialization.cst @@ var "name",
-        Serialization.cst @@ string ";"])
-      (lambda "items" $ Serialization.spaceSep @@ list [
+        Serialization.cst @@ string ";"]) (lambda "items" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "mod",
         Serialization.cst @@ var "name",
         Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
           (Lists.map (itemToExpr) (var "items"))])
-      (var "body")
 
 -- =============================================================================
 -- Impl blocks
@@ -1026,7 +1005,7 @@ pathSegmentToExpr = define "pathSegmentToExpr" $
   lambda "seg" $ lets [
     "name">: project R._PathSegment R._PathSegment_name @@ var "seg",
     "args">: project R._PathSegment R._PathSegment_arguments @@ var "seg"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ var "name",
       genericArgumentsToExpr @@ var "args"])
 
@@ -1056,8 +1035,8 @@ rangeExprToExpr = define "rangeExprToExpr" $
     "from">: project R._RangeExpr R._RangeExpr_from @@ var "r",
     "to">: project R._RangeExpr R._RangeExpr_to @@ var "r",
     "incl">: project R._RangeExpr R._RangeExpr_inclusive @@ var "r",
-    "fromStr">: Maybes.maybe (string "") (lambda "f" $ Serialization.printExpr @@ (expressionToExpr @@ var "f")) (var "from"),
-    "toStr">: Maybes.maybe (string "") (lambda "t" $ Serialization.printExpr @@ (expressionToExpr @@ var "t")) (var "to"),
+    "fromStr">: Optionals.cases (var "from") (string "") (lambda "f" $ Serialization.printExpr @@ (expressionToExpr @@ var "f")),
+    "toStr">: Optionals.cases (var "to") (string "") (lambda "t" $ Serialization.printExpr @@ (expressionToExpr @@ var "t")),
     "op">: Logic.ifElse (var "incl") (string "..=") (string "..")] $
     Serialization.cst @@ (Strings.cat (list [var "fromStr", var "op", var "toStr"]))
 
@@ -1068,8 +1047,8 @@ rangePatternToExpr = define "rangePatternToExpr" $
     "from">: project R._RangePattern R._RangePattern_from @@ var "rp",
     "to">: project R._RangePattern R._RangePattern_to @@ var "rp",
     "incl">: project R._RangePattern R._RangePattern_inclusive @@ var "rp",
-    "fromStr">: Maybes.maybe (string "") (lambda "p" $ Serialization.printExpr @@ (patternToExpr @@ var "p")) (var "from"),
-    "toStr">: Maybes.maybe (string "") (lambda "p" $ Serialization.printExpr @@ (patternToExpr @@ var "p")) (var "to"),
+    "fromStr">: Optionals.cases (var "from") (string "") (lambda "p" $ Serialization.printExpr @@ (patternToExpr @@ var "p")),
+    "toStr">: Optionals.cases (var "to") (string "") (lambda "p" $ Serialization.printExpr @@ (patternToExpr @@ var "p")),
     "op">: Logic.ifElse (var "incl") (string "..=") (string "..")] $
     Serialization.cst @@ (Strings.cat (list [var "fromStr", var "op", var "toStr"]))
 
@@ -1102,7 +1081,7 @@ referenceTypeToExpr = define "referenceTypeToExpr" $
     "lt">: project R._ReferenceType R._ReferenceType_lifetime @@ var "rt",
     "mut">: project R._ReferenceType R._ReferenceType_mutable @@ var "rt",
     "t">: project R._ReferenceType R._ReferenceType_type @@ var "rt",
-    "ltPart">: Maybes.maybe (string "") (lambda "l" $ Strings.cat2 (string "'") (Strings.cat2 (project R._Lifetime R._Lifetime_name @@ var "l") (string " "))) (var "lt"),
+    "ltPart">: Optionals.cases (var "lt") (string "") (lambda "l" $ Strings.cat2 (string "'") (Strings.cat2 (project R._Lifetime R._Lifetime_name @@ var "l") (string " "))),
     "mutPart">: Logic.ifElse (var "mut") (string "mut ") (string "")] $
     Serialization.cst @@ (Strings.cat (list [
       string "&",
@@ -1133,7 +1112,7 @@ staticDefToExpr = define "staticDefToExpr" $
     "val">: project R._StaticDef R._StaticDef_value @@ var "s",
     "mut">: project R._StaticDef R._StaticDef_mutable @@ var "s",
     "mutKw">: Logic.ifElse (var "mut") (just $ Serialization.cst @@ string "mut") nothing] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "static",
       var "mutKw",
       just $ Serialization.cst @@ (Strings.cat2 (var "name") (string ":")),
@@ -1167,16 +1146,16 @@ structDefToExpr = define "structDefToExpr" $
     "derives">: project R._StructDef R._StructDef_derives @@ var "s",
     "docC">: project R._StructDef R._StructDef_doc @@ var "s",
     "derivesAttr">: derivesToExpr @@ var "derives",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "struct",
       just $ Serialization.cst @@ var "name",
       genericParamsToExpr @@ var "generics"]),
-    "wherePart">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC")] $
+    "wherePart">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w")] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
-      Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]) (var "derivesAttr"),
-      list [Serialization.spaceSep @@ Maybes.cat (list [
+      Optionals.cases (var "derivesAttr") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]),
+      list [Serialization.spaceSep @@ Optionals.cat (list [
         just $ var "header",
         var "wherePart",
         just $ structBodyToExpr @@ var "body"])]])
@@ -1189,10 +1168,10 @@ structExprToExpr = define "structExprToExpr" $
     "fields">: project R._StructExpr R._StructExpr_fields @@ var "s",
     "rest">: project R._StructExpr R._StructExpr_rest @@ var "s",
     "fieldExprs">: Lists.map (fieldValueToExpr) (var "fields"),
-    "restExpr">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [
+    "restExpr">: Optionals.cases (var "rest") (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [
       Serialization.spaceSep @@ list [
         Serialization.cst @@ string "..",
-        expressionToExpr @@ var "r"]]) (var "rest"),
+        expressionToExpr @@ var "r"]]),
     "allFields">: Lists.concat2 (var "fieldExprs") (var "restExpr")] $
     Serialization.spaceSep @@ list [
       exprPathToExpr @@ var "path",
@@ -1207,10 +1186,10 @@ structFieldToExpr = define "structFieldToExpr" $
     "pub">: project R._StructField R._StructField_public @@ var "field",
     "docC">: project R._StructField R._StructField_doc @@ var "field",
     "pubKw">: Logic.ifElse (var "pub") (just $ Serialization.cst @@ string "pub") nothing,
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")])] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
-      list [Serialization.spaceSep @@ Maybes.cat (list [
+      list [Serialization.spaceSep @@ Optionals.cat (list [
         var "pubKw",
         just $ Serialization.cst @@ (Strings.cat2 (var "name") (string ":")),
         just $ typeToExpr @@ var "typ"])]])
@@ -1260,10 +1239,10 @@ traitConstToExpr = define "traitConstToExpr" $
     "name">: project R._TraitConst R._TraitConst_name @@ var "c",
     "typ">: project R._TraitConst R._TraitConst_type @@ var "c",
     "def">: project R._TraitConst R._TraitConst_default @@ var "c",
-    "defPart">: Maybes.maybe nothing (lambda "d" $ just $ Serialization.spaceSep @@ list [
+    "defPart">: Optionals.cases (var "def") nothing (lambda "d" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "=",
-      expressionToExpr @@ var "d"]) (var "def")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      expressionToExpr @@ var "d"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "const",
       just $ Serialization.cst @@ (Strings.cat2 (var "name") (string ":")),
       just $ typeToExpr @@ var "typ",
@@ -1285,15 +1264,15 @@ traitDefToExpr = define "traitDefToExpr" $
     "items">: project R._TraitDef R._TraitDef_items @@ var "t",
     "isUnsafe">: project R._TraitDef R._TraitDef_unsafe @@ var "t",
     "docC">: project R._TraitDef R._TraitDef_doc @@ var "t",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC"),
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
     "unsafeKw">: Logic.ifElse (var "isUnsafe") (just $ Serialization.cst @@ string "unsafe") nothing,
     "genericsExpr">: genericParamsToExpr @@ var "generics",
     "superPart">: Logic.ifElse (Lists.null $ var "supers") nothing
       (just $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string ":",
         Serialization.cst @@ (Strings.intercalate (string " + ") (Lists.map (lambda "b" $ Serialization.printExpr @@ (typeParamBoundToExpr @@ var "b")) (var "supers")))]),
-    "wherePart">: Maybes.maybe nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w") (var "whereC"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+    "wherePart">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w"),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       var "unsafeKw",
       just $ Serialization.cst @@ string "trait",
       just $ Serialization.cst @@ var "name",
@@ -1326,19 +1305,16 @@ traitMethodToExpr = define "traitMethodToExpr" $
     "defBody">: project R._TraitMethod R._TraitMethod_defaultBody @@ var "m",
     "genericsExpr">: genericParamsToExpr @@ var "generics",
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (methodParamToExpr) (var "params")),
-    "retTypeExpr">: Maybes.maybe nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
+    "retTypeExpr">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
-      typeToExpr @@ var "t"]) (var "retType"),
-    "header">: Serialization.spaceSep @@ Maybes.cat (list [
+      typeToExpr @@ var "t"]),
+    "header">: Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "fn",
       just $ Serialization.cst @@ var "name",
       var "genericsExpr",
       just $ var "paramsExpr",
       var "retTypeExpr"])] $
-    Maybes.maybe
-      (Serialization.spaceSep @@ list [var "header", Serialization.cst @@ string ";"])
-      (lambda "body" $ Serialization.spaceSep @@ list [var "header", blockToExpr @@ var "body"])
-      (var "defBody")
+    Optionals.cases (var "defBody") (Serialization.spaceSep @@ list [var "header", Serialization.cst @@ string ";"]) (lambda "body" $ Serialization.spaceSep @@ list [var "header", blockToExpr @@ var "body"])
 
 traitTypeToExpr :: TypedTermDefinition (R.TraitType -> Expr)
 traitTypeToExpr = define "traitTypeToExpr" $
@@ -1351,10 +1327,10 @@ traitTypeToExpr = define "traitTypeToExpr" $
       (just $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string ":",
         Serialization.cst @@ (Strings.intercalate (string " + ") (Lists.map (lambda "b" $ Serialization.printExpr @@ (typeParamBoundToExpr @@ var "b")) (var "bounds")))]),
-    "defPart">: Maybes.maybe nothing (lambda "d" $ just $ Serialization.spaceSep @@ list [
+    "defPart">: Optionals.cases (var "def") nothing (lambda "d" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "=",
-      typeToExpr @@ var "d"]) (var "def")] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+      typeToExpr @@ var "d"])] $
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "type",
       just $ Serialization.cst @@ var "name",
       var "boundsPart",
@@ -1390,10 +1366,10 @@ typeAliasToExpr = define "typeAliasToExpr" $
     "generics">: project R._TypeAlias R._TypeAlias_generics @@ var "ta",
     "typ">: project R._TypeAlias R._TypeAlias_type @@ var "ta",
     "docC">: project R._TypeAlias R._TypeAlias_doc @@ var "ta",
-    "docPart">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]) (var "docC")] $
+    "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")])] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
-      list [Serialization.spaceSep @@ Maybes.cat (list [
+      list [Serialization.spaceSep @@ Optionals.cat (list [
         just $ Serialization.cst @@ string "type",
         just $ Serialization.cst @@ var "name",
         genericParamsToExpr @@ var "generics",
@@ -1499,7 +1475,7 @@ useDeclarationToExpr = define "useDeclarationToExpr" $
     "pub">: project R._UseDeclaration R._UseDeclaration_public @@ var "use",
     "tree">: project R._UseDeclaration R._UseDeclaration_tree @@ var "use",
     "pubKw">: Logic.ifElse (var "pub") (just $ Serialization.cst @@ string "pub") nothing] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       var "pubKw",
       just $ Serialization.cst @@ string "use",
       just $ useTreeToExpr @@ var "tree",
@@ -1578,7 +1554,7 @@ whileExprToExpr = define "whileExprToExpr" $
     "label">: project R._WhileExpr R._WhileExpr_label @@ var "w",
     "cond">: project R._WhileExpr R._WhileExpr_condition @@ var "w",
     "body">: project R._WhileExpr R._WhileExpr_body @@ var "w",
-    "labelPart">: Maybes.maybe nothing (lambda "lbl" $ just $ Serialization.cst @@ (Strings.cat2 (string "'") (Strings.cat2 (var "lbl") (string ":")))) (var "label"),
+    "labelPart">: Optionals.cases (var "label") nothing (lambda "lbl" $ just $ Serialization.cst @@ (Strings.cat2 (string "'") (Strings.cat2 (var "lbl") (string ":")))),
     "condExpr">: cases R._IfCondition (var "cond") Nothing [
       R._IfCondition_bool>>: lambda "e" $ expressionToExpr @@ var "e",
       R._IfCondition_let>>: lambda "lc" $ lets [
@@ -1589,7 +1565,7 @@ whileExprToExpr = define "whileExprToExpr" $
           patternToExpr @@ var "pat",
           Serialization.cst @@ string "=",
           expressionToExpr @@ var "expr"]]] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       var "labelPart",
       just $ Serialization.cst @@ string "while",
       just $ var "condExpr",

@@ -20,7 +20,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -50,7 +50,7 @@ isComplexBinding tc b =
 
       let term = Core.bindingTerm b
           mts = Core.bindingTypeScheme b
-      in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
+      in (Optionals.cases mts (isComplexTerm tc term) (\ts ->
         let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
             isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeBody ts)) 0
             isComplex = isComplexTerm tc term
@@ -69,11 +69,11 @@ isComplexVariable :: Graph.Graph -> Core.Name -> Bool
 isComplexVariable tc name =
 
       let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
-      in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
+      in (Logic.ifElse (Optionals.isGiven metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
-        in (Maybes.maybe (
+        in (Optionals.cases typeLookup (
           let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
-          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+          in (Optionals.cases primLookup True (\prim -> Equality.gt (Arity.typeSchemeArity (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))) 0))) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0)))))
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =
@@ -146,7 +146,7 @@ isTrivialTerm t =
           Core.TermProject _ -> isTrivialTerm arg
           Core.TermUnwrap _ -> isTrivialTerm arg
           _ -> False
-      Core.TermMaybe v0 -> Maybes.maybe True (\inner -> isTrivialTerm inner) v0
+      Core.TermOptional v0 -> Optionals.cases v0 True (\inner -> isTrivialTerm inner)
       Core.TermRecord v0 -> Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0)
       Core.TermWrap v0 -> isTrivialTerm (Core.wrappedTermBody v0)
       Core.TermTypeApplication v0 -> isTrivialTerm (Core.typeApplicationTermBody v0)
