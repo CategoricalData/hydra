@@ -54,7 +54,7 @@ arrayRestrictionToExpr r =
 fromObject :: Model.Value -> M.Map String Model.Value
 fromObject v =
     case v of
-      Model.ValueObject v0 -> v0
+      Model.ValueObject v0 -> Maps.fromList v0
 -- | Encode an integer as a JSON number value
 integerToExpr :: Int -> Model.Value
 integerToExpr n = Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint n))
@@ -80,11 +80,11 @@ jsonSchemaDocumentToJsonValue doc =
                     (key_schema, (Optionals.pure (Model.ValueString "http://json-schema.org/2020-12/schema"))),
                     (
                       key_definitions,
-                      (Optionals.map (\mp -> Model.ValueObject (Maps.fromList (Lists.map (\p ->
+                      (Optionals.map (\mp -> Model.ValueObject ((Lists.map (\p ->
                         let k = Pairs.first p
                             schema = Pairs.second p
                         in (Schema.unKeyword k, (schemaToExpr schema))) (Maps.toList mp)))) mdefs))])
-      in (Model.ValueObject (Maps.union schemaMap restMap))
+      in (Model.ValueObject (Maps.toList (Maps.union schemaMap restMap)))
 -- | Convert a JSON Schema document to a JSON string
 jsonSchemaDocumentToString :: Schema.Document -> String
 jsonSchemaDocumentToString doc = Writer.printJson (jsonSchemaDocumentToJsonValue doc)
@@ -199,13 +199,13 @@ numericRestrictionToExpr r =
 objectRestrictionToExpr :: Schema.ObjectRestriction -> (String, Model.Value)
 objectRestrictionToExpr r =
     case r of
-      Schema.ObjectRestrictionProperties v0 -> (key_properties, (Model.ValueObject (Maps.fromList (Lists.map propertyToExpr (Maps.toList v0)))))
+      Schema.ObjectRestrictionProperties v0 -> (key_properties, (Model.ValueObject ((Lists.map propertyToExpr (Maps.toList v0)))))
       Schema.ObjectRestrictionAdditionalProperties v0 -> (key_additionalProperties, (additionalItemsToExpr v0))
       Schema.ObjectRestrictionRequired v0 -> (key_required, (Model.ValueArray (Lists.map keywordToExpr v0)))
       Schema.ObjectRestrictionMinProperties v0 -> (key_minProperties, (integerToExpr v0))
       Schema.ObjectRestrictionMaxProperties v0 -> (key_maxProperties, (integerToExpr v0))
-      Schema.ObjectRestrictionDependencies v0 -> (key_dependencies, (Model.ValueObject (Maps.fromList (Lists.map keywordSchemaOrArrayToExpr (Maps.toList v0)))))
-      Schema.ObjectRestrictionPatternProperties v0 -> (key_patternProperties, (Model.ValueObject (Maps.fromList (Lists.map patternPropertyToExpr (Maps.toList v0)))))
+      Schema.ObjectRestrictionDependencies v0 -> (key_dependencies, (Model.ValueObject ((Lists.map keywordSchemaOrArrayToExpr (Maps.toList v0)))))
+      Schema.ObjectRestrictionPatternProperties v0 -> (key_patternProperties, (Model.ValueObject ((Lists.map patternPropertyToExpr (Maps.toList v0)))))
 -- | Encode a pattern property pair as a key-value pair
 patternPropertyToExpr :: (Schema.RegularExpression, Schema.Schema) -> (String, Model.Value)
 patternPropertyToExpr p =
@@ -252,7 +252,7 @@ schemaReferenceToExpr :: Schema.SchemaReference -> Model.Value
 schemaReferenceToExpr sr = Model.ValueString (Schema.unSchemaReference sr)
 -- | Encode a schema as a JSON object value
 schemaToExpr :: Schema.Schema -> Model.Value
-schemaToExpr s = Model.ValueObject (Maps.fromList (Lists.concat (Lists.map restrictionToExpr (Schema.unSchema s))))
+schemaToExpr s = Model.ValueObject ((Lists.concat (Lists.map restrictionToExpr (Schema.unSchema s))))
 -- | Encode a string restriction as a key-value pair
 stringRestrictionToExpr :: Schema.StringRestriction -> (String, Model.Value)
 stringRestrictionToExpr r =
@@ -263,7 +263,7 @@ stringRestrictionToExpr r =
 -- | Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values
 toObject :: [(String, (Maybe Model.Value))] -> Model.Value
 toObject pairs =
-    Model.ValueObject (Maps.fromList (Optionals.cat (Lists.map (\p ->
+    Model.ValueObject ((Optionals.cat (Lists.map (\p ->
       let k = Pairs.first p
           mv = Pairs.second p
       in (Optionals.map (\v -> (k, v)) mv)) pairs)))

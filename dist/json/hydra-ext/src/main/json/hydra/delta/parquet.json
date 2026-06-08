@@ -1,228 +1,228 @@
 {
+  "name": "hydra.delta.parquet",
+  "metadata": {
+    "description": "A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API: https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.delta.parquet.ArrayType",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]},
               "body": {
                 "record": [
                   {"name": "elementType", "type": {"variable": "hydra.delta.parquet.DataType"}},
-                  {"name": "containsNull", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []},
-        "name": "hydra.delta.parquet.ArrayType"}},
+                  {"name": "containsNull", "type": {"literal": {"boolean": {}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.delta.parquet.BasePrimitiveType",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]},
               "body": {
                 "union": [
                   {
                     "name": "binary",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing byte[] values."}}}]},
-                        "body": {"unit": {}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing byte[] values."}}}]}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing boolean type values."}}}]},
-                        "body": {"unit": {}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing boolean type values."}}}]}}}},
                   {
                     "name": "byte",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing byte type values."}}}]},
-                        "body": {"unit": {}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing byte type values."}}}]}}}},
                   {
                     "name": "date",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "A date type, supporting \"0001-01-01\" through \"9999-12-31\". Internally, this is represented as the number of days from 1970-01-01."}}}]},
-                        "body": {"unit": {}}}}},
+                                  "string": "A date type, supporting \"0001-01-01\" through \"9999-12-31\". Internally, this is represented as the number of days from 1970-01-01."}}}]}}}},
                   {
                     "name": "double",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing double type values."}}}]},
-                        "body": {"unit": {}}}}},
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing double type values."}}}]}}}},
                   {
                     "name": "float",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing float type values."}}}]},
-                        "body": {"unit": {}}}}},
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing float type values."}}}]}}}},
                   {
                     "name": "integer",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The data type representing integer type values."}}}]},
-                        "body": {"unit": {}}}}},
+                              "value": {"literal": {"string": "The data type representing integer type values."}}}]}}}},
                   {
                     "name": "long",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing long type values."}}}]},
-                        "body": {"unit": {}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing long type values."}}}]}}}},
                   {
                     "name": "short",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing short type values."}}}]},
-                        "body": {"unit": {}}}}},
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing short type values."}}}]}}}},
                   {
                     "name": "string",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing string type values."}}}]},
-                        "body": {"unit": {}}}}},
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing string type values."}}}]}}}},
                   {
                     "name": "timestamp",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "A timestamp type, supporting [0001-01-01T00:00:00.000000Z, 9999-12-31T23:59:59.999999Z] where the left/right-bound is a date and time of the proleptic Gregorian calendar in UTC+00:00. Internally, this is represented as the number of microseconds since the Unix epoch, 1970-01-01 00:00:00 UTC."}}}]},
-                        "body": {"unit": {}}}}}]}}},
-          "variables": []},
-        "name": "hydra.delta.parquet.BasePrimitiveType"}},
+                                  "string": "A timestamp type, supporting [0001-01-01T00:00:00.000000Z, 9999-12-31T23:59:59.999999Z] where the left/right-bound is a date and time of the proleptic Gregorian calendar in UTC+00:00. Internally, this is represented as the number of microseconds since the Unix epoch, 1970-01-01 00:00:00 UTC."}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.delta.parquet.DataType",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {
                 "name": "array",
                 "type": {
                   "annotated": {
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]},
-                    "body": {"variable": "hydra.delta.parquet.ArrayType"}}}},
+                    "body": {"variable": "hydra.delta.parquet.ArrayType"},
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}}},
               {
                 "name": "base",
                 "type": {
                   "annotated": {
+                    "body": {"variable": "hydra.delta.parquet.BasePrimitiveType"},
                     "annotation": {
-                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]},
-                    "body": {"variable": "hydra.delta.parquet.BasePrimitiveType"}}}},
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]}}}},
               {
                 "name": "decimal",
                 "type": {
                   "annotated": {
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A decimal data type."}}}]},
-                    "body": {"variable": "hydra.delta.parquet.DecimalType"}}}},
+                    "body": {"variable": "hydra.delta.parquet.DecimalType"},
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A decimal data type."}}}]}}}},
               {
                 "name": "map",
                 "type": {
                   "annotated": {
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]},
-                    "body": {"variable": "hydra.delta.parquet.MapType"}}}},
+                    "body": {"variable": "hydra.delta.parquet.MapType"},
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}}},
               {
                 "name": "struct",
                 "type": {
                   "annotated": {
+                    "body": {"variable": "hydra.delta.parquet.StructType"},
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
-                          "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]},
-                    "body": {"variable": "hydra.delta.parquet.StructType"}}}}]},
-          "variables": []},
-        "name": "hydra.delta.parquet.DataType"}},
+                          "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]}}}}]}}}},
     {
       "type": {
+        "name": "hydra.delta.parquet.DecimalType",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {
+                "record": [
+                  {"name": "precision", "type": {"literal": {"integer": {"int32": {}}}}},
+                  {"name": "scale", "type": {"literal": {"integer": {"int32": {}}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision)."}}}]},
-              "body": {
-                "record": [
-                  {"name": "precision", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "scale", "type": {"literal": {"integer": {"int32": {}}}}}]}}},
-          "variables": []},
-        "name": "hydra.delta.parquet.DecimalType"}},
+                        "string": "A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision)."}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.delta.parquet.MapType",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]},
               "body": {
                 "record": [
                   {"name": "keyType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "valueType", "type": {"variable": "hydra.delta.parquet.DataType"}},
-                  {"name": "valueContainsNull", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []},
-        "name": "hydra.delta.parquet.MapType"}},
+                  {"name": "valueContainsNull", "type": {"literal": {"boolean": {}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.delta.parquet.StructField",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Represents a subfield of StructType with additional properties and metadata."}}}]},
               "body": {
                 "record": [
                   {"name": "name", "type": {"literal": {"string": {}}}},
                   {"name": "dataType", "type": {"variable": "hydra.delta.parquet.DataType"}},
-                  {"name": "nullable", "type": {"literal": {"boolean": {}}}}]}}},
-          "variables": []},
-        "name": "hydra.delta.parquet.StructField"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "nullable", "type": {"literal": {"boolean": {}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]},
-              "body": {"record": [{"name": "fields", "type": {"list": {"variable": "hydra.delta.parquet.StructField"}}}]}}},
-          "variables": []},
-        "name": "hydra.delta.parquet.StructType"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {
-    "comments": [],
-    "description": "A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API: https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html",
-    "seeAlso": []},
-  "name": "hydra.delta.parquet"}
+                    "value": {"literal": {"string": "Represents a subfield of StructType with additional properties and metadata."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.delta.parquet.StructType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "fields", "type": {"list": {"variable": "hydra.delta.parquet.StructField"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]}}}}}}]}

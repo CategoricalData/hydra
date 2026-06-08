@@ -1,112 +1,120 @@
 {
+  "name": "hydra.xml.schema",
+  "metadata": {
+    "description": "A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\nSee: https://www.w3.org/TR/xmlschema-2\nNote: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n      corresponding Hydra literal type.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.AnySimpleType"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.AnyType"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.AnyURI"}},
+      "type": {"name": "hydra.xml.schema.AnySimpleType", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.AnyType", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.AnyURI", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Base64Binary"}},
+      "type": {"name": "hydra.xml.schema.Base64Binary", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"boolean": {}}}}, "variables": []}, "name": "hydra.xml.schema.Boolean"}},
+      "type": {"name": "hydra.xml.schema.Boolean", "body": {"variables": [], "body": {"wrap": {"literal": {"boolean": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"integer": {"int8": {}}}}}, "variables": []}, "name": "hydra.xml.schema.Byte"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Date"}},
+      "type": {"name": "hydra.xml.schema.Byte", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"int8": {}}}}}}}},
+    {"type": {"name": "hydra.xml.schema.Date", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.DateTime"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Decimal"}},
-    {
-      "type": {
-        "body": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.Double"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Duration"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.ENTITIES"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.ENTITY"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"float": {"float32": {}}}}}, "variables": []}, "name": "hydra.xml.schema.Float"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.GDay"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.GMonth"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.GMonthDay"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.GYear"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.GYearMonth"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.HexBinary"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.ID"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.IDREF"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.IDREFS"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"integer": {"int32": {}}}}}, "variables": []}, "name": "hydra.xml.schema.Int"}},
+      "type": {"name": "hydra.xml.schema.DateTime", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.Decimal", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.Integer"}},
+        "name": "hydra.xml.schema.Double",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"float": {"float64": {}}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Language"}},
+      "type": {"name": "hydra.xml.schema.Duration", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"integer": {"int64": {}}}}}, "variables": []}, "name": "hydra.xml.schema.Long"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.NMTOKEN"}},
+      "type": {"name": "hydra.xml.schema.ENTITIES", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.ENTITY", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.NOTATION"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Name"}},
+      "type": {"name": "hydra.xml.schema.Float", "body": {"variables": [], "body": {"wrap": {"literal": {"float": {"float32": {}}}}}}}},
+    {"type": {"name": "hydra.xml.schema.GDay", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.GMonth", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.NegativeInteger"}},
+      "type": {"name": "hydra.xml.schema.GMonthDay", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.GYear", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.NonNegativeInteger"}},
+      "type": {"name": "hydra.xml.schema.GYearMonth", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.NonPositiveInteger"}},
+      "type": {"name": "hydra.xml.schema.HexBinary", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.ID", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.IDREF", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.IDREFS", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.NormalizedString"}},
-    {
-      "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.PositiveInteger"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.QName"}},
-    {
-      "type": {"body": {"body": {"wrap": {"literal": {"integer": {"int16": {}}}}}, "variables": []}, "name": "hydra.xml.schema.Short"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.String"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Time"}},
-    {"type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.xml.schema.Token"}},
+      "type": {"name": "hydra.xml.schema.Int", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"int32": {}}}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"uint8": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.UnsignedByte"}},
+        "name": "hydra.xml.schema.Integer",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}}},
+    {
+      "type": {"name": "hydra.xml.schema.Language", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {
+      "type": {"name": "hydra.xml.schema.Long", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"int64": {}}}}}}}},
+    {"type": {"name": "hydra.xml.schema.NMTOKEN", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {
+      "type": {"name": "hydra.xml.schema.NOTATION", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.Name", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"uint32": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.UnsignedInt"}},
+        "name": "hydra.xml.schema.NegativeInteger",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"uint64": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.UnsignedLong"}},
+        "name": "hydra.xml.schema.NonNegativeInteger",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"literal": {"integer": {"uint16": {}}}}}, "variables": []},
-        "name": "hydra.xml.schema.UnsignedShort"}},
+        "name": "hydra.xml.schema.NonPositiveInteger",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}}},
+    {
+      "type": {"name": "hydra.xml.schema.NormalizedString", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
       "type": {
+        "name": "hydra.xml.schema.PositiveInteger",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}}},
+    {"type": {"name": "hydra.xml.schema.QName", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {
+      "type": {"name": "hydra.xml.schema.Short", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"int16": {}}}}}}}},
+    {"type": {"name": "hydra.xml.schema.String", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.Time", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.xml.schema.Token", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedByte",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"uint8": {}}}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedInt",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"uint32": {}}}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedLong",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"uint64": {}}}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedShort",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": {"uint16": {}}}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.ConstrainingFacet",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {"wrap": {"unit": {}}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/xmlschema-2/#non-fundamental"}}}]},
-              "body": {"wrap": {"unit": {}}}}},
-          "variables": []},
-        "name": "hydra.xml.schema.ConstrainingFacet"}},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/xmlschema-2/#non-fundamental"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.xml.schema.Datatype",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "anySimpleType", "type": {"unit": {}}},
@@ -152,12 +160,4 @@
               {"name": "unsignedByte", "type": {"unit": {}}},
               {"name": "unsignedInt", "type": {"unit": {}}},
               {"name": "unsignedLong", "type": {"unit": {}}},
-              {"name": "unsignedShort", "type": {"unit": {}}}]},
-          "variables": []},
-        "name": "hydra.xml.schema.Datatype"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {
-    "comments": [],
-    "description": "A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\nSee: https://www.w3.org/TR/xmlschema-2\nNote: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n      corresponding Hydra literal type.",
-    "seeAlso": []},
-  "name": "hydra.xml.schema"}
+              {"name": "unsignedShort", "type": {"unit": {}}}]}}}}]}

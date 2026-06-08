@@ -104,21 +104,21 @@ pgElementToJson schema el cx =
     (\x -> case x of
       PgModel.ElementVertex v0 -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.vertexId v0)) (\term ->
         let labelJson = JsonModel.ValueString (PgModel.unVertexLabel (PgModel.vertexLabel v0))
-        in (Eithers.map (\propsJson -> JsonModel.ValueObject (Maps.fromList (Optionals.cat [
+        in (Eithers.map (\propsJson -> JsonModel.ValueObject ((Optionals.cat [
           Just ("label", labelJson),
           (Just ("id", (JsonModel.ValueString (ShowCore.term term)))),
-          propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (JsonModel.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->
+          propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (JsonModel.ValueObject (p)))) (Eithers.mapList (\pair ->
           let key = Pairs.first pair
               v = Pairs.second pair
           in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (PgModel.unPropertyKey key, (JsonModel.ValueString (ShowCore.term term2)))))) (Maps.toList pairs)))) (PgModel.vertexProperties v0))))
       PgModel.ElementEdge v0 -> Eithers.bind (Coders.coderDecode (Mapping.schemaEdgeIds schema) cx (PgModel.edgeId v0)) (\term -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.edgeOut v0)) (\termOut -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.edgeIn v0)) (\termIn ->
         let labelJson = JsonModel.ValueString (PgModel.unEdgeLabel (PgModel.edgeLabel v0))
-        in (Eithers.map (\propsJson -> JsonModel.ValueObject (Maps.fromList (Optionals.cat [
+        in (Eithers.map (\propsJson -> JsonModel.ValueObject ((Optionals.cat [
           Just ("label", labelJson),
           (Just ("id", (JsonModel.ValueString (ShowCore.term term)))),
           (Just ("out", (JsonModel.ValueString (ShowCore.term termOut)))),
           (Just ("in", (JsonModel.ValueString (ShowCore.term termIn)))),
-          propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (JsonModel.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->
+          propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (JsonModel.ValueObject (p)))) (Eithers.mapList (\pair ->
           let key = Pairs.first pair
               v = Pairs.second pair
           in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (PgModel.unPropertyKey key, (JsonModel.ValueString (ShowCore.term term2)))))) (Maps.toList pairs)))) (PgModel.edgeProperties v0))))))) el

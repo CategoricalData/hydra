@@ -1,46 +1,6 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a list of bindings as a string"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "elementStrs",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "elements"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "hydra.show.core.binding"},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Binding"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}},
-                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {"literal": {"string": "{"}},
-                            {
-                              "application": {
-                                "argument": {"variable": "elementStrs"},
-                                "function": {"application": {"argument": {"literal": {"string": ", "}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                            {"literal": {"string": "}"}}]},
-                        "function": {"variable": "hydra.lib.strings.cat"}}}}},
-                "domain": {"list": {"variable": "hydra.core.Binding"}},
-                "parameter": "elements"}}}},
-        "name": "hydra.show.graph.graph",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}}],
+  "name": "hydra.show.graph",
+  "metadata": {"description": "String representations of hydra.graph types", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.show.core"},
     {"module": "hydra.paths"},
@@ -65,5 +25,45 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "String representations of hydra.graph types", "seeAlso": []},
-  "name": "hydra.show.graph"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.show.graph.graph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.core.Binding"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "elements",
+                "domain": {"list": {"variable": "hydra.core.Binding"}},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "elementStrs",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Binding"}}},
+                                    "type": {"literal": {"string": {}}}}},
+                                "argument": {"variable": "hydra.show.core.binding"}}},
+                            "argument": {"variable": "elements"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "{"}},
+                            {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
+                                "argument": {"variable": "elementStrs"}}},
+                            {"literal": {"string": "}"}}]}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a list of bindings as a string"}}}]}}}}}]}

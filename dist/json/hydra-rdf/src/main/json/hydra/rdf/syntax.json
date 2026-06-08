@@ -1,226 +1,226 @@
 {
+  "name": "hydra.rdf.syntax",
+  "metadata": {"description": "An RDF 1.1 syntax model", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.rdf.syntax.BlankNode"}},
+      "type": {"name": "hydra.rdf.syntax.BlankNode", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
       "type": {
+        "name": "hydra.rdf.syntax.RdfsClass",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Stand-in for rdfs:Class"}}}]},
-              "body": {"wrap": {"unit": {}}}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.RdfsClass"}},
+              "body": {"wrap": {"unit": {}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Stand-in for rdfs:Class"}}}]}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Quad"}}}, "variables": []},
-        "name": "hydra.rdf.syntax.Dataset"}},
+        "name": "hydra.rdf.syntax.Dataset",
+        "body": {"variables": [], "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Quad"}}}}}},
     {
       "type": {
+        "name": "hydra.rdf.syntax.Description",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A graph of RDF statements together with a distinguished subject and/or object node"}}}]},
               "body": {
                 "record": [
                   {"name": "subject", "type": {"variable": "hydra.rdf.syntax.Node"}},
-                  {"name": "graph", "type": {"variable": "hydra.rdf.syntax.Graph"}}]}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Description"}},
-    {
-      "type": {
-        "body": {"body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Triple"}}}, "variables": []},
-        "name": "hydra.rdf.syntax.Graph"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Internationalized Resource Identifier"}}}]},
-              "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Iri"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "graph", "type": {"variable": "hydra.rdf.syntax.Graph"}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes"}}}]},
+                    "value": {"literal": {"string": "A graph of RDF statements together with a distinguished subject and/or object node"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.Graph",
+        "body": {"variables": [], "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Triple"}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.Iri",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Internationalized Resource Identifier"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.IriOrLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "union": [
                   {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-                  {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.IriOrLiteral"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A convenience type which provides at most one string value per language, and optionally a value without a language"}}}]},
+                        "string": "An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.LangStrings",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
-                "wrap": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}}}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.LangStrings"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A BCP47 language tag"}}}]},
-              "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.LanguageTag"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                "wrap": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A value such as a string, number, or date"}}}]},
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A convenience type which provides at most one string value per language, and optionally a value without a language"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.LanguageTag",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A BCP47 language tag"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.Literal",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "lexicalForm",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"string": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                              "value": {"literal": {"string": "a Unicode string, which should be in Normal Form C"}}}]}}}},
                   {
                     "name": "datatypeIri",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.rdf.syntax.Iri"},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]},
-                        "body": {"variable": "hydra.rdf.syntax.Iri"}}}},
+                              "value": {"literal": {"string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}}]}}}},
                   {
                     "name": "languageTag",
                     "type": {
                       "annotated": {
+                        "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                        "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}}]}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Literal"}},
+                                  "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A value such as a string, number, or date"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.rdf.syntax.Node",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
               {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}},
-              {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Node"}},
+              {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]}}}},
     {
       "type": {
+        "name": "hydra.rdf.syntax.Property",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {"string": "A type representing an RDF property, and encapsulating its domain, range, and subclass relationships"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "domain",
                     "type": {
                       "annotated": {
+                        "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]},
-                        "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}}},
+                              "value": {"literal": {"string": "State that any resource that has a given property is an instance of one or more classes"}}}]}}}},
                   {
                     "name": "range",
                     "type": {
                       "annotated": {
+                        "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]},
-                        "body": {"set": {"variable": "hydra.rdf.syntax.RdfsClass"}}}}},
-                  {"name": "subPropertyOf", "type": {"set": {"variable": "hydra.rdf.syntax.Property"}}}]}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Property"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                              "value": {"literal": {"string": "States that the values of a property are instances of one or more classes"}}}]}}}},
+                  {"name": "subPropertyOf", "type": {"set": {"variable": "hydra.rdf.syntax.Property"}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An RDF triple with an optional named graph component"}}}]},
+                    "value": {
+                      "literal": {"string": "A type representing an RDF property, and encapsulating its domain, range, and subclass relationships"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.Quad",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {"name": "subject", "type": {"variable": "hydra.rdf.syntax.Resource"}},
                   {"name": "predicate", "type": {"variable": "hydra.rdf.syntax.Iri"}},
                   {"name": "object", "type": {"variable": "hydra.rdf.syntax.Node"}},
-                  {"name": "graph", "type": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}}]}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Quad"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "union": [
-              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-              {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}}]},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Resource"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "graph", "type": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An RDF triple defined by a subject, predicate, and object"}}}]},
+                    "value": {"literal": {"string": "An RDF triple with an optional named graph component"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.Resource",
+        "body": {
+          "variables": [],
+          "body": {
+            "union": [
+              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
+              {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}}]}}}},
+    {
+      "type": {
+        "name": "hydra.rdf.syntax.Triple",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {"name": "subject", "type": {"variable": "hydra.rdf.syntax.Resource"}},
                   {"name": "predicate", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-                  {"name": "object", "type": {"variable": "hydra.rdf.syntax.Node"}}]}}},
-          "variables": []},
-        "name": "hydra.rdf.syntax.Triple"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {"comments": [], "description": "An RDF 1.1 syntax model", "seeAlso": []},
-  "name": "hydra.rdf.syntax"}
+                  {"name": "object", "type": {"variable": "hydra.rdf.syntax.Node"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An RDF triple defined by a subject, predicate, and object"}}}]}}}}}}]}

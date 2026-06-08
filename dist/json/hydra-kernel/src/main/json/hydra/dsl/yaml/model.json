@@ -1,547 +1,547 @@
 {
+  "name": "hydra.dsl.yaml.model",
+  "metadata": {"description": "DSL functions for hydra.yaml.model", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.yaml.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "definitions": [
     {
       "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the mapping variant of hydra.yaml.model.Node"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Node"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping from nodes to nodes"}}}]},
-                        "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
         "name": "hydra.dsl.yaml.model.nodeMapping",
         "signature": {
+          "typeParameters": [],
           "parameters": [
             {
-              "isLazy": false,
               "name": "arg0",
               "type": {
                 "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping from nodes to nodes"}}}]},
-                      "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping from nodes to nodes"}}}]}}}}},
+              "isLazy": false}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Node"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the scalar variant of hydra.yaml.model.Node"}}}]},
             "body": {
               "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.yaml.model.Node"}, "values": {"variable": "hydra.yaml.model.Node"}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping from nodes to nodes"}}}]}}}}},
                 "body": {
                   "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
                     "body": {
                       "inject": {
+                        "typeName": "hydra.core.Term",
                         "field": {
                           "name": "inject",
                           "term": {
                             "record": {
+                              "typeName": "hydra.core.Injection",
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Node"}}, "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Node"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
+                                      "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "scalar"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "mapping"}}}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]},
-                        "body": {"variable": "hydra.yaml.model.Scalar"}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the mapping variant of hydra.yaml.model.Node"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.yaml.model.nodeScalar",
         "signature": {
+          "typeParameters": [],
           "parameters": [
             {
-              "isLazy": false,
               "name": "arg0",
               "type": {
                 "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]},
-                      "body": {"variable": "hydra.yaml.model.Scalar"}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                      "body": {"variable": "hydra.yaml.model.Scalar"},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]}}}}},
+              "isLazy": false}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Node"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the sequence variant of hydra.yaml.model.Node"}}}]},
             "body": {
               "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.yaml.model.Scalar"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]}}}}},
                 "body": {
                   "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
                     "body": {
                       "inject": {
+                        "typeName": "hydra.core.Term",
                         "field": {
                           "name": "inject",
                           "term": {
                             "record": {
+                              "typeName": "hydra.core.Injection",
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Node"}}, "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Node"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
+                                      "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "sequence"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scalar"}}}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]},
-                        "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the scalar variant of hydra.yaml.model.Node"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.yaml.model.nodeSequence",
         "signature": {
+          "typeParameters": [],
           "parameters": [
             {
-              "isLazy": false,
               "name": "arg0",
               "type": {
                 "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]},
-                      "body": {"list": {"variable": "hydra.yaml.model.Node"}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                      "body": {"list": {"variable": "hydra.yaml.model.Node"}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]}}}}},
+              "isLazy": false}],
           "result": {
-            "type": {"application": {"argument": {"variable": "hydra.yaml.model.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Node"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the bool variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.yaml.model.Node"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]}}}}},
                 "body": {
                   "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
                     "body": {
                       "inject": {
+                        "typeName": "hydra.core.Term",
                         "field": {
                           "name": "inject",
                           "term": {
                             "record": {
+                              "typeName": "hydra.core.Injection",
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Scalar"}}, "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Node"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
+                                      "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bool"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "sequence"}}}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]},
-                        "body": {"literal": {"boolean": {}}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the sequence variant of hydra.yaml.model.Node"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.yaml.model.scalarBool",
         "signature": {
+          "typeParameters": [],
           "parameters": [
             {
-              "isLazy": false,
               "name": "arg0",
               "type": {
                 "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]},
-                      "body": {"literal": {"boolean": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                      "body": {"literal": {"boolean": {}}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]}}}}},
+              "isLazy": false}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Scalar"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": {"boolean": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]}}}}},
                 "body": {
                   "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
                     "body": {
                       "inject": {
+                        "typeName": "hydra.core.Term",
                         "field": {
                           "name": "inject",
                           "term": {
                             "record": {
+                              "typeName": "hydra.core.Injection",
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Scalar"}}, "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Scalar"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
+                                      "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decimal"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "bool"}}}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}]},
-                        "body": {"literal": {"decimal": {}}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the bool variant of hydra.yaml.model.Scalar"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.yaml.model.scalarDecimal",
         "signature": {
+          "typeParameters": [],
           "parameters": [
             {
-              "isLazy": false,
               "name": "arg0",
               "type": {
                 "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
+                      "body": {"literal": {"decimal": {}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
-                            "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}]},
-                      "body": {"literal": {"decimal": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                            "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}]}}}}},
+              "isLazy": false}],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Scalar"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.yaml.model.Scalar"}}}]},
             "body": {
               "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Scalar"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
+                "parameter": "x",
                 "domain": {
                   "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]},
-                        "body": {"literal": {"float": {"float64": {}}}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
-        "name": "hydra.dsl.yaml.model.scalarFloat",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": {
-                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]},
-                      "body": {"literal": {"float": {"float64": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the int variant of hydra.yaml.model.Scalar"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Scalar"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "int"}}, "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
+                        "body": {"literal": {"decimal": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}]},
-                        "body": {"literal": {"integer": {"bigint": {}}}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
-        "name": "hydra.dsl.yaml.model.scalarInt",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": {
-                        "map": [
-                          {
-                            "key": {"variable": "description"},
-                            "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}]},
-                      "body": {"literal": {"integer": {"bigint": {}}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
+                              "value": {"literal": {"string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Scalar"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "decimal"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the null variant of hydra.yaml.model.Scalar"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.yaml.model.Scalar"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.yaml.model.scalarFloat",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"float": {"float64": {}}}},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Scalar"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": {"float": {"float64": {}}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Scalar"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "float"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.yaml.model.Scalar"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.yaml.model.scalarInt",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"integer": {"bigint": {}}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Scalar"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Represents arbitrary sized finite mathematical integers"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Scalar"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "int"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the int variant of hydra.yaml.model.Scalar"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.yaml.model.scalarNull",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Scalar"}}}}},
+        "body": {
+          "annotated": {
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Scalar"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Scalar"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "null"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
-        "name": "hydra.dsl.yaml.model.scalarNull",
-        "signature": {
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "null"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the str variant of hydra.yaml.model.Scalar"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the null variant of hydra.yaml.model.Scalar"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.yaml.model.scalarStr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"string": {}}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.yaml.model.Scalar"}}}}},
+        "body": {
+          "annotated": {
             "body": {
               "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}}},
                 "body": {
                   "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
                     "body": {
                       "inject": {
+                        "typeName": "hydra.core.Term",
                         "field": {
                           "name": "inject",
                           "term": {
                             "record": {
+                              "typeName": "hydra.core.Injection",
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.yaml.model.Scalar"}}, "typeName": "hydra.core.Name"}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.yaml.model.Scalar"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
                                     "record": {
+                                      "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "str"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "str"}}}}},
                                         {
                                           "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.typed.TypedTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]},
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.typed.TypedTerm"}}},
-                "parameter": "x"}}}},
-        "name": "hydra.dsl.yaml.model.scalarStr",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]},
-                      "body": {"literal": {"string": {}}}}},
-                  "function": {"variable": "hydra.typed.TypedTerm"}}}}],
-          "result": {
-            "type": {
-              "application": {"argument": {"variable": "hydra.yaml.model.Scalar"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}}],
-  "dependencies": [{"module": "hydra.yaml.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "metadata": {"comments": [], "description": "DSL functions for hydra.yaml.model", "seeAlso": []},
-  "name": "hydra.dsl.yaml.model"}
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the str variant of hydra.yaml.model.Scalar"}}}]}}}}}]}

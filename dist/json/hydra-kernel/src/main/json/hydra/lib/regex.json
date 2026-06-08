@@ -1,117 +1,6 @@
 {
-  "definitions": [
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "find(pat, s) returns Just(t) where t is the leftmost substring of s matching pat, or Nothing if pat does not match anywhere in s.",
-            "Regex syntax is host-defined; behavior tends to converge on the intersection of ECMA-262 and POSIX-ERE features (literal characters, character classes, alternation, anchors ^ and $, repetition with ?/*/+/{n,m}, grouping with parentheses), but extension features (lookaround, backreferences, Unicode property classes, named groups, engine-specific flags) vary widely. For portable code, restrict patterns to the common subset.",
-            "Total in the sense that no error is raised at the kernel level; behavior on an ill-formed pattern is host-defined."],
-          "description": "Find the first regex match within a string, returning the matched substring if any.",
-          "seeAlso": []},
-        "name": "hydra.lib.regex.find",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"string": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "findAll(pat, s) returns the list of all leftmost, non-overlapping matches of pat in s, in the order they appear. Returns the empty list if pat does not match anywhere.",
-            "Regex syntax is host-defined; see find for the common-subset caveat.",
-            "Total; ill-formed patterns are host-defined."],
-          "description": "Find all non-overlapping regex matches within a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.regex.findAll",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"list": {"literal": {"string": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "matches(pat, s) returns true iff pat matches somewhere in s (not anchored to the start or end; for whole-string matching, anchor the pattern explicitly with ^ and $).",
-            "Regex syntax is host-defined; see find for the common-subset caveat.",
-            "Total; ill-formed patterns are host-defined."],
-          "description": "Test whether a regex matches anywhere in a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.regex.matches",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "replace(pat, repl, s) returns s with the first leftmost match of pat replaced by repl. If pat does not match, s is returned unchanged.",
-            "Replacement-string syntax (capture-group references such as $1 or \\\\1, literal escapes) is host-defined.",
-            "Regex syntax is host-defined; see find for the common-subset caveat.",
-            "Total; ill-formed patterns and replacement strings are host-defined."],
-          "description": "Replace the first regex match in a string with a replacement string.",
-          "seeAlso": []},
-        "name": "hydra.lib.regex.replace",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping match of pat replaced by repl. If pat does not match anywhere, s is returned unchanged.",
-            "Replacement-string syntax is host-defined; see replace and find for the common-subset caveats.",
-            "Total; ill-formed patterns and replacement strings are host-defined."],
-          "description": "Replace all non-overlapping regex matches in a string with a replacement string.",
-          "seeAlso": []},
-        "name": "hydra.lib.regex.replaceAll",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost, non-overlapping match of pat.",
-            "Trailing empty splits are host-defined (some engines retain them, some discard them; for portable code, do not rely on the trailing-empty behavior).",
-            "Regex syntax is host-defined; see find for the common-subset caveat.",
-            "Total; ill-formed patterns are host-defined."],
-          "description": "Split a string by occurrences of a regex pattern.",
-          "seeAlso": []},
-        "name": "hydra.lib.regex.split",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"list": {"literal": {"string": {}}}}},
-          "typeParameters": []}}}],
+  "name": "hydra.lib.regex",
+  "metadata": {"description": "Primitives in the hydra.lib.regex module.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -135,5 +24,116 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.regex module.", "seeAlso": []},
-  "name": "hydra.lib.regex"}
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.regex.find",
+        "metadata": {
+          "description": "Find the first regex match within a string, returning the matched substring if any.",
+          "comments": [
+            "find(pat, s) returns Just(t) where t is the leftmost substring of s matching pat, or Nothing if pat does not match anywhere in s.",
+            "Regex syntax is host-defined; behavior tends to converge on the intersection of ECMA-262 and POSIX-ERE features (literal characters, character classes, alternation, anchors ^ and $, repetition with ?/*/+/{n,m}, grouping with parentheses), but extension features (lookaround, backreferences, Unicode property classes, named groups, engine-specific flags) vary widely. For portable code, restrict patterns to the common subset.",
+            "Total in the sense that no error is raised at the kernel level; behavior on an ill-formed pattern is host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"string": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.regex.findAll",
+        "metadata": {
+          "description": "Find all non-overlapping regex matches within a string.",
+          "comments": [
+            "findAll(pat, s) returns the list of all leftmost, non-overlapping matches of pat in s, in the order they appear. Returns the empty list if pat does not match anywhere.",
+            "Regex syntax is host-defined; see find for the common-subset caveat.",
+            "Total; ill-formed patterns are host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": {"string": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.regex.matches",
+        "metadata": {
+          "description": "Test whether a regex matches anywhere in a string.",
+          "comments": [
+            "matches(pat, s) returns true iff pat matches somewhere in s (not anchored to the start or end; for whole-string matching, anchor the pattern explicitly with ^ and $).",
+            "Regex syntax is host-defined; see find for the common-subset caveat.",
+            "Total; ill-formed patterns are host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.regex.replace",
+        "metadata": {
+          "description": "Replace the first regex match in a string with a replacement string.",
+          "comments": [
+            "replace(pat, repl, s) returns s with the first leftmost match of pat replaced by repl. If pat does not match, s is returned unchanged.",
+            "Replacement-string syntax (capture-group references such as $1 or \\\\1, literal escapes) is host-defined.",
+            "Regex syntax is host-defined; see find for the common-subset caveat.",
+            "Total; ill-formed patterns and replacement strings are host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg2", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.regex.replaceAll",
+        "metadata": {
+          "description": "Replace all non-overlapping regex matches in a string with a replacement string.",
+          "comments": [
+            "replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping match of pat replaced by repl. If pat does not match anywhere, s is returned unchanged.",
+            "Replacement-string syntax is host-defined; see replace and find for the common-subset caveats.",
+            "Total; ill-formed patterns and replacement strings are host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg2", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.regex.split",
+        "metadata": {
+          "description": "Split a string by occurrences of a regex pattern.",
+          "comments": [
+            "split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost, non-overlapping match of pat.",
+            "Trailing empty splits are host-defined (some engines retain them, some discard them; for portable code, do not rely on the trailing-empty behavior).",
+            "Regex syntax is host-defined; see find for the common-subset caveat.",
+            "Total; ill-formed patterns are host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": {"string": {}}}}}},
+        "isPure": true,
+        "isTotal": true}}]}

@@ -30,7 +30,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 import qualified Hydra.Haskell.Lib.Literals as Literals
 -- | Test cases for JSON parsing
 allTests :: Testing.TestGroup
@@ -447,7 +446,7 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject M.empty),
+                  Parsing.parseSuccessValue = (Model.ValueObject []),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -460,8 +459,8 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
-                    ("name", (Model.ValueString "Alice"))])),
+                  Parsing.parseSuccessValue = (Model.ValueObject [
+                    ("name", (Model.ValueString "Alice"))]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -474,9 +473,9 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
+                  Parsing.parseSuccessValue = (Model.ValueObject [
                     ("a", (Model.ValueNumber (Literals.stringToDecimal "1.0"))),
-                    ("b", (Model.ValueNumber (Literals.stringToDecimal "2.0")))])),
+                    ("b", (Model.ValueNumber (Literals.stringToDecimal "2.0")))]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -489,10 +488,10 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
+                  Parsing.parseSuccessValue = (Model.ValueObject [
                     ("active", (Model.ValueBoolean True)),
                     ("count", (Model.ValueNumber (Literals.stringToDecimal "42.0"))),
-                    ("name", (Model.ValueString "test"))])),
+                    ("name", (Model.ValueString "test"))]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -529,12 +528,12 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
+                  Parsing.parseSuccessValue = (Model.ValueObject [
                     (
                       "items",
                       (Model.ValueArray [
                         Model.ValueNumber (Literals.stringToDecimal "1.0"),
-                        (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))])),
+                        (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -548,10 +547,10 @@ allTests =
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
                   Parsing.parseSuccessValue = (Model.ValueArray [
-                    Model.ValueObject (M.fromList [
-                      ("id", (Model.ValueNumber (Literals.stringToDecimal "1.0")))]),
-                    (Model.ValueObject (M.fromList [
-                      ("id", (Model.ValueNumber (Literals.stringToDecimal "2.0")))]))]),
+                    Model.ValueObject [
+                      ("id", (Model.ValueNumber (Literals.stringToDecimal "1.0")))],
+                    (Model.ValueObject [
+                      ("id", (Model.ValueNumber (Literals.stringToDecimal "2.0")))])]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -564,9 +563,9 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
-                    ("user", (Model.ValueObject (M.fromList [
-                      ("name", (Model.ValueString "Bob"))])))])),
+                  Parsing.parseSuccessValue = (Model.ValueObject [
+                    ("user", (Model.ValueObject [
+                      ("name", (Model.ValueString "Bob"))]))]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -613,8 +612,8 @@ allTests =
                 Testing.universalTestCaseExpected = (\_ -> (\x -> case x of
                   Parsing.ParseResultSuccess v0 -> Strings.cat2 "success(" (Strings.cat2 (Writer.printJson (Parsing.parseSuccessValue v0)) (Strings.cat2 ", " (Strings.cat2 (Parsing.parseSuccessRemainder v0) ")")))
                   Parsing.ParseResultFailure _ -> Strings.cat2 "failure(" (Strings.cat2 "parse error" ")")) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                  Parsing.parseSuccessValue = (Model.ValueObject (M.fromList [
-                    ("a", (Model.ValueNumber (Literals.stringToDecimal "1.0")))])),
+                  Parsing.parseSuccessValue = (Model.ValueObject [
+                    ("a", (Model.ValueNumber (Literals.stringToDecimal "1.0")))]),
                   Parsing.parseSuccessRemainder = ""})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},

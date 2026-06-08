@@ -1,73 +1,73 @@
 {
+  "name": "hydra.protobuf.environment",
+  "metadata": {"description": "Type definitions for the Protobuf code generation environment", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.protobuf.environment.EncoderState",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "State threaded through Protobuf encoding: inference context plus field-index counter"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "context",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.typing.InferenceContext"},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Inference context used by kernel utilities (annotations, dependency analysis)"}}}]},
-                        "body": {"variable": "hydra.typing.InferenceContext"}}}},
+                              "value": {"literal": {"string": "Inference context used by kernel utilities (annotations, dependency analysis)"}}}]}}}},
                   {
                     "name": "fieldIndex",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Counter used to assign the next Protobuf field index within the current message"}}}]},
-                        "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.protobuf.environment.EncoderState"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                              "value": {"literal": {"string": "Counter used to assign the next Protobuf field index within the current message"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a structural type (Either or Pair) with its component types"}}}]},
+                    "value": {"literal": {"string": "State threaded through Protobuf encoding: inference context plus field-index counter"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.protobuf.environment.StructuralTypeRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "union": [
                   {
                     "name": "either",
                     "type": {
                       "annotated": {
+                        "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "An Either type with left and right component types"}}}]},
-                        "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}}}}},
+                              "value": {"literal": {"string": "An Either type with left and right component types"}}}]}}}},
                   {
                     "name": "pair",
                     "type": {
                       "annotated": {
+                        "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A Pair type with first and second component types"}}}]},
-                        "body": {"pair": {"first": {"variable": "hydra.core.Type"}, "second": {"variable": "hydra.core.Type"}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.protobuf.environment.StructuralTypeRef"}}],
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
-  "metadata": {"comments": [], "description": "Type definitions for the Protobuf code generation environment", "seeAlso": []},
-  "name": "hydra.protobuf.environment"}
+                              "value": {"literal": {"string": "A Pair type with first and second component types"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to a structural type (Either or Pair) with its component types"}}}]}}}}}}]}

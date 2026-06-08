@@ -1,27 +1,32 @@
 {
+  "name": "hydra.owl.syntax",
+  "metadata": {"description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.rdf.syntax"}, {"module": "hydra.xml.schema"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.owl.syntax.Ontology",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "directImports", "type": {"list": {"variable": "hydra.owl.syntax.Ontology"}}},
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "axioms", "type": {"list": {"variable": "hydra.owl.syntax.Axiom"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.Ontology"}},
+              {"name": "axioms", "type": {"list": {"variable": "hydra.owl.syntax.Axiom"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.Declaration",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "entity", "type": {"variable": "hydra.owl.syntax.Entity"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.Declaration"}},
+              {"name": "entity", "type": {"variable": "hydra.owl.syntax.Entity"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.Entity",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "annotationProperty", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
@@ -29,181 +34,176 @@
               {"name": "dataProperty", "type": {"variable": "hydra.owl.syntax.DataProperty"}},
               {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
               {"name": "namedIndividual", "type": {"variable": "hydra.owl.syntax.NamedIndividual"}},
-              {"name": "objectProperty", "type": {"variable": "hydra.owl.syntax.ObjectProperty"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.Entity"}},
+              {"name": "objectProperty", "type": {"variable": "hydra.owl.syntax.ObjectProperty"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AnnotationSubject",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-              {"name": "anonymousIndividual", "type": {"variable": "hydra.owl.syntax.AnonymousIndividual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AnnotationSubject"}},
+              {"name": "anonymousIndividual", "type": {"variable": "hydra.owl.syntax.AnonymousIndividual"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AnnotationValue",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "anonymousIndividual", "type": {"variable": "hydra.owl.syntax.AnonymousIndividual"}},
               {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-              {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AnnotationValue"}},
+              {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.Annotation",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
-              {"name": "value", "type": {"variable": "hydra.owl.syntax.AnnotationValue"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.Annotation"}},
+              {"name": "value", "type": {"variable": "hydra.owl.syntax.AnnotationValue"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AnnotationAxiom",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "annotationAssertion", "type": {"variable": "hydra.owl.syntax.AnnotationAssertion"}},
               {"name": "annotationPropertyDomain", "type": {"variable": "hydra.owl.syntax.AnnotationPropertyDomain"}},
               {"name": "annotationPropertyRange", "type": {"variable": "hydra.owl.syntax.AnnotationPropertyRange"}},
-              {"name": "subAnnotationPropertyOf", "type": {"variable": "hydra.owl.syntax.SubAnnotationPropertyOf"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AnnotationAxiom"}},
+              {"name": "subAnnotationPropertyOf", "type": {"variable": "hydra.owl.syntax.SubAnnotationPropertyOf"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AnnotationAssertion",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
               {"name": "subject", "type": {"variable": "hydra.owl.syntax.AnnotationSubject"}},
-              {"name": "value", "type": {"variable": "hydra.owl.syntax.AnnotationValue"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AnnotationAssertion"}},
+              {"name": "value", "type": {"variable": "hydra.owl.syntax.AnnotationValue"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.SubAnnotationPropertyOf",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "subProperty", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
-              {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.SubAnnotationPropertyOf"}},
+              {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AnnotationPropertyDomain",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
-              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AnnotationPropertyDomain"}},
+              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AnnotationPropertyRange",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
-              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AnnotationPropertyRange"}},
+              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.Class",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {"wrap": {"unit": {}}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Classes"}}}]},
-              "body": {"wrap": {"unit": {}}}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.Class"}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Classes"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.Datatype",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatypes"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "xmlSchema",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.xml.schema.Datatype"},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]},
-                        "body": {"variable": "hydra.xml.schema.Datatype"}}}},
-                  {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.Datatype"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                                  "string": "Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]}}}},
+                  {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Properties"}}}]},
-              "body": {"wrap": {"unit": {}}}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectProperty"}},
-    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.owl.syntax.DataProperty"}},
-    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.owl.syntax.AnnotationProperty"}},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatypes"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectProperty",
         "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"unit": {}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Properties"}}}]}}}}}},
+    {"type": {"name": "hydra.owl.syntax.DataProperty", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+    {"type": {"name": "hydra.owl.syntax.AnnotationProperty", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.Individual",
+        "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "named", "type": {"variable": "hydra.owl.syntax.NamedIndividual"}},
-              {"name": "anonymous", "type": {"variable": "hydra.owl.syntax.AnonymousIndividual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.Individual"}},
-    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.owl.syntax.NamedIndividual"}},
-    {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.owl.syntax.AnonymousIndividual"}},
+              {"name": "anonymous", "type": {"variable": "hydra.owl.syntax.AnonymousIndividual"}}]}}}},
+    {"type": {"name": "hydra.owl.syntax.NamedIndividual", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+    {"type": {"name": "hydra.owl.syntax.AnonymousIndividual", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectPropertyExpression",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "object", "type": {"variable": "hydra.owl.syntax.ObjectProperty"}},
-              {"name": "inverseObject", "type": {"variable": "hydra.owl.syntax.InverseObjectProperty"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectPropertyExpression"}},
+              {"name": "inverseObject", "type": {"variable": "hydra.owl.syntax.InverseObjectProperty"}}]}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"variable": "hydra.owl.syntax.ObjectProperty"}}, "variables": []},
-        "name": "hydra.owl.syntax.InverseObjectProperty"}},
+        "name": "hydra.owl.syntax.InverseObjectProperty",
+        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.owl.syntax.ObjectProperty"}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"variable": "hydra.owl.syntax.DataProperty"}}, "variables": []},
-        "name": "hydra.owl.syntax.DataPropertyExpression"}},
+        "name": "hydra.owl.syntax.DataPropertyExpression",
+        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.owl.syntax.DataProperty"}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataRange",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Data_Ranges"}}}]},
               "body": {
                 "union": [
                   {"name": "dataComplementOf", "type": {"variable": "hydra.owl.syntax.DataComplementOf"}},
@@ -211,109 +211,114 @@
                   {"name": "dataOneOf", "type": {"variable": "hydra.owl.syntax.DataOneOf"}},
                   {"name": "dataUnionOf", "type": {"variable": "hydra.owl.syntax.DataUnionOf"}},
                   {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
-                  {"name": "datatypeRestriction", "type": {"variable": "hydra.owl.syntax.DatatypeRestriction"}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataRange"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "datatypeRestriction", "type": {"variable": "hydra.owl.syntax.DatatypeRestriction"}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges"}}}]},
-              "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataIntersectionOf"}},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Data_Ranges"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataIntersectionOf",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges"}}}]},
-              "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataUnionOf"}},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataUnionOf",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges"}}}]},
-              "body": {"wrap": {"variable": "hydra.owl.syntax.DataRange"}}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataComplementOf"}},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataComplementOf",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {"wrap": {"variable": "hydra.owl.syntax.DataRange"}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals"}}}]},
-              "body": {"wrap": {"list": {"variable": "hydra.rdf.syntax.Literal"}}}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataOneOf"}},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataOneOf",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.rdf.syntax.Literal"}}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions"}}}]},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.DatatypeRestriction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
-                  {"name": "constraints", "type": {"list": {"variable": "hydra.owl.syntax.DatatypeRestriction_Constraint"}}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DatatypeRestriction"}},
+                  {"name": "constraints", "type": {"list": {"variable": "hydra.owl.syntax.DatatypeRestriction_Constraint"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DatatypeRestriction_Constraint",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "constrainingFacet", "type": {"variable": "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet"}},
-              {"name": "restrictionValue", "type": {"variable": "hydra.rdf.syntax.Literal"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DatatypeRestriction_Constraint"}},
+              {"name": "restrictionValue", "type": {"variable": "hydra.rdf.syntax.Literal"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {
                 "name": "xmlSchema",
                 "type": {
                   "annotated": {
+                    "body": {"variable": "hydra.xml.schema.ConstrainingFacet"},
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
                           "value": {
                             "literal": {
-                              "string": "Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]},
-                    "body": {"variable": "hydra.xml.schema.ConstrainingFacet"}}}},
-              {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet"}},
+                              "string": "Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]}}}},
+              {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ClassExpression",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "class", "type": {"variable": "hydra.owl.syntax.Class"}},
@@ -332,172 +337,169 @@
               {"name": "objectMinCardinality", "type": {"variable": "hydra.owl.syntax.ObjectMinCardinality"}},
               {"name": "objectOneOf", "type": {"variable": "hydra.owl.syntax.ObjectOneOf"}},
               {"name": "objectSomeValuesFrom", "type": {"variable": "hydra.owl.syntax.ObjectSomeValuesFrom"}},
-              {"name": "objectUnionOf", "type": {"variable": "hydra.owl.syntax.ObjectUnionOf"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ClassExpression"}},
+              {"name": "objectUnionOf", "type": {"variable": "hydra.owl.syntax.ObjectUnionOf"}}]}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}, "variables": []},
-        "name": "hydra.owl.syntax.ObjectIntersectionOf"}},
+        "name": "hydra.owl.syntax.ObjectIntersectionOf",
+        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}, "variables": []},
-        "name": "hydra.owl.syntax.ObjectUnionOf"}},
+        "name": "hydra.owl.syntax.ObjectUnionOf",
+        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"variable": "hydra.owl.syntax.ClassExpression"}}, "variables": []},
-        "name": "hydra.owl.syntax.ObjectComplementOf"}},
+        "name": "hydra.owl.syntax.ObjectComplementOf",
+        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.owl.syntax.ClassExpression"}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"list": {"variable": "hydra.owl.syntax.Individual"}}}, "variables": []},
-        "name": "hydra.owl.syntax.ObjectOneOf"}},
+        "name": "hydra.owl.syntax.ObjectOneOf",
+        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.Individual"}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectSomeValuesFrom",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-              {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectSomeValuesFrom"}},
+              {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectAllValuesFrom",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-              {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectAllValuesFrom"}},
+              {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectHasValue",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-              {"name": "individual", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectHasValue"}},
+              {"name": "individual", "type": {"variable": "hydra.owl.syntax.Individual"}}]}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}, "variables": []},
-        "name": "hydra.owl.syntax.ObjectHasSelf"}},
+        "name": "hydra.owl.syntax.ObjectHasSelf",
+        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectMinCardinality",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality"}}}]},
               "body": {
                 "record": [
                   {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-                  {"name": "class", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectMinCardinality"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "class", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality"}}}]},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.ObjectMaxCardinality",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-                  {"name": "class", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectMaxCardinality"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "class", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality"}}}]},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.ObjectExactCardinality",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-                  {"name": "class", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectExactCardinality"}},
+                  {"name": "class", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataSomeValuesFrom",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "property", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}},
-              {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataSomeValuesFrom"}},
+              {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataAllValuesFrom",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "property", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}},
-              {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataAllValuesFrom"}},
+              {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataHasValue",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "value", "type": {"variable": "hydra.rdf.syntax.Literal"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataHasValue"}},
+              {"name": "value", "type": {"variable": "hydra.rdf.syntax.Literal"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataMinCardinality",
         "body": {
-          "body": {
-            "record": [
-              {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "range", "type": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataMinCardinality"}},
-    {
-      "type": {
-        "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "range", "type": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataMaxCardinality"}},
+              {"name": "range", "type": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataMaxCardinality",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "range", "type": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataExactCardinality"}},
+              {"name": "range", "type": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataExactCardinality",
         "body": {
+          "variables": [],
+          "body": {
+            "record": [
+              {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
+              {"name": "range", "type": {"list": {"variable": "hydra.owl.syntax.DataRange"}}}]}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.Axiom",
+        "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Axioms"}}}]},
               "body": {
                 "union": [
                   {"name": "annotationAxiom", "type": {"variable": "hydra.owl.syntax.AnnotationAxiom"}},
@@ -507,68 +509,71 @@
                   {"name": "datatypeDefinition", "type": {"variable": "hydra.owl.syntax.DatatypeDefinition"}},
                   {"name": "declaration", "type": {"variable": "hydra.owl.syntax.Declaration"}},
                   {"name": "hasKey", "type": {"variable": "hydra.owl.syntax.HasKey"}},
-                  {"name": "objectPropertyAxiom", "type": {"variable": "hydra.owl.syntax.ObjectPropertyAxiom"}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.Axiom"}},
+                  {"name": "objectPropertyAxiom", "type": {"variable": "hydra.owl.syntax.ObjectPropertyAxiom"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Axioms"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ClassAxiom",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "disjointClasses", "type": {"variable": "hydra.owl.syntax.DisjointClasses"}},
               {"name": "disjointUnion", "type": {"variable": "hydra.owl.syntax.DisjointUnion"}},
               {"name": "equivalentClasses", "type": {"variable": "hydra.owl.syntax.EquivalentClasses"}},
-              {"name": "subClassOf", "type": {"variable": "hydra.owl.syntax.SubClassOf"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ClassAxiom"}},
+              {"name": "subClassOf", "type": {"variable": "hydra.owl.syntax.SubClassOf"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.SubClassOf",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "subClass", "type": {"variable": "hydra.owl.syntax.ClassExpression"}},
-              {"name": "superClass", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.SubClassOf"}},
+              {"name": "superClass", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.EquivalentClasses",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.EquivalentClasses"}},
+              {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DisjointClasses",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DisjointClasses"}},
+              {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DisjointUnion",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
                   {"name": "class", "type": {"variable": "hydra.owl.syntax.Class"}},
-                  {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.DisjointUnion"}},
+                  {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectPropertyAxiom",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "asymmetricObjectProperty", "type": {"variable": "hydra.owl.syntax.AsymmetricObjectProperty"}},
@@ -583,147 +588,147 @@
               {"name": "reflexiveObjectProperty", "type": {"variable": "hydra.owl.syntax.ReflexiveObjectProperty"}},
               {"name": "subObjectPropertyOf", "type": {"variable": "hydra.owl.syntax.SubObjectPropertyOf"}},
               {"name": "symmetricObjectProperty", "type": {"variable": "hydra.owl.syntax.SymmetricObjectProperty"}},
-              {"name": "transitiveObjectProperty", "type": {"variable": "hydra.owl.syntax.TransitiveObjectProperty"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectPropertyAxiom"}},
+              {"name": "transitiveObjectProperty", "type": {"variable": "hydra.owl.syntax.TransitiveObjectProperty"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.SubObjectPropertyOf",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "subProperty", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}},
-              {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.SubObjectPropertyOf"}},
+              {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.EquivalentObjectProperties",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.EquivalentObjectProperties"}},
+              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DisjointObjectProperties",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DisjointObjectProperties"}},
+              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectPropertyDomain",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-                  {"name": "domain", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectPropertyDomain"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                  {"name": "domain", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range"}}}]},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.ObjectPropertyRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-                  {"name": "range", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectPropertyRange"}},
+                  {"name": "range", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.InverseObjectProperties",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property1", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
-              {"name": "property2", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.InverseObjectProperties"}},
+              {"name": "property2", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.FunctionalObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.FunctionalObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.InverseFunctionalObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.InverseFunctionalObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ReflexiveObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ReflexiveObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.IrreflexiveObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.IrreflexiveObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.SymmetricObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.SymmetricObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.AsymmetricObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.AsymmetricObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.TransitiveObjectProperty",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.TransitiveObjectProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataPropertyAxiom",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "dataPropertyAxiom", "type": {"variable": "hydra.owl.syntax.DataPropertyAxiom"}},
@@ -731,94 +736,94 @@
               {"name": "disjointDataProperties", "type": {"variable": "hydra.owl.syntax.DisjointDataProperties"}},
               {"name": "equivalentDataProperties", "type": {"variable": "hydra.owl.syntax.EquivalentDataProperties"}},
               {"name": "functionalDataProperty", "type": {"variable": "hydra.owl.syntax.FunctionalDataProperty"}},
-              {"name": "subDataPropertyOf", "type": {"variable": "hydra.owl.syntax.SubDataPropertyOf"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataPropertyAxiom"}},
+              {"name": "subDataPropertyOf", "type": {"variable": "hydra.owl.syntax.SubDataPropertyOf"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.SubDataPropertyOf",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "subProperty", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.SubDataPropertyOf"}},
+              {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.EquivalentDataProperties",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.EquivalentDataProperties"}},
+              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DisjointDataProperties",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DisjointDataProperties"}},
+              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataPropertyDomain",
         "body": {
-          "body": {
-            "record": [
-              {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "domain", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataPropertyDomain"}},
-    {
-      "type": {
-        "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
-              {"name": "range", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataPropertyRange"}},
+              {"name": "domain", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataPropertyRange",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.FunctionalDataProperty"}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
+              {"name": "range", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.FunctionalDataProperty",
         "body": {
+          "variables": [],
+          "body": {
+            "record": [
+              {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
+              {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}]}}}},
+    {
+      "type": {
+        "name": "hydra.owl.syntax.DatatypeDefinition",
+        "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
-              {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DatatypeDefinition"}},
+              {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.HasKey",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Keys"}}}]},
               "body": {
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
                   {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}},
                   {"name": "objectProperties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}},
-                  {"name": "dataProperties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]}}},
-          "variables": []},
-        "name": "hydra.owl.syntax.HasKey"}},
+                  {"name": "dataProperties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/owl2-syntax/#Keys"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.Assertion",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "classAssertion", "type": {"variable": "hydra.owl.syntax.ClassAssertion"}},
@@ -827,81 +832,76 @@
               {"name": "objectPropertyAssertion", "type": {"variable": "hydra.owl.syntax.ObjectPropertyAssertion"}},
               {"name": "negativeDataPropertyAssertion", "type": {"variable": "hydra.owl.syntax.NegativeDataPropertyAssertion"}},
               {"name": "negativeObjectPropertyAssertion", "type": {"variable": "hydra.owl.syntax.NegativeObjectPropertyAssertion"}},
-              {"name": "sameIndividual", "type": {"variable": "hydra.owl.syntax.SameIndividual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.Assertion"}},
+              {"name": "sameIndividual", "type": {"variable": "hydra.owl.syntax.SameIndividual"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.SameIndividual",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "individuals", "type": {"list": {"variable": "hydra.owl.syntax.Individual"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.SameIndividual"}},
+              {"name": "individuals", "type": {"list": {"variable": "hydra.owl.syntax.Individual"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DifferentIndividuals",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "individuals", "type": {"list": {"variable": "hydra.owl.syntax.Individual"}}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DifferentIndividuals"}},
+              {"name": "individuals", "type": {"list": {"variable": "hydra.owl.syntax.Individual"}}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ClassAssertion",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}},
-              {"name": "individual", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ClassAssertion"}},
+              {"name": "individual", "type": {"variable": "hydra.owl.syntax.Individual"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.ObjectPropertyAssertion",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
               {"name": "source", "type": {"variable": "hydra.owl.syntax.Individual"}},
-              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.ObjectPropertyAssertion"}},
+              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.NegativeObjectPropertyAssertion",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
               {"name": "source", "type": {"variable": "hydra.owl.syntax.Individual"}},
-              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.NegativeObjectPropertyAssertion"}},
+              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.DataPropertyAssertion",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
               {"name": "source", "type": {"variable": "hydra.owl.syntax.Individual"}},
-              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.DataPropertyAssertion"}},
+              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]}}}},
     {
       "type": {
+        "name": "hydra.owl.syntax.NegativeDataPropertyAssertion",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
               {"name": "property", "type": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
               {"name": "source", "type": {"variable": "hydra.owl.syntax.Individual"}},
-              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]},
-          "variables": []},
-        "name": "hydra.owl.syntax.NegativeDataPropertyAssertion"}}],
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.rdf.syntax"}, {"module": "hydra.xml.schema"}],
-  "metadata": {"comments": [], "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax", "seeAlso": []},
-  "name": "hydra.owl.syntax"}
+              {"name": "target", "type": {"variable": "hydra.owl.syntax.Individual"}}]}}}}]}

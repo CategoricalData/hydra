@@ -1,79 +1,6 @@
 {
-  "definitions": [
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map over both elements of a pair, defined in terms of first and second."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "pair": {
-                            "first": {
-                              "application": {
-                                "argument": {"application": {"argument": {"variable": "p"}, "function": {"variable": "hydra.lib.pairs.first"}}},
-                                "function": {"variable": "f"}}},
-                            "second": {
-                              "application": {
-                                "argument": {"application": {"argument": {"variable": "p"}, "function": {"variable": "hydra.lib.pairs.second"}}},
-                                "function": {"variable": "g"}}}}},
-                        "parameter": "p"}},
-                    "parameter": "g"}},
-                "parameter": "f"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
-            "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
-          "description": "Map over both elements of a pair.",
-          "seeAlso": []},
-        "name": "hydra.lib.pairs.bimap",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "c"}, "domain": {"variable": "a"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"function": {"codomain": {"variable": "d"}, "domain": {"variable": "b"}}}},
-            {"isLazy": false, "name": "arg2", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
-          "result": {"type": {"pair": {"first": {"variable": "c"}, "second": {"variable": "d"}}}},
-          "typeParameters": [
-            {"constraints": [], "name": "a"},
-            {"constraints": [], "name": "b"},
-            {"constraints": [], "name": "c"},
-            {"constraints": [], "name": "d"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["first(p) returns the first component of the pair p.", "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
-          "description": "Get the first element of a pair.",
-          "seeAlso": []},
-        "name": "hydra.lib.pairs.first",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
-          "result": {"type": {"variable": "a"}},
-          "typeParameters": [{"constraints": [], "name": "a"}, {"constraints": [], "name": "b"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["second(p) returns the second component of the pair p.", "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
-          "description": "Get the second element of a pair.",
-          "seeAlso": []},
-        "name": "hydra.lib.pairs.second",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}],
-          "result": {"type": {"variable": "b"}},
-          "typeParameters": [{"constraints": [], "name": "a"}, {"constraints": [], "name": "b"}]}}}],
+  "name": "hydra.lib.pairs",
+  "metadata": {"description": "Primitives in the hydra.lib.pairs module.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -97,5 +24,78 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.pairs module.", "seeAlso": []},
-  "name": "hydra.lib.pairs"}
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.pairs.bimap",
+        "metadata": {
+          "description": "Map over both elements of a pair.",
+          "comments": [
+            "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
+            "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [
+            {"name": "a", "constraints": []},
+            {"name": "b", "constraints": []},
+            {"name": "c", "constraints": []},
+            {"name": "d", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "c"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"function": {"domain": {"variable": "b"}, "codomain": {"variable": "d"}}}, "isLazy": false},
+            {"name": "arg2", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}, "isLazy": false}],
+          "result": {"type": {"pair": {"first": {"variable": "c"}, "second": {"variable": "d"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "f",
+                "body": {
+                  "lambda": {
+                    "parameter": "g",
+                    "body": {
+                      "lambda": {
+                        "parameter": "p",
+                        "body": {
+                          "pair": {
+                            "first": {
+                              "application": {
+                                "function": {"variable": "f"},
+                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
+                            "second": {
+                              "application": {
+                                "function": {"variable": "g"},
+                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map over both elements of a pair, defined in terms of first and second."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.pairs.first",
+        "metadata": {
+          "description": "Get the first element of a pair.",
+          "comments": ["first(p) returns the first component of the pair p.", "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}, "isLazy": false}],
+          "result": {"type": {"variable": "a"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.pairs.second",
+        "metadata": {
+          "description": "Get the second element of a pair.",
+          "comments": ["second(p) returns the second component of the pair p.", "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}, "isLazy": false}],
+          "result": {"type": {"variable": "b"}}},
+        "isPure": true,
+        "isTotal": true}}]}

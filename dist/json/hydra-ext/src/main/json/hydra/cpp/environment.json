@@ -1,33 +1,33 @@
 {
+  "name": "hydra.cpp.environment",
+  "metadata": {"description": "Type definitions for C++ code generation environment", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.cpp.environment.CppEnvironment",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for C++ code generation"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "namespaces",
                     "type": {
                       "annotated": {
+                        "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]},
-                        "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.ModuleNames"}}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}},
                   {
                     "name": "boundTypeVariables",
                     "type": {
                       "annotated": {
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]},
                         "body": {
                           "pair": {
                             "first": {"list": {"variable": "hydra.core.Name"}},
-                            "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.cpp.environment.CppEnvironment"}}],
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
-  "metadata": {"comments": [], "description": "Type definitions for C++ code generation environment", "seeAlso": []},
-  "name": "hydra.cpp.environment"}
+                            "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for C++ code generation"}}}]}}}}}}]}

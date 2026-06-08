@@ -8,7 +8,6 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 -- | DSL injection for the array variant of hydra.json.model.Value
 valueArray :: Typed.TypedTerm [Model.Value] -> Typed.TypedTerm Model.Value
 valueArray x =
@@ -42,7 +41,7 @@ valueNumber x =
         Core.fieldName = (Core.Name "number"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the object variant of hydra.json.model.Value
-valueObject :: Typed.TypedTerm (M.Map String Model.Value) -> Typed.TypedTerm Model.Value
+valueObject :: Typed.TypedTerm [(String, Model.Value)] -> Typed.TypedTerm Model.Value
 valueObject x =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),

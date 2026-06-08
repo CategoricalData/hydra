@@ -1,827 +1,6 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a list of descriptions to an RDF graph"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "ds"}, "function": {"variable": "hydra.rdf.utils.triplesOf"}}},
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
-                    "typeName": "hydra.rdf.syntax.Graph"}},
-                "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
-                "parameter": "ds"}}}},
-        "name": "hydra.rdf.utils.descriptionsToGraph",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create an empty description with a given node"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "record": {
-                    "fields": [
-                      {"name": "subject", "term": {"variable": "node"}},
-                      {"name": "graph", "term": {"variable": "hydra.rdf.utils.emptyRdfGraph"}}],
-                    "typeName": "hydra.rdf.syntax.Description"}},
-                "domain": {"variable": "hydra.rdf.syntax.Node"},
-                "parameter": "node"}}}},
-        "name": "hydra.rdf.utils.emptyDescription",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rdf.syntax.Node"}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Description"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty LangStrings value"}}}]},
-            "body": {
-              "wrap": {
-                "body": {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
-                    "type": {"literal": {"string": {}}}}},
-                "typeName": "hydra.rdf.syntax.LangStrings"}}}},
-        "name": "hydra.rdf.utils.emptyLangStrings",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.rdf.syntax.LangStrings"}}, "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty RDF graph"}}}]},
-            "body": {
-              "wrap": {
-                "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
-                "typeName": "hydra.rdf.syntax.Graph"}}}},
-        "name": "hydra.rdf.utils.emptyRdfGraph",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}}, "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra literal as an RDF literal"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "lit"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "lexicalForm",
-                                        "term": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.literals.binaryToString"}}}},
-                                      {
-                                        "name": "datatypeIri",
-                                        "term": {
-                                          "application": {"argument": {"literal": {"string": "base64Binary"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                      {
-                                        "name": "languageTag",
-                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                "domain": {"literal": {"binary": {}}},
-                                "parameter": "s"}},
-                            "name": "binary"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "lexicalForm",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"literal": {"string": "false"}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "true"}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "b"},
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}},
-                                      {
-                                        "name": "datatypeIri",
-                                        "term": {
-                                          "application": {"argument": {"literal": {"string": "boolean"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                      {
-                                        "name": "languageTag",
-                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                "domain": {"literal": {"boolean": {}}},
-                                "parameter": "b"}},
-                            "name": "boolean"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "f"},
-                                    "function": {
-                                      "cases": {
-                                        "cases": [
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showFloat32"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "float"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"float": {"float32": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "float32"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "double"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"float": {"float64": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "float64"}],
-                                        "typeName": "hydra.core.FloatValue"}}}},
-                                "domain": {"variable": "hydra.core.FloatValue"},
-                                "parameter": "f"}},
-                            "name": "float"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "i"},
-                                    "function": {
-                                      "cases": {
-                                        "cases": [
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigint"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "integer"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"bigint": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "bigint"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showInt8"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "byte"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"int8": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "int8"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showInt16"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "short"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"int16": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "int16"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showInt32"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "int"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"int32": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "int32"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showInt64"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "long"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"int64": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "int64"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showUint8"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "unsignedByte"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"uint8": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "uint8"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showUint16"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "unsignedShort"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"uint16": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "uint16"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showUint32"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "unsignedInt"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"uint32": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "uint32"},
-                                          {
-                                            "handler": {
-                                              "lambda": {
-                                                "body": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "lexicalForm",
-                                                        "term": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showUint64"}}}},
-                                                      {
-                                                        "name": "datatypeIri",
-                                                        "term": {
-                                                          "application": {"argument": {"literal": {"string": "unsignedLong"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                                      {
-                                                        "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                                "domain": {"literal": {"integer": {"uint64": {}}}},
-                                                "parameter": "v"}},
-                                            "name": "uint64"}],
-                                        "typeName": "hydra.core.IntegerValue"}}}},
-                                "domain": {"variable": "hydra.core.IntegerValue"},
-                                "parameter": "i"}},
-                            "name": "integer"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {
-                                  "record": {
-                                    "fields": [
-                                      {"name": "lexicalForm", "term": {"variable": "s"}},
-                                      {
-                                        "name": "datatypeIri",
-                                        "term": {
-                                          "application": {"argument": {"literal": {"string": "string"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
-                                      {
-                                        "name": "languageTag",
-                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
-                                    "typeName": "hydra.rdf.syntax.Literal"}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "s"}},
-                            "name": "string"}],
-                        "typeName": "hydra.core.Literal"}}}},
-                "domain": {"variable": "hydra.core.Literal"},
-                "parameter": "lit"}}}},
-        "name": "hydra.rdf.utils.encodeLiteral",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Literal"}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Literal"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Create triples from a subject, predicate, and list of object nodes"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "objs"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "record": {
-                                        "fields": [
-                                          {"name": "subject", "term": {"variable": "subj"}},
-                                          {"name": "predicate", "term": {"variable": "pred"}},
-                                          {"name": "object", "term": {"variable": "obj"}}],
-                                        "typeName": "hydra.rdf.syntax.Triple"}},
-                                    "domain": {"variable": "hydra.rdf.syntax.Node"},
-                                    "parameter": "obj"}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
-                                    "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}},
-                        "domain": {"list": {"variable": "hydra.rdf.syntax.Node"}},
-                        "parameter": "objs"}},
-                    "domain": {"variable": "hydra.rdf.syntax.Iri"},
-                    "parameter": "pred"}},
-                "domain": {"variable": "hydra.rdf.syntax.Resource"},
-                "parameter": "subj"}}}},
-        "name": "hydra.rdf.utils.forObjects",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "hydra.rdf.syntax.Node"}}}],
-          "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Construct an IRI from a namespace and local name"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "wrap": {
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "local"},
-                            "function": {"application": {"argument": {"variable": "ns"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                        "typeName": "hydra.rdf.syntax.Iri"}},
-                    "domain": {"literal": {"string": {}}},
-                    "parameter": "local"}},
-                "domain": {"literal": {"string": {}}},
-                "parameter": "ns"}}}},
-        "name": "hydra.rdf.utils.iri",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a key IRI from a local name"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "local"},
-                    "function": {"application": {"argument": {"literal": {"string": "urn:key:"}}, "function": {"variable": "hydra.rdf.utils.iri"}}}}},
-                "domain": {"literal": {"string": {}}},
-                "parameter": "local"}}}},
-        "name": "hydra.rdf.utils.keyIri",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Merge a list of RDF graphs into a single graph"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "graphs"},
-                            "function": {
-                              "application": {
-                                "argument": {"unwrap": "hydra.rdf.syntax.Graph"},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Graph"}}},
-                                    "type": {"set": {"variable": "hydra.rdf.syntax.Triple"}}}}}}}},
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.unions"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
-                    "typeName": "hydra.rdf.syntax.Graph"}},
-                "domain": {"list": {"variable": "hydra.rdf.syntax.Graph"}},
-                "parameter": "graphs"}}}},
-        "name": "hydra.rdf.utils.mergeGraphs",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Graph"}}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "name"}, "function": {"unwrap": "hydra.core.Name"}}},
-                        "function": {"application": {"argument": {"literal": {"string": "urn:"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                    "typeName": "hydra.rdf.syntax.Iri"}},
-                "domain": {"variable": "hydra.core.Name"},
-                "parameter": "name"}}}},
-        "name": "hydra.rdf.utils.nameToIri",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Generate the next blank node and an incremented counter"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {
-                              "inject": {
-                                "field": {
-                                  "name": "bnode",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "application": {
-                                          "argument": {"application": {"argument": {"variable": "counter"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                          "function": {"application": {"argument": {"literal": {"string": "b"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                      "typeName": "hydra.rdf.syntax.BlankNode"}}},
-                                "typeName": "hydra.rdf.syntax.Resource"}},
-                            "second": {
-                              "application": {
-                                "argument": {"literal": {"integer": {"int32": 1}}},
-                                "function": {"application": {"argument": {"variable": "counter"}, "function": {"variable": "hydra.lib.math.add"}}}}}}},
-                        "type": {"variable": "hydra.rdf.syntax.Resource"}}},
-                    "type": {"literal": {"integer": {"int32": {}}}}}},
-                "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "counter"}}}},
-        "name": "hydra.rdf.utils.nextBlankNode",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {
-            "type": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Construct a property IRI from a record name and field name"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "qualName",
-                            "term": {"application": {"argument": {"variable": "rname"}, "function": {"variable": "hydra.names.qualifyName"}}},
-                            "typeScheme": {"body": {"variable": "hydra.util.QualifiedName"}, "variables": []}},
-                          {
-                            "name": "gname",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "qualName"},
-                                "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
-                            "typeScheme": {"body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
-                          {
-                            "name": "local_",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "qualName"},
-                                "function": {"project": {"fieldName": "local", "typeName": "hydra.util.QualifiedName"}}}},
-                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                        "body": {
-                          "wrap": {
-                            "body": {
-                              "application": {
-                                "argument": {
-                                  "list": [
-                                    {"literal": {"string": "urn:"}},
-                                    {
-                                      "application": {
-                                        "argument": {"unwrap": "hydra.packaging.ModuleName"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"literal": {"string": ""}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "gname"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}}}},
-                                    {"literal": {"string": "#"}},
-                                    {"application": {"argument": {"variable": "local_"}, "function": {"variable": "hydra.formatting.decapitalize"}}},
-                                    {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "fname"}, "function": {"unwrap": "hydra.core.Name"}}},
-                                        "function": {"variable": "hydra.formatting.capitalize"}}}]},
-                                "function": {"variable": "hydra.lib.strings.cat"}}},
-                            "typeName": "hydra.rdf.syntax.Iri"}}}},
-                    "domain": {"variable": "hydra.core.Name"},
-                    "parameter": "fname"}},
-                "domain": {"variable": "hydra.core.Name"},
-                "parameter": "rname"}}}},
-        "name": "hydra.rdf.utils.propertyIri",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Name"}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an RDF namespace IRI"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "local"},
-                    "function": {
-                      "application": {
-                        "argument": {"literal": {"string": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}},
-                        "function": {"variable": "hydra.rdf.utils.iri"}}}}},
-                "domain": {"literal": {"string": {}}},
-                "parameter": "local"}}}},
-        "name": "hydra.rdf.utils.rdfIri",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a resource to a node"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "r"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"inject": {"field": {"name": "iri", "term": {"variable": "i"}}, "typeName": "hydra.rdf.syntax.Node"}},
-                                "domain": {"variable": "hydra.rdf.syntax.Iri"},
-                                "parameter": "i"}},
-                            "name": "iri"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"inject": {"field": {"name": "bnode", "term": {"variable": "b"}}, "typeName": "hydra.rdf.syntax.Node"}},
-                                "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
-                                "parameter": "b"}},
-                            "name": "bnode"}],
-                        "typeName": "hydra.rdf.syntax.Resource"}}}},
-                "domain": {"variable": "hydra.rdf.syntax.Resource"},
-                "parameter": "r"}}}},
-        "name": "hydra.rdf.utils.resourceToNode",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Node"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract subjects from a list of descriptions"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "descs"},
-                    "function": {
-                      "application": {
-                        "argument": {"project": {"fieldName": "subject", "typeName": "hydra.rdf.syntax.Description"}},
-                        "function": {
-                          "typeApplication": {
-                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
-                            "type": {"variable": "hydra.rdf.syntax.Node"}}}}}}},
-                "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
-                "parameter": "descs"}}}},
-        "name": "hydra.rdf.utils.subjectsOf",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}],
-          "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Node"}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Extract all triples from a list of descriptions"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "descs"},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "d"},
-                                            "function": {"project": {"fieldName": "graph", "typeName": "hydra.rdf.syntax.Description"}}}},
-                                        "function": {"unwrap": "hydra.rdf.syntax.Graph"}}},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
-                                "domain": {"variable": "hydra.rdf.syntax.Description"},
-                                "parameter": "d"}},
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
-                                "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}}}}}},
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
-                "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
-                "parameter": "descs"}}}},
-        "name": "hydra.rdf.utils.triplesOf",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}],
-          "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an XML Schema datatype IRI"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "local"},
-                    "function": {
-                      "application": {
-                        "argument": {"literal": {"string": "http://www.w3.org/2001/XMLSchema#"}},
-                        "function": {"variable": "hydra.rdf.utils.iri"}}}}},
-                "domain": {"literal": {"string": {}}},
-                "parameter": "local"}}}},
-        "name": "hydra.rdf.utils.xmlSchemaDatatypeIri",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
-          "typeParameters": []}}}],
+  "name": "hydra.rdf.utils",
+  "metadata": {"description": "Utility functions for working with RDF graphs and descriptions", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.names"},
@@ -848,5 +27,826 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Utility functions for working with RDF graphs and descriptions", "seeAlso": []},
-  "name": "hydra.rdf.utils"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.rdf.utils.descriptionsToGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ds",
+                "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.rdf.syntax.Graph",
+                    "body": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.rdf.utils.triplesOf"}, "argument": {"variable": "ds"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a list of descriptions to an RDF graph"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.emptyDescription",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Node"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Description"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "node",
+                "domain": {"variable": "hydra.rdf.syntax.Node"},
+                "body": {
+                  "record": {
+                    "typeName": "hydra.rdf.syntax.Description",
+                    "fields": [
+                      {"name": "subject", "term": {"variable": "node"}},
+                      {"name": "graph", "term": {"variable": "hydra.rdf.utils.emptyRdfGraph"}}]}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Create an empty description with a given node"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.emptyLangStrings",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.rdf.syntax.LangStrings"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.rdf.syntax.LangStrings",
+                "body": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                    "type": {"literal": {"string": {}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty LangStrings value"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.emptyRdfGraph",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.rdf.syntax.Graph",
+                "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty RDF graph"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.encodeLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Literal"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Literal"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "lit",
+                "domain": {"variable": "hydra.core.Literal"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.Literal",
+                        "cases": [
+                          {
+                            "name": "binary",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "s",
+                                "domain": {"literal": {"binary": {}}},
+                                "body": {
+                                  "record": {
+                                    "typeName": "hydra.rdf.syntax.Literal",
+                                    "fields": [
+                                      {
+                                        "name": "lexicalForm",
+                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "s"}}}},
+                                      {
+                                        "name": "datatypeIri",
+                                        "term": {
+                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "base64Binary"}}}}},
+                                      {
+                                        "name": "languageTag",
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                          {
+                            "name": "boolean",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "b",
+                                "domain": {"literal": {"boolean": {}}},
+                                "body": {
+                                  "record": {
+                                    "typeName": "hydra.rdf.syntax.Literal",
+                                    "fields": [
+                                      {
+                                        "name": "lexicalForm",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                    "argument": {"variable": "b"}}},
+                                                "argument": {"literal": {"string": "true"}}}},
+                                            "argument": {"literal": {"string": "false"}}}}},
+                                      {
+                                        "name": "datatypeIri",
+                                        "term": {
+                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "boolean"}}}}},
+                                      {
+                                        "name": "languageTag",
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                          {
+                            "name": "float",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "f",
+                                "domain": {"variable": "hydra.core.FloatValue"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.core.FloatValue",
+                                        "cases": [
+                                          {
+                                            "name": "float32",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"float": {"float32": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showFloat32"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "float"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "float64",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"float": {"float64": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showFloat64"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "double"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}}]}},
+                                    "argument": {"variable": "f"}}}}}},
+                          {
+                            "name": "integer",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"variable": "hydra.core.IntegerValue"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "cases": [
+                                          {
+                                            "name": "bigint",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"bigint": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "integer"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "int8",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"int8": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt8"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "byte"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "int16",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"int16": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt16"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "short"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "int32",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "int"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "int64",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"int64": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt64"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "long"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "uint8",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"uint8": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint8"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "unsignedByte"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "uint16",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"uint16": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint16"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "unsignedShort"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "uint32",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"uint32": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint32"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "unsignedInt"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}},
+                                          {
+                                            "name": "uint64",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "v",
+                                                "domain": {"literal": {"integer": {"uint64": {}}}},
+                                                "body": {
+                                                  "record": {
+                                                    "typeName": "hydra.rdf.syntax.Literal",
+                                                    "fields": [
+                                                      {
+                                                        "name": "lexicalForm",
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint64"}, "argument": {"variable": "v"}}}},
+                                                      {
+                                                        "name": "datatypeIri",
+                                                        "term": {
+                                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "unsignedLong"}}}}},
+                                                      {
+                                                        "name": "languageTag",
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}}]}},
+                                    "argument": {"variable": "i"}}}}}},
+                          {
+                            "name": "string",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "s",
+                                "domain": {"literal": {"string": {}}},
+                                "body": {
+                                  "record": {
+                                    "typeName": "hydra.rdf.syntax.Literal",
+                                    "fields": [
+                                      {"name": "lexicalForm", "term": {"variable": "s"}},
+                                      {
+                                        "name": "datatypeIri",
+                                        "term": {
+                                          "application": {"function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}, "argument": {"literal": {"string": "string"}}}}},
+                                      {
+                                        "name": "languageTag",
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}]}}}}}]}},
+                    "argument": {"variable": "lit"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra literal as an RDF literal"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.forObjects",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.rdf.syntax.Iri"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "hydra.rdf.syntax.Node"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "subj",
+                "domain": {"variable": "hydra.rdf.syntax.Resource"},
+                "body": {
+                  "lambda": {
+                    "parameter": "pred",
+                    "domain": {"variable": "hydra.rdf.syntax.Iri"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "objs",
+                        "domain": {"list": {"variable": "hydra.rdf.syntax.Node"}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
+                                    "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "obj",
+                                    "domain": {"variable": "hydra.rdf.syntax.Node"},
+                                    "body": {
+                                      "record": {
+                                        "typeName": "hydra.rdf.syntax.Triple",
+                                        "fields": [
+                                          {"name": "subject", "term": {"variable": "subj"}},
+                                          {"name": "predicate", "term": {"variable": "pred"}},
+                                          {"name": "object", "term": {"variable": "obj"}}]}}}}}},
+                            "argument": {"variable": "objs"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Create triples from a subject, predicate, and list of object nodes"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.iri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ns",
+                "domain": {"literal": {"string": {}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "local",
+                    "domain": {"literal": {"string": {}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.rdf.syntax.Iri",
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "ns"}}},
+                            "argument": {"variable": "local"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct an IRI from a namespace and local name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.keyIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "local",
+                "domain": {"literal": {"string": {}}},
+                "body": {
+                  "application": {
+                    "function": {"application": {"function": {"variable": "hydra.rdf.utils.iri"}, "argument": {"literal": {"string": "urn:key:"}}}},
+                    "argument": {"variable": "local"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct a key IRI from a local name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.mergeGraphs",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Graph"}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Graph"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "graphs",
+                "domain": {"list": {"variable": "hydra.rdf.syntax.Graph"}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.rdf.syntax.Graph",
+                    "body": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.unions"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Graph"}}},
+                                    "type": {"set": {"variable": "hydra.rdf.syntax.Triple"}}}},
+                                "argument": {"unwrap": "hydra.rdf.syntax.Graph"}}},
+                            "argument": {"variable": "graphs"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Merge a list of RDF graphs into a single graph"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.nameToIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "name",
+                "domain": {"variable": "hydra.core.Name"},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.rdf.syntax.Iri",
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "urn:"}}}},
+                        "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "name"}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.nextBlankNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
+          "result": {
+            "type": {"pair": {"first": {"variable": "hydra.rdf.syntax.Resource"}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "counter",
+                "domain": {"literal": {"integer": {"int32": {}}}},
+                "body": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {
+                              "inject": {
+                                "typeName": "hydra.rdf.syntax.Resource",
+                                "field": {
+                                  "name": "bnode",
+                                  "term": {
+                                    "wrap": {
+                                      "typeName": "hydra.rdf.syntax.BlankNode",
+                                      "body": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "b"}}}},
+                                          "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "counter"}}}}}}}}}},
+                            "second": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "counter"}}},
+                                "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                        "type": {"variable": "hydra.rdf.syntax.Resource"}}},
+                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generate the next blank node and an incremented counter"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.propertyIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "rname",
+                "domain": {"variable": "hydra.core.Name"},
+                "body": {
+                  "lambda": {
+                    "parameter": "fname",
+                    "domain": {"variable": "hydra.core.Name"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "qualName",
+                            "term": {"application": {"function": {"variable": "hydra.names.qualifyName"}, "argument": {"variable": "rname"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}}},
+                          {
+                            "name": "gname",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "moduleName"}},
+                                "argument": {"variable": "qualName"}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
+                          {
+                            "name": "local_",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "local"}},
+                                "argument": {"variable": "qualName"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                        "body": {
+                          "wrap": {
+                            "typeName": "hydra.rdf.syntax.Iri",
+                            "body": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "argument": {
+                                  "list": [
+                                    {"literal": {"string": "urn:"}},
+                                    {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "argument": {"variable": "gname"}}},
+                                            "argument": {"literal": {"string": ""}}}},
+                                        "argument": {"unwrap": "hydra.packaging.ModuleName"}}},
+                                    {"literal": {"string": "#"}},
+                                    {"application": {"function": {"variable": "hydra.formatting.decapitalize"}, "argument": {"variable": "local_"}}},
+                                    {
+                                      "application": {
+                                        "function": {"variable": "hydra.formatting.capitalize"},
+                                        "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "fname"}}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Construct a property IRI from a record name and field name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.rdfIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "local",
+                "domain": {"literal": {"string": {}}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.rdf.utils.iri"},
+                        "argument": {"literal": {"string": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}}}},
+                    "argument": {"variable": "local"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an RDF namespace IRI"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.resourceToNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Node"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "r",
+                "domain": {"variable": "hydra.rdf.syntax.Resource"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.rdf.syntax.Resource",
+                        "cases": [
+                          {
+                            "name": "iri",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"variable": "hydra.rdf.syntax.Iri"},
+                                "body": {"inject": {"typeName": "hydra.rdf.syntax.Node", "field": {"name": "iri", "term": {"variable": "i"}}}}}}},
+                          {
+                            "name": "bnode",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "b",
+                                "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
+                                "body": {"inject": {"typeName": "hydra.rdf.syntax.Node", "field": {"name": "bnode", "term": {"variable": "b"}}}}}}}]}},
+                    "argument": {"variable": "r"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a resource to a node"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.subjectsOf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Node"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "descs",
+                "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {
+                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
+                            "type": {"variable": "hydra.rdf.syntax.Node"}}},
+                        "argument": {"project": {"typeName": "hydra.rdf.syntax.Description", "fieldName": "subject"}}}},
+                    "argument": {"variable": "descs"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract subjects from a list of descriptions"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.triplesOf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "descs",
+                "domain": {"list": {"variable": "hydra.rdf.syntax.Description"}},
+                "body": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
+                                "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "d",
+                                "domain": {"variable": "hydra.rdf.syntax.Description"},
+                                "body": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"unwrap": "hydra.rdf.syntax.Graph"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.rdf.syntax.Description", "fieldName": "graph"}},
+                                            "argument": {"variable": "d"}}}}}}}}}}},
+                        "argument": {"variable": "descs"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract all triples from a list of descriptions"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.xmlSchemaDatatypeIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "local",
+                "domain": {"literal": {"string": {}}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.rdf.utils.iri"},
+                        "argument": {"literal": {"string": "http://www.w3.org/2001/XMLSchema#"}}}},
+                    "argument": {"variable": "local"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Construct an XML Schema datatype IRI"}}}]}}}}}]}

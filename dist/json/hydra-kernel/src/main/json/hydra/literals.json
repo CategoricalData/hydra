@@ -1,216 +1,6 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert a bigint to an integer value of a given type (note: lossy)"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "it"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {"inject": {"field": {"name": "bigint", "term": {"variable": "bi"}}, "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "bigint"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "int8",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToInt8"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "int8"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "int16",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToInt16"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "int16"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "int32",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToInt32"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "int32"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "int64",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToInt64"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "int64"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "uint8",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToUint8"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "uint8"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "uint16",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToUint16"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "uint16"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "uint32",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToUint32"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "uint32"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "uint64",
-                                          "term": {"application": {"argument": {"variable": "bi"}, "function": {"variable": "hydra.lib.literals.bigintToUint64"}}}},
-                                        "typeName": "hydra.core.IntegerValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}},
-                                "name": "uint64"}],
-                            "typeName": "hydra.core.IntegerType"}}}},
-                    "domain": {"literal": {"integer": {"bigint": {}}}},
-                    "parameter": "bi"}},
-                "domain": {"variable": "hydra.core.IntegerType"},
-                "parameter": "it"}}}},
-        "name": "hydra.literals.bigintToIntegerValue",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.IntegerType"}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"variable": "hydra.core.IntegerValue"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert an integer value of any precision to a bigint"}}}]},
-            "body": {
-              "cases": {
-                "cases": [
-                  {
-                    "handler": {"lambda": {"body": {"variable": "bi"}, "domain": {"literal": {"integer": {"bigint": {}}}}, "parameter": "bi"}},
-                    "name": "bigint"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "i8"}, "function": {"variable": "hydra.lib.literals.int8ToBigint"}}},
-                        "domain": {"literal": {"integer": {"int8": {}}}},
-                        "parameter": "i8"}},
-                    "name": "int8"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "i16"}, "function": {"variable": "hydra.lib.literals.int16ToBigint"}}},
-                        "domain": {"literal": {"integer": {"int16": {}}}},
-                        "parameter": "i16"}},
-                    "name": "int16"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "i32"}, "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                        "domain": {"literal": {"integer": {"int32": {}}}},
-                        "parameter": "i32"}},
-                    "name": "int32"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "i64"}, "function": {"variable": "hydra.lib.literals.int64ToBigint"}}},
-                        "domain": {"literal": {"integer": {"int64": {}}}},
-                        "parameter": "i64"}},
-                    "name": "int64"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "ui8"}, "function": {"variable": "hydra.lib.literals.uint8ToBigint"}}},
-                        "domain": {"literal": {"integer": {"uint8": {}}}},
-                        "parameter": "ui8"}},
-                    "name": "uint8"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "ui16"}, "function": {"variable": "hydra.lib.literals.uint16ToBigint"}}},
-                        "domain": {"literal": {"integer": {"uint16": {}}}},
-                        "parameter": "ui16"}},
-                    "name": "uint16"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "ui32"}, "function": {"variable": "hydra.lib.literals.uint32ToBigint"}}},
-                        "domain": {"literal": {"integer": {"uint32": {}}}},
-                        "parameter": "ui32"}},
-                    "name": "uint32"},
-                  {
-                    "handler": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "ui64"}, "function": {"variable": "hydra.lib.literals.uint64ToBigint"}}},
-                        "domain": {"literal": {"integer": {"uint64": {}}}},
-                        "parameter": "ui64"}},
-                    "name": "uint64"}],
-                "typeName": "hydra.core.IntegerValue"}}}},
-        "name": "hydra.literals.integerValueToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.IntegerValue"}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}}],
+  "name": "hydra.literals",
+  "metadata": {"description": "Conversion functions for literal values.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -234,5 +24,215 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Conversion functions for literal values.", "seeAlso": []},
-  "name": "hydra.literals"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.literals.bigintToIntegerValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.IntegerType"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.IntegerValue"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "it",
+                "domain": {"variable": "hydra.core.IntegerType"},
+                "body": {
+                  "lambda": {
+                    "parameter": "bi",
+                    "domain": {"literal": {"integer": {"bigint": {}}}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.core.IntegerType",
+                            "cases": [
+                              {
+                                "name": "bigint",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {"inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "bigint", "term": {"variable": "bi"}}}}}}},
+                              {
+                                "name": "int8",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "int8",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToInt8"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "int16",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "int16",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToInt16"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "int32",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "int32",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToInt32"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "int64",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "int64",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToInt64"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "uint8",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "uint8",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToUint8"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "uint16",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "uint16",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToUint16"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "uint32",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "uint32",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToUint32"}, "argument": {"variable": "bi"}}}}}}}}},
+                              {
+                                "name": "uint64",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"unit": {}},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.IntegerValue",
+                                        "field": {
+                                          "name": "uint64",
+                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToUint64"}, "argument": {"variable": "bi"}}}}}}}}}]}},
+                        "argument": {"variable": "it"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a bigint to an integer value of a given type (note: lossy)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.literals.integerValueToBigint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.IntegerValue"}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.core.IntegerValue",
+                "cases": [
+                  {
+                    "name": "bigint",
+                    "handler": {"lambda": {"parameter": "bi", "domain": {"literal": {"integer": {"bigint": {}}}}, "body": {"variable": "bi"}}}},
+                  {
+                    "name": "int8",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "i8",
+                        "domain": {"literal": {"integer": {"int8": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.int8ToBigint"}, "argument": {"variable": "i8"}}}}}},
+                  {
+                    "name": "int16",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "i16",
+                        "domain": {"literal": {"integer": {"int16": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.int16ToBigint"}, "argument": {"variable": "i16"}}}}}},
+                  {
+                    "name": "int32",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "i32",
+                        "domain": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.int32ToBigint"}, "argument": {"variable": "i32"}}}}}},
+                  {
+                    "name": "int64",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "i64",
+                        "domain": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.int64ToBigint"}, "argument": {"variable": "i64"}}}}}},
+                  {
+                    "name": "uint8",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "ui8",
+                        "domain": {"literal": {"integer": {"uint8": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.uint8ToBigint"}, "argument": {"variable": "ui8"}}}}}},
+                  {
+                    "name": "uint16",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "ui16",
+                        "domain": {"literal": {"integer": {"uint16": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.uint16ToBigint"}, "argument": {"variable": "ui16"}}}}}},
+                  {
+                    "name": "uint32",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "ui32",
+                        "domain": {"literal": {"integer": {"uint32": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.uint32ToBigint"}, "argument": {"variable": "ui32"}}}}}},
+                  {
+                    "name": "uint64",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "ui64",
+                        "domain": {"literal": {"integer": {"uint64": {}}}},
+                        "body": {"application": {"function": {"variable": "hydra.lib.literals.uint64ToBigint"}, "argument": {"variable": "ui64"}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an integer value of any precision to a bigint"}}}]}}}}}]}

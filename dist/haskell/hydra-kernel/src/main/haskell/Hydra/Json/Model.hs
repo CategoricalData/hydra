@@ -5,7 +5,6 @@ module Hydra.Json.Model where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 -- | A JSON value
 data Value =
   -- | A JSON array
@@ -16,8 +15,8 @@ data Value =
   ValueNull |
   -- | A numeric value
   ValueNumber Sci.Scientific |
-  -- | A JSON object as a set of key/value pairs
-  ValueObject (M.Map String Value) |
+  -- | A JSON object as an ordered list of key/value pairs. The ordering preserves the declaration order of the record from which the object was encoded, rather than alphabetizing keys. As a consequence, equality of Value objects is order-sensitive: two objects with the same pairs in a different order are equal as JSON, but not as Hydra Values.
+  ValueObject [(String, Value)] |
   -- | A string value
   ValueString String
   deriving (Eq, Ord, Read, Show)

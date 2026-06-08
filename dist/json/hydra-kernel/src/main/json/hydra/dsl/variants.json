@@ -1,1721 +1,1721 @@
 {
+  "name": "hydra.dsl.variants",
+  "metadata": {"description": "DSL functions for hydra.variants", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.variants"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "definitions": [
     {
       "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the binary variant of hydra.variants.LiteralVariant"}}}]},
-            "body": {
-              "wrap": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "binary"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
         "name": "hydra.dsl.variants.literalVariantBinary",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "boolean"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "binary"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the binary variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.literalVariantBoolean",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "decimal"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "boolean"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.literalVariantDecimal",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "decimal"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.literalVariantFloat",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the integer variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "integer"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "float"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.literalVariantInteger",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.variants.LiteralVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.LiteralVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "string"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "integer"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the integer variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.literalVariantString",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.LiteralVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "annotated"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "string"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantAnnotated",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "application"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotated"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantApplication",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the cases variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "cases"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "application"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantCases",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "either"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "cases"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the cases variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantEither",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the inject variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "inject"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "either"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantInject",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the lambda variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "lambda"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "inject"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the inject variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantLambda",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the let variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "let"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "lambda"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the lambda variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantLet",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "list"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "let"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the let variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantList",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "literal"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "list"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantLiteral",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "map"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "literal"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantMap",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optional"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "map"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantOptional",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pair"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "optional"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantPair",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the project variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "project"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pair"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantProject",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "record"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "project"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the project variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantRecord",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "set"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "record"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantSet",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the typeApplication variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeApplication"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "set"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantTypeApplication",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the typeLambda variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeLambda"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeApplication"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeApplication variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantTypeLambda",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unit"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeLambda"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeLambda variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantUnit",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the unwrap variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unwrap"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "unit"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantUnwrap",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "variable"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "unwrap"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unwrap variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantVariable",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TermVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrap"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "variable"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantWrap",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TermVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "annotated"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrap"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantAnnotated",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "application"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotated"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantApplication",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "either"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "application"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the application variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantEither",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the forall variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "forall"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "either"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the either variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantForall",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the function variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "function"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "forall"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the forall variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantFunction",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "list"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "function"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the function variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantList",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "literal"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "list"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantLiteral",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "map"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "literal"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the literal variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantMap",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optional"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "map"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantOptional",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "pair"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "optional"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantPair",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "record"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pair"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the pair variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantRecord",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "set"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "record"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the record variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantSet",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the union variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "union"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "set"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantUnion",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "unit"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "union"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the union variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantUnit",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "variable"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "unit"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the unit variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantVariable",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the void variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "void"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "variable"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the variable variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantVoid",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
         "body": {
           "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
                 "body": {
                   "inject": {
+                    "typeName": "hydra.core.Term",
                     "field": {
                       "name": "inject",
                       "term": {
                         "record": {
+                          "typeName": "hydra.core.Injection",
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.TypeVariant"}}, "typeName": "hydra.core.Name"}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
                             {
                               "name": "field",
                               "term": {
                                 "record": {
+                                  "typeName": "hydra.core.Field",
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "wrap"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.typed.TypedTerm"}}}},
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "void"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the void variant of hydra.variants.TypeVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.typeVariantWrap",
         "signature": {
+          "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"argument": {"variable": "hydra.variants.TypeVariant"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
-          "typeParameters": []}}}],
-  "dependencies": [{"module": "hydra.variants"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
-  "metadata": {"comments": [], "description": "DSL functions for hydra.variants", "seeAlso": []},
-  "name": "hydra.dsl.variants"}
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrap"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TypeVariant"}}}]}}}}}]}

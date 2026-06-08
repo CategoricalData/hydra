@@ -1,24 +1,6 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all hoisting tests"}}}]},
-            "body": {
-              "record": {
-                "fields": [
-                  {"name": "name", "term": {"literal": {"string": "hoisting"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
-                  {
-                    "name": "subgroups",
-                    "term": {"list": [{"variable": "hydra.test.hoisting.cases.allTests"}, {"variable": "hydra.test.hoisting.let.allTests"}]}},
-                  {
-                    "name": "cases",
-                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "name": "hydra.test.hoisting.all.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
+  "name": "hydra.test.hoisting.all",
+  "metadata": {"description": "Hydra's hoisting test suite", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.test.hoisting.cases"},
     {"module": "hydra.test.hoisting.let"},
@@ -44,5 +26,23 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Hydra's hoisting test suite", "seeAlso": []},
-  "name": "hydra.test.hoisting.all"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.hoisting.all.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "hoisting"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {"list": [{"variable": "hydra.test.hoisting.cases.allTests"}, {"variable": "hydra.test.hoisting.let.allTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all hoisting tests"}}}]}}}}}]}

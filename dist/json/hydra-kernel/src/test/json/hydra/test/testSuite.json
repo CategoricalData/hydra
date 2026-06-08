@@ -1,61 +1,9 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all common tests"}}}]},
-            "body": {
-              "record": {
-                "fields": [
-                  {"name": "name", "term": {"literal": {"string": "common"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
-                  {
-                    "name": "subgroups",
-                    "term": {
-                      "list": [
-                        {"variable": "hydra.test.lib.chars.allTests"},
-                        {"variable": "hydra.test.lib.eithers.allTests"},
-                        {"variable": "hydra.test.lib.equality.allTests"},
-                        {"variable": "hydra.test.lib.lists.allTests"},
-                        {"variable": "hydra.test.lib.literals.allTests"},
-                        {"variable": "hydra.test.lib.logic.allTests"},
-                        {"variable": "hydra.test.lib.maps.allTests"},
-                        {"variable": "hydra.test.lib.math.allTests"},
-                        {"variable": "hydra.test.lib.optionals.allTests"},
-                        {"variable": "hydra.test.lib.pairs.allTests"},
-                        {"variable": "hydra.test.lib.regex.allTests"},
-                        {"variable": "hydra.test.lib.sets.allTests"},
-                        {"variable": "hydra.test.lib.strings.allTests"},
-                        {"variable": "hydra.test.annotations.allTests"},
-                        {"variable": "hydra.test.checking.all.allTests"},
-                        {"variable": "hydra.test.dependencies.allTests"},
-                        {"variable": "hydra.test.differentiation.allTests"},
-                        {"variable": "hydra.test.etaExpansion.allTests"},
-                        {"variable": "hydra.test.formatting.allTests"},
-                        {"variable": "hydra.test.generation.allTests"},
-                        {"variable": "hydra.test.hoisting.all.allTests"},
-                        {"variable": "hydra.test.inference.all.allTests"},
-                        {"variable": "hydra.test.json.parser.allTests"},
-                        {"variable": "hydra.test.json.roundtrip.allTests"},
-                        {"variable": "hydra.test.json.writer.allTests"},
-                        {"variable": "hydra.test.json.yaml.allTests"},
-                        {"variable": "hydra.test.ordering.allTests"},
-                        {"variable": "hydra.test.reduction.allTests"},
-                        {"variable": "hydra.test.rewriting.allTests"},
-                        {"variable": "hydra.test.serialization.allTests"},
-                        {"variable": "hydra.test.sorting.allTests"},
-                        {"variable": "hydra.test.strip.allTests"},
-                        {"variable": "hydra.test.substitution.allTests"},
-                        {"variable": "hydra.test.unification.allTests"},
-                        {"variable": "hydra.test.validate.all.allTests"},
-                        {"variable": "hydra.test.variables.allTests"}]}},
-                  {
-                    "name": "cases",
-                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "name": "hydra.test.testSuite.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
+  "name": "hydra.test.testSuite",
+  "metadata": {
+    "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
+    "comments": [],
+    "seeAlso": []},
   "dependencies": [
     {"module": "hydra.test.lib.chars"},
     {"module": "hydra.test.lib.eithers"},
@@ -115,8 +63,60 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {
-    "comments": [],
-    "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
-    "seeAlso": []},
-  "name": "hydra.test.testSuite"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.testSuite.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "common"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {
+                      "list": [
+                        {"variable": "hydra.test.lib.chars.allTests"},
+                        {"variable": "hydra.test.lib.eithers.allTests"},
+                        {"variable": "hydra.test.lib.equality.allTests"},
+                        {"variable": "hydra.test.lib.lists.allTests"},
+                        {"variable": "hydra.test.lib.literals.allTests"},
+                        {"variable": "hydra.test.lib.logic.allTests"},
+                        {"variable": "hydra.test.lib.maps.allTests"},
+                        {"variable": "hydra.test.lib.math.allTests"},
+                        {"variable": "hydra.test.lib.optionals.allTests"},
+                        {"variable": "hydra.test.lib.pairs.allTests"},
+                        {"variable": "hydra.test.lib.regex.allTests"},
+                        {"variable": "hydra.test.lib.sets.allTests"},
+                        {"variable": "hydra.test.lib.strings.allTests"},
+                        {"variable": "hydra.test.annotations.allTests"},
+                        {"variable": "hydra.test.checking.all.allTests"},
+                        {"variable": "hydra.test.dependencies.allTests"},
+                        {"variable": "hydra.test.differentiation.allTests"},
+                        {"variable": "hydra.test.etaExpansion.allTests"},
+                        {"variable": "hydra.test.formatting.allTests"},
+                        {"variable": "hydra.test.generation.allTests"},
+                        {"variable": "hydra.test.hoisting.all.allTests"},
+                        {"variable": "hydra.test.inference.all.allTests"},
+                        {"variable": "hydra.test.json.parser.allTests"},
+                        {"variable": "hydra.test.json.roundtrip.allTests"},
+                        {"variable": "hydra.test.json.writer.allTests"},
+                        {"variable": "hydra.test.json.yaml.allTests"},
+                        {"variable": "hydra.test.ordering.allTests"},
+                        {"variable": "hydra.test.reduction.allTests"},
+                        {"variable": "hydra.test.rewriting.allTests"},
+                        {"variable": "hydra.test.serialization.allTests"},
+                        {"variable": "hydra.test.sorting.allTests"},
+                        {"variable": "hydra.test.strip.allTests"},
+                        {"variable": "hydra.test.substitution.allTests"},
+                        {"variable": "hydra.test.unification.allTests"},
+                        {"variable": "hydra.test.validate.all.allTests"},
+                        {"variable": "hydra.test.variables.allTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all common tests"}}}]}}}}}]}

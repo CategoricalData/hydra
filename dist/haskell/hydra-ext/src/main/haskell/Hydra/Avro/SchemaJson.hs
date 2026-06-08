@@ -182,7 +182,7 @@ decodeSchema cx v =
     case v of
       Model.ValueString v0 -> Optionals.cases (decodePrimitiveName v0) (Right (Schema.SchemaReference v0)) (\p -> Right (Schema.SchemaPrimitive p))
       Model.ValueArray v0 -> Eithers.map (\decoded -> Schema.SchemaUnion (Schema.Union decoded)) (Eithers.mapList (decodeSchema cx) v0)
-      Model.ValueObject v0 -> Eithers.bind (requireStringE cx avro_type v0) (\typeName -> decodeObjectSchema cx v0 typeName)
+      Model.ValueObject v0 -> Eithers.bind (requireStringE cx avro_type (Maps.fromList v0)) (\typeName -> decodeObjectSchema cx (Maps.fromList v0) typeName)
       _ -> err cx (Strings.cat [
         "unexpected JSON value for schema: ",
         (showJsonValue v)])
@@ -192,7 +192,7 @@ encodeAnnotations m = Lists.map (\entry -> (Strings.cat2 "@" (Pairs.first entry)
 -- | Encode an Avro array schema to a JSON object
 encodeArray :: Schema.Array -> Model.Value
 encodeArray arr =
-    Model.ValueObject (Maps.fromList [
+    Model.ValueObject ([
       ("type", (Model.ValueString "array")),
       ("items", (encodeSchema (Schema.arrayItems arr)))])
 -- | Encode an Avro enum type as key-value pairs
@@ -208,7 +208,7 @@ encodeEnum e =
 -- | Encode an Avro field to a JSON object
 encodeField :: Schema.Field -> Model.Value
 encodeField f =
-    Model.ValueObject (Maps.fromList (Lists.concat [
+    Model.ValueObject ((Lists.concat [
       [
         ("name", (Model.ValueString (Schema.fieldName f)))],
       [
@@ -231,13 +231,13 @@ encodeFixed f =
 -- | Encode an Avro map schema to a JSON object
 encodeMap :: Schema.Map -> Model.Value
 encodeMap mp =
-    Model.ValueObject (Maps.fromList [
+    Model.ValueObject ([
       ("type", (Model.ValueString "map")),
       ("values", (encodeSchema (Schema.mapValues mp)))])
 -- | Encode an Avro named type to a JSON object
 encodeNamed :: Schema.Named -> Model.Value
 encodeNamed n =
-    Model.ValueObject (Maps.fromList (Lists.concat [
+    Model.ValueObject ((Lists.concat [
       [
         ("name", (Model.ValueString (Schema.namedName n)))],
       (Optionals.cases (Schema.namedNamespace n) [] (\ns -> [
@@ -312,7 +312,7 @@ expectNumberE cx value =
 expectObjectE :: t0 -> Model.Value -> Either t1 (M.Map String Model.Value)
 expectObjectE cx value =
     case value of
-      Model.ValueObject v0 -> Right v0
+      Model.ValueObject v0 -> Right (Maps.fromList v0)
 -- | Extract a JSON string or return an error
 expectStringE :: t0 -> Model.Value -> Either t1 String
 expectStringE cx value =

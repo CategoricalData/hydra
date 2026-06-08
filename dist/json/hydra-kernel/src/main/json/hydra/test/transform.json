@@ -1,751 +1,9 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add generation namespace prefix"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "ns_"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
-                        "function": {
-                          "application": {"argument": {"literal": {"string": "generation."}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                    "typeName": "hydra.packaging.ModuleName"}},
-                "domain": {"variable": "hydra.packaging.ModuleName"},
-                "parameter": "ns_"}}}},
-        "name": "hydra.test.transform.addGenerationPrefix",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}}],
-          "result": {"type": {"variable": "hydra.packaging.ModuleName"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Build a Term representing a convertCase function call"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "inject": {
-                            "field": {
-                              "name": "application",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "function",
-                                      "term": {
-                                        "inject": {
-                                          "field": {
-                                            "name": "application",
-                                            "term": {
-                                              "record": {
-                                                "fields": [
-                                                  {
-                                                    "name": "function",
-                                                    "term": {
-                                                      "inject": {
-                                                        "field": {
-                                                          "name": "application",
-                                                          "term": {
-                                                            "record": {
-                                                              "fields": [
-                                                                {
-                                                                  "name": "function",
-                                                                  "term": {
-                                                                    "inject": {
-                                                                      "field": {
-                                                                        "name": "variable",
-                                                                        "term": {"wrap": {"body": {"literal": {"string": "hydra.formatting.convertCase"}}, "typeName": "hydra.core.Name"}}},
-                                                                      "typeName": "hydra.core.Term"}}},
-                                                                {
-                                                                  "name": "argument",
-                                                                  "term": {
-                                                                    "application": {"argument": {"variable": "fromConv"}, "function": {"variable": "hydra.test.transform.encodeCaseConvention"}}}}],
-                                                              "typeName": "hydra.core.Application"}}},
-                                                        "typeName": "hydra.core.Term"}}},
-                                                  {
-                                                    "name": "argument",
-                                                    "term": {
-                                                      "application": {"argument": {"variable": "toConv"}, "function": {"variable": "hydra.test.transform.encodeCaseConvention"}}}}],
-                                                "typeName": "hydra.core.Application"}}},
-                                          "typeName": "hydra.core.Term"}}},
-                                    {
-                                      "name": "argument",
-                                      "term": {
-                                        "inject": {
-                                          "field": {
-                                            "name": "literal",
-                                            "term": {"inject": {"field": {"name": "string", "term": {"variable": "input_"}}, "typeName": "hydra.core.Literal"}}},
-                                          "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Application"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "domain": {"literal": {"string": {}}},
-                        "parameter": "input_"}},
-                    "domain": {"variable": "hydra.util.CaseConvention"},
-                    "parameter": "toConv"}},
-                "domain": {"variable": "hydra.util.CaseConvention"},
-                "parameter": "fromConv"}}}},
-        "name": "hydra.test.transform.buildConvertCaseCall",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.util.CaseConvention"}},
-            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Build a Term representing a topologicalSort function call"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "application",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "function",
-                              "term": {
-                                "inject": {
-                                  "field": {
-                                    "name": "variable",
-                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.sorting.topologicalSort"}}, "typeName": "hydra.core.Name"}}},
-                                  "typeName": "hydra.core.Term"}}},
-                            {
-                              "name": "argument",
-                              "term": {
-                                "application": {"argument": {"variable": "adjList"}, "function": {"variable": "hydra.test.transform.encodeAdjacencyList"}}}}],
-                          "typeName": "hydra.core.Application"}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
-                "parameter": "adjList"}}}},
-        "name": "hydra.test.transform.buildTopologicalSortCall",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "list": {
-                  "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Build a Term representing a topologicalSortComponents function call"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "application",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "function",
-                              "term": {
-                                "inject": {
-                                  "field": {
-                                    "name": "variable",
-                                    "term": {"wrap": {"body": {"literal": {"string": "hydra.sorting.topologicalSortComponents"}}, "typeName": "hydra.core.Name"}}},
-                                  "typeName": "hydra.core.Term"}}},
-                            {
-                              "name": "argument",
-                              "term": {
-                                "application": {"argument": {"variable": "adjList"}, "function": {"variable": "hydra.test.transform.encodeAdjacencyList"}}}}],
-                          "typeName": "hydra.core.Application"}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
-                "parameter": "adjList"}}}},
-        "name": "hydra.test.transform.buildTopologicalSortSCCCall",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "list": {
-                  "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Collect all test cases from a test group (flattening hierarchy)"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "tg"},
-                                "function": {"project": {"fieldName": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {"application": {"argument": {"variable": "sg"}, "function": {"variable": "hydra.test.transform.collectTestCases"}}},
-                                    "domain": {"variable": "hydra.testing.TestGroup"},
-                                    "parameter": "sg"}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.testing.TestGroup"}}},
-                                    "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}}}},
-                        "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
-                    "function": {
-                      "application": {
-                        "argument": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"fieldName": "cases", "typeName": "hydra.testing.TestGroup"}}}},
-                        "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}}},
-                "domain": {"variable": "hydra.testing.TestGroup"},
-                "parameter": "tg"}}}},
-        "name": "hydra.test.transform.collectTestCases",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.testing.TestGroup"}}],
-          "result": {"type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an adjacency list as a Term"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "list",
-                      "term": {
-                        "application": {
-                          "argument": {"variable": "pairs"},
-                          "function": {
-                            "application": {
-                              "argument": {
-                                "lambda": {
-                                  "body": {
-                                    "inject": {
-                                      "field": {
-                                        "name": "pair",
-                                        "term": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "pair": {
-                                                    "first": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "p"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-                                                        "function": {"variable": "hydra.test.transform.encodeInt"}}},
-                                                    "second": {
-                                                      "inject": {
-                                                        "field": {
-                                                          "name": "list",
-                                                          "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "application": {
-                                                                  "argument": {"variable": "p"},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "lambda": {
-                                                                      "body": {"application": {"argument": {"variable": "d"}, "function": {"variable": "hydra.test.transform.encodeInt"}}},
-                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                      "parameter": "d"}},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                        "typeName": "hydra.core.Term"}}}},
-                                                "type": {"variable": "hydra.core.Term"}}},
-                                            "type": {"variable": "hydra.core.Term"}}}},
-                                      "typeName": "hydra.core.Term"}},
-                                  "domain": {
-                                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                  "parameter": "p"}},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"variable": "hydra.lib.lists.map"},
-                                      "type": {
-                                        "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
-                "parameter": "pairs"}}}},
-        "name": "hydra.test.transform.encodeAdjacencyList",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "list": {
-                  "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode CaseConvention as a Term (unit variant)"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.CaseConvention"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "conv"},
-                                          "function": {
-                                            "cases": {
-                                              "cases": [
-                                                {
-                                                  "handler": {
-                                                    "lambda": {
-                                                      "body": {"wrap": {"body": {"literal": {"string": "lowerSnake"}}, "typeName": "hydra.core.Name"}},
-                                                      "domain": {"unit": {}},
-                                                      "parameter": "_"}},
-                                                  "name": "lowerSnake"},
-                                                {
-                                                  "handler": {
-                                                    "lambda": {
-                                                      "body": {"wrap": {"body": {"literal": {"string": "upperSnake"}}, "typeName": "hydra.core.Name"}},
-                                                      "domain": {"unit": {}},
-                                                      "parameter": "_"}},
-                                                  "name": "upperSnake"},
-                                                {
-                                                  "handler": {
-                                                    "lambda": {
-                                                      "body": {"wrap": {"body": {"literal": {"string": "camel"}}, "typeName": "hydra.core.Name"}},
-                                                      "domain": {"unit": {}},
-                                                      "parameter": "_"}},
-                                                  "name": "camel"},
-                                                {
-                                                  "handler": {
-                                                    "lambda": {
-                                                      "body": {"wrap": {"body": {"literal": {"string": "pascal"}}, "typeName": "hydra.core.Name"}},
-                                                      "domain": {"unit": {}},
-                                                      "parameter": "_"}},
-                                                  "name": "pascal"}],
-                                              "typeName": "hydra.util.CaseConvention"}}}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {"variable": "hydra.util.CaseConvention"},
-                "parameter": "conv"}}}},
-        "name": "hydra.test.transform.encodeCaseConvention",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode Either [[Int]] [Int] as a Term"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "either",
-                      "term": {
-                        "application": {
-                          "argument": {"variable": "e"},
-                          "function": {
-                            "application": {
-                              "argument": {
-                                "lambda": {
-                                  "body": {"application": {"argument": {"variable": "sorted"}, "function": {"variable": "hydra.test.transform.encodeIntList"}}},
-                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                  "parameter": "sorted"}},
-                              "function": {
-                                "application": {
-                                  "argument": {
-                                    "lambda": {
-                                      "body": {"application": {"argument": {"variable": "cycles"}, "function": {"variable": "hydra.test.transform.encodeListList"}}},
-                                      "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
-                                      "parameter": "cycles"}},
-                                  "function": {
-                                    "typeApplication": {
-                                      "body": {
-                                        "typeApplication": {
-                                          "body": {
-                                            "typeApplication": {
-                                              "body": {
-                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
-                                              "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                          "type": {"variable": "hydra.core.Term"}}},
-                                      "type": {"variable": "hydra.core.Term"}}}}}}}}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {
-                  "either": {
-                    "left": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
-                    "right": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                "parameter": "e"}}}},
-        "name": "hydra.test.transform.encodeEitherListList",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {
-                "either": {
-                  "left": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
-                  "right": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Int as a Term"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "literal",
-                      "term": {
-                        "inject": {
-                          "field": {
-                            "name": "integer",
-                            "term": {"inject": {"field": {"name": "int32", "term": {"variable": "n"}}, "typeName": "hydra.core.IntegerValue"}}},
-                          "typeName": "hydra.core.Literal"}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {"literal": {"integer": {"int32": {}}}},
-                "parameter": "n"}}}},
-        "name": "hydra.test.transform.encodeInt",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode [Int] as a Term"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "list",
-                      "term": {
-                        "application": {
-                          "argument": {"variable": "ints"},
-                          "function": {
-                            "application": {
-                              "argument": {
-                                "lambda": {
-                                  "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.test.transform.encodeInt"}}},
-                                  "domain": {"literal": {"integer": {"int32": {}}}},
-                                  "parameter": "n"}},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                "parameter": "ints"}}}},
-        "name": "hydra.test.transform.encodeIntList",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"integer": {"int32": {}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode [[Int]] as a Term"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "list",
-                      "term": {
-                        "application": {
-                          "argument": {"variable": "lists"},
-                          "function": {
-                            "application": {
-                              "argument": {
-                                "lambda": {
-                                  "body": {"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.test.transform.encodeIntList"}}},
-                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                  "parameter": "l"}},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
-                    "typeName": "hydra.core.Term"}},
-                "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
-                "parameter": "lists"}}}},
-        "name": "hydra.test.transform.encodeListList",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}],
-          "result": {"type": {"variable": "hydra.core.Term"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Transform module with generation namespace"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "name",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
-                            "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
-                      {
-                        "name": "metadata",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "m"},
-                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.Module"}}}}},
-                      {
-                        "name": "dependencies",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "m"},
-                            "function": {"project": {"fieldName": "dependencies", "typeName": "hydra.packaging.Module"}}}}},
-                      {
-                        "name": "definitions",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "m"},
-                            "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}}}],
-                    "typeName": "hydra.packaging.Module"}},
-                "domain": {"variable": "hydra.packaging.Module"},
-                "parameter": "m"}}}},
-        "name": "hydra.test.transform.transformModule",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"variable": "hydra.packaging.Module"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "typeLambda": {
-            "body": {
-              "annotated": {
-                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pass through test cases unchanged"}}}]},
-                "body": {"lambda": {"body": {"optional": {"variable": "tcm"}}, "domain": {"variable": "t0"}, "parameter": "tcm"}}}},
-            "parameter": "t0"}},
-        "name": "hydra.test.transform.transformTestCase",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "t0"}}],
-          "result": {"type": {"optional": {"variable": "t0"}}},
-          "typeParameters": [{"constraints": [], "name": "t0"}]}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Transform test group hierarchy to only include delegated evaluation tests"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "name_",
-                        "term": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.testing.TestGroup"}}}},
-                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
-                      {
-                        "name": "desc",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "tg"},
-                            "function": {"project": {"fieldName": "description", "typeName": "hydra.testing.TestGroup"}}}},
-                        "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
-                      {
-                        "name": "subgroups",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "tg"},
-                            "function": {"project": {"fieldName": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestGroup"}}, "variables": []}},
-                      {
-                        "name": "cases_",
-                        "term": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"fieldName": "cases", "typeName": "hydra.testing.TestGroup"}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "variables": []}},
-                      {
-                        "name": "transformedCases",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "cases_"},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "tc"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.test.transform.transformTestCase"},
-                                                "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
-                                        "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
-                                        "parameter": "tc"}},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                        "type": {"optional": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}}}},
-                            "function": {
-                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "variables": []}},
-                      {
-                        "name": "transformedSubgroups",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "subgroups"},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {"argument": {"variable": "sg"}, "function": {"variable": "hydra.test.transform.transformToCompiledTests"}}},
-                                        "domain": {"variable": "hydra.testing.TestGroup"},
-                                        "parameter": "sg"}},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.testing.TestGroup"}}},
-                                        "type": {"optional": {"variable": "hydra.testing.TestGroup"}}}}}}}},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.testing.TestGroup"}}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestGroup"}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "optional": {
-                            "record": {
-                              "fields": [
-                                {"name": "name", "term": {"variable": "name_"}},
-                                {"name": "description", "term": {"variable": "desc"}},
-                                {"name": "subgroups", "term": {"variable": "transformedSubgroups"}},
-                                {"name": "cases", "term": {"variable": "transformedCases"}}],
-                              "typeName": "hydra.testing.TestGroup"}}},
-                        "function": {
-                          "application": {
-                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.testing.TestGroup"}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "transformedSubgroups"},
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.testing.TestGroup"}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "transformedCases"},
-                                            "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
-                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.testing.TestGroup"}}}}}}}}}}}},
-                "domain": {"variable": "hydra.testing.TestGroup"},
-                "parameter": "tg"}}}},
-        "name": "hydra.test.transform.transformToCompiledTests",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.testing.TestGroup"}}],
-          "result": {"type": {"optional": {"variable": "hydra.testing.TestGroup"}}},
-          "typeParameters": []}}}],
+  "name": "hydra.test.transform",
+  "metadata": {
+    "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
+    "comments": [],
+    "seeAlso": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.sorting"},
@@ -771,8 +29,750 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {
-    "comments": [],
-    "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
-    "seeAlso": []},
-  "name": "hydra.test.transform"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.transform.addGenerationPrefix",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.packaging.ModuleName"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ns_",
+                "domain": {"variable": "hydra.packaging.ModuleName"},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.packaging.ModuleName",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "generation."}}}},
+                        "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns_"}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add generation namespace prefix"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.buildConvertCaseCall",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.util.CaseConvention"}, "isLazy": false},
+            {"name": "arg2", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "fromConv",
+                "domain": {"variable": "hydra.util.CaseConvention"},
+                "body": {
+                  "lambda": {
+                    "parameter": "toConv",
+                    "domain": {"variable": "hydra.util.CaseConvention"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "input_",
+                        "domain": {"literal": {"string": {}}},
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "application",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Application",
+                                  "fields": [
+                                    {
+                                      "name": "function",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.Term",
+                                          "field": {
+                                            "name": "application",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.core.Application",
+                                                "fields": [
+                                                  {
+                                                    "name": "function",
+                                                    "term": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.Term",
+                                                        "field": {
+                                                          "name": "application",
+                                                          "term": {
+                                                            "record": {
+                                                              "typeName": "hydra.core.Application",
+                                                              "fields": [
+                                                                {
+                                                                  "name": "function",
+                                                                  "term": {
+                                                                    "inject": {
+                                                                      "typeName": "hydra.core.Term",
+                                                                      "field": {
+                                                                        "name": "variable",
+                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.formatting.convertCase"}}}}}}}},
+                                                                {
+                                                                  "name": "argument",
+                                                                  "term": {
+                                                                    "application": {"function": {"variable": "hydra.test.transform.encodeCaseConvention"}, "argument": {"variable": "fromConv"}}}}]}}}}}},
+                                                  {
+                                                    "name": "argument",
+                                                    "term": {
+                                                      "application": {"function": {"variable": "hydra.test.transform.encodeCaseConvention"}, "argument": {"variable": "toConv"}}}}]}}}}}},
+                                    {
+                                      "name": "argument",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.Term",
+                                          "field": {
+                                            "name": "literal",
+                                            "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "input_"}}}}}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Term representing a convertCase function call"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.buildTopologicalSortCall",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "list": {
+                  "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "adjList",
+                "domain": {
+                  "list": {
+                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Application",
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "typeName": "hydra.core.Term",
+                                  "field": {
+                                    "name": "variable",
+                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.sorting.topologicalSort"}}}}}}}},
+                            {
+                              "name": "argument",
+                              "term": {
+                                "application": {"function": {"variable": "hydra.test.transform.encodeAdjacencyList"}, "argument": {"variable": "adjList"}}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Term representing a topologicalSort function call"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.buildTopologicalSortSCCCall",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "list": {
+                  "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "adjList",
+                "domain": {
+                  "list": {
+                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Application",
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "inject": {
+                                  "typeName": "hydra.core.Term",
+                                  "field": {
+                                    "name": "variable",
+                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.sorting.topologicalSortComponents"}}}}}}}},
+                            {
+                              "name": "argument",
+                              "term": {
+                                "application": {"function": {"variable": "hydra.test.transform.encodeAdjacencyList"}, "argument": {"variable": "adjList"}}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Term representing a topologicalSortComponents function call"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.collectTestCases",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.testing.TestGroup"}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "tg",
+                "domain": {"variable": "hydra.testing.TestGroup"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                        "argument": {
+                          "application": {"function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "cases"}}, "argument": {"variable": "tg"}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.testing.TestGroup"}}},
+                                    "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "sg",
+                                    "domain": {"variable": "hydra.testing.TestGroup"},
+                                    "body": {"application": {"function": {"variable": "hydra.test.transform.collectTestCases"}, "argument": {"variable": "sg"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "subgroups"}},
+                                "argument": {"variable": "tg"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Collect all test cases from a test group (flattening hierarchy)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.encodeAdjacencyList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "list": {
+                  "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "pairs",
+                "domain": {
+                  "list": {
+                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "list",
+                      "term": {
+                        "application": {
+                          "function": {
+                            "application": {
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {"variable": "hydra.lib.lists.map"},
+                                      "type": {
+                                        "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+                                  "type": {"variable": "hydra.core.Term"}}},
+                              "argument": {
+                                "lambda": {
+                                  "parameter": "p",
+                                  "domain": {
+                                    "pair": {"first": {"literal": {"integer": {"int32": {}}}}, "second": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                  "body": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "pair",
+                                        "term": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.test.transform.encodeInt"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            "argument": {"variable": "p"}}}}},
+                                                    "second": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.Term",
+                                                        "field": {
+                                                          "name": "list",
+                                                          "term": {
+                                                            "application": {
+                                                              "function": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                      "type": {"variable": "hydra.core.Term"}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "d",
+                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.test.transform.encodeInt"}, "argument": {"variable": "d"}}}}}}},
+                                                              "argument": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                  "argument": {"variable": "p"}}}}}}}}}},
+                                                "type": {"variable": "hydra.core.Term"}}},
+                                            "type": {"variable": "hydra.core.Term"}}}}}}}}}},
+                          "argument": {"variable": "pairs"}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an adjacency list as a Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.encodeCaseConvention",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "conv",
+                "domain": {"variable": "hydra.util.CaseConvention"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.CaseConvention"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "application": {
+                                          "function": {
+                                            "cases": {
+                                              "typeName": "hydra.util.CaseConvention",
+                                              "cases": [
+                                                {
+                                                  "name": "lowerSnake",
+                                                  "handler": {
+                                                    "lambda": {
+                                                      "parameter": "_",
+                                                      "domain": {"unit": {}},
+                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "lowerSnake"}}}}}}},
+                                                {
+                                                  "name": "upperSnake",
+                                                  "handler": {
+                                                    "lambda": {
+                                                      "parameter": "_",
+                                                      "domain": {"unit": {}},
+                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperSnake"}}}}}}},
+                                                {
+                                                  "name": "camel",
+                                                  "handler": {
+                                                    "lambda": {
+                                                      "parameter": "_",
+                                                      "domain": {"unit": {}},
+                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "camel"}}}}}}},
+                                                {
+                                                  "name": "pascal",
+                                                  "handler": {
+                                                    "lambda": {
+                                                      "parameter": "_",
+                                                      "domain": {"unit": {}},
+                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pascal"}}}}}}}]}},
+                                          "argument": {"variable": "conv"}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode CaseConvention as a Term (unit variant)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.encodeEitherListList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "either": {
+                  "left": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                  "right": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {
+                  "either": {
+                    "left": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                    "right": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "either",
+                      "term": {
+                        "application": {
+                          "function": {
+                            "application": {
+                              "function": {
+                                "application": {
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                              "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                          "type": {"variable": "hydra.core.Term"}}},
+                                      "type": {"variable": "hydra.core.Term"}}},
+                                  "argument": {
+                                    "lambda": {
+                                      "parameter": "cycles",
+                                      "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                                      "body": {"application": {"function": {"variable": "hydra.test.transform.encodeListList"}, "argument": {"variable": "cycles"}}}}}}},
+                              "argument": {
+                                "lambda": {
+                                  "parameter": "sorted",
+                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                  "body": {"application": {"function": {"variable": "hydra.test.transform.encodeIntList"}, "argument": {"variable": "sorted"}}}}}}},
+                          "argument": {"variable": "e"}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode Either [[Int]] [Int] as a Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.encodeInt",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "n",
+                "domain": {"literal": {"integer": {"int32": {}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "inject": {
+                          "typeName": "hydra.core.Literal",
+                          "field": {
+                            "name": "integer",
+                            "term": {"inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"variable": "n"}}}}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an Int as a Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.encodeIntList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"literal": {"integer": {"int32": {}}}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ints",
+                "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "list",
+                      "term": {
+                        "application": {
+                          "function": {
+                            "application": {
+                              "function": {
+                                "typeApplication": {
+                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                  "type": {"variable": "hydra.core.Term"}}},
+                              "argument": {
+                                "lambda": {
+                                  "parameter": "n",
+                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                  "body": {"application": {"function": {"variable": "hydra.test.transform.encodeInt"}, "argument": {"variable": "n"}}}}}}},
+                          "argument": {"variable": "ints"}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode [Int] as a Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.encodeListList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "lists",
+                "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "list",
+                      "term": {
+                        "application": {
+                          "function": {
+                            "application": {
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                  "type": {"variable": "hydra.core.Term"}}},
+                              "argument": {
+                                "lambda": {
+                                  "parameter": "l",
+                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                  "body": {"application": {"function": {"variable": "hydra.test.transform.encodeIntList"}, "argument": {"variable": "l"}}}}}}},
+                          "argument": {"variable": "lists"}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode [[Int]] as a Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.transformModule",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.packaging.Module"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "domain": {"variable": "hydra.packaging.Module"},
+                "body": {
+                  "record": {
+                    "typeName": "hydra.packaging.Module",
+                    "fields": [
+                      {
+                        "name": "name",
+                        "term": {
+                          "application": {
+                            "function": {"variable": "hydra.test.transform.addGenerationPrefix"},
+                            "argument": {
+                              "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "m"}}}}}},
+                      {
+                        "name": "metadata",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "metadata"}},
+                            "argument": {"variable": "m"}}}},
+                      {
+                        "name": "dependencies",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "dependencies"}},
+                            "argument": {"variable": "m"}}}},
+                      {
+                        "name": "definitions",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "definitions"}},
+                            "argument": {"variable": "m"}}}}]}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Transform module with generation namespace"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.transformTestCase",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "t0"}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {"lambda": {"parameter": "tcm", "domain": {"variable": "t0"}, "body": {"optional": {"variable": "tcm"}}}},
+                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pass through test cases unchanged"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.test.transform.transformToCompiledTests",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.testing.TestGroup"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "hydra.testing.TestGroup"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "tg",
+                "domain": {"variable": "hydra.testing.TestGroup"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "name_",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}}, "argument": {"variable": "tg"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                      {
+                        "name": "desc",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "description"}},
+                            "argument": {"variable": "tg"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"literal": {"string": {}}}}}},
+                      {
+                        "name": "subgroups",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "subgroups"}},
+                            "argument": {"variable": "tg"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
+                      {
+                        "name": "cases_",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "cases"}}, "argument": {"variable": "tg"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                      {
+                        "name": "transformedCases",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                        "type": {"optional": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "tc",
+                                        "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.test.transform.transformTestCase"},
+                                                "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                            "argument": {"variable": "tc"}}}}}}},
+                                "argument": {"variable": "cases_"}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                      {
+                        "name": "transformedSubgroups",
+                        "term": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.testing.TestGroup"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.testing.TestGroup"}}},
+                                        "type": {"optional": {"variable": "hydra.testing.TestGroup"}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "sg",
+                                        "domain": {"variable": "hydra.testing.TestGroup"},
+                                        "body": {
+                                          "application": {"function": {"variable": "hydra.test.transform.transformToCompiledTests"}, "argument": {"variable": "sg"}}}}}}},
+                                "argument": {"variable": "subgroups"}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.testing.TestGroup"}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.logic.and"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                            "argument": {"variable": "transformedCases"}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.testing.TestGroup"}}},
+                                        "argument": {"variable": "transformedSubgroups"}}}}}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.testing.TestGroup"}}}}},
+                        "argument": {
+                          "optional": {
+                            "record": {
+                              "typeName": "hydra.testing.TestGroup",
+                              "fields": [
+                                {"name": "name", "term": {"variable": "name_"}},
+                                {"name": "description", "term": {"variable": "desc"}},
+                                {"name": "subgroups", "term": {"variable": "transformedSubgroups"}},
+                                {"name": "cases", "term": {"variable": "transformedCases"}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Transform test group hierarchy to only include delegated evaluation tests"}}}]}}}}}]}

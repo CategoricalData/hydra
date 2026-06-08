@@ -1,52 +1,57 @@
 {
+  "name": "hydra.json.model",
+  "metadata": {"description": "A JSON syntax model. See the BNF at https://www.json.org", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.json.model.Value",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON value"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "array",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON array"}}}]},
-                        "body": {"list": {"variable": "hydra.json.model.Value"}}}}},
+                        "body": {"list": {"variable": "hydra.json.model.Value"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON array"}}}]}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]},
-                        "body": {"literal": {"boolean": {}}}}}},
+                        "body": {"literal": {"boolean": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]}}}},
                   {
                     "name": "null",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "JSON's null value"}}}]},
-                        "body": {"unit": {}}}}},
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "JSON's null value"}}}]}}}},
                   {
                     "name": "number",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric value"}}}]},
-                        "body": {"literal": {"decimal": {}}}}}},
+                        "body": {"literal": {"decimal": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric value"}}}]}}}},
                   {
                     "name": "object",
                     "type": {
                       "annotated": {
+                        "body": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON object as a set of key/value pairs"}}}]},
-                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}}}},
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A JSON object as an ordered list of key/value pairs. The ordering preserves the declaration order of the record from which the object was encoded, rather than alphabetizing keys. As a consequence, equality of Value objects is order-sensitive: two objects with the same pairs in a different order are equal as JSON, but not as Hydra Values."}}}]}}}},
                   {
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]},
-                        "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.json.model.Value"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {"comments": [], "description": "A JSON syntax model. See the BNF at https://www.json.org", "seeAlso": []},
-  "name": "hydra.json.model"}
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON value"}}}]}}}}}}]}

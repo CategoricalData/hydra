@@ -134,11 +134,11 @@ expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
       _ -> Left "expected number"
--- | Extract an object from a JSON value
+-- | Extract an object from a JSON value as a name-keyed map. Field order is not preserved here; decoding looks fields up by name.
 expectObject :: Model.Value -> Either String (M.Map String Model.Value)
 expectObject value =
     case value of
-      Model.ValueObject v0 -> Right v0
+      Model.ValueObject v0 -> Right (Maps.fromList v0)
       _ -> Left "expected object"
 -- | Extract a string from a JSON value
 expectString :: Model.Value -> Either String String

@@ -1,954 +1,9 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an attribute list to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "al"}, "function": {"unwrap": "hydra.graphviz.dot.AttrList"}}},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "alist"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "hydra.graphviz.serde.equalityPairToExpr"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.EqualityPair"}}},
-                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                        "function": {
-                                          "application": {"argument": {"variable": "hydra.serialization.inlineStyle"}, "function": {"variable": "hydra.serialization.commaSep"}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.serialization.inlineStyle"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.serialization.squareBrackets"},
-                                            "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                                "domain": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}},
-                                "parameter": "alist"}},
-                            "function": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}}}},
-                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                "domain": {"variable": "hydra.graphviz.dot.AttrList"},
-                "parameter": "al"}}}},
-        "name": "hydra.graphviz.serde.attrListToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.AttrList"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert an attribute statement to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "t",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "as"},
-                            "function": {"project": {"fieldName": "type", "typeName": "hydra.graphviz.dot.AttrStmt"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.graphviz.dot.AttrType"}, "variables": []}},
-                      {
-                        "name": "attr",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "as"},
-                            "function": {"project": {"fieldName": "attributes", "typeName": "hydra.graphviz.dot.AttrStmt"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.graphviz.dot.AttrList"}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.graphviz.serde.attrTypeToExpr"}}},
-                            {"application": {"argument": {"variable": "attr"}, "function": {"variable": "hydra.graphviz.serde.attrListToExpr"}}}]},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
-                "parameter": "as"}}}},
-        "name": "hydra.graphviz.serde.attrStmtToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.AttrStmt"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an attribute type to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "t"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "graph"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "graph"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "node"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "node"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "edge"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "edge"}],
-                        "typeName": "hydra.graphviz.dot.AttrType"}}}},
-                "domain": {"variable": "hydra.graphviz.dot.AttrType"},
-                "parameter": "t"}}}},
-        "name": "hydra.graphviz.serde.attrTypeToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.AttrType"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a compass point to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "p"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "n"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "n"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "ne"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "ne"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "e"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "e"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "se"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "se"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "s"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "s"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "sw"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "sw"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "w"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "w"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "nw"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "nw"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "c"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "c"},
-                          {
-                            "handler": {
-                              "lambda": {
-                                "body": {"application": {"argument": {"literal": {"string": "none"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"unit": {}},
-                                "parameter": "_"}},
-                            "name": "none"}],
-                        "typeName": "hydra.graphviz.dot.CompassPt"}}}},
-                "domain": {"variable": "hydra.graphviz.dot.CompassPt"},
-                "parameter": "p"}}}},
-        "name": "hydra.graphviz.serde.compassPtToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.CompassPt"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an edge statement to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "l",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "es"},
-                                "function": {"project": {"fieldName": "left", "typeName": "hydra.graphviz.dot.EdgeStmt"}}}},
-                            "typeScheme": {"body": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}, "variables": []}},
-                          {
-                            "name": "r",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "es"},
-                                "function": {"project": {"fieldName": "right", "typeName": "hydra.graphviz.dot.EdgeStmt"}}}},
-                            "typeScheme": {"body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}, "variables": []}},
-                          {
-                            "name": "attr",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "es"},
-                                "function": {"project": {"fieldName": "attributes", "typeName": "hydra.graphviz.dot.EdgeStmt"}}}},
-                            "typeScheme": {"body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}, "variables": []}},
-                          {
-                            "name": "arrow",
-                            "term": {
-                              "application": {
-                                "argument": {"literal": {"string": "--"}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "->"}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "directed"},
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
-                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
-                          {
-                            "name": "rhsParts",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "r"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "list": [
-                                                {"application": {"argument": {"variable": "arrow"}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                {
-                                                  "application": {
-                                                    "argument": {"variable": "n"},
-                                                    "function": {
-                                                      "application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}}}}}]},
-                                            "domain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
-                                            "parameter": "n"}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}},
-                                            "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                            "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
-                          {
-                            "name": "attrParts",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "list": [{"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graphviz.serde.attrListToExpr"}}}]},
-                                    "domain": {"variable": "hydra.graphviz.dot.AttrList"},
-                                    "parameter": "a"}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "attr"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.AttrList"}}},
-                                            "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                            "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
-                        "body": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {
-                                  "list": [
-                                    {
-                                      "list": [
-                                        {
-                                          "application": {
-                                            "argument": {"variable": "l"},
-                                            "function": {
-                                              "application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}}}}}]},
-                                    {"variable": "rhsParts"},
-                                    {"variable": "attrParts"}]},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                    "domain": {"variable": "hydra.graphviz.dot.EdgeStmt"},
-                    "parameter": "es"}},
-                "domain": {"literal": {"boolean": {}}},
-                "parameter": "directed"}}}},
-        "name": "hydra.graphviz.serde.edgeStmtToExpr",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graphviz.dot.EdgeStmt"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an equality pair to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "l",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "eq"},
-                            "function": {"project": {"fieldName": "left", "typeName": "hydra.graphviz.dot.EqualityPair"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}},
-                      {
-                        "name": "r",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "eq"},
-                            "function": {"project": {"fieldName": "right", "typeName": "hydra.graphviz.dot.EqualityPair"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {"application": {"argument": {"variable": "l"}, "function": {"variable": "hydra.graphviz.serde.idToExpr"}}},
-                            {"application": {"argument": {"literal": {"string": "="}}, "function": {"variable": "hydra.serialization.cst"}}},
-                            {"application": {"argument": {"variable": "r"}, "function": {"variable": "hydra.graphviz.serde.idToExpr"}}}]},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
-                "parameter": "eq"}}}},
-        "name": "hydra.graphviz.serde.equalityPairToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.EqualityPair"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a graph to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "strict",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "g"},
-                            "function": {"project": {"fieldName": "strict", "typeName": "hydra.graphviz.dot.Graph"}}}},
-                        "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
-                      {
-                        "name": "directed",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "g"},
-                            "function": {"project": {"fieldName": "directed", "typeName": "hydra.graphviz.dot.Graph"}}}},
-                        "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
-                      {
-                        "name": "stmts",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "g"},
-                            "function": {"project": {"fieldName": "statements", "typeName": "hydra.graphviz.dot.Graph"}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "variables": []}},
-                      {
-                        "name": "graphKeyword",
-                        "term": {
-                          "application": {
-                            "argument": {"literal": {"string": "graph"}},
-                            "function": {
-                              "application": {
-                                "argument": {"literal": {"string": "digraph"}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "directed"},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}},
-                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
-                      {
-                        "name": "graphExpr",
-                        "term": {
-                          "application": {
-                            "argument": {"application": {"argument": {"variable": "graphKeyword"}, "function": {"variable": "hydra.serialization.cst"}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "list": [
-                                        {"application": {"argument": {"literal": {"string": "strict"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                        {"application": {"argument": {"variable": "graphKeyword"}, "function": {"variable": "hydra.serialization.cst"}}}]},
-                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "strict"},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
-                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "stmts"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.stmtToExpr"}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}},
-                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.serialization.fullBlockStyle"},
-                                    "function": {"application": {"argument": {"literal": {"string": ";"}}, "function": {"variable": "hydra.serialization.symbolSep"}}}}}}},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "hydra.serialization.fullBlockStyle"},
-                                "function": {
-                                  "application": {"argument": {"variable": "hydra.serialization.curlyBraces"}, "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {"list": [{"variable": "graphExpr"}, {"variable": "body"}]},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                "domain": {"variable": "hydra.graphviz.dot.Graph"},
-                "parameter": "g"}}}},
-        "name": "hydra.graphviz.serde.graphToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.Graph"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an identifier to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {"literal": {"string": "\""}},
-                            {"application": {"argument": {"variable": "i"}, "function": {"unwrap": "hydra.graphviz.dot.Id"}}},
-                            {"literal": {"string": "\""}}]},
-                        "function": {"variable": "hydra.lib.strings.cat"}}},
-                    "function": {"variable": "hydra.serialization.cst"}}},
-                "domain": {"variable": "hydra.graphviz.dot.Id"},
-                "parameter": "i"}}}},
-        "name": "hydra.graphviz.serde.idToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.Id"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node identifier to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "i",
-                        "term": {
-                          "application": {"argument": {"variable": "nid"}, "function": {"project": {"fieldName": "id", "typeName": "hydra.graphviz.dot.NodeId"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.graphviz.dot.Id"}, "variables": []}},
-                      {
-                        "name": "mp",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "nid"},
-                            "function": {"project": {"fieldName": "port", "typeName": "hydra.graphviz.dot.NodeId"}}}},
-                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphviz.dot.Port"}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {
-                              "list": [
-                                {
-                                  "application": {
-                                    "argument": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.graphviz.serde.idToExpr"}}},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                                {
-                                  "application": {
-                                    "argument": {"variable": "mp"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.graphviz.serde.portToExpr"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.Port"}}},
-                                            "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "function": {"variable": "hydra.serialization.noSep"}}}}},
-                "domain": {"variable": "hydra.graphviz.dot.NodeId"},
-                "parameter": "nid"}}}},
-        "name": "hydra.graphviz.serde.nodeIdToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.NodeId"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node or subgraph to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "ns"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.NodeId"},
-                                    "parameter": "n"}},
-                                "name": "node"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "sg"},
-                                        "function": {"application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.subgraphToExpr"}}}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
-                                    "parameter": "sg"}},
-                                "name": "subgraph"}],
-                            "typeName": "hydra.graphviz.dot.NodeOrSubgraph"}}}},
-                    "domain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
-                    "parameter": "ns"}},
-                "domain": {"literal": {"boolean": {}}},
-                "parameter": "directed"}}}},
-        "name": "hydra.graphviz.serde.nodeOrSubgraphToExpr",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node statement to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "i",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "ns"},
-                            "function": {"project": {"fieldName": "id", "typeName": "hydra.graphviz.dot.NodeStmt"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.graphviz.dot.NodeId"}, "variables": []}},
-                      {
-                        "name": "attr",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "ns"},
-                            "function": {"project": {"fieldName": "attributes", "typeName": "hydra.graphviz.dot.NodeStmt"}}}},
-                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {
-                              "list": [
-                                {
-                                  "application": {
-                                    "argument": {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}}},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                                {
-                                  "application": {
-                                    "argument": {"variable": "attr"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.graphviz.serde.attrListToExpr"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.AttrList"}}},
-                                            "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                "domain": {"variable": "hydra.graphviz.dot.NodeStmt"},
-                "parameter": "ns"}}}},
-        "name": "hydra.graphviz.serde.nodeStmtToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.NodeStmt"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a port to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "mi",
-                        "term": {
-                          "application": {"argument": {"variable": "p"}, "function": {"project": {"fieldName": "id", "typeName": "hydra.graphviz.dot.Port"}}}},
-                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphviz.dot.Id"}}, "variables": []}},
-                      {
-                        "name": "mp",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "p"},
-                            "function": {"project": {"fieldName": "position", "typeName": "hydra.graphviz.dot.Port"}}}},
-                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}, "variables": []}},
-                      {
-                        "name": "pre",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "i"}, "function": {"variable": "hydra.graphviz.serde.idToExpr"}}}]},
-                                "domain": {"variable": "hydra.graphviz.dot.Id"},
-                                "parameter": "i"}},
-                            "function": {
-                              "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "mi"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
-                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
-                      {
-                        "name": "suf",
-                        "term": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "list": [
-                                    {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                    {"application": {"argument": {"variable": "cp"}, "function": {"variable": "hydra.graphviz.serde.compassPtToExpr"}}}]},
-                                "domain": {"variable": "hydra.graphviz.dot.CompassPt"},
-                                "parameter": "cp"}},
-                            "function": {
-                              "application": {
-                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "mp"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.CompassPt"}}},
-                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"list": [{"variable": "pre"}, {"variable": "suf"}]},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "function": {"variable": "hydra.serialization.noSep"}}}}},
-                "domain": {"variable": "hydra.graphviz.dot.Port"},
-                "parameter": "p"}}}},
-        "name": "hydra.graphviz.serde.portToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.Port"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "s"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.graphviz.serde.nodeStmtToExpr"}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.NodeStmt"},
-                                    "parameter": "n"}},
-                                "name": "node"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "e"},
-                                        "function": {"application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.edgeStmtToExpr"}}}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.EdgeStmt"},
-                                    "parameter": "e"}},
-                                "name": "edge"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.graphviz.serde.attrStmtToExpr"}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
-                                    "parameter": "a"}},
-                                "name": "attr"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {"application": {"argument": {"variable": "eq"}, "function": {"variable": "hydra.graphviz.serde.equalityPairToExpr"}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
-                                    "parameter": "eq"}},
-                                "name": "equals"},
-                              {
-                                "handler": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "sg"},
-                                        "function": {"application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.subgraphToExpr"}}}}},
-                                    "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
-                                    "parameter": "sg"}},
-                                "name": "subgraph"}],
-                            "typeName": "hydra.graphviz.dot.Stmt"}}}},
-                    "domain": {"variable": "hydra.graphviz.dot.Stmt"},
-                    "parameter": "s"}},
-                "domain": {"literal": {"boolean": {}}},
-                "parameter": "directed"}}}},
-        "name": "hydra.graphviz.serde.stmtToExpr",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graphviz.dot.Stmt"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "mid",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "sg"},
-                                "function": {"project": {"fieldName": "subgraphId", "typeName": "hydra.graphviz.dot.Subgraph"}}}},
-                            "typeScheme": {"body": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}, "variables": []}},
-                          {
-                            "name": "stmts",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "sg"},
-                                "function": {"project": {"fieldName": "statements", "typeName": "hydra.graphviz.dot.Subgraph"}}}},
-                            "typeScheme": {"body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "variables": []}},
-                          {
-                            "name": "body",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "stmts"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"application": {"argument": {"variable": "directed"}, "function": {"variable": "hydra.graphviz.serde.stmtToExpr"}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.serialization.inlineStyle"},
-                                    "function": {
-                                      "application": {"argument": {"variable": "hydra.serialization.curlyBraces"}, "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                            "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
-                        "body": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {
-                                  "list": [
-                                    {
-                                      "application": {
-                                        "argument": {"variable": "mid"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.graphviz.serde.subgraphIdToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    {
-                                      "application": {
-                                        "argument": {"variable": "body"},
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}}}}]},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                            "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                    "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
-                    "parameter": "sg"}},
-                "domain": {"literal": {"boolean": {}}},
-                "parameter": "directed"}}}},
-        "name": "hydra.graphviz.serde.subgraphToExpr",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph identifier to an expression"}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {
-                              "application": {
-                                "argument": {"application": {"argument": {"literal": {"string": "subgraph"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                            {
-                              "application": {
-                                "argument": {"application": {"argument": {"variable": "sid"}, "function": {"unwrap": "hydra.graphviz.dot.SubgraphId"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.graphviz.serde.idToExpr"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
-                                        "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                "domain": {"variable": "hydra.graphviz.dot.SubgraphId"},
-                "parameter": "sid"}}}},
-        "name": "hydra.graphviz.serde.subgraphIdToExpr",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.graphviz.dot.SubgraphId"}}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}},
-          "typeParameters": []}}}],
+  "name": "hydra.graphviz.serde",
+  "metadata": {
+    "description": "Serialization functions for converting Graphviz DOT AST to abstract expressions",
+    "comments": [],
+    "seeAlso": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.graphviz.dot"},
@@ -974,8 +29,953 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {
-    "comments": [],
-    "description": "Serialization functions for converting Graphviz DOT AST to abstract expressions",
-    "seeAlso": []},
-  "name": "hydra.graphviz.serde"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.attrListToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.AttrList"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "al",
+                "domain": {"variable": "hydra.graphviz.dot.AttrList"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.serialization.spaceSep"},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}}}},
+                                "type": {"variable": "hydra.ast.Expr"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "alist",
+                                "domain": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.serialization.brackets"},
+                                            "argument": {"variable": "hydra.serialization.squareBrackets"}}},
+                                        "argument": {"variable": "hydra.serialization.inlineStyle"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {"function": {"variable": "hydra.serialization.commaSep"}, "argument": {"variable": "hydra.serialization.inlineStyle"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.EqualityPair"}}},
+                                                    "type": {"variable": "hydra.ast.Expr"}}},
+                                                "argument": {"variable": "hydra.graphviz.serde.equalityPairToExpr"}}},
+                                            "argument": {"variable": "alist"}}}}}}}}}}},
+                        "argument": {"application": {"function": {"unwrap": "hydra.graphviz.dot.AttrList"}, "argument": {"variable": "al"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an attribute list to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.attrStmtToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.AttrStmt"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "as",
+                "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "t",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.AttrStmt", "fieldName": "type"}},
+                            "argument": {"variable": "as"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.AttrType"}}},
+                      {
+                        "name": "attr",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.AttrStmt", "fieldName": "attributes"}},
+                            "argument": {"variable": "as"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.AttrList"}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.spaceSep"},
+                        "argument": {
+                          "list": [
+                            {"application": {"function": {"variable": "hydra.graphviz.serde.attrTypeToExpr"}, "argument": {"variable": "t"}}},
+                            {"application": {"function": {"variable": "hydra.graphviz.serde.attrListToExpr"}, "argument": {"variable": "attr"}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an attribute statement to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.attrTypeToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.AttrType"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.graphviz.dot.AttrType"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.graphviz.dot.AttrType",
+                        "cases": [
+                          {
+                            "name": "graph",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "graph"}}}}}}},
+                          {
+                            "name": "node",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "node"}}}}}}},
+                          {
+                            "name": "edge",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "edge"}}}}}}}]}},
+                    "argument": {"variable": "t"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an attribute type to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.compassPtToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.CompassPt"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "p",
+                "domain": {"variable": "hydra.graphviz.dot.CompassPt"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.graphviz.dot.CompassPt",
+                        "cases": [
+                          {
+                            "name": "n",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "n"}}}}}}},
+                          {
+                            "name": "ne",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "ne"}}}}}}},
+                          {
+                            "name": "e",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "e"}}}}}}},
+                          {
+                            "name": "se",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "se"}}}}}}},
+                          {
+                            "name": "s",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "s"}}}}}}},
+                          {
+                            "name": "sw",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "sw"}}}}}}},
+                          {
+                            "name": "w",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "w"}}}}}}},
+                          {
+                            "name": "nw",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "nw"}}}}}}},
+                          {
+                            "name": "c",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "c"}}}}}}},
+                          {
+                            "name": "none",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"unit": {}},
+                                "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "none"}}}}}}}]}},
+                    "argument": {"variable": "p"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a compass point to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.edgeStmtToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.EdgeStmt"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "directed",
+                "domain": {"literal": {"boolean": {}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "es",
+                    "domain": {"variable": "hydra.graphviz.dot.EdgeStmt"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "l",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.graphviz.dot.EdgeStmt", "fieldName": "left"}},
+                                "argument": {"variable": "es"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}},
+                          {
+                            "name": "r",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.graphviz.dot.EdgeStmt", "fieldName": "right"}},
+                                "argument": {"variable": "es"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}}},
+                          {
+                            "name": "attr",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.graphviz.dot.EdgeStmt", "fieldName": "attributes"}},
+                                "argument": {"variable": "es"}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}},
+                          {
+                            "name": "arrow",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                        "argument": {"variable": "directed"}}},
+                                    "argument": {"literal": {"string": "->"}}}},
+                                "argument": {"literal": {"string": "--"}}}},
+                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                          {
+                            "name": "rhsParts",
+                            "term": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}},
+                                            "type": {"list": {"variable": "hydra.ast.Expr"}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "n",
+                                            "domain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
+                                            "body": {
+                                              "list": [
+                                                {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "arrow"}}},
+                                                {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {"function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}, "argument": {"variable": "directed"}}},
+                                                    "argument": {"variable": "n"}}}]}}}}},
+                                    "argument": {"variable": "r"}}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                          {
+                            "name": "attrParts",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.AttrList"}}},
+                                            "type": {"list": {"variable": "hydra.ast.Expr"}}}},
+                                        "argument": {"variable": "attr"}}},
+                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "a",
+                                    "domain": {"variable": "hydra.graphviz.dot.AttrList"},
+                                    "body": {
+                                      "list": [{"application": {"function": {"variable": "hydra.graphviz.serde.attrListToExpr"}, "argument": {"variable": "a"}}}]}}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.serialization.spaceSep"},
+                            "argument": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "list": [
+                                    {
+                                      "list": [
+                                        {
+                                          "application": {
+                                            "function": {
+                                              "application": {"function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}, "argument": {"variable": "directed"}}},
+                                            "argument": {"variable": "l"}}}]},
+                                    {"variable": "rhsParts"},
+                                    {"variable": "attrParts"}]}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an edge statement to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.equalityPairToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.EqualityPair"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "eq",
+                "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "l",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.EqualityPair", "fieldName": "left"}},
+                            "argument": {"variable": "eq"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}}},
+                      {
+                        "name": "r",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.EqualityPair", "fieldName": "right"}},
+                            "argument": {"variable": "eq"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.spaceSep"},
+                        "argument": {
+                          "list": [
+                            {"application": {"function": {"variable": "hydra.graphviz.serde.idToExpr"}, "argument": {"variable": "l"}}},
+                            {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "="}}}},
+                            {"application": {"function": {"variable": "hydra.graphviz.serde.idToExpr"}, "argument": {"variable": "r"}}}]}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an equality pair to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.graphToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.Graph"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "g",
+                "domain": {"variable": "hydra.graphviz.dot.Graph"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "strict",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "strict"}},
+                            "argument": {"variable": "g"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                      {
+                        "name": "directed",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "directed"}},
+                            "argument": {"variable": "g"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                      {
+                        "name": "stmts",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "statements"}},
+                            "argument": {"variable": "g"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
+                      {
+                        "name": "graphKeyword",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                    "argument": {"variable": "directed"}}},
+                                "argument": {"literal": {"string": "digraph"}}}},
+                            "argument": {"literal": {"string": "graph"}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                      {
+                        "name": "graphExpr",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "strict"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.serialization.spaceSep"},
+                                    "argument": {
+                                      "list": [
+                                        {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "strict"}}}},
+                                        {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "graphKeyword"}}}]}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "graphKeyword"}}}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                      {
+                        "name": "body",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {"function": {"variable": "hydra.serialization.brackets"}, "argument": {"variable": "hydra.serialization.curlyBraces"}}},
+                                "argument": {"variable": "hydra.serialization.fullBlockStyle"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.serialization.symbolSep"}, "argument": {"literal": {"string": ";"}}}},
+                                    "argument": {"variable": "hydra.serialization.fullBlockStyle"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.stmtToExpr"}, "argument": {"variable": "directed"}}}}},
+                                    "argument": {"variable": "stmts"}}}}}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.spaceSep"},
+                        "argument": {"list": [{"variable": "graphExpr"}, {"variable": "body"}]}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a graph to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.idToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.Id"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "i",
+                "domain": {"variable": "hydra.graphviz.dot.Id"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.serialization.cst"},
+                    "argument": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "\""}},
+                            {"application": {"function": {"unwrap": "hydra.graphviz.dot.Id"}, "argument": {"variable": "i"}}},
+                            {"literal": {"string": "\""}}]}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an identifier to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.nodeIdToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.NodeId"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "nid",
+                "domain": {"variable": "hydra.graphviz.dot.NodeId"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "i",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.graphviz.dot.NodeId", "fieldName": "id"}}, "argument": {"variable": "nid"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}}},
+                      {
+                        "name": "mp",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.NodeId", "fieldName": "port"}},
+                            "argument": {"variable": "nid"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.Port"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.noSep"},
+                        "argument": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "argument": {
+                              "list": [
+                                {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.idToExpr"}, "argument": {"variable": "i"}}}}},
+                                {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.Port"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}},
+                                        "argument": {"variable": "hydra.graphviz.serde.portToExpr"}}},
+                                    "argument": {"variable": "mp"}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node identifier to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.nodeOrSubgraphToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "directed",
+                "domain": {"literal": {"boolean": {}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "ns",
+                    "domain": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.graphviz.dot.NodeOrSubgraph",
+                            "cases": [
+                              {
+                                "name": "node",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "n",
+                                    "domain": {"variable": "hydra.graphviz.dot.NodeId"},
+                                    "body": {"application": {"function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}, "argument": {"variable": "n"}}}}}},
+                              {
+                                "name": "subgraph",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "sg",
+                                    "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.graphviz.serde.subgraphToExpr"}, "argument": {"variable": "directed"}}},
+                                        "argument": {"variable": "sg"}}}}}}]}},
+                        "argument": {"variable": "ns"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node or subgraph to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.nodeStmtToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.NodeStmt"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ns",
+                "domain": {"variable": "hydra.graphviz.dot.NodeStmt"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "i",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.NodeStmt", "fieldName": "id"}},
+                            "argument": {"variable": "ns"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.NodeId"}}},
+                      {
+                        "name": "attr",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.NodeStmt", "fieldName": "attributes"}},
+                            "argument": {"variable": "ns"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.spaceSep"},
+                        "argument": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "argument": {
+                              "list": [
+                                {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}, "argument": {"variable": "i"}}}}},
+                                {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.AttrList"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}},
+                                        "argument": {"variable": "hydra.graphviz.serde.attrListToExpr"}}},
+                                    "argument": {"variable": "attr"}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a node statement to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.portToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.Port"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "p",
+                "domain": {"variable": "hydra.graphviz.dot.Port"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "mi",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.graphviz.dot.Port", "fieldName": "id"}}, "argument": {"variable": "p"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.Id"}}}},
+                      {
+                        "name": "mp",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.graphviz.dot.Port", "fieldName": "position"}},
+                            "argument": {"variable": "p"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}}},
+                      {
+                        "name": "pre",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}},
+                                    "argument": {"variable": "mi"}}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"variable": "hydra.graphviz.dot.Id"},
+                                "body": {
+                                  "list": [
+                                    {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ":"}}}},
+                                    {"application": {"function": {"variable": "hydra.graphviz.serde.idToExpr"}, "argument": {"variable": "i"}}}]}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                      {
+                        "name": "suf",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.CompassPt"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}},
+                                    "argument": {"variable": "mp"}}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "cp",
+                                "domain": {"variable": "hydra.graphviz.dot.CompassPt"},
+                                "body": {
+                                  "list": [
+                                    {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ":"}}}},
+                                    {"application": {"function": {"variable": "hydra.graphviz.serde.compassPtToExpr"}, "argument": {"variable": "cp"}}}]}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.noSep"},
+                        "argument": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "argument": {"list": [{"variable": "pre"}, {"variable": "suf"}]}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a port to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.stmtToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.Stmt"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "directed",
+                "domain": {"literal": {"boolean": {}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "s",
+                    "domain": {"variable": "hydra.graphviz.dot.Stmt"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.graphviz.dot.Stmt",
+                            "cases": [
+                              {
+                                "name": "node",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "n",
+                                    "domain": {"variable": "hydra.graphviz.dot.NodeStmt"},
+                                    "body": {"application": {"function": {"variable": "hydra.graphviz.serde.nodeStmtToExpr"}, "argument": {"variable": "n"}}}}}},
+                              {
+                                "name": "edge",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "e",
+                                    "domain": {"variable": "hydra.graphviz.dot.EdgeStmt"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.graphviz.serde.edgeStmtToExpr"}, "argument": {"variable": "directed"}}},
+                                        "argument": {"variable": "e"}}}}}},
+                              {
+                                "name": "attr",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "a",
+                                    "domain": {"variable": "hydra.graphviz.dot.AttrStmt"},
+                                    "body": {"application": {"function": {"variable": "hydra.graphviz.serde.attrStmtToExpr"}, "argument": {"variable": "a"}}}}}},
+                              {
+                                "name": "equals",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "eq",
+                                    "domain": {"variable": "hydra.graphviz.dot.EqualityPair"},
+                                    "body": {"application": {"function": {"variable": "hydra.graphviz.serde.equalityPairToExpr"}, "argument": {"variable": "eq"}}}}}},
+                              {
+                                "name": "subgraph",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "sg",
+                                    "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.graphviz.serde.subgraphToExpr"}, "argument": {"variable": "directed"}}},
+                                        "argument": {"variable": "sg"}}}}}}]}},
+                        "argument": {"variable": "s"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.subgraphToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.Subgraph"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "directed",
+                "domain": {"literal": {"boolean": {}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "sg",
+                    "domain": {"variable": "hydra.graphviz.dot.Subgraph"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "mid",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.graphviz.dot.Subgraph", "fieldName": "subgraphId"}},
+                                "argument": {"variable": "sg"}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}}},
+                          {
+                            "name": "stmts",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.graphviz.dot.Subgraph", "fieldName": "statements"}},
+                                "argument": {"variable": "sg"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
+                          {
+                            "name": "body",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.serialization.brackets"}, "argument": {"variable": "hydra.serialization.curlyBraces"}}},
+                                    "argument": {"variable": "hydra.serialization.inlineStyle"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.serialization.spaceSep"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.stmtToExpr"}, "argument": {"variable": "directed"}}}}},
+                                        "argument": {"variable": "stmts"}}}}}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.serialization.spaceSep"},
+                            "argument": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {
+                                  "list": [
+                                    {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}},
+                                            "argument": {"variable": "hydra.graphviz.serde.subgraphIdToExpr"}}},
+                                        "argument": {"variable": "mid"}}},
+                                    {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                        "argument": {"variable": "body"}}}]}}}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphviz.serde.subgraphIdToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.SubgraphId"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "sid",
+                "domain": {"variable": "hydra.graphviz.dot.SubgraphId"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.serialization.spaceSep"},
+                    "argument": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "subgraph"}}}}}},
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                        "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "hydra.graphviz.serde.idToExpr"}}},
+                                "argument": {"application": {"function": {"unwrap": "hydra.graphviz.dot.SubgraphId"}, "argument": {"variable": "sid"}}}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph identifier to an expression"}}}]}}}}}]}
