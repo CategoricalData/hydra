@@ -1,5 +1,5 @@
 {
-  "defaultLibModules": ["hydra.lib.defaults.lists"],
+  "defaultLibModules": [],
   "dslModules": [
     "hydra.dsl.ast",
     "hydra.dsl.coders",
@@ -102,7 +102,6 @@
     "hydra.languages",
     "hydra.lexical",
     "hydra.lib.chars",
-    "hydra.lib.defaults.lists",
     "hydra.lib.eithers",
     "hydra.lib.equality",
     "hydra.lib.lists",
