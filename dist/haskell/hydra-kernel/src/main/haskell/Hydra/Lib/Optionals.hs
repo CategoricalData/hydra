@@ -34,7 +34,7 @@ apply =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Applicative apply for optionals: combine an optional function and an optional argument."),
         Packaging.entityMetadataComments = [
-          "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing.",
+          "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.",
           "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
           "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
         Packaging.entityMetadataSeeAlso = [],
@@ -100,7 +100,7 @@ bind =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Monadic bind for optionals."),
         Packaging.entityMetadataComments = [
-          "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing.",
+          "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
           "The monadic bind for optionals; used to chain computations that may be absent.",
           "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
         Packaging.entityMetadataSeeAlso = [],
@@ -156,7 +156,7 @@ cases =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Case analysis on an optional, with cases-style argument order."),
         Packaging.entityMetadataComments = [
-          "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
+          "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
           "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
           "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
         Packaging.entityMetadataSeeAlso = [],
@@ -200,7 +200,7 @@ cat =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Concatenate optionals, keeping only the present values."),
         Packaging.entityMetadataComments = [
-          "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded.",
+          "cat(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
           "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -262,7 +262,7 @@ compose =
         Packaging.entityMetadataDescription = (Just "Kleisli composition for optionals."),
         Packaging.entityMetadataComments = [
           "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
-          "If either f or the second stage produces Nothing, the result is Nothing.",
+          "If either f or the second stage produces none, the result is none.",
           "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -330,7 +330,7 @@ fromOptional =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Return the value contained in an optional, falling back to a default if absent."),
         Packaging.entityMetadataComments = [
-          "fromOptional(def, m) returns x when m is Just(x), and def when m is Nothing.",
+          "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
           "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -381,9 +381,9 @@ isGiven =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.optionals.isGiven"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether an optional is present (Just)."),
+        Packaging.entityMetadataDescription = (Just "Test whether an optional is present (given)."),
         Packaging.entityMetadataComments = [
-          "isGiven(m) returns true iff m is a Just variant.",
+          "isGiven(m) returns true iff m is a given variant.",
           "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -426,9 +426,9 @@ isNone =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.optionals.isNone"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Test whether an optional is absent (Nothing)."),
+        Packaging.entityMetadataDescription = (Just "Test whether an optional is absent (none)."),
         Packaging.entityMetadataComments = [
-          "isNone(m) returns true iff m is the Nothing variant.",
+          "isNone(m) returns true iff m is the none variant.",
           "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -473,7 +473,7 @@ map =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a function over an optional."),
         Packaging.entityMetadataComments = [
-          "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing.",
+          "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
           "The functor instance for optionals.",
           "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
         Packaging.entityMetadataSeeAlso = [],
@@ -534,7 +534,7 @@ mapOptional =
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
         Packaging.entityMetadataDescription = (Just "Map a partial function over a list, keeping only the present results."),
         Packaging.entityMetadataComments = [
-          "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded.",
+          "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.",
           "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -587,9 +587,9 @@ pure =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.optionals.pure"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Wrap a value in Just."),
+        Packaging.entityMetadataDescription = (Just "Wrap a value in given."),
         Packaging.entityMetadataComments = [
-          "pure(x) = Just(x). The applicative pure for optionals.",
+          "pure(x) = given(x). The applicative pure for optionals.",
           "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -615,15 +615,15 @@ pure =
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermOptional (Just (Core.TermVariable (Core.Name "x"))))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Wrap a value in Just.")))]))})))}
+          (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Wrap a value in given.")))]))})))}
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
       Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.optionals.toList"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Convert an optional to a list: Just x maps to [x], Nothing to []."),
+        Packaging.entityMetadataDescription = (Just "Convert an optional to a list: given x maps to [x], none to []."),
         Packaging.entityMetadataComments = [
-          "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing.",
+          "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
           "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),

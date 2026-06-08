@@ -1134,7 +1134,7 @@
                   "map": [
                     {
                       "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Show a Maybe value using a given function to show the element"}}}]},
+                      "value": {"literal": {"string": "Show an optional value using a given function to show the element"}}}]},
                 "body": {
                   "lambda": {
                     "body": {
@@ -1152,12 +1152,12 @@
                                           "application": {
                                             "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                    "function": {"application": {"argument": {"literal": {"string": "just("}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                    "function": {"application": {"argument": {"literal": {"string": "given("}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                 "domain": {"variable": "t0"},
                                 "parameter": "x"}},
                             "function": {
                               "application": {
-                                "argument": {"literal": {"string": "nothing"}},
+                                "argument": {"literal": {"string": "none"}},
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "mx"},
@@ -1170,7 +1170,7 @@
                     "domain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "t0"}}},
                     "parameter": "f"}}}},
             "parameter": "t0"}},
-        "name": "hydra.show.core.maybe",
+        "name": "hydra.show.core.optional",
         "signature": {
           "parameters": [
             {
@@ -1712,7 +1712,7 @@
                                               "application": {
                                                 "argument": {
                                                   "list": [
-                                                    {"literal": {"string": "just("}},
+                                                    {"literal": {"string": "given("}},
                                                     {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.show.core.term"}}},
                                                     {"literal": {"string": ")"}}]},
                                                 "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -1720,7 +1720,7 @@
                                             "parameter": "t"}},
                                         "function": {
                                           "application": {
-                                            "argument": {"literal": {"string": "nothing"}},
+                                            "argument": {"literal": {"string": "none"}},
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "mt"},
@@ -2408,7 +2408,7 @@
                                               "application": {
                                                 "argument": {
                                                   "list": [
-                                                    {"literal": {"string": "maybe<"}},
+                                                    {"literal": {"string": "optional<"}},
                                                     {"application": {"argument": {"variable": "etyp"}, "function": {"variable": "hydra.show.core.type"}}},
                                                     {"literal": {"string": ">"}}]},
                                                 "function": {"variable": "hydra.lib.strings.cat"}}},

@@ -53,7 +53,7 @@ subtermStep step =
         Paths.SubtermStepListElement v0 -> idx v0
         Paths.SubtermStepMapKey v0 -> idxSuff ".key" v0
         Paths.SubtermStepMapValue v0 -> idxSuff ".value" v0
-        Paths.SubtermStepMaybeTerm -> Just "just"
+        Paths.SubtermStepOptionalTerm -> Just "given"
         Paths.SubtermStepProductTerm v0 -> idx v0
         Paths.SubtermStepRecordField v0 -> Just (Strings.cat2 "." (Core.unName v0))
         Paths.SubtermStepSetElement v0 -> idx v0

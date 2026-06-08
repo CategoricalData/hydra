@@ -3531,7 +3531,7 @@
                                                                                               "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                                                                               "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                               "parameter": "n"}},
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.optional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "domain": {"optional": {"literal": {"integer": {"int32": {}}}}},
                                                                                   "parameter": "mx"}},
                                                                               "function": {
@@ -3581,7 +3581,7 @@
                                                                                               "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                                                                               "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                               "parameter": "n"}},
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.optional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "domain": {"optional": {"literal": {"integer": {"int32": {}}}}},
                                                                                   "parameter": "mx"}},
                                                                               "function": {
@@ -3693,7 +3693,7 @@
                                                                                               "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                                                                               "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                               "parameter": "n"}},
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.optional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "domain": {"optional": {"literal": {"integer": {"int32": {}}}}},
                                                                                   "parameter": "mx"}},
                                                                               "function": {
@@ -3741,7 +3741,7 @@
                                                                                               "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                                                                               "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                               "parameter": "n"}},
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.optional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "domain": {"optional": {"literal": {"integer": {"int32": {}}}}},
                                                                                   "parameter": "mx"}},
                                                                               "function": {
@@ -3853,7 +3853,7 @@
                                                                                               "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                                                                               "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                               "parameter": "n"}},
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.optional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "domain": {"optional": {"literal": {"integer": {"int32": {}}}}},
                                                                                   "parameter": "mx"}},
                                                                               "function": {
@@ -3904,7 +3904,7 @@
                                                                                               "body": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.lib.literals.showInt32"}}},
                                                                                               "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                               "parameter": "n"}},
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.maybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.show.core.optional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "domain": {"optional": {"literal": {"integer": {"int32": {}}}}},
                                                                                   "parameter": "mx"}},
                                                                               "function": {

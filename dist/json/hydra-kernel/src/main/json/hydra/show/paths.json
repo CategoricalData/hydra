@@ -168,8 +168,8 @@
                                         "parameter": "i"}},
                                     "name": "mapValue"},
                                   {
-                                    "handler": {"lambda": {"body": {"optional": {"literal": {"string": "just"}}}, "domain": {"unit": {}}, "parameter": "_"}},
-                                    "name": "maybeTerm"},
+                                    "handler": {"lambda": {"body": {"optional": {"literal": {"string": "given"}}}, "domain": {"unit": {}}, "parameter": "_"}},
+                                    "name": "optionalTerm"},
                                   {
                                     "handler": {
                                       "lambda": {

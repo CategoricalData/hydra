@@ -2537,7 +2537,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the maybeTerm variant of hydra.paths.SubtermStep"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the optionalTerm variant of hydra.paths.SubtermStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -2555,13 +2555,13 @@
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybeTerm"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optionalTerm"}}, "typeName": "hydra.core.Name"}}},
                                     {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}},
-        "name": "hydra.dsl.paths.subtermStepMaybeTerm",
+        "name": "hydra.dsl.paths.subtermStepOptionalTerm",
         "signature": {
           "parameters": [],
           "result": {
@@ -5365,7 +5365,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the maybeElement variant of hydra.paths.SubtypeStep"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the optionalElement variant of hydra.paths.SubtypeStep"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -5383,13 +5383,13 @@
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybeElement"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optionalElement"}}, "typeName": "hydra.core.Name"}}},
                                     {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}},
-        "name": "hydra.dsl.paths.subtypeStepMaybeElement",
+        "name": "hydra.dsl.paths.subtypeStepOptionalElement",
         "signature": {
           "parameters": [],
           "result": {

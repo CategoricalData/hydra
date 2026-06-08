@@ -5392,7 +5392,7 @@
                                                                                                                 "argument": {"variable": "val0"},
                                                                                                                 "function": {
                                                                                                                   "application": {
-                                                                                                                    "argument": {"inject": {"field": {"name": "maybeTerm", "term": {"unit": {}}}, "typeName": "hydra.paths.SubtermStep"}},
+                                                                                                                    "argument": {"inject": {"field": {"name": "optionalTerm", "term": {"unit": {}}}, "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                     "function": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
@@ -13201,7 +13201,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"inject": {"field": {"name": "maybeTerm", "term": {"unit": {}}}, "typeName": "hydra.paths.SubtermStep"}},
+                                                "first": {"inject": {"field": {"name": "optionalTerm", "term": {"unit": {}}}, "typeName": "hydra.paths.SubtermStep"}},
                                                 "second": {"variable": "t"}}},
                                             "type": {"variable": "hydra.paths.SubtermStep"}}},
                                         "type": {"variable": "hydra.core.Term"}}}]},
