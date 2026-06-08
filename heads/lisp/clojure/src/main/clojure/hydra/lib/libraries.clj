@@ -600,14 +600,14 @@
 ;; ============================================================
 
 (defn- term-maybe-to-native
-  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:given val) / (:none)"
+  "Convert a term-level maybe (:optional val_or_nil) to native maybe (:given val) / (:none)"
   [m]
   (cond
     (nil? m) (list :none)
     (not (sequential? m)) (list :given m)
     (= (first m) :none) (list :none)
     (= (first m) :given) m
-    (= (first m) :maybe)
+    (= (first m) :optional)
     (let [inner (second m)]
       (cond
         (or (nil? inner)
@@ -620,14 +620,14 @@
     :else (list :given m)))
 
 (defn- native-maybe-to-term
-  "Convert a native maybe (:given val) / (:none) to term-level (:maybe val_or_nil)"
+  "Convert a native maybe (:given val) / (:none) to term-level (:optional val_or_nil)"
   [m]
   (cond
-    (nil? m) (list :maybe nil)
-    (not (sequential? m)) (list :maybe m)
-    (= (first m) :given) (list :maybe (second m))
-    (= (first m) :none) (list :maybe nil)
-    :else (list :maybe m)))
+    (nil? m) (list :optional nil)
+    (not (sequential? m)) (list :optional m)
+    (= (first m) :given) (list :optional (second m))
+    (= (first m) :none) (list :optional nil)
+    :else (list :optional m)))
 
 (defn register-annotations []
   (let [t (p/tc-term)]
@@ -666,16 +666,16 @@
               (fn [cx graph term]
                 (let [result ((((deref (or (resolve 'hydra_annotations_get_term_description) (ns-resolve 'hydra.annotations 'hydra_annotations_get_term_description))) cx) graph) term)]
                   ;; Result is Either Error (Maybe String)
-                  ;; Convert to term-level: (:either (:right (:maybe (:literal (:string "...")))))
+                  ;; Convert to term-level: (:either (:right (:optional (:literal (:string "...")))))
                   (if (= (first result) :left)
                     (list :either result)
                     (let [maybe-str (second result)
                           term-maybe (cond
-                                       (nil? maybe-str) (list :maybe nil)
-                                       (= (first maybe-str) :none) (list :maybe nil)
+                                       (nil? maybe-str) (list :optional nil)
+                                       (= (first maybe-str) :none) (list :optional nil)
                                        (= (first maybe-str) :given)
-                                       (list :maybe (list :literal (list :string (second maybe-str))))
-                                       :else (list :maybe maybe-str))]
+                                       (list :optional (list :literal (list :string (second maybe-str))))
+                                       :else (list :optional maybe-str))]
                       (list :either (list :right term-maybe))))))
               [] t t t t)}))
 

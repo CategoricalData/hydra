@@ -567,13 +567,13 @@
 ;; ============================================================================
 
 (defun term-maybe-to-native (m)
-  "Convert a term-level maybe (:maybe val_or_nil) to native maybe (:given val) / (:none)."
+  "Convert a term-level maybe (:optional val_or_nil) to native maybe (:given val) / (:none)."
   (cond
     ((null m) (list :none))
     ((not (consp m)) (list :given m))
     ((eq (first m) :none) (list :none))
     ((eq (first m) :given) m)
-    ((eq (first m) :maybe)
+    ((eq (first m) :optional)
      (let ((inner (second m)))
        (if (or (null inner)
                (and (consp inner) (eq (first inner) :none)))
@@ -582,13 +582,13 @@
     (t (list :given m))))
 
 (defun native-maybe-to-term (m)
-  "Convert a native maybe (:given val) / (:none) to term-level (:maybe val_or_nil)."
+  "Convert a native maybe (:given val) / (:none) to term-level (:optional val_or_nil)."
   (cond
-    ((null m) (list :maybe nil))
-    ((not (consp m)) (list :maybe m))
-    ((eq (first m) :given) (list :maybe (second m)))
-    ((eq (first m) :none) (list :maybe nil))
-    (t (list :maybe m))))
+    ((null m) (list :optional nil))
+    ((not (consp m)) (list :optional m))
+    ((eq (first m) :given) (list :optional (second m)))
+    ((eq (first m) :none) (list :optional nil))
+    (t (list :optional m))))
 
 (defun register-annotations ()
   (let ((t_ (tc-term)))
@@ -639,11 +639,11 @@
                                (let* ((maybe-str (second result))
                                       (term-maybe
                                         (cond
-                                          ((null maybe-str) (list :maybe nil))
-                                          ((eq (first maybe-str) :none) (list :maybe nil))
+                                          ((null maybe-str) (list :optional nil))
+                                          ((eq (first maybe-str) :none) (list :optional nil))
                                           ((eq (first maybe-str) :given)
-                                           (list :maybe (list :literal (list :string (second maybe-str)))))
-                                          (t (list :maybe maybe-str)))))
+                                           (list :optional (list :literal (list :string (second maybe-str)))))
+                                          (t (list :optional maybe-str)))))
                                  (list :either (list :right term-maybe))))))))
                    nil t_ t_ t_ t_)))))
 

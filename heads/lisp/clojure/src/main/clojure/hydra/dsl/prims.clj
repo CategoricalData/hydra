@@ -45,7 +45,7 @@
                                 (visit (:codomain ft)))
                     :list (visit (second t))
                     :set (visit (second t))
-                    :maybe (visit (second t))
+                    :optional (visit (second t))
                     :map (let [mt (second t)]
                            (visit (:keys mt))
                            (visit (:values mt)))
@@ -276,7 +276,7 @@
 
 (defn tc-optional [el-coder]
   (->hydra_graph_term_coder
-   (list :maybe (:type el-coder))
+   (list :optional (:type el-coder))
    (fn [cx g t]
      (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_optional_term)
         (fn [term] ((.encode el-coder) cx g term)))
@@ -284,17 +284,17 @@
    (fn [cx mv]
      (cond
        ;; nil or empty list → Nothing
-       (or (nil? mv) (and (sequential? mv) (empty? mv))) (list :right (list :maybe nil))
+       (or (nil? mv) (and (sequential? mv) (empty? mv))) (list :right (list :optional nil))
        ;; (:none) → Nothing
-       (and (sequential? mv) (= (first mv) :none)) (list :right (list :maybe nil))
+       (and (sequential? mv) (= (first mv) :none)) (list :right (list :optional nil))
        ;; (:given val) → Just val
        (and (sequential? mv) (= (first mv) :given))
        (let [r ((.decode el-coder) cx (second mv))]
-         (if (= (first r) :left) r (list :right (list :maybe (second r)))))
+         (if (= (first r) :left) r (list :right (list :optional (second r)))))
        ;; bare value → Just val
        :else
        (let [r ((.decode el-coder) cx mv)]
-         (if (= (first r) :left) r (list :right (list :maybe (second r)))))))))
+         (if (= (first r) :left) r (list :right (list :optional (second r)))))))))
 
 (defn tc-either [left-coder right-coder]
   (->hydra_graph_term_coder

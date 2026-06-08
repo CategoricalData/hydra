@@ -274,7 +274,7 @@
 
     (define (tc-optional el-coder)
       (make-hydra_graph_term_coder
-       (list 'maybe (hydra_graph_term_coder-type el-coder))
+       (list 'optional (hydra_graph_term_coder-type el-coder))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
@@ -284,14 +284,14 @@
         (lambda (cx)
           (lambda (mv)
             (cond
-              ((null? mv) (list 'right (list 'maybe (list 'none))))
-              ((and (pair? mv) (eq? (car mv) 'none)) (list 'right (list 'maybe (list 'none))))
+              ((null? mv) (list 'right (list 'optional (list 'none))))
+              ((and (pair? mv) (eq? (car mv) 'none)) (list 'right (list 'optional (list 'none))))
               ((and (pair? mv) (eq? (car mv) 'given))
                (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (cadr mv))))
-                 (if (eq? (car r) 'left) r (list 'right (list 'maybe (cadr r))))))
+                 (if (eq? (car r) 'left) r (list 'right (list 'optional (cadr r))))))
               (else
                (let ((r (((hydra_graph_term_coder-decode el-coder) cx) mv)))
-                 (if (eq? (car r) 'left) r (list 'right (list 'maybe (cadr r)))))))))))
+                 (if (eq? (car r) 'left) r (list 'right (list 'optional (cadr r)))))))))))
 
     (define (tc-either left-coder right-coder)
       (make-hydra_graph_term_coder
