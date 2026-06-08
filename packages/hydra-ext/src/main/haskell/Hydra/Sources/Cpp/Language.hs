@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -127,7 +127,7 @@ cppLanguage = define "cppLanguage" $
     Variants.termVariantList,        -- std::vector
     Variants.termVariantLiteral,
     Variants.termVariantMap,         -- std::map
-    Variants.termVariantMaybe,       -- std::optional
+    Variants.termVariantOptional,       -- std::optional
     Variants.termVariantPair,        -- std::pair
     Variants.termVariantRecord,      -- struct with named fields
     Variants.termVariantSet,         -- std::set
@@ -142,7 +142,7 @@ cppLanguage = define "cppLanguage" $
     Variants.typeVariantList,        -- std::vector
     Variants.typeVariantLiteral,     -- primitive types
     Variants.typeVariantMap,         -- std::map
-    Variants.typeVariantMaybe,       -- std::optional
+    Variants.typeVariantOptional,       -- std::optional
     Variants.typeVariantPair,        -- std::pair
     Variants.typeVariantRecord,      -- structs
     Variants.typeVariantSet,         -- std::set

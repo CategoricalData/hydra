@@ -102,7 +102,7 @@ public abstract class ConsList<T> extends AbstractList<T> implements Serializabl
     /**
      * Returns an optional first element.
      */
-    public abstract Maybe<T> safeHead();
+    public abstract Optional<T> safeHead();
 
     /**
      * Returns all elements except the first. O(1) -- shared structure.
@@ -362,8 +362,8 @@ public abstract class ConsList<T> extends AbstractList<T> implements Serializabl
         }
 
         @Override
-        public Maybe<T> safeHead() {
-            return Maybe.nothing();
+        public Optional<T> safeHead() {
+            return Optional.none();
         }
 
         @Override
@@ -399,8 +399,8 @@ public abstract class ConsList<T> extends AbstractList<T> implements Serializabl
         }
 
         @Override
-        public Maybe<T> safeHead() {
-            return Maybe.just(hd);
+        public Optional<T> safeHead() {
+            return Optional.given(hd);
         }
 
         @Override

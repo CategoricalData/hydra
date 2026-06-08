@@ -34,8 +34,8 @@ module_ = Module {
     definitions = [Phantoms.toDefinition allTests]
 
 optionalInt32 :: Maybe Int -> TypedTerm Term
-optionalInt32 Nothing = Core.termMaybe nothing
-optionalInt32 (Just x) = Core.termMaybe $ just (int32 x)
+optionalInt32 Nothing = Core.termOptional nothing
+optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 
 -- Test groups for hydra.lib.math primitives
 

@@ -14,7 +14,7 @@ import hydra.dsl.meta.lib.Literals;
 import hydra.dsl.meta.lib.Logic;
 import hydra.dsl.meta.lib.Maps;
 import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Maybes;
+import hydra.dsl.meta.lib.Optionals;
 import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
@@ -24,7 +24,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -363,9 +363,9 @@ public class Serde {
         () -> lambda("ai",
                 let("groups",
                     apply(unwrap(ArrayInitializer.TYPE_), var("ai")),
-                    Maybes.fromMaybe(
+                    Optionals.fromOptional(
                         apply(var("hydra.serialization.cst"), string("{}")),
-                        Maybes.map(
+                        Optionals.map(
                             lambda("firstGroup",
                                 Logic.ifElse(
                                     Equality.equal(Lists.length(var("groups")), int32(1)),
@@ -519,10 +519,10 @@ public class Serde {
                         var("hydra.serialization.withSemi"),
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     just(apply(var("hydra.serialization.cst"), string("break"))),
-                                    Maybes.map(ref(Serde.identifierToExpr), var("mlabel")))))))));
+                                    Optionals.map(ref(Serde.identifierToExpr), var("mlabel")))))))));
 
     public static final Def castExpressionLambdaToExpr = def(
         "castExpressionLambdaToExpr",
@@ -574,7 +574,7 @@ public class Serde {
                         list(
                             apply(
                                 var("hydra.serialization.spaceSep"),
-                                Maybes.cat(
+                                Optionals.cat(
                                     list(
                                         just(apply(ref(Serde.referenceTypeToExpr), var("rt"))),
                                         Logic.ifElse(
@@ -678,9 +678,7 @@ public class Serde {
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.QUALIFIER, "cice")),
                     field("e",
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.EXPRESSION, "cice")),
-                    Maybes.maybe(
-                        apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")),
-                        lambda("q",
+                    Optionals.cases(var("mqual"), apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")), lambda("q",
                             apply(
                                 var("hydra.serialization.dotSep"),
                                 list(
@@ -689,8 +687,7 @@ public class Serde {
                                         var("q")),
                                     apply(
                                         ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr),
-                                        var("e"))))),
-                        var("mqual")))));
+                                        var("e")))))))));
 
     public static final Def classLiteralToExpr = def(
         "classLiteralToExpr",
@@ -769,13 +766,13 @@ public class Serde {
                         proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.TYPE_ARGUMENTS, "coitti")),
                     apply(
                         var("hydra.serialization.noSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 just(
                                     apply(
                                         var("hydra.serialization.dotSep"),
                                         Lists.map(ref(Serde.annotatedIdentifierToExpr), var("ids")))),
-                                Maybes.map(ref(Serde.typeArgumentsOrDiamondToExpr), var("margs"))))))));
+                                Optionals.map(ref(Serde.typeArgumentsOrDiamondToExpr), var("margs"))))))));
 
     public static final Def classTypeToExpr = def(
         "classTypeToExpr",
@@ -813,12 +810,12 @@ public class Serde {
                                             apply(ref(Serde.typeIdentifierToExpr), var("id")))))))),
                     apply(
                         var("hydra.serialization.noSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 just(
                                     apply(
                                         var("hydra.serialization.spaceSep"),
-                                        Maybes.cat(
+                                        Optionals.cat(
                                             list(
                                                 Logic.ifElse(
                                                     Lists.null_(var("anns")),
@@ -861,7 +858,7 @@ public class Serde {
                                             ref(Serde.singleLineComment),
                                             var("hydra.constants.warningAutoGeneratedFile")))),
                                 field("pkgSec",
-                                    Maybes.map(ref(Serde.packageDeclarationToExpr), var("mpkg"))),
+                                    Optionals.map(ref(Serde.packageDeclarationToExpr), var("mpkg"))),
                                 field("importsSec",
                                     Logic.ifElse(
                                         Lists.null_(var("imports")),
@@ -884,7 +881,7 @@ public class Serde {
                                                     var("types")))))),
                                 apply(
                                     var("hydra.serialization.doubleNewlineSep"),
-                                    Maybes.cat(
+                                    Optionals.cat(
                                         list(
                                             var("warning"),
                                             var("pkgSec"),
@@ -956,7 +953,7 @@ public class Serde {
                         var("hydra.serialization.withSemi"),
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -993,9 +990,9 @@ public class Serde {
                         var("hydra.serialization.fullBlockStyle"),
                         apply(
                             var("hydra.serialization.doubleNewlineSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
-                                    Maybes.map(
+                                    Optionals.map(
                                         ref(Serde.explicitConstructorInvocationToExpr),
                                         var("minvoc")),
                                     just(
@@ -1017,7 +1014,7 @@ public class Serde {
                         proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.BODY, "cd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1029,7 +1026,7 @@ public class Serde {
                                                 ref(Serde.constructorModifierToExpr),
                                                 var("mods"))))),
                                 just(apply(ref(Serde.constructorDeclaratorToExpr), var("cons"))),
-                                Maybes.map(ref(Serde.throwsToExpr), var("mthrows")),
+                                Optionals.map(ref(Serde.throwsToExpr), var("mthrows")),
                                 just(apply(ref(Serde.constructorBodyToExpr), var("body")))))))));
 
     public static final Def constructorDeclaratorToExpr = def(
@@ -1044,7 +1041,7 @@ public class Serde {
                         proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.FORMAL_PARAMETERS, "cd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("tparams")),
@@ -1089,10 +1086,10 @@ public class Serde {
                         var("hydra.serialization.withSemi"),
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     just(apply(var("hydra.serialization.cst"), string("continue"))),
-                                    Maybes.map(ref(Serde.identifierToExpr), var("mlabel")))))))));
+                                    Optionals.map(ref(Serde.identifierToExpr), var("mlabel")))))))));
 
     public static final Def dimsToExpr = def(
         "dimsToExpr",
@@ -1245,9 +1242,9 @@ public class Serde {
                         proj(ExpressionName.TYPE_, ExpressionName.IDENTIFIER, "en")),
                     apply(
                         var("hydra.serialization.dotSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
-                                Maybes.map(ref(Serde.ambiguousNameToExpr), var("mqual")),
+                                Optionals.map(ref(Serde.ambiguousNameToExpr), var("mqual")),
                                 just(apply(ref(Serde.identifierToExpr), var("id")))))))));
 
     public static final Def expressionStatementToExpr = def(
@@ -1321,7 +1318,7 @@ public class Serde {
                         var("hydra.serialization.withSemi"),
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -1409,7 +1406,7 @@ public class Serde {
                         proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.ID, "fps")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1636,7 +1633,7 @@ public class Serde {
                         proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.BODY, "imd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1736,11 +1733,11 @@ public class Serde {
                         field("hi",
                             Math_.add(
                                 int32(55296),
-                                Maybes.fromMaybe(int32(0), Math_.maybeDiv(var("n'"), int32(1024))))),
+                                Optionals.fromOptional(int32(0), Math_.maybeDiv(var("n'"), int32(1024))))),
                         field("lo",
                             Math_.add(
                                 int32(56320),
-                                Maybes.fromMaybe(int32(0), Math_.maybeMod(var("n'"), int32(1024))))),
+                                Optionals.fromOptional(int32(0), Math_.maybeMod(var("n'"), int32(1024))))),
                         Strings.cat2(
                             Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("hi"))),
                             Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("lo"))))),
@@ -1905,7 +1902,7 @@ public class Serde {
                         proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.DECLARATORS, "lvd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1960,7 +1957,7 @@ public class Serde {
                     field("headerAndBody",
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -1975,7 +1972,7 @@ public class Serde {
                                     just(apply(ref(Serde.methodBodyToExpr), var("body"))))))),
                     apply(
                         var("hydra.serialization.newlineSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -2016,7 +2013,7 @@ public class Serde {
                         proj(MethodHeader.TYPE_, MethodHeader.THROWS, "mh")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("params")),
@@ -2028,7 +2025,7 @@ public class Serde {
                                             Lists.map(ref(Serde.typeParameterToExpr), var("params"))))),
                                 just(apply(ref(Serde.resultToExpr), var("result"))),
                                 just(apply(ref(Serde.methodDeclaratorToExpr), var("decl"))),
-                                Maybes.map(ref(Serde.throwsToExpr), var("mthrows"))))))));
+                                Optionals.map(ref(Serde.throwsToExpr), var("mthrows"))))))));
 
     public static final Def methodInvocationToExpr = def(
         "methodInvocationToExpr",
@@ -2061,7 +2058,7 @@ public class Serde {
                                         field("idSec",
                                             apply(
                                                 var("hydra.serialization.noSep"),
-                                                Maybes.cat(
+                                                Optionals.cat(
                                                     list(
                                                         Logic.ifElse(
                                                             Lists.null_(var("targs")),
@@ -2261,7 +2258,7 @@ public class Serde {
                         proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY, "ncd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -2274,7 +2271,7 @@ public class Serde {
                                 just(
                                     apply(
                                         var("hydra.serialization.noSep"),
-                                        Maybes.cat(
+                                        Optionals.cat(
                                             list(
                                                 just(
                                                     apply(
@@ -2290,7 +2287,7 @@ public class Serde {
                                                             Lists.map(
                                                                 ref(Serde.typeParameterToExpr),
                                                                 var("tparams"))))))))),
-                                Maybes.map(
+                                Optionals.map(
                                     lambda("c",
                                         apply(
                                             var("hydra.serialization.spaceSep"),
@@ -2334,7 +2331,7 @@ public class Serde {
                         proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.BODY, "nid")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -2349,7 +2346,7 @@ public class Serde {
                                 just(
                                     apply(
                                         var("hydra.serialization.noSep"),
-                                        Maybes.cat(
+                                        Optionals.cat(
                                             list(
                                                 just(
                                                     apply(
@@ -2407,7 +2404,7 @@ public class Serde {
                         var("hydra.serialization.withSemi"),
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -2466,17 +2463,17 @@ public class Serde {
         () -> lambda("n",
                 let(
                     field("d3",
-                        Maybes.fromMaybe(int32(0), Math_.maybeDiv(var("n"), int32(4096)))),
+                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("n"), int32(4096)))),
                     field("r3",
-                        Maybes.fromMaybe(int32(0), Math_.maybeMod(var("n"), int32(4096)))),
+                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("n"), int32(4096)))),
                     field("d2",
-                        Maybes.fromMaybe(int32(0), Math_.maybeDiv(var("r3"), int32(256)))),
+                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("r3"), int32(256)))),
                     field("r2",
-                        Maybes.fromMaybe(int32(0), Math_.maybeMod(var("r3"), int32(256)))),
+                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("r3"), int32(256)))),
                     field("d1",
-                        Maybes.fromMaybe(int32(0), Math_.maybeDiv(var("r2"), int32(16)))),
+                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("r2"), int32(16)))),
                     field("d0",
-                        Maybes.fromMaybe(int32(0), Math_.maybeMod(var("r2"), int32(16)))),
+                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("r2"), int32(16)))),
                     Strings.fromList(
                         list(
                             apply(ref(Serde.hexDigit), var("d3")),
@@ -2599,7 +2596,7 @@ public class Serde {
                         proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.ANNOTATIONS, "ptwa")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -2751,10 +2748,10 @@ public class Serde {
                         var("hydra.serialization.withSemi"),
                         apply(
                             var("hydra.serialization.spaceSep"),
-                            Maybes.cat(
+                            Optionals.cat(
                                 list(
                                     just(apply(var("hydra.serialization.cst"), string("return"))),
-                                    Maybes.map(ref(Serde.expressionToExpr), var("mex")))))))));
+                                    Optionals.map(ref(Serde.expressionToExpr), var("mex")))))))));
 
     public static final Def sanitizeJavaComment = def(
         "sanitizeJavaComment",
@@ -2828,11 +2825,9 @@ public class Serde {
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.NAME, "sea")),
                     field("mv",
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.VALUE, "sea")),
-                    Maybes.maybe(
-                        apply(
+                    Optionals.cases(var("mv"), apply(
                             ref(Serde.markerAnnotationToExpr),
-                            wrap(MarkerAnnotation.TYPE_, var("tname"))),
-                        lambda("v",
+                            wrap(MarkerAnnotation.TYPE_, var("tname"))), lambda("v",
                             apply(
                                 var("hydra.serialization.prefix"),
                                 string("@"),
@@ -2843,8 +2838,7 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.parenList"),
                                             bool(false),
-                                            list(apply(ref(Serde.elementValueToExpr), var("v")))))))),
-                        var("mv")))));
+                                            list(apply(ref(Serde.elementValueToExpr), var("v"))))))))))));
 
     public static final Def singleLineComment = def(
         "singleLineComment",
@@ -3102,9 +3096,9 @@ public class Serde {
                         proj(TypeName.TYPE_, TypeName.QUALIFIER, "tn")),
                     apply(
                         var("hydra.serialization.dotSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
-                                Maybes.map(ref(Serde.packageOrTypeNameToExpr), var("mqual")),
+                                Optionals.map(ref(Serde.packageOrTypeNameToExpr), var("mqual")),
                                 just(apply(ref(Serde.typeIdentifierToExpr), var("id")))))))));
 
     public static final Def typeParameterModifierToExpr = def(
@@ -3126,7 +3120,7 @@ public class Serde {
                         proj(TypeParameter.TYPE_, TypeParameter.BOUND, "tp")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -3138,7 +3132,7 @@ public class Serde {
                                                 ref(Serde.typeParameterModifierToExpr),
                                                 var("mods"))))),
                                 just(apply(ref(Serde.typeIdentifierToExpr), var("id"))),
-                                Maybes.map(
+                                Optionals.map(
                                     lambda("b",
                                         apply(
                                             var("hydra.serialization.spaceSep"),
@@ -3172,7 +3166,7 @@ public class Serde {
                         proj(TypeVariable.TYPE_, TypeVariable.IDENTIFIER, "tv")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -3263,7 +3257,7 @@ public class Serde {
                         proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.BODY, "ucice")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 just(apply(var("hydra.serialization.cst"), string("new"))),
                                 Logic.ifElse(
@@ -3285,7 +3279,7 @@ public class Serde {
                                                 var("hydra.serialization.parenList"),
                                                 bool(false),
                                                 Lists.map(ref(Serde.expressionToExpr), var("args")))))),
-                                Maybes.map(ref(Serde.classBodyToExpr), var("mbody"))))))));
+                                Optionals.map(ref(Serde.classBodyToExpr), var("mbody"))))))));
 
     public static final Def variableArityParameterToExpr = def(
         "variableArityParameterToExpr",
@@ -3301,10 +3295,10 @@ public class Serde {
                         proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.DIMS, "vdi")),
                     apply(
                         var("hydra.serialization.noSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 just(apply(ref(Serde.identifierToExpr), var("id"))),
-                                Maybes.map(ref(Serde.dimsToExpr), var("mdims"))))))));
+                                Optionals.map(ref(Serde.dimsToExpr), var("mdims"))))))));
 
     public static final Def variableDeclaratorToExpr = def(
         "variableDeclaratorToExpr",
@@ -3316,15 +3310,12 @@ public class Serde {
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
                     field("idSec",
                         apply(ref(Serde.variableDeclaratorIdToExpr), var("id"))),
-                    Maybes.maybe(
-                        var("idSec"),
-                        lambda("init",
+                    Optionals.cases(var("minit"), var("idSec"), lambda("init",
                             apply(
                                 var("hydra.serialization.infixWs"),
                                 string("="),
                                 var("idSec"),
-                                apply(ref(Serde.variableInitializerToExpr), var("init")))),
-                        var("minit")))));
+                                apply(ref(Serde.variableInitializerToExpr), var("init"))))))));
 
     public static final Def variableInitializerToExpr = def(
         "variableInitializerToExpr",
@@ -3359,10 +3350,7 @@ public class Serde {
                     field("body",
                         proj(WhileStatement.TYPE_, WhileStatement.BODY, "ws")),
                     field("condSer",
-                        Maybes.maybe(
-                            apply(var("hydra.serialization.cst"), string("true")),
-                            lambda("c", apply(ref(Serde.expressionToExpr), var("c"))),
-                            var("mcond"))),
+                        Optionals.cases(var("mcond"), apply(var("hydra.serialization.cst"), string("true")), lambda("c", apply(ref(Serde.expressionToExpr), var("c"))))),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         list(
@@ -3408,7 +3396,7 @@ public class Serde {
                         proj(Wildcard.TYPE_, Wildcard.WILDCARD, "w")),
                     apply(
                         var("hydra.serialization.spaceSep"),
-                        Maybes.cat(
+                        Optionals.cat(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -3419,7 +3407,7 @@ public class Serde {
                                             var("hydra.serialization.inlineStyle"),
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
                                 just(apply(var("hydra.serialization.cst"), string("*"))),
-                                Maybes.map(ref(Serde.wildcardBoundsToExpr), var("mbounds"))))))));
+                                Optionals.map(ref(Serde.wildcardBoundsToExpr), var("mbounds"))))))));
 
     public static final Def withComments = def(
         "withComments",
@@ -3428,9 +3416,7 @@ public class Serde {
                 lambda(
                     "mc",
                     "expr",
-                    Maybes.maybe(
-                        var("expr"),
-                        lambda("c",
+                    Optionals.cases(var("mc"), var("expr"), lambda("c",
                             apply(
                                 var("hydra.serialization.newlineSep"),
                                 list(
@@ -3454,8 +3440,7 @@ public class Serde {
                                                                 ref(Serde.sanitizeJavaComment),
                                                                 var("c"))))),
                                                 string("\n */")))),
-                                    var("expr")))),
-                        var("mc")))));
+                                    var("expr"))))))));
 
 
 
@@ -3671,11 +3656,11 @@ public class Serde {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just(new EntityMetadata(
-            Maybe.just("Java serializer: converts Java AST to concrete syntax"),
+        Optional.given(new EntityMetadata(
+            Optional.given("Java serializer: converts Java AST to concrete syntax"),
             java.util.List.of(),
             java.util.List.of(),
-            Maybe.nothing())),
+            Optional.none())),
         DEPENDENCIES,
         DEFINITIONS);
 }

@@ -237,7 +237,7 @@ map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType value
 optional :: TermCoder x -> TermCoder (Y.Maybe x)
 optional mel = TermCoder (Types.optional $ termCoderType mel) encode decode
   where
-    encode cx g = ExtractCore.maybeTerm (termCoderEncode mel cx g) g
+    encode cx g = ExtractCore.optionalTerm (termCoderEncode mel cx g) g
     decode cx mv = Terms.optional <$> case mv of
       Nothing -> pure Nothing
       Just v -> Just <$> termCoderDecode mel cx v

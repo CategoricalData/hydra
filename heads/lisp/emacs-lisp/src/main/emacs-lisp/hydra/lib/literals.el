@@ -144,11 +144,11 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (numberp n) (not (= n 0)) (not (string= s "0")))
-              (list :just (float n))
+              (list :given (float n))
               (if (string= s "0")
-                  (list :just 0.0)
-                  (list :nothing))))
-      (error (list :nothing)))))
+                  (list :given 0.0)
+                  (list :none))))
+      (error (list :none)))))
 
 ;; read_bigint :: String -> Maybe BigInteger
 ;; Uses read-from-string to handle arbitrarily large integers (Emacs 27+ bignum support)
@@ -158,10 +158,10 @@
         (if (string-match-p "^-?[0-9]+$" s)
             (let ((n (car (read-from-string s))))
               (if (integerp n)
-                  (list :just n)
-                (list :nothing)))
-          (list :nothing))
-      (error (list :nothing)))))
+                  (list :given n)
+                (list :none)))
+          (list :none))
+      (error (list :none)))))
 
 ;; read_float :: String -> Maybe Double
 (defvar hydra_lib_literals_read_float
@@ -169,23 +169,23 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
-              (list :just (float n))
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given (float n))
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_float32 :: String -> Maybe Float
 (defvar hydra_lib_literals_read_float32
   (lambda (s)
     (cond
-      ((string= s "NaN") (list :just 0.0e+NaN))
-      ((string= s "Infinity") (list :just 1.0e+INF))
-      ((string= s "-Infinity") (list :just -1.0e+INF))
+      ((string= s "NaN") (list :given 0.0e+NaN))
+      ((string= s "Infinity") (list :given 1.0e+INF))
+      ((string= s "-Infinity") (list :given -1.0e+INF))
       (t (condition-case nil
              (let ((n (string-to-number s)))
                (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
-                   (list :just (round-to-float32 (float n)))
-                   (list :nothing)))
-           (error (list :nothing)))))))
+                   (list :given (round-to-float32 (float n)))
+                   (list :none)))
+           (error (list :none)))))))
 
 ;; read_int :: String -> Maybe Int
 (defvar hydra_lib_literals_read_int
@@ -193,9 +193,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_int64 :: String -> Maybe Int64
 (defvar hydra_lib_literals_read_int64
@@ -203,9 +203,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_uint :: String -> Maybe Uint
 (defvar hydra_lib_literals_read_uint
@@ -213,9 +213,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n 0) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_uint32 :: String -> Maybe Uint32
 (defvar hydra_lib_literals_read_uint32
@@ -223,9 +223,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n 0) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_uint64 :: String -> Maybe Uint64
 (defvar hydra_lib_literals_read_uint64
@@ -233,9 +233,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n 0) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; Helper for Haskell-compatible float show
 (defun hydra--literals-infinitep (x)
@@ -437,9 +437,9 @@
 (defvar hydra_lib_literals_read_boolean
   (lambda (s)
     (cond
-      ((string= s "true") (list :just t))
-      ((string= s "false") (list :just nil))
-      (t (list :nothing)))))
+      ((string= s "true") (list :given t))
+      ((string= s "false") (list :given nil))
+      (t (list :none)))))
 
 ;; read_string :: String -> Maybe String
 ;; Haskell semantics: reads a quoted string literal, returns Nothing for unquoted
@@ -467,8 +467,8 @@
                 (progn
                   (push (aref inner i) result)
                   (setq i (1+ i)))))
-          (list :just (apply #'string (nreverse result))))
-        (list :nothing))))
+          (list :given (apply #'string (nreverse result))))
+        (list :none))))
 
 ;; show_boolean :: Bool -> String
 (defvar hydra_lib_literals_show_boolean
@@ -528,15 +528,15 @@
 (defvar hydra_lib_literals_read_float64
   (lambda (s)
     (cond
-      ((string= s "NaN") (list :just 0.0e+NaN))
-      ((string= s "Infinity") (list :just 1.0e+INF))
-      ((string= s "-Infinity") (list :just -1.0e+INF))
+      ((string= s "NaN") (list :given 0.0e+NaN))
+      ((string= s "Infinity") (list :given 1.0e+INF))
+      ((string= s "-Infinity") (list :given -1.0e+INF))
       (t (condition-case nil
              (let ((n (string-to-number s)))
                (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
-                   (list :just (float n))
-                   (list :nothing)))
-           (error (list :nothing)))))))
+                   (list :given (float n))
+                   (list :none)))
+           (error (list :none)))))))
 
 ;; read_int8 :: String -> Maybe Int8
 (defvar hydra_lib_literals_read_int8
@@ -544,9 +544,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n -128) (<= n 127) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_int16 :: String -> Maybe Int16
 (defvar hydra_lib_literals_read_int16
@@ -554,9 +554,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n -32768) (<= n 32767) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_int32 :: String -> Maybe Int32
 (defvar hydra_lib_literals_read_int32
@@ -564,9 +564,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_uint8 :: String -> Maybe Uint8
 (defvar hydra_lib_literals_read_uint8
@@ -574,9 +574,9 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n 0) (<= n 255) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 ;; read_uint16 :: String -> Maybe Uint16
 (defvar hydra_lib_literals_read_uint16
@@ -584,8 +584,8 @@
     (condition-case nil
         (let ((n (string-to-number s)))
           (if (and (integerp n) (>= n 0) (<= n 65535) (string= (number-to-string n) s))
-              (list :just n)
-              (list :nothing)))
-      (error (list :nothing)))))
+              (list :given n)
+              (list :none)))
+      (error (list :none)))))
 
 (provide 'hydra.lib.literals)

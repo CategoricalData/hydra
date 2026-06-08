@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,9 +42,9 @@ public class MaybeHead extends PrimitiveFunction {
      * Apply the function to its single argument.
      * @param <X> the element type
      * @param list the list to get the head from
-     * @return a Maybe containing the first element, or empty if the list is empty
+     * @return a Optional containing the first element, or empty if the list is empty
      */
-    public static <X> Maybe<X> apply(List<X> list) {
-        return list.isEmpty() ? Maybe.nothing() : Maybe.just(list.get(0));
+    public static <X> Optional<X> apply(List<X> list) {
+        return list.isEmpty() ? Optional.none() : Optional.given(list.get(0));
     }
 }

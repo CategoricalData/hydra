@@ -17,7 +17,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -43,15 +43,15 @@ import qualified Data.Scientific as Sci
 -- | Annotate an expression with an optional comment using Annotated[]
 annotatedExpression :: Maybe String -> Syntax.Expression -> Syntax.Expression
 annotatedExpression mcomment expr =
-    Maybes.maybe expr (\c -> pyPrimaryToPyExpression (primaryWithExpressionSlices (pyNameToPyPrimary (Syntax.Name "Annotated")) [
+    Optionals.cases mcomment expr (\c -> pyPrimaryToPyExpression (primaryWithExpressionSlices (pyNameToPyPrimary (Syntax.Name "Annotated")) [
       expr,
-      (doubleQuotedString c)])) mcomment
+      (doubleQuotedString c)]))
 -- | Annotate a statement with an optional comment
 annotatedStatement :: Maybe String -> Syntax.Statement -> Syntax.Statement
 annotatedStatement mcomment stmt =
-    Maybes.maybe stmt (\c -> Syntax.StatementAnnotated (Syntax.AnnotatedStatement {
+    Optionals.cases mcomment stmt (\c -> Syntax.StatementAnnotated (Syntax.AnnotatedStatement {
       Syntax.annotatedStatementComment = c,
-      Syntax.annotatedStatementStatement = stmt})) mcomment
+      Syntax.annotatedStatementStatement = stmt}))
 -- | Create an assignment statement from name and annotated rhs
 assignment :: Syntax.Name -> Syntax.AnnotatedRhs -> Syntax.Statement
 assignment name rhs =
@@ -90,7 +90,7 @@ decodePyComparisonToPyAwaitPrimary c =
           sumRhs = Syntax.sumRhs shiftRhs
           termLhs = Syntax.termLhs sumRhs
           termRhs = Syntax.termRhs sumRhs
-      in (Logic.ifElse (Logic.not (Lists.null rhs)) Nothing (Logic.ifElse (Maybes.isJust orLhs) Nothing (Logic.ifElse (Maybes.isJust xorLhs) Nothing (Logic.ifElse (Maybes.isJust andLhs) Nothing (Logic.ifElse (Maybes.isJust shiftLhs) Nothing (Logic.ifElse (Maybes.isJust sumLhs) Nothing (Logic.ifElse (Maybes.isJust termLhs) Nothing (case termRhs of
+      in (Logic.ifElse (Logic.not (Lists.null rhs)) Nothing (Logic.ifElse (Optionals.isGiven orLhs) Nothing (Logic.ifElse (Optionals.isGiven xorLhs) Nothing (Logic.ifElse (Optionals.isGiven andLhs) Nothing (Logic.ifElse (Optionals.isGiven shiftLhs) Nothing (Logic.ifElse (Optionals.isGiven sumLhs) Nothing (Logic.ifElse (Optionals.isGiven termLhs) Nothing (case termRhs of
         Syntax.FactorSimple v0 -> decodePyPowerToPyPrimary v0
         _ -> Nothing))))))))
 -- | Decode a Conjunction to a Primary if possible
@@ -98,14 +98,14 @@ decodePyConjunctionToPyPrimary :: Syntax.Conjunction -> Maybe Syntax.Primary
 decodePyConjunctionToPyPrimary c =
 
       let inversions = Syntax.unConjunction c
-      in (Logic.ifElse (Equality.equal (Lists.length inversions) 1) (Maybes.bind (Lists.maybeHead inversions) (\i -> decodePyInversionToPyPrimary i)) Nothing)
+      in (Logic.ifElse (Equality.equal (Lists.length inversions) 1) (Optionals.bind (Lists.maybeHead inversions) (\i -> decodePyInversionToPyPrimary i)) Nothing)
 -- | Decode an Expression to a Primary if possible
 decodePyExpressionToPyPrimary :: Syntax.Expression -> Maybe Syntax.Primary
 decodePyExpressionToPyPrimary e =
     case e of
       Syntax.ExpressionSimple v0 ->
         let conjunctions = Syntax.unDisjunction v0
-        in (Logic.ifElse (Equality.equal (Lists.length conjunctions) 1) (Maybes.bind (Lists.maybeHead conjunctions) (\c2 -> decodePyConjunctionToPyPrimary c2)) Nothing)
+        in (Logic.ifElse (Equality.equal (Lists.length conjunctions) 1) (Optionals.bind (Lists.maybeHead conjunctions) (\c2 -> decodePyConjunctionToPyPrimary c2)) Nothing)
       _ -> Nothing
 -- | Decode an Inversion to a Primary if possible
 decodePyInversionToPyPrimary :: Syntax.Inversion -> Maybe Syntax.Primary
@@ -169,8 +169,8 @@ getItemParams =
 indentedBlock :: Maybe String -> [[Syntax.Statement]] -> Syntax.Block
 indentedBlock mcomment stmts =
 
-      let commentGroup = Maybes.maybe [] (\s -> [
-            commentStatement s]) mcomment
+      let commentGroup = Optionals.cases mcomment [] (\s -> [
+            commentStatement s])
           groups = Lists.filter (\g -> Logic.not (Lists.null g)) (Lists.cons commentGroup stmts)
       in (Logic.ifElse (Lists.null groups) (Syntax.BlockIndented [
         [
@@ -190,13 +190,13 @@ orExpression :: [Syntax.Primary] -> Syntax.Expression
 orExpression prims =
 
       let build =
-              \prev -> \ps -> Maybes.maybe (Syntax.BitwiseOr {
+              \prev -> \ps -> Optionals.cases (Lists.uncons ps) (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
                 Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Syntax.PrimarySimple Syntax.AtomEllipsis))}) (\p -> Logic.ifElse (Lists.null (Pairs.second p)) (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
                 Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))}) (build (Just (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
-                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))})) (Pairs.second p))) (Lists.uncons ps)
+                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))})) (Pairs.second p)))
       in (pyBitwiseOrToPyExpression (build Nothing prims))
 -- | Create a primary with parameters (subscript)
 primaryAndParams :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Expression
@@ -204,7 +204,7 @@ primaryAndParams prim params = pyPrimaryToPyExpression (primaryWithExpressionSli
 -- | Create a Primary with expression slices
 primaryWithExpressionSlices :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Primary
 primaryWithExpressionSlices prim exprs =
-    Maybes.fromMaybe prim (Maybes.map (\p -> primaryWithSlices prim (pyExpressionToPySlice (Pairs.first p)) (Lists.map (\e -> Syntax.SliceOrStarredExpressionSlice (pyExpressionToPySlice e)) (Pairs.second p))) (Lists.uncons exprs))
+    Optionals.fromOptional prim (Optionals.map (\p -> primaryWithSlices prim (pyExpressionToPySlice (Pairs.first p)) (Lists.map (\e -> Syntax.SliceOrStarredExpressionSlice (pyExpressionToPySlice e)) (Pairs.second p))) (Lists.uncons exprs))
 -- | Combine a Primary with a PrimaryRhs
 primaryWithRhs :: Syntax.Primary -> Syntax.PrimaryRhs -> Syntax.Primary
 primaryWithRhs prim rhs =
@@ -286,7 +286,7 @@ pyExpressionToPyAnnotatedRhs expr = Syntax.AnnotatedRhsStar [
 -- | Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary
 pyExpressionToPyPrimary :: Syntax.Expression -> Syntax.Primary
 pyExpressionToPyPrimary e =
-    Maybes.maybe (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e)))) (\prim -> prim) (decodePyExpressionToPyPrimary e)
+    Optionals.cases (decodePyExpressionToPyPrimary e) (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e)))) (\prim -> prim)
 -- | Convert an Expression to a SimpleStatement (as star expressions)
 pyExpressionToPySimpleStatement :: Syntax.Expression -> Syntax.SimpleStatement
 pyExpressionToPySimpleStatement expr = Syntax.SimpleStatementStarExpressions [

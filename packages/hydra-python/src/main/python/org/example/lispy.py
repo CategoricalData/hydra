@@ -6,7 +6,7 @@ demonstrating how to use the Hydra Types DSL in Python.
 
 from hydra.core import Binding, Name, TypeScheme, Type
 from hydra.dsl.annotations import doc
-from hydra.dsl.python import Just, Nothing
+from hydra.dsl.python import Given, None_
 from hydra.packaging import Module, ModuleName
 import hydra.dsl.types as T
 
@@ -25,7 +25,7 @@ def define(local_name: str, typ: Type) -> Binding:
     return Binding(
         name=qualified_name(local_name),
         term=typ,  # Note: In a full implementation, this would be the encoded type
-        type=Nothing()  # Type scheme is optional
+        type=None_()  # Type scheme is optional
     )
 
 
@@ -143,5 +143,5 @@ module_ = Module(
     ),
     term_dependencies=(),
     type_dependencies=(),  # Would include Core.ns equivalent if needed
-    description=Just("Data model definition for the Lispy interpreter"),
+    description=Given("Data model definition for the Lispy interpreter"),
 )

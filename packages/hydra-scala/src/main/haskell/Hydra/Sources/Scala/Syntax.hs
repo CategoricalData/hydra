@@ -292,7 +292,7 @@ case_ :: TypeDefinition
 case_ = def "Case" $
   T.record [
     "pat">: meta "Pat",
-    "cond">: T.maybe $ meta "Data",
+    "cond">: T.optional $ meta "Data",
     "body">: meta "Data"]
 
 classDefn :: TypeDefinition
@@ -392,7 +392,7 @@ defDefn = def "DefDefn" $
     "name">: meta "NameData",
     "tparams">: T.list $ meta "ParamType",
     "paramss">: T.list $ T.list $ meta "ParamData",
-    "decltpe">: T.maybe $ meta "Type",
+    "decltpe">: T.optional $ meta "Type",
     "body">: meta "Data"]
 
 defn :: TypeDefinition
@@ -749,8 +749,8 @@ paramData = def "ParamData" $
   T.record [
     "mods">: T.list $ meta "Mod",
     "name">: meta "Name",
-    "decltpe">: T.maybe $ meta "Type",
-    "default">: T.maybe $ meta "Data"]
+    "decltpe">: T.optional $ meta "Type",
+    "default">: T.optional $ meta "Data"]
 
 paramType :: TypeDefinition
 paramType = def "ParamType" $
@@ -862,7 +862,7 @@ refType = def "RefType" $
 refineType :: TypeDefinition
 refineType = def "RefineType" $
   T.record [
-    "tpe">: T.maybe $ meta "Type",
+    "tpe">: T.optional $ meta "Type",
     "stats">: T.list $ meta "Stat"]
 
 renameImportee :: TypeDefinition
@@ -998,14 +998,14 @@ tryData = def "TryData" $
   T.record [
     "expr">: meta "Data",
     "catchp">: T.list $ meta "Case",
-    "finallyp">: T.maybe $ meta "Data"]
+    "finallyp">: T.optional $ meta "Data"]
 
 tryWithHandlerData :: TypeDefinition
 tryWithHandlerData = def "TryWithHandlerData" $
   T.record [
     "expr">: meta "Data",
     "catchp">: meta "Data",
-    "finallyp">: T.maybe $ meta "Data"]
+    "finallyp">: T.optional $ meta "Data"]
 
 tupleData :: TypeDefinition
 tupleData = def "TupleData" $
@@ -1025,8 +1025,8 @@ tupleType = def "TupleType" $
 typeBounds :: TypeDefinition
 typeBounds = def "TypeBounds" $
   T.record [
-    "lo">: T.maybe $ meta "Type",
-    "hi">: T.maybe $ meta "Type"]
+    "lo">: T.optional $ meta "Type",
+    "hi">: T.optional $ meta "Type"]
 
 typeCase :: TypeDefinition
 typeCase = def "TypeCase" $
@@ -1111,7 +1111,7 @@ valDefn = def "ValDefn" $
   T.record [
     "mods">: T.list $ meta "Mod",
     "pats">: T.list $ meta "Pat",
-    "decltpe">: T.maybe $ meta "Type",
+    "decltpe">: T.optional $ meta "Type",
     "rhs">: meta "Data"]
 
 valEnumerator :: TypeDefinition
@@ -1133,7 +1133,7 @@ varDefn = def "VarDefn" $
     "mods">: T.list $ meta "Mod",
     "pats">: T.list $ meta "Pat",
     "decltpe">: meta "Type",
-    "rhs">: T.maybe $ meta "Data"]
+    "rhs">: T.optional $ meta "Data"]
 
 varPat :: TypeDefinition
 varPat = def "VarPat" $

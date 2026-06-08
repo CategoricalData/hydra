@@ -74,8 +74,8 @@ data SubtermStep =
   SubtermStepMapKey Int |
   -- | Access a value in a map by index
   SubtermStepMapValue Int |
-  -- | Access the term inside a Just value
-  SubtermStepMaybeTerm |
+  -- | Access the term inside a given (present) optional value
+  SubtermStepOptionalTerm |
   -- | Access an element of a product (tuple) by index
   SubtermStepProductTerm Int |
   -- | Access a field of a record by field name
@@ -105,7 +105,7 @@ _SubtermStep_letBinding = Core.Name "letBinding"
 _SubtermStep_listElement = Core.Name "listElement"
 _SubtermStep_mapKey = Core.Name "mapKey"
 _SubtermStep_mapValue = Core.Name "mapValue"
-_SubtermStep_maybeTerm = Core.Name "maybeTerm"
+_SubtermStep_optionalTerm = Core.Name "optionalTerm"
 _SubtermStep_productTerm = Core.Name "productTerm"
 _SubtermStep_recordField = Core.Name "recordField"
 _SubtermStep_setElement = Core.Name "setElement"
@@ -184,7 +184,7 @@ data SubtypeStep =
   -- | Access the value type of a map type
   SubtypeStepMapValues |
   -- | Access the element type of an optional type
-  SubtypeStepMaybeElement |
+  SubtypeStepOptionalElement |
   -- | Access the first type of a pair type
   SubtypeStepPairFirst |
   -- | Access the second type of a pair type
@@ -210,7 +210,7 @@ _SubtypeStep_functionCodomain = Core.Name "functionCodomain"
 _SubtypeStep_listElement = Core.Name "listElement"
 _SubtypeStep_mapKeys = Core.Name "mapKeys"
 _SubtypeStep_mapValues = Core.Name "mapValues"
-_SubtypeStep_maybeElement = Core.Name "maybeElement"
+_SubtypeStep_optionalElement = Core.Name "optionalElement"
 _SubtypeStep_pairFirst = Core.Name "pairFirst"
 _SubtypeStep_pairSecond = Core.Name "pairSecond"
 _SubtypeStep_recordField = Core.Name "recordField"

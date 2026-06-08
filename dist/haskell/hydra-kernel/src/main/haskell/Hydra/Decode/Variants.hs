@@ -10,7 +10,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -33,10 +33,10 @@ literalVariant cx raw =
                       (Core.Name "float", (\input -> Eithers.map (\t -> Variants.LiteralVariantFloat) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Variants.LiteralVariantInteger) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "string", (\input -> Eithers.map (\t -> Variants.LiteralVariantString) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.variants.TermVariant
 termVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TermVariant
@@ -60,7 +60,7 @@ termVariant cx raw =
                       (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TermVariantList) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "literal", (\input -> Eithers.map (\t -> Variants.TermVariantLiteral) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "map", (\input -> Eithers.map (\t -> Variants.TermVariantMap) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Variants.TermVariantMaybe) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "optional", (\input -> Eithers.map (\t -> Variants.TermVariantOptional) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "pair", (\input -> Eithers.map (\t -> Variants.TermVariantPair) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "project", (\input -> Eithers.map (\t -> Variants.TermVariantProject) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TermVariantRecord) (ExtractCore.decodeUnit cx input))),
@@ -73,10 +73,10 @@ termVariant cx raw =
                       (Core.Name "unwrap", (\input -> Eithers.map (\t -> Variants.TermVariantUnwrap) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TermVariantVariable) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TermVariantWrap) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.variants.TypeVariant
 typeVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TypeVariant
@@ -98,7 +98,7 @@ typeVariant cx raw =
                       (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TypeVariantList) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "literal", (\input -> Eithers.map (\t -> Variants.TypeVariantLiteral) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "map", (\input -> Eithers.map (\t -> Variants.TypeVariantMap) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "maybe", (\input -> Eithers.map (\t -> Variants.TypeVariantMaybe) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "optional", (\input -> Eithers.map (\t -> Variants.TypeVariantOptional) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "pair", (\input -> Eithers.map (\t -> Variants.TypeVariantPair) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "record", (\input -> Eithers.map (\t -> Variants.TypeVariantRecord) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TypeVariantSet) (ExtractCore.decodeUnit cx input))),
@@ -107,8 +107,8 @@ typeVariant cx raw =
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TypeVariantVariable) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "void", (\input -> Eithers.map (\t -> Variants.TypeVariantVoid) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TypeVariantWrap) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

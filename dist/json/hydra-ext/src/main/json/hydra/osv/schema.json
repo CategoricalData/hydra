@@ -6,7 +6,7 @@
           "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
-              {"name": "contact", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Url"}}}}]},
+              {"name": "contact", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Url"}}}}]},
           "variables": []},
         "name": "hydra.osv.schema.Credited"}},
     {
@@ -38,19 +38,19 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The default value is '1.0.0', matching version 1.0 of the OSV Schema"}}}]},
-                    "body": {"maybe": {"variable": "hydra.osv.schema.OsvVersion"}}}}},
+                    "body": {"optional": {"variable": "hydra.osv.schema.OsvVersion"}}}}},
               {"name": "id", "type": {"variable": "hydra.osv.schema.Id"}},
               {"name": "modified", "type": {"variable": "hydra.osv.schema.Timestamp"}},
-              {"name": "published", "type": {"maybe": {"variable": "hydra.osv.schema.Timestamp"}}},
-              {"name": "withdrawn", "type": {"maybe": {"variable": "hydra.osv.schema.Timestamp"}}},
-              {"name": "aliases", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Id"}}}},
-              {"name": "related", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Id"}}}},
-              {"name": "summary", "type": {"maybe": {"literal": {"string": {}}}}},
-              {"name": "details", "type": {"maybe": {"variable": "hydra.osv.schema.Markdown"}}},
-              {"name": "severity", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Severity"}}}},
-              {"name": "affected", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.PackageVersions"}}}},
-              {"name": "references", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Reference"}}}},
-              {"name": "credits", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Credited"}}}}]},
+              {"name": "published", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
+              {"name": "withdrawn", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
+              {"name": "aliases", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
+              {"name": "related", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
+              {"name": "summary", "type": {"optional": {"literal": {"string": {}}}}},
+              {"name": "details", "type": {"optional": {"variable": "hydra.osv.schema.Markdown"}}},
+              {"name": "severity", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Severity"}}}},
+              {"name": "affected", "type": {"optional": {"list": {"variable": "hydra.osv.schema.PackageVersions"}}}},
+              {"name": "references", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Reference"}}}},
+              {"name": "credits", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Credited"}}}}]},
           "variables": []},
         "name": "hydra.osv.schema.Entry"}},
     {
@@ -108,7 +108,7 @@
             "record": [
               {"name": "ecosystem", "type": {"variable": "hydra.osv.schema.Ecosystem"}},
               {"name": "name", "type": {"literal": {"string": {}}}},
-              {"name": "purl", "type": {"maybe": {"variable": "hydra.osv.schema.Url"}}}]},
+              {"name": "purl", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}}]},
           "variables": []},
         "name": "hydra.osv.schema.Package"}},
     {
@@ -117,8 +117,8 @@
           "body": {
             "record": [
               {"name": "package", "type": {"variable": "hydra.osv.schema.Package"}},
-              {"name": "ranges", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.VersionRange"}}}},
-              {"name": "versions", "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Version"}}}}]},
+              {"name": "ranges", "type": {"optional": {"list": {"variable": "hydra.osv.schema.VersionRange"}}}},
+              {"name": "versions", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Version"}}}}]},
           "variables": []},
         "name": "hydra.osv.schema.PackageVersions"}},
     {
@@ -225,7 +225,7 @@
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.osv.schema.VersionType"}},
-              {"name": "repo", "type": {"maybe": {"variable": "hydra.osv.schema.Url"}}},
+              {"name": "repo", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}},
               {"name": "events", "type": {"list": {"variable": "hydra.osv.schema.Event"}}}]},
           "variables": []},
         "name": "hydra.osv.schema.VersionRange"}},

@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -147,11 +147,11 @@ evaluateProperties = define "evaluateProperties" $
     -- This takes the key as parameter so it doesn't need to capture it
     "extractMaybe" <~ ("k" ~> "term" ~>
       match _Term Nothing [
-        _Term_maybe>>: "mv" ~>
-          right $ Maybes.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
+        _Term_optional>>: "mv" ~>
+          right $ Optionals.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
       @@ var "term") $
     Eithers.map
-      ("pairs" ~> Maps.fromList $ Maybes.cat $ var "pairs")
+      ("pairs" ~> Maps.fromList $ Optionals.cat $ var "pairs")
       (Eithers.mapList
         ("pair" ~>
           "k" <~ Pairs.first (var "pair") $
@@ -178,21 +178,21 @@ evaluateEdge = define "evaluateEdge" $
           (Eithers.bind
             (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "outSpec") (var "record")))
             ("__term" ~>
-              ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+              ExtractCore.optionalTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
           ("mOutId" ~>
             Eithers.bind
               (Eithers.bind
                 (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "inSpec") (var "record")))
                 ("__term" ~>
-                  ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+                  ExtractCore.optionalTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
               ("mInId" ~>
                 Eithers.bind
                   (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
                   ("props" ~>
                     right $
-                      Maybes.bind (var "mOutId")
+                      Optionals.bind (var "mOutId")
                         ("outId" ~>
-                          Maybes.map
+                          Optionals.map
                             ("inId" ~>
                               record PG._Edge [
                                 PG._Edge_label>>: var "label",
@@ -214,13 +214,13 @@ evaluateVertex = define "evaluateVertex" $
       (Eithers.bind
         (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
         ("__term" ~>
-          ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+          ExtractCore.optionalTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
       ("mId" ~>
         Eithers.bind
           (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
           ("props" ~>
             right $
-              Maybes.map
+              Optionals.map
                 ("id" ~>
                   record PG._Vertex [
                     PG._Vertex_label>>: var "label",
@@ -283,10 +283,10 @@ tableForEdge = define "tableForEdge" $
       (list [var "id", var "outId", var "inId"])
       (Maps.elems $ var "props")) $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
-      (Maybes.maybe
+      (Optionals.cases
+        (Lists.maybeHead $ Sets.toList $ var "tables")
         (left $ string "unreachable: empty tables set")
-        (reify right)
-        (Lists.maybeHead $ Sets.toList $ var "tables"))
+        (reify right))
       (left $ Strings.cat $ list [
         string "Specification for ",
         unwrap PG._EdgeLabel @@ var "label",
@@ -302,10 +302,10 @@ tableForVertex = define "tableForVertex" $
     "props" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertex") $
     "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ var "props")) $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
-      (Maybes.maybe
+      (Optionals.cases
+        (Lists.maybeHead $ Sets.toList $ var "tables")
         (left $ string "unreachable: empty tables set")
-        (reify right)
-        (Lists.maybeHead $ Sets.toList $ var "tables"))
+        (reify right))
       (left $ Strings.cat $ list [
         string "Specification for ",
         unwrap PG._VertexLabel @@ var "label",
@@ -335,7 +335,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
               "table" <~ Pairs.first (var "p") $
               "v" <~ Pairs.second (var "p") $
               "existing" <~ Maps.lookup (var "table") (var "m") $
-              "current" <~ Maybes.fromMaybe (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
+              "current" <~ Optionals.fromOptional (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Lists.cons (var "v") (Pairs.first $ var "current"))
@@ -345,7 +345,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
               "table" <~ Pairs.first (var "p") $
               "e" <~ Pairs.second (var "p") $
               "existing" <~ Maps.lookup (var "table") (var "m") $
-              "current" <~ Maybes.fromMaybe (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
+              "current" <~ Optionals.fromOptional (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Pairs.first $ var "current")
@@ -366,7 +366,7 @@ termRowToRecord = define "termRowToRecord" $
       Lists.zipWith
         ("colType" ~> "mvalue" ~>
           "cname" <~ (unwrap Rel._ColumnName @@ (project Tab._ColumnType Tab._ColumnType_name @@ var "colType")) $
-          Core.field (wrap _Name $ var "cname") (Core.termMaybe $ var "mvalue"))
+          Core.field (wrap _Name $ var "cname") (Core.termOptional $ var "mvalue"))
         (var "colTypes")
         (var "cells")
 
@@ -381,7 +381,7 @@ transformRecord = define "transformRecord" $
         Eithers.bind
           (Eithers.mapList ("spec" ~> evaluateEdge @@ var "cx" @@ var "g" @@ var "spec" @@ var "record") (var "especs"))
           ("mEdges" ~>
-            right $ pair (Maybes.cat $ var "mVertices") (Maybes.cat $ var "mEdges")))
+            right $ pair (Optionals.cat $ var "mVertices") (Optionals.cat $ var "mEdges")))
 
 --------------------------------------------------------------------------------
 -- CSV Parsing (pure functions)
@@ -501,22 +501,22 @@ parseTableLines = define "parseTableLines" $
       (Eithers.mapList ("ln" ~> parseSingleLine @@ var "ln") (var "rawLines"))
       ("parsedRows" ~>
         -- Filter out empty lines (Nothing values) to get [[Maybe String]]
-        "rows" <~ Maybes.cat (var "parsedRows") $
+        "rows" <~ Optionals.cat (var "parsedRows") $
         -- Build the table based on hasHeader flag
         Logic.ifElse (var "hasHeader")
           (-- With header: first row is header, rest are data
-            Maybes.maybe
+            Optionals.cases
+              (Lists.uncons (var "rows"))
               (left $ string "empty rows: cannot parse header")
               (lambda "p" $ lets [
                 "headerRow">: Pairs.first (var "p"),
                 "dataRows">: Pairs.second (var "p")] $
                 -- Check for null headers
-                Logic.ifElse (listAny @@ ("m" ~> Maybes.isNothing (var "m")) @@ var "headerRow")
+                Logic.ifElse (listAny @@ ("m" ~> Optionals.isNone (var "m")) @@ var "headerRow")
                   (left $ string "null header column(s)")
                   (right $ record Tab._Table [
-                    Tab._Table_header>>: just (wrap Tab._HeaderRow $ Maybes.cat $ var "headerRow"),
-                    Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")]))
-              (Lists.uncons (var "rows")))
+                    Tab._Table_header>>: just (wrap Tab._HeaderRow $ Optionals.cat $ var "headerRow"),
+                    Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")])))
           (-- No header: all rows are data
             right $ record Tab._Table [
               Tab._Table_header>>: nothing,
@@ -585,7 +585,7 @@ decodeCell = define "decodeCell" $
   "colType" ~> "mvalue" ~>
     "cname" <~ (unwrap Rel._ColumnName @@ (project Tab._ColumnType Tab._ColumnType_name @@ var "colType")) $
     "typ" <~ (project Tab._ColumnType Tab._ColumnType_type @@ var "colType") $
-    -- Lift the decoder function to a let binding before Maybes.maybe
+    -- Lift the decoder function to a let binding before Optionals.cases
     -- This avoids Python issues with match statements inside inline lambdas
     "decodeValue" <~ ("value" ~>
       "parseError" <~ (Strings.cat $ list [
@@ -601,45 +601,45 @@ decodeCell = define "decodeCell" $
             string "Unsupported literal type for column ",
             var "cname"]) [
             _LiteralType_boolean>>: constant $
-              Maybes.maybe
+              Optionals.cases
+                (Literals.readBoolean $ var "value")
                 (left $ var "parseError")
-                ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed")
-                (Literals.readBoolean $ var "value"),
+                ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed"),
             _LiteralType_float>>: "ft" ~>
               match _FloatType (Just $ left $ Strings.cat $ list [
                 string "Unsupported float type for column ",
                 var "cname"]) [
                 _FloatType_float32>>: constant $
-                  Maybes.maybe
+                  Optionals.cases
+                    (Literals.readFloat32 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed")
-                    (Literals.readFloat32 $ var "value"),
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed"),
                 _FloatType_float64>>: constant $
-                  Maybes.maybe
+                  Optionals.cases
+                    (Literals.readFloat64 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")
-                    (Literals.readFloat64 $ var "value")]
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")]
               @@ var "ft",
             _LiteralType_integer>>: "it" ~>
               match _IntegerType (Just $ left $ Strings.cat $ list [
                 string "Unsupported integer type for column ",
                 var "cname"]) [
                 _IntegerType_int32>>: constant $
-                  Maybes.maybe
+                  Optionals.cases
+                    (Literals.readInt32 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed")
-                    (Literals.readInt32 $ var "value"),
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed"),
                 _IntegerType_int64>>: constant $
-                  Maybes.maybe
+                  Optionals.cases
+                    (Literals.readInt64 $ var "value")
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")
-                    (Literals.readInt64 $ var "value")]
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")]
               @@ var "it",
             _LiteralType_string>>: constant $
               right $ just $ Core.termLiteral $ Core.literalString $ var "value"]
           @@ var "lt"]
       @@ var "typ") $
-    Maybes.maybe
-      (right nothing)  -- No value - return Nothing
-      (var "decodeValue")  -- Has value - use the lifted decoder function
+    Optionals.cases
       (var "mvalue")
+      (right nothing)  -- No value - return Nothing
+      (var "decodeValue")

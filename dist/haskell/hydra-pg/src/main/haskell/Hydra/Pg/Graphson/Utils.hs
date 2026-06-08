@@ -2,19 +2,38 @@
 -- | Utility functions for GraphSON encoding and property graph conversion.
 
 module Hydra.Pg.Graphson.Utils where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Pg.Graphson.Construct as Construct
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as PgModel
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Convert a list of property graph elements to a list of vertices with their adjacent edges
@@ -54,14 +73,14 @@ elementsToVerticesWithAdjacentEdges els =
                                   PgModel.adjacentEdgeVertex = outV,
                                   PgModel.adjacentEdgeProperties = props}
                         vmap1 =
-                                Maybes.maybe vmap (\vae -> Maps.insert outV (PgModel.VertexWithAdjacentEdges {
+                                Optionals.cases (Maps.lookup outV vmap) vmap (\vae -> Maps.insert outV (PgModel.VertexWithAdjacentEdges {
                                   PgModel.vertexWithAdjacentEdgesVertex = (PgModel.vertexWithAdjacentEdgesVertex vae),
                                   PgModel.vertexWithAdjacentEdgesIns = (PgModel.vertexWithAdjacentEdgesIns vae),
-                                  PgModel.vertexWithAdjacentEdgesOuts = (Lists.cons adjEdgeOut (PgModel.vertexWithAdjacentEdgesOuts vae))}) vmap) (Maps.lookup outV vmap)
-                    in (Maybes.maybe vmap1 (\vae -> Maps.insert inV (PgModel.VertexWithAdjacentEdges {
+                                  PgModel.vertexWithAdjacentEdgesOuts = (Lists.cons adjEdgeOut (PgModel.vertexWithAdjacentEdgesOuts vae))}) vmap)
+                    in (Optionals.cases (Maps.lookup inV vmap1) vmap1 (\vae -> Maps.insert inV (PgModel.VertexWithAdjacentEdges {
                       PgModel.vertexWithAdjacentEdgesVertex = (PgModel.vertexWithAdjacentEdgesVertex vae),
                       PgModel.vertexWithAdjacentEdgesIns = (Lists.cons adjEdgeIn (PgModel.vertexWithAdjacentEdgesIns vae)),
-                      PgModel.vertexWithAdjacentEdgesOuts = (PgModel.vertexWithAdjacentEdgesOuts vae)}) vmap1) (Maps.lookup inV vmap1))) vertexMap0 edges
+                      PgModel.vertexWithAdjacentEdgesOuts = (PgModel.vertexWithAdjacentEdgesOuts vae)}) vmap1))) vertexMap0 edges
       in (Maps.elems vertexMap1)
 -- | Encode a String value as a GraphSON Value
 encodeStringValue :: String -> Either t0 Syntax.Value

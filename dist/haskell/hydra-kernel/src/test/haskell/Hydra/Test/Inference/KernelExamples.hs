@@ -77,7 +77,7 @@ testGroupForNestedLet =
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.fromList")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cat")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cat")),
                                 Core.applicationArgument = (Core.TermList [
                                   Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")),

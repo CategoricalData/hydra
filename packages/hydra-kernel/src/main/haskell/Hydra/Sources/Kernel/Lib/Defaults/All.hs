@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math      as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
@@ -56,7 +56,7 @@ import qualified Hydra.Sources.Kernel.Lib.Defaults.Lists as DefaultLists
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Logic as DefaultLogic
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Maps as DefaultMaps
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Math as DefaultMath
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Maybes as DefaultMaybes
+import qualified Hydra.Sources.Kernel.Lib.Defaults.Optionals as DefaultOptionals
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Pairs as DefaultPairs
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Sets as DefaultSets
 
@@ -69,9 +69,9 @@ define = definitionInModuleName ns
 
 -- | All default library modules (term-level fallback implementations used by the interpreter
 -- when a host does not supply a native primitive).
--- Note: Eithers, Lists, Maps, Maybes, and Sets modules cannot currently be code-generated
+-- Note: Eithers, Lists, Maps, Optionals, and Sets modules cannot currently be code-generated
 -- due to DSL type inference limitations. The interpreter-level implementations in those modules
--- use meta-level DSL functions (Maybes.maybe, Eithers.either_, etc.) applied to Term-level
+-- use meta-level DSL functions (Optionals.cases, Eithers.either_, etc.) applied to Term-level
 -- values, which causes unification errors. These modules still work at runtime via the
 -- native Haskell implementations registered via DefaultsPrimitives.
 defaultLibModules :: [Module]
@@ -82,7 +82,7 @@ defaultLibModules = [
   DefaultLogic.module_,
   DefaultMaps.module_,
   DefaultMath.module_,
-  DefaultMaybes.module_,
+  DefaultOptionals.module_,
   DefaultPairs.module_,
   DefaultSets.module_
   ]

@@ -141,7 +141,7 @@ Hydra's Java code is split across three locations
   — hand-written Java runtime
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — Java DSL (Terms, Types, Expect, ...)
-  - `hydra/util/` — core utilities (Either, Maybe, Pair, Lazy) plus the
+  - `hydra/util/` — core utilities (Either, Optional, Pair, Lazy) plus the
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
   - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)

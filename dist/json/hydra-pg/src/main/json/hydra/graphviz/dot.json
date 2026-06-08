@@ -8,7 +8,7 @@
             "record": [
               {"name": "strict", "type": {"literal": {"boolean": {}}}},
               {"name": "directed", "type": {"literal": {"boolean": {}}}},
-              {"name": "id", "type": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}},
+              {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
               {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]},
           "variables": []},
         "name": "hydra.graphviz.dot.Graph"}},
@@ -63,7 +63,7 @@
             "record": [
               {"name": "left", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
               {"name": "right", "type": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}},
-              {"name": "attributes", "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
+              {"name": "attributes", "type": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
           "variables": []},
         "name": "hydra.graphviz.dot.EdgeStmt"}},
     {
@@ -81,7 +81,7 @@
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
-              {"name": "attributes", "type": {"maybe": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
+              {"name": "attributes", "type": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
           "variables": []},
         "name": "hydra.graphviz.dot.NodeStmt"}},
     {
@@ -90,7 +90,7 @@
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.graphviz.dot.Id"}},
-              {"name": "port", "type": {"maybe": {"variable": "hydra.graphviz.dot.Port"}}}]},
+              {"name": "port", "type": {"optional": {"variable": "hydra.graphviz.dot.Port"}}}]},
           "variables": []},
         "name": "hydra.graphviz.dot.NodeId"}},
     {
@@ -98,8 +98,8 @@
         "body": {
           "body": {
             "record": [
-              {"name": "id", "type": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}},
-              {"name": "position", "type": {"maybe": {"variable": "hydra.graphviz.dot.CompassPt"}}}]},
+              {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
+              {"name": "position", "type": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}}]},
           "variables": []},
         "name": "hydra.graphviz.dot.Port"}},
     {
@@ -107,13 +107,13 @@
         "body": {
           "body": {
             "record": [
-              {"name": "subgraphId", "type": {"maybe": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
+              {"name": "subgraphId", "type": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
               {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]},
           "variables": []},
         "name": "hydra.graphviz.dot.Subgraph"}},
     {
       "type": {
-        "body": {"body": {"wrap": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}}, "variables": []},
+        "body": {"body": {"wrap": {"optional": {"variable": "hydra.graphviz.dot.Id"}}}, "variables": []},
         "name": "hydra.graphviz.dot.SubgraphId"}},
     {
       "type": {

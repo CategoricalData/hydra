@@ -20,7 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -77,7 +77,7 @@ subtermStep = define "subtermStep" $
   "step" ~>
   "idx" <~ ("i" ~> nothing) $  -- TODO: restore index functionality
   "idxSuff" <~ ("suffix" ~> "i" ~>
-    Maybes.map ("s" ~> Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
+    Optionals.map ("s" ~> Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
   cases _SubtermStep (var "step")
     Nothing [
     _SubtermStep_annotatedBody>>: constant nothing,
@@ -91,7 +91,7 @@ subtermStep = define "subtermStep" $
     _SubtermStep_listElement>>: "i" ~> var "idx" @@ var "i",
     _SubtermStep_mapKey>>: "i" ~> var "idxSuff" @@ (string ".key") @@ var "i",
     _SubtermStep_mapValue>>: "i" ~> var "idxSuff" @@ (string ".value") @@ var "i",
-    _SubtermStep_maybeTerm>>: constant (just (string "just")),
+    _SubtermStep_optionalTerm>>: constant (just (string "given")),
     _SubtermStep_productTerm>>: "i" ~> var "idx" @@ var "i",
     _SubtermStep_recordField>>: "name" ~> just (Strings.cat2 (string ".") (Core.unName (var "name"))),
     _SubtermStep_setElement>>: "i" ~> var "idx" @@ var "i",
@@ -158,16 +158,12 @@ termToSubtermGraph = define "termToSubtermGraph" $
           $ var "helper" @@ var "ids1" @@ var "mroot" @@ var "nextPath" @@ var "stateAfterBindings" @@
             pair Paths.subtermStepLetBody (var "env"),
         _Term_variable>>: lambda "name" $
-          Maybes.maybe (var "state")
-            (lambda "root" $
-              Maybes.maybe (var "state")
-                (lambda "node" $ lets [
+          Optionals.cases (var "mroot") (var "state") (lambda "root" $
+              Optionals.cases (Maps.lookup (var "name") (var "ids")) (var "state") (lambda "node" $ lets [
                   "edge">: Paths.subtermEdge (var "root")
                     (Paths.subtermPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]
-                  $ pair (pair (var "nodes") (var "newEdges")) (var "visited"))
-                (Maps.lookup (var "name") (var "ids")))
-            (var "mroot")]
+                  $ pair (pair (var "nodes") (var "newEdges")) (var "visited")))]
       @@ var "currentTerm",
     "initialState">: pair (pair (list ([] :: [TypedTerm SubtermNode])) (list ([] :: [TypedTerm SubtermEdge]))) Sets.empty,
     "result">: var "helper" @@ Maps.empty @@ nothing @@ list ([] :: [TypedTerm SubtermStep]) @@ var "initialState" @@

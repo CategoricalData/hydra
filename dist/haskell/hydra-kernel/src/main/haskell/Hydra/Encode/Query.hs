@@ -5,7 +5,7 @@ module Hydra.Encode.Query where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -54,10 +54,10 @@ edge x =
           Core.fieldTerm = (EncodeCore.name (Query.edgeType x))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeOut x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map EncodeCore.name opt)) (Query.edgeOut x))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeIn x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map EncodeCore.name opt)) (Query.edgeIn x))}]})
 -- | Encoder for hydra.query.GraphPattern
 graphPattern :: Query.GraphPattern -> Core.Term
 graphPattern x =

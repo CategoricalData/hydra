@@ -89,7 +89,7 @@ const _cachedKernelTypes: ReadonlyMap<Name, TypeScheme> = maps.fromList(
     if (tsAny.variables && tsAny.variables.length > 0) return [k, ts] as const;
     const { vars, body } = collectForallVars(tsAny.body);
     if (vars.length === 0) return [k, ts] as const;
-    return [k, { variables: vars, body, constraints: tsAny.constraints ?? { tag: "nothing" } } as unknown as TypeScheme] as const;
+    return [k, { variables: vars, body, constraints: tsAny.constraints ?? { tag: "none" } } as unknown as TypeScheme] as const;
   }));
 
 const buildGraph = (testTypes: ReadonlyMap<Name, Type>, testTerms: ReadonlyMap<Name, Term>): Graph => {
@@ -98,7 +98,7 @@ const buildGraph = (testTypes: ReadonlyMap<Name, Type>, testTerms: ReadonlyMap<N
   const wrappedTestTypes: ReadonlyMap<Name, TypeScheme> = maps.fromList(
     maps.toList(testTypes).map(([k, v]) => {
       const { vars, body } = collectForallVars(v);
-      return [k, { variables: vars, body, constraints: { tag: "nothing" } } as unknown as TypeScheme] as const;
+      return [k, { variables: vars, body, constraints: { tag: "none" } } as unknown as TypeScheme] as const;
     }));
   // schemaTypes carries kernel type definitions (records/unions/wraps)
   // so the reducer can resolve nominal type fields via `cases _Term`.

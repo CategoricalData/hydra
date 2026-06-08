@@ -34,8 +34,9 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Name"}}},
-                                                "type": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}}}}}},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
+                                                "type": {"optional": {"variable": "hydra.packaging.ModuleName"}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
                                 "function": {
                                   "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
                             "typeScheme": {"body": {"set": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
@@ -59,7 +60,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
                                         "function": {"variable": "hydra.formatting.capitalize"}}},
                                     "typeName": "hydra.haskell.syntax.ModuleName"}},
                                 "domain": {"variable": "hydra.packaging.ModuleName"},
@@ -224,7 +225,7 @@
                                                   {"name": "term", "term": {"variable": "term"}},
                                                   {
                                                     "name": "typeScheme",
-                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                 "typeName": "hydra.core.Binding"}},
                                             "domain": {"variable": "hydra.core.Term"},
                                             "parameter": "term"}},
@@ -276,7 +277,7 @@
                                                                     "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}}},
                                                                 {
                                                                   "name": "metadata",
-                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
+                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.EntityMetadata"}}}},
                                                                 {
                                                                   "name": "signature",
                                                                   "term": {
@@ -288,7 +289,7 @@
                                                                           "argument": {"variable": "hydra.scoping.typeSchemeToTermSignature"},
                                                                           "function": {
                                                                             "typeApplication": {
-                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.core.TypeScheme"}}},
                                                                               "type": {"variable": "hydra.typing.TermSignature"}}}}}}}},
                                                                 {
                                                                   "name": "body",
@@ -840,7 +841,7 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": ""}},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                                                     "function": {"variable": "hydra.lib.logic.not"}}},
                                                 "domain": {"variable": "hydra.haskell.syntax.ModuleName"},

@@ -11,7 +11,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any, TypeVar
 
-from hydra.dsl.python import Maybe, Just, Nothing, NOTHING
+from hydra.dsl.python import Optional, Given, None_, NONE_
 from hydra.python.util import ConsList, PersistentMap
 
 K = TypeVar('K')
@@ -29,12 +29,12 @@ def _to_pmap(mapping: Mapping[K, V]) -> PersistentMap[K, V]:
 
 
 def alter(
-    f: Callable[[Maybe[V]], Maybe[V]], key: K, mapping: Mapping[K, V]
+    f: Callable[[Optional[V]], Optional[V]], key: K, mapping: Mapping[K, V]
 ) -> Mapping[K, V]:
     """Alter a value at a key using a function."""
     current_value = lookup(key, mapping)
     new_value = f(current_value)
-    if isinstance(new_value, Just):
+    if isinstance(new_value, Given):
         return insert(key, new_value.value, mapping)
     return delete(key, mapping)
 
@@ -98,15 +98,15 @@ def keys(mapping: Mapping[K, Any]) -> Sequence[K]:
     return ConsList.from_iterable(_to_pmap(mapping).keys_list())
 
 
-def lookup(key: K, mapping: Mapping[K, V]) -> Maybe[V]:
+def lookup(key: K, mapping: Mapping[K, V]) -> Optional[V]:
     """Lookup a value in a map."""
     if isinstance(mapping, PersistentMap):
         if mapping.contains_key(key):
-            return Just(mapping[key])
-        return NOTHING
+            return Given(mapping[key])
+        return NONE_
     if key in mapping:
-        return Just(mapping[key])
-    return NOTHING
+        return Given(mapping[key])
+    return NONE_
 
 
 def map(f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> Mapping[K, V2]:

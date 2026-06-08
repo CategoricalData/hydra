@@ -243,7 +243,7 @@ nothing = optional Nothing
 -- | Create a Maybe (nullable) term
 -- Example: optional (Just (string "found"))
 optional :: Maybe Term -> Term
-optional = TermMaybe
+optional = TermOptional
 
 -- | Create a pair
 -- Example: pair (string "name") (int32 42)

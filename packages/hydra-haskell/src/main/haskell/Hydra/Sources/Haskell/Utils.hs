@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -139,10 +139,10 @@ elementReference = haskellUtilsDefinition "elementReference" $
     "local">: Util.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
     "mns">: Util.qualifiedNameModuleName $ var "qname"] $
-    Maybes.cases (Util.qualifiedNameModuleName $ var "qname")
+    Optionals.cases (Util.qualifiedNameModuleName $ var "qname")
       (simpleName @@ var "local") $
       "ns" ~>
-        Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
+        Optionals.cases (Maps.lookup (var "ns") (var "namespacesMap"))
           (simpleName @@ var "local") $
           "mn" ~> lets [
             "aliasStr">: unwrap H._ModuleName @@ var "mn"] $
@@ -203,7 +203,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     -- hydra.decode.graph in hydra.decode.coders) don't produce import
     -- lines for nonexistent modules.
     "termNss" <<~ Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
-    "knownNss" <~ Sets.fromList (Maybes.cat
+    "knownNss" <~ Sets.fromList (Optionals.cat
       (Lists.map Names.moduleNameOf (Lists.concat2
         (Maps.keys (Graph.graphSchemaTypes (var "g")))
         (Maps.keys (Graph.graphBoundTerms (var "g")))))) $
@@ -245,8 +245,8 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     "initialState" <~ (Maps.fromList $ Lists.map
       ("nm" ~> pair (var "nm") (int32 1))
       (var "nssAsList")) $
-    "segsFor" <~ ("nm" ~> Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap"))) $
-    "takenFor" <~ ("state" ~> "nm" ~> Maybes.fromMaybe (int32 1) (Maps.lookup (var "nm") (var "state"))) $
+    "segsFor" <~ ("nm" ~> Optionals.fromOptional (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap"))) $
+    "takenFor" <~ ("state" ~> "nm" ~> Optionals.fromOptional (int32 1) (Maps.lookup (var "nm") (var "state"))) $
     -- One pass of the fixed point: within each collision group (namespaces
     -- currently sharing an alias), only namespaces with *more* segments than
     -- the shortest in the group grow. This realizes the "shortest module
@@ -268,7 +268,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
         ("m" ~> "e" ~> lets [
           "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e"] $
           Maps.insert (var "k")
-            (Math.add (int32 1) (Maybes.fromMaybe (int32 0) (Maps.lookup (var "k") (var "m"))))
+            (Math.add (int32 1) (Optionals.fromOptional (int32 0) (Maps.lookup (var "k") (var "m"))))
             (var "m"))
         Maps.empty
         (var "aliasEntries"),
@@ -280,7 +280,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
           "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
           "existing">: Maps.lookup (var "k") (var "m")] $
           Maps.insert (var "k")
-            (Maybes.cases (var "existing")
+            (Optionals.cases (var "existing")
               (var "segCount") $
               "prev" ~> Logic.ifElse (Equality.lt (var "segCount") (var "prev")) (var "segCount") (var "prev"))
             (var "m"))
@@ -294,10 +294,10 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
           ("m" ~> "e" ~> lets [
             "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
             "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
-            "minSegs">: Maybes.fromMaybe (var "segCount") (Maps.lookup (var "k") (var "aliasMinSegs"))] $
+            "minSegs">: Optionals.fromOptional (var "segCount") (Maps.lookup (var "k") (var "aliasMinSegs"))] $
             Logic.ifElse (Equality.equal (var "segCount") (var "minSegs"))
               (Maps.insert (var "k")
-                (Math.add (int32 1) (Maybes.fromMaybe (int32 0) (Maps.lookup (var "k") (var "m"))))
+                (Math.add (int32 1) (Optionals.fromOptional (int32 0) (Maps.lookup (var "k") (var "m"))))
                 (var "m"))
               (var "m"))
           Maps.empty
@@ -308,9 +308,9 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
           "n">: Pairs.first $ Pairs.second $ var "e",
           "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
           "aliasStr">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
-          "count">: Maybes.fromMaybe (int32 0) (Maps.lookup (var "aliasStr") (var "aliasCounts")),
-          "minSegs">: Maybes.fromMaybe (var "segCount") (Maps.lookup (var "aliasStr") (var "aliasMinSegs")),
-          "minSegsCount">: Maybes.fromMaybe (int32 0) (Maps.lookup (var "aliasStr") (var "aliasMinSegsCount")),
+          "count">: Optionals.fromOptional (int32 0) (Maps.lookup (var "aliasStr") (var "aliasCounts")),
+          "minSegs">: Optionals.fromOptional (var "segCount") (Maps.lookup (var "aliasStr") (var "aliasMinSegs")),
+          "minSegsCount">: Optionals.fromOptional (int32 0) (Maps.lookup (var "aliasStr") (var "aliasMinSegsCount")),
           -- A namespace grows iff (1) its alias currently collides, (2) it
           -- still has room to grow, and (3) it is strictly longer than the
           -- shortest in its group OR the shortest position is tied (in which
@@ -399,8 +399,8 @@ toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
         H._QualifiedName_qualifiers>>: list ([] :: [TypedTerm H.NamePart]),
         H._QualifiedName_unqualified>>: wrap H._NamePart $ string ""],
     "app">: "l" ~>
-      Maybes.fromMaybe (var "dummyType")
-        (Maybes.map
+      Optionals.fromOptional (var "dummyType")
+        (Optionals.map
           ("p" ~> Logic.ifElse (Lists.null (Pairs.second (var "p")))
             (Pairs.first (var "p"))
             (inject H._Type H._Type_application $ record H._ApplicationType [
@@ -415,7 +415,7 @@ typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
   "sname" ~> lets [
     "snameStr">: Core.unName $ var "sname",
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
-    Maybes.fromMaybe (var "snameStr") (Lists.maybeLast (var "parts"))
+    Optionals.fromOptional (var "snameStr") (Lists.maybeLast (var "parts"))
 
 unionFieldReference :: TypedTermDefinition (S.Set Name -> HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReference = haskellUtilsDefinition "unionFieldReference" $

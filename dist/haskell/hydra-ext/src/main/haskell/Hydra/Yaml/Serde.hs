@@ -2,16 +2,38 @@
 -- | Native YAML serialization: YAML Node to String
 
 module Hydra.Yaml.Serde where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Haskell.Lib.Chars as Chars
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
-import qualified Hydra.Yaml.Model as Model
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
+import qualified Hydra.Yaml.Model as YamlModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Escape single quotes by doubling them
@@ -28,9 +50,9 @@ hasLeadingTrailingSpace :: String -> Bool
 hasLeadingTrailingSpace s =
 
       let chars = Strings.toList s
-      in (Logic.or (Maybes.fromMaybe False (Maybes.map (\c -> Chars.isSpace c) (Lists.maybeHead chars))) (Maybes.fromMaybe False (Maybes.map (\c -> Chars.isSpace c) (Lists.maybeLast chars))))
+      in (Logic.or (Optionals.fromOptional False (Optionals.map (\c -> Chars.isSpace c) (Lists.maybeHead chars))) (Optionals.fromOptional False (Optionals.map (\c -> Chars.isSpace c) (Lists.maybeLast chars))))
 -- | Serialize a YAML node to a string
-hydraYamlToString :: Model.Node -> String
+hydraYamlToString :: YamlModel.Node -> String
 hydraYamlToString node = writeNode node
 -- | Indent all lines of a string by 2 spaces
 indentString :: String -> String
@@ -57,7 +79,7 @@ looksLikeNumber :: String -> Bool
 looksLikeNumber s =
 
       let chars = Strings.toList s
-      in (Maybes.fromMaybe False (Maybes.map (\p ->
+      in (Optionals.fromOptional False (Optionals.map (\p ->
         let firstCh = Pairs.first p
             tailCh = Pairs.second p
             rest = Logic.ifElse (Equality.equal firstCh 45) tailCh chars
@@ -73,70 +95,70 @@ needsQuoting s =
           hasSpecial = Logic.not (Lists.null (Lists.filter (\c -> Lists.elem c specials) chars))
       in (Logic.ifElse hasSpecial True (hasLeadingTrailingSpace s)))))
 -- | Write a mapping entry in block style
-writeMappingEntry :: (Model.Node, Model.Node) -> String
+writeMappingEntry :: (YamlModel.Node, YamlModel.Node) -> String
 writeMappingEntry entry =
 
       let key = Pairs.first entry
           value = Pairs.second entry
       in case value of
-        Model.NodeScalar v0 -> Strings.cat [
+        YamlModel.NodeScalar v0 -> Strings.cat [
           writeNodeInline key,
           ": ",
           (writeScalar v0),
           "\n"]
-        Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) (Strings.cat [
+        YamlModel.NodeSequence v0 -> Logic.ifElse (Lists.null v0) (Strings.cat [
           writeNodeInline key,
           ": []\n"]) (Strings.cat [
           writeNodeInline key,
           ":\n",
           (indentString (writeNode value))])
-        Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) (Strings.cat [
+        YamlModel.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) (Strings.cat [
           writeNodeInline key,
           ": {}\n"]) (Strings.cat [
           writeNodeInline key,
           ":\n",
           (indentString (writeNode value))])
 -- | Write a mapping entry for the first item of a sequence element
-writeMappingEntryInline :: (Model.Node, Model.Node) -> String
+writeMappingEntryInline :: (YamlModel.Node, YamlModel.Node) -> String
 writeMappingEntryInline entry =
 
       let key = Pairs.first entry
           value = Pairs.second entry
       in case value of
-        Model.NodeScalar v0 -> Strings.cat [
+        YamlModel.NodeScalar v0 -> Strings.cat [
           writeNodeInline key,
           ": ",
           (writeScalar v0),
           "\n"]
-        Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) (Strings.cat [
+        YamlModel.NodeSequence v0 -> Logic.ifElse (Lists.null v0) (Strings.cat [
           writeNodeInline key,
           ": []\n"]) (Strings.cat [
           writeNodeInline key,
           ":\n",
           (indentString (writeNode value))])
-        Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) (Strings.cat [
+        YamlModel.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) (Strings.cat [
           writeNodeInline key,
           ": {}\n"]) (Strings.cat [
           writeNodeInline key,
           ":\n",
           (indentString (writeNode value))])
 -- | Write a YAML node as a top-level value in block style
-writeNode :: Model.Node -> String
+writeNode :: YamlModel.Node -> String
 writeNode node =
     case node of
-      Model.NodeScalar v0 -> Strings.cat2 (writeScalar v0) "\n"
-      Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "[]\n" (Strings.cat (Lists.map (\item -> writeSequenceItem item) v0))
-      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "{}\n" (Strings.cat (Lists.map (\e -> writeMappingEntry e) (Maps.toList v0)))
+      YamlModel.NodeScalar v0 -> Strings.cat2 (writeScalar v0) "\n"
+      YamlModel.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "[]\n" (Strings.cat (Lists.map (\item -> writeSequenceItem item) v0))
+      YamlModel.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "{}\n" (Strings.cat (Lists.map (\e -> writeMappingEntry e) (Maps.toList v0)))
 -- | Write a node inline (for use as a mapping key)
-writeNodeInline :: Model.Node -> String
+writeNodeInline :: YamlModel.Node -> String
 writeNodeInline node =
     case node of
-      Model.NodeScalar v0 -> writeScalar v0
-      Model.NodeSequence v0 -> Strings.cat [
+      YamlModel.NodeScalar v0 -> writeScalar v0
+      YamlModel.NodeSequence v0 -> Strings.cat [
         "[",
         (Strings.intercalate ", " (Lists.map (\item -> writeNodeInline item) v0)),
         "]"]
-      Model.NodeMapping v0 ->
+      YamlModel.NodeMapping v0 ->
         let writeFlowEntry =
                 \e -> Strings.cat [
                   writeNodeInline (Pairs.first e),
@@ -147,27 +169,27 @@ writeNodeInline node =
           (Strings.intercalate ", " (Lists.map writeFlowEntry (Maps.toList v0))),
           "}"])
 -- | Write a scalar value
-writeScalar :: Model.Scalar -> String
+writeScalar :: YamlModel.Scalar -> String
 writeScalar s =
     case s of
-      Model.ScalarBool v0 -> Logic.ifElse v0 "true" "false"
-      Model.ScalarDecimal v0 -> Literals.showDecimal v0
-      Model.ScalarFloat v0 -> Literals.showFloat64 v0
-      Model.ScalarInt v0 -> Literals.showBigint v0
-      Model.ScalarNull -> "null"
-      Model.ScalarStr v0 -> writeString v0
+      YamlModel.ScalarBool v0 -> Logic.ifElse v0 "true" "false"
+      YamlModel.ScalarDecimal v0 -> Literals.showDecimal v0
+      YamlModel.ScalarFloat v0 -> Literals.showFloat64 v0
+      YamlModel.ScalarInt v0 -> Literals.showBigint v0
+      YamlModel.ScalarNull -> "null"
+      YamlModel.ScalarStr v0 -> writeString v0
 -- | Write a sequence item in block style
-writeSequenceItem :: Model.Node -> String
+writeSequenceItem :: YamlModel.Node -> String
 writeSequenceItem node =
     case node of
-      Model.NodeScalar v0 -> Strings.cat [
+      YamlModel.NodeScalar v0 -> Strings.cat [
         "- ",
         (writeScalar v0),
         "\n"]
-      Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "- []\n" (Strings.cat2 "-\n" (indentString (writeNode node)))
-      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" (
+      YamlModel.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "- []\n" (Strings.cat2 "-\n" (indentString (writeNode node)))
+      YamlModel.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" (
         let entries = Maps.toList v0
-        in (Maybes.fromMaybe "" (Maybes.map (\p ->
+        in (Optionals.fromOptional "" (Optionals.map (\p ->
           let firstEntry = Pairs.first p
               restEntries = Pairs.second p
               firstStr = writeMappingEntryInline firstEntry

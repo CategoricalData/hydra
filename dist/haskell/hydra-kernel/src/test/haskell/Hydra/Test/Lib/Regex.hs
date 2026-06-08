@@ -209,7 +209,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.find")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "[0-9]+"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "abc123def"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "123")))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "123")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -220,7 +220,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.find")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "[0-9]+"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "abcdef"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -231,7 +231,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.find")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "[a-z]+"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "123abc456def"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "abc")))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "abc")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -242,7 +242,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.find")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "[0-9]+"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -253,7 +253,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.find")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ".*"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "hello")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

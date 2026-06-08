@@ -42,29 +42,29 @@
             result
             (recur (next rest_) (cons (second result) acc)))))))))
 
-;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-(def hydra_lib_eithers_map_maybe
+;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+(def hydra_lib_eithers_map_optional
   (fn [f] (fn [m]
     (cond
       (or (nil? m)
           (and (sequential? m) (empty? m))
-          (and (sequential? m) (= (first m) :nothing)))
-      (list :right (list :nothing))
+          (and (sequential? m) (= (first m) :none)))
+      (list :right (list :none))
 
-      (and (sequential? m) (= (first m) :just))
+      (and (sequential? m) (= (first m) :given))
       (let [result (f (second m))]
         (if (= (first result) :left)
           result
-          (list :right (list :just (second result)))))
+          (list :right (list :given (second result)))))
 
-      (and (sequential? m) (= (first m) :maybe)
+      (and (sequential? m) (= (first m) :optional)
            (>= (count m) 2) (not (nil? (second m))))
       (let [result (f (second m))]
         (if (= (first result) :left)
           result
-          (list :right (list :maybe (second result)))))
+          (list :right (list :optional (second result)))))
 
-      ;; bare value (term-level maybe: (:maybe val) where val is not wrapped)
+      ;; bare value (term-level maybe: (:optional val) where val is not wrapped)
       :else
       (let [result (f m)]
         (if (= (first result) :left)

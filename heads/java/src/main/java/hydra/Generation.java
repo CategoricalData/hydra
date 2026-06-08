@@ -20,7 +20,7 @@ import hydra.packaging.ModuleName;
 import hydra.Rewriting;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 import hydra.util.Pair;
 import java.util.HashSet;
 
@@ -544,8 +544,8 @@ public class Generation {
                 @Override public Void visit(Definition.Term td) {
                     TermDefinition t = td.value;
                     Term newTerm = Strip.removeTypesFromTerm(t.body);
-                    Maybe<TermSignature> newType = Maybe.nothing();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Maybe.nothing(), newType, newTerm)));
+                    Optional<TermSignature> newType = Optional.none();
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Optional.none(), newType, newTerm)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {

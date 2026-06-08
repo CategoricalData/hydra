@@ -14,7 +14,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -107,7 +107,7 @@ map f pa =
       in (Parsing.Parser parse)
 -- | Optionally parse something, returning Nothing if it fails
 optional :: Parsing.Parser t0 -> Parsing.Parser (Maybe t0)
-optional p = alt (map Maybes.pure p) (pure Nothing)
+optional p = alt (map Optionals.pure p) (pure Nothing)
 -- | A parser that always succeeds with the given value without consuming input
 pure :: t0 -> Parsing.Parser t0
 pure a =
@@ -124,7 +124,7 @@ satisfy pred =
       let parse =
               \input ->
                 let codes = Strings.toList input
-                in (Maybes.maybe (Parsing.ParseResultFailure (Parsing.ParseError {
+                in (Optionals.cases (Lists.maybeHead codes) (Parsing.ParseResultFailure (Parsing.ParseError {
                   Parsing.parseErrorMessage = "unexpected end of input",
                   Parsing.parseErrorRemainder = input})) (\c ->
                   let rest = Strings.fromList (Lists.drop 1 codes)
@@ -132,7 +132,7 @@ satisfy pred =
                     Parsing.parseSuccessValue = c,
                     Parsing.parseSuccessRemainder = rest})) (Parsing.ParseResultFailure (Parsing.ParseError {
                     Parsing.parseErrorMessage = "character did not satisfy predicate",
-                    Parsing.parseErrorRemainder = input})))) (Lists.maybeHead codes))
+                    Parsing.parseErrorRemainder = input})))))
       in (Parsing.Parser parse)
 -- | Parse zero or more occurrences separated by a separator
 sepBy :: Parsing.Parser t0 -> Parsing.Parser t1 -> Parsing.Parser [t0]

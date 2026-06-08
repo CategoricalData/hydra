@@ -19,7 +19,7 @@ import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
@@ -113,11 +113,11 @@ generateTestFileWithPythonCodec testModule testGroup =
       let testModuleContent = buildPythonTestModule testModule testGroup testBody
           ns_ = Packaging.moduleName testModule
           parts = Strings.splitOn "." (Packaging.unModuleName ns_)
-          dirParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
+          dirParts = Optionals.fromOptional [] (Lists.maybeInit parts)
           fileName =
                   Strings.cat [
                     "test_",
-                    (Maybes.fromMaybe "" (Lists.maybeLast parts)),
+                    (Optionals.fromOptional "" (Lists.maybeLast parts)),
                     ".py"]
           filePath =
                   Strings.cat [

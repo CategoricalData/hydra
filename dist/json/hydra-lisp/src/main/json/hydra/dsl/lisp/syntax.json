@@ -106,7 +106,7 @@
                           "annotated": {
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module/namespace declaration"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "module"}},
                 "domain": {
@@ -139,7 +139,7 @@
                     "annotated": {
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module/namespace declaration"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -295,7 +295,7 @@
                   "annotated": {
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module/namespace declaration"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -872,7 +872,7 @@
                           "annotated": {
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module/namespace declaration"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -895,7 +895,7 @@
                     "annotated": {
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module/namespace declaration"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1965,7 +1965,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comment"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "comment"}},
                 "domain": {
@@ -1973,7 +1973,7 @@
                     "argument": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation string"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "doc"}}}},
         "name": "hydra.dsl.lisp.syntax.topLevelFormWithComments",
@@ -1987,7 +1987,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation string"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1997,7 +1997,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comment"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -2077,7 +2077,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation string"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -2142,7 +2142,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comment"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -2323,7 +2323,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation string"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2349,7 +2349,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation string"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2470,7 +2470,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comment"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2496,7 +2496,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comment"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Comment"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2765,7 +2765,7 @@
                                 "argument": {
                                   "annotated": {
                                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                                 "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "doc"}},
                         "domain": {
@@ -2773,7 +2773,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest/variadic parameter"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "restParam"}},
                     "domain": {
@@ -2823,7 +2823,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest/variadic parameter"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -2833,7 +2833,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -3044,7 +3044,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest/variadic parameter"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -3105,7 +3105,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -3936,7 +3936,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest/variadic parameter"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -3958,7 +3958,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest/variadic parameter"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -4179,7 +4179,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -4201,7 +4201,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -4766,7 +4766,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "doc"}},
                     "domain": {
@@ -4816,7 +4816,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -5002,7 +5002,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -5400,7 +5400,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -5422,7 +5422,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -5491,7 +5491,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "doc"}},
                     "domain": {
@@ -5541,7 +5541,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -5727,7 +5727,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -6125,7 +6125,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -6147,7 +6147,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -6216,7 +6216,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "doc"}},
                     "domain": {
@@ -6266,7 +6266,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -6452,7 +6452,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -6850,7 +6850,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -6872,7 +6872,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional docstring"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -6931,7 +6931,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "defaultValue"}},
                 "domain": {
@@ -6963,7 +6963,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -7090,7 +7090,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -7281,7 +7281,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -7303,7 +7303,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -7390,7 +7390,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "restParam"}},
                     "domain": {
@@ -7440,7 +7440,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -7636,7 +7636,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -8197,7 +8197,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -8219,7 +8219,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -10509,7 +10509,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "restParam"}},
                     "domain": {
@@ -10529,7 +10529,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Optional name for self-referential lambdas (Clojure named fn)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                        "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "name"}}}},
         "name": "hydra.dsl.lisp.syntax.lambda",
@@ -10547,7 +10547,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional name for self-referential lambdas (Clojure named fn)"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -10567,7 +10567,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -10645,7 +10645,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional name for self-referential lambdas (Clojure named fn)"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -10767,7 +10767,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -10982,7 +10982,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional name for self-referential lambdas (Clojure named fn)"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -11008,7 +11008,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional name for self-referential lambdas (Clojure named fn)"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -11336,7 +11336,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -11358,7 +11358,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional rest parameter"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -13241,7 +13241,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional else branch"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "else"}},
                     "domain": {
@@ -13291,7 +13291,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional else branch"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -13477,7 +13477,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional else branch"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -13875,7 +13875,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional else branch"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -13897,7 +13897,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional else branch"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -13956,7 +13956,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default expression"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "default"}},
                 "domain": {
@@ -13988,7 +13988,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default expression"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -14113,7 +14113,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default expression"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -14302,7 +14302,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default expression"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -14324,7 +14324,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default expression"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -14820,7 +14820,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default clause"}}}]},
-                                "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                                "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "default"}},
                     "domain": {
@@ -14870,7 +14870,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default clause"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -15056,7 +15056,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default clause"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -15454,7 +15454,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default clause"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -15476,7 +15476,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default clause"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -21639,7 +21639,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "precision"}},
                 "domain": {
@@ -21675,7 +21675,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -21804,7 +21804,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -21997,7 +21997,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -22023,7 +22023,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -22563,7 +22563,7 @@
                             "annotation": {
                               "map": [
                                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "namespace"}},
                 "domain": {
@@ -22599,7 +22599,7 @@
                       "annotation": {
                         "map": [
                           {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -22727,7 +22727,7 @@
                     "annotation": {
                       "map": [
                         {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -22920,7 +22920,7 @@
                             "annotation": {
                               "map": [
                                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]},
-                            "body": {"maybe": {"literal": {"string": {}}}}}},
+                            "body": {"optional": {"literal": {"string": {}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -22944,7 +22944,7 @@
                       "annotation": {
                         "map": [
                           {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]},
-                      "body": {"maybe": {"literal": {"string": {}}}}}},
+                      "body": {"optional": {"literal": {"string": {}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -26799,7 +26799,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module documentation"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "doc"}},
                 "domain": {
@@ -26831,7 +26831,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module documentation"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -26956,7 +26956,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module documentation"}}}]},
-                    "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                    "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -27145,7 +27145,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module documentation"}}}]},
-                            "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                            "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -27167,7 +27167,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module documentation"}}}]},
-                      "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}},
+                      "body": {"optional": {"variable": "hydra.lisp.syntax.Docstring"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {

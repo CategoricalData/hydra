@@ -21,7 +21,7 @@ from hydra.codegen import (
 )
 from hydra.typing import InferenceContext
 from hydra.core import Binding
-from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
+from hydra.dsl.python import FrozenDict, Given, Left, None_, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
 from hydra.packaging import Module, ModuleName
@@ -219,7 +219,7 @@ def strip_term_types(m):
         if isinstance(d, DefinitionTerm):
             td = d.value
             new_term = remove_types_from_term(td.body)
-            stripped.append(DefinitionTerm(TermDefinition(td.name, Nothing(), Nothing(), new_term)))
+            stripped.append(DefinitionTerm(TermDefinition(td.name, None_(), None_(), new_term)))
         else:
             stripped.append(d)
     return Module(m.name, m.metadata, m.dependencies, tuple(stripped))

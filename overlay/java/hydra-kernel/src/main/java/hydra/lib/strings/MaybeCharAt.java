@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,9 +42,9 @@ public class MaybeCharAt extends PrimitiveFunction {
     /**
      * Returns a function that retrieves the character at the given index.
      * @param index the index of the character to retrieve
-     * @return a function that takes a string and returns a Maybe containing the code point at the index
+     * @return a function that takes a string and returns a Optional containing the code point at the index
      */
-    public static Function<String, Maybe<Integer>> apply(Integer index) {
+    public static Function<String, Optional<Integer>> apply(Integer index) {
         return (s) -> apply(index, s);
     }
 
@@ -52,14 +52,14 @@ public class MaybeCharAt extends PrimitiveFunction {
      * Get the character at the given index in the string.
      * @param index the index of the character to retrieve
      * @param s the string to query
-     * @return a Maybe containing the code point at the index, or empty if out of bounds
+     * @return a Optional containing the code point at the index, or empty if out of bounds
      */
-    public static Maybe<Integer> apply(Integer index, String s) {
+    public static Optional<Integer> apply(Integer index, String s) {
         int len = s.codePointCount(0, s.length());
         if (index < 0 || index >= len) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(s.codePointAt(s.offsetByCodePoints(0, index)));
+            return Optional.given(s.codePointAt(s.offsetByCodePoints(0, index)));
         }
     }
 }

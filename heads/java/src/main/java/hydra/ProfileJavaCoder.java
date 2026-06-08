@@ -10,7 +10,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.util.Either;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -85,7 +85,7 @@ public class ProfileJavaCoder {
                     if (d instanceof Definition.Term) {
                         TermDefinition td = ((Definition.Term) d).value;
                         stripped.add(new Definition.Term(
-                            new TermDefinition(td.name, hydra.util.Maybe.nothing(), Maybe.<hydra.typing.TermSignature>nothing(), td.body)));
+                            new TermDefinition(td.name, hydra.util.Optional.none(), Optional.<hydra.typing.TermSignature>none(), td.body)));
                     } else stripped.add(d);
                 }
                 strippedTarget = new Module(m.name, m.metadata, m.dependencies, stripped);

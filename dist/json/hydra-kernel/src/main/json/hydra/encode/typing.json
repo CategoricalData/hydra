@@ -199,7 +199,7 @@
                                                           "body": {
                                                             "inject": {
                                                               "field": {
-                                                                "name": "maybe",
+                                                                "name": "optional",
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "opt"},
@@ -208,10 +208,10 @@
                                                                         "argument": {"variable": "hydra.encode.core.type"},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.core.Type"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": {"maybe": {"variable": "hydra.core.Type"}},
+                                                          "domain": {"optional": {"variable": "hydra.core.Type"}},
                                                           "parameter": "opt"}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -522,7 +522,7 @@
                                                   "body": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "application": {
                                                             "argument": {"variable": "opt"},
@@ -540,10 +540,10 @@
                                                                     "parameter": "x"}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": {"string": {}}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": {"maybe": {"literal": {"string": {}}}},
+                                                  "domain": {"optional": {"literal": {"string": {}}}},
                                                   "parameter": "opt"}}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -626,7 +626,7 @@
                                                   "body": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "application": {
                                                             "argument": {"variable": "opt"},
@@ -644,10 +644,10 @@
                                                                     "parameter": "x"}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": {"string": {}}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": {"maybe": {"literal": {"string": {}}}},
+                                                  "domain": {"optional": {"literal": {"string": {}}}},
                                                   "parameter": "opt"}}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {

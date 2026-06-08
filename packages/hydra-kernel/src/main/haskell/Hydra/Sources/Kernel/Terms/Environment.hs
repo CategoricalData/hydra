@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -104,9 +104,7 @@ definitionAsTypeApplicationTerm :: TypedTermDefinition (Binding -> Either Error 
 definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   doc "Convert a definition to a typed term" $
   "el" ~>
-  Maybes.maybe (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")))
-    ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
-    (Core.bindingTypeScheme (var "el"))
+  Optionals.cases (Core.bindingTypeScheme (var "el")) (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding"))) ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
 
 graphAsLet :: TypedTermDefinition ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $
@@ -144,8 +142,8 @@ partitionDefinitions = define "partitionDefinitions" $
     _Definition_term>>: "td" ~> just (var "td"),
     _Definition_primitive>>: "_" ~> nothing]) $
   pair
-    (Maybes.cat $ Lists.map (var "getType") (var "defs"))
-    (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
+    (Optionals.cat $ Lists.map (var "getType") (var "defs"))
+    (Optionals.cat $ Lists.map (var "getTerm") (var "defs"))
 
 reorderDefs :: TypedTermDefinition ([Definition] -> [Definition])
 reorderDefs = define "reorderDefs" $
@@ -217,8 +215,8 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
           (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
           (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TypedTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (Strip.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
-    right $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
-  Eithers.map ("mpairs" ~> Maps.fromList (Maybes.cat (var "mpairs")))
+    right $ Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
+  Eithers.map ("mpairs" ~> Maps.fromList (Optionals.cat (var "mpairs")))
     (Eithers.mapList (var "toPair") (Lexical.graphToBindings @@ var "g"))
 
 -- Note: this is lossy, as it throws away the term body

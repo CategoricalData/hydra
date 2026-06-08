@@ -21,7 +21,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -139,7 +139,7 @@ encodeLetAsNative dialect cx g bindings body =
                   Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
           sccs = Sorting.topologicalSortComponents adjList
           nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
-          sortedBindings = Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) (Lists.concat sccs))
+          sortedBindings = Optionals.cat (Lists.map (\name -> Maps.lookup name nameToBinding) (Lists.concat sccs))
           hasCycle = Lists.foldl (\acc -> \scc -> Logic.or acc (Equality.gt (Lists.length scc) 1)) False sccs
       in (Eithers.bind (Eithers.mapList (\b ->
         let bname =
@@ -232,7 +232,7 @@ encodeProjectionElim dialect cx g proj marg =
 
       let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
           tname = qualifiedSnakeName (Core.projectionTypeName proj)
-      in (Maybes.cases marg (Right (lispLambdaExpr [
+      in (Optionals.cases marg (Right (lispLambdaExpr [
         "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
         Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
         Syntax.fieldAccessField = (Syntax.Symbol fname),
@@ -267,9 +267,9 @@ encodeTerm dialect cx g term =
         Syntax.mapEntryKey = k,
         Syntax.mapEntryValue = v})))) (Maps.toList v0)) (\pairs -> Right (Syntax.ExpressionMap (Syntax.MapLiteral {
         Syntax.mapLiteralEntries = pairs})))
-      Core.TermMaybe v0 -> Maybes.cases v0 (Right (lispApp (lispVar "list") [
-        lispKeyword "nothing"])) (\val -> Eithers.bind (encodeTerm dialect cx g val) (\sval -> Right (lispApp (lispVar "list") [
-        lispKeyword "just",
+      Core.TermOptional v0 -> Optionals.cases v0 (Right (lispApp (lispVar "list") [
+        lispKeyword "none"])) (\val -> Eithers.bind (encodeTerm dialect cx g val) (\sval -> Right (lispApp (lispVar "list") [
+        lispKeyword "given",
         sval])))
       Core.TermPair v0 -> Eithers.bind (encodeTerm dialect cx g (Pairs.first v0)) (\f -> Eithers.bind (encodeTerm dialect cx g (Pairs.second v0)) (\s -> Right (lispListExpr [
         f,
@@ -337,7 +337,7 @@ encodeType cx g t =
         Core.TypeList v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierList enc) (encodeType cx g v0)
         Core.TypeSet v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierSet enc) (encodeType cx g v0)
         Core.TypeMap _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Map"))
-        Core.TypeMaybe v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierMaybe enc) (encodeType cx g v0)
+        Core.TypeOptional v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierMaybe enc) (encodeType cx g v0)
         Core.TypeEither _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Either"))
         Core.TypePair _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Pair"))
         Core.TypeFunction _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Function"))
@@ -405,7 +405,7 @@ encodeUnionElim dialect cx g cs marg =
           Core.applicationFunction = cfterm,
           Core.applicationArgument = (Core.TermVariable (Core.Name "match_value"))}))) (\bodyExpr -> Right (Syntax.CondClause {
           Syntax.condClauseCondition = condExpr,
-          Syntax.condClauseBody = bodyExpr})))) caseFields) (\clauses -> Eithers.bind (Maybes.cases defCase (Right Nothing) (\dt -> Eithers.bind (encodeTerm dialect cx g dt) (\defBody -> Right (Just defBody)))) (\defExpr ->
+          Syntax.condClauseBody = bodyExpr})))) caseFields) (\clauses -> Eithers.bind (Optionals.cases defCase (Right Nothing) (\dt -> Eithers.bind (encodeTerm dialect cx g dt) (\defBody -> Right (Just defBody)))) (\defExpr ->
         let condExpr =
                 Syntax.ExpressionCond (Syntax.CondExpression {
                   Syntax.condExpressionClauses = clauses,
@@ -415,13 +415,13 @@ encodeUnionElim dialect cx g cs marg =
                       "match_value"] condExpr) [
                       lispApp (lispVar (dialectCadr dialect)) [
                         lispVar "match_target"]]
-        in (Maybes.cases marg (Right (lispLambdaExpr [
+        in (Optionals.cases marg (Right (lispLambdaExpr [
           "match_target"] innerExpr)) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (lispApp (lispLambdaExpr [
           "match_target"] innerExpr) [
           sarg])))))))
 encodeUnwrapElim :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Name -> Maybe Core.Term -> Either t1 Syntax.Expression
 encodeUnwrapElim dialect cx g name marg =
-    Maybes.cases marg (Right (lispLambdaExpr [
+    Optionals.cases marg (Right (lispLambdaExpr [
       "v"] (lispVar "v"))) (\arg -> encodeTerm dialect cx g arg)
 isPrimitiveRef :: String -> Core.Term -> Bool
 isPrimitiveRef primName term =
@@ -433,7 +433,7 @@ isPrimitiveRef primName term =
       _ -> False
 lazyFlagsForPrimitiveTerm :: Graph.Graph -> Core.Term -> [Bool]
 lazyFlagsForPrimitiveTerm g headTerm =
-    Maybes.cases (primHeadName headTerm) [] (\name -> Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))))
+    Optionals.cases (primHeadName headTerm) [] (\name -> Optionals.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))))
 lispApp :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
 lispApp fun args =
     Syntax.ExpressionApplication (Syntax.Application {
@@ -480,7 +480,7 @@ lispTopForm form =
 lispTopFormWithComments :: Maybe String -> Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
 lispTopFormWithComments mdoc form =
     Syntax.TopLevelFormWithComments {
-      Syntax.topLevelFormWithCommentsDoc = (Maybes.map (\d -> Syntax.Docstring d) mdoc),
+      Syntax.topLevelFormWithCommentsDoc = (Optionals.map (\d -> Syntax.Docstring d) mdoc),
       Syntax.topLevelFormWithCommentsComment = Nothing,
       Syntax.topLevelFormWithCommentsForm = form}
 lispVar :: String -> Syntax.Expression
@@ -555,7 +555,7 @@ primHeadName term =
       Core.TermTypeLambda v0 -> primHeadName (Core.typeLambdaBody v0)
       _ -> Nothing
 primIsLazyAt :: Graph.Graph -> Core.Term -> Int -> Bool
-primIsLazyAt g headTerm i = Maybes.fromMaybe False (Lists.maybeAt i (lazyFlagsForPrimitiveTerm g headTerm))
+primIsLazyAt g headTerm i = Optionals.fromOptional False (Lists.maybeAt i (lazyFlagsForPrimitiveTerm g headTerm))
 qualifiedSnakeName :: Core.Name -> String
 qualifiedSnakeName name =
 

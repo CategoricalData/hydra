@@ -182,11 +182,11 @@ For low-level access without HydraPop, import the kernel directly. The DSL helpe
 ```python
 from hydra.dsl import literal_types, literals
 from hydra.validate.core import check_literal
-from hydra.lib.maybes import is_just
+from hydra.lib.optionals import is_given
 
-# Type mismatch returns Just(InvalidLiteralError(...)) -- typed error, not a string
+# Type mismatch returns Given(InvalidLiteralError(...)) -- typed error, not a string
 result = check_literal(literal_types.string(), literals.int32(42))
-assert is_just(result)
+assert is_given(result)
 ```
 
 ---

@@ -632,7 +632,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.variants.TermVariant"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.variants.TermVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -650,13 +650,13 @@
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybe"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optional"}}, "typeName": "hydra.core.Name"}}},
                                     {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}},
-        "name": "hydra.dsl.variants.termVariantMaybe",
+        "name": "hydra.dsl.variants.termVariantOptional",
         "signature": {
           "parameters": [],
           "result": {
@@ -1373,7 +1373,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.variants.TypeVariant"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.variants.TypeVariant"}}}]},
             "body": {
               "wrap": {
                 "body": {
@@ -1391,13 +1391,13 @@
                               "term": {
                                 "record": {
                                   "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybe"}}, "typeName": "hydra.core.Name"}}},
+                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optional"}}, "typeName": "hydra.core.Name"}}},
                                     {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
                           "typeName": "hydra.core.Injection"}}},
                     "typeName": "hydra.core.Term"}},
                 "typeName": "hydra.typed.TypedTerm"}}}},
-        "name": "hydra.dsl.variants.typeVariantMaybe",
+        "name": "hydra.dsl.variants.typeVariantOptional",
         "signature": {
           "parameters": [],
           "result": {

@@ -41,7 +41,7 @@
                                             "term": {
                                               "inject": {
                                                 "field": {
-                                                  "name": "maybe",
+                                                  "name": "optional",
                                                   "term": {
                                                     "inject": {
                                                       "field": {
@@ -116,7 +116,7 @@
                                             "term": {
                                               "inject": {
                                                 "field": {
-                                                  "name": "maybe",
+                                                  "name": "optional",
                                                   "term": {
                                                     "inject": {
                                                       "field": {
@@ -376,7 +376,7 @@
                               "term": {
                                 "inject": {
                                   "field": {
-                                    "name": "maybe",
+                                    "name": "optional",
                                     "term": {
                                       "inject": {
                                         "field": {"name": "variable", "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
@@ -540,7 +540,7 @@
                                             "term": {
                                               "inject": {
                                                 "field": {
-                                                  "name": "maybe",
+                                                  "name": "optional",
                                                   "term": {
                                                     "inject": {
                                                       "field": {
@@ -1563,7 +1563,7 @@
             "body": {
               "inject": {
                 "field": {
-                  "name": "maybe",
+                  "name": "optional",
                   "term": {
                     "inject": {
                       "field": {
@@ -1586,7 +1586,7 @@
             "body": {
               "inject": {
                 "field": {
-                  "name": "maybe",
+                  "name": "optional",
                   "term": {
                     "inject": {
                       "field": {
@@ -1609,7 +1609,7 @@
             "body": {
               "inject": {
                 "field": {
-                  "name": "maybe",
+                  "name": "optional",
                   "term": {
                     "inject": {
                       "field": {

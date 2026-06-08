@@ -114,7 +114,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "visibility",
                     "type": {
@@ -294,7 +294,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -322,7 +322,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.StructDef"}},
     {
@@ -385,7 +385,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment for the field"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.StructField"}},
     {
@@ -440,7 +440,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "variants",
                     "type": {
@@ -464,7 +464,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.EnumDef"}},
     {
@@ -493,7 +493,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment for the variant"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.EnumVariant"}},
     {
@@ -555,7 +555,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "params",
                     "type": {
@@ -567,7 +567,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The return type (None means ())"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -603,7 +603,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.FnDef"}},
     {
@@ -708,7 +708,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.TypeAlias"}},
     {
@@ -749,7 +749,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.ConstDef"}},
     {
@@ -796,7 +796,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.StaticDef"}},
     {
@@ -823,7 +823,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module body (None for external file)"}}}]},
-                        "body": {"maybe": {"list": {"variable": "hydra.rust.syntax.Item"}}}}}},
+                        "body": {"optional": {"list": {"variable": "hydra.rust.syntax.Item"}}}}}},
                   {
                     "name": "public",
                     "type": {
@@ -835,7 +835,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.ModDef"}},
     {
@@ -861,13 +861,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "trait",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.TypePath"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}}}}},
                   {
                     "name": "negative",
                     "type": {
@@ -941,7 +941,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "params",
                     "type": {
@@ -954,7 +954,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The return type (None means ())"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -982,7 +982,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.ImplMethod"}},
     {
@@ -1014,7 +1014,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "superTraits",
                     "type": {
@@ -1044,7 +1044,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.TraitDef"}},
     {
@@ -1105,7 +1105,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional where clause"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.WhereClause"}}}}},
                   {
                     "name": "params",
                     "type": {
@@ -1118,19 +1118,19 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The return type"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}},
                   {
                     "name": "defaultBody",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default body"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Block"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Block"}}}}},
                   {
                     "name": "doc",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.TraitMethod"}},
     {
@@ -1158,13 +1158,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default type"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}},
                   {
                     "name": "doc",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.TraitType"}},
     {
@@ -1193,13 +1193,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default value"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}},
                   {
                     "name": "doc",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.TraitConst"}},
     {
@@ -1576,7 +1576,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The output type"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.ParenthesizedArgs"}},
     {
@@ -1593,7 +1593,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional lifetime annotation"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Lifetime"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Lifetime"}}}}},
                   {
                     "name": "mutable",
                     "type": {
@@ -1832,13 +1832,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A return expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}},
                   {
                     "name": "break",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A break expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}},
                   {
                     "name": "continue",
                     "type": {
@@ -2045,7 +2045,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional return type annotation"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -2073,7 +2073,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type annotation"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.ClosureParam"}},
     {
@@ -2102,7 +2102,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional else branch"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.IfExpr"}},
     {
@@ -2168,7 +2168,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional guard expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -2190,7 +2190,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional loop label"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -2214,7 +2214,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional loop label"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "condition",
                     "type": {
@@ -2242,7 +2242,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional loop label"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "pattern",
                     "type": {
@@ -2401,7 +2401,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Optional base expression for struct update syntax"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.StructExpr"}},
     {
@@ -2425,7 +2425,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field value (None for shorthand syntax)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.FieldValue"}},
     {
@@ -2485,13 +2485,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The lower bound (optional)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}},
                   {
                     "name": "to",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The upper bound (optional)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}},
                   {
                     "name": "inclusive",
                     "type": {
@@ -2715,13 +2715,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type annotation"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Type"}}}}},
                   {
                     "name": "init",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional initializer expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.LetStatement"}},
     {
@@ -2743,7 +2743,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional trailing expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.Block"}},
     {
@@ -2864,7 +2864,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional sub-pattern (e.g., x @ Some(_))"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.IdentifierPattern"}},
     {
@@ -2940,7 +2940,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field pattern (None for shorthand)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Pattern"}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.FieldPattern"}},
     {
@@ -2979,13 +2979,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The lower bound"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Pattern"}}}}},
                   {
                     "name": "to",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The upper bound"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}}}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.Pattern"}}}}},
                   {
                     "name": "inclusive",
                     "type": {
@@ -3072,7 +3072,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type suffix"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.IntegerLiteral"}},
     {
@@ -3096,7 +3096,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type suffix"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.FloatLiteral"}},
     {
@@ -3134,7 +3134,7 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The attribute arguments as a raw token string"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.rust.syntax.Attribute"}},
     {

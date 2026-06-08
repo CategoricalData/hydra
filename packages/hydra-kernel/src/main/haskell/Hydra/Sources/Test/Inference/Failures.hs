@@ -314,7 +314,7 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
     expectFailure 3 []
       (primitive _lists_maybeHead @@ string "not a list"),
     expectFailure 4 []
-      (primitive _maybes_fromMaybe @@ int32 42 @@ string "not optional")],
+      (primitive _optionals_fromOptional @@ int32 42 @@ string "not optional")],
 
   subgroup "Math primitive errors" [
     expectFailure 1 []

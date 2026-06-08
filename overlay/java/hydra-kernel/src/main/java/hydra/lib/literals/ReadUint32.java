@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -55,18 +55,18 @@ public class ReadUint32 extends PrimitiveFunction {
     /**
      * Attempts to parse a string into a Long representing uint32 (0-4294967295).
      * @param str the string to parse
-     * @return a Maybe containing the parsed Long, or empty if parsing fails or value is out of range
+     * @return a Optional containing the parsed Long, or empty if parsing fails or value is out of range
      */
-    public static Maybe<Long> apply(String str) {
+    public static Optional<Long> apply(String str) {
         try {
             long n = Long.parseLong(str);
             if (n >= 0 && n <= 4294967295L) {
-                return Maybe.just(n);
+                return Optional.given(n);
             } else {
-                return Maybe.nothing();
+                return Optional.none();
             }
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

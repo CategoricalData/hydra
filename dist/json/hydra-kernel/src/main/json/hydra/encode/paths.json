@@ -724,7 +724,7 @@
                                       "term": {
                                         "record": {
                                           "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybeTerm"}}, "typeName": "hydra.core.Name"}}},
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optionalTerm"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
                                               "term": {
@@ -740,7 +740,7 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}},
-                    "name": "maybeTerm"},
+                    "name": "optionalTerm"},
                   {
                     "handler": {
                       "lambda": {
@@ -1748,7 +1748,7 @@
                                       "term": {
                                         "record": {
                                           "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybeElement"}}, "typeName": "hydra.core.Name"}}},
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optionalElement"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
                                               "term": {
@@ -1764,7 +1764,7 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}},
-                    "name": "maybeElement"},
+                    "name": "optionalElement"},
                   {
                     "handler": {
                       "lambda": {

@@ -300,7 +300,7 @@
                                     {
                                       "key": {"variable": "description"},
                                       "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
-                                "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                                "body": {"optional": {"variable": "hydra.core.Name"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "in"}},
                     "domain": {
@@ -312,7 +312,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "out"}},
                 "domain": {
@@ -356,7 +356,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -370,7 +370,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -498,7 +498,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                    "body": {"optional": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -561,7 +561,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                    "body": {"optional": {"variable": "hydra.core.Name"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -827,7 +827,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -851,7 +851,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The field representing the out-projection of the edge. Defaults to 'out'."}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -973,7 +973,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Name"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -997,7 +997,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Name"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Name"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.query.Edge"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},

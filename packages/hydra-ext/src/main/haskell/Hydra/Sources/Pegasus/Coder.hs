@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -127,7 +127,7 @@ constructModule = def "constructModule" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDefs" ~>
     "groups" <~ (Dependencies.topologicalSortTypeDefinitions @@ var "typeDefs") $
     -- Check for cycles: if any group has more than one element, it's a cycle
-    Maybes.cases (Lists.find (lambda "grp" $ Equality.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
+    Optionals.cases (Lists.find (lambda "grp" $ Equality.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
       -- No cycle found: flatten and process
       ("sortedDefs" <~ Lists.concat (var "groups") $
        "schemas" <<~ (Eithers.mapList (lambda "typeDef" $ typeToSchema @@ var "cx" @@ var "g" @@ var "aliases" @@ var "mod" @@ var "typeDef") (var "sortedDefs")) $
@@ -181,7 +181,7 @@ encodePossiblyOptionalType :: TypedTermDefinition (InferenceContext -> Graph -> 
 encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
     cases _Type (Strip.deannotateType @@ var "typ") Nothing [
-      _Type_maybe>>: lambda "ot" $
+      _Type_optional>>: lambda "ot" $
         "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "ot") $
         right (pair (var "t") true),
       _Type_record>>: lambda "rt" $
@@ -313,7 +313,7 @@ encodeType_ = def "encodeType" $
       _Type_wrap>>: lambda "wt" $
         -- Unwrap to inner type
         encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "wt",
-      _Type_maybe>>: lambda "ot" $
+      _Type_optional>>: lambda "ot" $
         err (var "cx") (string "optionals unexpected at top level"),
       _Type_record>>: lambda "rt" $
         "rfields" <<~ (Eithers.mapList (encodeRecordField @@ var "cx" @@ var "g" @@ var "aliases") (var "rt")) $
@@ -403,11 +403,11 @@ pdlNameForElement = def "pdlNameForElement" $
     "qn" <~ (Names.qualifyName @@ var "name") $
     "ns_" <~ project _QualifiedName _QualifiedName_moduleName @@ var "qn" $
     "local" <~ project _QualifiedName _QualifiedName_local @@ var "qn" $
-    "alias" <~ Maybes.bind (var "ns_") (lambda "n" $ Maps.lookup (var "n") (var "aliases")) $
+    "alias" <~ Optionals.bind (var "ns_") (lambda "n" $ Maps.lookup (var "n") (var "aliases")) $
     record PDL._QualifiedName [
       PDL._QualifiedName_name>>: wrap PDL._Name (var "local"),
       PDL._QualifiedName_namespace>>: Logic.ifElse (var "withNs")
-        (Maybes.map (lambda "a" $ wrap PDL._Namespace (var "a")) (var "alias"))
+        (Optionals.map (lambda "a" $ wrap PDL._Namespace (var "a")) (var "alias"))
         nothing]
 
 pdlNameForModule :: TypedTermDefinition (Module -> PDL.Namespace)

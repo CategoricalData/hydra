@@ -4,29 +4,48 @@
 module Hydra.Pegasus.Coder where
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Pegasus.Language as Language
 import qualified Hydra.Pegasus.Pdl as Pdl
 import qualified Hydra.Pegasus.Serde as Serde
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -35,7 +54,7 @@ constructModule :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Pac
 constructModule cx g aliases mod typeDefs =
 
       let groups = Dependencies.topologicalSortTypeDefinitions typeDefs
-      in (Maybes.cases (Lists.find (\grp -> Equality.gt (Lists.length grp) 1) groups) (
+      in (Optionals.cases (Lists.find (\grp -> Equality.gt (Lists.length grp) 1) groups) (
         let sortedDefs = Lists.concat groups
         in (Eithers.bind (Eithers.mapList (\typeDef -> typeToSchema cx g aliases mod typeDef) sortedDefs) (\schemas -> Right (Maps.fromList (Lists.map (toPair mod aliases) schemas))))) (\cycle -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "types form a cycle (unsupported in PDL): [" (Strings.cat2 (Strings.intercalate ", " (Lists.map (\td -> Core.unName (Packaging.typeDefinitionName td)) cycle)) "]"))))))
 -- | Create PDL annotations from an optional doc string
@@ -60,7 +79,7 @@ encodeEnumField cx g ft =
 encodePossiblyOptionalType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.Type -> Either Errors.Error (Pdl.Schema, Bool)
 encodePossiblyOptionalType cx g aliases typ =
     case (Strip.deannotateType typ) of
-      Core.TypeMaybe v0 -> Eithers.bind (encode cx g aliases v0) (\t -> Right (t, True))
+      Core.TypeOptional v0 -> Eithers.bind (encode cx g aliases v0) (\t -> Right (t, True))
       Core.TypeRecord _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeUnion _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeLiteral _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
@@ -144,7 +163,7 @@ encodeType cx g aliases typ =
       Core.TypeSet v0 -> Eithers.bind (encode cx g aliases v0) (\inner -> Right (Left (Pdl.SchemaArray inner)))
       Core.TypeVariable v0 -> Right (Left (Pdl.SchemaNamed (pdlNameForElement aliases True v0)))
       Core.TypeWrap v0 -> encodeType cx g aliases v0
-      Core.TypeMaybe _ -> Left (Errors.ErrorOther (Errors.OtherError "optionals unexpected at top level"))
+      Core.TypeOptional _ -> Left (Errors.ErrorOther (Errors.OtherError "optionals unexpected at top level"))
       Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (encodeRecordField cx g aliases) v0) (\rfields -> Right (Right (Pdl.NamedSchemaTypeRecord (Pdl.RecordSchema {
         Pdl.recordSchemaFields = rfields,
         Pdl.recordSchemaIncludes = []}))))
@@ -197,10 +216,10 @@ pdlNameForElement aliases withNs name =
       let qn = Names.qualifyName name
           ns_ = Util.qualifiedNameModuleName qn
           local = Util.qualifiedNameLocal qn
-          alias = Maybes.bind ns_ (\n -> Maps.lookup n aliases)
+          alias = Optionals.bind ns_ (\n -> Maps.lookup n aliases)
       in Pdl.QualifiedName {
         Pdl.qualifiedNameName = (Pdl.Name local),
-        Pdl.qualifiedNameNamespace = (Logic.ifElse withNs (Maybes.map (\a -> Pdl.Namespace a) alias) Nothing)}
+        Pdl.qualifiedNameNamespace = (Logic.ifElse withNs (Optionals.map (\a -> Pdl.Namespace a) alias) Nothing)}
 -- | Convert a module's namespace to a PDL namespace
 pdlNameForModule :: Packaging.Module -> Pdl.Namespace
 pdlNameForModule mod = Pdl.Namespace (slashesToDots (Packaging.unModuleName (Packaging.moduleName mod)))

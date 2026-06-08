@@ -13,7 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -40,7 +40,7 @@ subtermStep :: Paths.SubtermStep -> Maybe String
 subtermStep step =
 
       let idx = \i -> Nothing
-          idxSuff = \suffix -> \i -> Maybes.map (\s -> Strings.cat2 s suffix) (idx i)
+          idxSuff = \suffix -> \i -> Optionals.map (\s -> Strings.cat2 s suffix) (idx i)
       in case step of
         Paths.SubtermStepAnnotatedBody -> Nothing
         Paths.SubtermStepApplicationFunction -> Just "fun"
@@ -53,7 +53,7 @@ subtermStep step =
         Paths.SubtermStepListElement v0 -> idx v0
         Paths.SubtermStepMapKey v0 -> idxSuff ".key" v0
         Paths.SubtermStepMapValue v0 -> idxSuff ".value" v0
-        Paths.SubtermStepMaybeTerm -> Just "just"
+        Paths.SubtermStepOptionalTerm -> Just "given"
         Paths.SubtermStepProductTerm v0 -> idx v0
         Paths.SubtermStepRecordField v0 -> Just (Strings.cat2 "." (Core.unName v0))
         Paths.SubtermStepSetElement v0 -> idx v0
@@ -111,14 +111,14 @@ termToSubtermGraph namespaces term =
                             nodeBindingPairs = Lists.zip nodes1 bindings
                             stateAfterBindings = Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs
                         in (helper ids1 mroot nextPath stateAfterBindings (Paths.SubtermStepLetBody, env))
-                      Core.TermVariable v0 -> Maybes.maybe state (\root -> Maybes.maybe state (\node ->
+                      Core.TermVariable v0 -> Optionals.cases mroot state (\root -> Optionals.cases (Maps.lookup v0 ids) state (\node ->
                         let edge =
                                 Paths.SubtermEdge {
                                   Paths.subtermEdgeSource = root,
                                   Paths.subtermEdgePath = (Paths.SubtermPath (Lists.reverse nextPath)),
                                   Paths.subtermEdgeTarget = node}
                             newEdges = Lists.cons edge edges
-                        in ((nodes, newEdges), visited)) (Maps.lookup v0 ids)) mroot
+                        in ((nodes, newEdges), visited)))
                       _ -> Lists.foldl (helper ids mroot nextPath) state (Rewriting.subtermsWithSteps currentTerm)
           initialState = (([], []), Sets.empty)
           result = helper Maps.empty Nothing [] initialState (dontCareStep, term)

@@ -116,8 +116,8 @@
     (lambda (s)
       (let ((ms (hydra--ensure-multibyte s)))
         (if (and (>= n 0) (< n (length ms)))
-            (list :just (aref (vconcat (string-to-list ms)) n))
-            (list :nothing))))))
+            (list :given (aref (vconcat (string-to-list ms)) n))
+            (list :none))))))
 
 ;; null :: String -> Bool
 (defvar hydra_lib_strings_null

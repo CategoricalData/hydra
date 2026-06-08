@@ -22,7 +22,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -69,7 +69,7 @@ dslBindingName n =
       let parts = Strings.splitOn "." (Core.unName n)
           localPart = Formatting.decapitalize (Names.localNameOf n)
           localResult = Core.Name localPart
-      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsHeadTail ->
+      in (Optionals.cases (Lists.maybeInit parts) localResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) localResult (\nsHeadTail ->
         let dslNsParts =
                 Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
                   "hydra",
@@ -77,27 +77,27 @@ dslBindingName n =
                   "hydra",
                   "dsl"] nsParts)
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-          localPart])))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
+          localPart]))))))
 -- | Generate a qualified DSL element name from a type name and local element name
 dslDefinitionName :: Core.Name -> String -> Core.Name
 dslDefinitionName typeName localName =
 
       let parts = Strings.splitOn "." (Core.unName typeName)
-      in (Maybes.maybe (Core.Name localName) (\nsParts ->
+      in (Optionals.cases (Lists.maybeInit parts) (Core.Name localName) (\nsParts ->
         let dslNsParts =
-                Maybes.maybe [
+                Optionals.cases (Lists.uncons nsParts) [
                   "hydra",
                   "dsl"] (\nsHeadTail -> Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
                   "hydra",
                   "dsl"] (Pairs.second nsHeadTail)) (Lists.concat2 [
                   "hydra",
-                  "dsl"] nsParts)) (Lists.uncons nsParts)
+                  "dsl"] nsParts))
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-          localName])))) (Lists.maybeInit parts))
+          localName])))))
 -- | Transform a type module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 dslModule cx graph mod =
-    Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
+    Eithers.bind (filterTypeBindings cx graph (Optionals.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
         let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
             dataTerm =
@@ -129,7 +129,7 @@ dslModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionMetadata = Nothing,
-        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+        Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
         Packaging.termDefinitionBody = (Core.bindingTerm b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
 -- | Generate a DSL module name from a source module name
 dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
@@ -140,9 +140,9 @@ dslModuleName ns =
                   Packaging.ModuleName (Strings.cat [
                     "hydra.dsl.",
                     (Packaging.unModuleName ns)])
-      in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
+      in (Optionals.cases (Lists.uncons parts) prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
         "hydra.dsl.",
-        (Strings.intercalate "." (Pairs.second ht))])) prefixFull) (Lists.uncons parts))
+        (Strings.intercalate "." (Pairs.second ht))])) prefixFull))
 -- | Build a TypeScheme with TypedTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
 dslTypeScheme origType paramTypes resultType =
@@ -165,7 +165,7 @@ dslTypeScheme origType paramTypes resultType =
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: t0 -> t1 -> [Core.Binding] -> Either t2 [Core.Binding]
 filterTypeBindings cx graph bindings =
-    Eithers.map Maybes.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
+    Eithers.map Optionals.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 -- | Generate all DSL bindings for a type binding
 generateBindingsForType :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError [Core.Binding]
 generateBindingsForType cx graph b =
@@ -581,7 +581,7 @@ isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Bindin
 isDslEligibleBinding cx graph b =
 
       let ns = Names.moduleNameOf (Core.bindingName b)
-      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unModuleName ns) "hydra.typed") (Right Nothing) (Right (Just b)))
+      in (Logic.ifElse (Equality.equal (Optionals.cases ns "" Packaging.unModuleName) "hydra.typed") (Right Nothing) (Right (Just b)))
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
 nominalResultType typeName origType =

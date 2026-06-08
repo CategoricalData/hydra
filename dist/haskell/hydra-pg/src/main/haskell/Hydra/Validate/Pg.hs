@@ -8,7 +8,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Pg.Model as Model
@@ -19,7 +19,7 @@ import qualified Data.Map as M
 -- | Append a rule-tagged InvalidEdgeError finding to a ValidationResult.
 appendFindingEdge :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingEdge p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -32,7 +32,7 @@ appendFindingEdge p acc finding =
 -- | Append a rule-tagged InvalidGraphError finding to a ValidationResult.
 appendFindingGraph :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingGraph p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -45,7 +45,7 @@ appendFindingGraph p acc finding =
 -- | Append a rule-tagged InvalidElementPropertyError finding to a ValidationResult.
 appendFindingProperty :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingProperty p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -58,7 +58,7 @@ appendFindingProperty p acc finding =
 -- | Append a rule-tagged InvalidVertexError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingVertex :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingVertex p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -99,35 +99,35 @@ validateEdge p checkValue labelForVertexId typ el =
     Lists.foldl (\acc -> \guarded -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (appendFindingEdge p acc guarded)) (Validation.ValidationResult {
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) [
-      Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.label")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.label", f)) (
+      Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.label")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.label", f)) (
         let expected = Model.edgeTypeLabel typ
             actual = Model.edgeLabel el
         in (Logic.ifElse (Equality.equal (Model.unEdgeLabel actual) (Model.unEdgeLabel expected)) Nothing (Just (Pg.InvalidEdgeErrorLabel (Pg.NoSuchEdgeLabelError {
           Pg.noSuchEdgeLabelErrorLabel = actual})))))) Nothing,
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.id")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.id", f)) (Maybes.map (\err -> Pg.InvalidEdgeErrorId err) (checkValue (Model.edgeTypeId typ) (Model.edgeId el)))) Nothing),
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.property")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.property", f)) (Maybes.map (\err -> Pg.InvalidEdgeErrorProperty err) (Lists.maybeHead (Validation.validationResultErrors (validateProperties p checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))))) Nothing),
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexNotFound")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexNotFound", f)) (Maybes.maybe Nothing (\f -> Maybes.maybe (Just Pg.InvalidEdgeErrorOutVertexNotFound) (\_label -> Nothing) (f (Model.edgeOut el))) labelForVertexId)) Nothing),
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexLabel")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexLabel", f)) (Maybes.maybe Nothing (\f -> Maybes.maybe Nothing (\label -> Logic.ifElse (Equality.equal (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeOut typ))) Nothing (Just (Pg.InvalidEdgeErrorOutVertexLabel (Pg.WrongVertexLabelError {
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.id")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.id", f)) (Optionals.map (\err -> Pg.InvalidEdgeErrorId err) (checkValue (Model.edgeTypeId typ) (Model.edgeId el)))) Nothing),
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.property")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.property", f)) (Optionals.map (\err -> Pg.InvalidEdgeErrorProperty err) (Lists.maybeHead (Validation.validationResultErrors (validateProperties p checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))))) Nothing),
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexNotFound")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexNotFound", f)) (Optionals.cases labelForVertexId Nothing (\f -> Optionals.cases (f (Model.edgeOut el)) (Just Pg.InvalidEdgeErrorOutVertexNotFound) (\_label -> Nothing)))) Nothing),
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexLabel")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.outVertexLabel", f)) (Optionals.cases labelForVertexId Nothing (\f -> Optionals.cases (f (Model.edgeOut el)) Nothing (\label -> Logic.ifElse (Equality.equal (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeOut typ))) Nothing (Just (Pg.InvalidEdgeErrorOutVertexLabel (Pg.WrongVertexLabelError {
         Pg.wrongVertexLabelErrorExpected = (Model.edgeTypeOut typ),
-        Pg.wrongVertexLabelErrorActual = label})))) (f (Model.edgeOut el))) labelForVertexId)) Nothing),
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexNotFound")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexNotFound", f)) (Maybes.maybe Nothing (\f -> Maybes.maybe (Just Pg.InvalidEdgeErrorInVertexNotFound) (\_label -> Nothing) (f (Model.edgeIn el))) labelForVertexId)) Nothing),
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexLabel")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexLabel", f)) (Maybes.maybe Nothing (\f -> Maybes.maybe Nothing (\label -> Logic.ifElse (Equality.equal (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeIn typ))) Nothing (Just (Pg.InvalidEdgeErrorInVertexLabel (Pg.WrongVertexLabelError {
+        Pg.wrongVertexLabelErrorActual = label}))))))) Nothing),
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexNotFound")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexNotFound", f)) (Optionals.cases labelForVertexId Nothing (\f -> Optionals.cases (f (Model.edgeIn el)) (Just Pg.InvalidEdgeErrorInVertexNotFound) (\_label -> Nothing)))) Nothing),
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexLabel")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidEdgeError.inVertexLabel", f)) (Optionals.cases labelForVertexId Nothing (\f -> Optionals.cases (f (Model.edgeIn el)) Nothing (\label -> Logic.ifElse (Equality.equal (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeIn typ))) Nothing (Just (Pg.InvalidEdgeErrorInVertexLabel (Pg.WrongVertexLabelError {
         Pg.wrongVertexLabelErrorExpected = (Model.edgeTypeIn typ),
-        Pg.wrongVertexLabelErrorActual = label})))) (f (Model.edgeIn el))) labelForVertexId)) Nothing)]
+        Pg.wrongVertexLabelErrorActual = label}))))))) Nothing)]
 -- | Validate a property graph against a GraphSchema under the given ValidationProfile, threading a ValidationResult InvalidGraphError accumulator. Errors hard-stop traversal once maxErrors is reached.
 validateGraph :: Ord t0 => (Validation.ValidationProfile -> Validation.ValidationResult (Pg.InvalidGraphError t0) -> (t1 -> t0 -> Maybe Pg.InvalidValueError) -> Model.GraphSchema t1 -> Model.Graph t0 -> Validation.ValidationResult (Pg.InvalidGraphError t0))
 validateGraph p acc0 checkValue schema graph =
 
-      let labelForVertexId = Just (\i -> Maybes.map Model.vertexLabel (Maps.lookup i (Model.graphVertices graph)))
+      let labelForVertexId = Just (\i -> Optionals.map Model.vertexLabel (Maps.lookup i (Model.graphVertices graph)))
           vertexFindings =
                   Lists.bind (Maps.elems (Model.graphVertices graph)) (\el ->
                     let tOpt = Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)
                         perVertex =
-                                Maybes.maybe (Validation.ValidationResult {
+                                Optionals.cases tOpt (Validation.ValidationResult {
                                   Validation.validationResultErrors = [
                                     Pg.InvalidVertexErrorLabel (Pg.NoSuchVertexLabelError {
                                       Pg.noSuchVertexLabelErrorLabel = (Model.vertexLabel el)})],
-                                  Validation.validationResultWarnings = []}) (\t -> validateVertex p checkValue t el) tOpt
+                                  Validation.validationResultWarnings = []}) (\t -> validateVertex p checkValue t el)
                     in (Lists.map (\ve -> Pg.InvalidGraphErrorVertex (Pg.InvalidGraphVertexError {
                       Pg.invalidGraphVertexErrorId = (Model.vertexId el),
                       Pg.invalidGraphVertexErrorError = ve})) (Validation.validationResultErrors perVertex)))
@@ -135,11 +135,11 @@ validateGraph p acc0 checkValue schema graph =
                   Lists.bind (Maps.elems (Model.graphEdges graph)) (\el ->
                     let tOpt = Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema)
                         perEdge =
-                                Maybes.maybe (Validation.ValidationResult {
+                                Optionals.cases tOpt (Validation.ValidationResult {
                                   Validation.validationResultErrors = [
                                     Pg.InvalidEdgeErrorLabel (Pg.NoSuchEdgeLabelError {
                                       Pg.noSuchEdgeLabelErrorLabel = (Model.edgeLabel el)})],
-                                  Validation.validationResultWarnings = []}) (\t -> validateEdge p checkValue labelForVertexId t el) tOpt
+                                  Validation.validationResultWarnings = []}) (\t -> validateEdge p checkValue labelForVertexId t el)
                     in (Lists.map (\ee -> Pg.InvalidGraphErrorEdge (Pg.InvalidGraphEdgeError {
                       Pg.invalidGraphEdgeErrorId = (Model.edgeId el),
                       Pg.invalidGraphEdgeErrorError = ee})) (Validation.validationResultErrors perEdge)))
@@ -155,20 +155,20 @@ validateProperties p checkValue types props =
 
       let m = Maps.fromList (Lists.map (\pt -> (Model.propertyTypeKey pt, (Model.propertyTypeValue pt))) types)
           missingChecks =
-                  Lists.map (\t -> Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidPropertyError.missingRequired")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidPropertyError.missingRequired", f)) (Logic.ifElse (Model.propertyTypeRequired t) (Maybes.maybe (Just (Pg.InvalidElementPropertyError {
+                  Lists.map (\t -> Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidPropertyError.missingRequired")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidPropertyError.missingRequired", f)) (Logic.ifElse (Model.propertyTypeRequired t) (Optionals.cases (Maps.lookup (Model.propertyTypeKey t) props) (Just (Pg.InvalidElementPropertyError {
                     Pg.invalidElementPropertyErrorKey = (Model.propertyTypeKey t),
-                    Pg.invalidElementPropertyErrorError = (Pg.InvalidPropertyErrorMissingRequired (Model.propertyTypeKey t))})) (\_ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing)) Nothing) types
+                    Pg.invalidElementPropertyErrorError = (Pg.InvalidPropertyErrorMissingRequired (Model.propertyTypeKey t))})) (\_ -> Nothing)) Nothing)) Nothing) types
           valueChecks =
                   Lists.bind (Maps.toList props) (\kv ->
                     let key = Pairs.first kv
                         val = Pairs.second kv
                     in [
-                      Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidPropertyError.unexpectedKey")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidPropertyError.unexpectedKey", f)) (Maybes.maybe (Just (Pg.InvalidElementPropertyError {
+                      Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidPropertyError.unexpectedKey")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidPropertyError.unexpectedKey", f)) (Optionals.cases (Maps.lookup key m) (Just (Pg.InvalidElementPropertyError {
                         Pg.invalidElementPropertyErrorKey = key,
-                        Pg.invalidElementPropertyErrorError = (Pg.InvalidPropertyErrorUnexpectedKey key)})) (\_ -> Nothing) (Maps.lookup key m))) Nothing,
-                      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidPropertyError.invalidValue")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidPropertyError.invalidValue", f)) (Maybes.maybe Nothing (\typ -> Maybes.map (\err -> Pg.InvalidElementPropertyError {
+                        Pg.invalidElementPropertyErrorError = (Pg.InvalidPropertyErrorUnexpectedKey key)})) (\_ -> Nothing))) Nothing,
+                      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidPropertyError.invalidValue")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidPropertyError.invalidValue", f)) (Optionals.cases (Maps.lookup key m) Nothing (\typ -> Optionals.map (\err -> Pg.InvalidElementPropertyError {
                         Pg.invalidElementPropertyErrorKey = key,
-                        Pg.invalidElementPropertyErrorError = (Pg.InvalidPropertyErrorInvalidValue err)}) (checkValue typ val)) (Maps.lookup key m))) Nothing)])
+                        Pg.invalidElementPropertyErrorError = (Pg.InvalidPropertyErrorInvalidValue err)}) (checkValue typ val)))) Nothing)])
       in (Lists.foldl (\acc -> \guarded -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (appendFindingProperty p acc guarded)) (Validation.ValidationResult {
         Validation.validationResultErrors = [],
         Validation.validationResultWarnings = []}) (Lists.concat2 missingChecks valueChecks))
@@ -178,10 +178,10 @@ validateVertex p checkValue typ el =
     Lists.foldl (\acc -> \guarded -> Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc)) (Validation.validationProfileMaxErrors p)) acc (appendFindingVertex p acc guarded)) (Validation.ValidationResult {
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) [
-      Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidVertexError.label")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidVertexError.label", f)) (
+      Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidVertexError.label")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidVertexError.label", f)) (
         let expected = Model.vertexTypeLabel typ
             actual = Model.vertexLabel el
         in (Logic.ifElse (Equality.equal (Model.unVertexLabel actual) (Model.unVertexLabel expected)) Nothing (Just (Pg.InvalidVertexErrorLabel (Pg.NoSuchVertexLabelError {
           Pg.noSuchVertexLabelErrorLabel = actual})))))) Nothing,
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidVertexError.id")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidVertexError.id", f)) (Maybes.map (\err -> Pg.InvalidVertexErrorId err) (checkValue (Model.vertexTypeId typ) (Model.vertexId el)))) Nothing),
-      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidVertexError.property")) (Maybes.map (\f -> (Core.Name "hydra.error.pg.InvalidVertexError.property", f)) (Maybes.map (\err -> Pg.InvalidVertexErrorProperty err) (Lists.maybeHead (Validation.validationResultErrors (validateProperties p checkValue (Model.vertexTypeProperties typ) (Model.vertexProperties el)))))) Nothing)]
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidVertexError.id")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidVertexError.id", f)) (Optionals.map (\err -> Pg.InvalidVertexErrorId err) (checkValue (Model.vertexTypeId typ) (Model.vertexId el)))) Nothing),
+      (Logic.ifElse (enabledPg p (Core.Name "hydra.error.pg.InvalidVertexError.property")) (Optionals.map (\f -> (Core.Name "hydra.error.pg.InvalidVertexError.property", f)) (Optionals.map (\err -> Pg.InvalidVertexErrorProperty err) (Lists.maybeHead (Validation.validationResultErrors (validateProperties p checkValue (Model.vertexTypeProperties typ) (Model.vertexProperties el)))))) Nothing)]

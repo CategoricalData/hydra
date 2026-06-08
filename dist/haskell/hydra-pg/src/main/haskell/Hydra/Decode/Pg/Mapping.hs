@@ -3,15 +3,20 @@
 
 module Hydra.Decode.Pg.Mapping where
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Coders as Coders
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Pg.Model as Model
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.pg.mapping.AnnotationSchema
@@ -122,10 +127,10 @@ elementSpec cx raw =
                     Maps.fromList [
                       (Core.Name "vertex", (\input -> Eithers.map (\t -> Mapping.ElementSpecVertex t) (vertexSpec cx input))),
                       (Core.Name "edge", (\input -> Eithers.map (\t -> Mapping.ElementSpecEdge t) (edgeSpec cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.mapping.PropertySpec
 propertySpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.PropertySpec
@@ -155,10 +160,10 @@ valueSpec cx raw =
                             Core.LiteralString v2 -> Right v2
                             _ -> Left (Errors.DecodingError "expected string literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.mapping.VertexSpec
 vertexSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.VertexSpec

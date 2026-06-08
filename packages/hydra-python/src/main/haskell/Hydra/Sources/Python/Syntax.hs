@@ -282,7 +282,7 @@ number = def "Number" $ T.union [ -- NUMBER in the grammar
 string :: TypeDefinition
 string = def "String" $ T.record [ -- STRING in the grammar (non-f, non-t variants)
   "value">: T.string,
-  "prefix">: T.maybe $ python "StringPrefix",
+  "prefix">: T.optional $ python "StringPrefix",
   "quoteStyle">: python "QuoteStyle"]
 
 typeComment :: TypeDefinition
@@ -474,13 +474,13 @@ typedAssignment :: TypeDefinition
 typedAssignment = def "TypedAssignment" $ T.record [
   "lhs">: python "SingleTarget",
   "type">: python "Expression",
-  "rhs">: T.maybe $ python "AnnotatedRhs"]
+  "rhs">: T.optional $ python "AnnotatedRhs"]
 
 untypedAssignment :: TypeDefinition
 untypedAssignment = def "UntypedAssignment" $ T.record [
   "targets">: nonemptyList $ python "StarTarget",
   "rhs">: python "AnnotatedRhs",
-  "typeComment">: T.maybe $ python "TypeComment"]
+  "typeComment">: T.optional $ python "TypeComment"]
 
 -- annotated_rhs: yield_expr | star_expressions
 
@@ -529,7 +529,7 @@ delStatement = def "DelStatement" $ T.wrap $ python "DelTargets"
 raiseExpression :: TypeDefinition
 raiseExpression = def "RaiseExpression" $ T.record [
   "expression">: python "Expression",
-  "from">: T.maybe $ python "Expression"]
+  "from">: T.optional $ python "Expression"]
 
 -- global_stmt: 'global' ','.NAME+
 --
@@ -539,7 +539,7 @@ raiseExpression = def "RaiseExpression" $ T.record [
 --     | 'del' del_targets &(';' | NEWLINE)
 
 raiseStatement :: TypeDefinition
-raiseStatement = def "RaiseStatement" $ T.wrap $ T.maybe $ python "RaiseExpression"
+raiseStatement = def "RaiseStatement" $ T.wrap $ T.optional $ python "RaiseExpression"
 
 returnStatement :: TypeDefinition
 returnStatement = def "ReturnStatement" $ T.wrap $ T.list $ python "StarExpression"
@@ -558,7 +558,7 @@ yieldStatement = def "YieldStatement" $ T.wrap $ python "YieldExpression"
 assertStatement :: TypeDefinition
 assertStatement = def "AssertStatement" $ T.record [
   "expression1">: python "Expression",
-  "expression2">: T.maybe $ python "Expression"]
+  "expression2">: T.optional $ python "Expression"]
 
 -- import_stmt:
 --     | import_name
@@ -573,7 +573,7 @@ block = def "Block" $ T.union [
 dottedAsName :: TypeDefinition
 dottedAsName = def "DottedAsName" $ T.record [
   "name">: python "DottedName",
-  "as">: T.maybe $ python "Name"]
+  "as">: T.optional $ python "Name"]
 
 -- dotted_name:
 --     | dotted_name '.' NAME
@@ -596,13 +596,13 @@ dottedName = def "DottedName" $ T.wrap $ nonemptyList $ python "Name"
 importFrom :: TypeDefinition
 importFrom = def "ImportFrom" $ T.record [
   "prefixes">: T.list $ python "RelativeImportPrefix",
-  "dottedName">: T.maybe $ python "DottedName",
+  "dottedName">: T.optional $ python "DottedName",
   "targets">: python "ImportFromTargets"]
 
 importFromAsName :: TypeDefinition
 importFromAsName = def "ImportFromAsName" $ T.record [
   "name">: python "Name",
-  "as">: T.maybe $ python "Name"]
+  "as">: T.optional $ python "Name"]
 
 -- dotted_as_names:
 --     | ','.dotted_as_name+
@@ -652,10 +652,10 @@ relativeImportPrefix = def "RelativeImportPrefix" $ T.enum ["dot", "ellipsis"]
 
 classDefinition :: TypeDefinition
 classDefinition = def "ClassDefinition" $ T.record [
-  "decorators">: T.maybe $ python "Decorators",
+  "decorators">: T.optional $ python "Decorators",
   "name">: python "Name",
   "typeParams">: T.list $ python "TypeParameter",
-  "arguments">: T.maybe $ python "Args",
+  "arguments">: T.optional $ python "Args",
   "body">: python "Block"]
 
 -- class_def_raw:
@@ -671,7 +671,7 @@ classDefinition = def "ClassDefinition" $ T.record [
 commaStarEtc :: TypeDefinition
 commaStarEtc = def "CommaStarEtc" $ T.record [
   "paramMaybeDefault">: nonemptyList $ python "ParamMaybeDefault",
-  "keywords">: T.maybe $ python "Keywords"]
+  "keywords">: T.optional $ python "Keywords"]
 
 -- kwds:
 --     | '**' param_no_default
@@ -691,9 +691,9 @@ functionDefRaw = def "FunctionDefRaw" $ T.record [
   "async">: T.boolean,
   "name">: python "Name",
   "typeParams">: T.list $ python "TypeParameter",
-  "params">: T.maybe $ python "Parameters",
-  "returnType">: T.maybe $ python "Expression",
-  "funcTypeComment">: T.maybe $ python "FuncTypeComment",
+  "params">: T.optional $ python "Parameters",
+  "returnType">: T.optional $ python "Expression",
+  "funcTypeComment">: T.optional $ python "FuncTypeComment",
   "block">: python "Block"]
 
 -- # Function parameters
@@ -711,7 +711,7 @@ functionDefRaw = def "FunctionDefRaw" $ T.record [
 
 functionDefinition :: TypeDefinition
 functionDefinition = def "FunctionDefinition" $ T.record [
-  "decorators">: T.maybe $ python "Decorators",
+  "decorators">: T.optional $ python "Decorators",
   "raw">: python "FunctionDefRaw"]
 
 -- function_def_raw:
@@ -742,24 +742,24 @@ noDefaultStarAnnotationStarEtc :: TypeDefinition
 noDefaultStarAnnotationStarEtc = def "NoDefaultStarAnnotationStarEtc" $ T.record [
   "paramNoDefaultStarAnnotation">: python "ParamNoDefaultStarAnnotation",
   "paramMaybeDefault">: T.list $ python "ParamMaybeDefault",
-  "keywords">: T.maybe $ python "Keywords"]
+  "keywords">: T.optional $ python "Keywords"]
 
 noDefaultStarEtc :: TypeDefinition
 noDefaultStarEtc = def "NoDefaultStarEtc" $ T.record [
   "paramNoDefault">: python "ParamNoDefault",
   "paramMaybeDefault">: T.list $ python "ParamMaybeDefault",
-  "keywords">: T.maybe $ python "Keywords"]
+  "keywords">: T.optional $ python "Keywords"]
 
 paramMaybeDefault :: TypeDefinition
 paramMaybeDefault = def "ParamMaybeDefault" $ T.record [
   "param">: python "Param",
-  "default">: T.maybe $ python "Default",
-  "typeComment">: T.maybe $ python "TypeComment"]
+  "default">: T.optional $ python "Default",
+  "typeComment">: T.optional $ python "TypeComment"]
 
 paramNoDefault :: TypeDefinition
 paramNoDefault = def "ParamNoDefault" $ T.record [
   "param">: python "Param",
-  "typeComment">: T.maybe $ python "TypeComment"]
+  "typeComment">: T.optional $ python "TypeComment"]
 
 -- param_no_default_star_annotation:
 --     | param_star_annotation ',' TYPE_COMMENT?
@@ -769,12 +769,12 @@ paramNoDefaultParameters :: TypeDefinition
 paramNoDefaultParameters = def "ParamNoDefaultParameters" $ T.record [
   "paramNoDefault">: nonemptyList $ python "ParamNoDefault",
   "paramWithDefault">: T.list $ python "ParamWithDefault",
-  "starEtc">: T.maybe $ python "StarEtc"]
+  "starEtc">: T.optional $ python "StarEtc"]
 
 paramNoDefaultStarAnnotation :: TypeDefinition
 paramNoDefaultStarAnnotation = def "ParamNoDefaultStarAnnotation" $ T.record [
   "paramStarAnnotation">: python "ParamStarAnnotation",
-  "typeComment">: T.maybe $ python "TypeComment"]
+  "typeComment">: T.optional $ python "TypeComment"]
 
 -- param_with_default:
 --     | param default ',' TYPE_COMMENT?
@@ -784,7 +784,7 @@ paramWithDefault :: TypeDefinition
 paramWithDefault = def "ParamWithDefault" $ T.record [
   "param">: python "Param",
   "default">: python "Default",
-  "typeComment">: T.maybe $ python "TypeComment"]
+  "typeComment">: T.optional $ python "TypeComment"]
 
 -- param_maybe_default:
 --     | param default? ',' TYPE_COMMENT?
@@ -793,7 +793,7 @@ paramWithDefault = def "ParamWithDefault" $ T.record [
 paramWithDefaultParameters :: TypeDefinition
 paramWithDefaultParameters = def "ParamWithDefaultParameters" $ T.record [
   "paramWithDefault">: nonemptyList $ python "ParamWithDefault",
-  "starEtc">: T.maybe $ python "StarEtc"]
+  "starEtc">: T.optional $ python "StarEtc"]
 
 -- # Some duplication here because we can't write (',' | &')'),
 -- # which is because we don't support empty alternatives (yet).
@@ -822,7 +822,7 @@ slashNoDefaultParameters = def "SlashNoDefaultParameters" $ T.record [
   "slash">: python "SlashNoDefault",
   "paramNoDefault">: T.list $ python "ParamNoDefault",
   "paramWithDefault">: T.list $ python "ParamWithDefault",
-  "starEtc">: T.maybe $ python "StarEtc"]
+  "starEtc">: T.optional $ python "StarEtc"]
 
 slashWithDefault :: TypeDefinition
 slashWithDefault = def "SlashWithDefault" $ T.record [
@@ -839,7 +839,7 @@ slashWithDefaultParameters :: TypeDefinition
 slashWithDefaultParameters = def "SlashWithDefaultParameters" $ T.record [
   "paramNoDefault">: T.list $ python "ParamNoDefault",
   "paramWithDefault">: T.list $ python "ParamWithDefault",
-  "starEtc">: T.maybe $ python "StarEtc"]
+  "starEtc">: T.optional $ python "StarEtc"]
 
 starEtc :: TypeDefinition
 starEtc = def "StarEtc" $ T.union [
@@ -853,7 +853,7 @@ starEtc = def "StarEtc" $ T.union [
 param :: TypeDefinition
 param = def "Param" $ T.record [
   "name">: python "Name",
-  "annotation">: T.maybe $ python "Annotation"]
+  "annotation">: T.optional $ python "Annotation"]
 
 -- param_star_annotation: NAME star_annotation
 
@@ -877,7 +877,7 @@ starAnnotation = def "StarAnnotation" $ T.wrap $ python "StarExpression"
 caseBlock :: TypeDefinition
 caseBlock = def "CaseBlock" $ T.record [
   "patterns">: python "Patterns",
-  "guard">: T.maybe $ python "Guard",
+  "guard">: T.optional $ python "Guard",
   "body">: python "Block"]
 
 default_ :: TypeDefinition
@@ -892,13 +892,13 @@ default_ = def "Default" $ T.wrap $ python "Expression"
 
 exceptBlock :: TypeDefinition
 exceptBlock = def "ExceptBlock" $ T.record [
-  "expression">: T.maybe $ python "ExceptExpression",
+  "expression">: T.optional $ python "ExceptExpression",
   "body">: python "Block"]
 
 exceptExpression :: TypeDefinition
 exceptExpression = def "ExceptExpression" $ T.record [
   "expression">: python "Expression",
-  "as">: T.maybe $ python "Name"]
+  "as">: T.optional $ python "Name"]
 
 -- except_star_block:
 --     | 'except' '*' expression ['as' NAME ] ':' block
@@ -906,7 +906,7 @@ exceptExpression = def "ExceptExpression" $ T.record [
 exceptStarBlock :: TypeDefinition
 exceptStarBlock = def "ExceptStarBlock" $ T.record [
   "expression">: python "Expression",
-  "as">: T.maybe $ python "Name",
+  "as">: T.optional $ python "Name",
   "body">: python "Block"]
 
 -- finally_block:
@@ -923,9 +923,9 @@ forStatement = def "ForStatement" $ T.record [
   "async">: T.boolean,
   "targets">: nonemptyList $ python "StarTarget",
   "expressions">: nonemptyList $ python "StarExpression",
-  "typeComment">: T.maybe $ python "TypeComment",
+  "typeComment">: T.optional $ python "TypeComment",
   "body">: python "Block",
-  "else">: T.maybe $ python "Block"]
+  "else">: T.optional $ python "Block"]
 
 -- # With statement
 -- # --------------
@@ -940,7 +940,7 @@ ifStatement :: TypeDefinition
 ifStatement = def "IfStatement" $ T.record [
   "condition">: python "NamedExpression",
   "body">: python "Block",
-  "continuation">: T.maybe $ python "IfTail"]
+  "continuation">: T.optional $ python "IfTail"]
 
 ifTail :: TypeDefinition
 ifTail = def "IfTail" $ T.union [
@@ -981,8 +981,8 @@ tryExceptStarStatement :: TypeDefinition
 tryExceptStarStatement = def "TryExceptStarStatement" $ T.record [
   "body">: python "Block",
   "excepts">: nonemptyList $ python "ExceptStarBlock",
-  "else">: T.maybe $ python "Block",
-  "finally">: T.maybe $ python "Block"]
+  "else">: T.optional $ python "Block",
+  "finally">: T.optional $ python "Block"]
 
 -- # Except statement
 -- # ----------------
@@ -995,8 +995,8 @@ tryExceptStatement :: TypeDefinition
 tryExceptStatement = def "TryExceptStatement" $ T.record [
   "body">: python "Block",
   "excepts">: nonemptyList $ python "ExceptBlock",
-  "else">: T.maybe $ python "Block",
-  "finally">: T.maybe $ python "Block"]
+  "else">: T.optional $ python "Block",
+  "finally">: T.optional $ python "Block"]
 
 tryFinallyStatement :: TypeDefinition
 tryFinallyStatement = def "TryFinallyStatement" $ T.record [
@@ -1013,7 +1013,7 @@ whileStatement :: TypeDefinition
 whileStatement = def "WhileStatement" $ T.record [
   "condition">: python "NamedExpression",
   "body">: python "Block",
-  "else">: T.maybe $ python "Block"]
+  "else">: T.optional $ python "Block"]
 
 -- # For statement
 -- # -------------
@@ -1025,7 +1025,7 @@ whileStatement = def "WhileStatement" $ T.record [
 withItem :: TypeDefinition
 withItem = def "WithItem" $ T.record [
   "expression">: python "Expression",
-  "as">: T.maybe $ python "StarTarget"]
+  "as">: T.optional $ python "StarTarget"]
 
 -- # Try statement
 -- # -------------
@@ -1039,7 +1039,7 @@ withStatement :: TypeDefinition
 withStatement = def "WithStatement" $ T.record [
   "async">: T.boolean,
   "items">: nonemptyList $ python "WithItem",
-  "typeComment">: T.maybe $ python "TypeComment",
+  "typeComment">: T.optional $ python "TypeComment",
   "body">: python "Block"]
 
 -- with_item:
@@ -1144,8 +1144,8 @@ capturePattern = def "CapturePattern" $ T.wrap $ python "PatternCaptureTarget"
 classPattern :: TypeDefinition
 classPattern = def "ClassPattern" $ T.record [
   "nameOrAttribute">: python "NameOrAttribute",
-  "positionalPatterns">: T.maybe $ python "PositionalPatterns",
-  "keywordPatterns">: T.maybe $ python "KeywordPatterns"]
+  "positionalPatterns">: T.optional $ python "PositionalPatterns",
+  "keywordPatterns">: T.optional $ python "KeywordPatterns"]
 
 -- positional_patterns:
 --     | ','.pattern+
@@ -1178,7 +1178,7 @@ doubleStarPattern = def "DoubleStarPattern" $ T.wrap $ python "PatternCaptureTar
 doubleStarTypeParameter :: TypeDefinition
 doubleStarTypeParameter = def "DoubleStarTypeParameter" $ T.record [
   "name">: python "Name",
-  "default">: T.maybe $ python "Expression"]
+  "default">: T.optional $ python "Expression"]
 
 -- type_param_bound: ':' expression
 -- type_param_default: '=' expression
@@ -1267,8 +1267,8 @@ literalExpressionOrAttribute = def "LiteralExpressionOrAttribute" $ T.union [
 
 mappingPattern :: TypeDefinition
 mappingPattern = def "MappingPattern" $ T.record [
-  "items">: T.maybe $ python "ItemsPattern",
-  "doubleStar">: T.maybe $ python "DoubleStarPattern"]
+  "items">: T.optional $ python "ItemsPattern",
+  "doubleStar">: T.optional $ python "DoubleStarPattern"]
 
 -- items_pattern:
 --     | ','.key_value_pattern+
@@ -1298,7 +1298,7 @@ nameOrAttribute = def "NameOrAttribute" $ T.wrap $ nonemptyList $ python "Name"
 openSequencePattern :: TypeDefinition
 openSequencePattern = def "OpenSequencePattern" $ T.record [
   "head">: python "MaybeStarPattern",
-  "tail">: T.maybe $ python "MaybeSequencePattern"]
+  "tail">: T.optional $ python "MaybeSequencePattern"]
 
 -- maybe_sequence_pattern:
 --     | ','.maybe_star_pattern+ ','?
@@ -1335,8 +1335,8 @@ realNumber = def "RealNumber" $ T.union [ -- NUMBER token excluding imaginary li
 
 sequencePattern :: TypeDefinition
 sequencePattern = def "SequencePattern" $ T.union [
-  "list">: T.maybe $ python "MaybeSequencePattern",
-  "tuple">: T.maybe $ python "OpenSequencePattern"]
+  "list">: T.optional $ python "MaybeSequencePattern",
+  "tuple">: T.optional $ python "OpenSequencePattern"]
 
 -- open_sequence_pattern:
 --     | maybe_star_pattern ',' maybe_sequence_pattern?
@@ -1361,8 +1361,8 @@ signedRealNumber = def "SignedRealNumber" $ T.union [
 simpleTypeParameter :: TypeDefinition
 simpleTypeParameter = def "SimpleTypeParameter" $ T.record [
   "name">: python "Name",
-  "bound">: T.maybe $ python "Expression",
-  "default">: T.maybe $ python "Expression"]
+  "bound">: T.optional $ python "Expression",
+  "default">: T.optional $ python "Expression"]
 
 starExpression :: TypeDefinition
 starExpression = def "StarExpression" $ T.union [
@@ -1383,7 +1383,7 @@ starPattern = def "StarPattern" $ T.union [
 starTypeParameter :: TypeDefinition
 starTypeParameter = def "StarTypeParameter" $ T.record [
   "name">: python "Name",
-  "default">: T.maybe $ python "StarExpression"]
+  "default">: T.optional $ python "StarExpression"]
 
 typeAlias :: TypeDefinition
 typeAlias = def "TypeAlias" $ T.record [
@@ -1478,7 +1478,7 @@ awaitPrimary = def "AwaitPrimary" $ T.record [
 
 bitwiseAnd :: TypeDefinition
 bitwiseAnd = def "BitwiseAnd" $ T.record [
-  "lhs">: T.maybe $ python "BitwiseAnd",
+  "lhs">: T.optional $ python "BitwiseAnd",
   "rhs">: python "ShiftExpression"]
 
 -- shift_expr:
@@ -1488,7 +1488,7 @@ bitwiseAnd = def "BitwiseAnd" $ T.record [
 
 bitwiseOr :: TypeDefinition
 bitwiseOr = def "BitwiseOr" $ T.record [
-  "lhs">: T.maybe $ python "BitwiseOr",
+  "lhs">: T.optional $ python "BitwiseOr",
   "rhs">: python "BitwiseXor"]
 
 -- bitwise_xor:
@@ -1497,7 +1497,7 @@ bitwiseOr = def "BitwiseOr" $ T.record [
 
 bitwiseXor :: TypeDefinition
 bitwiseXor = def "BitwiseXor" $ T.record [
-  "lhs">: T.maybe $ python "BitwiseXor",
+  "lhs">: T.optional $ python "BitwiseXor",
   "rhs">: python "BitwiseAnd"]
 
 -- bitwise_and:
@@ -1607,7 +1607,7 @@ lambdaKwds = def "LambdaKwds" $ T.wrap $ python "LambdaParamNoDefault"
 lambdaParamMaybeDefault :: TypeDefinition
 lambdaParamMaybeDefault = def "LambdaParamMaybeDefault" $ T.record [
   "param">: python "Name",
-  "default">: T.maybe $ python "Default"]
+  "default">: T.optional $ python "Default"]
 
 -- lambda_param: NAME
 --
@@ -1636,7 +1636,7 @@ lambdaParamNoDefault = def "LambdaParamNoDefault" $ T.wrap $ python "Name"
 lambdaParamWithDefault :: TypeDefinition
 lambdaParamWithDefault = def "LambdaParamWithDefault" $ T.record [
   "param">: python "Name",
-  "default">: T.maybe $ python "Default"]
+  "default">: T.optional $ python "Default"]
 
 -- lambda_param_maybe_default:
 --     | lambda_param default? ','
@@ -1644,10 +1644,10 @@ lambdaParamWithDefault = def "LambdaParamWithDefault" $ T.record [
 
 lambdaParameters :: TypeDefinition
 lambdaParameters = def "LambdaParameters" $ T.record [
-  "slashNoDefault">: T.maybe $ python "LambdaSlashNoDefault",
+  "slashNoDefault">: T.optional $ python "LambdaSlashNoDefault",
   "paramNoDefault">: T.list $ python "LambdaParamNoDefault",
   "paramWithDefault">: T.list $ python "LambdaParamWithDefault",
-  "starEtc">: T.maybe $ python "LambdaStarEtc"]
+  "starEtc">: T.optional $ python "LambdaStarEtc"]
 
 -- lambda_slash_no_default:
 --     | lambda_param_no_default+ '/' ','
@@ -1718,7 +1718,7 @@ namedExpression = def "NamedExpression" $ T.union [
 power :: TypeDefinition
 power = def "Power" $ T.record [
   "lhs">: python "AwaitPrimary",
-  "rhs">: T.maybe $ python "Factor"]
+  "rhs">: T.optional $ python "Factor"]
 
 -- # Primary elements
 -- # ----------------
@@ -1752,7 +1752,7 @@ primaryWithRhs = def "PrimaryWithRhs" $ T.record [
 
 shiftExpression :: TypeDefinition
 shiftExpression = def "ShiftExpression" $ T.record [
-  "lhs">: T.maybe $ python "ShiftLhs",
+  "lhs">: T.optional $ python "ShiftLhs",
   "rhs">: python "Sum"]
 
 shiftLhs :: TypeDefinition
@@ -1779,9 +1779,9 @@ slice = def "Slice" $ T.union [
 
 sliceExpression :: TypeDefinition
 sliceExpression = def "SliceExpression" $ T.record [
-  "start">: T.maybe $ python "Expression",
-  "stop">: T.maybe $ python "Expression",
-  "step">: T.maybe $ python "Expression"]
+  "start">: T.optional $ python "Expression",
+  "stop">: T.optional $ python "Expression",
+  "step">: T.optional $ python "Expression"]
 
 -- atom:
 --     | NAME
@@ -1843,12 +1843,12 @@ sumOp = def "SumOp" $ T.enum [
 
 sum_ :: TypeDefinition
 sum_ = def "Sum" $ T.record [
-  "lhs">: T.maybe $ python "SumLhs",
+  "lhs">: T.optional $ python "SumLhs",
   "rhs">: python "Term"]
 
 term :: TypeDefinition
 term = def "Term" $ T.record [
-  "lhs">: T.maybe $ python "TermLhs",
+  "lhs">: T.optional $ python "TermLhs",
   "rhs">: python "Factor"]
 
 termLhs :: TypeDefinition
@@ -2088,8 +2088,8 @@ starAtom :: TypeDefinition
 starAtom = def "StarAtom" $ T.union [
   "name">: python "Name",
   "targetWithStarAtom">: python "TargetWithStarAtom",
-  "starTargetsTupleSeq">: T.maybe $ python "StarTargetsTupleSeq",
-  "starTargetsListSeq">: T.maybe $ python "StarTargetsListSeq"]
+  "starTargetsTupleSeq">: T.optional $ python "StarTargetsTupleSeq",
+  "starTargetsListSeq">: T.optional $ python "StarTargetsListSeq"]
 
 -- single_target:
 --     | single_subscript_attribute_target
@@ -2138,7 +2138,7 @@ tPrimary = def "TPrimary" $ T.union [
 tPrimaryAndArguments :: TypeDefinition
 tPrimaryAndArguments = def "TPrimaryAndArguments" $ T.record [
   "primary">: python "TPrimary",
-  "arguments">: T.maybe $ python "Args"]
+  "arguments">: T.optional $ python "Args"]
 
 -- t_lookahead: '(' | '[' | '.'
 --

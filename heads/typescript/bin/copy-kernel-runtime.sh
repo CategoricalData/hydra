@@ -55,7 +55,7 @@ EOF
 # share the name and the hand-written file clobbered the generated kernel
 # core every sync, masking all kernel exports (Term, Type, Literal, …) at
 # tsc-check time. Now `runtime.ts` provides the JS-native value
-# constructors (Just/Nothing/Left/Right/Pair/Unit + Name/Namespace
+# constructors (Given/None/Left/Right/Pair/Unit + Name/Namespace
 # factories), while generated `core.ts` provides the kernel type
 # definitions imported by every other generated file.
 for f in runtime.ts primitives.ts bootstrap.ts; do

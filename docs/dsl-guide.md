@@ -1005,8 +1005,8 @@ T.list T.int32
 -- Map type
 T.map T.string T.int32
 
--- Maybe (optional) type
-T.maybe T.int32
+-- Optional type
+T.optional T.int32
 
 -- Either type
 T.either_ T.string T.int32  -- Either String Int32
@@ -1188,16 +1188,16 @@ Maps.values myMap  -- Actually Maps.elems
 Maps.fromList (list [tuple2 key1 val1, tuple2 key2 val2])
 ```
 
-### Maybe operations
+### Optional operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import Hydra.Dsl.Meta.Lib.Optionals as Optionals
 
-Maybes.isJust maybeValue
-Maybes.isNothing maybeValue
-Maybes.fromMaybe defaultValue maybeValue                        -- extract with fallback
-Maybes.maybe defaultValue (lambda "x" ...) maybeValue           -- fold over the two branches
-Maybes.map (lambda "x" (Math.add (var "x") (int32 1))) maybeValue
+Optionals.isGiven optionalValue
+Optionals.isNone optionalValue
+Optionals.fromOptional defaultValue optionalValue              -- extract with fallback
+Optionals.cases optionalValue defaultValue (lambda "x" ...)    -- fold over the two branches (subject-first)
+Optionals.map (lambda "x" (Math.add (var "x") (int32 1))) optionalValue
 ```
 
 ### Equality and comparison
@@ -1466,10 +1466,10 @@ import Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 safeDivide :: TypedTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
-  Maybes.maybe
+  Optionals.cases
+    (Math.maybeDiv (var "x") (var "y"))
     (left (string "Division by zero"))
     ("q" ~> right (var "q"))
-    (Math.maybeDiv (var "x") (var "y"))
 ```
 
 ## Import conventions
@@ -1490,7 +1490,7 @@ a common source of errors.
 Functions from `Hydra.Dsl.Meta.Lib.*` and `Hydra.Dsl.Meta.Phantoms` are Haskell functions
 on `TypedTerm` values. They take arguments directly via Haskell function application -- no `@@`
 needed. This includes all primitive function wrappers (`Lists.concat`, `Strings.cat`,
-`Maybes.maybe`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
+`Optionals.cases`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
 `project`, `lets`, etc.).
 
 ```haskell

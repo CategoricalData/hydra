@@ -167,19 +167,19 @@ binder = define "Binder" $ T.union [
 caseItem :: TypeDefinition
 caseItem = define "CaseItem" $ T.record [
   "term">: coq "Term100",
-  "as">: T.maybe $ coq "Name",
-  "in">: T.maybe $ coq "Pattern"]
+  "as">: T.optional $ coq "Name",
+  "in">: T.optional $ coq "Pattern"]
 
 cofix :: TypeDefinition
 cofix = define "Cofix" $ T.record [
   "body">: coq "CofixBody",
-  "qual">: T.maybe $ coq "CofixQual"]
+  "qual">: T.optional $ coq "CofixQual"]
 
 cofixBody :: TypeDefinition
 cofixBody = define "CofixBody" $ T.record [
   "ident">: coq "Ident",
   "binders">: T.list $ coq "Binder",
-  "type">: T.maybe $ coq "Type",
+  "type">: T.optional $ coq "Type",
   "term">: coq "Term"]
 
 cofixQual :: TypeDefinition
@@ -190,7 +190,7 @@ cofixQual = define "CofixQual" $ T.union [
 cofixWith :: TypeDefinition
 cofixWith = define "CofixWith" $ T.record [
   "with">: nonemptyList $ coq "CofixBody",
-  "for">: T.maybe $ coq "Ident"]
+  "for">: T.optional $ coq "Ident"]
 
 comment :: TypeDefinition
 comment = define "Comment" $
@@ -203,7 +203,7 @@ constructor = define "Constructor" $
   T.record [
     "name">: coq "Ident",
     "binders">: T.list $ coq "Binder",
-    "type">: T.maybe $ coq "Type"]
+    "type">: T.optional $ coq "Type"]
 
 coq :: String -> Type
 coq = typeref ns
@@ -212,10 +212,10 @@ definition :: TypeDefinition
 definition = define "Definition" $
   doc "A Definition or Let command: Definition name binders : type := term." $
   T.record [
-    "locality">: T.maybe $ coq "Locality",
+    "locality">: T.optional $ coq "Locality",
     "name">: coq "Ident",
     "binders">: T.list $ coq "Binder",
-    "type">: T.maybe $ coq "Type",
+    "type">: T.optional $ coq "Type",
     "body">: coq "Term"]
 
 document :: TypeDefinition
@@ -239,7 +239,7 @@ existentialVariableVariant = define "ExistentialVariableVariant" $ T.union [
   "placeholder">: T.unit,
   "inside1">: T.unit,
   "inside2">: T.unit,
-  "outside">: T.maybe $ coq "IdentArg"]
+  "outside">: T.optional $ coq "IdentArg"]
 
 fieldIdent :: TypeDefinition
 fieldIdent = define "FieldIdent" $ T.wrap $ coq "Ident"
@@ -253,8 +253,8 @@ fixAnnot = define "FixAnnot" $ T.union [
 fixAnnot_Measure :: TypeDefinition
 fixAnnot_Measure = define "FixAnnot_Measure" $ T.record [
   "term">: coq "OneTerm",
-  "ident">: T.maybe $ coq "Ident",
-  "term2">: T.maybe $ coq "OneTerm"]
+  "ident">: T.optional $ coq "Ident",
+  "term2">: T.optional $ coq "OneTerm"]
 
 fixAnnot_Wf :: TypeDefinition
 fixAnnot_Wf = define "FixAnnot_Wf" $ T.record [
@@ -264,19 +264,19 @@ fixAnnot_Wf = define "FixAnnot_Wf" $ T.record [
 fixWith :: TypeDefinition
 fixWith = define "FixWith" $ T.record [
   "decls">: nonemptyList $ coq "Fix_Decl",
-  "for">: T.maybe $ coq "Ident"]
+  "for">: T.optional $ coq "Ident"]
 
 fix_ :: TypeDefinition
 fix_ = define "Fix" $ T.union [
   "decl">: coq "Fix_Decl",
-  "qual">: T.maybe $ coq "Fix_Qual"]
+  "qual">: T.optional $ coq "Fix_Qual"]
 
 fix_Decl :: TypeDefinition
 fix_Decl = define "Fix_Decl" $ T.record [
   "ident">: coq "Ident",
   "binders">: T.list $ coq "Binder",
-  "annot">: T.maybe $ coq "FixAnnot",
-  "type">: T.maybe $ coq "Type",
+  "annot">: T.optional $ coq "FixAnnot",
+  "type">: T.optional $ coq "Type",
   "term">: coq "Term"]
 
 fix_Qual :: TypeDefinition
@@ -288,11 +288,11 @@ fixpointDefinition :: TypeDefinition
 fixpointDefinition = define "FixpointDefinition" $
   doc "A Fixpoint command for recursive definitions" $
   T.record [
-    "locality">: T.maybe $ coq "Locality",
+    "locality">: T.optional $ coq "Locality",
     "name">: coq "Ident",
     "binders">: T.list $ coq "Binder",
-    "annot">: T.maybe $ coq "FixAnnot",
-    "type">: T.maybe $ coq "Type",
+    "annot">: T.optional $ coq "FixAnnot",
+    "type">: T.optional $ coq "Type",
     "body">: coq "Term",
     "with">: T.list $ coq "Fix_Decl"]
 
@@ -338,7 +338,7 @@ if_ = define "If" $
   doc "Pattern match on boolean values" $
   T.record [
     "condition">: coq "Term",
-    "returnAs">: T.maybe $ coq "ReturnAs",
+    "returnAs">: T.optional $ coq "ReturnAs",
     "then">: coq "Term",
     "else">: coq "Term"]
 
@@ -367,14 +367,14 @@ inductiveBody = define "InductiveBody" $
   T.record [
     "name">: coq "Ident",
     "binders">: T.list $ coq "Binder",
-    "type">: T.maybe $ coq "Type",
+    "type">: T.optional $ coq "Type",
     "constructors">: T.list $ coq "Constructor"]
 
 inductiveDefinition :: TypeDefinition
 inductiveDefinition = define "InductiveDefinition" $
   doc "An Inductive or CoInductive definition with one or more mutually inductive bodies" $
   T.record [
-    "locality">: T.maybe $ coq "Locality",
+    "locality">: T.optional $ coq "Locality",
     "coinductive">: T.boolean,
     "bodies">: nonemptyList $ coq "InductiveBody"]
 
@@ -383,7 +383,7 @@ letBinder = define "LetBinder" $
   doc "Some constructions allow the binding of a variable to value. This is called a 'let-binder'." $
   T.record [
     "name">: coq "Name",
-    "type">: T.maybe $ coq "Type",
+    "type">: T.optional $ coq "Type",
     "term">: coq "Term"]
 
 letBindings :: TypeDefinition
@@ -400,14 +400,14 @@ letDestructuring = define "LetDestructuring" $ T.union [
 letDestructuring_Variant1 :: TypeDefinition
 letDestructuring_Variant1 = define "LetDestructuring_Variant1" $ T.record [
   "names">: T.list $ coq "Name",
-  "returnAs">: T.maybe $ coq "ReturnAs",
+  "returnAs">: T.optional $ coq "ReturnAs",
   "term">: coq "Term"]
 
 letDestructuring_Variant2 :: TypeDefinition
 letDestructuring_Variant2 = define "LetDestructuring_Variant2" $ T.record [
   "pattern">: coq "Pattern",
   "term">: coq "Term",
-  "return">: T.maybe $ coq "Term100"]
+  "return">: T.optional $ coq "Term100"]
 
 letDestructuring_Variant3 :: TypeDefinition
 letDestructuring_Variant3 = define "LetDestructuring_Variant3" $ T.record [
@@ -438,7 +438,7 @@ locality = define "Locality" $
 match :: TypeDefinition
 match = define "Match" $ T.record [
   "caseItems">: nonemptyList $ coq "CaseItem",
-  "return">: T.maybe $ coq "Term100",
+  "return">: T.optional $ coq "Term100",
   "pipe">: T.boolean,
   "equations">: T.list $ coq "Equation"]
 
@@ -450,7 +450,7 @@ moduleDefinition = define "ModuleDefinition" $
     "sentences">: T.list $ coq "Sentence"]
 
 name_ :: TypeDefinition
-name_ = define "Name" $ T.wrap $ T.maybe $ coq "Ident"
+name_ = define "Name" $ T.wrap $ T.optional $ coq "Ident"
 
 natural :: TypeDefinition
 natural = define "Natural" $
@@ -473,8 +473,8 @@ notationDeclaration = define "NotationDeclaration" $
   T.record [
     "notation">: coq "String",
     "definition">: coq "Term",
-    "level">: T.maybe $ coq "Natural",
-    "associativity">: T.maybe T.string]
+    "level">: T.optional $ coq "Natural",
+    "associativity">: T.optional T.string]
 
 number :: TypeDefinition
 number = define "Number" $ T.wrap T.float64
@@ -501,7 +501,7 @@ pattern0 = define "Pattern0" $ T.union [
 pattern1 :: TypeDefinition
 pattern1 = define "Pattern1" $ T.record [
   "pattern">: coq "Pattern0",
-  "scope">: T.maybe $ coq "ScopeKey"]
+  "scope">: T.optional $ coq "ScopeKey"]
 
 pattern10 :: TypeDefinition
 pattern10 = define "Pattern10" $ T.union [
@@ -527,7 +527,7 @@ pattern10_Qualid = define "Pattern10_Qualid" $ T.record [
 pattern_ :: TypeDefinition
 pattern_ = define "Pattern" $ T.union [
   "pattern">: coq "Pattern10",
-  "term">: T.maybe $ coq "Term"]
+  "term">: T.optional $ coq "Term"]
 
 primitiveNotations :: TypeDefinition
 primitiveNotations = define "PrimitiveNotations" $ T.union [
@@ -549,23 +549,23 @@ qualidAndPattern = define "QualidAndPattern" $ T.record [
 qualidAnnotated :: TypeDefinition
 qualidAnnotated = define "QualidAnnotated" $ T.record [
   "qualid">: coq "Qualid",
-  "univAnnot">: T.maybe $ coq "UnivAnnot"]
+  "univAnnot">: T.optional $ coq "UnivAnnot"]
 
 recordBody :: TypeDefinition
 recordBody = define "RecordBody" $
   doc "The body of a Record definition" $
   T.record [
-    "constructor">: T.maybe $ coq "Ident",
+    "constructor">: T.optional $ coq "Ident",
     "fields">: T.list $ coq "RecordField"]
 
 recordDefinition :: TypeDefinition
 recordDefinition = define "RecordDefinition" $
   doc "A Record or Structure definition" $
   T.record [
-    "locality">: T.maybe $ coq "Locality",
+    "locality">: T.optional $ coq "Locality",
     "name">: coq "Ident",
     "binders">: T.list $ coq "Binder",
-    "sort">: T.maybe $ coq "Sort",
+    "sort">: T.optional $ coq "Sort",
     "body">: coq "RecordBody"]
 
 recordField :: TypeDefinition
@@ -579,14 +579,14 @@ requireImport :: TypeDefinition
 requireImport = define "RequireImport" $
   doc "A Require Import/Export command" $
   T.record [
-    "from">: T.maybe $ coq "Qualid",
+    "from">: T.optional $ coq "Qualid",
     "require">: T.boolean,
-    "qualification">: T.maybe $ coq "ImportQualification",
+    "qualification">: T.optional $ coq "ImportQualification",
     "modules">: nonemptyList $ coq "Qualid"]
 
 returnAs :: TypeDefinition
 returnAs = define "ReturnAs" $ T.record [
-  "as">: T.maybe $ coq "Name",
+  "as">: T.optional $ coq "Name",
   "return">: coq "Term100"]
 
 scopeKey :: TypeDefinition
@@ -603,7 +603,7 @@ sentence :: TypeDefinition
 sentence = define "Sentence" $
   doc "A top-level sentence in a Coq document, optionally preceded by a comment" $
   T.record [
-    "comment">: T.maybe $ coq "Comment",
+    "comment">: T.optional $ coq "Comment",
     "content">: coq "SentenceContent"]
 
 sentenceContent :: TypeDefinition
@@ -722,7 +722,7 @@ type_ = define "Type" $ T.wrap $ coq "Term"
 typeclassConstraint :: TypeDefinition
 typeclassConstraint = define "TypeclassConstraint" $
   T.record [
-    "name">: T.maybe $ coq "Name",
+    "name">: T.optional $ coq "Name",
     "generalizing">: T.boolean,
     "term">: coq "Term"]
 
@@ -756,4 +756,4 @@ universeName = define "UniverseName" $ T.union [
 universe_Expr :: TypeDefinition
 universe_Expr = define "Universe_Expr" $ T.record [
   "name">: coq "UniverseName",
-  "number">: T.maybe $ coq "Natural"]
+  "number">: T.optional $ coq "Natural"]

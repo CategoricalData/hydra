@@ -510,7 +510,7 @@
                                         "parameter": "rec"}},
                                     "name": "record"}],
                                 "typeName": "hydra.haskell.syntax.Constructor"}}}},
-                        "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
@@ -609,7 +609,7 @@
                                                                 "argument": {"variable": "hydra.serialization.halfBlockStyle"},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                                                     "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}}]},
                                                     "function": {
                                                       "application": {
@@ -623,33 +623,33 @@
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "mc"},
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"list": [{"variable": "body"}]},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
+                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "c"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"list": [{"variable": "body"}]},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
-                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.newlineSep"}}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "c"}},
+                            "argument": {"variable": "body"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "body"},
+                                "argument": {"variable": "mc"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Constructor"},
                 "parameter": "cons"}}}},
         "name": "hydra.haskell.serde.constructorToExpr",
@@ -836,7 +836,7 @@
                                         "parameter": "tb"}},
                                     "name": "typedBinding"}],
                                 "typeName": "hydra.haskell.syntax.Declaration"}}}},
-                        "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
@@ -1104,33 +1104,33 @@
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "mc"},
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"list": [{"variable": "body"}]},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
+                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "c"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"list": [{"variable": "body"}]},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
-                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.newlineSep"}}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "c"}},
+                            "argument": {"variable": "body"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "body"},
+                                "argument": {"variable": "mc"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Declaration"},
                 "parameter": "decl"}}}},
         "name": "hydra.haskell.serde.declarationToExpr",
@@ -1412,7 +1412,7 @@
                           "application": {
                             "argument": {"variable": "field"},
                             "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.Field"}}}},
-                        "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
@@ -1435,33 +1435,33 @@
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "mc"},
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"list": [{"variable": "body"}]},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
+                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "c"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"list": [{"variable": "body"}]},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
-                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.newlineSep"}}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "c"}},
+                            "argument": {"variable": "body"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "body"},
+                                "argument": {"variable": "mc"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Field"},
                 "parameter": "field"}}}},
         "name": "hydra.haskell.serde.fieldToExpr",
@@ -1646,14 +1646,14 @@
                           "application": {
                             "argument": {"variable": "import"},
                             "function": {"project": {"fieldName": "as", "typeName": "hydra.haskell.syntax.Import"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ModuleName"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.haskell.syntax.ModuleName"}}, "variables": []}},
                       {
                         "name": "mspec",
                         "term": {
                           "application": {
                             "argument": {"variable": "import"},
                             "function": {"project": {"fieldName": "spec", "typeName": "hydra.haskell.syntax.Import"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.haskell.syntax.ImportSpec"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {"application": {"argument": {"variable": "modName"}, "function": {"unwrap": "hydra.haskell.syntax.ModuleName"}}},
@@ -1716,19 +1716,20 @@
                             "argument": {
                               "list": [
                                 {
-                                  "maybe": {"application": {"argument": {"literal": {"string": "import"}}, "function": {"variable": "hydra.serialization.cst"}}}},
+                                  "optional": {"application": {"argument": {"literal": {"string": "import"}}, "function": {"variable": "hydra.serialization.cst"}}}},
                                 {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "maybe": {"application": {"argument": {"literal": {"string": "qualified"}}, "function": {"variable": "hydra.serialization.cst"}}}},
+                                          "optional": {"application": {"argument": {"literal": {"string": "qualified"}}, "function": {"variable": "hydra.serialization.cst"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "qual"},
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.ast.Expr"}}}}}}}}}},
-                                {"maybe": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.serialization.cst"}}}},
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.ast.Expr"}}}}}}}}}},
+                                {"optional": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.serialization.cst"}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "mod"},
@@ -1748,7 +1749,7 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.haskell.syntax.ModuleName"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.haskell.syntax.ModuleName"}}},
                                             "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                 {
                                   "application": {
@@ -1759,9 +1760,9 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.haskell.syntax.ImportSpec"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.haskell.syntax.ImportSpec"}}},
                                             "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {"application": {"argument": {"variable": "parts"}, "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.Import"},
@@ -1922,7 +1923,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"integer": {"int32": 0}}},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                 "function": {"variable": "parensIfNeg"}}}}},
                                                         "function": {
@@ -2134,7 +2135,7 @@
                           "application": {
                             "argument": {"variable": "moduleHead"},
                             "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.ModuleHead"}}}},
-                        "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "modName",
                         "term": {
@@ -2168,39 +2169,39 @@
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "mc"},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"list": [{"variable": "head"}]},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"application": {"argument": {"literal": {"string": ""}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                        "argument": {"list": [{"variable": "head"}]},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
-                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                            "argument": {"application": {"argument": {"literal": {"string": ""}}, "function": {"variable": "hydra.serialization.cst"}}},
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.newlineSep"}}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "c"}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.haskell.serde.toHaskellComments"}}},
+                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "c"}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "head"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "head"},
+                                "argument": {"variable": "mc"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.haskell.syntax.ModuleHead"},
                 "parameter": "moduleHead"}}}},
         "name": "hydra.haskell.serde.moduleHeadToExpr",
@@ -2226,7 +2227,7 @@
                           "application": {
                             "argument": {"variable": "module"},
                             "function": {"project": {"fieldName": "head", "typeName": "hydra.haskell.syntax.Module"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ModuleHead"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.haskell.syntax.ModuleHead"}}, "variables": []}},
                       {
                         "name": "imports",
                         "term": {
@@ -2257,22 +2258,23 @@
                         "name": "headerLine",
                         "term": {
                           "application": {
-                            "argument": {"variable": "mh"},
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "list": [{"application": {"argument": {"variable": "h"}, "function": {"variable": "hydra.haskell.serde.moduleHeadToExpr"}}}]},
+                                "domain": {"variable": "hydra.haskell.syntax.ModuleHead"},
+                                "parameter": "h"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "list": [{"application": {"argument": {"variable": "h"}, "function": {"variable": "hydra.haskell.serde.moduleHeadToExpr"}}}]},
-                                    "domain": {"variable": "hydra.haskell.syntax.ModuleHead"},
-                                    "parameter": "h"}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "mh"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                        "type": {"variable": "hydra.haskell.syntax.ModuleHead"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.haskell.syntax.ModuleHead"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                       {
                         "name": "declLines",
@@ -2884,7 +2886,7 @@
                                           "application": {
                                             "argument": {"variable": "simpleVB"},
                                             "function": {"project": {"fieldName": "localBindings", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
-                                        "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}, "variables": []}},
+                                        "typeScheme": {"body": {"optional": {"variable": "hydra.haskell.syntax.LocalBindings"}}, "variables": []}},
                                       {
                                         "name": "lhsExpr",
                                         "term": {"application": {"argument": {"variable": "pat"}, "function": {"variable": "hydra.haskell.serde.patternToExpr"}}},
@@ -2931,59 +2933,60 @@
                                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                     "body": {
                                       "application": {
-                                        "argument": {"variable": "local"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "lambda": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "bindings",
+                                                    "term": {
+                                                      "application": {"argument": {"variable": "localBindings"}, "function": {"unwrap": "hydra.haskell.syntax.LocalBindings"}}},
+                                                    "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.LocalBinding"}}, "variables": []}}],
                                                 "body": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "bindings",
-                                                        "term": {
-                                                          "application": {"argument": {"variable": "localBindings"}, "function": {"unwrap": "hydra.haskell.syntax.LocalBindings"}}},
-                                                        "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.LocalBinding"}}, "variables": []}}],
-                                                    "body": {
+                                                  "application": {
+                                                    "argument": {
                                                       "application": {
                                                         "argument": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "list": [
-                                                                {
+                                                          "list": [
+                                                            {
+                                                              "application": {
+                                                                "argument": {
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "bindings"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.haskell.serde.localBindingToExpr"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.haskell.syntax.LocalBinding"}}},
-                                                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                                                        "argument": {"variable": "bindings"},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"application": {"argument": {"literal": {"string": "where"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                    "function": {"variable": "hydra.serialization.indentBlock"}}}]},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "body"},
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                        "function": {"variable": "hydra.serialization.indentBlock"}}}}},
-                                                "domain": {"variable": "hydra.haskell.syntax.LocalBindings"},
-                                                "parameter": "localBindings"}},
+                                                                            "argument": {"variable": "hydra.haskell.serde.localBindingToExpr"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.haskell.syntax.LocalBinding"}}},
+                                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"application": {"argument": {"literal": {"string": "where"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                                                "function": {"variable": "hydra.serialization.indentBlock"}}}]},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "body"},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                                    "function": {"variable": "hydra.serialization.indentBlock"}}}}},
+                                            "domain": {"variable": "hydra.haskell.syntax.LocalBindings"},
+                                            "parameter": "localBindings"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "body"},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "body"},
+                                                "argument": {"variable": "local"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                                    "type": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}}}}}}}},
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.haskell.syntax.LocalBindings"}}},
+                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                                 "domain": {"variable": "hydra.haskell.syntax.SimpleValueBinding"},
                                 "parameter": "simpleVB"}},
                             "name": "simple"}],

@@ -25,7 +25,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -53,7 +53,7 @@ addExpressions exprs =
               Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral 0)))))))
       in (Lists.foldl (\ae -> \me -> Syntax.AdditiveExpressionPlus (Syntax.AdditiveExpression_Binary {
         Syntax.additiveExpression_BinaryLhs = ae,
-        Syntax.additiveExpression_BinaryRhs = me})) (Syntax.AdditiveExpressionUnary (Maybes.fromMaybe dummyMult (Lists.maybeHead exprs))) (Lists.drop 1 exprs))
+        Syntax.additiveExpression_BinaryRhs = me})) (Syntax.AdditiveExpressionUnary (Optionals.fromOptional dummyMult (Lists.maybeHead exprs))) (Lists.drop 1 exprs))
 addInScopeVar :: Core.Name -> Environment.Aliases -> Environment.Aliases
 addInScopeVar name aliases =
     Environment.Aliases {
@@ -159,7 +159,7 @@ interfaceMethodDeclaration mods tparams methodName params result stmts =
       Syntax.interfaceMethodDeclarationHeader = (javaMethodHeader tparams methodName params result),
       Syntax.interfaceMethodDeclarationBody = (javaMethodBody stmts)})
 isEscaped :: String -> Bool
-isEscaped s = Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 s)) 36
+isEscaped s = Equality.equal (Optionals.fromOptional 0 (Strings.maybeCharAt 0 s)) 36
 javaAdditiveExpressionToJavaExpression :: Syntax.AdditiveExpression -> Syntax.Expression
 javaAdditiveExpressionToJavaExpression ae =
     Syntax.ExpressionAssignment (Syntax.AssignmentExpressionConditional (Syntax.ConditionalExpressionSimple (Syntax.ConditionalOrExpression [
@@ -171,7 +171,7 @@ javaAdditiveExpressionToJavaExpression ae =
 javaArrayCreation :: Syntax.PrimitiveTypeWithAnnotations -> Maybe Syntax.ArrayInitializer -> Syntax.Expression
 javaArrayCreation primType minit =
 
-      let init_ = Maybes.cases minit (Syntax.ArrayInitializer []) (\i -> i)
+      let init_ = Optionals.cases minit (Syntax.ArrayInitializer []) (\i -> i)
       in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionWithInitializer_ (Syntax.ArrayCreationExpressionWithInitializerPrimitive (Syntax.ArrayCreationExpressionWithInitializer_Primitive {
         Syntax.arrayCreationExpressionWithInitializer_PrimitiveType = primType,
         Syntax.arrayCreationExpressionWithInitializer_PrimitiveDims = [],
@@ -221,7 +221,7 @@ javaCastPrimitive pt expr =
 javaClassDeclaration :: Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.ClassModifier] -> Maybe Core.Name -> [Syntax.InterfaceType] -> [Syntax.ClassBodyDeclarationWithComments] -> Syntax.ClassDeclaration
 javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
 
-      let extends_ = Maybes.map (\n -> nameToJavaClassType aliases True [] n Nothing) supname
+      let extends_ = Optionals.map (\n -> nameToJavaClassType aliases True [] n Nothing) supname
       in (Syntax.ClassDeclarationNormal (Syntax.NormalClassDeclaration {
         Syntax.normalClassDeclarationModifiers = mods,
         Syntax.normalClassDeclarationIdentifier = (javaDeclName elName),
@@ -233,7 +233,7 @@ javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
 javaClassType :: [Syntax.ReferenceType] -> Maybe Syntax.PackageName -> String -> Syntax.ClassType
 javaClassType args pkg id =
 
-      let qual = Maybes.cases pkg Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)
+      let qual = Optionals.cases pkg Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)
           targs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) args
       in Syntax.ClassType {
         Syntax.classTypeAnnotations = [],
@@ -320,15 +320,15 @@ javaExpressionToJavaPrimary e =
           Syntax.AssignmentExpressionConditional v1 -> case v1 of
             Syntax.ConditionalExpressionSimple v2 ->
               let cands = Syntax.unConditionalOrExpression v2
-              in (Maybes.fromMaybe fallback (Maybes.bind (Lists.maybeHead cands) (\candHead ->
+              in (Optionals.fromOptional fallback (Optionals.bind (Lists.maybeHead cands) (\candHead ->
                 let iors = Syntax.unConditionalAndExpression candHead
-                in (Maybes.bind (Lists.maybeHead iors) (\iorHead ->
+                in (Optionals.bind (Lists.maybeHead iors) (\iorHead ->
                   let xors = Syntax.unInclusiveOrExpression iorHead
-                  in (Maybes.bind (Lists.maybeHead xors) (\xorHead ->
+                  in (Optionals.bind (Lists.maybeHead xors) (\xorHead ->
                     let ands = Syntax.unExclusiveOrExpression xorHead
-                    in (Maybes.bind (Lists.maybeHead ands) (\andHead ->
+                    in (Optionals.bind (Lists.maybeHead ands) (\andHead ->
                       let eqs = Syntax.unAndExpression andHead
-                      in (Maybes.bind (Lists.maybeHead eqs) (\eqHead -> Just (case eqHead of
+                      in (Optionals.bind (Lists.maybeHead eqs) (\eqHead -> Just (case eqHead of
                         Syntax.EqualityExpressionUnary v3 -> case v3 of
                           Syntax.RelationalExpressionSimple v4 -> case v4 of
                             Syntax.ShiftExpressionUnary v5 -> case v5 of
@@ -434,7 +434,8 @@ javaMemberField mods jt v =
       Syntax.fieldDeclarationVariableDeclarators = [
         v]}))
 javaMethodBody :: Maybe [Syntax.BlockStatement] -> Syntax.MethodBody
-javaMethodBody mstmts = Maybes.cases mstmts Syntax.MethodBodyNone (\stmts -> Syntax.MethodBodyBlock (Syntax.Block stmts))
+javaMethodBody mstmts =
+    Optionals.cases mstmts Syntax.MethodBodyNone (\stmts -> Syntax.MethodBodyBlock (Syntax.Block stmts))
 javaMethodDeclarationToJavaClassBodyDeclaration :: Syntax.MethodDeclaration -> Syntax.ClassBodyDeclaration
 javaMethodDeclarationToJavaClassBodyDeclaration md =
     Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationMethod md)
@@ -650,7 +651,7 @@ javaVariableName :: Core.Name -> Syntax.Identifier
 javaVariableName name = javaIdentifier (Names.localNameOf name)
 lookupJavaVarName :: Environment.Aliases -> Core.Name -> Core.Name
 lookupJavaVarName aliases name =
-    Maybes.cases (Maps.lookup name (Environment.aliasesVarRenames aliases)) name (\renamed -> renamed)
+    Optionals.cases (Maps.lookup name (Environment.aliasesVarRenames aliases)) name (\renamed -> renamed)
 makeConstructor :: Environment.Aliases -> Core.Name -> Bool -> [Syntax.FormalParameter] -> [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
 makeConstructor aliases elName private params stmts =
 
@@ -683,7 +684,7 @@ methodInvocation :: Maybe (Either Syntax.ExpressionName Syntax.Primary) -> Synta
 methodInvocation lhs methodName args =
 
       let header =
-              Maybes.cases lhs (Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName methodName)) (\either -> Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
+              Optionals.cases lhs (Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName methodName)) (\either -> Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
                 Syntax.methodInvocation_ComplexVariant = (Eithers.either (\en -> Syntax.MethodInvocation_VariantExpression en) (\p -> Syntax.MethodInvocation_VariantPrimary p) either),
                 Syntax.methodInvocation_ComplexTypeArguments = [],
                 Syntax.methodInvocation_ComplexIdentifier = methodName}))
@@ -721,9 +722,9 @@ nameToJavaName aliases name =
       let qn = Names.qualifyName name
           ns_ = Util.qualifiedNameModuleName qn
           local = Util.qualifiedNameLocal qn
-      in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
+      in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Optionals.cases ns_ (Syntax.Identifier local) (\gname ->
         let parts =
-                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Packaging.unModuleName gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
+                Optionals.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Packaging.unModuleName gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
             allParts = Lists.concat2 parts [
                   sanitizeJavaName local]
         in (Syntax.Identifier (Strings.intercalate "." allParts)))))
@@ -739,11 +740,11 @@ nameToQualifiedJavaName aliases qualify name mlocal =
           ns_ = Util.qualifiedNameModuleName qn
           local = Util.qualifiedNameLocal qn
           alias =
-                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (JavaNames.javaPackageName (Strings.splitOn "." (Packaging.unModuleName n))) (\id -> id)))
+                  Optionals.cases ns_ Nothing (\n -> Just (Optionals.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (JavaNames.javaPackageName (Strings.splitOn "." (Packaging.unModuleName n))) (\id -> id)))
           pkg =
-                  Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
+                  Logic.ifElse qualify (Optionals.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
           jid =
-                  javaTypeIdentifier (Maybes.cases mlocal (sanitizeJavaName local) (\l -> Strings.cat2 (Strings.cat2 (sanitizeJavaName local) ".") (sanitizeJavaName l)))
+                  javaTypeIdentifier (Optionals.cases mlocal (sanitizeJavaName local) (\l -> Strings.cat2 (Strings.cat2 (sanitizeJavaName local) ".") (sanitizeJavaName l)))
       in (jid, pkg)
 overrideAnnotation :: Syntax.Annotation
 overrideAnnotation = Syntax.AnnotationMarker (Syntax.MarkerAnnotation (javaTypeName (Syntax.Identifier "Override")))

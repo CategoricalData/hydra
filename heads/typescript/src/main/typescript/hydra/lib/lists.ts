@@ -10,8 +10,8 @@
 // continuations) can call these without TS2345 noise. Runtime behavior is
 // correct for any array-shaped input.
 
-import type { Maybe } from "../runtime.js";
-import { Just, Nothing } from "../runtime.js";
+import type { Optional } from "../runtime.js";
+import { Given, None } from "../runtime.js";
 
 export const apply = <A, B>(fs: readonly ((a: A) => B)[], xs: any): readonly B[] => {
   const out: B[] = [];
@@ -49,9 +49,9 @@ export const elem = <A>(x: A, xs: any): boolean => xs.includes(x);
 
 export const filter = (p: (a: any) => boolean, xs: any): readonly any[] => xs.filter(p);
 
-export const find = <A>(p: (a: A) => boolean, xs: any): Maybe<A> => {
-  for (const x of xs) if (p(x)) return Just(x);
-  return Nothing;
+export const find = <A>(p: (a: A) => boolean, xs: any): Optional<A> => {
+  for (const x of xs) if (p(x)) return Given(x);
+  return None;
 };
 
 export const foldl = <A, B>(f: (b: B, a: A) => B, init: B, xs: any): B =>
@@ -97,20 +97,20 @@ export const length = <A>(xs: any): number => xs.length;
 
 export const map = (f: (a: any) => any, xs: any): readonly any[] => xs.map(f);
 
-export const maybeAt = (i: number, xs: any): Maybe<any> =>
-  (i >= 0 && i < xs.length) ? Just(xs[i]!) : Nothing;
+export const maybeAt = (i: number, xs: any): Optional<any> =>
+  (i >= 0 && i < xs.length) ? Given(xs[i]!) : None;
 
-export const maybeHead = (xs: any): Maybe<any> =>
-  xs.length === 0 ? Nothing : Just(xs[0]!);
+export const maybeHead = (xs: any): Optional<any> =>
+  xs.length === 0 ? None : Given(xs[0]!);
 
-export const maybeInit = (xs: any): Maybe<readonly any[]> =>
-  xs.length === 0 ? Nothing : Just(xs.slice(0, -1));
+export const maybeInit = (xs: any): Optional<readonly any[]> =>
+  xs.length === 0 ? None : Given(xs.slice(0, -1));
 
-export const maybeLast = (xs: any): Maybe<any> =>
-  xs.length === 0 ? Nothing : Just(xs[xs.length - 1]!);
+export const maybeLast = (xs: any): Optional<any> =>
+  xs.length === 0 ? None : Given(xs[xs.length - 1]!);
 
-export const maybeTail = (xs: any): Maybe<readonly any[]> =>
-  xs.length === 0 ? Nothing : Just(xs.slice(1));
+export const maybeTail = (xs: any): Optional<readonly any[]> =>
+  xs.length === 0 ? None : Given(xs.slice(1));
 
 export const nub = (xs: any): readonly any[] => {
   const seen = new Set<any>();
@@ -169,8 +169,8 @@ export const transpose = <A>(xss: readonly (readonly A[])[]): readonly (readonly
   return out;
 };
 
-export const uncons = <A>(xs: any): Maybe<readonly [A, readonly A[]]> =>
-  xs.length === 0 ? Nothing : Just([xs[0]!, xs.slice(1)] as const);
+export const uncons = <A>(xs: any): Optional<readonly [A, readonly A[]]> =>
+  xs.length === 0 ? None : Given([xs[0]!, xs.slice(1)] as const);
 
 // Return type is `readonly any[]` (rather than `readonly (readonly [unknown, unknown])[]`)
 // so the result is implicitly assignable into nominally-typed pair-array

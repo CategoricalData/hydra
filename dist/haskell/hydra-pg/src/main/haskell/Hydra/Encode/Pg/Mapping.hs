@@ -3,6 +3,8 @@
 
 module Hydra.Encode.Pg.Mapping where
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Coders as Coders
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Pg.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Pg.Mapping as Mapping

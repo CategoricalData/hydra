@@ -74,13 +74,13 @@ command = define "Command" $
         "This property is deprecated. Either value, synchronous or asynchronous, has the same meaning: " ++
         "a command that starts execution within a configurable time and that completes execution " ++
         "within a configurable time.") $
-      T.maybe $ dtld "CommandType",
+      T.optional $ dtld "CommandType",
     "request">:
       doc "A description of the input to the Command" $
-      T.maybe $ dtld "CommandPayload",
+      T.optional $ dtld "CommandPayload",
     "response">:
       doc "A description of the output of the Command" $
-      T.maybe $ dtld "CommandPayload"]
+      T.optional $ dtld "CommandPayload"]
 
 commandPayload :: TypeDefinition
 commandPayload = define "CommandPayload" $
@@ -104,7 +104,7 @@ commandType = define "CommandType" $
     "asynchronous"]
 
 commentField :: FieldType
-commentField = "comment">: doc "A comment for model authors" $ T.maybe nonemptyString512
+commentField = "comment">: doc "A comment for model authors" $ T.optional nonemptyString512
 
 component :: TypeDefinition
 component = define "Component" $
@@ -122,10 +122,10 @@ component = define "Component" $
     displayNameField]
 
 descriptionField :: FieldType
-descriptionField = "description">: doc "A localizable description for display" $ T.maybe nonemptyString512
+descriptionField = "description">: doc "A localizable description for display" $ T.optional nonemptyString512
 
 displayNameField :: FieldType
-displayNameField = "displayName">: doc "A localizable name for display" $ T.maybe nonemptyString64
+displayNameField = "displayName">: doc "A localizable name for display" $ T.optional nonemptyString64
 
 dtld :: String -> Type
 dtld = typeref ns
@@ -169,7 +169,7 @@ field = define "Field" $
 
 -- Helper field constructors
 idField :: Bool -> Int -> String -> FieldType
-idField req maxlen desc = "id">: doc desc $ if req then t else T.maybe t
+idField req maxlen desc = "id">: doc desc $ if req then t else T.optional t
   where
     t = bounded Nothing (Just maxlen) $ dtld "Dtmi"
 
@@ -196,17 +196,17 @@ interface_ = define "Interface" $ T.record [
     doc (
       "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, " ++
       "and/or Components) of this interface") $
-    T.maybe $ boundedSet Nothing (Just 300) $ dtld "Interface_Contents",
+    T.optional $ boundedSet Nothing (Just 300) $ dtld "Interface_Contents",
   descriptionField,
   displayNameField,
   "extends">: -- Note: there is a maximum depth of 10 levels, not captured here
     doc (
       "A set of DTMIs that refer to interfaces this interface inherits from. " ++
       "Interfaces can inherit from multiple interfaces.") $
-    T.maybe $ boundedSet Nothing (Just 2) $ dtld "Interface",
+    T.optional $ boundedSet Nothing (Just 2) $ dtld "Interface",
   "schemas">:
     doc "A set of IRIs or objects that refer to the reusable schemas within this interface." $
-    T.maybe $ T.set $ dtld "Schema_Interface"]
+    T.optional $ T.set $ dtld "Schema_Interface"]
 
 interface_Contents :: TypeDefinition
 interface_Contents = define "Interface_Contents" $ T.union [
@@ -289,19 +289,19 @@ relationship = define "Relationship" $
       doc (
         "The maximum multiplicity for the target of the relationship. The default value is infinite " ++
         "(there may be an unlimited number of relationship instances for this relationship).") $
-      T.maybe $ bounded (Just 1) Nothing T.int32,
+      T.optional $ bounded (Just 1) Nothing T.int32,
     "minMultiplicity">:
       -- Note: "must be <= maxMultiplicity"
       doc (
         "The minimum multiplicity for the target of the relationship. The default value is 0 " ++
         "(this relationship is permitted to have no instances). In DTDL v2, minMultiplicity must always be 0.") $
-      T.maybe $ bounded (Just 0) Nothing T.int32,
+      T.optional $ bounded (Just 0) Nothing T.int32,
     "properties">:
       doc "A set of Properties that define relationship-specific state" $
-      T.maybe $ bounded Nothing (Just 300) $ T.set $ dtld "Property",
+      T.optional $ bounded Nothing (Just 300) $ T.set $ dtld "Property",
     "target">:
       doc "An interface ID. The default value (when target is not specified) is that the target may be any interface." $
-      T.maybe $ dtld "Interface",
+      T.optional $ dtld "Interface",
       writableField "relationship"]
 
 schema :: TypeDefinition
@@ -465,7 +465,7 @@ typeField desc = "type">: doc desc $ dtld "Iri"
 unitField :: String -> FieldType
 unitField cat = "unit">:
   doc ("The unit type of the " ++ cat ++ ". A semantic type is required for the unit property to be available.") $
-  T.maybe $ dtld "Unit"
+  T.optional $ dtld "Unit"
 
 unit_ :: TypeDefinition
 unit_ = define "Unit" $ T.wrap T.unit
@@ -475,4 +475,4 @@ writableField cat = "writable">:
   doc (
     "A boolean value that indicates whether the " ++ cat ++ " is writable by an external source, " ++
     "such as an application, or not. The default value is false (read-only).") $
-  T.maybe T.boolean
+  T.optional T.boolean

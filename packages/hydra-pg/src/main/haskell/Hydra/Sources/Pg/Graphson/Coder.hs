@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -199,8 +199,8 @@ toJsonObject :: TypedTermDefinition ([(String, Maybe JM.Value)] -> JM.Value)
 toJsonObject = define "toJsonObject" $
   doc "Create a JSON object from a list of key-value pairs, filtering out Nothing values" $
   "pairs" ~>
-    Json.valueObject $ Maps.fromList $ Maybes.cat $ Lists.map
-      ("p" ~> Maybes.map
+    Json.valueObject $ Maps.fromList $ Optionals.cat $ Lists.map
+      ("p" ~> Optionals.map
         ("v" ~> pair (Pairs.first $ var "p") (var "v"))
         (Pairs.second $ var "p"))
       (var "pairs")
@@ -281,7 +281,7 @@ vertexPropertyValueToJson = define "vertexPropertyValueToJson" $
   doc "Convert a GraphSON VertexPropertyValue to a JSON Value" $
   "vpv" ~>
     toJsonObject @@ list [
-      pair (string "id") (Maybes.map valueToJson $ project G._VertexPropertyValue G._VertexPropertyValue_id @@ var "vpv"),
+      pair (string "id") (Optionals.map valueToJson $ project G._VertexPropertyValue G._VertexPropertyValue_id @@ var "vpv"),
       pair (string "value") (just $ valueToJson @@ (project G._VertexPropertyValue G._VertexPropertyValue_value @@ var "vpv"))]
 
 -- | Convert a GraphSON Vertex to JSON
@@ -291,7 +291,7 @@ vertexToJson = define "vertexToJson" $
   "v" ~>
     toJsonObject @@ list [
       pair (string "id") (just $ valueToJson @@ (project G._Vertex G._Vertex_id @@ var "v")),
-      pair (string "label") (Maybes.map
+      pair (string "label") (Optionals.map
         ("lbl" ~> Json.valueString $ unwrap G._VertexLabel @@ var "lbl")
         (project G._Vertex G._Vertex_label @@ var "v")),
       pair (string "inE") (edgeMapToJson @@ boolean False @@ (project G._Vertex G._Vertex_inEdges @@ var "v")),

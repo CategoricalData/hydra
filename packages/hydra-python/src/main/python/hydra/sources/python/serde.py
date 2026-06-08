@@ -5,13 +5,13 @@ Serializes the Python syntax model into properly formatted Python source code.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Just, Nothing
+from hydra.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.logic as Logic
-import hydra.dsl.meta.lib.maybes as Maybes
+import hydra.dsl.meta.lib.optionals as Optionals
 import hydra.dsl.meta.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 
@@ -63,11 +63,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just(EntityMetadata(
-        Just("Python serializer: converts Python AST to concrete syntax"),
+    Given(EntityMetadata(
+        Given("Python serializer: converts Python AST to concrete syntax"),
         (),
         (),
-        Nothing())),
+        None_())),
     DEPENDENCIES,
     (),
 )
@@ -137,7 +137,7 @@ def _annotated_rhs_to_expr():
     body = _space_sep(list_([
         _cst("="),
         cases(
-            _ty("AnnotatedRhs"), var("arhs"), Nothing(),
+            _ty("AnnotatedRhs"), var("arhs"), None_(),
             [
                 field("star",
                     lam(
@@ -218,7 +218,7 @@ def _args_to_expr():
 
 def _assignment_to_expr():
     body = cases(
-        _ty("Assignment"), var("a"), Nothing(),
+        _ty("Assignment"), var("a"), None_(),
         [
             field("typed", lam("t", _local("typedAssignmentToExpr")(var("t")))),
             field("untyped", lam("u", _local("untypedAssignmentToExpr")(var("u")))),
@@ -257,7 +257,7 @@ def _assignment_expression_to_expr():
 
 def _atom_to_expr():
     body = cases(
-        _ty("Atom"), var("atom"), Nothing(),
+        _ty("Atom"), var("atom"), None_(),
         [
             field("dict", lam("d", _local("dictToExpr")(var("d")))),
             field("dictcomp", lam("_", _cst("{...}"))),
@@ -327,8 +327,8 @@ def _bitwise_op_body(local_name, type_name, lhs_local, rhs_local, op_str):
             field("lhs", _proj(type_name, "lhs", lhs_local)),
             field("rhs", _proj(type_name, "rhs", lhs_local)),
         ],
-        serialization_space_sep(Maybes.cat(list_([
-            Maybes.map(
+        serialization_space_sep(Optionals.cat(list_([
+            Optionals.map(
                 lam("l", _space_sep(list_([
                     _local(local_name)(var("l")),
                     _cst(op_str),
@@ -378,7 +378,7 @@ def _bitwise_xor_to_expr():
 
 def _block_to_expr():
     body = cases(
-        _ty("Block"), var("b"), Nothing(),
+        _ty("Block"), var("b"), None_(),
         [
             field("indented",
                 lam(
@@ -429,10 +429,10 @@ def _case_block_to_expr():
         ],
         _newline_sep(list_([
             _no_sep(list_([
-                serialization_space_sep(Maybes.cat(list_([
+                serialization_space_sep(Optionals.cat(list_([
                     just(_cst("case")),
                     just(_local("patternsToExpr")(var("patterns"))),
-                    Maybes.map(_local("guardToExpr"), var("guard")),
+                    Optionals.map(_local("guardToExpr"), var("guard")),
                 ]))),
                 _cst(":"),
             ])),
@@ -456,7 +456,7 @@ def _class_definition_to_expr():
             field("args", _proj("ClassDefinition", "arguments", "cd")),
             field("body", _proj("ClassDefinition", "body", "cd")),
             field("argPart",
-                Maybes.map(
+                Optionals.map(
                     lam("a", _no_sep(list_([
                         _cst("("),
                         _local("argsToExpr")(var("a")),
@@ -466,9 +466,9 @@ def _class_definition_to_expr():
                 ),
             ),
         ],
-        serialization_newline_sep(Maybes.cat(list_([
-            Maybes.map(_local("decoratorsToExpr"), var("decs")),
-            just(serialization_no_sep(Maybes.cat(list_([
+        serialization_newline_sep(Optionals.cat(list_([
+            Optionals.map(_local("decoratorsToExpr"), var("decs")),
+            just(serialization_no_sep(Optionals.cat(list_([
                 just(_space_sep(list_([
                     _cst("class"),
                     _local("nameToExpr")(var("name")),
@@ -495,11 +495,11 @@ def _class_pattern_to_expr():
             field("pos", _proj("ClassPattern", "positionalPatterns", "cp")),
             field("kw", _proj("ClassPattern", "keywordPatterns", "cp")),
         ],
-        serialization_no_sep(Maybes.cat(list_([
+        serialization_no_sep(Optionals.cat(list_([
             just(_local("nameOrAttributeToExpr")(var("noa"))),
             just(_cst("(")),
-            Maybes.map(_local("positionalPatternsToExpr"), var("pos")),
-            Maybes.map(_local("keywordPatternsToExpr"), var("kw")),
+            Optionals.map(_local("positionalPatternsToExpr"), var("pos")),
+            Optionals.map(_local("keywordPatternsToExpr"), var("kw")),
             just(_cst(")")),
         ]))),
     )
@@ -514,7 +514,7 @@ def _class_pattern_to_expr():
 
 def _closed_pattern_to_expr():
     body = cases(
-        _ty("ClosedPattern"), var("cp"), Nothing(),
+        _ty("ClosedPattern"), var("cp"), None_(),
         [
             field("literal", lam("_", _cst("..."))),
             field("capture", lam("c", _local("capturePatternToExpr")(var("c")))),
@@ -551,7 +551,7 @@ def _compare_op_bitwise_or_pair_to_expr():
 
 def _compare_op_to_string():
     body = cases(
-        _ty("CompareOp"), var("op"), Nothing(),
+        _ty("CompareOp"), var("op"), None_(),
         [
             field("eq", constant(string("=="))),
             field("noteq", constant(string("!="))),
@@ -602,7 +602,7 @@ def _comparison_to_expr():
 
 def _compound_statement_to_expr():
     body = cases(
-        _ty("CompoundStatement"), var("cs"), Nothing(),
+        _ty("CompoundStatement"), var("cs"), None_(),
         [
             field("function", lam("f", _local("functionDefinitionToExpr")(var("f")))),
             field("if", lam("_", _cst("if ..."))),
@@ -706,9 +706,9 @@ def _dotted_as_name_to_expr():
             field("name", _proj("DottedAsName", "name", "dan")),
             field("alias", _proj("DottedAsName", "as", "dan")),
         ],
-        serialization_space_sep(Maybes.cat(list_([
+        serialization_space_sep(Optionals.cat(list_([
             just(_local("dottedNameToExpr")(var("name"))),
-            Maybes.map(
+            Optionals.map(
                 lam("a", _space_sep(list_([
                     _cst("as"),
                     _local("nameToExpr")(var("a")),
@@ -745,7 +745,7 @@ def _dotted_name_to_expr():
 
 def _double_starred_kvpair_to_expr():
     body = cases(
-        _ty("DoubleStarredKvpair"), var("dskv"), Nothing(),
+        _ty("DoubleStarredKvpair"), var("dskv"), None_(),
         [
             field("pair", lam("p", _local("kvpairToExpr")(var("p")))),
             field("starred", lam("e", _no_sep(list_([
@@ -765,7 +765,7 @@ def _double_starred_kvpair_to_expr():
 
 def _expression_to_expr():
     body = cases(
-        _ty("Expression"), var("expr"), Nothing(),
+        _ty("Expression"), var("expr"), None_(),
         [
             field("simple", lam("d", _local("disjunctionToExpr")(var("d")))),
             field("conditional", lam("c", _local("conditionalToExpr")(var("c")))),
@@ -783,7 +783,7 @@ def _expression_to_expr():
 
 def _factor_to_expr():
     body = cases(
-        _ty("Factor"), var("f"), Nothing(),
+        _ty("Factor"), var("f"), None_(),
         [
             field("positive",
                 lam("inner", _no_sep(list_([
@@ -839,10 +839,10 @@ def _function_def_raw_to_expr():
                 ),
             ),
             field("paramPart",
-                Maybes.map(_local("parametersToExpr"), var("params")),
+                Optionals.map(_local("parametersToExpr"), var("params")),
             ),
             field("retPart",
-                Maybes.map(
+                Optionals.map(
                     lam("t", _space_sep(list_([
                         _cst("->"),
                         _local("expressionToExpr")(var("t")),
@@ -853,10 +853,10 @@ def _function_def_raw_to_expr():
         ],
         _newline_sep(list_([
             _no_sep(list_([
-                serialization_space_sep(Maybes.cat(list_([
+                serialization_space_sep(Optionals.cat(list_([
                     var("asyncKw"),
                     just(_cst("def")),
-                    just(serialization_no_sep(Maybes.cat(list_([
+                    just(serialization_no_sep(Optionals.cat(list_([
                         just(_local("nameToExpr")(var("name"))),
                         var("tparamPart"),
                         just(_cst("(")),
@@ -885,8 +885,8 @@ def _function_definition_to_expr():
             field("decs", _proj("FunctionDefinition", "decorators", "fd")),
             field("raw", _proj("FunctionDefinition", "raw", "fd")),
         ],
-        serialization_newline_sep(Maybes.cat(list_([
-            Maybes.map(_local("decoratorsToExpr"), var("decs")),
+        serialization_newline_sep(Optionals.cat(list_([
+            Optionals.map(_local("decoratorsToExpr"), var("decs")),
             just(_local("functionDefRawToExpr")(var("raw"))),
         ]))),
     )
@@ -901,7 +901,7 @@ def _function_definition_to_expr():
 
 def _group_to_expr():
     body = cases(
-        _ty("Group"), var("g"), Nothing(),
+        _ty("Group"), var("g"), None_(),
         [
             field("expression", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
             field("yield", lam("_", _cst("(yield ...)"))),
@@ -937,12 +937,12 @@ def _import_from_to_expr():
             field("name", _proj("ImportFrom", "dottedName", "if_")),
             field("targets", _proj("ImportFrom", "targets", "if_")),
             field("lhs",
-                serialization_no_sep(Maybes.cat(Lists.concat(list_([
+                serialization_no_sep(Optionals.cat(Lists.concat(list_([
                     Lists.map(
                         lam("p", just(_local("relativeImportPrefixToExpr")(var("p")))),
                         var("prefixes"),
                     ),
-                    list_([Maybes.map(_local("dottedNameToExpr"), var("name"))]),
+                    list_([Optionals.map(_local("dottedNameToExpr"), var("name"))]),
                 ])))),
             ),
         ],
@@ -968,7 +968,8 @@ def _import_from_as_name_to_expr():
             field("name", _proj("ImportFromAsName", "name", "ifan")),
             field("alias", _proj("ImportFromAsName", "as", "ifan")),
         ],
-        Maybes.maybe(
+        Optionals.cases(
+            var("alias"),
             _local("nameToExpr")(var("name")),
             lam(
                 "a",
@@ -978,7 +979,6 @@ def _import_from_as_name_to_expr():
                     _local("nameToExpr")(var("a")),
                 ])),
             ),
-            var("alias"),
         ),
     )
     return _def(
@@ -992,7 +992,7 @@ def _import_from_as_name_to_expr():
 
 def _import_from_targets_to_expr():
     body = cases(
-        _ty("ImportFromTargets"), var("t"), Nothing(),
+        _ty("ImportFromTargets"), var("t"), None_(),
         [
             field("simple",
                 lam(
@@ -1038,7 +1038,7 @@ def _import_name_to_expr():
 
 def _import_statement_to_expr():
     body = cases(
-        _ty("ImportStatement"), var("is_"), Nothing(),
+        _ty("ImportStatement"), var("is_"), None_(),
         [
             field("name", lam("n", _local("importNameToExpr")(var("n")))),
             field("from", lam("f", _local("importFromToExpr")(var("f")))),
@@ -1055,7 +1055,7 @@ def _import_statement_to_expr():
 
 def _inversion_to_expr():
     body = cases(
-        _ty("Inversion"), var("i"), Nothing(),
+        _ty("Inversion"), var("i"), None_(),
         [
             field("not",
                 lam("other", _space_sep(list_([
@@ -1153,7 +1153,7 @@ def _kwarg_to_expr():
 
 def _kwarg_or_double_starred_to_expr():
     body = cases(
-        _ty("KwargOrDoubleStarred"), var("kds"), Nothing(),
+        _ty("KwargOrDoubleStarred"), var("kds"), None_(),
         [
             field("kwarg", lam("k", _local("kwargToExpr")(var("k")))),
             field("doubleStarred",
@@ -1175,7 +1175,7 @@ def _kwarg_or_double_starred_to_expr():
 
 def _kwarg_or_starred_to_expr():
     body = cases(
-        _ty("KwargOrStarred"), var("ks"), Nothing(),
+        _ty("KwargOrStarred"), var("ks"), None_(),
         [
             field("kwarg", lam("k", _local("kwargToExpr")(var("k")))),
             field("starred", lam("se", _local("starredExpressionToExpr")(var("se")))),
@@ -1243,7 +1243,7 @@ def _lambda_parameters_to_expr():
 
 def _lambda_star_etc_to_expr():
     body = cases(
-        _ty("LambdaStarEtc"), var("lse"), Nothing(),
+        _ty("LambdaStarEtc"), var("lse"), None_(),
         [
             field("paramNoDefault", lam("p", _local("lambdaParamNoDefaultToExpr")(var("p")))),
             field("star", lam("_", _cst("*..."))),
@@ -1348,7 +1348,7 @@ def _name_or_attribute_to_expr():
 
 def _named_expression_to_expr():
     body = cases(
-        _ty("NamedExpression"), var("ne"), Nothing(),
+        _ty("NamedExpression"), var("ne"), None_(),
         [
             field("simple", lam("e", _local("expressionToExpr")(var("e")))),
             field("assignment", lam("ae", _local("assignmentExpressionToExpr")(var("ae")))),
@@ -1365,7 +1365,7 @@ def _named_expression_to_expr():
 
 def _number_to_expr():
     body = cases(
-        _ty("Number"), var("num"), Nothing(),
+        _ty("Number"), var("num"), None_(),
         [
             field("float",
                 lam("f", serialization_cst(_local("pythonFloatLiteralText")(var("hydra.lib.literals.showFloat64")(var("f"))))),
@@ -1407,9 +1407,9 @@ def _param_to_expr():
             field("name", _proj("Param", "name", "p")),
             field("ann", _proj("Param", "annotation", "p")),
         ],
-        serialization_no_sep(Maybes.cat(list_([
+        serialization_no_sep(Optionals.cat(list_([
             just(_local("nameToExpr")(var("name"))),
-            Maybes.map(_local("annotationToExpr"), var("ann")),
+            Optionals.map(_local("annotationToExpr"), var("ann")),
         ]))),
     )
     return _def(
@@ -1450,7 +1450,7 @@ def _param_no_default_parameters_to_expr():
 
 def _parameters_to_expr():
     body = cases(
-        _ty("Parameters"), var("p"), Nothing(),
+        _ty("Parameters"), var("p"), None_(),
         [
             field("paramNoDefault", lam("pnd", _local("paramNoDefaultParametersToExpr")(var("pnd")))),
             field("slashNoDefault", lam("_", _cst("..."))),
@@ -1468,7 +1468,7 @@ def _parameters_to_expr():
 
 def _pattern_to_expr():
     body = cases(
-        _ty("Pattern"), var("p"), Nothing(),
+        _ty("Pattern"), var("p"), None_(),
         [
             field("or", lam("op", _local("orPatternToExpr")(var("op")))),
             field("as", lam("_", _cst("... as ..."))),
@@ -1496,7 +1496,7 @@ def _pattern_capture_target_to_expr():
 
 def _patterns_to_expr():
     body = cases(
-        _ty("Patterns"), var("ps"), Nothing(),
+        _ty("Patterns"), var("ps"), None_(),
         [
             field("pattern", lam("p", _local("patternToExpr")(var("p")))),
             field("sequence", lam("_", _cst("..."))),
@@ -1513,7 +1513,7 @@ def _patterns_to_expr():
 
 def _pos_arg_to_expr():
     body = cases(
-        _ty("PosArg"), var("pa"), Nothing(),
+        _ty("PosArg"), var("pa"), None_(),
         [
             field("starred", lam("se", _local("starredExpressionToExpr")(var("se")))),
             field("assignment", lam("ae", _local("assignmentExpressionToExpr")(var("ae")))),
@@ -1546,9 +1546,9 @@ def _power_to_expr():
             field("lhs", _proj("Power", "lhs", "p")),
             field("rhs", _proj("Power", "rhs", "p")),
         ],
-        serialization_space_sep(Maybes.cat(list_([
+        serialization_space_sep(Optionals.cat(list_([
             just(_local("awaitPrimaryToExpr")(var("lhs"))),
-            Maybes.map(
+            Optionals.map(
                 lam("r", _space_sep(list_([
                     _cst("**"),
                     _local("factorToExpr")(var("r")),
@@ -1568,7 +1568,7 @@ def _power_to_expr():
 
 def _primary_to_expr():
     body = cases(
-        _ty("Primary"), var("p"), Nothing(),
+        _ty("Primary"), var("p"), None_(),
         [
             field("simple", lam("a", _local("atomToExpr")(var("a")))),
             field("compound", lam("pwr", _local("primaryWithRhsToExpr")(var("pwr")))),
@@ -1585,7 +1585,7 @@ def _primary_to_expr():
 
 def _primary_rhs_to_expr():
     body = cases(
-        _ty("PrimaryRhs"), var("rhs"), Nothing(),
+        _ty("PrimaryRhs"), var("rhs"), None_(),
         [
             field("call",
                 lam("args", _no_sep(list_([
@@ -1645,9 +1645,9 @@ def _raise_expression_to_expr():
             field("expr", _proj("RaiseExpression", "expression", "re")),
             field("from_", _proj("RaiseExpression", "from", "re")),
         ],
-        serialization_space_sep(Maybes.cat(list_([
+        serialization_space_sep(Optionals.cat(list_([
             just(_local("expressionToExpr")(var("expr"))),
-            Maybes.map(
+            Optionals.map(
                 lam("f", _space_sep(list_([
                     _cst("from"),
                     _local("expressionToExpr")(var("f")),
@@ -1666,9 +1666,9 @@ def _raise_expression_to_expr():
 
 
 def _raise_statement_to_expr():
-    body = serialization_space_sep(Maybes.cat(list_([
+    body = serialization_space_sep(Optionals.cat(list_([
         just(_cst("raise")),
-        Maybes.map(_local("raiseExpressionToExpr"), _unwrap("RaiseStatement", "rs")),
+        Optionals.map(_local("raiseExpressionToExpr"), _unwrap("RaiseStatement", "rs")),
     ])))
     return _def(
         "raiseStatementToExpr",
@@ -1681,7 +1681,7 @@ def _raise_statement_to_expr():
 
 def _relative_import_prefix_to_expr():
     body = cases(
-        _ty("RelativeImportPrefix"), var("p"), Nothing(),
+        _ty("RelativeImportPrefix"), var("p"), None_(),
         [
             field("dot", constant(_cst("."))),
             field("ellipsis", constant(_cst("..."))),
@@ -1734,7 +1734,7 @@ def _shift_expression_to_expr():
 
 def _simple_statement_to_expr():
     body = cases(
-        _ty("SimpleStatement"), var("ss"), Nothing(),
+        _ty("SimpleStatement"), var("ss"), None_(),
         [
             field("assignment", lam("a", _local("assignmentToExpr")(var("a")))),
             field("starExpressions",
@@ -1775,7 +1775,7 @@ def _simple_type_parameter_to_expr():
 
 def _single_target_to_expr():
     body = cases(
-        _ty("SingleTarget"), var("st"), Nothing(),
+        _ty("SingleTarget"), var("st"), None_(),
         [
             field("name", lam("n", _local("nameToExpr")(var("n")))),
             field("parens", lam("_", _cst("(...)"))),
@@ -1793,7 +1793,7 @@ def _single_target_to_expr():
 
 def _slice_to_expr():
     body = cases(
-        _ty("Slice"), var("s"), Nothing(),
+        _ty("Slice"), var("s"), None_(),
         [
             field("named", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
             field("slice_", lam("_", _cst(":"))),
@@ -1810,7 +1810,7 @@ def _slice_to_expr():
 
 def _slice_or_starred_expression_to_expr():
     body = cases(
-        _ty("SliceOrStarredExpression"), var("s"), Nothing(),
+        _ty("SliceOrStarredExpression"), var("s"), None_(),
         [
             field("slice", lam("sl", _local("sliceToExpr")(var("sl")))),
             field("starred", lam("se", _local("starredExpressionToExpr")(var("se")))),
@@ -1847,7 +1847,7 @@ def _slices_to_expr():
 
 def _star_atom_to_expr():
     body = cases(
-        _ty("StarAtom"), var("sa"), Nothing(),
+        _ty("StarAtom"), var("sa"), None_(),
         [
             field("name", lam("n", _local("nameToExpr")(var("n")))),
             field("targetWithStarAtom", lam("_", _cst("(...)"))),
@@ -1866,7 +1866,7 @@ def _star_atom_to_expr():
 
 def _star_expression_to_expr():
     body = cases(
-        _ty("StarExpression"), var("se"), Nothing(),
+        _ty("StarExpression"), var("se"), None_(),
         [
             field("star",
                 lam("bor", _no_sep(list_([
@@ -1888,7 +1888,7 @@ def _star_expression_to_expr():
 
 def _star_named_expression_to_expr():
     body = cases(
-        _ty("StarNamedExpression"), var("sne"), Nothing(),
+        _ty("StarNamedExpression"), var("sne"), None_(),
         [
             field("star",
                 lam("bor", _no_sep(list_([
@@ -1910,7 +1910,7 @@ def _star_named_expression_to_expr():
 
 def _star_target_to_expr():
     body = cases(
-        _ty("StarTarget"), var("st"), Nothing(),
+        _ty("StarTarget"), var("st"), None_(),
         [
             field("unstarred", lam("t", _local("targetWithStarAtomToExpr")(var("t")))),
             field("starred",
@@ -1946,7 +1946,7 @@ def _starred_expression_to_expr():
 
 def _statement_to_expr():
     body = cases(
-        _ty("Statement"), var("stmt"), Nothing(),
+        _ty("Statement"), var("stmt"), None_(),
         [
             field("annotated", lam("a", _local("annotatedStatementToExpr")(var("a")))),
             field("simple",
@@ -1966,7 +1966,7 @@ def _statement_to_expr():
 
 def _string_prefix_to_text():
     body = cases(
-        _ty("StringPrefix"), var("p"), Nothing(),
+        _ty("StringPrefix"), var("p"), None_(),
         [
             field("raw", constant(string("r"))),
             field("bytes", constant(string("b"))),
@@ -1987,11 +1987,11 @@ def _string_to_expr():
     body = lets(
         [
             field("content", _proj("String", "value", "s")),
-            field("prefix", Maybes.maybe(string(""), _local("stringPrefixToText"), _proj("String", "prefix", "s"))),
+            field("prefix", Optionals.cases(_proj("String", "prefix", "s"), string(""), _local("stringPrefixToText"))),
             field("style", _proj("String", "quoteStyle", "s")),
         ],
         cases(
-            _ty("QuoteStyle"), var("style"), Nothing(),
+            _ty("QuoteStyle"), var("style"), None_(),
             [
                 field("single",
                     constant(serialization_cst(Strings.cat2(var("prefix"), _local("escapePythonString")(false(), var("content"))))),
@@ -2027,7 +2027,7 @@ def _string_to_expr():
 
 def _subject_expression_to_expr():
     body = cases(
-        _ty("SubjectExpression"), var("se"), Nothing(),
+        _ty("SubjectExpression"), var("se"), None_(),
         [
             field("simple", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
             field("tuple", lam("_", _cst("*..."))),
@@ -2055,7 +2055,7 @@ def _sum_to_expr():
 
 def _t_primary_to_expr():
     body = cases(
-        _ty("TPrimary"), var("tp"), Nothing(),
+        _ty("TPrimary"), var("tp"), None_(),
         [
             field("atom", lam("a", _local("atomToExpr")(var("a")))),
             field("primaryAndName", lam("pn", _local("tPrimaryAndNameToExpr")(var("pn")))),
@@ -2096,7 +2096,7 @@ def _t_primary_and_name_to_expr():
 
 def _target_with_star_atom_to_expr():
     body = cases(
-        _ty("TargetWithStarAtom"), var("t"), Nothing(),
+        _ty("TargetWithStarAtom"), var("t"), None_(),
         [
             field("atom", lam("a", _local("starAtomToExpr")(var("a")))),
             field("project", lam("pn", _local("tPrimaryAndNameToExpr")(var("pn")))),
@@ -2128,9 +2128,9 @@ def _tuple_to_expr():
         [
             field("es", _unwrap("Tuple", "t")),
         ],
-        Maybes.from_maybe(
+        Optionals.from_optional(
             serialization_paren_list_adaptive(Lists.map(_local("starNamedExpressionToExpr"), var("es"))),
-            Maybes.map(
+            Optionals.map(
                 lam(
                     "firstEs",
                     Logic.if_else(
@@ -2162,7 +2162,7 @@ def _type_alias_to_expr():
             field("tparams", _proj("TypeAlias", "typeParams", "ta")),
             field("expr", _proj("TypeAlias", "expression", "ta")),
             field("alias",
-                serialization_no_sep(Maybes.cat(list_([
+                serialization_no_sep(Optionals.cat(list_([
                     just(_local("nameToExpr")(var("name"))),
                     Logic.if_else(
                         Lists.null(var("tparams")),
@@ -2190,7 +2190,7 @@ def _type_alias_to_expr():
 
 def _type_parameter_to_expr():
     body = cases(
-        _ty("TypeParameter"), var("tp"), Nothing(),
+        _ty("TypeParameter"), var("tp"), None_(),
         [
             field("simple", lam("s", _local("simpleTypeParameterToExpr")(var("s")))),
             field("star", lam("_", _cst("*..."))),
@@ -2213,13 +2213,13 @@ def _typed_assignment_to_expr():
             field("typ", _proj("TypedAssignment", "type", "ta")),
             field("rhs", _proj("TypedAssignment", "rhs", "ta")),
         ],
-        serialization_space_sep(Maybes.cat(list_([
+        serialization_space_sep(Optionals.cat(list_([
             just(_no_sep(list_([
                 _local("singleTargetToExpr")(var("lhs")),
                 _cst(":"),
             ]))),
             just(_local("expressionToExpr")(var("typ"))),
-            Maybes.map(_local("annotatedRhsToExpr"), var("rhs")),
+            Optionals.map(_local("annotatedRhsToExpr"), var("rhs")),
         ]))),
     )
     return _def(
@@ -2269,7 +2269,7 @@ def _while_statement_to_expr():
             field("body", _proj("WhileStatement", "body", "ws")),
             field("else_", _proj("WhileStatement", "else", "ws")),
         ],
-        serialization_newline_sep(Maybes.cat(list_([
+        serialization_newline_sep(Optionals.cat(list_([
             just(_newline_sep(list_([
                 _space_sep(list_([
                     _cst("while"),
@@ -2280,7 +2280,7 @@ def _while_statement_to_expr():
                 ])),
                 _local("blockToExpr")(var("body")),
             ]))),
-            Maybes.map(
+            Optionals.map(
                 lam("eb", _newline_sep(list_([
                     _cst("else:"),
                     _local("blockToExpr")(var("eb")),
