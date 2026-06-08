@@ -488,8 +488,10 @@ decodeSchema = define "decodeSchema" $
         Eithers.map
           (lambda "decoded" $ inject Avro._Schema Avro._Schema_union (wrap Avro._Union (var "decoded")))
           (Eithers.mapList (decodeSchema @@ var "cx") (var "schemas")),
-      -- Object: named type or container
-      JM._Value_object>>: lambda "m" $
+      -- Object: named type or container. The object payload is an ordered pair-list;
+      -- decoding looks fields up by name, so convert to a map up front.
+      JM._Value_object>>: lambda "mList" $ lets [
+        "m">: Maps.fromList (var "mList")] $
         Eithers.bind (requireStringE @@ var "cx" @@ avro_type @@ var "m")
           (lambda "typeName" $ decodeObjectSchema @@ var "cx" @@ var "m" @@ var "typeName")]
 
@@ -511,9 +513,9 @@ encodeArray = define "encodeArray" $
   doc "Encode an Avro array schema to a JSON object" $
   lambda "arr" $
     inject JM._Value JM._Value_object
-      (Maps.fromList (list [
+      (list [
         pair (string "type") (inject JM._Value JM._Value_string (string "array")),
-        pair (string "items") (encodeSchema @@ (project Avro._Array Avro._Array_items @@ var "arr"))]))
+        pair (string "items") (encodeSchema @@ (project Avro._Array Avro._Array_items @@ var "arr"))])
 
 encodeEnumE :: TypedTermDefinition (Avro.Enum -> [(String, JM.Value)])
 encodeEnumE = define "encodeEnum" $
@@ -529,14 +531,14 @@ encodeFieldE = define "encodeField" $
   doc "Encode an Avro field to a JSON object" $
   lambda "f" $
     inject JM._Value JM._Value_object
-      (Maps.fromList (Lists.concat (list [
+      (Lists.concat (list [
         list [pair (string "name") (inject JM._Value JM._Value_string (project Avro._Field Avro._Field_name @@ var "f"))],
         list [pair (string "type") (encodeSchema @@ (project Avro._Field Avro._Field_type @@ var "f"))],
         Optionals.cases (project Avro._Field Avro._Field_doc @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]),
         Optionals.cases (project Avro._Field Avro._Field_default @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (var "d")]),
         Optionals.cases (project Avro._Field Avro._Field_order @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "o" $ list [encodeOrderE @@ var "o"]),
         Optionals.cases (project Avro._Field Avro._Field_aliases @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]),
-        encodeAnnotations @@ (project Avro._Field Avro._Field_annotations @@ var "f")])))
+        encodeAnnotations @@ (project Avro._Field Avro._Field_annotations @@ var "f")]))
 
 encodeFixedE :: TypedTermDefinition (Avro.Fixed -> [(String, JM.Value)])
 encodeFixedE = define "encodeFixed" $
@@ -551,22 +553,22 @@ encodeMap = define "encodeMap" $
   doc "Encode an Avro map schema to a JSON object" $
   lambda "mp" $
     inject JM._Value JM._Value_object
-      (Maps.fromList (list [
+      (list [
         pair (string "type") (inject JM._Value JM._Value_string (string "map")),
-        pair (string "values") (encodeSchema @@ (project Avro._Map Avro._Map_values @@ var "mp"))]))
+        pair (string "values") (encodeSchema @@ (project Avro._Map Avro._Map_values @@ var "mp"))])
 
 encodeNamed :: TypedTermDefinition (Avro.Named -> JM.Value)
 encodeNamed = define "encodeNamed" $
   doc "Encode an Avro named type to a JSON object" $
   lambda "n" $
     inject JM._Value JM._Value_object
-      (Maps.fromList (Lists.concat (list [
+      (Lists.concat (list [
         list [pair (string "name") (inject JM._Value JM._Value_string (project Avro._Named Avro._Named_name @@ var "n"))],
         Optionals.cases (project Avro._Named Avro._Named_namespace @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "ns" $ list [pair (string "namespace") (inject JM._Value JM._Value_string (var "ns"))]),
         Optionals.cases (project Avro._Named Avro._Named_doc @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]),
         Optionals.cases (project Avro._Named Avro._Named_aliases @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]),
         encodeNamedType @@ (project Avro._Named Avro._Named_type @@ var "n"),
-        encodeAnnotations @@ (project Avro._Named Avro._Named_annotations @@ var "n")])))
+        encodeAnnotations @@ (project Avro._Named Avro._Named_annotations @@ var "n")]))
 
 encodeNamedType :: TypedTermDefinition (Avro.NamedType -> [(String, JM.Value)])
 encodeNamedType = define "encodeNamedType" $
@@ -651,10 +653,10 @@ expectNumberE = define "expectNumberE" $
 
 expectObjectE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result (M.Map String JM.Value))
 expectObjectE = define "expectObjectE" $
-  doc "Extract a JSON object or return an error" $
+  doc "Extract a JSON object as a name-keyed map or return an error (field order is dropped)" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
-      JM._Value_object>>: lambda "v" $ Phantoms.right (var "v")]
+      JM._Value_object>>: lambda "v" $ Phantoms.right (Maps.fromList (var "v"))]
 
 expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $

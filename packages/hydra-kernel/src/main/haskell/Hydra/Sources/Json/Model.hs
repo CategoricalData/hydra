@@ -44,8 +44,12 @@ value = define "Value" $
       doc "A numeric value" $
       T.decimal,
     "object">:
-      doc "A JSON object as a set of key/value pairs" $
-      T.map T.string value,
+      doc ("A JSON object as an ordered list of key/value pairs. The ordering preserves the "
+        ++ "declaration order of the record from which the object was encoded, rather than "
+        ++ "alphabetizing keys. As a consequence, equality of Value objects is order-sensitive: "
+        ++ "two objects with the same pairs in a different order are equal as JSON, but not as "
+        ++ "Hydra Values.") $
+      T.list (T.pair T.string value),
     "string">:
       doc "A string value" $
       T.string]

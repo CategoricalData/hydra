@@ -200,9 +200,9 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   cases JM._Value (var "v") Nothing [
                     JM._Value_object>>: lambda "m" $
                       Eithers.map (lambda "pairs" $ Core.termMap (Maps.fromList (var "pairs")))
-                        (Eithers.mapList (lambda "e" $ var "pairToHydra" @@ var "cx1" @@ var "e") (Maps.toList (var "m")))])
+                        (Eithers.mapList (lambda "e" $ var "pairToHydra" @@ var "cx1" @@ var "e") (var "m"))])
                 (lambda "cx1" $ lambda "m" $
-                  Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (var "mp'"))
+                  Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (Maps.toList (var "mp'")))
                     (ExtractCore.map @@ (lambda "t" $ ExtractCore.string @@ Graph.emptyGraph @@ var "t")
                       @@ (lambda "t" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
                       @@ Graph.emptyGraph @@ var "m"))))
@@ -296,11 +296,11 @@ avroHydraAdapter = define "avroHydraAdapter" $
                             cases JM._Value (var "jv") Nothing [
                               JM._Value_object>>: lambda "m" $
                                 Eithers.map (lambda "fields" $ Core.termRecord (Core.record (var "hydraName") (var "fields")))
-                                  (Eithers.mapList (lambda "e" $ var "encodePair" @@ var "cx1" @@ var "e") (Maps.toList (var "m")))])
+                                  (Eithers.mapList (lambda "e" $ var "encodePair" @@ var "cx1" @@ var "e") (var "m"))])
                           (lambda "cx1" $ lambda "t" $
                             cases _Term (var "t") Nothing [
                               _Term_record>>: lambda "rec" $
-                                Eithers.map (lambda "kvs" $ inject JM._Value JM._Value_object (Maps.fromList (var "kvs")))
+                                Eithers.map (lambda "kvs" $ inject JM._Value JM._Value_object (var "kvs"))
                                   (Eithers.mapList (lambda "fld" $ var "decodeField" @@ var "cx1" @@ var "fld")
                                     (project _Record _Record_fields @@ var "rec"))])))
                       (var "env2"))))])
@@ -494,7 +494,7 @@ encodeAnnotationValue = define "encodeAnnotationValue" $
             "k">: Pairs.first (var "entry"),
             "v'">: Pairs.second (var "entry")] $
             pair (MetaTerms.stringLift (var "k")) (encodeAnnotationValue @@ var "v'"))
-          (Maps.toList (var "m")))),
+          (var "m"))),
       JM._Value_string>>: lambda "s" $
         MetaTerms.stringLift (var "s")]
 
@@ -516,7 +516,7 @@ expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
-      JM._Value_object>>: lambda "v" $ right (var "v")]
+      JM._Value_object>>: lambda "v" $ right (Maps.fromList (var "v"))]
 
 expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $

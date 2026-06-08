@@ -233,7 +233,7 @@ encodeTypeInner = define "encodeTypeInner" $
                                 Eithers.bind (ExtractCore.string @@ Graph.emptyGraph @@ var "k") (lambda "kStr" $
                                 Eithers.map (lambda "vJson" $ pair (var "kStr") (var "vJson"))
                                   (Coders.coderEncode (Coders.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v"))] $
-                              Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
+                              Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
                                 (Eithers.mapList (var "encodeEntry") (Maps.toList (var "entries")))])
                         (lambda "cx1" $ lambda "j" $
                           cases JM._Value (var "j") Nothing [
@@ -244,7 +244,7 @@ encodeTypeInner = define "encodeTypeInner" $
                                 Eithers.map (lambda "vTerm" $ pair (MetaTerms.stringLift (var "k")) (var "vTerm"))
                                   (Coders.coderDecode (Coders.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v")] $
                               Eithers.map (lambda "pairs" $ Core.termMap (Maps.fromList (var "pairs")))
-                                (Eithers.mapList (var "decodeEntry") (Maps.toList (var "m")))])))
+                                (Eithers.mapList (var "decodeEntry") (var "m"))])))
                     (var "env1")))]],
       _Type_record>>: lambda "fieldTypes" $
         namedTypeAdapter @@ var "cx" @@ var "typ" @@ var "mName" @@ var "annotations" @@ var "fieldTypes" @@ var "env"
@@ -610,15 +610,16 @@ recordTermCoder = define "recordTermCoder" $
             "fTerm">: Optionals.fromOptional Core.termUnit (Maps.lookup (var "fname") (var "fieldMap"))] $
             Eithers.map (lambda "jv" $ pair (localName @@ var "fname") (var "jv"))
               (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "fTerm")] $
-          Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
+          Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
             (Eithers.mapList (var "encodeField") (var "fieldAdapters"))],
     "decode">: lambda "cx1" $ lambda "json" $
       cases JM._Value (var "json") (Just (err @@ var "cx" @@ string "expected JSON object")) [
         JM._Value_object>>: lambda "m" $ lets [
+          "mm">: Maps.fromList (var "m"),
           "decodeField">: lambda "nameAd" $ lets [
             "fname">: Pairs.first (var "nameAd"),
             "ad">: Pairs.second (var "nameAd"),
-            "jv">: Optionals.fromOptional (injectUnit JM._Value JM._Value_null) (Maps.lookup (localName @@ var "fname") (var "m"))] $
+            "jv">: Optionals.fromOptional (injectUnit JM._Value JM._Value_null) (Maps.lookup (localName @@ var "fname") (var "mm"))] $
             Eithers.map (lambda "t" $ Core.field (var "fname") (var "t"))
               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv")] $
           Eithers.map (lambda "fields" $ Core.termRecord (Core.record (var "typeName") (var "fields")))
@@ -640,7 +641,7 @@ termToJsonValue = define "termToJsonValue" $
       _Term_list>>: lambda "ts" $
         inject JM._Value JM._Value_array (Lists.map termToJsonValue (var "ts")),
       _Term_map>>: lambda "m" $
-        inject JM._Value JM._Value_object (Maps.fromList (Lists.map
+        inject JM._Value JM._Value_object ((Lists.map
           (lambda "entry" $ lets [
             "k">: Pairs.first (var "entry"),
             "v">: Pairs.second (var "entry")] $
@@ -710,18 +711,19 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                     (Eithers.map (lambda "jv" $ pair (localName @@ var "fname") (var "jv"))
                       (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "activeValue"))
                     (right (pair (localName @@ var "fname") (injectUnit JM._Value JM._Value_null)))] $
-                Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
+                Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
                   (Eithers.mapList (var "encodePair") (var "fieldAdapters"))])
           (lambda "cx1" $ lambda "j" $
             cases JM._Value (var "j") (Just (err @@ var "cx1" @@ string "expected JSON object for union-as-record")) [
               JM._Value_object>>: lambda "m" $ lets [
+                "mm">: Maps.fromList (var "m"),
                 "findActive">: lambda "remaining" $
                   Optionals.cases (Lists.uncons (var "remaining")) (err @@ var "cx1" @@ string "no non-null field in union record") (lambda "p" $ lets [
                       "head_">: Pairs.first (var "p"),
                       "rest_">: Pairs.second (var "p"),
                       "fname">: Pairs.first (var "head_"),
                       "ad">: Pairs.second (var "head_"),
-                      "mjv">: Maps.lookup (localName @@ var "fname") (var "m")] $
+                      "mjv">: Maps.lookup (localName @@ var "fname") (var "mm")] $
                       Optionals.cases (var "mjv") (var "findActive" @@ var "rest_") (lambda "jv" $
                           cases JM._Value (var "jv") (Just (
                             Eithers.map (lambda "t" $ Core.termInject (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))

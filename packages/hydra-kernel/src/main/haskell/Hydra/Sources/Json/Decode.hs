@@ -263,10 +263,10 @@ expectNumber = define "expectNumber" $
 -- | Extract an object from a JSON value
 expectObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
-  doc "Extract an object from a JSON value" $
+  doc "Extract an object from a JSON value as a name-keyed map. Field order is not preserved here; decoding looks fields up by name." $
   "value" ~> cases _Value (var "value")
     (Just $ left $ string "expected object") [
-    _Value_object>>: "obj" ~> right $ var "obj"]
+    _Value_object>>: "obj" ~> right $ Maps.fromList $ var "obj"]
 
 -- | Extract a number from a JSON value
 -- | Extract a string from a JSON value

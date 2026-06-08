@@ -127,10 +127,10 @@ expectNumber = define "expectNumber" $
 
 expectObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
-  doc "Extract an object from a JSON value, failing if the value is not an object" $
+  doc "Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name." $
   lambda "value" $ cases _Value (var "value")
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON object")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
-    _Value_object>>: lambda "m" $ right $ var "m"]
+    _Value_object>>: lambda "m" $ right $ Maps.fromList $ var "m"]
 
 expectString :: TypedTermDefinition (Value -> Either String String)
 expectString = define "expectString" $

@@ -105,38 +105,38 @@ nestedGroup = subgroup "nested structures" [
         Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 3.0, Json.valueNumber $ Phantoms.decimal 4.0]]) "[[1, 2], [3, 4]]",
 
     -- Object with array
-    writerCase "object with array" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "items", Json.valueArray $ Phantoms.list [
+    writerCase "object with array" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
             Json.valueNumber $ Phantoms.decimal 1.0,
             Json.valueNumber $ Phantoms.decimal 2.0])]) "{\"items\": [1, 2]}",
 
     -- Array of objects
     writerCase "array of objects" (Json.valueArray $ Phantoms.list [
-        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 1.0),
-        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 2.0)]) "[{\"id\": 1}, {\"id\": 2}]",
+        Json.valueObject $ Phantoms.list [Phantoms.pair (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 1.0)],
+        Json.valueObject $ Phantoms.list [Phantoms.pair (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 2.0)]]) "[{\"id\": 1}, {\"id\": 2}]",
 
     -- Nested object
-    writerCase "nested object" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "user", Json.valueObject $ Phantoms.map $ M.fromList [
-            (Phantoms.string "name", Json.valueString $ Phantoms.string "Bob")])]) "{\"user\": {\"name\": \"Bob\"}}"]
+    writerCase "nested object" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "user") (Json.valueObject $ Phantoms.list [
+            Phantoms.pair (Phantoms.string "name") (Json.valueString $ Phantoms.string "Bob")])]) "{\"user\": {\"name\": \"Bob\"}}"]
 
 objectsGroup :: TypedTerm TestGroup
 objectsGroup = subgroup "objects" [
     -- Empty and single key
-    writerCase "empty object" (Json.valueObject $ Phantoms.map M.empty) "{}",
-    writerCase "single key-value" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "name", Json.valueString $ Phantoms.string "Alice")]) "{\"name\": \"Alice\"}",
+    writerCase "empty object" (Json.valueObject $ Phantoms.list ([] :: [TypedTerm (String, Value)])) "{}",
+    writerCase "single key-value" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "name") (Json.valueString $ Phantoms.string "Alice")]) "{\"name\": \"Alice\"}",
 
     -- Multiple keys
-    writerCase "multiple keys" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "a", Json.valueNumber $ Phantoms.decimal 1.0),
-        (Phantoms.string "b", Json.valueNumber $ Phantoms.decimal 2.0)]) "{\"a\": 1, \"b\": 2}",
+    writerCase "multiple keys" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "a") (Json.valueNumber $ Phantoms.decimal 1.0),
+        Phantoms.pair (Phantoms.string "b") (Json.valueNumber $ Phantoms.decimal 2.0)]) "{\"a\": 1, \"b\": 2}",
 
-    -- Mixed value types
-    writerCase "mixed value types" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "count", Json.valueNumber $ Phantoms.decimal 42.0),
-        (Phantoms.string "name", Json.valueString $ Phantoms.string "test"),
-        (Phantoms.string "active", Json.valueBoolean $ Phantoms.boolean True)]) "{\"active\": true, \"count\": 42, \"name\": \"test\"}"]
+    -- Mixed value types (the serializer now preserves the field order, rather than alphabetizing)
+    writerCase "mixed value types" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "count") (Json.valueNumber $ Phantoms.decimal 42.0),
+        Phantoms.pair (Phantoms.string "name") (Json.valueString $ Phantoms.string "test"),
+        Phantoms.pair (Phantoms.string "active") (Json.valueBoolean $ Phantoms.boolean True)]) "{\"count\": 42, \"name\": \"test\", \"active\": true}"]
 
 primitivesGroup :: TypedTerm TestGroup
 primitivesGroup = subgroup "primitives" [

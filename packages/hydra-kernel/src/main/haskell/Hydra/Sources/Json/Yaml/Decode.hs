@@ -141,7 +141,7 @@ yamlToJson = define "yamlToJson" $
             Eithers.map ("v" ~> pair (var "key") (var "v")) (var "valResult"))
           (var "keyResult")) $
       "entries" <~ (Eithers.mapList (var "convertEntry") (Maps.toList $ var "m")) $
-      Eithers.map ("es" ~> Json.valueObject $ Maps.fromList $ var "es") (var "entries"),
+      Eithers.map ("es" ~> Json.valueObject $ var "es") (var "entries"),
 
     YM._Node_scalar>>: "s" ~>
       cases YM._Scalar (var "s")

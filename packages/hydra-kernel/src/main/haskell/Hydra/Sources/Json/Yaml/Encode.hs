@@ -129,7 +129,7 @@ jsonToYaml = define "jsonToYaml" $
           ("kv" ~> pair
             (Yaml.nodeScalar $ Yaml.scalarStr $ Pairs.first $ var "kv")
             (jsonToYaml @@ (Pairs.second $ var "kv")))
-          (Maps.toList $ var "obj"),
+          (var "obj"),
 
     _Value_string>>: "s" ~>
       Yaml.nodeScalar $ Yaml.scalarStr $ var "s"]
