@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -57,11 +57,11 @@ public class ReadInt64 extends PrimitiveFunction {
      * @param str the string to parse
      * @return an Opt containing the parsed Long, or empty if parsing fails
      */
-    public static Maybe<Long> apply(String str) {
+    public static Optional<Long> apply(String str) {
         try {
-            return Maybe.just(Long.parseLong(str));
+            return Optional.given(Long.parseLong(str));
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

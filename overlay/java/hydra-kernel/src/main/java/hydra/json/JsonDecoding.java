@@ -7,7 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -128,7 +128,7 @@ public abstract class JsonDecoding {
      */
     public static <A> List<A> decodeListField(String name, Function<Value, A> mapping, Value json) {
         // Note: this allows the field to be omitted, and also allows a null value, both resulting in an empty list
-        Maybe<List<A>> opt = decodeOptionalField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
+        Optional<List<A>> opt = decodeOptionalField(name, v -> decodeList(mapping, v), json, Collections.emptyList());
         return opt.orElse(Collections.emptyList());
     }
 
@@ -192,7 +192,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional boolean
      */
-    public static Maybe<Boolean> decodeOptionalBooleanField(String name, Value json) {
+    public static Optional<Boolean> decodeOptionalBooleanField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeBoolean, json, null);
     }
 
@@ -203,7 +203,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional boolean
      */
-    public static Maybe<Boolean> decodeOptionalBooleanField(Name name, Value json) {
+    public static Optional<Boolean> decodeOptionalBooleanField(Name name, Value json) {
         return decodeOptionalField(name.value, JsonDecoding::decodeBoolean, json, null);
     }
 
@@ -214,7 +214,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional double
      */
-    public static Maybe<Double> decodeOptionalDoubleField(String name, Value json) {
+    public static Optional<Double> decodeOptionalDoubleField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeDouble, json, null);
     }
 
@@ -225,7 +225,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional double
      */
-    public static Maybe<Double> decodeOptionalDoubleField(Name name, Value json) {
+    public static Optional<Double> decodeOptionalDoubleField(Name name, Value json) {
         return decodeOptionalField(name.value, JsonDecoding::decodeDouble, json, null);
     }
 
@@ -239,24 +239,24 @@ public abstract class JsonDecoding {
      * @param defaultValue the default value if the field is missing or null
      * @return the decoded optional value
      */
-    public static <A> Maybe<A> decodeOptionalField(String name,
+    public static <A> Optional<A> decodeOptionalField(String name,
                                                    Function<Value, A> mapping,
                                                    Value json,
                                                    A defaultValue) {
         Map<String, Value> map = decodeObject(json);
         Value fieldValue = map.get(name);
         if (fieldValue == null) {
-            return defaultValue == null ? Maybe.nothing() : Maybe.just(defaultValue);
+            return defaultValue == null ? Optional.none() : Optional.given(defaultValue);
         } else {
             return fieldValue.accept(new Value.PartialVisitor<>() {
                 @Override
-                public Maybe<A> otherwise(Value instance) {
-                    return Maybe.just(mapping.apply(fieldValue));
+                public Optional<A> otherwise(Value instance) {
+                    return Optional.given(mapping.apply(fieldValue));
                 }
 
                 @Override
-                public Maybe<A> visit(Value.Null instance) {
-                    return defaultValue == null ? Maybe.nothing() : Maybe.just(defaultValue);
+                public Optional<A> visit(Value.Null instance) {
+                    return defaultValue == null ? Optional.none() : Optional.given(defaultValue);
                 }
             });
         }
@@ -272,7 +272,7 @@ public abstract class JsonDecoding {
      * @param defaultValue the default value if the field is missing or null
      * @return the decoded optional value
      */
-    public static <A> Maybe<A> decodeOptionalField(Name name,
+    public static <A> Optional<A> decodeOptionalField(Name name,
                                                    Function<Value, A> mapping,
                                                    Value json,
                                                    A defaultValue) {
@@ -288,7 +288,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional value
      */
-    public static <A> Maybe<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json) {
+    public static <A> Optional<A> decodeOptionalField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, mapping, json, null);
     }
 
@@ -301,7 +301,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional value
      */
-    public static <A> Maybe<A> decodeOptionalField(Name name, Function<Value, A> mapping, Value json) {
+    public static <A> Optional<A> decodeOptionalField(Name name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name.value, mapping, json, null);
     }
 
@@ -312,7 +312,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional integer
      */
-    public static Maybe<Integer> decodeOptionalIntegerField(String name, Value json) {
+    public static Optional<Integer> decodeOptionalIntegerField(String name, Value json) {
         return decodeOptionalField(name, JsonDecoding::decodeInteger, json, null);
     }
 
@@ -323,7 +323,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional integer
      */
-    public static Maybe<Integer> decodeOptionalIntegerField(Name name, Value json) {
+    public static Optional<Integer> decodeOptionalIntegerField(Name name, Value json) {
         return decodeOptionalField(name.value, JsonDecoding::decodeInteger, json, null);
     }
 
@@ -336,7 +336,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional set
      */
-    public static <A> Maybe<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
+    public static <A> Optional<Set<A>> decodeOptionalSetField(String name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name, v -> decodeSet(mapping, v), json);
     }
 
@@ -349,7 +349,7 @@ public abstract class JsonDecoding {
      * @param json the JSON value to decode
      * @return the decoded optional set
      */
-    public static <A> Maybe<Set<A>> decodeOptionalSetField(Name name, Function<Value, A> mapping, Value json) {
+    public static <A> Optional<Set<A>> decodeOptionalSetField(Name name, Function<Value, A> mapping, Value json) {
         return decodeOptionalField(name.value, v -> decodeSet(mapping, v), json);
     }
 
@@ -386,9 +386,9 @@ public abstract class JsonDecoding {
      * @return the decoded value
      */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json, A defaultValue) {
-        Maybe<A> opt = decodeOptionalField(name, mapping, json);
-        if (opt.isJust()) {
-            return opt.fromJust();
+        Optional<A> opt = decodeOptionalField(name, mapping, json);
+        if (opt.isGiven()) {
+            return opt.fromGiven();
         } else {
             return defaultValue;
         }
@@ -418,9 +418,9 @@ public abstract class JsonDecoding {
      * @return the decoded value
      */
     public static <A> A decodeRequiredField(String name, Function<Value, A> mapping, Value json) {
-        Maybe<A> opt = decodeOptionalField(name, mapping, json);
-        if (opt.isJust()) {
-            return opt.fromJust();
+        Optional<A> opt = decodeOptionalField(name, mapping, json);
+        if (opt.isGiven()) {
+            return opt.fromGiven();
         } else {
             throw new JsonDecodingException("missing required field \"" + name + "\"");
         }

@@ -28,7 +28,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -179,7 +179,7 @@ deduplicateCaseVariables cases_ =
                     let v = Core.lambdaParameter v0
                         mdom = Core.lambdaDomain v0
                         body = Core.lambdaBody v0
-                    in (Maybes.maybe (Maps.insert v 1 countByName, (Lists.cons field done)) (\count ->
+                    in (Optionals.cases (Maps.lookup v countByName) (Maps.insert v 1 countByName, (Lists.cons field done)) (\count ->
                       let count2 = Math.add count 1
                           v2 = Core.Name (Strings.cat2 (Core.unName v) (Literals.showInt32 count2))
                           newBody = Reduction.alphaConvert v v2 body
@@ -193,7 +193,7 @@ deduplicateCaseVariables cases_ =
                                   Core.CaseAlternative {
                                     Core.caseAlternativeName = fname,
                                     Core.caseAlternativeHandler = newTerm}
-                      in (Maps.insert v count2 countByName, (Lists.cons newField done))) (Maps.lookup v countByName))
+                      in (Maps.insert v count2 countByName, (Lists.cons newField done))))
                   _ -> (countByName, (Lists.cons field done))
           result = Lists.foldl rewriteCase (Maps.empty, []) cases_
       in (Lists.reverse (Pairs.second result))
@@ -236,7 +236,7 @@ eliminateUnitVar v term0 =
                       Core.lambdaBody = (recurse (Core.lambdaBody v0))}))
                     Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                      Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
+                      Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v0)),
                       Core.caseStatementCases = (Lists.map (rewriteCaseAlternative recurse) (Core.caseStatementCases v0))})
                     Core.TermLet v0 -> Core.TermLet (Core.Let {
                       Core.letBindings = (Lists.map (rewriteBinding recurse) (Core.letBindings v0)),
@@ -250,7 +250,7 @@ eliminateUnitVar v term0 =
                     Core.TermInject v0 -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = (Core.injectionTypeName v0),
                       Core.injectionField = (rewriteField recurse (Core.injectionField v0))})
-                    Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map recurse v0)
+                    Core.TermOptional v0 -> Core.TermOptional (Optionals.map recurse v0)
                     Core.TermPair v0 -> Core.TermPair (recurse (Pairs.first v0), (recurse (Pairs.second v0)))
                     Core.TermWrap v0 -> Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
@@ -316,7 +316,7 @@ encodeApplication cx env app =
 encodeApplicationInner :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
 encodeApplicationInner cx env fun hargs rargs =
 
-      let firstArg = Maybes.fromMaybe (Utils.pyNameToPyExpression (Syntax.Name "")) (Lists.maybeHead hargs)
+      let firstArg = Optionals.fromOptional (Utils.pyNameToPyExpression (Syntax.Name "")) (Lists.maybeHead hargs)
           restArgs = Lists.drop 1 hargs
           withRest = \e -> Logic.ifElse (Lists.null restArgs) e (Utils.functionCall (Utils.pyExpressionToPyPrimary e) restArgs)
           defaultCase =
@@ -336,7 +336,7 @@ encodeApplicationInner cx env fun hargs rargs =
           let g = pythonEnvironmentGetGraph env
               allArgs = Lists.concat2 hargs rargs
               inlineVars = PythonEnvironment.pythonEnvironmentInlineVariables env
-          in (Maybes.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (Maybes.maybe (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\el -> Maybes.maybe (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\ts ->
+          in (Optionals.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (Optionals.cases (Lexical.lookupBinding g v0) (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\el -> Optionals.cases (Core.bindingTypeScheme el) (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\ts ->
             let elArity = Arity.typeSchemeArity ts
                 consumeCount = Math.min elArity (Lists.length allArgs)
                 consumedArgs = Lists.take consumeCount allArgs
@@ -345,7 +345,7 @@ encodeApplicationInner cx env fun hargs rargs =
               Utils.functionCall (Utils.pyExpressionToPyPrimary (lazyDotGet (PythonNames.termVariableReference env v0))) consumedArgs,
               remainingArgs)) (Right (
               Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs,
-              remainingArgs))))) (Core.bindingTypeScheme el)) (Lexical.lookupBinding g v0)) (\_prim ->
+              remainingArgs))))))) (\_prim ->
             let wrappedArgs = wrapLazyArguments g v0 hargs
             in (Eithers.bind (encodeVariable cx env v0 wrappedArgs) (\expr -> Right (expr, rargs)))))
         _ -> defaultCase
@@ -362,7 +362,7 @@ encodeApplicationType env at =
                 Core.TypeList _ -> (t, ps)
                 Core.TypeLiteral _ -> (t, ps)
                 Core.TypeMap _ -> (t, ps)
-                Core.TypeMaybe _ -> (t, ps)
+                Core.TypeOptional _ -> (t, ps)
                 Core.TypeEither _ -> (t, ps)
                 Core.TypePair _ -> (t, ps)
                 Core.TypeRecord _ -> (t, ps)
@@ -384,14 +384,14 @@ encodeBindingAs cx env binding =
           term1 = Core.bindingTerm binding
           mts = Core.bindingTypeScheme binding
           fname = PythonNames.encodeName True Util.CaseConventionLowerSnake env name1
-      in (Maybes.maybe (
+      in (Optionals.cases mts (
         let gathered = gatherLambdas term1
             lambdaParams = Pairs.first gathered
             innerBody = Pairs.second gathered
             mcsa = isCaseStatementApplication innerBody
-        in (Maybes.maybe (
+        in (Optionals.cases mcsa (
           let mcs = extractCaseElimination term1
-          in (Maybes.maybe (Eithers.bind (encodeTermMultiline cx env term1) (\stmts -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "encodeTermMultiline returned no statements"))) (\x -> Right x) (Lists.maybeHead stmts))) (\cs ->
+          in (Optionals.cases mcs (Eithers.bind (encodeTermMultiline cx env term1) (\stmts -> Optionals.cases (Lists.maybeHead stmts) (Left (Errors.ErrorOther (Errors.OtherError "encodeTermMultiline returned no statements"))) (\x -> Right x))) (\cs ->
             let tname = Core.caseStatementTypeName cs
                 dflt = Core.caseStatementDefault cs
                 cases_ = Core.caseStatementCases cs
@@ -433,9 +433,9 @@ encodeBindingAs cx env binding =
                               Syntax.functionDefRawBlock = body}
                 in (Right (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
                   Syntax.functionDefinitionDecorators = Nothing,
-                  Syntax.functionDefinitionRaw = funcDefRaw})))))))))) mcs)) (\csa -> Logic.ifElse (Lists.null lambdaParams) (
+                  Syntax.functionDefinitionRaw = funcDefRaw})))))))))))) (\csa -> Logic.ifElse (Lists.null lambdaParams) (
           let mcs = extractCaseElimination term1
-          in (Maybes.maybe (Eithers.bind (encodeTermMultiline cx env term1) (\stmts -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "encodeTermMultiline returned no statements"))) (\x -> Right x) (Lists.maybeHead stmts))) (\cs ->
+          in (Optionals.cases mcs (Eithers.bind (encodeTermMultiline cx env term1) (\stmts -> Optionals.cases (Lists.maybeHead stmts) (Left (Errors.ErrorOther (Errors.OtherError "encodeTermMultiline returned no statements"))) (\x -> Right x))) (\cs ->
             let tname = Core.caseStatementTypeName cs
                 dflt = Core.caseStatementDefault cs
                 cases_ = Core.caseStatementCases cs
@@ -477,7 +477,7 @@ encodeBindingAs cx env binding =
                               Syntax.functionDefRawBlock = body}
                 in (Right (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
                   Syntax.functionDefinitionDecorators = Nothing,
-                  Syntax.functionDefinitionRaw = funcDefRaw})))))))))) mcs)) (
+                  Syntax.functionDefinitionRaw = funcDefRaw})))))))))))) (
           let tname = Pairs.first csa
               rest1 = Pairs.second csa
               dflt = Pairs.first rest1
@@ -486,8 +486,8 @@ encodeBindingAs cx env binding =
           in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
             let isEnum = Predicates.isEnumRowType rt
                 isFull = isCasesFull rt cases_
-                capturedVarNames = Maybes.fromMaybe [] (Lists.maybeInit lambdaParams)
-                matchLambdaParam = Maybes.fromMaybe (Core.Name "") (Lists.maybeLast lambdaParams)
+                capturedVarNames = Optionals.fromOptional [] (Lists.maybeInit lambdaParams)
+                matchLambdaParam = Optionals.fromOptional (Core.Name "") (Lists.maybeLast lambdaParams)
                 capturedParams =
                         Lists.map (\n -> Syntax.ParamNoDefault {
                           Syntax.paramNoDefaultParam = Syntax.Param {
@@ -530,9 +530,9 @@ encodeBindingAs cx env binding =
                             Syntax.functionDefRawBlock = body}
               in (Right (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
                 Syntax.functionDefinitionDecorators = Nothing,
-                Syntax.functionDefinitionRaw = funcDefRaw}))))))))))) mcsa)) (\ts -> Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term1) (\comment ->
-        let normComment = Maybes.map Formatting.normalizeComment comment
-        in (encodeTermAssignment cx env False name1 term1 ts normComment))) mts)
+                Syntax.functionDefinitionRaw = funcDefRaw}))))))))))))) (\ts -> Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term1) (\comment ->
+        let normComment = Optionals.map Formatting.normalizeComment comment
+        in (encodeTermAssignment cx env False name1 term1 ts normComment))))
 -- | Encode a binding as a walrus operator assignment
 encodeBindingAsAssignment :: Typing.InferenceContext -> Bool -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.NamedExpression
 encodeBindingAsAssignment cx allowThunking env binding =
@@ -547,7 +547,7 @@ encodeBindingAsAssignment cx allowThunking env binding =
             termIsComplex = Predicates.isComplexTerm tc term
             isTrivial = Predicates.isTrivialTerm term
             needsThunk =
-                    Logic.ifElse isTrivial False (Maybes.maybe (Logic.and allowThunking (Logic.or isComplexVar termIsComplex)) (\ts -> Logic.and allowThunking (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Logic.or isComplexVar termIsComplex))) mts)
+                    Logic.ifElse isTrivial False (Optionals.cases mts (Logic.and allowThunking (Logic.or isComplexVar termIsComplex)) (\ts -> Logic.and allowThunking (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Logic.or isComplexVar termIsComplex))))
             pterm = makeLazy pbody
         in (Right (Syntax.NamedExpressionAssignment (Syntax.AssignmentExpression {
           Syntax.assignmentExpressionName = pyName,
@@ -558,7 +558,7 @@ encodeBindingsAsDefs env encodeBinding bindings = Eithers.mapList (encodeBinding
 -- | Encode the default (wildcard) case block for a match statement
 encodeDefaultCaseBlock :: (t0 -> Either t1 Syntax.Expression) -> Bool -> Maybe t0 -> Core.Name -> Either t1 [Syntax.CaseBlock]
 encodeDefaultCaseBlock termToExpr isFull mdflt tname =
-    Eithers.bind (Maybes.maybe (Right (Logic.ifElse isFull (Utils.raiseAssertionError "Unreachable: all variants handled") (Utils.raiseTypeError (Strings.cat2 "Unsupported " (Names.localNameOf tname))))) (\d -> Eithers.bind (termToExpr d) (\pyexpr -> Right (Utils.returnSingle pyexpr))) mdflt) (\stmt ->
+    Eithers.bind (Optionals.cases mdflt (Right (Logic.ifElse isFull (Utils.raiseAssertionError "Unreachable: all variants handled") (Utils.raiseTypeError (Strings.cat2 "Unsupported " (Names.localNameOf tname))))) (\d -> Eithers.bind (termToExpr d) (\pyexpr -> Right (Utils.returnSingle pyexpr)))) (\stmt ->
       let patterns = Utils.pyClosedPatternToPyPatterns Syntax.ClosedPatternWildcard
           body = Utils.indentedBlock Nothing [
                 [
@@ -576,12 +576,12 @@ encodeDefinition cx env def_ =
         let name = Packaging.termDefinitionName v0
             term = Packaging.termDefinitionBody v0
             typ =
-                    Maybes.maybe (Core.TypeScheme {
+                    Optionals.cases (Packaging.termDefinitionSignature v0) (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
-                      Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0)
+                      Core.typeSchemeConstraints = Nothing}) (\sig -> Scoping.termSignatureToTypeScheme sig)
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
-          let normComment = Maybes.map Formatting.normalizeComment comment
+          let normComment = Optionals.map Formatting.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env True name term typ normComment) (\stmt -> Right [
             [
               stmt]]))))
@@ -589,7 +589,7 @@ encodeDefinition cx env def_ =
         let name = Packaging.typeDefinitionName v0
             typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
         in (Eithers.bind (Annotations.getTypeDescription cx (pythonEnvironmentGetGraph env) typ) (\comment ->
-          let normComment = Maybes.map Formatting.normalizeComment comment
+          let normComment = Optionals.map Formatting.normalizeComment comment
           in (encodeTypeAssignment cx env name typ normComment)))
 -- | Encode an enum value assignment statement with optional comment
 encodeEnumValueAssignment :: t0 -> PythonEnvironment.PythonEnvironment -> Core.FieldType -> Either Errors.Error [Syntax.Statement]
@@ -604,10 +604,10 @@ encodeEnumValueAssignment cx env fieldType =
                     Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
                       Utils.doubleQuotedString fnameStr]
             assignStmt = Utils.assignmentStatement pyName pyValue
-        in (Right (Maybes.maybe [
+        in (Right (Optionals.cases mcomment [
           assignStmt] (\c -> [
           assignStmt,
-          (Utils.pyExpressionToPyStatement (Utils.tripleQuotedString c))]) mcomment))))
+          (Utils.pyExpressionToPyStatement (Utils.tripleQuotedString c))])))))
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
 encodeField :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Field -> (Core.Term -> Either t1 t2) -> Either t1 (Syntax.Name, t2)
 encodeField cx env field termToExpr =
@@ -662,7 +662,7 @@ encodeForallType env lt =
                 Core.TypeList _ -> (t, (Lists.reverse ps))
                 Core.TypeLiteral _ -> (t, (Lists.reverse ps))
                 Core.TypeMap _ -> (t, (Lists.reverse ps))
-                Core.TypeMaybe _ -> (t, (Lists.reverse ps))
+                Core.TypeOptional _ -> (t, (Lists.reverse ps))
                 Core.TypeEither _ -> (t, (Lists.reverse ps))
                 Core.TypePair _ -> (t, (Lists.reverse ps))
                 Core.TypeRecord _ -> (t, (Lists.reverse ps))
@@ -712,7 +712,7 @@ encodeFunctionType env ft =
                   Core.TypeList _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeLiteral _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeMap _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
-                  Core.TypeMaybe _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+                  Core.TypeOptional _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeEither _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypePair _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeRecord _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
@@ -817,8 +817,8 @@ encodePythonModule cx g mod defs0 =
                     Logic.ifElse (Logic.and isTypeMod (Equality.equal targetPythonVersion PythonEnvironment.PythonVersionPython310)) (setMetaUsesTypeAlias meta2 True) meta2
             namespaces = PythonEnvironment.pythonModuleMetadataNamespaces meta0
             commentStmts =
-                    Maybes.maybe [] (\c -> [
-                      Utils.commentStatement c]) (Maybes.map Formatting.normalizeComment (Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)))
+                    Optionals.cases (Optionals.map Formatting.normalizeComment (Optionals.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em))) [] (\c -> [
+                      Utils.commentStatement c])
             importStmts = moduleImports namespaces meta
             tvars =
                     Logic.ifElse (Logic.or isTypeMod (Logic.not useInlineTypeParams)) (PythonEnvironment.pythonModuleMetadataTypeVariables meta) Sets.empty
@@ -843,8 +843,8 @@ encodeRecordType cx env name rowType comment =
           boundVars = PythonEnvironment.pythonEnvironmentBoundTypeVariables env
           tparamList = Pairs.first boundVars
           mGenericArg = genericArg tparamList
-          args = Maybes.maybe Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
-                a])) mGenericArg
+          args = Optionals.cases mGenericArg Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
+                a]))
           decs = Just (Syntax.Decorators [
                 dataclassDecorator])
           pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
@@ -1002,8 +1002,8 @@ encodeTermInline cx env noCast term =
           let pmapOfEntries =
                   Utils.projectFromExpression (Utils.pyNameToPyExpression (Syntax.Name "PersistentMap")) (Syntax.Name "of_entries")
           in (Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pmapOfEntries) tuplePairs)))
-        Core.TermMaybe v0 -> Maybes.maybe (Right (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Nothing")) [])) (\t1 -> Eithers.bind (encode t1) (\pyexp -> withCast (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Just")) [
-          pyexp]))) v0
+        Core.TermOptional v0 -> Optionals.cases v0 (Right (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "None_")) [])) (\t1 -> Eithers.bind (encode t1) (\pyexp -> withCast (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Given")) [
+          pyexp])))
         Core.TermPair v0 ->
           let t1 = Pairs.first v0
               t2 = Pairs.second v0
@@ -1029,7 +1029,7 @@ encodeTermInline cx env noCast term =
           in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt -> Logic.ifElse (Predicates.isEnumRowType rt) (Right (Utils.projectFromExpression (Utils.pyNameToPyExpression (PythonNames.encodeNameQualified env tname)) (PythonNames.encodeEnumValue env (Core.fieldName field)))) (
             let fname = Core.fieldName field
                 isUnitVariant =
-                        Maybes.maybe False (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft))) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) rt)
+                        Optionals.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) rt) False (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft)))
             in (Eithers.bind (Logic.ifElse (Logic.or (Predicates.isUnitTerm (Core.fieldTerm field)) isUnitVariant) (Right []) (Eithers.bind (encode (Core.fieldTerm field)) (\parg -> Right [
               parg]))) (\args ->
               let deconflictedName = deconflictVariantName True env tname fname (PythonEnvironment.pythonEnvironmentGraph env)
@@ -1057,7 +1057,7 @@ encodeTermMultiline cx env term =
           args = Pairs.first gathered
           body = Pairs.second gathered
       in (Logic.ifElse (Equality.equal (Lists.length args) 1) (
-        let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args)
+        let arg = Optionals.fromOptional Core.TermUnit (Lists.maybeHead args)
         in case (Strip.deannotateAndDetypeTerm body) of
           Core.TermCases v0 ->
             let tname = Core.caseStatementTypeName v0
@@ -1102,7 +1102,7 @@ encodeTermMultilineTCO cx env funcName paramNames term =
             args2 = Pairs.first gathered2
             body2 = Pairs.second gathered2
         in (Logic.ifElse (Equality.equal (Lists.length args2) 1) (
-          let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args2)
+          let arg = Optionals.fromOptional Core.TermUnit (Lists.maybeHead args2)
           in case (Strip.deannotateAndDetypeTerm body2) of
             Core.TermCases v0 ->
               let tname = Core.caseStatementTypeName v0
@@ -1137,7 +1137,7 @@ encodeType env typ =
           pykt,
           pyvt])))
         Core.TypeLiteral v0 -> encodeLiteralType v0
-        Core.TypeMaybe v0 -> Eithers.bind (encodeType env v0) (\ptype -> Right (Utils.pyPrimaryToPyExpression (Utils.primaryWithExpressionSlices (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "Maybe"))) [
+        Core.TypeOptional v0 -> Eithers.bind (encodeType env v0) (\ptype -> Right (Utils.pyPrimaryToPyExpression (Utils.primaryWithExpressionSlices (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "Optional"))) [
           ptype])))
         Core.TypeEither v0 -> Eithers.bind (encodeType env (Core.eitherTypeLeft v0)) (\pyleft -> Eithers.bind (encodeType env (Core.eitherTypeRight v0)) (\pyright -> Right (Utils.pyPrimaryToPyExpression (Utils.primaryWithExpressionSlices (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "Either"))) [
           pyleft,
@@ -1199,7 +1199,7 @@ encodeUnionEliminationInline cx env cs pyArg =
         let isEnum = Predicates.isEnumRowType rt
             valueExpr = Utils.projectFromExpression pyArg (Syntax.Name "value")
             isinstancePrimary = Utils.pyNameToPyPrimary (Syntax.Name "isinstance")
-        in (Eithers.bind (Maybes.maybe (Right (unsupportedExpression "no matching case in inline union elimination")) (\dflt -> encodeTermInline cx env False dflt) mdefault) (\pyDefault ->
+        in (Eithers.bind (Optionals.cases mdefault (Right (unsupportedExpression "no matching case in inline union elimination")) (\dflt -> encodeTermInline cx env False dflt)) (\pyDefault ->
           let encodeBranch =
                   \field ->
                     let fname = Core.caseAlternativeName field
@@ -1311,12 +1311,12 @@ encodeVariable cx env name args =
           tcMetadata = Graph.graphMetadata tc
           inlineVars = PythonEnvironment.pythonEnvironmentInlineVariables env
           mTypScheme = Maps.lookup name tcTypes
-          mTyp = Maybes.map (\ts_ -> Core.typeSchemeBody ts_) mTypScheme
+          mTyp = Optionals.map (\ts_ -> Core.typeSchemeBody ts_) mTypScheme
           asVariable = PythonNames.termVariableReference env name
           asFunctionCall =
                   Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env name)) args
           asLazyCall = Utils.functionCall (Utils.pyExpressionToPyPrimary (lazyDotGet asVariable)) args
-      in (Logic.ifElse (Logic.not (Lists.null args)) (Logic.ifElse (Sets.member name inlineVars) (Right asLazyCall) (Maybes.maybe (Right asFunctionCall) (\prim ->
+      in (Logic.ifElse (Logic.not (Lists.null args)) (Logic.ifElse (Sets.member name inlineVars) (Right asLazyCall) (Optionals.cases (Lexical.lookupPrimitive g name) (Right asFunctionCall) (\prim ->
         let primArity = Arity.primitiveArity prim
         in (Logic.ifElse (Equality.equal primArity (Lists.length args)) (Right asFunctionCall) (
           let numRemaining = Math.sub primArity (Lists.length args)
@@ -1346,36 +1346,36 @@ encodeVariable cx env name args =
               allArgs = Lists.concat2 args remainingExprs
               fullCall =
                       Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env name)) allArgs
-          in (Right (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name))) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (Right (lazyDotGet asVariable)) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Unknown variable: " (Core.unName name))))) (\_ -> Right asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->
+          in (Right (makeUncurriedLambda remainingParams fullCall))))))) (Optionals.cases mTyp (Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (Right (lazyDotGet asVariable)) (Optionals.cases (Lexical.lookupPrimitive g name) (Optionals.cases (Lexical.lookupBinding g name) (Optionals.cases (Maps.lookup name tcMetadata) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Unknown variable: " (Core.unName name))))) (\_ -> Right asFunctionCall)) (\el ->
         let elTrivial1 = Predicates.isTrivialTerm (Core.bindingTerm el)
-        in (Maybes.maybe (Right asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Predicates.isComplexBinding tc el)) (Logic.not elTrivial1)) (Right asFunctionCall) (
+        in (Optionals.cases (Core.bindingTypeScheme el) (Right asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Predicates.isComplexBinding tc el)) (Logic.not elTrivial1)) (Right asFunctionCall) (
           let asFunctionRef =
                   Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeBody ts)) asVariable) asVariable
-          in (Right asFunctionRef))) (Core.bindingTypeScheme el))) (Lexical.lookupBinding g name)) (\prim ->
+          in (Right asFunctionRef)))))) (\prim ->
         let primArity = Arity.primitiveArity prim
         in (Logic.ifElse (Equality.equal primArity 0) (Right asFunctionCall) (
           let ts = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))
               asFunctionRef =
                       Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeBody ts)) asVariable) asVariable
-          in (Right asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (
+          in (Right asFunctionRef))))))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (
         let unwrapped = lazyDotGet asVariable
             asFunctionRef =
                     Logic.ifElse (Logic.not (Sets.null (Variables.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) unwrapped) unwrapped
-        in (Right asFunctionRef)) (Logic.ifElse (Logic.not (Maps.member name tcMetadata)) (Maybes.maybe (
+        in (Right asFunctionRef)) (Logic.ifElse (Logic.not (Maps.member name tcMetadata)) (Optionals.cases (Lexical.lookupBinding g name) (
         let asFunctionRef =
                 Logic.ifElse (Logic.not (Sets.null (Variables.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable
         in (Right asFunctionRef)) (\el ->
         let elTrivial = Predicates.isTrivialTerm (Core.bindingTerm el)
-        in (Maybes.maybe (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Logic.not elTrivial)) (Right asFunctionCall) (
+        in (Optionals.cases (Core.bindingTypeScheme el) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Logic.not elTrivial)) (Right asFunctionCall) (
           let asFunctionRef =
                   Logic.ifElse (Logic.not (Sets.null (Variables.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable
           in (Right asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Predicates.isComplexBinding tc el)) (Logic.not elTrivial)) (Right asFunctionCall) (
           let asFunctionRef =
                   Logic.ifElse (Logic.not (Sets.null (Variables.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable
-          in (Right asFunctionRef))) (Core.bindingTypeScheme el))) (Lexical.lookupBinding g name)) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Predicates.isComplexVariable tc name)) (Right asFunctionCall) (
+          in (Right asFunctionRef)))))) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Predicates.isComplexVariable tc name)) (Right asFunctionCall) (
         let asFunctionRef =
                 Logic.ifElse (Logic.not (Sets.null (Variables.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable
-        in (Right asFunctionRef)))))) mTyp))
+        in (Right asFunctionRef))))))))
 -- | Encode a wrapped type (newtype) to a Python class definition
 encodeWrappedType :: PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either t0 [Syntax.Statement]
 encodeWrappedType env name typ comment =
@@ -1444,14 +1444,14 @@ extendMetaForTerm topLevel meta0 term =
                 Core.TermEither v0 ->
                   let metaWithCast = setMetaUsesCast True meta
                   in (Eithers.either (\_ -> setMetaUsesLeft metaWithCast True) (\_ -> setMetaUsesRight metaWithCast True) v0)
-                Core.TermLambda v0 -> Maybes.maybe meta (\dom -> Logic.ifElse topLevel (extendMetaForType True False dom meta) meta) (Core.lambdaDomain v0)
+                Core.TermLambda v0 -> Optionals.cases (Core.lambdaDomain v0) meta (\dom -> Logic.ifElse topLevel (extendMetaForType True False dom meta) meta)
                 Core.TermLet v0 ->
                   let bindings = Core.letBindings v0
                   in (Lists.foldl (
                     let forBinding =
-                            \m -> \b -> Maybes.maybe m (\ts ->
+                            \m -> \b -> Optionals.cases (Core.bindingTypeScheme b) m (\ts ->
                               let term1 = Core.bindingTerm b
-                              in (Logic.ifElse (Analysis.isSimpleAssignment term1) m (extendMetaForType True True (Core.typeSchemeBody ts) m))) (Core.bindingTypeScheme b)
+                              in (Logic.ifElse (Analysis.isSimpleAssignment term1) m (extendMetaForType True True (Core.typeSchemeBody ts) m)))
                     in forBinding) meta bindings)
                 Core.TermLiteral v0 -> case v0 of
                   Core.LiteralDecimal _ -> setMetaUsesDecimal meta True
@@ -1459,7 +1459,7 @@ extendMetaForTerm topLevel meta0 term =
                 Core.TermList _ -> setMetaUsesFrozenList meta True
                 Core.TermMap _ -> setMetaUsesFrozenDict meta True
                 Core.TermSet _ -> setMetaUsesFrozenSet meta True
-                Core.TermMaybe v0 -> Maybes.maybe (setMetaUsesNothing meta True) (\_ -> setMetaUsesJust meta True) v0
+                Core.TermOptional v0 -> Optionals.cases v0 (setMetaUsesNothing meta True) (\_ -> setMetaUsesJust meta True)
                 Core.TermInject _ -> setMetaUsesCast True meta
                 _ -> meta
       in (Rewriting.foldOverTerm Coders.TraversalOrderPre step meta0 term)
@@ -1476,7 +1476,7 @@ extendMetaForType topLevel isTermAnnot typ meta =
         Core.TypeList _ -> setMetaUsesFrozenList metaWithSubtypes True
         Core.TypeMap _ -> setMetaUsesFrozenDict metaWithSubtypes True
         Core.TypeSet _ -> setMetaUsesFrozenSet metaWithSubtypes True
-        Core.TypeMaybe _ -> setMetaUsesMaybe metaWithSubtypes True
+        Core.TypeOptional _ -> setMetaUsesMaybe metaWithSubtypes True
         Core.TypeEither _ -> setMetaUsesEither metaWithSubtypes True
         Core.TypeLiteral v0 -> case v0 of
           Core.LiteralTypeDecimal -> setMetaUsesDecimal metaWithSubtypes True
@@ -1514,7 +1514,7 @@ findTypeParams :: PythonEnvironment.PythonEnvironment -> Core.Type -> [Core.Name
 findTypeParams env typ =
 
       let boundVars = Pairs.second (PythonEnvironment.pythonEnvironmentBoundTypeVariables env)
-          isBound = \v -> Maybes.isJust (Maps.lookup v boundVars)
+          isBound = \v -> Optionals.isGiven (Maps.lookup v boundVars)
       in (Lists.filter isBound (Sets.toList (Variables.freeVariablesInType typ)))
 -- | Encode a function definition with parameters and body
 functionDefinitionToExpr :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
@@ -1545,7 +1545,7 @@ functionDefinitionToExpr cx env name tparams args body doms mcod comment prefixe
         in (Right (Utils.indentedBlock comment [
           [
             whileStmt]])))) (Eithers.bind (encodeTermMultiline cx env body) (\stmts -> Right (Utils.indentedBlock comment [
-        Lists.concat2 prefixes stmts])))) (\block -> Eithers.bind (Maybes.maybe (Right Nothing) (\cod -> Eithers.bind (encodeType env cod) (\pytyp -> Right (Just pytyp))) mcod) (\mreturnType ->
+        Lists.concat2 prefixes stmts])))) (\block -> Eithers.bind (Optionals.cases mcod (Right Nothing) (\cod -> Eithers.bind (encodeType env cod) (\pytyp -> Right (Just pytyp)))) (\mreturnType ->
         let pyTparams =
                 Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (PythonNames.encodeTypeVariable arg_)) tparams) []
             isThunk = Lists.null args
@@ -1582,7 +1582,7 @@ gatherMetadata focusNs defs =
                     Packaging.DefinitionTerm v0 ->
                       let term = Packaging.termDefinitionBody v0
                           typ =
-                                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)) (Packaging.termDefinitionSignature v0)
+                                  Optionals.cases (Packaging.termDefinitionSignature v0) (Core.TypeVariable (Core.Name "hydra.core.Unit")) (\sig -> Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig))
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
@@ -1669,7 +1669,7 @@ isCaseStatementApplication term =
           args = Pairs.first gathered
           body = Pairs.second gathered
       in (Logic.ifElse (Logic.not (Equality.equal (Lists.length args) 1)) Nothing (
-        let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args)
+        let arg = Optionals.fromOptional Core.TermUnit (Lists.maybeHead args)
         in case (Strip.deannotateAndDetypeTerm body) of
           Core.TermCases v0 -> Just (Core.caseStatementTypeName v0, (Core.caseStatementDefault v0, (Core.caseStatementCases v0, arg)))
           _ -> Nothing))
@@ -1694,14 +1694,14 @@ isVariantUnitType :: [Core.FieldType] -> Core.Name -> Bool
 isVariantUnitType rowType fieldName =
 
       let mfield = Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) rowType
-      in (Maybes.fromMaybe False (Maybes.map (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft))) mfield))
+      in (Optionals.fromOptional False (Optionals.map (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft))) mfield))
 -- | Wrap an expression in a .get() method call (for Lazy unwrap at use sites)
 lazyDotGet :: Syntax.Expression -> Syntax.Expression
 lazyDotGet expr = Utils.functionCall (Utils.pyExpressionToPyPrimary (Utils.projectFromExpression expr (Syntax.Name "get"))) []
 -- | Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391).
 lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
 lazyFlagsForPrimitive g name =
-    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim ->
+    Optionals.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim ->
       let def0 = Graph.primitiveDefinition prim
           sig = Packaging.primitiveDefinitionSignature def0
       in (Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters sig)))
@@ -1822,11 +1822,11 @@ moduleStandardImports meta =
                   "hydra.dsl.python",
                   [
                     condImportSymbol "Either" (PythonEnvironment.pythonModuleMetadataUsesEither meta),
-                    (condImportSymbol "Just" (PythonEnvironment.pythonModuleMetadataUsesJust meta)),
+                    (condImportSymbol "Given" (PythonEnvironment.pythonModuleMetadataUsesJust meta)),
                     (condImportSymbol "Left" (PythonEnvironment.pythonModuleMetadataUsesLeft meta)),
-                    (condImportSymbol "Maybe" (PythonEnvironment.pythonModuleMetadataUsesMaybe meta)),
                     (condImportSymbol "Node" (PythonEnvironment.pythonModuleMetadataUsesNode meta)),
-                    (condImportSymbol "Nothing" (PythonEnvironment.pythonModuleMetadataUsesNothing meta)),
+                    (condImportSymbol "None_" (PythonEnvironment.pythonModuleMetadataUsesNothing meta)),
+                    (condImportSymbol "Optional" (PythonEnvironment.pythonModuleMetadataUsesMaybe meta)),
                     (condImportSymbol "Right" (PythonEnvironment.pythonModuleMetadataUsesRight meta))]),
                 (
                   "hydra.python.util",
@@ -1844,9 +1844,9 @@ moduleStandardImports meta =
                     (condImportSymbol "TypeVar" (PythonEnvironment.pythonModuleMetadataUsesTypeVar meta)),
                     (condImportSymbol "cast" (PythonEnvironment.pythonModuleMetadataUsesCast meta))])]
           simplified =
-                  Maybes.cat (Lists.map (\p ->
+                  Optionals.cat (Lists.map (\p ->
                     let modName = Pairs.first p
-                        symbols = Maybes.cat (Pairs.second p)
+                        symbols = Optionals.cat (Pairs.second p)
                     in (Logic.ifElse (Lists.null symbols) Nothing (Just (modName, symbols)))) pairs)
       in (Lists.map (\p -> standardImportStatement (Pairs.first p) (Pairs.second p)) simplified)
 -- | Convert a Hydra module to Python source files
@@ -2506,7 +2506,7 @@ termArityWithPrimitives graph term =
       Core.TermProject _ -> 1
       Core.TermUnwrap _ -> 1
       Core.TermCases _ -> 1
-      Core.TermVariable v0 -> Maybes.maybe 0 (\el -> Maybes.maybe (Arity.termArity (Core.bindingTerm el)) (\ts -> Arity.typeSchemeArity ts) (Core.bindingTypeScheme el)) (Lexical.lookupBinding graph v0)
+      Core.TermVariable v0 -> Optionals.cases (Lexical.lookupBinding graph v0) 0 (\el -> Optionals.cases (Core.bindingTypeScheme el) (Arity.termArity (Core.bindingTerm el)) (\ts -> Arity.typeSchemeArity ts))
       _ -> 0
 -- | Create a TypeVar assignment statement for a type variable name
 tvarStatement :: Syntax.Name -> Syntax.Statement
@@ -2556,7 +2556,7 @@ useInlineTypeParamsFor version = Equality.equal version PythonEnvironment.Python
 -- | Create args for variant (Node[type], Generic[tparams])
 variantArgs :: Syntax.Expression -> [Core.Name] -> Syntax.Args
 variantArgs ptype tparams =
-    Utils.pyExpressionsToPyArgs (Maybes.cat [
+    Utils.pyExpressionsToPyArgs (Optionals.cat [
       Just (Utils.pyPrimaryToPyExpression (Utils.primaryWithExpressionSlices (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "Node"))) [
         ptype])),
       (genericArg tparams)])
@@ -2578,11 +2578,11 @@ withDefinitions :: PythonEnvironment.PythonEnvironment -> [Packaging.Definition]
 withDefinitions env defs body =
 
       let bindings =
-              Maybes.cat (Lists.map (\def_ -> case def_ of
+              Optionals.cat (Lists.map (\def_ -> case def_ of
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                  Core.bindingTypeScheme = (Maybes.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
+                  Core.bindingTypeScheme = (Optionals.map (\sig -> Scoping.termSignatureToTypeScheme sig) (Packaging.termDefinitionSignature v0))})
                 Packaging.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =

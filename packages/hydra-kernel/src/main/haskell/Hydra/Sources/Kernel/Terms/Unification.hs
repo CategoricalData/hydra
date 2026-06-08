@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -124,8 +124,8 @@ joinTypes = define "joinTypes" $
       _Type_map>>: "r" ~> right (list [
         var "joinOne" @@ (Core.mapTypeKeys (var "l")) @@ (Core.mapTypeKeys (var "r")),
         var "joinOne" @@ (Core.mapTypeValues (var "l")) @@ (Core.mapTypeValues (var "r"))])],
-    _Type_maybe>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_maybe>>: "r" ~> right (list [
+    _Type_optional>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
+      _Type_optional>>: "r" ~> right (list [
         var "joinOne" @@ (var "l") @@ (var "r")])],
     _Type_pair>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_pair>>: "r" ~> right (list [
@@ -181,17 +181,14 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
         (Just (var "tryBinding" @@ var "name" @@ var "sright")) [
         _Type_variable>>: "name2" ~> Logic.ifElse (Core.equalName_ (var "name") (var "name2"))
           (unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ var "rest")
-          (Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (var "schemaTypes")))
-            (Logic.ifElse (Maybes.isJust (Maps.lookup (var "name2") (var "schemaTypes")))
+          (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name") (var "schemaTypes")))
+            (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name2") (var "schemaTypes")))
               (left (Error.unificationError (var "sleft") (var "sright")
                   ((string "Attempted to unify schema names ") ++ (Core.unName (var "name")) ++ (string " and ") ++ (Core.unName (var "name2"))
                     ++ (string " (") ++ var "comment" ++ (string ")"))))
               (var "bind" @@ var "name2" @@ var "sleft"))
             (var "bind" @@ var "name" @@ var "sright"))]]) $
-  Maybes.maybe
-    (right (asTerm Substitution.idTypeSubst))
-    ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
-    (Lists.uncons $ var "constraints")
+  Optionals.cases (Lists.uncons $ var "constraints") (right (asTerm Substitution.idTypeSubst)) ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
 
 unifyTypeLists :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $

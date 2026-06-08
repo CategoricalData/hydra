@@ -138,7 +138,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional type scheme of the bound term"}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.core.TypeScheme"}}}}}]}}},
           "variables": []},
         "name": "hydra.core.Binding"}},
     {
@@ -201,7 +201,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Term"}}}}},
+                        "body": {"optional": {"variable": "hydra.core.Term"}}}}},
                   {
                     "name": "cases",
                     "type": {
@@ -571,7 +571,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional domain type for the lambda"}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
+                        "body": {"optional": {"variable": "hydra.core.Type"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -900,11 +900,11 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A map of keys to values"}}}]},
                         "body": {"map": {"keys": {"variable": "hydra.core.Term"}, "values": {"variable": "hydra.core.Term"}}}}}},
                   {
-                    "name": "maybe",
+                    "name": "optional",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional value"}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Term"}}}}},
+                        "body": {"optional": {"variable": "hydra.core.Term"}}}}},
                   {
                     "name": "pair",
                     "type": {
@@ -1035,7 +1035,7 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A map type"}}}]},
                         "body": {"variable": "hydra.core.MapType"}}}},
                   {
-                    "name": "maybe",
+                    "name": "optional",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional type"}}}]},
@@ -1209,7 +1209,7 @@
                                 "literal": {
                                   "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]},
                         "body": {
-                          "maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}}]}}},
+                          "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}}]}}},
           "variables": []},
         "name": "hydra.core.TypeScheme"}},
     {

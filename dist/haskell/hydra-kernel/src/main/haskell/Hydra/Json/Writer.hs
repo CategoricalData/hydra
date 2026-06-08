@@ -17,7 +17,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -51,9 +51,9 @@ hexByte :: Int -> String
 hexByte c =
 
       let nibble =
-              \i -> Maybes.fromMaybe "?" (Maybes.map (\ch -> Strings.fromList (Lists.pure ch)) (Strings.maybeCharAt i "0123456789abcdef"))
-          hi = nibble (Maybes.fromMaybe 0 (Math.maybeDiv c 16))
-          lo = nibble (Maybes.fromMaybe 0 (Math.maybeMod c 16))
+              \i -> Optionals.fromOptional "?" (Optionals.map (\ch -> Strings.fromList (Lists.pure ch)) (Strings.maybeCharAt i "0123456789abcdef"))
+          hi = nibble (Optionals.fromOptional 0 (Math.maybeDiv c 16))
+          lo = nibble (Optionals.fromOptional 0 (Math.maybeMod c 16))
       in (Strings.cat2 hi lo)
 -- | Escape and quote a string for JSON output
 jsonString :: String -> String

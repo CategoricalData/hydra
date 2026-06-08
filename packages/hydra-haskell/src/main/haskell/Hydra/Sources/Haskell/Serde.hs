@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -216,10 +216,7 @@ constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
         "fields">: project H._RecordConstructor H._RecordConstructor_fields @@ var "rec"] $
         Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
           Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ (Lists.map (fieldToExpr) (var "fields"))]))]] $
-    Maybes.maybe
-      (var "body")
-      (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
-      (var "mc")
+    Optionals.cases (var "mc") (var "body") (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
 
 dataKeywordToExpr :: TypedTermDefinition (H.DataKeyword -> Expr)
 dataKeywordToExpr = haskellSerdeDefinition "dataKeywordToExpr" $
@@ -279,10 +276,7 @@ declarationToExpr = haskellSerdeDefinition "declarationToExpr" $
         "htype">: project H._TypeSignature H._TypeSignature_type @@ var "typeSig"] $
         Serialization.newlineSep @@ (Lists.cons (Serialization.structuralSpaceSep @@ list [nameToExpr @@ var "name", Serialization.cst @@ string "::", typeToExpr @@ var "htype"]) (list [
           valueBindingToExpr @@ var "vb"]))]] $
-    Maybes.maybe
-      (var "body")
-      (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
-      (var "mc")
+    Optionals.cases (var "mc") (var "body") (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
 
 expressionToExpr :: TypedTermDefinition (H.Expression -> Expr)
 expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
@@ -319,10 +313,7 @@ fieldToExpr = haskellSerdeDefinition "fieldToExpr" $
     "typ">: project H._Field H._Field_type @@ var "field",
     "mc">: project H._Field H._Field_comments @@ var "field",
     "body">: Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.cons (Serialization.cst @@ (string "::")) (list [typeToExpr @@ var "typ"])))] $
-    Maybes.maybe
-      (var "body")
-      (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
-      (var "mc")
+    Optionals.cases (var "mc") (var "body") (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
 
 haskellSerdeDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 haskellSerdeDefinition = definitionInModule module_
@@ -362,12 +353,12 @@ importToExpr = haskellSerdeDefinition "importToExpr" $
             (Serialization.cst @@ (string "hiding "))
             (list [Serialization.parens @@
               (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (namedImportExportToExpr) (var "names")))]))],
-    "parts">: Maybes.cat $ list [
+    "parts">: Optionals.cat $ list [
       just $ Serialization.cst @@ (string "import"),
       Logic.ifElse (var "qual") (just $ Serialization.cst @@ (string "qualified")) nothing,
       just $ Serialization.cst @@ var "name",
-      Maybes.map (lambda "m" $ Serialization.cst @@ (Strings.cat2 (string "as ") (unwrap H._ModuleName @@ var "m"))) (var "mod"),
-      Maybes.map (var "hidingSec") (var "mspec")]] $
+      Optionals.map (lambda "m" $ Serialization.cst @@ (Strings.cat2 (string "as ") (unwrap H._ModuleName @@ var "m"))) (var "mod"),
+      Optionals.map (var "hidingSec") (var "mspec")]] $
     Serialization.spaceSep @@ var "parts"
 
 lambdaExpressionToExpr :: TypedTermDefinition (H.LambdaExpression -> Expr)
@@ -428,7 +419,7 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
     Logic.ifElse (Equality.equal (var "raw") (string "-Infinity"))
       (string "(-(1/0))") $
     var "parensIfNeg"
-      @@ Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (var "raw"))) (int32 45)
+      @@ Equality.equal (Optionals.fromOptional (int32 0) (Strings.maybeCharAt (int32 0) (var "raw"))) (int32 45)
       @@ var "raw") $
   Serialization.cst @@
     cases H._Literal (var "lit") Nothing [
@@ -466,13 +457,10 @@ moduleHeadToExpr = haskellSerdeDefinition "moduleHeadToExpr" $
       (Serialization.cst @@ (string "module")) (Lists.cons
       (Serialization.cst @@ var "mname")
       (list [Serialization.cst @@ (string "where")])))] $
-    Maybes.maybe
-      (var "head")
-      (lambda "c" $ Serialization.newlineSep @@ (Lists.cons
+    Optionals.cases (var "mc") (var "head") (lambda "c" $ Serialization.newlineSep @@ (Lists.cons
         (Serialization.cst @@ (toHaskellComments @@ var "c")) (Lists.cons
         (Serialization.cst @@ (string ""))
         (list [var "head"]))))
-      (var "mc")
 
 moduleToExpr :: TypedTermDefinition (H.Module -> Expr)
 moduleToExpr = haskellSerdeDefinition "moduleToExpr" $
@@ -482,7 +470,7 @@ moduleToExpr = haskellSerdeDefinition "moduleToExpr" $
     "imports">: project H._Module H._Module_imports @@ var "module",
     "decls">: project H._Module H._Module_declarations @@ var "module",
     "warning">: list [Serialization.cst @@ (toSimpleComments @@ Constants.warningAutoGeneratedFile)],
-    "headerLine">: Maybes.maybe (list ([] :: [TypedTerm Expr])) (lambda "h" $ list [moduleHeadToExpr @@ var "h"]) (var "mh"),
+    "headerLine">: Optionals.cases (var "mh") (list ([] :: [TypedTerm Expr])) (lambda "h" $ list [moduleHeadToExpr @@ var "h"]),
     "declLines">: Lists.map (declarationToExpr) (var "decls"),
     "importLines">: Logic.ifElse (Lists.null $ var "imports")
       (list ([] :: [TypedTerm Expr]))
@@ -616,14 +604,11 @@ valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
           (Serialization.newlineSep @@ list [
             Serialization.spaceSep @@ list [var "lhsExpr", Serialization.cst @@ string "="],
             Serialization.tabIndent @@ var "rhsExpr"])] $
-        Maybes.maybe
-          (var "body")
-          (lambda "localBindings" $ lets [
+        Optionals.cases (var "local") (var "body") (lambda "localBindings" $ lets [
             "bindings">: unwrap H._LocalBindings @@ var "localBindings"] $
             Serialization.indentBlock @@ (Lists.cons
               (var "body")
-              (list [Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "where")) (Lists.map (localBindingToExpr) (var "bindings"))])))
-          (var "local")]
+              (list [Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "where")) (Lists.map (localBindingToExpr) (var "bindings"))])))]
 
 variableToExpr :: TypedTermDefinition (H.Variable -> Expr)
 variableToExpr = haskellSerdeDefinition "variableToExpr" $

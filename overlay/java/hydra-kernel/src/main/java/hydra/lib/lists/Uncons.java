@@ -7,7 +7,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 import hydra.util.Pair;
 
 import java.util.List;
@@ -49,13 +49,13 @@ public class Uncons extends PrimitiveFunction {
      * Apply the function to its single argument.
      * @param <X> the element type
      * @param list the list to split
-     * @return a Maybe containing a pair (head, tail), or empty if the list is empty
+     * @return a Optional containing a pair (head, tail), or empty if the list is empty
      */
-    public static <X> Maybe<Pair<X, List<X>>> apply(List<X> list) {
+    public static <X> Optional<Pair<X, List<X>>> apply(List<X> list) {
         if (list.isEmpty()) {
-            return Maybe.nothing();
+            return Optional.none();
         }
         ConsList<X> cl = ConsList.fromList(list);
-        return Maybe.just(new Pair<>(cl.head(), cl.tail()));
+        return Optional.given(new Pair<>(cl.head(), cl.tail()));
     }
 }

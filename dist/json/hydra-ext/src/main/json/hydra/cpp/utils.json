@@ -45,7 +45,7 @@
                           {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                           {
                             "name": "defaultValue",
-                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                         "typeName": "hydra.cpp.syntax.Parameter"}},
                     "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                     "parameter": "typ"}},
@@ -90,7 +90,7 @@
                                     {"name": "body", "term": {"variable": "mbody"}}],
                                   "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
                             "typeName": "hydra.cpp.syntax.Declaration"}},
-                        "domain": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}},
+                        "domain": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}},
                         "parameter": "mbody"}},
                     "domain": {"list": {"variable": "hydra.cpp.syntax.BaseSpecifier"}},
                     "parameter": "baseSpecs"}},
@@ -101,7 +101,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}},
-            {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
+            {"isLazy": false, "name": "arg2", "type": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
           "result": {"type": {"variable": "hydra.cpp.syntax.Declaration"}},
           "typeParameters": []}}},
     {
@@ -136,7 +136,7 @@
                                 {"name": "body", "term": {"variable": "mbody"}}],
                               "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
                         "typeName": "hydra.cpp.syntax.Declaration"}},
-                    "domain": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}},
+                    "domain": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}},
                     "parameter": "mbody"}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "name"}}}},
@@ -144,7 +144,7 @@
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
+            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
           "result": {"type": {"variable": "hydra.cpp.syntax.Declaration"}},
           "typeParameters": []}}},
     {
@@ -177,7 +177,7 @@
                                   "typeName": "hydra.cpp.syntax.ClassSpecifier"}}},
                             {
                               "name": "body",
-                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}}}],
+                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}}}],
                           "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
                     "typeName": "hydra.cpp.syntax.Declaration"}},
                 "domain": {"literal": {"string": {}}},
@@ -621,7 +621,7 @@
                                           {"name": "parameters", "term": {"variable": "params"}},
                                           {
                                             "name": "returnType",
-                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
+                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
                                           {
                                             "name": "body",
                                             "term": {
@@ -1498,7 +1498,7 @@
                           {"name": "unnamed", "term": {"literal": {"boolean": true}}},
                           {
                             "name": "defaultValue",
-                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                         "typeName": "hydra.cpp.syntax.Parameter"}},
                     "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                     "parameter": "typ"}},

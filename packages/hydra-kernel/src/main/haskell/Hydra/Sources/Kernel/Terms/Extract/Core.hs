@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -127,9 +127,9 @@ module_ = Module {
      toDefinition literal,
      toDefinition map,
      toDefinition mapType,
-     toDefinition maybeTerm,
-     toDefinition maybeType,
      toDefinition nArgs,
+     toDefinition optionalTerm,
+     toDefinition optionalType,
      toDefinition pair,
      toDefinition record,
      toDefinition recordType,
@@ -212,10 +212,7 @@ caseField = define "caseField" $
   "matching" <~ (Lists.find
     ("f" ~> Core.equalName_ (Core.caseAlternativeName (var "f")) (var "fieldName"))
     (Core.caseStatementCases (var "cs"))) $
-  Maybes.maybe
-    (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case")))
-    ("mf" ~> right $ var "mf")
-    (var "matching")
+  Optionals.cases (var "matching") (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case"))) ("mf" ~> right $ var "mf")
 
 formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
@@ -320,7 +317,7 @@ decodeMaybe = define "decodeMaybe" $
     (stripWithDecodingError @@ var "g" @@ var "term")
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected optional value") [
-      _Term_maybe>>: "opt" ~> Eithers.mapMaybe (var "elemDecoder" @@ var "g") $ var "opt"])
+      _Term_optional>>: "opt" ~> Eithers.mapOptional (var "elemDecoder" @@ var "g") $ var "opt"])
 
 -- | Decode a Pair using the provided first and second decoders
 
@@ -417,12 +414,9 @@ field = define "field" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatchErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
-      (Maybes.maybe
-        (var "noMatchErr")
-        ("mf" ~>
+      (Optionals.cases (Lists.maybeHead $ var "matchingFields") (var "noMatchErr") ("mf" ~>
           "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ (Core.fieldTerm $ var "mf") $
-          var "mapping" @@ var "stripped")
-        (Lists.maybeHead $ var "matchingFields"))
+          var "mapping" @@ var "stripped"))
       (unexpected(Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
 
 float32 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Float)
@@ -598,10 +592,7 @@ letBinding = define "letBinding" $
   Logic.ifElse (Lists.null (var "matchingBindings"))
     (var "noBindingErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
-      (Maybes.maybe
-        (var "noBindingErr")
-        ("b" ~> right (Core.bindingTerm $ var "b"))
-        (Lists.maybeHead $ var "matchingBindings"))
+      (Optionals.cases (Lists.maybeHead $ var "matchingBindings") (var "noBindingErr") ("b" ~> right (Core.bindingTerm $ var "b")))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleBindings $ Error.multipleBindingsError (var "name"))))
 
 let_ :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Let)
@@ -626,10 +617,7 @@ listHead = define "listHead" $
   doc "Extract the first element of a list term" $
   "graph" ~> "term" ~>
   "l" <<~ list @@ var "graph" @@ var "term" $
-  Maybes.maybe
-    (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "non-empty list") (Phantoms.string "empty list")))
-    ("h" ~> right $ var "h")
-    (Lists.maybeHead $ var "l")
+  Optionals.cases (Lists.maybeHead $ var "l") (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "non-empty list") (Phantoms.string "empty list"))) ("h" ~> right $ var "h")
 
 listOf :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error [x])
 listOf = define "listOf" $
@@ -682,28 +670,25 @@ mapType = define "mapType" $
 
 -- TODO: nonstandard; move me
 
-maybeTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
-maybeTerm = define "maybeTerm" $
+optionalTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
+optionalTerm = define "optionalTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
   "f" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected
-      (Phantoms.string "maybe value")
+      (Phantoms.string "optional value")
       (ShowCore.term @@ var "term"))) [
-    _Term_maybe>>: "mt" ~> Maybes.maybe
-      (right nothing)
-      ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))
-      (var "mt")]
+    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (right nothing) ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))]
 
-maybeType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
-maybeType = define "maybeType" $
+optionalType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
+optionalType = define "optionalType" $
   doc "Extract the base type from an optional type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (unexpected(Phantoms.string "maybe type") (ShowCore.type_ @@ var "typ"))) [
-    _Type_maybe>>: "t" ~> right (var "t")]
+    (Just (unexpected(Phantoms.string "optional type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_optional>>: "t" ~> right (var "t")]
 
 -- TODO: nonstandard; move me
 nArgs :: TypedTermDefinition (Name -> Int -> [a] -> Prelude.Either Error ())
@@ -763,10 +748,7 @@ requireField :: TypedTermDefinition (String -> (Graph -> Term -> Either Decoding
 requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
-  Maybes.maybe
-    (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"])
-    ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
-    (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap")
+  Optionals.cases (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap") (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"]) ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
 
 -- | Convert a Record to a Map from field Name to Term
 

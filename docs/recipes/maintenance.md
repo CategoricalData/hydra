@@ -744,7 +744,7 @@ Each `hydra.lib.<sub>` module has a registry under
 | `hydra.lib.logic`     | `Hydra/Sources/Kernel/Lib/Logic.hs`     |
 | `hydra.lib.maps`      | `Hydra/Sources/Kernel/Lib/Maps.hs`      |
 | `hydra.lib.math`      | `Hydra/Sources/Kernel/Lib/Math.hs`      |
-| `hydra.lib.maybes`    | `Hydra/Sources/Kernel/Lib/Maybes.hs`    |
+| `hydra.lib.optionals` | `Hydra/Sources/Kernel/Lib/Optionals.hs` |
 | `hydra.lib.pairs`     | `Hydra/Sources/Kernel/Lib/Pairs.hs`     |
 | `hydra.lib.regex`     | `Hydra/Sources/Kernel/Lib/Regex.hs`     |
 | `hydra.lib.sets`      | `Hydra/Sources/Kernel/Lib/Sets.hs`      |

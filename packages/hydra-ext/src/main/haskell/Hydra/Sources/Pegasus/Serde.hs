@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -115,7 +115,7 @@ annotationsToExpr = define "annotationsToExpr" $
   doc "Convert PDL annotations to an optional expression (doc comment)" $
   lambda "anns" $ lets [
     "d">: project PDL._Annotations PDL._Annotations_doc @@ var "anns"] $
-    Maybes.map (lambda "s" $ Serialization.cst @@ (Formatting.javaStyleComment @@ var "s")) (var "d")
+    Optionals.map (lambda "s" $ Serialization.cst @@ (Formatting.javaStyleComment @@ var "s")) (var "d")
 
 enumFieldToExpr :: TypedTermDefinition (PDL.EnumField -> Expr)
 enumFieldToExpr = define "enumFieldToExpr" $
@@ -181,9 +181,9 @@ qualifiedNameToExpr = define "qualifiedNameToExpr" $
   lambda "qn" $ lets [
     "name">: unwrap PDL._Name @@ (project PDL._QualifiedName PDL._QualifiedName_name @@ var "qn"),
     "ns">: project PDL._QualifiedName PDL._QualifiedName_namespace @@ var "qn",
-    "parts">: Maybes.cat $ list [
-      Maybes.map (lambda "n" $ unwrap PDL._Namespace @@ var "n") (var "ns"),
-      Maybes.pure (var "name")]] $
+    "parts">: Optionals.cat $ list [
+      Optionals.map (lambda "n" $ unwrap PDL._Namespace @@ var "n") (var "ns"),
+      Optionals.pure (var "name")]] $
     Serialization.cst @@ (Strings.intercalate (string ".") (var "parts"))
 
 recordFieldToExpr :: TypedTermDefinition (PDL.RecordField -> Expr)
@@ -195,12 +195,12 @@ recordFieldToExpr = define "recordFieldToExpr" $
     "optional">: project PDL._RecordField PDL._RecordField_optional @@ var "rf",
     "anns">: project PDL._RecordField PDL._RecordField_annotations @@ var "rf"] $
     withAnnotations @@ var "anns" @@
-      (Serialization.spaceSep @@ (Maybes.cat $ list [
-        Maybes.pure (Serialization.cst @@ (Strings.cat2 (var "name") (string ":"))),
+      (Serialization.spaceSep @@ (Optionals.cat $ list [
+        Optionals.pure (Serialization.cst @@ (Strings.cat2 (var "name") (string ":"))),
         Logic.ifElse (var "optional")
-          (Maybes.pure (Serialization.cst @@ string "optional"))
+          (Optionals.pure (Serialization.cst @@ string "optional"))
           nothing,
-        Maybes.pure (schemaToExpr @@ var "schema")]))
+        Optionals.pure (schemaToExpr @@ var "schema")]))
 
 schemaFileToExpr :: TypedTermDefinition (PDL.SchemaFile -> Expr)
 schemaFileToExpr = define "schemaFileToExpr" $
@@ -210,19 +210,19 @@ schemaFileToExpr = define "schemaFileToExpr" $
     "pkg">: project PDL._SchemaFile PDL._SchemaFile_package @@ var "sf",
     "imports">: project PDL._SchemaFile PDL._SchemaFile_imports @@ var "sf",
     "schemas">: project PDL._SchemaFile PDL._SchemaFile_schemas @@ var "sf",
-    "namespaceSec">: Maybes.pure (Serialization.spaceSep @@ list [
+    "namespaceSec">: Optionals.pure (Serialization.spaceSep @@ list [
       Serialization.cst @@ string "namespace",
       Serialization.cst @@ var "ns"]),
-    "packageSec">: Maybes.map
+    "packageSec">: Optionals.map
       (lambda "p" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "package",
         Serialization.cst @@ (unwrap PDL._Package @@ var "p")])
       (var "pkg"),
     "importsSec">: Logic.ifElse (Lists.null (var "imports"))
       nothing
-      (Maybes.pure (Serialization.newlineSep @@ (Lists.map importToExpr (var "imports")))),
-    "schemaSecs">: Lists.map (lambda "s" $ Maybes.pure (namedSchemaToExpr @@ var "s")) (var "schemas")] $
-    Serialization.doubleNewlineSep @@ (Maybes.cat $
+      (Optionals.pure (Serialization.newlineSep @@ (Lists.map importToExpr (var "imports")))),
+    "schemaSecs">: Lists.map (lambda "s" $ Optionals.pure (namedSchemaToExpr @@ var "s")) (var "schemas")] $
+    Serialization.doubleNewlineSep @@ (Optionals.cat $
       Lists.concat $ list [
         list [var "namespaceSec", var "packageSec", var "importsSec"],
         var "schemaSecs"])
@@ -257,16 +257,16 @@ unionMemberToExpr = define "unionMemberToExpr" $
     "schema">: project PDL._UnionMember PDL._UnionMember_value @@ var "um",
     "anns">: project PDL._UnionMember PDL._UnionMember_annotations @@ var "um"] $
     withAnnotations @@ var "anns" @@
-      (Serialization.spaceSep @@ (Maybes.cat $ list [
-        Maybes.map (lambda "fn" $
+      (Serialization.spaceSep @@ (Optionals.cat $ list [
+        Optionals.map (lambda "fn" $
           Serialization.cst @@ (Strings.cat2 (unwrap PDL._FieldName @@ var "fn") (string ":")))
           (var "alias"),
-        Maybes.pure (schemaToExpr @@ var "schema")]))
+        Optionals.pure (schemaToExpr @@ var "schema")]))
 
 withAnnotations :: TypedTermDefinition (PDL.Annotations -> Expr -> Expr)
 withAnnotations = define "withAnnotations" $
   doc "Prepend annotations (doc comment) to an expression" $
   lambda "anns" $ lambda "expr" $
-    Serialization.newlineSep @@ (Maybes.cat $ list [
+    Serialization.newlineSep @@ (Optionals.cat $ list [
       annotationsToExpr @@ var "anns",
-      Maybes.pure (var "expr")])
+      Optionals.pure (var "expr")])

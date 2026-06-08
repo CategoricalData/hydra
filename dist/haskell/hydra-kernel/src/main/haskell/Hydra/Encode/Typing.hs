@@ -7,7 +7,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -34,7 +34,7 @@ functionStructure env x =
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.type_ xs)) (Typing.functionStructureDomains x))},
         Core.Field {
           Core.fieldName = (Core.Name "codomain"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.type_ opt)) (Typing.functionStructureCodomain x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map EncodeCore.type_ opt)) (Typing.functionStructureCodomain x))},
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]})
@@ -82,7 +82,7 @@ parameter x =
           Core.fieldTerm = (EncodeCore.name (Typing.parameterName x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.parameterDescription x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.parameterDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Typing.parameterType x))},
@@ -97,7 +97,7 @@ result x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.resultDescription x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.resultDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Typing.resultType x))}]})

@@ -17,7 +17,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Lisp.Syntax as Syntax
@@ -70,10 +70,10 @@ caseExpressionToExpr d caseExpr =
                     Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (expressionToExpr d) (Syntax.caseClauseKeys c))),
                     (expressionToExpr d (Syntax.caseClauseBody c))])) clauses
           defaultPart =
-                  Maybes.maybe [] (\e -> [
+                  Optionals.cases dflt [] (\e -> [
                     Serialization.parens (Serialization.spaceSepAdaptive [
                       Serialization.cst "else",
-                      (expressionToExpr d e)])]) dflt
+                      (expressionToExpr d e)])])
       in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
         [
           Serialization.cst "case",
@@ -97,9 +97,9 @@ condExpressionToExpr d condExpr =
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))]) clauses)
               defaultPart =
-                      Maybes.maybe [] (\e -> [
+                      Optionals.cases dflt [] (\e -> [
                         Serialization.cst ":else",
-                        (expressionToExpr d e)]) dflt
+                        (expressionToExpr d e)])
           in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
@@ -111,10 +111,10 @@ condExpressionToExpr d condExpr =
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))])) clauses
               defaultPart =
-                      Maybes.maybe [] (\e -> [
+                      Optionals.cases dflt [] (\e -> [
                         Serialization.parens (Serialization.spaceSepAdaptive [
                           Serialization.cst "t",
-                          (expressionToExpr d e)])]) dflt
+                          (expressionToExpr d e)])])
           in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
@@ -126,10 +126,10 @@ condExpressionToExpr d condExpr =
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))])) clauses
               defaultPart =
-                      Maybes.maybe [] (\e -> [
+                      Optionals.cases dflt [] (\e -> [
                         Serialization.parens (Serialization.spaceSepAdaptive [
                           Serialization.cst "t",
-                          (expressionToExpr d e)])]) dflt
+                          (expressionToExpr d e)])])
           in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
@@ -141,10 +141,10 @@ condExpressionToExpr d condExpr =
                     expressionToExpr d (Syntax.condClauseCondition c),
                     (expressionToExpr d (Syntax.condClauseBody c))])) clauses
               defaultPart =
-                      Maybes.maybe [] (\e -> [
+                      Optionals.cases dflt [] (\e -> [
                         Serialization.parens (Serialization.spaceSepAdaptive [
                           Serialization.cst "else",
-                          (expressionToExpr d e)])]) dflt
+                          (expressionToExpr d e)])])
           in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
             [
               Serialization.cst "cond"],
@@ -381,8 +381,8 @@ ifExpressionToExpr d ifExpr =
       let cond = expressionToExpr d (Syntax.ifExpressionCondition ifExpr)
           then_ = expressionToExpr d (Syntax.ifExpressionThen ifExpr)
           else_ = Syntax.ifExpressionElse ifExpr
-          elsePart = Maybes.maybe [] (\e -> [
-                expressionToExpr d e]) else_
+          elsePart = Optionals.cases else_ [] (\e -> [
+                expressionToExpr d e])
       in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
         [
           Serialization.cst "if",
@@ -418,10 +418,10 @@ keywordToExpr d k =
         Syntax.DialectScheme -> Serialization.noSep [
           Serialization.cst "'",
           (Serialization.cst name)]
-        _ -> Serialization.cst (Maybes.maybe (Strings.cat2 ":" name) (\n -> Strings.cat [
+        _ -> Serialization.cst (Optionals.cases ns (Strings.cat2 ":" name) (\n -> Strings.cat [
           n,
           "/:",
-          name]) ns)
+          name]))
 lambdaKeyword :: Syntax.Dialect -> String
 lambdaKeyword d =
     case d of
@@ -437,7 +437,7 @@ lambdaToExpr d lam =
           mname = Syntax.lambdaName lam
           kw = lambdaKeyword d
       in case d of
-        Syntax.DialectClojure -> Maybes.maybe (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
+        Syntax.DialectClojure -> Optionals.cases mname (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw],
           [
@@ -448,7 +448,7 @@ lambdaToExpr d lam =
             (symbolToExpr sym)],
           [
             Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
-          body]))) mname
+          body])))
         Syntax.DialectEmacsLisp -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat [
           [
             Serialization.cst kw],
@@ -765,7 +765,7 @@ programToExpr prog =
           importNames = Lists.map (\idecl -> Syntax.unNamespaceName (Syntax.importDeclarationModule idecl)) imports
           exportSyms = Lists.concat (Lists.map (\edecl -> Lists.map symbolToExpr (Syntax.exportDeclarationSymbols edecl)) exports)
       in case d of
-        Syntax.DialectClojure -> Maybes.maybe (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
+        Syntax.DialectClojure -> Optionals.cases modDecl (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               requireClauses =
                       Lists.map (\imp -> Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep [
@@ -800,8 +800,8 @@ programToExpr prog =
             [
               nsForm],
             declareForm,
-            formPart]))) modDecl
-        Syntax.DialectEmacsLisp -> Maybes.maybe (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
+            formPart])))
+        Syntax.DialectEmacsLisp -> Optionals.cases modDecl (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               requireClLib =
                       Serialization.parens (Serialization.spaceSepAdaptive [
@@ -828,8 +828,8 @@ programToExpr prog =
             requireImports,
             formPart,
             [
-              provideForm]]))) modDecl
-        Syntax.DialectCommonLisp -> Maybes.maybe (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
+              provideForm]])))
+        Syntax.DialectCommonLisp -> Optionals.cases modDecl (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               colonName = Strings.cat2 ":" nameStr
               useClause =
@@ -860,8 +860,8 @@ programToExpr prog =
             [
               defpkgForm,
               inpkgForm],
-            formPart]))) modDecl
-        Syntax.DialectScheme -> Maybes.maybe (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
+            formPart])))
+        Syntax.DialectScheme -> Optionals.cases modDecl (Serialization.doubleNewlineSep (Lists.concat2 warning formPart)) (\m ->
           let nameStr = Syntax.unNamespaceName (Syntax.moduleDeclarationName m)
               nameParts = Lists.map (\p -> Formatting.convertCaseCamelToLowerSnake p) (Strings.splitOn "." nameStr)
               nameExpr = Serialization.parens (Serialization.spaceSepAdaptive (Lists.map (\p -> Serialization.cst p) nameParts))
@@ -894,7 +894,7 @@ programToExpr prog =
                         [
                           beginClause]]))
           in (Serialization.doubleNewlineSep (Lists.concat2 warning [
-            libraryExpr]))) modDecl
+            libraryExpr])))
 recordTypeDefinitionToExpr :: Syntax.Dialect -> Syntax.RecordTypeDefinition -> Ast.Expr
 recordTypeDefinitionToExpr d rdef =
 
@@ -989,10 +989,10 @@ topLevelFormWithCommentsToExpr d fwc =
       let mdoc = Syntax.topLevelFormWithCommentsDoc fwc
           mcomment = Syntax.topLevelFormWithCommentsComment fwc
           form = Syntax.topLevelFormWithCommentsForm fwc
-          docPart = Maybes.maybe [] (\ds -> [
-                docstringToExpr ds]) mdoc
-          commentPart = Maybes.maybe [] (\c -> [
-                commentToExpr c]) mcomment
+          docPart = Optionals.cases mdoc [] (\ds -> [
+                docstringToExpr ds])
+          commentPart = Optionals.cases mcomment [] (\c -> [
+                commentToExpr c])
           formExpr = topLevelFormToExpr d form
       in (Serialization.newlineSep (Lists.concat [
         commentPart,

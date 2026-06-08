@@ -36,8 +36,8 @@
                     "handler": {"lambda": {"body": {"literal": {"string": "map"}}, "domain": {"unit": {}}, "parameter": "_"}},
                     "name": "map"},
                   {
-                    "handler": {"lambda": {"body": {"literal": {"string": "maybe"}}, "domain": {"unit": {}}, "parameter": "_"}},
-                    "name": "maybe"},
+                    "handler": {"lambda": {"body": {"literal": {"string": "optional"}}, "domain": {"unit": {}}, "parameter": "_"}},
+                    "name": "optional"},
                   {
                     "handler": {"lambda": {"body": {"literal": {"string": "pair"}}, "domain": {"unit": {}}, "parameter": "_"}},
                     "name": "pair"},
@@ -110,8 +110,8 @@
                     "handler": {"lambda": {"body": {"literal": {"string": "map"}}, "domain": {"unit": {}}, "parameter": "_"}},
                     "name": "map"},
                   {
-                    "handler": {"lambda": {"body": {"literal": {"string": "maybe"}}, "domain": {"unit": {}}, "parameter": "_"}},
-                    "name": "maybe"},
+                    "handler": {"lambda": {"body": {"literal": {"string": "optional"}}, "domain": {"unit": {}}, "parameter": "_"}},
+                    "name": "optional"},
                   {
                     "handler": {"lambda": {"body": {"literal": {"string": "pair"}}, "domain": {"unit": {}}, "parameter": "_"}},
                     "name": "pair"},

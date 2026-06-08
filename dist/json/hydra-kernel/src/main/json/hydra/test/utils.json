@@ -31,7 +31,7 @@
                                       "application": {
                                         "argument": {"variable": "tg"},
                                         "function": {"project": {"fieldName": "description", "typeName": "hydra.testing.TestGroup"}}}},
-                                    "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                    "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
                                   {
                                     "name": "subgroups",
                                     "term": {
@@ -188,7 +188,7 @@
                                       "application": {
                                         "argument": {"variable": "tcm"},
                                         "function": {"project": {"fieldName": "description", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
-                                    "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                    "typeScheme": {"body": {"optional": {"literal": {"string": {}}}}, "variables": []}},
                                   {
                                     "name": "tags_",
                                     "term": {

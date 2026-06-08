@@ -14,7 +14,7 @@ import hydra.dsl.meta.lib.Literals;
 import hydra.dsl.meta.lib.Logic;
 import hydra.dsl.meta.lib.Maps;
 import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Maybes;
+import hydra.dsl.meta.lib.Optionals;
 import hydra.dsl.meta.lib.Pairs;
 import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
@@ -24,7 +24,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -210,11 +210,11 @@ public class Names {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just(new EntityMetadata(
-            Maybe.just("Java naming constants and package name utilities"),
+        Optional.given(new EntityMetadata(
+            Optional.given("Java naming constants and package name utilities"),
             java.util.List.of(),
             java.util.List.of(),
-            Maybe.nothing())),
+            Optional.none())),
         DEPENDENCIES,
         DEFINITIONS);
 }

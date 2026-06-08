@@ -1712,28 +1712,28 @@ module_ =
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                                        Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                          Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                                          Core.wrappedTermBody = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
-                                            Core.applicationArgument = (Core.TermList [
-                                              Core.TermLiteral (Core.LiteralString "no such field "),
-                                              (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.core.Name")),
-                                                Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                              (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
-                                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "f"),
-                                        Core.lambdaDomain = Nothing,
-                                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fterm"))}))}))})),
-                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "variantMap"))}))}))}))}))}]})),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "variantMap"))}))})),
+                                      Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                                        Core.wrappedTermBody = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
+                                          Core.applicationArgument = (Core.TermList [
+                                            Core.TermLiteral (Core.LiteralString "no such field "),
+                                            (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.core.Name")),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                            (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
+                                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "f"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fterm"))}))}))}))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2336,28 +2336,28 @@ module_ =
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                                        Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                          Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                                          Core.wrappedTermBody = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
-                                            Core.applicationArgument = (Core.TermList [
-                                              Core.TermLiteral (Core.LiteralString "no such field "),
-                                              (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.core.Name")),
-                                                Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                              (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
-                                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "f"),
-                                        Core.lambdaDomain = Nothing,
-                                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fterm"))}))}))})),
-                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "variantMap"))}))}))}))}))}]})),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "variantMap"))}))})),
+                                      Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                                        Core.wrappedTermBody = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
+                                          Core.applicationArgument = (Core.TermList [
+                                            Core.TermLiteral (Core.LiteralString "no such field "),
+                                            (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.core.Name")),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                            (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
+                                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "f"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fterm"))}))}))}))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2776,28 +2776,28 @@ module_ =
                                   Core.letBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                                        Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                          Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                                          Core.wrappedTermBody = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
-                                            Core.applicationArgument = (Core.TermList [
-                                              Core.TermLiteral (Core.LiteralString "no such field "),
-                                              (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.core.Name")),
-                                                Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                              (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
-                                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "f"),
-                                        Core.lambdaDomain = Nothing,
-                                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fterm"))}))}))})),
-                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "variantMap"))}))}))}))}))}]})),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "variantMap"))}))})),
+                                      Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                                        Core.wrappedTermBody = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
+                                          Core.applicationArgument = (Core.TermList [
+                                            Core.TermLiteral (Core.LiteralString "no such field "),
+                                            (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.core.Name")),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                            (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
+                                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "f"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fterm"))}))}))}))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {

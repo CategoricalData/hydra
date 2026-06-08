@@ -4,7 +4,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Testing.hs
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Just, Nothing
+from hydra.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.chars as Chars
@@ -12,7 +12,7 @@ import hydra.dsl.meta.lib.eithers as Eithers
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.logic as Logic
-import hydra.dsl.meta.lib.maybes as Maybes
+import hydra.dsl.meta.lib.optionals as Optionals
 import hydra.dsl.meta.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
@@ -52,11 +52,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just(EntityMetadata(
-        Just("Python test code generation codec for pytest-based generation tests"),
+    Given(EntityMetadata(
+        Given("Python test code generation codec for pytest-based generation tests"),
         (),
         (),
-        Nothing())),
+        None_())),
     DEPENDENCIES,
     (),
 )
@@ -188,7 +188,7 @@ def _generate_python_test_case():
         cases(
             _TEST_CASE,
             var("tcase"),
-            Nothing(),
+            None_(),
             [
                 field("universal",
                     lam("ucase", universal_branch_body),
@@ -330,7 +330,7 @@ def _generate_test_file_with_python_codec():
                 ),
             ),
             field("dirParts",
-                Maybes.from_maybe(
+                Optionals.from_optional(
                     list_([]),
                     Lists.maybe_init(var("parts")),
                 ),
@@ -338,7 +338,7 @@ def _generate_test_file_with_python_codec():
             field("fileName",
                 Strings.cat(list_([
                     string("test_"),
-                    Maybes.from_maybe(
+                    Optionals.from_optional(
                         string(""),
                         Lists.maybe_last(var("parts")),
                     ),

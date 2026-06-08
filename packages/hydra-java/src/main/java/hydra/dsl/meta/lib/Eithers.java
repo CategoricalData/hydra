@@ -21,7 +21,7 @@ public final class Eithers {
     public static <A> TypedTerm<A> lefts(TypedTerm<?> eithers) { return Phantoms.apply(prim("lefts"), eithers); }
     public static <A> TypedTerm<A> map(TypedTerm<?> f, TypedTerm<?> e) { return Phantoms.apply(prim("map"), f, e); }
     public static <A> TypedTerm<A> mapList(TypedTerm<?> f, TypedTerm<?> xs) { return Phantoms.apply(prim("mapList"), f, xs); }
-    public static <A> TypedTerm<A> mapMaybe(TypedTerm<?> f, TypedTerm<?> x) { return Phantoms.apply(prim("mapMaybe"), f, x); }
+    public static <A> TypedTerm<A> mapOptional(TypedTerm<?> f, TypedTerm<?> x) { return Phantoms.apply(prim("mapOptional"), f, x); }
     public static <A> TypedTerm<A> mapSet(TypedTerm<?> f, TypedTerm<?> s) { return Phantoms.apply(prim("mapSet"), f, s); }
     public static <A> TypedTerm<A> partitionEithers(TypedTerm<?> eithers) { return Phantoms.apply(prim("partitionEithers"), eithers); }
     public static <A> TypedTerm<A> rights(TypedTerm<?> eithers) { return Phantoms.apply(prim("rights"), eithers); }

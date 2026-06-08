@@ -13,7 +13,7 @@
                       "literal": {"string": "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas"}}}]},
               "body": {
                 "record": [
-                  {"name": "doc", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "doc", "type": {"optional": {"literal": {"string": {}}}}},
                   {"name": "deprecated", "type": {"literal": {"boolean": {}}}}]}}},
           "variables": []},
         "name": "hydra.pegasus.pdl.Annotations"}},
@@ -83,7 +83,7 @@
           "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.pegasus.pdl.PropertyKey"}},
-              {"name": "value", "type": {"maybe": {"variable": "hydra.json.model.Value"}}}]},
+              {"name": "value", "type": {"optional": {"variable": "hydra.json.model.Value"}}}]},
           "variables": []},
         "name": "hydra.pegasus.pdl.Property"}},
     {
@@ -92,7 +92,7 @@
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.pegasus.pdl.Name"}},
-              {"name": "namespace", "type": {"maybe": {"variable": "hydra.pegasus.pdl.Namespace"}}}]},
+              {"name": "namespace", "type": {"optional": {"variable": "hydra.pegasus.pdl.Namespace"}}}]},
           "variables": []},
         "name": "hydra.pegasus.pdl.QualifiedName"}},
     {
@@ -110,7 +110,7 @@
                   {"name": "name", "type": {"variable": "hydra.pegasus.pdl.FieldName"}},
                   {"name": "value", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
                   {"name": "optional", "type": {"literal": {"boolean": {}}}},
-                  {"name": "default", "type": {"maybe": {"variable": "hydra.json.model.Value"}}},
+                  {"name": "default", "type": {"optional": {"variable": "hydra.json.model.Value"}}},
                   {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]}}},
           "variables": []},
         "name": "hydra.pegasus.pdl.RecordField"}},
@@ -151,7 +151,7 @@
           "body": {
             "record": [
               {"name": "namespace", "type": {"variable": "hydra.pegasus.pdl.Namespace"}},
-              {"name": "package", "type": {"maybe": {"variable": "hydra.pegasus.pdl.Package"}}},
+              {"name": "package", "type": {"optional": {"variable": "hydra.pegasus.pdl.Package"}}},
               {"name": "imports", "type": {"list": {"variable": "hydra.pegasus.pdl.QualifiedName"}}},
               {"name": "schemas", "type": {"list": {"variable": "hydra.pegasus.pdl.NamedSchema"}}}]},
           "variables": []},
@@ -168,7 +168,7 @@
                     "value": {"literal": {"string": "Note: annotations are only available for aliased members"}}}]},
               "body": {
                 "record": [
-                  {"name": "alias", "type": {"maybe": {"variable": "hydra.pegasus.pdl.FieldName"}}},
+                  {"name": "alias", "type": {"optional": {"variable": "hydra.pegasus.pdl.FieldName"}}},
                   {"name": "value", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
                   {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]}}},
           "variables": []},

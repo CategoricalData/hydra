@@ -2,9 +2,12 @@
 -- | Utility functions for property graph operations
 
 module Hydra.Pg.Utils where
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
@@ -13,13 +16,26 @@ import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Pg.Coder as Coder
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as PgModel
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Default Tinkerpop annotation schema
@@ -88,7 +104,7 @@ pgElementToJson schema el cx =
     (\x -> case x of
       PgModel.ElementVertex v0 -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.vertexId v0)) (\term ->
         let labelJson = JsonModel.ValueString (PgModel.unVertexLabel (PgModel.vertexLabel v0))
-        in (Eithers.map (\propsJson -> JsonModel.ValueObject (Maps.fromList (Maybes.cat [
+        in (Eithers.map (\propsJson -> JsonModel.ValueObject (Maps.fromList (Optionals.cat [
           Just ("label", labelJson),
           (Just ("id", (JsonModel.ValueString (ShowCore.term term)))),
           propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (JsonModel.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->
@@ -97,7 +113,7 @@ pgElementToJson schema el cx =
           in (Eithers.bind (Coders.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term2 -> Right (PgModel.unPropertyKey key, (JsonModel.ValueString (ShowCore.term term2)))))) (Maps.toList pairs)))) (PgModel.vertexProperties v0))))
       PgModel.ElementEdge v0 -> Eithers.bind (Coders.coderDecode (Mapping.schemaEdgeIds schema) cx (PgModel.edgeId v0)) (\term -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.edgeOut v0)) (\termOut -> Eithers.bind (Coders.coderDecode (Mapping.schemaVertexIds schema) cx (PgModel.edgeIn v0)) (\termIn ->
         let labelJson = JsonModel.ValueString (PgModel.unEdgeLabel (PgModel.edgeLabel v0))
-        in (Eithers.map (\propsJson -> JsonModel.ValueObject (Maps.fromList (Maybes.cat [
+        in (Eithers.map (\propsJson -> JsonModel.ValueObject (Maps.fromList (Optionals.cat [
           Just ("label", labelJson),
           (Just ("id", (JsonModel.ValueString (ShowCore.term term)))),
           (Just ("out", (JsonModel.ValueString (ShowCore.term termOut)))),

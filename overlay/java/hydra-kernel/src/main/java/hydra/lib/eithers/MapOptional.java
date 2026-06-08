@@ -1,0 +1,93 @@
+package hydra.lib.eithers;
+
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.dsl.Terms;
+import hydra.graph.Graph;
+import hydra.tools.PrimitiveFunction;
+import hydra.util.Optional;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.dsl.Types.either;
+import static hydra.dsl.Types.function;
+import static hydra.dsl.Types.optional;
+import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.var;
+import hydra.typing.InferenceContext;
+import hydra.errors.Error_;
+import hydra.util.Either;
+
+/**
+ * Map a function that may fail over a Optional, collecting results or returning the first error.
+ */
+public class MapOptional extends PrimitiveFunction {
+    public static final Name NAME = new Name("hydra.lib.eithers.mapOptional");
+
+    public Name name() {
+        return NAME;
+    }
+
+    @Override
+    public TypeScheme type() {
+        return scheme("a", "b", "z",
+            function(
+                function(var("a"), either(var("z"), var("b"))),
+                optional(var("a")),
+                either(var("z"), optional(var("b")))));
+    }
+
+    @Override
+    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(1)), maybe -> {
+                Term fn = args.get(0);
+                if (maybe.isNone()) {
+                    return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.optional(Optional.none()))));
+                }
+                Term val = maybe.fromGiven();
+                Either<Error_, Term> r = hydra.Reduction.reduceTerm(
+                    hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(fn, val));
+                if (r.isLeft()) return (Either) r;
+                Either<Error_, hydra.util.Either<Term, Term>> eitherResult =
+                    hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
+                        ((Either.Right<Error_, Term>) r).value);
+                if (eitherResult.isLeft()) return (Either) eitherResult;
+                hydra.util.Either<Term, Term> inner =
+                    ((Either.Right<Error_, hydra.util.Either<Term, Term>>) eitherResult).value;
+                if (inner.isLeft()) {
+                    return Either.right(new Term.Either(new hydra.util.Either.Left<>(
+                        ((hydra.util.Either.Left<Term, Term>) inner).value)));
+                }
+                return Either.right(new Term.Either(new hydra.util.Either.Right<>(
+                    Terms.optional(Optional.given(((hydra.util.Either.Right<Term, Term>) inner).value)))));
+            });
+    }
+
+    /**
+     * Map a function over a Optional, returning Left on failure or Right with the result.
+     */
+    public static <A, B, Z> hydra.util.Either<Z, Optional<B>> apply(
+            Function<A, hydra.util.Either<Z, B>> fn,
+            Optional<A> maybe) {
+        if (maybe.isNone()) {
+            return new hydra.util.Either.Right<>(Optional.none());
+        } else {
+            A val = maybe.orElse(null);
+            hydra.util.Either<Z, B> result = fn.apply(val);
+            if (result.isLeft()) {
+                return new hydra.util.Either.Left<>(((hydra.util.Either.Left<Z, B>) result).value);
+            }
+            return new hydra.util.Either.Right<>(Optional.given(((hydra.util.Either.Right<Z, B>) result).value));
+        }
+    }
+
+    /**
+     * Curried version for method references.
+     */
+    public static <A, B, Z> Function<Optional<A>, hydra.util.Either<Z, Optional<B>>> apply(
+            Function<A, hydra.util.Either<Z, B>> fn) {
+        return maybe -> apply(fn, maybe);
+    }
+}

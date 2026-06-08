@@ -370,13 +370,13 @@ subtermStepMapValue x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapValue"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
--- | DSL injection for the maybeTerm variant of hydra.paths.SubtermStep
-subtermStepMaybeTerm :: Typed.TypedTerm Paths.SubtermStep
-subtermStepMaybeTerm =
+-- | DSL injection for the optionalTerm variant of hydra.paths.SubtermStep
+subtermStepOptionalTerm :: Typed.TypedTerm Paths.SubtermStep
+subtermStepOptionalTerm =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "maybeTerm"),
+        Core.fieldName = (Core.Name "optionalTerm"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the productTerm variant of hydra.paths.SubtermStep
 subtermStepProductTerm :: Typed.TypedTerm Int -> Typed.TypedTerm Paths.SubtermStep
@@ -820,13 +820,13 @@ subtypeStepMapValues =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapValues"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the maybeElement variant of hydra.paths.SubtypeStep
-subtypeStepMaybeElement :: Typed.TypedTerm Paths.SubtypeStep
-subtypeStepMaybeElement =
+-- | DSL injection for the optionalElement variant of hydra.paths.SubtypeStep
+subtypeStepOptionalElement :: Typed.TypedTerm Paths.SubtypeStep
+subtypeStepOptionalElement =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "maybeElement"),
+        Core.fieldName = (Core.Name "optionalElement"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the pairFirst variant of hydra.paths.SubtypeStep
 subtypeStepPairFirst :: Typed.TypedTerm Paths.SubtypeStep

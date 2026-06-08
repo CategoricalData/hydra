@@ -9,7 +9,7 @@
 --   * Hydra records       → readonly `interface` declarations
 --   * Hydra unions        → readonly discriminated-union `type` aliases
 --   * Hydra type params   → generic `<T extends …>` parameters
---   * Hydra `Maybe<T>`    → `{ tag: "just", value: T } | { tag: "nothing" }`
+--   * Hydra `Optional<T>` → `{ tag: "given", value: T } | { tag: "none" }`
 --   * Hydra `Pair<A, B>`  → `readonly [A, B]`
 --
 -- Anything not needed for Hydra emission (decorators, namespaces, `enum`,

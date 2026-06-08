@@ -381,29 +381,29 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "mapMaybe",
+          Testing.testGroupName = "mapOptional",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "just succeeds",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) e) (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 5))),
-                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) e) (Right (Just 10)))})),
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Eithers.mapOptional (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 5))),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Right (Just 10)))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "just fails",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) e) (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 0))),
-                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) e) (Left "zero"))})),
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Eithers.mapOptional (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 0))),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Left "zero"))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nothing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) e) (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) Nothing)),
-                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) e) (Right Nothing))})),
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Eithers.mapOptional (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) Nothing)),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Right Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

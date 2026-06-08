@@ -11,7 +11,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -57,8 +57,8 @@ value cx raw =
                             Core.LiteralString v2 -> Right v2
                             _ -> Left (Errors.DecodingError "expected string literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

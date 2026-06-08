@@ -121,7 +121,7 @@ The block has these sections:
    Variants, etc.). These re-export the generated DSLs and add custom helpers such as AsTerm-flexible overrides and
    expression conversion utilities.
 5. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps,
-   Math, Maybes, Pairs, Sets)
+   Math, Optionals, Pairs, Sets)
 5. **Qualified kernel sources imports** —
    `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
 6. **Standard Haskell imports** — `Prelude hiding ((++))`, `Data.List as L`, `Data.Map as M`, `Data.Set as S`
@@ -392,9 +392,9 @@ lambdas ["x", "y"] $ ...
 you must use a lambda, not a direct function reference:
 
 ```haskell
--- Wrong: Lists.map Maybes.isNothing (var "xs")
+-- Wrong: Lists.map Optionals.isNone (var "xs")
 -- Correct:
-Lists.map ("x" ~> Maybes.isNothing (var "x")) (var "xs")
+Lists.map ("x" ~> Optionals.isNone (var "x")) (var "xs")
 
 -- Wrong: Eithers.map just (var "either")
 -- Correct:
@@ -518,8 +518,8 @@ inject _TypeName _TypeName_variant @@ var "value"
 -- Optionals
 just (var "x")
 nothing
-Maybes.maybe (var "default") ("x" ~> ...) (var "opt")
-Maybes.cat (var "xs")
+Optionals.cases (var "opt") (var "default") ("x" ~> ...)
+Optionals.cat (var "xs")
 
 -- Pairs
 pair (var "a") (var "b")
@@ -548,7 +548,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 3. **Watch for operator precedence**: Use parentheses liberally when combining DSL operators like `@@` and `$`.
 
 4. **Check DSL exports**: If a function isn't found in a DSL module, check what's actually exported (e.g.,
-   `Maybes.cat` not `Maybes.catMaybes`).
+   `Optionals.cat` not `Optionals.catOptionals`).
 
 5. **Compose type conversions**: Some conversions are not direct; compose existing primitives. For example, `int32ToBigint` then `bigintToDecimal`, then `decimalToFloat64` to go from int32 to float64.
 
@@ -579,7 +579,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 8. **DSL module naming conventions**: Functions in DSL modules often have different names than their Haskell
    counterparts:
-   - `Maybes.catMaybes` doesn't exist — use `Maybes.mapMaybe ("x" ~> var "x")`
+   - `Optionals.catOptionals` doesn't exist — use `Optionals.mapOptional ("x" ~> var "x")`
    - `Maps.values` doesn't exist — use `Maps.elems`
    - `Lists.any` doesn't exist — use foldl with `Logic.or`
 
@@ -870,7 +870,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     |---|---|---|
     | `S.filter pred set` | `Sets.intersection set2 set` (if filtering by membership) | No `Sets.filter`; use `Sets.intersection` or convert to list |
     | `L.concatMap f xs` | `Lists.concat (Lists.map f xs)` | No `Lists.concatMap` |
-    | `Y.catMaybes xs` | `Maybes.cat xs` | `Maybes.cat :: [Maybe a] -> [a]` |
+    | `Y.catMaybes xs` | `Optionals.cat xs` | `Optionals.cat :: [Maybe a] -> [a]` |
     | `Right x` | `right x` (from DSL prelude) | Not `inject _Either _Either_right` |
     | `Left x` | `Phantoms.left x` | For `Either` left values |
     | `Just $ Left $ ExpressionName ...` | `just (Phantoms.left (JavaDsl.expressionName nothing id))` | Common in methodInvocation calls |

@@ -2,22 +2,41 @@
 -- | Functions for converting Hydra terms to Graphviz DOT graphs
 
 module Hydra.Graphviz.Coder where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Graphviz.Dot as Dot
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Paths as ShowPaths
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -78,7 +97,7 @@ standardNamespaces =
       (Packaging.ModuleName "hydra.lib.logic", "logic"),
       (Packaging.ModuleName "hydra.lib.maps", "maps"),
       (Packaging.ModuleName "hydra.lib.math", "math"),
-      (Packaging.ModuleName "hydra.lib.maybes", "maybes"),
+      (Packaging.ModuleName "hydra.lib.optionals", "optionals"),
       (Packaging.ModuleName "hydra.lib.pairs", "pairs"),
       (Packaging.ModuleName "hydra.lib.regex", "regex"),
       (Packaging.ModuleName "hydra.lib.sets", "sets"),
@@ -128,7 +147,7 @@ termLabel compact namespaces term =
           Core.LiteralString v1 -> v1
           _ -> "?")
         Core.TermMap _ -> simpleLabel (Logic.ifElse compact "<,>" "map")
-        Core.TermMaybe _ -> simpleLabel (Logic.ifElse compact "opt" "optional")
+        Core.TermOptional _ -> simpleLabel (Logic.ifElse compact "opt" "optional")
         Core.TermRecord v0 -> simpleLabel (Strings.cat2 "\8743" (Names.compactName namespaces (Core.recordTypeName v0)))
         Core.TermTypeLambda _ -> simpleLabel "tyabs"
         Core.TermTypeApplication _ -> simpleLabel "tyapp"
@@ -166,7 +185,7 @@ termToDotStmts namespaces term =
                                   l = Pairs.first tls
                                   s = Pairs.second tls
                               in (Names.uniqueLabel vis l, s)
-                    labstyle = Maybes.maybe (labelOf visited currentTerm) (\ls -> ls) mlabstyle
+                    labstyle = Optionals.cases mlabstyle (labelOf visited currentTerm) (\ls -> ls)
                     label = Pairs.first labstyle
                     style = Pairs.second labstyle
                     nodeStyle = Logic.ifElse isElement nodeStyleElement termNodeStyle
@@ -177,15 +196,15 @@ termToDotStmts namespaces term =
                               Dot.nodeStmtId = (toNodeId selfId),
                               Dot.nodeStmtAttributes = (Just (labelAttrs nodeStyle rawLabel))})
                     toAccessorEdgeStmt =
-                            \acc -> \sty -> \i1 -> \i2 -> toEdgeStmt i1 i2 (Maybes.map (\s -> labelAttrs sty s) (ShowPaths.subtermStep acc))
+                            \acc -> \sty -> \i1 -> \i2 -> toEdgeStmt i1 i2 (Optionals.map (\s -> labelAttrs sty s) (ShowPaths.subtermStep acc))
                     edgeAttrs =
                             \lab -> Dot.AttrList [
                               [
                                 Dot.EqualityPair {
                                   Dot.equalityPairLeft = (Dot.Id "label"),
                                   Dot.equalityPairRight = (Dot.Id lab)}]]
-                    parentStmt = Maybes.maybe [] (\parent -> [
-                          toAccessorEdgeStmt accessor style parent selfId]) mparent
+                    parentStmt = Optionals.cases mparent [] (\parent -> [
+                          toAccessorEdgeStmt accessor style parent selfId])
                     selfStmts =
                             Lists.concat [
                               stmts,
@@ -237,12 +256,12 @@ termToDotStmts namespaces term =
                                 \stVis -> \binding ->
                                   let bname = Core.bindingName binding
                                       bterm = Core.bindingTerm binding
-                                      blab = Dot.unId (Maybes.fromMaybe (Dot.Id "?") (Maps.lookup bname ids1))
+                                      blab = Dot.unId (Optionals.fromOptional (Dot.Id "?") (Maps.lookup bname ids1))
                                   in (encode (Just (blab, nodeStyleElement)) True ids1 (Just selfId) stVis (Paths.SubtermStepLetBinding bname, bterm))
                         stmts1 = Lists.foldl addBindingTerm (selfStmts, selfVisited) bindings
                     in (encode Nothing False ids1 (Just selfId) stmts1 (Paths.SubtermStepLetBody, env))
-                  Core.TermVariable v0 -> Maybes.maybe dflt (\i -> (Lists.concat2 stmts [
-                    toAccessorEdgeStmt accessor style (Maybes.fromMaybe selfId mparent) i], visited)) (Maps.lookup v0 ids)
+                  Core.TermVariable v0 -> Optionals.cases (Maps.lookup v0 ids) dflt (\i -> (Lists.concat2 stmts [
+                    toAccessorEdgeStmt accessor style (Optionals.fromOptional selfId mparent) i], visited))
                   _ -> dflt
       in (Pairs.first (encode Nothing False Maps.empty Nothing ([], Sets.empty) (Paths.SubtermStepAnnotatedBody, term)))
 -- | Convert a term to an subterm-style DOT graph
@@ -271,7 +290,7 @@ termToSubtermDotStmts namespaces term =
                     let lab1 = Paths.subtermNodeId (Paths.subtermEdgeSource edge)
                         lab2 = Paths.subtermNodeId (Paths.subtermEdgeTarget edge)
                         pathAccessors = Paths.unSubtermPath (Paths.subtermEdgePath edge)
-                        showPath = Strings.intercalate "/" (Maybes.cat (Lists.map ShowPaths.subtermStep pathAccessors))
+                        showPath = Strings.intercalate "/" (Optionals.cat (Lists.map ShowPaths.subtermStep pathAccessors))
                     in (toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) (Just (Dot.AttrList [
                       [
                         labelAttr showPath]])))

@@ -76,28 +76,28 @@ aesGcmCtrV1 = define "AesGcmCtrV1" $
   T.record [
     "aadPrefix">:
       doc "AAD prefix" $
-      T.maybe T.binary,
+      T.optional T.binary,
     "aadFileUnique">:
       doc "Unique file identifier part of AAD suffix" $
-      T.maybe T.binary,
+      T.optional T.binary,
     "supplyAadPrefix">:
       doc ("In files encrypted with AAD prefix without storing it, " ++
            "readers must supply the prefix") $
-      T.maybe T.boolean]
+      T.optional T.boolean]
 
 aesGcmV1 :: TypeDefinition
 aesGcmV1 = define "AesGcmV1" $
   T.record [
     "aadPrefix">:
       doc "AAD prefix" $
-      T.maybe T.binary,
+      T.optional T.binary,
     "aadFileUnique">:
       doc "Unique file identifier part of AAD suffix" $
-      T.maybe T.binary,
+      T.optional T.binary,
     "supplyAadPrefix">:
       doc ("In files encrypted with AAD prefix without storing it, " ++
            "readers must supply the prefix") $
-      T.maybe T.boolean]
+      T.optional T.boolean]
 
 bloomFilterAlgorithm :: TypeDefinition
 bloomFilterAlgorithm = define "BloomFilterAlgorithm" $
@@ -153,7 +153,7 @@ columnChunk = define "ColumnChunk" $
     "filePath">:
       doc ("File where column data is stored.  If not set, assumed to be same file as " ++
            "metadata.  This path is relative to the current file.") $
-      T.maybe T.string,
+      T.optional T.string,
     "fileOffset">:
       doc "Byte offset in file_path to the ColumnMetaData"
       T.int64,
@@ -161,25 +161,25 @@ columnChunk = define "ColumnChunk" $
       doc ("Column metadata for this chunk. This is the same content as what is at " ++
            "file_path/file_offset.  Having it here has it replicated in the file " ++
            "metadata.") $
-      T.maybe $ parquet "ColumnMetaData",
+      T.optional $ parquet "ColumnMetaData",
     "offsetIndexOffset">:
       doc "File offset of ColumnChunk's OffsetIndex" $
-      T.maybe T.int64,
+      T.optional T.int64,
     "offsetIndexLength">:
       doc "Size of ColumnChunk's OffsetIndex, in bytes" $
-      T.maybe T.int32,
+      T.optional T.int32,
     "columnIndexOffset">:
       doc "File offset of ColumnChunk's ColumnIndex" $
-      T.maybe T.int64,
+      T.optional T.int64,
     "columnIndexLength">:
       doc "Size of ColumnChunk's ColumnIndex, in bytes" $
-      T.maybe T.int32,
+      T.optional T.int32,
     "cryptoMetadata">:
       doc "Crypto metadata of encrypted columns" $
-      T.maybe $ parquet "ColumnCryptoMetaData",
+      T.optional $ parquet "ColumnCryptoMetaData",
     "encryptedColumnMetadata">:
       doc "Encrypted column metadata for this chunk" $
-      T.maybe T.binary]
+      T.optional T.binary]
 
 columnCryptoMetaData :: TypeDefinition
 columnCryptoMetaData = define "ColumnCryptoMetaData" $
@@ -218,7 +218,7 @@ columnIndex = define "ColumnIndex" $
       parquet "BoundaryOrder",
     "nullCounts">:
       doc "A list containing the number of null values for each page" $
-      T.maybe $ T.list T.int64]
+      T.optional $ T.list T.int64]
 
 columnMetaData :: TypeDefinition
 columnMetaData = define "ColumnMetaData" $
@@ -249,27 +249,27 @@ columnMetaData = define "ColumnMetaData" $
       T.int64,
     "keyValueMetadata">:
       doc "Optional key/value metadata" $
-      T.maybe $ T.list $ parquet "KeyValue",
+      T.optional $ T.list $ parquet "KeyValue",
     "dataPageOffset">:
       doc "Byte offset from beginning of file to first data page"
       T.int64,
     "indexPageOffset">:
       doc "Byte offset from beginning of file to root index page" $
-      T.maybe T.int64,
+      T.optional T.int64,
     "dictionaryPageOffset">:
       doc "Byte offset from the beginning of file to first (only) dictionary page" $
-      T.maybe T.int64,
+      T.optional T.int64,
     "statistics">:
       doc "optional statistics for this column chunk" $
-      T.maybe $ parquet "Statistics",
+      T.optional $ parquet "Statistics",
     "encodingStats">:
       doc ("Set of all encodings used for pages in this column chunk. " ++
            "This information can be used to determine if all data pages are " ++
            "dictionary encoded for example") $
-      T.maybe $ T.list $ parquet "PageEncodingStats",
+      T.optional $ T.list $ parquet "PageEncodingStats",
     "bloomFilterOffset">:
       doc "Byte offset from beginning of file to Bloom filter data." $
-      T.maybe T.int64]
+      T.optional T.int64]
 
 columnOrder :: TypeDefinition
 columnOrder = define "ColumnOrder" $
@@ -360,7 +360,7 @@ dataPageHeader = define "DataPageHeader" $
       parquet "Encoding",
     "statistics">:
       doc "Optional statistics for the data in this page" $
-      T.maybe $ parquet "Statistics"]
+      T.optional $ parquet "Statistics"]
 
 dataPageHeaderV2 :: TypeDefinition
 dataPageHeaderV2 = define "DataPageHeaderV2" $
@@ -393,10 +393,10 @@ dataPageHeaderV2 = define "DataPageHeaderV2" $
            "definition_levels_byte_length + repetition_levels_byte_length + 1 and compressed_page_size (included) " ++
            "is compressed with the compression_codec. " ++
            "If missing it is considered compressed") $
-      T.maybe T.boolean,
+      T.optional T.boolean,
     "statistics">:
       doc "optional statistics for the data in this page" $
-      T.maybe $ parquet "Statistics"]
+      T.optional $ parquet "Statistics"]
 
 decimalType :: TypeDefinition
 decimalType = define "DecimalType" $
@@ -422,7 +422,7 @@ dictionaryPageHeader = define "DictionaryPageHeader" $
       parquet "Encoding",
     "isSorted">:
       doc "If true, the entries in the dictionary are sorted in ascending order" $
-      T.maybe T.boolean]
+      T.optional T.boolean]
 
 encoding :: TypeDefinition
 encoding = define "Encoding" $
@@ -479,7 +479,7 @@ encryptionWithColumnKey = define "EncryptionWithColumnKey" $
       T.list T.string,
     "keyMetadata">:
       doc "Retrieval metadata of column encryption key" $
-      T.maybe T.binary]
+      T.optional T.binary]
 
 encryptionWithFooterKey :: TypeDefinition
 encryptionWithFooterKey = define "EncryptionWithFooterKey" $ T.record []
@@ -504,7 +504,7 @@ fileCryptoMetaData = define "FileCryptoMetaData" $
     "keyMetadata">:
       doc ("Retrieval metadata of key used for encryption of footer, " ++
            "and (possibly) columns") $
-      T.maybe T.binary]
+      T.optional T.binary]
 
 fileMetaData :: TypeDefinition
 fileMetaData = define "FileMetaData" $
@@ -529,12 +529,12 @@ fileMetaData = define "FileMetaData" $
       T.list $ parquet "RowGroup",
     "keyValueMetadata">:
       doc "Optional key/value metadata" $
-      T.maybe $ T.list $ parquet "KeyValue",
+      T.optional $ T.list $ parquet "KeyValue",
     "createdBy">:
       doc ("String for application that wrote this file.  This should be in the format " ++
            "<Application> version <App Version> (build <App Build Hash>). " ++
            "e.g. impala version 1.0 (build 6cf94d29b2b7115df4de2c06e2ab4326d721eb55)") $
-      T.maybe T.string,
+      T.optional T.string,
     "columnOrders">:
       doc ("Sort order used for the min_value and max_value fields in the Statistics " ++
            "objects and the min_values and max_values fields in the ColumnIndex " ++
@@ -548,16 +548,16 @@ fileMetaData = define "FileMetaData" $
            "column_orders must be written as well.\n" ++
            "The obsolete min and max fields in the Statistics object are always sorted " ++
            "by signed comparison regardless of column_orders.") $
-      T.maybe $ T.list $ parquet "ColumnOrder",
+      T.optional $ T.list $ parquet "ColumnOrder",
     "encryptionAlgorithm">:
       doc ("Encryption algorithm. This field is set only in encrypted files " ++
            "with plaintext footer. Files with encrypted footer store algorithm id " ++
            "in FileCryptoMetaData structure.") $
-      T.maybe $ parquet "EncryptionAlgorithm",
+      T.optional $ parquet "EncryptionAlgorithm",
     "footerSigningKeyMetadata">:
       doc ("Retrieval metadata of key used for signing the footer. " ++
            "Used only in encrypted files with plaintext footer.") $
-      T.maybe T.binary]
+      T.optional T.binary]
 
 indexPageHeader :: TypeDefinition
 indexPageHeader = define "IndexPageHeader" $ T.record []
@@ -576,7 +576,7 @@ keyValue = define "KeyValue" $
   doc "Wrapper struct to store key values" $
   T.record [
     "key">: T.string,
-    "value">: T.maybe T.string]
+    "value">: T.optional T.string]
 
 logicalType :: TypeDefinition
 logicalType = define "LogicalType" $
@@ -670,15 +670,15 @@ pageHeader = define "PageHeader" $
            "  encryption itself is performed after page compression (if compressed)\n" ++
            "If enabled, this allows for disabling checksumming in HDFS if only a few " ++
            "pages need to be read. ") $
-      T.maybe T.int32,
+      T.optional T.int32,
     "dataPageHeader">:
-      T.maybe $ parquet "DataPageHeader",
+      T.optional $ parquet "DataPageHeader",
     "indexPageHeader">:
-      T.maybe $ parquet "IndexPageHeader",
+      T.optional $ parquet "IndexPageHeader",
     "dictionaryPageHeader">:
-      T.maybe $ parquet "DictionaryPageHeader",
+      T.optional $ parquet "DictionaryPageHeader",
     "dataPageHeaderV2">:
-      T.maybe $ parquet "DataPageHeaderV2"]
+      T.optional $ parquet "DataPageHeaderV2"]
 
 pageLocation :: TypeDefinition
 pageLocation = define "PageLocation" $
@@ -722,18 +722,18 @@ rowGroup = define "RowGroup" $
     "sortingColumns">:
       doc ("If set, specifies a sort ordering of the rows in this RowGroup. " ++
            "The sorting columns can be a subset of all the columns.") $
-      T.maybe $ T.list $ parquet "SortingColumn",
+      T.optional $ T.list $ parquet "SortingColumn",
     "fileOffset">:
       doc ("Byte offset from beginning of file to first page (data or dictionary) " ++
            "in this row group") $
-      T.maybe T.int64,
+      T.optional T.int64,
     "totalCompressedSize">:
       doc ("Total byte size of all compressed (and potentially encrypted) column data " ++
            "in this row group") $
-      T.maybe T.int64,
+      T.optional T.int64,
     "ordinal">:
       doc "Row group ordinal in the file" $
-      T.maybe T.int16]
+      T.optional T.int16]
 
 schemaElement :: TypeDefinition
 schemaElement = define "SchemaElement" $
@@ -744,17 +744,17 @@ schemaElement = define "SchemaElement" $
   T.record [
     "type">:
       doc "Data type for this field. Not set if the current element is a non-leaf node" $
-      T.maybe $ parquet "Type",
+      T.optional $ parquet "Type",
     "typeLength">:
       doc ("If type is FIXED_LEN_BYTE_ARRAY, this is the byte length of the values. " ++
            "Otherwise, if specified, this is the maximum bit length to store any of the values. " ++
            "(e.g. a low cardinality INT col could have this set to 3).  Note that this is " ++
            "in the schema, and therefore fixed for the entire file.") $
-      T.maybe T.int32,
+      T.optional T.int32,
     "repetitionType">:
       doc ("repetition of the field. The root of the schema does not have a repetition_type. " ++
            "All other nodes must have one") $
-      T.maybe $ parquet "FieldRepetitionType",
+      T.optional $ parquet "FieldRepetitionType",
     "name">:
       doc "Name of the field in the schema"
       T.string,
@@ -763,16 +763,16 @@ schemaElement = define "SchemaElement" $
            "the nesting is flattened to a single list by a depth-first traversal. " ++
            "The children count is used to construct the nested relationship. " ++
            "This field is not set when the element is a primitive type") $
-      T.maybe T.int32,
+      T.optional T.int32,
     "fieldId">:
       doc ("When the original schema supports field ids, this will save the " ++
            "original field id in the parquet schema") $
-      T.maybe T.int32,
+      T.optional T.int32,
     "logicalType">:
       doc ("The logical type of this SchemaElement. " ++
            "LogicalType replaces ConvertedType, but ConvertedType is still required " ++
            "for some logical types to ensure forward-compatibility in format v1.") $
-      T.maybe $ parquet "LogicalType"]
+      T.optional $ parquet "LogicalType"]
 
 sortingColumn :: TypeDefinition
 sortingColumn = define "SortingColumn" $
@@ -793,18 +793,18 @@ statistics :: TypeDefinition
 statistics = define "Statistics" $
   doc "Statistics per row group and per page. All fields are optional." $
   T.record [
-    "nullCount">: T.maybe T.uint64,
-    "distinctCount">: T.maybe T.uint64,
+    "nullCount">: T.optional T.uint64,
+    "distinctCount">: T.optional T.uint64,
     "maxValue">:
       doc ("Max value for the column, determined by its ColumnOrder. " ++
            "Values are encoded using PLAIN encoding, except that variable-length byte " ++
            "arrays do not include a length prefix.") $
-      T.maybe T.binary,
+      T.optional T.binary,
     "minValue">:
       doc ("Max value for the column, determined by its ColumnOrder. " ++
            "Values are encoded using PLAIN encoding, except that variable-length byte " ++
            "arrays do not include a length prefix.") $
-      T.maybe T.binary]
+      T.optional T.binary]
 
 timeType :: TypeDefinition
 timeType = define "TimeType" $

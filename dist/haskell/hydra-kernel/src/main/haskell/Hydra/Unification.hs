@@ -16,7 +16,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -86,8 +86,8 @@ joinTypes cx left right comment =
             joinOne (Core.mapTypeKeys v0) (Core.mapTypeKeys v1),
             (joinOne (Core.mapTypeValues v0) (Core.mapTypeValues v1))]
           _ -> cannotUnify
-        Core.TypeMaybe v0 -> case sright of
-          Core.TypeMaybe v1 -> Right [
+        Core.TypeOptional v0 -> case sright of
+          Core.TypeOptional v1 -> Right [
             joinOne v0 v1]
           _ -> cannotUnify
         Core.TypePair v0 -> case sright of
@@ -150,13 +150,13 @@ unifyTypeConstraints cx schemaTypes constraints =
                               _ -> noVars
                 in case sleft of
                   Core.TypeVariable v0 -> case sright of
-                    Core.TypeVariable v1 -> Logic.ifElse (Equality.equal (Core.unName v0) (Core.unName v1)) (unifyTypeConstraints cx schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v0 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Left (Errors.UnificationError {
+                    Core.TypeVariable v1 -> Logic.ifElse (Equality.equal (Core.unName v0) (Core.unName v1)) (unifyTypeConstraints cx schemaTypes rest) (Logic.ifElse (Optionals.isGiven (Maps.lookup v0 schemaTypes)) (Logic.ifElse (Optionals.isGiven (Maps.lookup v1 schemaTypes)) (Left (Errors.UnificationError {
                       Errors.unificationErrorLeftType = sleft,
                       Errors.unificationErrorRightType = sright,
                       Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")})) (bind v1 sleft)) (bind v0 sright))
                     _ -> tryBinding v0 sright
                   _ -> dflt
-      in (Maybes.maybe (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)) (Lists.uncons constraints))
+      in (Optionals.cases (Lists.uncons constraints) (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)))
 -- | Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics.
 unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =

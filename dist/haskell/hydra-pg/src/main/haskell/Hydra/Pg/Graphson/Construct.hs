@@ -2,17 +2,36 @@
 -- | Functions for constructing GraphSON vertices from property graph vertices.
 
 module Hydra.Pg.Graphson.Construct where
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Pg.Graphson.Coder as Coder
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as PgModel
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -37,7 +56,7 @@ aggregateMap pairs =
       let k = Pairs.first p
           v = Pairs.second p
           existing = Maps.lookup k m
-      in (Maps.insert k (Maybes.maybe (Lists.pure v) (\vs -> Lists.cons v vs) existing) m)) Maps.empty pairs
+      in (Maps.insert k (Optionals.cases existing (Lists.pure v) (\vs -> Lists.cons v vs)) m)) Maps.empty pairs
 -- | Convert a property graph edge property to a GraphSON property
 edgePropertyToGraphson :: (t0 -> Either t1 t2) -> (PgModel.PropertyKey, t0) -> Either t1 (Syntax.PropertyKey, t2)
 edgePropertyToGraphson encodeValue prop =

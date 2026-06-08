@@ -777,14 +777,14 @@ mapList =
           (
             Core.TermVariable (Core.Name "description"),
             (Core.TermLiteral (Core.LiteralString "Traverse a list with an Either-returning function, short-circuiting on Left.")))]))})))}
-mapMaybe :: Packaging.PrimitiveDefinition
-mapMaybe =
+mapOptional :: Packaging.PrimitiveDefinition
+mapOptional =
     Packaging.PrimitiveDefinition {
-      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapMaybe"),
+      Packaging.primitiveDefinitionName = (Core.Name "hydra.lib.eithers.mapOptional"),
       Packaging.primitiveDefinitionMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just "Map a function returning either over a maybe, or return Right Nothing if Nothing."),
+        Packaging.entityMetadataDescription = (Just "Map a function returning either over an optional, or return Right none if none."),
         Packaging.entityMetadataComments = [
-          "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
+          "mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value and returns the result with Right wrapped around given.",
           "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
         Packaging.entityMetadataSeeAlso = [],
         Packaging.entityMetadataLifecycle = Nothing})),
@@ -812,13 +812,13 @@ mapMaybe =
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
             Typing.parameterDescription = Nothing,
-            Typing.parameterType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "x"))),
+            Typing.parameterType = (Core.TypeOptional (Core.TypeVariable (Core.Name "x"))),
             Typing.parameterIsLazy = False}],
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
           Typing.resultType = (Core.TypeEither (Core.EitherType {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "z")),
-            Core.eitherTypeRight = (Core.TypeMaybe (Core.TypeVariable (Core.Name "y")))}))}},
+            Core.eitherTypeRight = (Core.TypeOptional (Core.TypeVariable (Core.Name "y")))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -831,26 +831,26 @@ mapMaybe =
             Core.lambdaBody = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
-                  Core.applicationArgument = (Core.TermEither (Right (Core.TermMaybe Nothing)))})),
-                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
-                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "y"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermMaybe (Just (Core.TermVariable (Core.Name "y"))))}))})),
-                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+                Core.applicationArgument = (Core.TermEither (Right (Core.TermOptional Nothing)))})),
+              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "y"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermOptional (Just (Core.TermVariable (Core.Name "y"))))}))})),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Traverse a Maybe with an Either-returning function.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "Traverse an Optional with an Either-returning function.")))]))})))}
 mapSet :: Packaging.PrimitiveDefinition
 mapSet =
     Packaging.PrimitiveDefinition {

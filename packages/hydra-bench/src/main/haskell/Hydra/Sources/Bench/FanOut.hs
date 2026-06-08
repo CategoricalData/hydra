@@ -25,7 +25,7 @@ import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
@@ -71,19 +71,13 @@ fanWalkerBody k =
          _Term_application>>: "app" ~>
            "fun" <~ Core.applicationFunction (var "app") $
            "arg" <~ Core.applicationArgument (var "app") $
-           Maybes.maybe
-             (fanWalkerRef p1 @@ var "arg")
-             ("_" ~> fanWalkerRef p1 @@ var "fun")
-             (fanWalkerRef p1 @@ var "fun"),
+           Optionals.cases (fanWalkerRef p1 @@ var "fun") (fanWalkerRef p1 @@ var "arg") ("_" ~> fanWalkerRef p1 @@ var "fun"),
          _Term_lambda>>: "lam" ~>
            "body" <~ Core.lambdaBody (var "lam") $
            fanWalkerRef p2 @@ var "body",
          _Term_let>>: "le" ~>
            "body" <~ Core.letBody (var "le") $
-           Maybes.maybe
-             nothing
-             ("inner" ~> fanWalkerRef p3 @@ var "inner")
-             (fanWalkerRef p3 @@ var "body"),
+           Optionals.cases (fanWalkerRef p3 @@ var "body") nothing ("inner" ~> fanWalkerRef p3 @@ var "inner"),
          _Term_variable>>: constant $ just (var "stripped"),
          _Term_literal>>:  constant $ just (var "stripped")]
 

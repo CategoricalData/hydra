@@ -31,7 +31,7 @@ import hydra.graph
 import hydra.lexical
 import hydra.rewriting
 import hydra.testing
-from hydra.dsl.python import FrozenDict, Nothing
+from hydra.dsl.python import FrozenDict, None_
 import hydra.typing
 
 import hydra.test.test_types
@@ -111,14 +111,14 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     from hydra.packaging import DefinitionTerm
     from hydra.core import Binding
-    import hydra.lib.maybes as Maybes
+    import hydra.lib.optionals as Optionals
     from hydra.scoping import term_signature_to_type_scheme
     bindings = {}
     for mod in term_mods:
         for d in mod.definitions:
             if isinstance(d, DefinitionTerm):
                 td = d.value
-                ts = Maybes.map(term_signature_to_type_scheme, td.signature)
+                ts = Optionals.map(term_signature_to_type_scheme, td.signature)
                 bindings[td.name] = Binding(td.name, td.body, ts)
 
     return bindings
@@ -195,7 +195,7 @@ def build_test_graph() -> hydra.graph.Graph:
     Returns:
         Graph: The test graph
     """
-    from hydra.dsl.python import FrozenDict, Nothing, Just
+    from hydra.dsl.python import FrozenDict, None_, Given
     import hydra.lexical
 
     from hydra.generation import bootstrap_graph
@@ -224,7 +224,7 @@ def build_test_graph() -> hydra.graph.Graph:
 
     # Build term bindings from test data
     test_terms_dict = test_graph.test_terms()
-    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=Nothing())
+    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=None_())
                      for name, term in test_terms_dict.items()]
 
     # Build the test graph with schema types and all term bindings

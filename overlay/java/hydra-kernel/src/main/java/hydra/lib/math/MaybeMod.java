@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -43,9 +43,9 @@ public class MaybeMod extends PrimitiveFunction {
     /**
      * Computes the modulo.
      * @param dividend the dividend
-     * @return a function that takes a divisor and returns a Maybe containing the modulo
+     * @return a function that takes a divisor and returns a Optional containing the modulo
      */
-    public static Function<Integer, Maybe<Integer>> apply(Integer dividend) {
+    public static Function<Integer, Optional<Integer>> apply(Integer dividend) {
         return (divisor) -> apply(dividend, divisor);
     }
 
@@ -53,13 +53,13 @@ public class MaybeMod extends PrimitiveFunction {
      * Computes the modulo.
      * @param dividend the dividend
      * @param divisor the divisor
-     * @return a Maybe containing the modulo, or empty if divisor is zero
+     * @return a Optional containing the modulo, or empty if divisor is zero
      */
-    public static Maybe<Integer> apply(Integer dividend, Integer divisor) {
+    public static Optional<Integer> apply(Integer dividend, Integer divisor) {
         if (divisor == 0) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(java.lang.Math.floorMod(dividend, divisor));
+            return Optional.given(java.lang.Math.floorMod(dividend, divisor));
         }
     }
 }

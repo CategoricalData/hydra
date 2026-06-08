@@ -95,10 +95,10 @@ termVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = Core.TermUnit}})
-      Variants.TermVariantMaybe -> Core.TermInject (Core.Injection {
+      Variants.TermVariantOptional -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybe"),
+          Core.fieldName = (Core.Name "optional"),
           Core.fieldTerm = Core.TermUnit}})
       Variants.TermVariantPair -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
@@ -194,10 +194,10 @@ typeVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = Core.TermUnit}})
-      Variants.TypeVariantMaybe -> Core.TermInject (Core.Injection {
+      Variants.TypeVariantOptional -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybe"),
+          Core.fieldName = (Core.Name "optional"),
           Core.fieldTerm = Core.TermUnit}})
       Variants.TypeVariantPair -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),

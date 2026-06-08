@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -56,13 +56,13 @@ public class ReadDecimal extends PrimitiveFunction {
     /**
      * Attempts to parse a string into a BigDecimal.
      * @param str the string to parse
-     * @return a Maybe containing the parsed BigDecimal, or empty if parsing fails
+     * @return a Optional containing the parsed BigDecimal, or empty if parsing fails
      */
-    public static Maybe<BigDecimal> apply(String str) {
+    public static Optional<BigDecimal> apply(String str) {
         try {
-            return Maybe.just(new BigDecimal(str));
+            return Optional.given(new BigDecimal(str));
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

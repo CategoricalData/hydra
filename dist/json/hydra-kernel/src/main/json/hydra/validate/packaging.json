@@ -216,10 +216,10 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}}}}}}}}},
-                            "domain": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}},
+                            "domain": {"optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}},
                             "parameter": "finding"}},
                         "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}},
                         "parameter": "acc"}},
@@ -237,7 +237,7 @@
             {
               "isLazy": false,
               "name": "arg2",
-              "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
+              "type": {"optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}]}}},
@@ -457,10 +457,10 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maybes.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}}}}}}}}},
-                            "domain": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}},
+                            "domain": {"optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}},
                             "parameter": "finding"}},
                         "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}},
                         "parameter": "acc"}},
@@ -478,7 +478,7 @@
             {
               "isLazy": false,
               "name": "arg2",
-              "type": {"maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
+              "type": {"optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.validation.ValidationResult"}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}]}}},
@@ -516,9 +516,9 @@
                                               "typeApplication": {
                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"literal": {"string": {}}}}},
                                                 "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                            "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                            "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                         "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}}}},
-                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -539,7 +539,7 @@
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                 "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}}}},
-                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
+                                                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
                                                     "typeScheme": {
                                                       "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}},
                                                       "variables": []}}],
@@ -557,8 +557,8 @@
                                                                   "typeApplication": {
                                                                     "body": {"variable": "hydra.lib.pairs.second"},
                                                                     "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}}}},
-                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
-                                                        "typeScheme": {"body": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}, "variables": []}}],
+                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
+                                                        "typeScheme": {"body": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
@@ -598,7 +598,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": {"string": {}}}}},
                                                                                         "type": {"variable": "hydra.packaging.ModuleName"}}}}}}},
-                                                                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
+                                                                            "typeScheme": {"body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
                                                                         "body": {
                                                                           "application": {
                                                                             "argument": {
@@ -611,7 +611,7 @@
                                                                                           "pair": {
                                                                                             "first": {"variable": "seen"},
                                                                                             "second": {
-                                                                                              "maybe": {
+                                                                                              "optional": {
                                                                                                 "inject": {
                                                                                                   "field": {
                                                                                                     "name": "conflictingModuleName",
@@ -621,7 +621,7 @@
                                                                                                         "typeName": "hydra.error.packaging.ConflictingModuleNameError"}}},
                                                                                                   "typeName": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                                         "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}}}},
-                                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                                                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                                                                 "domain": {"variable": "hydra.packaging.ModuleName"},
                                                                                 "parameter": "first"}},
                                                                             "function": {
@@ -645,37 +645,37 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.insert"}, "type": {"literal": {"string": {}}}}},
                                                                                                             "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
-                                                                                            "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                                                            "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                                         "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}}}},
-                                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                                                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "existing"},
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                                                         "type": {
                                                                                           "pair": {
                                                                                             "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}}}}}},
+                                                                                            "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}}}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "err"},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
                                                                     "type": {
                                                                       "pair": {
                                                                         "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                        "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}}}},
+                                                                        "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}}}},
                                             "domain": {"variable": "hydra.packaging.Module"},
                                             "parameter": "mod"}},
                                         "domain": {
                                           "pair": {
                                             "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}},
-                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                            "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                         "parameter": "acc"}},
                                     "function": {
                                       "typeApplication": {
@@ -685,13 +685,13 @@
                                             "type": {
                                               "pair": {
                                                 "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}},
-                                                "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
+                                                "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
                                         "type": {"variable": "hydra.packaging.Module"}}}}}}}}},
                         "typeScheme": {
                           "body": {
                             "pair": {
                               "first": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}},
-                              "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                              "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -702,13 +702,13 @@
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.pairs.second"},
                                 "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.packaging.ModuleName"}}}}},
-                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}},
+                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Package"},
                 "parameter": "pkg"}}}},
         "name": "hydra.validate.packaging.checkConflictingModuleNames",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Package"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -781,7 +781,7 @@
                                 "argument": {"variable": "defs"},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -847,7 +847,7 @@
                                                                                                         "argument": {"variable": "fields"},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                                                             "function": {
                                                                                                               "application": {
                                                                                                                 "argument": {
@@ -890,11 +890,11 @@
                                                                                                                                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                                                                                                             "body": {
                                                                                                                                               "application": {
-                                                                                                                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                                                                                                 "function": {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {
-                                                                                                                                                      "maybe": {
+                                                                                                                                                      "optional": {
                                                                                                                                                         "inject": {
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "conflictingVariantName",
@@ -919,35 +919,35 @@
                                                                                                                                                         "function": {
                                                                                                                                                           "typeApplication": {
                                                                                                                                                             "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                                                                                                                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
                                                                                                                                 "function": {
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "innerAcc"},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
-                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
-                                                                                                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                                                                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                                                                                                                         "domain": {"variable": "hydra.core.FieldType"},
                                                                                                                         "parameter": "field"}},
-                                                                                                                    "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                                                                                                    "domain": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}},
                                                                                                                     "parameter": "innerAcc"}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"variable": "hydra.lib.lists.foldl"},
-                                                                                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                                                                                                     "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
                                                                                                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                                     "parameter": "fields"}},
                                                                                                 "name": "union"}],
-                                                                                            "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                                            "default": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                                             "typeName": "hydra.core.Type"}}}}}}}}}},
                                                                         "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                         "parameter": "td"}},
                                                                     "name": "type"}],
-                                                                "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                "default": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                 "typeName": "hydra.packaging.Definition"}}}},
                                                         "function": {
                                                           "application": {
@@ -955,25 +955,25 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
-                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                                                 "domain": {"variable": "hydra.packaging.Definition"},
                                                 "parameter": "def"}},
-                                            "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                            "domain": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}},
                                             "parameter": "acc"}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.lists.foldl"},
-                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                             "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkConflictingVariantNames",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -1002,7 +1002,7 @@
                             "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                         "function": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -1122,41 +1122,42 @@
                                                                             "body": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "pd"},
-                                                                                    "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "lambda": {
-                                                                                        "body": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
                                                                                           "application": {
-                                                                                            "argument": {
+                                                                                            "argument": {"literal": {"string": ""}},
+                                                                                            "function": {
                                                                                               "application": {
-                                                                                                "argument": {"literal": {"string": ""}},
-                                                                                                "function": {
+                                                                                                "argument": {
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "em"},
-                                                                                                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"literal": {"string": ""}},
-                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
-                                                                                            "function": {"variable": "hydra.lib.logic.not"}}},
-                                                                                        "domain": {"variable": "hydra.packaging.EntityMetadata"},
-                                                                                        "parameter": "em"}},
+                                                                                                        "argument": {"variable": "em"},
+                                                                                                        "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.EntityMetadata"}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"literal": {"string": ""}},
+                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
+                                                                                        "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                    "domain": {"variable": "hydra.packaging.EntityMetadata"},
+                                                                                    "parameter": "em"}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"boolean": false}},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"literal": {"boolean": false}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "pd"},
+                                                                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.packaging.PrimitiveDefinition"}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"boolean": {}}}}},
-                                                                                            "type": {"variable": "hydra.packaging.EntityMetadata"}}}}}}}}},
+                                                                                            "body": {
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.EntityMetadata"}}},
+                                                                                            "type": {"literal": {"boolean": {}}}}}}}}}}},
                                                                             "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                             "parameter": "pd"}},
                                                                         "name": "primitive"}],
@@ -1166,7 +1167,7 @@
                                                         "body": {
                                                           "application": {
                                                             "argument": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "missingDocumentation",
@@ -1177,39 +1178,39 @@
                                                                   "typeName": "hydra.error.packaging.InvalidModuleError"}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "documented"},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
+                                                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "acc"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
-                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                                         "domain": {"variable": "hydra.packaging.Definition"},
                                         "parameter": "def"}},
-                                    "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                    "domain": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}},
                                     "parameter": "acc"}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.lists.foldl"},
-                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                     "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkDefinitionDocumentation",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -1258,7 +1259,7 @@
                                     "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -1301,7 +1302,7 @@
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "maybe": {
+                                                                          "optional": {
                                                                             "inject": {
                                                                               "field": {
                                                                                 "name": "definitionNotInModuleName",
@@ -1312,7 +1313,7 @@
                                                                               "typeName": "hydra.error.packaging.InvalidModuleError"}}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -1325,32 +1326,32 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "acc"},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
-                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                                                 "domain": {"variable": "hydra.packaging.Definition"},
                                                 "parameter": "def"}},
-                                            "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                            "domain": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}},
                                             "parameter": "acc"}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.lists.foldl"},
-                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                             "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkDefinitionModuleNames",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -1380,7 +1381,7 @@
                             "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                         "function": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -1480,7 +1481,7 @@
                                                                 "body": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "maybe": {
+                                                                      "optional": {
                                                                         "inject": {
                                                                           "field": {
                                                                             "name": "invalidDefinitionName",
@@ -1494,7 +1495,7 @@
                                                                           "typeName": "hydra.error.packaging.InvalidModuleError"}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -1504,32 +1505,32 @@
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}}}},
+                                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "acc"},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
-                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                                         "domain": {"variable": "hydra.packaging.Definition"},
                                         "parameter": "def"}},
-                                    "domain": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}},
+                                    "domain": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}},
                                     "parameter": "acc"}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.lists.foldl"},
-                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                     "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkDefinitionNameConvention",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -1570,10 +1571,10 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Name"}}},
-                                                "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
-                                            "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                "first": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Name"}}},
+                                                "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                            "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -1590,9 +1591,10 @@
                                                             "argument": {"variable": "acc"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
-                                                        "typeScheme": {"body": {"maybe": {"variable": "hydra.core.Name"}}, "variables": []}}],
+                                                                "body": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                        "typeScheme": {"body": {"optional": {"variable": "hydra.core.Name"}}, "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -1604,9 +1606,9 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
-                                                            "typeScheme": {"body": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}, "variables": []}}],
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                            "typeScheme": {"body": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}, "variables": []}}],
                                                         "body": {
                                                           "application": {
                                                             "argument": {
@@ -1646,9 +1648,9 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "pair": {
-                                                                                                    "first": {"maybe": {"variable": "currName"}},
+                                                                                                    "first": {"optional": {"variable": "currName"}},
                                                                                                     "second": {
-                                                                                                      "maybe": {
+                                                                                                      "optional": {
                                                                                                         "inject": {
                                                                                                           "field": {
                                                                                                             "name": "definitionsOutOfOrder",
@@ -1660,8 +1662,8 @@
                                                                                                                   {"name": "followingName", "term": {"variable": "currName"}}],
                                                                                                                 "typeName": "hydra.error.packaging.DefinitionsOutOfOrderError"}}},
                                                                                                           "typeName": "hydra.error.packaging.InvalidModuleError"}}}}},
-                                                                                                "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                                "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                                                                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {
@@ -1670,10 +1672,10 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "pair": {
-                                                                                                        "first": {"maybe": {"variable": "currName"}},
-                                                                                                        "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
-                                                                                                    "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                                        "first": {"optional": {"variable": "currName"}},
+                                                                                                        "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                                                                    "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
@@ -1688,8 +1690,8 @@
                                                                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                     "type": {
                                                                                                       "pair": {
-                                                                                                        "first": {"maybe": {"variable": "hydra.core.Name"}},
-                                                                                                        "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
+                                                                                                        "first": {"optional": {"variable": "hydra.core.Name"}},
+                                                                                                        "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
                                                                                 "domain": {"variable": "hydra.core.Name"},
                                                                                 "parameter": "prevName"}},
                                                                             "function": {
@@ -1700,37 +1702,37 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "pair": {
-                                                                                            "first": {"maybe": {"variable": "currName"}},
-                                                                                            "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
-                                                                                        "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                            "first": {"optional": {"variable": "currName"}},
+                                                                                            "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                                                        "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                                                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "prev"},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                         "type": {
                                                                                           "pair": {
-                                                                                            "first": {"maybe": {"variable": "hydra.core.Name"}},
-                                                                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                                                            "first": {"optional": {"variable": "hydra.core.Name"}},
+                                                                                            "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "err"},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                         "type": {
                                                                           "pair": {
-                                                                            "first": {"maybe": {"variable": "hydra.core.Name"}},
-                                                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                                            "first": {"optional": {"variable": "hydra.core.Name"}},
+                                                                            "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.packaging.Definition"},
                                                 "parameter": "def"}},
                                             "domain": {
                                               "pair": {
-                                                "first": {"maybe": {"variable": "hydra.core.Name"}},
-                                                "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                "first": {"optional": {"variable": "hydra.core.Name"}},
+                                                "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                             "parameter": "acc"}},
                                         "function": {
                                           "typeApplication": {
@@ -1739,14 +1741,14 @@
                                                 "body": {"variable": "hydra.lib.lists.foldl"},
                                                 "type": {
                                                   "pair": {
-                                                    "first": {"maybe": {"variable": "hydra.core.Name"}},
-                                                    "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                    "first": {"optional": {"variable": "hydra.core.Name"}},
+                                                    "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
                                             "type": {"variable": "hydra.packaging.Definition"}}}}}}}}},
                             "typeScheme": {
                               "body": {
                                 "pair": {
-                                  "first": {"maybe": {"variable": "hydra.core.Name"}},
-                                  "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                  "first": {"optional": {"variable": "hydra.core.Name"}},
+                                  "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                               "variables": []}}],
                         "body": {
                           "application": {
@@ -1754,14 +1756,14 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"maybe": {"variable": "hydra.core.Name"}}}},
-                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"optional": {"variable": "hydra.core.Name"}}}},
+                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkDefinitionOrdering",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -1802,9 +1804,9 @@
                                             "body": {
                                               "pair": {
                                                 "first": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.core.Name"}}},
-                                                "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                             "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -1822,7 +1824,7 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
                                                         "typeScheme": {"body": {"set": {"variable": "hydra.core.Name"}}, "variables": []}}],
                                                     "body": {
                                                       "let": {
@@ -1835,8 +1837,8 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
-                                                            "typeScheme": {"body": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}, "variables": []}}],
+                                                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                            "typeScheme": {"body": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}, "variables": []}}],
                                                         "body": {
                                                           "application": {
                                                             "argument": {
@@ -1865,9 +1867,9 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "name"},
                                                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.insert"}, "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                                                    "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+                                                                                    "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                                                                 "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -1878,7 +1880,7 @@
                                                                                       "pair": {
                                                                                         "first": {"variable": "seen"},
                                                                                         "second": {
-                                                                                          "maybe": {
+                                                                                          "optional": {
                                                                                             "inject": {
                                                                                               "field": {
                                                                                                 "name": "duplicateDefinitionName",
@@ -1888,7 +1890,7 @@
                                                                                                     "typeName": "hydra.error.packaging.DuplicateDefinitionNameError"}}},
                                                                                               "typeName": "hydra.error.packaging.InvalidModuleError"}}}}},
                                                                                     "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -1904,24 +1906,24 @@
                                                                                     "type": {
                                                                                       "pair": {
                                                                                         "first": {"set": {"variable": "hydra.core.Name"}},
-                                                                                        "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
+                                                                                        "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "err"},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                                         "type": {
                                                                           "pair": {
                                                                             "first": {"set": {"variable": "hydra.core.Name"}},
-                                                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
+                                                                            "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}}}}},
                                                 "domain": {"variable": "hydra.packaging.Definition"},
                                                 "parameter": "def"}},
                                             "domain": {
                                               "pair": {
                                                 "first": {"set": {"variable": "hydra.core.Name"}},
-                                                "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                                "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                             "parameter": "acc"}},
                                         "function": {
                                           "typeApplication": {
@@ -1931,13 +1933,13 @@
                                                 "type": {
                                                   "pair": {
                                                     "first": {"set": {"variable": "hydra.core.Name"}},
-                                                    "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
+                                                    "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}},
                                             "type": {"variable": "hydra.packaging.Definition"}}}}}}}}},
                             "typeScheme": {
                               "body": {
                                 "pair": {
                                   "first": {"set": {"variable": "hydra.core.Name"}},
-                                  "second": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                  "second": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                               "variables": []}}],
                         "body": {
                           "application": {
@@ -1945,13 +1947,13 @@
                             "function": {
                               "typeApplication": {
                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
+                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkDuplicateDefinitionNames",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -1984,9 +1986,9 @@
                                         "body": {
                                           "pair": {
                                             "first": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                            "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                            "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                         "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -2005,7 +2007,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
+                                                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
                                                     "typeScheme": {"body": {"set": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
                                                 "body": {
                                                   "let": {
@@ -2019,8 +2021,8 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                                                "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
-                                                        "typeScheme": {"body": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}, "variables": []}}],
+                                                                "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
+                                                        "typeScheme": {"body": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
@@ -2050,9 +2052,9 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "ns"},
                                                                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.insert"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}}}},
-                                                                                "second": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                                                "second": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                             "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                                                        "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                                                        "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -2063,7 +2065,7 @@
                                                                                   "pair": {
                                                                                     "first": {"variable": "seen"},
                                                                                     "second": {
-                                                                                      "maybe": {
+                                                                                      "optional": {
                                                                                         "inject": {
                                                                                           "field": {
                                                                                             "name": "duplicateModuleName",
@@ -2073,7 +2075,7 @@
                                                                                                 "typeName": "hydra.error.packaging.DuplicateModuleNameError"}}},
                                                                                           "typeName": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                                 "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                                                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                                                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -2089,24 +2091,24 @@
                                                                                 "type": {
                                                                                   "pair": {
                                                                                     "first": {"set": {"variable": "hydra.packaging.ModuleName"}},
-                                                                                    "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}},
+                                                                                    "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "err"},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.cases"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
                                                                     "type": {
                                                                       "pair": {
                                                                         "first": {"set": {"variable": "hydra.packaging.ModuleName"}},
-                                                                        "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}}}},
+                                                                        "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}}}}},
                                             "domain": {"variable": "hydra.packaging.Module"},
                                             "parameter": "mod"}},
                                         "domain": {
                                           "pair": {
                                             "first": {"set": {"variable": "hydra.packaging.ModuleName"}},
-                                            "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                                            "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                         "parameter": "acc"}},
                                     "function": {
                                       "typeApplication": {
@@ -2116,13 +2118,13 @@
                                             "type": {
                                               "pair": {
                                                 "first": {"set": {"variable": "hydra.packaging.ModuleName"}},
-                                                "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
+                                                "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}},
                                         "type": {"variable": "hydra.packaging.Module"}}}}}}}}},
                         "typeScheme": {
                           "body": {
                             "pair": {
                               "first": {"set": {"variable": "hydra.packaging.ModuleName"}},
-                              "second": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
+                              "second": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -2131,13 +2133,13 @@
                           "typeApplication": {
                             "body": {
                               "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                            "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}},
+                            "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Package"},
                 "parameter": "pkg"}}}},
         "name": "hydra.validate.packaging.checkDuplicateModuleNames",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Package"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -2161,7 +2163,7 @@
                     "body": {
                       "application": {
                         "argument": {
-                          "maybe": {
+                          "optional": {
                             "inject": {
                               "field": {
                                 "name": "invalidModuleNameConvention",
@@ -2172,7 +2174,7 @@
                               "typeName": "hydra.error.packaging.InvalidModuleError"}}},
                         "function": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -2183,13 +2185,13 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "mod"}}}},
         "name": "hydra.validate.packaging.checkModuleNameConvention",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -2213,7 +2215,7 @@
                     "body": {
                       "application": {
                         "argument": {
-                          "maybe": {
+                          "optional": {
                             "inject": {
                               "field": {
                                 "name": "invalidPackageName",
@@ -2224,7 +2226,7 @@
                               "typeName": "hydra.error.packaging.InvalidPackageError"}}},
                         "function": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -2235,13 +2237,13 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
+                                    "type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
                 "domain": {"variable": "hydra.packaging.Package"},
                 "parameter": "pkg"}}}},
         "name": "hydra.validate.packaging.checkPackageNameConvention",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Package"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -2462,7 +2464,7 @@
         "name": "hydra.validate.packaging.kernelModule",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -2514,7 +2516,7 @@
         "name": "hydra.validate.packaging.kernelPackage",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Package"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+          "result": {"type": {"optional": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -2541,7 +2543,7 @@
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2571,7 +2573,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2586,12 +2588,12 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                                 {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2621,7 +2623,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2636,12 +2638,12 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                                 {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2671,7 +2673,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2686,12 +2688,12 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                                 {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2721,7 +2723,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2736,12 +2738,12 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                                 {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2771,7 +2773,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2786,12 +2788,12 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                                 {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2821,7 +2823,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2836,12 +2838,12 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                                 {
                                   "application": {
                                     "argument": {
                                       "typeApplication": {
-                                        "body": {"maybe": null},
+                                        "body": {"optional": null},
                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                     "function": {
                                       "application": {
@@ -2871,7 +2873,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}},
                                         "function": {
                                           "application": {
@@ -2886,7 +2888,7 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
-                                                  "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}]},
+                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}}]},
                             "function": {
                               "application": {
                                 "argument": {"variable": "acc0"},
@@ -2944,7 +2946,7 @@
                                                                 "argument": {"variable": "hydra.error.packaging.InvalidModuleError"},
                                                                 "function": {"variable": "hydra.validation.ValidationResult"}}}}}}}}}}},
                                             "domain": {
-                                              "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
+                                              "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}},
                                             "parameter": "guarded"}},
                                         "domain": {
                                           "application": {
@@ -2961,7 +2963,7 @@
                                                 "argument": {"variable": "hydra.error.packaging.InvalidModuleError"},
                                                 "function": {"variable": "hydra.validation.ValidationResult"}}}}},
                                         "type": {
-                                          "maybe": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
+                                          "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}}},
                         "domain": {"variable": "hydra.packaging.Module"},
                         "parameter": "mod"}},
                     "domain": {
@@ -3019,7 +3021,7 @@
                                           "application": {
                                             "argument": {
                                               "typeApplication": {
-                                                "body": {"maybe": null},
+                                                "body": {"optional": null},
                                                 "type": {
                                                   "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                             "function": {
@@ -3050,7 +3052,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
                                                             "type": {
                                                               "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                 "function": {
@@ -3066,13 +3068,13 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {
-                                                          "maybe": {
+                                                          "optional": {
                                                             "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
                                         {
                                           "application": {
                                             "argument": {
                                               "typeApplication": {
-                                                "body": {"maybe": null},
+                                                "body": {"optional": null},
                                                 "type": {
                                                   "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                             "function": {
@@ -3103,7 +3105,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
                                                             "type": {
                                                               "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                 "function": {
@@ -3119,13 +3121,13 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {
-                                                          "maybe": {
+                                                          "optional": {
                                                             "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
                                         {
                                           "application": {
                                             "argument": {
                                               "typeApplication": {
-                                                "body": {"maybe": null},
+                                                "body": {"optional": null},
                                                 "type": {
                                                   "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                             "function": {
@@ -3156,7 +3158,7 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
                                                             "type": {
                                                               "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                 "function": {
@@ -3172,7 +3174,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {
-                                                          "maybe": {
+                                                          "optional": {
                                                             "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}}]},
                                     "function": {
                                       "application": {
@@ -3231,7 +3233,7 @@
                                                                         "argument": {"variable": "hydra.error.packaging.InvalidPackageError"},
                                                                         "function": {"variable": "hydra.validation.ValidationResult"}}}}}}}}}}},
                                                     "domain": {
-                                                      "maybe": {
+                                                      "optional": {
                                                         "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}},
                                                     "parameter": "guarded"}},
                                                 "domain": {
@@ -3249,7 +3251,7 @@
                                                         "argument": {"variable": "hydra.error.packaging.InvalidPackageError"},
                                                         "function": {"variable": "hydra.validation.ValidationResult"}}}}},
                                                 "type": {
-                                                  "maybe": {
+                                                  "optional": {
                                                     "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}}}}},
                                 "typeScheme": {
                                   "body": {

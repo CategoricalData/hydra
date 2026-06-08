@@ -3,26 +3,43 @@
 
 module Hydra.Pg.TermsToElements where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Pg.Mapping as Mapping
-import qualified Hydra.Pg.Model as Model
+import qualified Hydra.Pg.Model as PgModel
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -36,8 +53,8 @@ applyPattern cx firstLit pairs term =
       in (Lists.concat (Lists.map (\pStr -> Lists.map (\a -> Strings.cat2 (Strings.cat2 a pStr) litP) accum) pStrs))) [
       firstLit] evaluated))))
 -- | Decode an edge label from a term
-decodeEdgeLabel :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Model.EdgeLabel
-decodeEdgeLabel cx g t = Eithers.map (\_x -> Model.EdgeLabel _x) (ExtractCore.string g t)
+decodeEdgeLabel :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error PgModel.EdgeLabel
+decodeEdgeLabel cx g t = Eithers.map (\_x -> PgModel.EdgeLabel _x) (ExtractCore.string g t)
 -- | Decode an edge specification from a term
 decodeEdgeSpec :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Mapping.EdgeSpec
 decodeEdgeSpec cx g term =
@@ -54,8 +71,8 @@ decodeElementSpec cx g term =
       (Core.Name "vertex", (\t -> Eithers.map (\_x -> Mapping.ElementSpecVertex _x) (decodeVertexSpec cx g t))),
       (Core.Name "edge", (\t -> Eithers.map (\_x -> Mapping.ElementSpecEdge _x) (decodeEdgeSpec cx g t)))] term
 -- | Decode a property key from a term
-decodePropertyKey :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Model.PropertyKey
-decodePropertyKey cx g t = Eithers.map (\_x -> Model.PropertyKey _x) (ExtractCore.string g t)
+decodePropertyKey :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error PgModel.PropertyKey
+decodePropertyKey cx g t = Eithers.map (\_x -> PgModel.PropertyKey _x) (ExtractCore.string g t)
 -- | Decode a property specification from a term
 decodePropertySpec :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Mapping.PropertySpec
 decodePropertySpec cx g term =
@@ -75,8 +92,8 @@ decodeValueSpec cx g term =
         (Core.Name "value", (\_ -> Right Mapping.ValueSpecValue)),
         (Core.Name "pattern", (\t -> Eithers.map (\_x -> Mapping.ValueSpecPattern _x) (ExtractCore.string g t)))] term
 -- | Decode a vertex label from a term
-decodeVertexLabel :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Model.VertexLabel
-decodeVertexLabel cx g t = Eithers.map (\_x -> Model.VertexLabel _x) (ExtractCore.string g t)
+decodeVertexLabel :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error PgModel.VertexLabel
+decodeVertexLabel cx g t = Eithers.map (\_x -> PgModel.VertexLabel _x) (ExtractCore.string g t)
 -- | Decode a vertex specification from a term
 decodeVertexSpec :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Mapping.VertexSpec
 decodeVertexSpec cx g term =
@@ -87,17 +104,17 @@ decodeVertexSpec cx g term =
 -- | Evaluate a path (list of steps) on a term, returning all resulting terms
 evalPath :: t0 -> [String] -> Core.Term -> Either Errors.Error [Core.Term]
 evalPath cx path term =
-    Maybes.maybe (Right [
-      term]) (\p -> Eithers.bind (evalStep cx (Pairs.first p) term) (\results -> Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (evalPath cx (Pairs.second p)) results))) (Lists.uncons path)
+    Optionals.cases (Lists.uncons path) (Right [
+      term]) (\p -> Eithers.bind (evalStep cx (Pairs.first p) term) (\results -> Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (evalPath cx (Pairs.second p)) results)))
 -- | Evaluate a single step of a path traversal on a term
 evalStep :: t0 -> String -> Core.Term -> Either Errors.Error [Core.Term]
 evalStep cx step term =
     Logic.ifElse (Strings.null step) (Right [
       term]) (case (Strip.deannotateTerm term) of
       Core.TermList v0 -> Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (evalStep cx step) v0)
-      Core.TermMaybe v0 -> Maybes.maybe (Right []) (\t -> evalStep cx step t) v0
-      Core.TermRecord v0 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "No such field " step) " in record")))) (\t -> Right [
-        t]) (Maps.lookup (Core.Name step) (Resolution.fieldMap (Core.recordFields v0)))
+      Core.TermOptional v0 -> Optionals.cases v0 (Right []) (\t -> evalStep cx step t)
+      Core.TermRecord v0 -> Optionals.cases (Maps.lookup (Core.Name step) (Resolution.fieldMap (Core.recordFields v0))) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "No such field " step) " in record")))) (\t -> Right [
+        t])
       Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v0))) step) (evalStep cx step (Core.fieldTerm (Core.injectionField v0))) (Right [])
       Core.TermWrap v0 -> evalStep cx step (Core.wrappedTermBody v0)
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Can't traverse through term for step " step))))
@@ -105,11 +122,11 @@ evalStep cx step term =
 expectList :: t0 -> Graph.Graph -> (t0 -> Graph.Graph -> Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error [t1]
 expectList cx g f term = Eithers.bind (ExtractCore.list g term) (\elems -> Eithers.mapList (f cx g) elems)
 -- | Parse an edge id pattern from a value spec and schema
-parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext ->Core.Term -> Either Errors.Error [t4])
+parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext -> Core.Term -> Either Errors.Error [t4])
 parseEdgeIdPattern cx g schema spec =
     Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms)))
 -- | Parse an edge specification into a label and encoder function
-parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (Model.Label, (Typing.InferenceContext ->Core.Term -> Either Errors.Error [Model.Element t4]))
+parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (PgModel.Label, (Typing.InferenceContext -> Core.Term -> Either Errors.Error [PgModel.Element t4]))
 parseEdgeSpec cx g schema spec =
 
       let label = Mapping.edgeSpecLabel spec
@@ -118,16 +135,16 @@ parseEdgeSpec cx g schema spec =
           inV = Mapping.edgeSpecIn spec
           props = Mapping.edgeSpecProperties spec
       in (Eithers.bind (parseEdgeIdPattern cx g schema id) (\getId -> Eithers.bind (parseVertexIdPattern cx g schema outV) (\getOut -> Eithers.bind (parseVertexIdPattern cx g schema inV) (\getIn -> Eithers.bind (Eithers.mapList (parsePropertySpec cx g schema) props) (\getProps -> Right (
-        Model.LabelEdge label,
+        PgModel.LabelEdge label,
         (\cx_ -> \term -> Eithers.bind (requireUnique cx_ "edge id" (getId cx_) term) (\tid -> Eithers.bind (requireUnique cx_ "vertex id" (getOut cx_) term) (\tout -> Eithers.bind (requireUnique cx_ "edge id" (getIn cx_) term) (\tin -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx_ "property key" (gf cx_) term) getProps)) (\tprops -> Right [
-          Model.ElementEdge (Model.Edge {
-            Model.edgeLabel = label,
-            Model.edgeId = tid,
-            Model.edgeOut = tout,
-            Model.edgeIn = tin,
-            Model.edgeProperties = tprops})])))))))))))
+          PgModel.ElementEdge (PgModel.Edge {
+            PgModel.edgeLabel = label,
+            PgModel.edgeId = tid,
+            PgModel.edgeOut = tout,
+            PgModel.edgeIn = tin,
+            PgModel.edgeProperties = tprops})])))))))))))
 -- | Parse an element specification into a label and encoder function
-parseElementSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ElementSpec -> Either t5 (Model.Label, (Typing.InferenceContext ->Core.Term -> Either Errors.Error [Model.Element t4]))
+parseElementSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ElementSpec -> Either t5 (PgModel.Label, (Typing.InferenceContext -> Core.Term -> Either Errors.Error [PgModel.Element t4]))
 parseElementSpec cx g schema spec =
     case spec of
       Mapping.ElementSpecVertex v0 -> parseVertexSpec cx g schema v0
@@ -137,18 +154,18 @@ parsePattern :: t0 -> t1 -> String -> Either t2 (t3 -> Core.Term -> Either Error
 parsePattern cx _g pat =
 
       let segments = Strings.splitOn "${" pat
-          firstLit = Maybes.fromMaybe pat (Lists.maybeHead segments)
+          firstLit = Optionals.fromOptional pat (Lists.maybeHead segments)
           rest = Lists.drop 1 segments
           parsed =
                   Lists.map (\seg ->
                     let parts = Strings.splitOn "}" seg
-                        pathStr = Maybes.fromMaybe "" (Lists.maybeHead parts)
+                        pathStr = Optionals.fromOptional "" (Lists.maybeHead parts)
                         litPart = Strings.intercalate "}" (Lists.drop 1 parts)
                         pathSteps = Strings.splitOn "/" pathStr
                     in (pathSteps, litPart)) rest
       in (Right (\cx_ -> \term -> applyPattern cx_ firstLit parsed term))
 -- | Parse a property specification into an encoder function
-parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpec -> Either t5 (Typing.InferenceContext ->Core.Term -> Either Errors.Error [(Model.PropertyKey, t4)])
+parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpec -> Either t5 (Typing.InferenceContext -> Core.Term -> Either Errors.Error [(PgModel.PropertyKey, t4)])
 parsePropertySpec cx g schema spec =
 
       let key = Mapping.propertySpecKey spec
@@ -162,37 +179,37 @@ parseValueSpec cx g spec =
         term])
       Mapping.ValueSpecPattern v0 -> parsePattern cx g v0
 -- | Parse a vertex id pattern from a value spec and schema
-parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext ->Core.Term -> Either Errors.Error [t4])
+parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext -> Core.Term -> Either Errors.Error [t4])
 parseVertexIdPattern cx g schema spec =
     Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaVertexIds schema) cx_) terms)))
 -- | Parse a vertex specification into a label and encoder function
-parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (Model.Label, (Typing.InferenceContext ->Core.Term -> Either Errors.Error [Model.Element t4]))
+parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (PgModel.Label, (Typing.InferenceContext -> Core.Term -> Either Errors.Error [PgModel.Element t4]))
 parseVertexSpec cx g schema spec =
 
       let label = Mapping.vertexSpecLabel spec
           id = Mapping.vertexSpecId spec
           props = Mapping.vertexSpecProperties spec
       in (Eithers.bind (parseVertexIdPattern cx g schema id) (\getId -> Eithers.bind (Eithers.mapList (parsePropertySpec cx g schema) props) (\getProps -> Right (
-        Model.LabelVertex label,
+        PgModel.LabelVertex label,
         (\cx_ -> \term -> Eithers.bind (requireUnique cx_ "vertex id" (getId cx_) term) (\tid -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx_ "property key" (gf cx_) term) getProps)) (\tprops -> Right [
-          Model.ElementVertex (Model.Vertex {
-            Model.vertexLabel = label,
-            Model.vertexId = tid,
-            Model.vertexProperties = tprops})])))))))
+          PgModel.ElementVertex (PgModel.Vertex {
+            PgModel.vertexLabel = label,
+            PgModel.vertexId = tid,
+            PgModel.vertexProperties = tprops})])))))))
 -- | Read a field from a map of fields by name
 readField :: t0 -> M.Map Core.Name t1 -> Core.Name -> (t1 -> Either Errors.Error t2) -> Either Errors.Error t2
 readField cx fields fname fun =
-    Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no such field: " (Core.unName fname))))) fun (Maps.lookup fname fields)
+    Optionals.cases (Maps.lookup fname fields) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no such field: " (Core.unName fname))))) fun
 -- | Read an injection (union value) from a term
 readInjection :: t0 -> Graph.Graph -> [(Core.Name, (Core.Term -> Either Errors.Error t1))] -> Core.Term -> Either Errors.Error t1
 readInjection cx g cases encoded =
     Eithers.bind (ExtractCore.map (\k -> Eithers.map (\_n -> Core.Name _n) (ExtractCore.string g k)) (\_v -> Right _v) g encoded) (\mp ->
       let entries = Maps.toList mp
-      in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "empty injection"))) (\f ->
+      in (Optionals.cases (Lists.maybeHead entries) (Left (Errors.ErrorOther (Errors.OtherError "empty injection"))) (\f ->
         let key = Pairs.first f
             val = Pairs.second f
             matching = Lists.filter (\c -> Equality.equal (Pairs.first c) key) cases
-        in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected field: " (Core.unName key))))) (\m -> Pairs.second m val) (Lists.maybeHead matching))) (Lists.maybeHead entries)))
+        in (Optionals.cases (Lists.maybeHead matching) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected field: " (Core.unName key))))) (\m -> Pairs.second m val)))))
 -- | Read a record from a term as a map of field names to values
 readRecord :: t0 -> Graph.Graph -> (M.Map Core.Name Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error t1
 readRecord cx g cons term =
@@ -200,13 +217,13 @@ readRecord cx g cons term =
 -- | Require exactly one result from a list-producing function
 requireUnique :: t0 -> String -> (t1 -> Either Errors.Error [t2]) -> t1 -> Either Errors.Error t2
 requireUnique cx context fun term =
-    Eithers.bind (fun term) (\results -> Logic.ifElse (Lists.null results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No value found: " context)))) (Logic.ifElse (Equality.equal (Lists.length results) 1) (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context)))) (\x -> Right x) (Lists.maybeHead results)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context))))))
+    Eithers.bind (fun term) (\results -> Logic.ifElse (Lists.null results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No value found: " context)))) (Logic.ifElse (Equality.equal (Lists.length results) 1) (Optionals.cases (Lists.maybeHead results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context)))) (\x -> Right x)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context))))))
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
-termToElementsAdapter :: t0 -> Graph.Graph -> Mapping.Schema t1 t2 t3 -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type [Model.Label] Core.Term [Model.Element t3])
+termToElementsAdapter :: t0 -> Graph.Graph -> Mapping.Schema t1 t2 t3 -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type [PgModel.Label] Core.Term [PgModel.Element t3])
 termToElementsAdapter cx g schema typ =
 
       let key_elements = Core.Name "elements"
-      in (Maybes.maybe (Right (Coders.Adapter {
+      in (Optionals.cases (Annotations.getTypeAnnotation key_elements typ) (Right (Coders.Adapter {
         Coders.adapterIsLossy = False,
         Coders.adapterSource = typ,
         Coders.adapterTarget = [],
@@ -221,7 +238,7 @@ termToElementsAdapter cx g schema typ =
           Coders.adapterTarget = labels,
           Coders.adapterCoder = Coders.Coder {
             Coders.coderEncode = (\cx_ -> \t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e cx_ t) encoders)),
-            Coders.coderDecode = (\cx_ -> \_els -> Left (Errors.ErrorOther (Errors.OtherError "element decoding is not yet supported")))}}))))) (Annotations.getTypeAnnotation key_elements typ))
+            Coders.coderDecode = (\cx_ -> \_els -> Left (Errors.ErrorOther (Errors.OtherError "element decoding is not yet supported")))}}))))))
 -- | Convert a term to its string representation
 termToString :: Core.Term -> String
 termToString term =
@@ -236,5 +253,5 @@ termToString term =
           Core.FloatValueFloat64 v2 -> Literals.showFloat64 v2
           _ -> ShowCore.term term
         _ -> ShowCore.term term
-      Core.TermMaybe v0 -> Maybes.maybe "nothing" (\t -> termToString t) v0
+      Core.TermOptional v0 -> Optionals.cases v0 "nothing" (\t -> termToString t)
       _ -> ShowCore.term term

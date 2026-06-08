@@ -34,31 +34,31 @@ class frozenlist(metaclass=_FrozenListMeta):
 
 @final
 @dataclass(frozen=True)
-class Just(Generic[T]):
+class Given(Generic[T]):
     value: T
 
 @final
-class Nothing:
+class None_:
     __slots__ = ()
     def __repr__(self) -> str:
-        return "Nothing"
+        return "None_"
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, Nothing)
+        return isinstance(other, None_)
     def __hash__(self) -> int:
-        return hash("Nothing")
+        return hash("None_")
 
 # Note: unused
-NOTHING = Nothing()
+NONE_ = None_()
 
-# Maybe needs to be subscriptable at runtime for cast() compatibility in Python 3.10/PyPy
-class _MaybeMeta(type):
-    """Metaclass that makes Maybe subscriptable at runtime."""
+# Optional needs to be subscriptable at runtime for cast() compatibility in Python 3.10/PyPy
+class _OptionalMeta(type):
+    """Metaclass that makes Optional subscriptable at runtime."""
     def __getitem__(cls, item: Any) -> Any:
         # Return a runtime-usable type for cast() - this is just for type checking
         return object
 
-class Maybe(metaclass=_MaybeMeta):
-    """A type alias for optional values (Just[T] | Nothing). Subscriptable at runtime for cast() compatibility."""
+class Optional(metaclass=_OptionalMeta):
+    """A type alias for optional values (Given[T] | None_). Subscriptable at runtime for cast() compatibility."""
     pass
 
 

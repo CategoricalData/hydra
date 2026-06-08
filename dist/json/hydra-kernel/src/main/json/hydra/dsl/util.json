@@ -983,7 +983,7 @@
                     "argument": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
-                        "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}},
+                        "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "moduleName"}}}},
         "name": "hydra.dsl.util.qualifiedName",
@@ -997,7 +997,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -1071,7 +1071,7 @@
                 "argument": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
-                    "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}},
+                    "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -1214,7 +1214,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
-                            "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}},
+                            "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -1236,7 +1236,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
-                      "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}},
+                      "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {

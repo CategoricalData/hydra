@@ -17,10 +17,10 @@
           "body": {
             "record": [
               {"name": "projection", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Projection"}},
-              {"name": "restrictorExt", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}}},
+              {"name": "restrictorExt", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}}},
               {"name": "pathPattern", "type": {"variable": "com.gdblab.pathAlgebra.syntax.PathPattern"}},
-              {"name": "groupBy", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.GroupBy"}}},
-              {"name": "orderBy", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.OrderBy"}}}]},
+              {"name": "groupBy", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.GroupBy"}}},
+              {"name": "orderBy", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.OrderBy"}}}]},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.syntax.PathQuery"}},
     {
@@ -117,13 +117,13 @@
               {"name": "startNode", "type": {"variable": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
               {"name": "edge", "type": {"variable": "com.gdblab.pathAlgebra.syntax.EdgePattern"}},
               {"name": "endNode", "type": {"variable": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
-              {"name": "condition", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.ComplexCondition"}}}]},
+              {"name": "condition", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.ComplexCondition"}}}]},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.syntax.PathPattern"}},
     {
       "type": {
         "body": {
-          "body": {"record": [{"name": "variable", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.Variable"}}}]},
+          "body": {"record": [{"name": "variable", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.Variable"}}}]},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
     {
@@ -132,7 +132,7 @@
           "body": {
             "record": [
               {"name": "direction", "type": {"variable": "com.gdblab.pathAlgebra.syntax.EdgeDirection"}},
-              {"name": "rpq", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}}}]},
+              {"name": "rpq", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}}}]},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.syntax.EdgePattern"}},
     {
@@ -167,7 +167,7 @@
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-              {"name": "restrictor", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}}}]},
+              {"name": "restrictor", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}}}]},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.syntax.Plus"}},
     {
@@ -176,7 +176,7 @@
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-              {"name": "restrictor", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}}}]},
+              {"name": "restrictor", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}}}]},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.syntax.Star"}},
     {

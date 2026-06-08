@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as LibLiterals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -342,7 +342,7 @@ arrayInitializerToExpr :: TypedTermDefinition (Java.ArrayInitializer -> Expr)
 arrayInitializerToExpr = def "arrayInitializerToExpr" $
   lambda "ai" $ lets [
     "groups">: unwrap Java._ArrayInitializer @@ var "ai"] $
-    Maybes.fromMaybe (Serialization.cst @@ string "{}") (Maybes.map
+    Optionals.fromOptional (Serialization.cst @@ string "{}") (Optionals.map
       (lambda "firstGroup" $
         Logic.ifElse (Equality.equal (Lists.length (var "groups")) (int32 1))
           (Serialization.noSep @@ list [
@@ -417,9 +417,9 @@ breakStatementToExpr :: TypedTermDefinition (Java.BreakStatement -> Expr)
 breakStatementToExpr = def "breakStatementToExpr" $
   lambda "bs" $ lets [
     "mlabel">: unwrap Java._BreakStatement @@ var "bs"] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "break",
-      Maybes.map identifierToExpr (var "mlabel")]))
+      Optionals.map identifierToExpr (var "mlabel")]))
 
 castExpressionLambdaToExpr :: TypedTermDefinition (Java.CastExpression_Lambda -> Expr)
 castExpressionLambdaToExpr = def "castExpressionLambdaToExpr" $
@@ -447,7 +447,7 @@ castExpressionRefAndBoundsToExpr = def "castExpressionRefAndBoundsToExpr" $
   lambda "rab" $ lets [
     "rt">: project Java._CastExpression_RefAndBounds Java._CastExpression_RefAndBounds_type @@ var "rab",
     "adds">: project Java._CastExpression_RefAndBounds Java._CastExpression_RefAndBounds_bounds @@ var "rab"] $
-    Serialization.parenList @@ false @@ list [Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.parenList @@ false @@ list [Serialization.spaceSep @@ Optionals.cat (list [
       just $ referenceTypeToExpr @@ var "rt",
       Logic.ifElse (Lists.null (var "adds")) nothing (just $ Serialization.spaceSep @@ Lists.map additionalBoundToExpr (var "adds"))])]
 
@@ -500,10 +500,7 @@ classInstanceCreationExpressionToExpr = def "classInstanceCreationExpressionToEx
   lambda "cice" $ lets [
     "mqual">: project Java._ClassInstanceCreationExpression Java._ClassInstanceCreationExpression_qualifier @@ var "cice",
     "e">: project Java._ClassInstanceCreationExpression Java._ClassInstanceCreationExpression_expression @@ var "cice"] $
-    Maybes.maybe
-      (unqualifiedClassInstanceCreationExpressionToExpr @@ var "e")
-      (lambda "q" $ Serialization.dotSep @@ list [classInstanceCreationExpressionQualifierToExpr @@ var "q", unqualifiedClassInstanceCreationExpressionToExpr @@ var "e"])
-      (var "mqual")
+    Optionals.cases (var "mqual") (unqualifiedClassInstanceCreationExpressionToExpr @@ var "e") (lambda "q" $ Serialization.dotSep @@ list [classInstanceCreationExpressionQualifierToExpr @@ var "q", unqualifiedClassInstanceCreationExpressionToExpr @@ var "e"])
 
 classLiteralToExpr :: TypedTermDefinition (Java.ClassLiteral -> Expr)
 classLiteralToExpr = def "classLiteralToExpr" $
@@ -544,9 +541,9 @@ classOrInterfaceTypeToInstantiateToExpr = def "classOrInterfaceTypeToInstantiate
   lambda "coitti" $ lets [
     "ids">: project Java._ClassOrInterfaceTypeToInstantiate Java._ClassOrInterfaceTypeToInstantiate_identifiers @@ var "coitti",
     "margs">: project Java._ClassOrInterfaceTypeToInstantiate Java._ClassOrInterfaceTypeToInstantiate_typeArguments @@ var "coitti"] $
-    Serialization.noSep @@ Maybes.cat (list [
+    Serialization.noSep @@ Optionals.cat (list [
       just $ Serialization.dotSep @@ Lists.map annotatedIdentifierToExpr (var "ids"),
-      Maybes.map typeArgumentsOrDiamondToExpr (var "margs")])
+      Optionals.map typeArgumentsOrDiamondToExpr (var "margs")])
 
 
 classTypeToExpr :: TypedTermDefinition (Java.ClassType -> Expr)
@@ -560,8 +557,8 @@ classTypeToExpr = def "classTypeToExpr" $
       Java._ClassTypeQualifier_none>>: constant $ typeIdentifierToExpr @@ var "id",
       Java._ClassTypeQualifier_package>>: lambda "pkg" $ Serialization.dotSep @@ list [packageNameToExpr @@ var "pkg", typeIdentifierToExpr @@ var "id"],
       Java._ClassTypeQualifier_parent>>: lambda "cit" $ Serialization.dotSep @@ list [classOrInterfaceTypeToExpr @@ var "cit", typeIdentifierToExpr @@ var "id"]]] $
-    Serialization.noSep @@ Maybes.cat (list [
-      just $ Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.noSep @@ Optionals.cat (list [
+      just $ Serialization.spaceSep @@ Optionals.cat (list [
         Logic.ifElse (Lists.null (var "anns")) nothing (just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map annotationToExpr (var "anns")),
         just $ var "qualifiedId"]),
       Logic.ifElse (Lists.null (var "args")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeArgumentToExpr (var "args"))])
@@ -575,12 +572,12 @@ compilationUnitToExpr = def "compilationUnitToExpr" $
         "imports">: project Java._OrdinaryCompilationUnit Java._OrdinaryCompilationUnit_imports @@ var "ocu",
         "types">: project Java._OrdinaryCompilationUnit Java._OrdinaryCompilationUnit_types @@ var "ocu",
         "warning">: just $ singleLineComment @@ Constants.warningAutoGeneratedFile,
-        "pkgSec">: Maybes.map packageDeclarationToExpr (var "mpkg"),
+        "pkgSec">: Optionals.map packageDeclarationToExpr (var "mpkg"),
         "importsSec">: Logic.ifElse (Lists.null (var "imports")) nothing
           (just $ Serialization.newlineSep @@ Lists.map importDeclarationToExpr (var "imports")),
         "typesSec">: Logic.ifElse (Lists.null (var "types")) nothing
           (just $ Serialization.doubleNewlineSep @@ Lists.map typeDeclarationWithCommentsToExpr (var "types"))] $
-        Serialization.doubleNewlineSep @@ Maybes.cat (list [var "warning", var "pkgSec", var "importsSec", var "typesSec"])]
+        Serialization.doubleNewlineSep @@ Optionals.cat (list [var "warning", var "pkgSec", var "importsSec", var "typesSec"])]
 
 
 conditionalAndExpressionToExpr :: TypedTermDefinition (Java.ConditionalAndExpression -> Expr)
@@ -615,7 +612,7 @@ constantDeclarationToExpr = def "constantDeclarationToExpr" $
     "mods">: project Java._ConstantDeclaration Java._ConstantDeclaration_modifiers @@ var "cd",
     "typ">: project Java._ConstantDeclaration Java._ConstantDeclaration_type @@ var "cd",
     "vars">: project Java._ConstantDeclaration Java._ConstantDeclaration_variables @@ var "cd"] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map constantModifierToExpr (var "mods")),
       just $ unannTypeToExpr @@ var "typ",
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map variableDeclaratorToExpr (var "vars")]))
@@ -630,8 +627,8 @@ constructorBodyToExpr = def "constructorBodyToExpr" $
   lambda "cb" $ lets [
     "minvoc">: project Java._ConstructorBody Java._ConstructorBody_invocation @@ var "cb",
     "stmts">: project Java._ConstructorBody Java._ConstructorBody_statements @@ var "cb"] $
-    Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.doubleNewlineSep @@ Maybes.cat (list [
-      Maybes.map explicitConstructorInvocationToExpr (var "minvoc"),
+    Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.doubleNewlineSep @@ Optionals.cat (list [
+      Optionals.map explicitConstructorInvocationToExpr (var "minvoc"),
       just $ Serialization.newlineSep @@ Lists.map blockStatementToExpr (var "stmts")]))
 
 
@@ -642,10 +639,10 @@ constructorDeclarationToExpr = def "constructorDeclarationToExpr" $
     "cons">: project Java._ConstructorDeclaration Java._ConstructorDeclaration_constructor @@ var "cd",
     "mthrows">: project Java._ConstructorDeclaration Java._ConstructorDeclaration_throws @@ var "cd",
     "body">: project Java._ConstructorDeclaration Java._ConstructorDeclaration_body @@ var "cd"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map constructorModifierToExpr (var "mods")),
       just $ constructorDeclaratorToExpr @@ var "cons",
-      Maybes.map throwsToExpr (var "mthrows"),
+      Optionals.map throwsToExpr (var "mthrows"),
       just $ constructorBodyToExpr @@ var "body"])
 
 constructorDeclaratorToExpr :: TypedTermDefinition (Java.ConstructorDeclarator -> Expr)
@@ -654,7 +651,7 @@ constructorDeclaratorToExpr = def "constructorDeclaratorToExpr" $
     "tparams">: project Java._ConstructorDeclarator Java._ConstructorDeclarator_parameters @@ var "cd",
     "name">: project Java._ConstructorDeclarator Java._ConstructorDeclarator_name @@ var "cd",
     "fparams">: project Java._ConstructorDeclarator Java._ConstructorDeclarator_formalParameters @@ var "cd"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "tparams")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeParameterToExpr (var "tparams")),
       just $ simpleTypeNameToExpr @@ var "name",
       just $ Serialization.parenListAdaptive @@ Lists.map formalParameterToExpr (var "fparams")])
@@ -672,9 +669,9 @@ continueStatementToExpr :: TypedTermDefinition (Java.ContinueStatement -> Expr)
 continueStatementToExpr = def "continueStatementToExpr" $
   lambda "cs" $ lets [
     "mlabel">: unwrap Java._ContinueStatement @@ var "cs"] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "continue",
-      Maybes.map identifierToExpr (var "mlabel")]))
+      Optionals.map identifierToExpr (var "mlabel")]))
 
 def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
@@ -766,8 +763,8 @@ expressionNameToExpr = def "expressionNameToExpr" $
   lambda "en" $ lets [
     "mqual">: project Java._ExpressionName Java._ExpressionName_qualifier @@ var "en",
     "id">: project Java._ExpressionName Java._ExpressionName_identifier @@ var "en"] $
-    Serialization.dotSep @@ Maybes.cat (list [
-      Maybes.map ambiguousNameToExpr (var "mqual"),
+    Serialization.dotSep @@ Optionals.cat (list [
+      Optionals.map ambiguousNameToExpr (var "mqual"),
       just $ identifierToExpr @@ var "id"])
 
 expressionStatementToExpr :: TypedTermDefinition (Java.ExpressionStatement -> Expr)
@@ -799,7 +796,7 @@ fieldDeclarationToExpr = def "fieldDeclarationToExpr" $
     "mods">: project Java._FieldDeclaration Java._FieldDeclaration_modifiers @@ var "fd",
     "typ">: project Java._FieldDeclaration Java._FieldDeclaration_unannType @@ var "fd",
     "vars">: project Java._FieldDeclaration Java._FieldDeclaration_variableDeclarators @@ var "fd"] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map fieldModifierToExpr (var "mods")),
       just $ unannTypeToExpr @@ var "typ",
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map variableDeclaratorToExpr (var "vars")]))
@@ -839,7 +836,7 @@ formalParameterSimpleToExpr = def "formalParameterSimpleToExpr" $
     "mods">: project Java._FormalParameter_Simple Java._FormalParameter_Simple_modifiers @@ var "fps",
     "typ">: project Java._FormalParameter_Simple Java._FormalParameter_Simple_type @@ var "fps",
     "id">: project Java._FormalParameter_Simple Java._FormalParameter_Simple_id @@ var "fps"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map variableModifierToExpr (var "mods")),
       just $ unannTypeToExpr @@ var "typ",
       just $ variableDeclaratorIdToExpr @@ var "id"])
@@ -956,7 +953,7 @@ interfaceMethodDeclarationToExpr = def "interfaceMethodDeclarationToExpr" $
     "mods">: project Java._InterfaceMethodDeclaration Java._InterfaceMethodDeclaration_modifiers @@ var "imd",
     "header">: project Java._InterfaceMethodDeclaration Java._InterfaceMethodDeclaration_header @@ var "imd",
     "body">: project Java._InterfaceMethodDeclaration Java._InterfaceMethodDeclaration_body @@ var "imd"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map interfaceMethodModifierToExpr (var "mods")),
       just $ methodHeaderToExpr @@ var "header",
       just $ methodBodyToExpr @@ var "body"])
@@ -1009,8 +1006,8 @@ javaUnicodeEscape = def "javaUnicodeEscape" $
     Logic.ifElse (Equality.gt (var "n") (int32 65535))
       -- Supplementary plane: UTF-16 surrogate pair
       ("n'" <~ Math.sub (var "n") (int32 65536) $
-       "hi" <~ Math.add (int32 55296) (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "n'") (int32 1024))) $  -- 0xD800
-       "lo" <~ Math.add (int32 56320) (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "n'") (int32 1024))) $  -- 0xDC00
+       "hi" <~ Math.add (int32 55296) (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "n'") (int32 1024))) $  -- 0xD800
+       "lo" <~ Math.add (int32 56320) (Optionals.fromOptional (int32 0) (Math.maybeMod (var "n'") (int32 1024))) $  -- 0xDC00
        Strings.cat2 (Strings.cat2 (string "\\u") (padHex4 @@ var "hi"))
                      (Strings.cat2 (string "\\u") (padHex4 @@ var "lo")))
       -- Basic multilingual plane
@@ -1099,7 +1096,7 @@ localVariableDeclarationToExpr = def "localVariableDeclarationToExpr" $
     "mods">: project Java._LocalVariableDeclaration Java._LocalVariableDeclaration_modifiers @@ var "lvd",
     "t">: project Java._LocalVariableDeclaration Java._LocalVariableDeclaration_type @@ var "lvd",
     "decls">: project Java._LocalVariableDeclaration Java._LocalVariableDeclaration_declarators @@ var "lvd"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map variableModifierToExpr (var "mods")),
       just $ localNameToExpr @@ var "t",
       just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map variableDeclaratorToExpr (var "decls")])
@@ -1123,11 +1120,11 @@ methodDeclarationToExpr = def "methodDeclarationToExpr" $
     "mods">: project Java._MethodDeclaration Java._MethodDeclaration_modifiers @@ var "md",
     "header">: project Java._MethodDeclaration Java._MethodDeclaration_header @@ var "md",
     "body">: project Java._MethodDeclaration Java._MethodDeclaration_body @@ var "md",
-    "headerAndBody">: Serialization.spaceSep @@ Maybes.cat (list [
+    "headerAndBody">: Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map methodModifierToExpr (var "mods")),
       just $ methodHeaderToExpr @@ var "header",
       just $ methodBodyToExpr @@ var "body"])] $
-    Serialization.newlineSep @@ Maybes.cat (list [
+    Serialization.newlineSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "anns")) nothing (just $ Serialization.newlineSep @@ Lists.map annotationToExpr (var "anns")),
       just $ var "headerAndBody"])
 
@@ -1147,11 +1144,11 @@ methodHeaderToExpr = def "methodHeaderToExpr" $
     "result">: project Java._MethodHeader Java._MethodHeader_result @@ var "mh",
     "decl">: project Java._MethodHeader Java._MethodHeader_declarator @@ var "mh",
     "mthrows">: project Java._MethodHeader Java._MethodHeader_throws @@ var "mh"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "params")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeParameterToExpr (var "params")),
       just $ resultToExpr @@ var "result",
       just $ methodDeclaratorToExpr @@ var "decl",
-      Maybes.map throwsToExpr (var "mthrows")])
+      Optionals.map throwsToExpr (var "mthrows")])
 
 methodInvocationToExpr :: TypedTermDefinition (Java.MethodInvocation -> Expr)
 methodInvocationToExpr = def "methodInvocationToExpr" $
@@ -1165,7 +1162,7 @@ methodInvocationToExpr = def "methodInvocationToExpr" $
         "cvar">: project Java._MethodInvocation_Complex Java._MethodInvocation_Complex_variant @@ var "cx",
         "targs">: project Java._MethodInvocation_Complex Java._MethodInvocation_Complex_typeArguments @@ var "cx",
         "cid">: project Java._MethodInvocation_Complex Java._MethodInvocation_Complex_identifier @@ var "cx",
-        "idSec">: Serialization.noSep @@ Maybes.cat (list [
+        "idSec">: Serialization.noSep @@ Optionals.cat (list [
           Logic.ifElse (Lists.null (var "targs")) nothing
             (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeArgumentToExpr (var "targs")),
           just $ identifierToExpr @@ var "cid"])] $
@@ -1237,13 +1234,13 @@ normalClassDeclarationToExpr = def "normalClassDeclarationToExpr" $
     "msuperc">: project Java._NormalClassDeclaration Java._NormalClassDeclaration_extends @@ var "ncd",
     "superi">: project Java._NormalClassDeclaration Java._NormalClassDeclaration_implements @@ var "ncd",
     "body">: project Java._NormalClassDeclaration Java._NormalClassDeclaration_body @@ var "ncd"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map classModifierToExpr (var "mods")),
       just $ Serialization.cst @@ string "class",
-      just $ Serialization.noSep @@ Maybes.cat (list [
+      just $ Serialization.noSep @@ Optionals.cat (list [
         just $ typeIdentifierToExpr @@ var "id",
         Logic.ifElse (Lists.null (var "tparams")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeParameterToExpr (var "tparams"))]),
-      Maybes.map (lambda "c" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", classTypeToExpr @@ var "c"]) (var "msuperc"),
+      Optionals.map (lambda "c" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", classTypeToExpr @@ var "c"]) (var "msuperc"),
       Logic.ifElse (Lists.null (var "superi")) nothing
         (just $ Serialization.spaceSep @@ list [Serialization.cst @@ string "implements", Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map interfaceTypeToExpr (var "superi")]),
       just $ classBodyToExpr @@ var "body"])
@@ -1256,10 +1253,10 @@ normalInterfaceDeclarationToExpr = def "normalInterfaceDeclarationToExpr" $
     "tparams">: project Java._NormalInterfaceDeclaration Java._NormalInterfaceDeclaration_parameters @@ var "nid",
     "extends">: project Java._NormalInterfaceDeclaration Java._NormalInterfaceDeclaration_extends @@ var "nid",
     "body">: project Java._NormalInterfaceDeclaration Java._NormalInterfaceDeclaration_body @@ var "nid"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map interfaceModifierToExpr (var "mods")),
       just $ Serialization.cst @@ string "interface",
-      just $ Serialization.noSep @@ Maybes.cat (list [
+      just $ Serialization.noSep @@ Optionals.cat (list [
         just $ typeIdentifierToExpr @@ var "id",
         Logic.ifElse (Lists.null (var "tparams")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeParameterToExpr (var "tparams"))]),
       Logic.ifElse (Lists.null (var "extends")) nothing
@@ -1278,7 +1275,7 @@ packageDeclarationToExpr = def "packageDeclarationToExpr" $
   lambda "pd" $ lets [
     "mods">: project Java._PackageDeclaration Java._PackageDeclaration_modifiers @@ var "pd",
     "ids">: project Java._PackageDeclaration Java._PackageDeclaration_identifiers @@ var "pd"] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map packageModifierToExpr (var "mods")),
       just $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "package",
@@ -1303,12 +1300,12 @@ packageOrTypeNameToExpr = def "packageOrTypeNameToExpr" $
 padHex4 :: TypedTermDefinition (Int -> String)
 padHex4 = def "padHex4" $
   lambda "n" $
-    "d3" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "n") (int32 4096)) $     -- n / 16^3
-    "r3" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "n") (int32 4096)) $
-    "d2" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $      -- remainder / 16^2
-    "r2" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
-    "d1" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $       -- remainder / 16
-    "d0" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r2") (int32 16)) $        -- remainder
+    "d3" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "n") (int32 4096)) $     -- n / 16^3
+    "r3" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "n") (int32 4096)) $
+    "d2" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $      -- remainder / 16^2
+    "r2" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
+    "d1" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $       -- remainder / 16
+    "d0" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "r2") (int32 16)) $        -- remainder
     Strings.fromList (list [hexDigit @@ var "d3", hexDigit @@ var "d2",
                             hexDigit @@ var "d1", hexDigit @@ var "d0"])
 
@@ -1371,7 +1368,7 @@ primitiveTypeWithAnnotationsToExpr = def "primitiveTypeWithAnnotationsToExpr" $
   lambda "ptwa" $ lets [
     "pt">: project Java._PrimitiveTypeWithAnnotations Java._PrimitiveTypeWithAnnotations_type @@ var "ptwa",
     "anns">: project Java._PrimitiveTypeWithAnnotations Java._PrimitiveTypeWithAnnotations_annotations @@ var "ptwa"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "anns")) nothing (just $ Serialization.spaceSep @@ Lists.map annotationToExpr (var "anns")),
       just $ primitiveTypeToExpr @@ var "pt"])
 
@@ -1447,9 +1444,9 @@ returnStatementToExpr :: TypedTermDefinition (Java.ReturnStatement -> Expr)
 returnStatementToExpr = def "returnStatementToExpr" $
   lambda "rs" $ lets [
     "mex">: unwrap Java._ReturnStatement @@ var "rs"] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "return",
-      Maybes.map expressionToExpr (var "mex")]))
+      Optionals.map expressionToExpr (var "mex")]))
 
 sanitizeJavaComment :: TypedTermDefinition (String -> String)
 sanitizeJavaComment = def "sanitizeJavaComment" $
@@ -1488,12 +1485,9 @@ singleElementAnnotationToExpr = def "singleElementAnnotationToExpr" $
   lambda "sea" $ lets [
     "tname">: project Java._SingleElementAnnotation Java._SingleElementAnnotation_name @@ var "sea",
     "mv">: project Java._SingleElementAnnotation Java._SingleElementAnnotation_value @@ var "sea"] $
-    Maybes.maybe
-      (markerAnnotationToExpr @@ (wrap Java._MarkerAnnotation (var "tname")))
-      (lambda "v" $ Serialization.prefix @@ string "@" @@ (Serialization.noSep @@ list [
+    Optionals.cases (var "mv") (markerAnnotationToExpr @@ (wrap Java._MarkerAnnotation (var "tname"))) (lambda "v" $ Serialization.prefix @@ string "@" @@ (Serialization.noSep @@ list [
         typeNameToExpr @@ var "tname",
         Serialization.parenList @@ false @@ list [elementValueToExpr @@ var "v"]]))
-      (var "mv")
 
 singleLineComment :: TypedTermDefinition (String -> Expr)
 singleLineComment = def "singleLineComment" $
@@ -1633,8 +1627,8 @@ typeNameToExpr = def "typeNameToExpr" $
   lambda "tn" $ lets [
     "id">: project Java._TypeName Java._TypeName_identifier @@ var "tn",
     "mqual">: project Java._TypeName Java._TypeName_qualifier @@ var "tn"] $
-    Serialization.dotSep @@ Maybes.cat (list [
-      Maybes.map packageOrTypeNameToExpr (var "mqual"),
+    Serialization.dotSep @@ Optionals.cat (list [
+      Optionals.map packageOrTypeNameToExpr (var "mqual"),
       just $ typeIdentifierToExpr @@ var "id"])
 
 typeParameterModifierToExpr :: TypedTermDefinition (Java.TypeParameterModifier -> Expr)
@@ -1649,10 +1643,10 @@ typeParameterToExpr = def "typeParameterToExpr" $
     "mods">: project Java._TypeParameter Java._TypeParameter_modifiers @@ var "tp",
     "id">: project Java._TypeParameter Java._TypeParameter_identifier @@ var "tp",
     "bound">: project Java._TypeParameter Java._TypeParameter_bound @@ var "tp"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "mods")) nothing (just $ Serialization.spaceSep @@ Lists.map typeParameterModifierToExpr (var "mods")),
       just $ typeIdentifierToExpr @@ var "id",
-      Maybes.map (lambda "b" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", typeBoundToExpr @@ var "b"]) (var "bound")])
+      Optionals.map (lambda "b" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", typeBoundToExpr @@ var "b"]) (var "bound")])
 
 typeToExpr :: TypedTermDefinition (Java.Type -> Expr)
 typeToExpr = def "typeToExpr" $
@@ -1666,7 +1660,7 @@ typeVariableToExpr = def "typeVariableToExpr" $
   lambda "tv" $ lets [
     "anns">: project Java._TypeVariable Java._TypeVariable_annotations @@ var "tv",
     "id">: project Java._TypeVariable Java._TypeVariable_identifier @@ var "tv"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "anns"))
         nothing
         (just $ Serialization.spaceSep @@ Lists.map annotationToExpr (var "anns")),
@@ -1704,11 +1698,11 @@ unqualifiedClassInstanceCreationExpressionToExpr = def "unqualifiedClassInstance
     "cit">: project Java._UnqualifiedClassInstanceCreationExpression Java._UnqualifiedClassInstanceCreationExpression_classOrInterface @@ var "ucice",
     "args">: project Java._UnqualifiedClassInstanceCreationExpression Java._UnqualifiedClassInstanceCreationExpression_arguments @@ var "ucice",
     "mbody">: project Java._UnqualifiedClassInstanceCreationExpression Java._UnqualifiedClassInstanceCreationExpression_body @@ var "ucice"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "new",
       Logic.ifElse (Lists.null (var "targs")) nothing (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ Lists.map typeArgumentToExpr (var "targs")),
       just $ Serialization.noSep @@ list [classOrInterfaceTypeToInstantiateToExpr @@ var "cit", Serialization.parenList @@ false @@ Lists.map expressionToExpr (var "args")],
-      Maybes.map classBodyToExpr (var "mbody")])
+      Optionals.map classBodyToExpr (var "mbody")])
 
 variableArityParameterToExpr :: TypedTermDefinition (Java.VariableArityParameter -> Expr)
 variableArityParameterToExpr = def "variableArityParameterToExpr" $
@@ -1719,9 +1713,9 @@ variableDeclaratorIdToExpr = def "variableDeclaratorIdToExpr" $
   lambda "vdi" $ lets [
     "id">: project Java._VariableDeclaratorId Java._VariableDeclaratorId_identifier @@ var "vdi",
     "mdims">: project Java._VariableDeclaratorId Java._VariableDeclaratorId_dims @@ var "vdi"] $
-    Serialization.noSep @@ Maybes.cat (list [
+    Serialization.noSep @@ Optionals.cat (list [
       just $ identifierToExpr @@ var "id",
-      Maybes.map dimsToExpr (var "mdims")])
+      Optionals.map dimsToExpr (var "mdims")])
 
 variableDeclaratorToExpr :: TypedTermDefinition (Java.VariableDeclarator -> Expr)
 variableDeclaratorToExpr = def "variableDeclaratorToExpr" $
@@ -1729,9 +1723,7 @@ variableDeclaratorToExpr = def "variableDeclaratorToExpr" $
     "id">: project Java._VariableDeclarator Java._VariableDeclarator_id @@ var "vd",
     "minit">: project Java._VariableDeclarator Java._VariableDeclarator_initializer @@ var "vd",
     "idSec">: variableDeclaratorIdToExpr @@ var "id"] $
-    Maybes.maybe (var "idSec")
-      (lambda "init" $ Serialization.infixWs @@ string "=" @@ var "idSec" @@ (variableInitializerToExpr @@ var "init"))
-      (var "minit")
+    Optionals.cases (var "minit") (var "idSec") (lambda "init" $ Serialization.infixWs @@ string "=" @@ var "idSec" @@ (variableInitializerToExpr @@ var "init"))
 
 variableInitializerToExpr :: TypedTermDefinition (Java.VariableInitializer -> Expr)
 variableInitializerToExpr = def "variableInitializerToExpr" $
@@ -1752,10 +1744,7 @@ whileStatementToExpr = def "whileStatementToExpr" $
   lambda "ws" $ lets [
     "mcond">: project Java._WhileStatement Java._WhileStatement_cond @@ var "ws",
     "body">: project Java._WhileStatement Java._WhileStatement_body @@ var "ws",
-    "condSer">: Maybes.maybe
-      (Serialization.cst @@ string "true")
-      (lambda "c" $ expressionToExpr @@ var "c")
-      (var "mcond")] $
+    "condSer">: Optionals.cases (var "mcond") (Serialization.cst @@ string "true") (lambda "c" $ expressionToExpr @@ var "c")] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "while",
       Serialization.parenList @@ false @@ list [var "condSer"],
@@ -1774,10 +1763,10 @@ wildcardToExpr = def "wildcardToExpr" $
   lambda "w" $ lets [
     "anns">: project Java._Wildcard Java._Wildcard_annotations @@ var "w",
     "mbounds">: project Java._Wildcard Java._Wildcard_wildcard @@ var "w"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       Logic.ifElse (Lists.null (var "anns")) nothing (just $ Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map annotationToExpr (var "anns")),
       just $ Serialization.cst @@ string "*",
-      Maybes.map wildcardBoundsToExpr (var "mbounds")])
+      Optionals.map wildcardBoundsToExpr (var "mbounds")])
 
 
 withComments :: TypedTermDefinition (Maybe String -> Expr -> Expr)
@@ -1785,9 +1774,7 @@ withComments = def "withComments" $
   doc ("Wrap an expression with optional Javadoc comments. Blank lines"
     <> " inside the doc body emit ` *` (no trailing space) instead of ` * `.") $
   lambda "mc" $ lambda "expr" $
-    Maybes.maybe
-      (var "expr")
-      (lambda "c" $ Serialization.newlineSep @@ list [
+    Optionals.cases (var "mc") (var "expr") (lambda "c" $ Serialization.newlineSep @@ list [
         Serialization.cst @@ (Strings.cat2 (string "/**\n")
           (Strings.cat2
             (Strings.intercalate (string "\n")
@@ -1797,4 +1784,3 @@ withComments = def "withComments" $
                 (Strings.lines (sanitizeJavaComment @@ var "c"))))
             (string "\n */"))),
         var "expr"])
-      (var "mc")

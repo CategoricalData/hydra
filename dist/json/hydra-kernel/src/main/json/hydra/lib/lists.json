@@ -181,7 +181,7 @@
               "name": "arg0",
               "type": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "x"}}}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"variable": "x"}}},
+          "result": {"type": {"optional": {"variable": "x"}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
@@ -326,7 +326,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"variable": "x"}}},
+          "result": {"type": {"optional": {"variable": "x"}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
@@ -341,7 +341,7 @@
         "name": "hydra.lib.lists.maybeHead",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"variable": "x"}}},
+          "result": {"type": {"optional": {"variable": "x"}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
@@ -356,7 +356,7 @@
         "name": "hydra.lib.lists.maybeInit",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"list": {"variable": "x"}}}},
+          "result": {"type": {"optional": {"list": {"variable": "x"}}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
@@ -371,7 +371,7 @@
         "name": "hydra.lib.lists.maybeLast",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"variable": "x"}}},
+          "result": {"type": {"optional": {"variable": "x"}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
@@ -386,7 +386,7 @@
         "name": "hydra.lib.lists.maybeTail",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"list": {"variable": "x"}}}},
+          "result": {"type": {"optional": {"list": {"variable": "x"}}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {
@@ -593,7 +593,7 @@
         "name": "hydra.lib.lists.uncons",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"maybe": {"pair": {"first": {"variable": "x"}, "second": {"list": {"variable": "x"}}}}}},
+          "result": {"type": {"optional": {"pair": {"first": {"variable": "x"}, "second": {"list": {"variable": "x"}}}}}},
           "typeParameters": [{"constraints": [], "name": "x"}]}}},
     {
       "primitive": {

@@ -32,7 +32,7 @@
                           "value": {
                             "literal": {
                               "string": "A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn't defined in the reader's schema. The value provided here must be a JSON string that's a member of the symbols array"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}}}]},
+                    "body": {"optional": {"literal": {"string": {}}}}}}}]},
           "variables": []},
         "name": "hydra.avro.schema.Enum"}},
     {
@@ -55,7 +55,7 @@
                     "annotation": {
                       "map": [
                         {"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON string describing this field for users"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}}},
               {
                 "name": "type",
                 "type": {
@@ -73,7 +73,7 @@
                           "value": {
                             "literal": {
                               "string": "default value for this field, only used when reading instances that lack the field for schema evolution purposes"}}}]},
-                    "body": {"maybe": {"variable": "hydra.json.model.Value"}}}}},
+                    "body": {"optional": {"variable": "hydra.json.model.Value"}}}}},
               {
                 "name": "order",
                 "type": {
@@ -83,7 +83,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "specifies how this field impacts sort ordering of this record"}}}]},
-                    "body": {"maybe": {"variable": "hydra.avro.schema.Order"}}}}},
+                    "body": {"optional": {"variable": "hydra.avro.schema.Order"}}}}},
               {
                 "name": "aliases",
                 "type": {
@@ -93,7 +93,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "a JSON array of strings, providing alternate names for this field"}}}]},
-                    "body": {"maybe": {"list": {"literal": {"string": {}}}}}}}},
+                    "body": {"optional": {"list": {"literal": {"string": {}}}}}}}},
               {
                 "name": "annotations",
                 "type": {
@@ -143,7 +143,7 @@
                 "type": {
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a string that qualifies the name"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}}},
               {
                 "name": "aliases",
                 "type": {
@@ -153,7 +153,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "a JSON array of strings, providing alternate names for this schema"}}}]},
-                    "body": {"maybe": {"list": {"literal": {"string": {}}}}}}}},
+                    "body": {"optional": {"list": {"literal": {"string": {}}}}}}}},
               {
                 "name": "doc",
                 "type": {
@@ -163,7 +163,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "a JSON string providing documentation to the user of this schema"}}}]},
-                    "body": {"maybe": {"literal": {"string": {}}}}}}},
+                    "body": {"optional": {"literal": {"string": {}}}}}}},
               {"name": "type", "type": {"variable": "hydra.avro.schema.NamedType"}},
               {
                 "name": "annotations",

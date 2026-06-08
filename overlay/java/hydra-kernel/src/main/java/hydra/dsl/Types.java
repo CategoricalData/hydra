@@ -19,7 +19,7 @@ import hydra.core.TypeClassConstraint;
 import hydra.core.TypeScheme;
 import hydra.core.TypeVariableConstraints;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 import hydra.util.PersistentMap;
 import hydra.util.PersistentSet;
 
@@ -438,7 +438,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme mono(Type body) {
-        return new TypeScheme(Collections.emptyList(), body, Maybe.nothing());
+        return new TypeScheme(Collections.emptyList(), body, Optional.none());
     }
 
     /**
@@ -453,7 +453,7 @@ public interface Types {
         for (String v : vs) {
             reversed = ConsList.cons(name(v), reversed);
         }
-        return new TypeScheme(reversed.reverse(), body, Maybe.nothing());
+        return new TypeScheme(reversed.reverse(), body, Optional.none());
     }
 
     /**
@@ -486,7 +486,7 @@ public interface Types {
                 constraintMap = constraintMap.insert(varName, new TypeVariableConstraints(toConstraints(entry.getValue())));
             }
         }
-        return new TypeScheme(varsRev.reverse(), body, Maybe.just(constraintMap));
+        return new TypeScheme(varsRev.reverse(), body, Optional.given(constraintMap));
     }
 
     Set<Name> ORD = PersistentSet.singleton(name("ordering"));
@@ -513,7 +513,7 @@ public interface Types {
     static TypeScheme constrained1(String v1, Set<Name> c1, Type body) {
         PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
-        return new TypeScheme(ConsList.of(name(v1)), body, Maybe.just(cm));
+        return new TypeScheme(ConsList.of(name(v1)), body, Optional.given(cm));
     }
 
     /**
@@ -523,7 +523,7 @@ public interface Types {
         PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
-        return new TypeScheme(ConsList.of(name(v1), name(v2)), body, Maybe.just(cm));
+        return new TypeScheme(ConsList.of(name(v1), name(v2)), body, Optional.given(cm));
     }
 
     /**
@@ -534,7 +534,7 @@ public interface Types {
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
         if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableConstraints(toConstraints(c3)));
-        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3)), body, Maybe.just(cm));
+        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3)), body, Optional.given(cm));
     }
 
     /**
@@ -547,7 +547,7 @@ public interface Types {
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
         if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableConstraints(toConstraints(c3)));
         if (!c4.isEmpty()) cm = cm.insert(name(v4), new TypeVariableConstraints(toConstraints(c4)));
-        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3), name(v4)), body, Maybe.just(cm));
+        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3), name(v4)), body, Optional.given(cm));
     }
 
     /**
@@ -557,7 +557,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var, Type body) {
-        return new TypeScheme(Arrays.asList(name(var)), body, Maybe.nothing());
+        return new TypeScheme(Arrays.asList(name(var)), body, Optional.none());
     }
 
     /**
@@ -568,7 +568,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2)), body, Maybe.nothing());
+        return new TypeScheme(Arrays.asList(name(var1), name(var2)), body, Optional.none());
     }
 
     /**
@@ -580,7 +580,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, String var3, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3)), body, Maybe.nothing());
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3)), body, Optional.none());
     }
 
     /**
@@ -593,7 +593,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, String var3, String var4, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body, Maybe.nothing());
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body, Optional.none());
     }
 
     /**
@@ -648,17 +648,17 @@ public interface Types {
     }
 
     /**
-     * Maybe (nullable) type.
+     * Optional (nullable) type.
      * Example: maybe(string())
      * @param elements the element type
      * @return the maybe type
      */
     static Type maybe(Type elements) {
-        return new Type.Maybe(elements);
+        return new Type.Optional(elements);
     }
 
     /**
-     * Maybe type (with string variable name).
+     * Optional type (with string variable name).
      * @param elements the element type variable name
      * @return the maybe type
      */
@@ -1019,7 +1019,7 @@ public interface Types {
     }
 
     /**
-     * Maybe (optional) type from a Binding.
+     * Optional (optional) type from a Binding.
      * @param elements the element type binding
      * @return the maybe type
      */

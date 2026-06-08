@@ -1,16 +1,20 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | WebAssembly code generator: converts Hydra type and term modules to WAT source code
 
 module Hydra.Wasm.Coder where
-
 import qualified Hydra.Analysis as Analysis
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
@@ -18,24 +22,36 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
+import qualified Hydra.Wasm.Language as Language
 import qualified Hydra.Wasm.Serde as Serde
 import qualified Hydra.Wasm.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 buildFieldOffsets :: Graph.Graph -> M.Map Core.Name [(Core.Name, Int)]
 buildFieldOffsets g =
 
@@ -56,7 +72,7 @@ buildFieldOffsets g =
                         tscheme = Pairs.second nameSchemePair
                         tbody = Core.typeSchemeBody tscheme
                         mfields = recordFieldsOf tbody
-                    in (Maybes.cases mfields Nothing (\fts ->
+                    in (Optionals.cases mfields Nothing (\fts ->
                       let namedOffsets =
                               Lists.map (\p ->
                                 let i = Pairs.first p
@@ -65,9 +81,8 @@ buildFieldOffsets g =
                                 Lists.length acc]) [] fts) fts)
                       in (Just (tname, namedOffsets))))
           schemaTypesList = Maps.toList (Graph.graphSchemaTypes g)
-          entries = Maybes.cat (Lists.map entryFor schemaTypesList)
+          entries = Optionals.cat (Lists.map entryFor schemaTypesList)
       in (Maps.fromList entries)
-
 buildFunctionSignatures :: t0 -> Graph.Graph -> [Packaging.TermDefinition] -> M.Map String ([Syntax.ValType], [Syntax.ValType])
 buildFunctionSignatures cx g termDefs =
 
@@ -79,15 +94,16 @@ buildFunctionSignatures cx g termDefs =
                     sigEither = extractSignature cx g (Core.typeSchemeBody ts)
                 in (Eithers.either (\_err -> Nothing) (\sig -> Just (snakeName, sig)) sigEither)
           primEntries =
-                  Maybes.cat (Lists.map (\kv -> toSigEntry (Pairs.first kv, (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition (Pairs.second kv)))))) (Maps.toList (Graph.graphPrimitives g)))
-          boundEntries = Maybes.cat (Lists.map (\kv -> toSigEntry kv) (Maps.toList (Graph.graphBoundTypes g)))
+                  Optionals.cat (Lists.map (\kv -> toSigEntry (
+                    Pairs.first kv,
+                    (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition (Pairs.second kv)))))) (Maps.toList (Graph.graphPrimitives g)))
+          boundEntries = Optionals.cat (Lists.map (\kv -> toSigEntry kv) (Maps.toList (Graph.graphBoundTypes g)))
           localEntries =
-                  Maybes.cat (Lists.map (\td -> Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td)) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
+                  Optionals.cat (Lists.map (\td -> Optionals.bind (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td)) (\ts -> toSigEntry (Packaging.termDefinitionName td, ts))) termDefs)
       in (Maps.fromList (Lists.concat [
         primEntries,
         boundEntries,
         localEntries]))
-
 buildStringOffsets :: [String] -> (M.Map String Int, Int)
 buildStringOffsets strs =
 
@@ -99,9 +115,8 @@ buildStringOffsets strs =
                 in (Maps.insert s off m, (Math.add off (Math.add 4 len)))
           final = Lists.foldl step (Maps.empty, 1024) strs
           rawEnd = Pairs.second final
-          aligned = Math.mul (Maybes.fromMaybe 0 (Math.maybeDiv (Math.add rawEnd 15) 16)) 16
+          aligned = Math.mul (Optionals.fromOptional 0 (Math.maybeDiv (Math.add rawEnd 15) 16)) 16
       in (Pairs.first final, aligned)
-
 buildVariantIndexes :: Graph.Graph -> M.Map Core.Name [(Core.Name, Int)]
 buildVariantIndexes g =
 
@@ -122,7 +137,7 @@ buildVariantIndexes g =
                         tscheme = Pairs.second nameSchemePair
                         tbody = Core.typeSchemeBody tscheme
                         mfields = unionFieldsOf tbody
-                    in (Maybes.cases mfields Nothing (\fts ->
+                    in (Optionals.cases mfields Nothing (\fts ->
                       let namedIndexes =
                               Lists.map (\p ->
                                 let i = Pairs.first p
@@ -131,12 +146,10 @@ buildVariantIndexes g =
                                 Lists.length acc]) [] fts) fts)
                       in (Just (tname, namedIndexes))))
           schemaTypesList = Maps.toList (Graph.graphSchemaTypes g)
-          entries = Maybes.cat (Lists.map entryFor schemaTypesList)
+          entries = Optionals.cat (Lists.map entryFor schemaTypesList)
       in (Maps.fromList entries)
-
 clampValTypesToI32 :: [t0] -> [Syntax.ValType]
 clampValTypesToI32 vts = Lists.map (\_vt -> Syntax.ValTypeI32) vts
-
 collectCallTargets :: [Syntax.Instruction] -> S.Set String
 collectCallTargets instrs =
     Lists.foldl (\acc -> \instr -> case instr of
@@ -145,7 +158,6 @@ collectCallTargets instrs =
       Syntax.InstructionLoop v0 -> Sets.union acc (collectCallTargets (Syntax.blockInstructionBody v0))
       Syntax.InstructionIf v0 -> Sets.union (Sets.union acc (collectCallTargets (Syntax.ifInstructionThen v0))) (collectCallTargets (Syntax.ifInstructionElse v0))
       _ -> acc) Sets.empty instrs
-
 collectInstructionLocals :: [Syntax.Instruction] -> S.Set String
 collectInstructionLocals instrs =
     Lists.foldl (\acc -> \instr -> case instr of
@@ -156,7 +168,6 @@ collectInstructionLocals instrs =
       Syntax.InstructionLoop v0 -> Sets.union acc (collectInstructionLocals (Syntax.blockInstructionBody v0))
       Syntax.InstructionIf v0 -> Sets.union (Sets.union acc (collectInstructionLocals (Syntax.ifInstructionThen v0))) (collectInstructionLocals (Syntax.ifInstructionElse v0))
       _ -> acc) Sets.empty instrs
-
 collectStrings :: [Packaging.TermDefinition] -> [String]
 collectStrings termDefs =
 
@@ -169,7 +180,6 @@ collectStrings termDefs =
           allStrings =
                   Lists.foldl (\acc -> \td -> Rewriting.foldOverTerm Coders.TraversalOrderPre collectOne acc (Packaging.termDefinitionBody td)) Sets.empty termDefs
       in (Sets.toList allStrings)
-
 encodeApplication :: t0 -> t1 -> M.Map String Int -> M.Map Core.Name [(Core.Name, Int)] -> M.Map Core.Name [(Core.Name, Int)] -> M.Map String ([t2], t3) -> Core.Term -> Either Errors.Error [Syntax.Instruction]
 encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
 
@@ -185,11 +195,11 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
           Core.TermVariable v0 ->
             let rawName = Core.unName v0
                 lname = Formatting.convertCaseCamelToLowerSnake rawName
-            in (Logic.ifElse (Lists.null (Maybes.fromMaybe [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (
+            in (Logic.ifElse (Lists.null (Optionals.fromOptional [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (
               let mFirstArg = Lists.maybeHead args
                   firstArgInstrs =
-                          Maybes.cases mFirstArg [
-                            Syntax.InstructionConst (Syntax.ConstValueI32 0)] (\_a -> Maybes.fromMaybe [] (Lists.maybeHead realArgInstrs))
+                          Optionals.cases mFirstArg [
+                            Syntax.InstructionConst (Syntax.ConstValueI32 0)] (\_a -> Optionals.fromOptional [] (Lists.maybeHead realArgInstrs))
                   extraArgDropInstrs =
                           Lists.concat (Lists.map (\ai -> Lists.concat2 ai [
                             Syntax.InstructionDrop]) (Lists.drop 1 realArgInstrs))
@@ -216,7 +226,7 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
                     Syntax.typeUseResults = []}))]]))) (
               let mSig = Maps.lookup lname funcSigs
                   callerArgCount = Lists.length args
-                  calleeParamCount = Maybes.maybe callerArgCount (\sig -> Lists.length (Pairs.first sig)) mSig
+                  calleeParamCount = Optionals.cases mSig callerArgCount (\sig -> Lists.length (Pairs.first sig))
                   padCount = Math.sub calleeParamCount callerArgCount
                   padInstrs =
                           Lists.concat (Lists.replicate (Logic.ifElse (Equality.gt padCount 0) padCount 0) [
@@ -226,9 +236,9 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
                 padInstrs,
                 [
                   Syntax.InstructionCall lname]]))))
-          Core.TermProject v0 -> Maybes.cases (Lists.maybeHead args) (Right [
+          Core.TermProject v0 -> Optionals.cases (Lists.maybeHead args) (Right [
             Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\firstArg -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs firstArg) (\firstArgInstrs -> encodeProjection cx g fieldOffsets v0 firstArgInstrs))
-          Core.TermCases v0 -> Maybes.cases (Lists.maybeHead args) (Right [
+          Core.TermCases v0 -> Optionals.cases (Lists.maybeHead args) (Right [
             Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\firstArg -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs firstArg) (\firstArgInstrs -> encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs v0 firstArgInstrs))
           Core.TermLambda v0 ->
             let peeled = peelLambdaApp (Core.TermLambda v0) args
@@ -253,7 +263,6 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
             [
               Syntax.InstructionDrop,
               (Syntax.InstructionConst (Syntax.ConstValueI32 0))]]))))
-
 encodeCases :: t0 -> t1 -> M.Map String Int -> M.Map Core.Name [(Core.Name, Int)] -> M.Map Core.Name [(Core.Name, Int)] -> M.Map String ([t2], t3) -> Core.CaseStatement -> [Syntax.Instruction] -> Either Errors.Error [Syntax.Instruction]
 encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutineeInstrsRaw =
 
@@ -288,16 +297,16 @@ encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutinee
           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (cfname, armBody)))) caseFields) (\explicitArms ->
         let defaultArmLabel = "_default"
             mDefault = Core.caseStatementDefault cs
-        in (Eithers.bind (Maybes.cases mDefault (Right [
+        in (Eithers.bind (Optionals.cases mDefault (Right [
           Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\defTerm -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs defTerm)) (\defaultArmBody ->
           let arms = Lists.concat2 explicitArms [
                 (defaultArmLabel, defaultArmBody)]
               explicitLabelForName =
-                      \fname -> Maybes.fromMaybe defaultArmLabel (Maybes.map Pairs.first (Lists.find (\arm -> Equality.equal (Pairs.first arm) fname) explicitArms))
+                      \fname -> Optionals.fromOptional defaultArmLabel (Optionals.map Pairs.first (Lists.find (\arm -> Equality.equal (Pairs.first arm) fname) explicitArms))
               typeName = Core.caseStatementTypeName cs
               mUnionVariants = Maps.lookup typeName variantIndexes
               brTableLabels =
-                      Maybes.cases mUnionVariants (Lists.map Pairs.first explicitArms) (\variantPairs ->
+                      Optionals.cases mUnionVariants (Lists.map Pairs.first explicitArms) (\variantPairs ->
                         let sorted = Lists.sortOn Pairs.second variantPairs
                         in (Lists.map (\np ->
                           let fieldName = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
@@ -326,7 +335,6 @@ encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutinee
               Syntax.blockInstructionLabel = (Just endLabel),
               Syntax.blockInstructionBlockType = (Syntax.BlockTypeValue Syntax.ValTypeI32),
               Syntax.blockInstructionBody = dispatch})])))))
-
 encodeLiteral :: Core.Literal -> Syntax.Instruction
 encodeLiteral lit =
     case lit of
@@ -343,7 +351,6 @@ encodeLiteral lit =
         Core.IntegerValueUint32 v1 -> Syntax.InstructionConst (Syntax.ConstValueI32 (Literals.bigintToInt32 (Literals.uint32ToBigint v1)))
         Core.IntegerValueUint64 _ -> Syntax.InstructionConst (Syntax.ConstValueI32 0)
         Core.IntegerValueBigint _ -> Syntax.InstructionConst (Syntax.ConstValueI32 0)
-
 encodeLiteralType :: Core.LiteralType -> Syntax.ValType
 encodeLiteralType lt =
     case lt of
@@ -363,7 +370,6 @@ encodeLiteralType lt =
         Core.IntegerTypeUint32 -> Syntax.ValTypeI32
         Core.IntegerTypeUint64 -> Syntax.ValTypeI64
       Core.LiteralTypeString -> Syntax.ValTypeI32
-
 encodeProjection :: t0 -> t1 -> M.Map Core.Name [(Core.Name, Int)] -> Core.Projection -> [Syntax.Instruction] -> Either t2 [Syntax.Instruction]
 encodeProjection cx g fieldOffsets proj scrutineeInstrs =
 
@@ -371,10 +377,10 @@ encodeProjection cx g fieldOffsets proj scrutineeInstrs =
           fieldName = Core.projectionFieldName proj
           mFields = Maps.lookup typeName fieldOffsets
           mOffset =
-                  Maybes.cases mFields Nothing (\pairs ->
+                  Optionals.cases mFields Nothing (\pairs ->
                     let matching = Lists.filter (\p -> Equality.equal (Pairs.first p) fieldName) pairs
-                    in (Maybes.map Pairs.second (Lists.maybeHead matching)))
-      in (Maybes.cases mOffset (Right (Lists.concat [
+                    in (Optionals.map Pairs.second (Lists.maybeHead matching)))
+      in (Optionals.cases mOffset (Right (Lists.concat [
         scrutineeInstrs,
         (Logic.ifElse (Lists.null scrutineeInstrs) [] [
           Syntax.InstructionDrop]),
@@ -388,7 +394,6 @@ encodeProjection cx g fieldOffsets proj scrutineeInstrs =
             Syntax.memoryInstructionMemArg = Syntax.MemArg {
               Syntax.memArgOffset = off,
               Syntax.memArgAlign = 2}})]])))
-
 encodeTerm :: t0 -> t1 -> M.Map String Int -> M.Map Core.Name [(Core.Name, Int)] -> M.Map Core.Name [(Core.Name, Int)] -> M.Map String ([t2], t3) -> Core.Term -> Either Errors.Error [Syntax.Instruction]
 encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
     case term of
@@ -437,9 +442,9 @@ encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
                       _ -> False
             mVariants = Maps.lookup typeName variantIndexes
             tag =
-                    Maybes.cases mVariants 0 (\pairs ->
+                    Optionals.cases mVariants 0 (\pairs ->
                       let matching = Lists.filter (\p -> Equality.equal (Pairs.first p) fieldName) pairs
-                      in (Maybes.cases (Lists.maybeHead matching) 0 (\p -> Pairs.second p)))
+                      in (Optionals.cases (Lists.maybeHead matching) 0 (\p -> Pairs.second p)))
         in (Eithers.bind (Logic.ifElse isUnit (Right [
           Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs fterm)) (\payloadInstrs -> Right (Lists.concat [
           [
@@ -512,9 +517,9 @@ encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
             storeInstrs,
             finalInstrs]))))
       Core.TermLiteral v0 -> case v0 of
-        Core.LiteralString v1 -> Maybes.maybe (Right [
+        Core.LiteralString v1 -> Optionals.cases (Maps.lookup v1 stringOffsets) (Right [
           Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\off -> Right [
-          Syntax.InstructionConst (Syntax.ConstValueI32 off)]) (Maps.lookup v1 stringOffsets)
+          Syntax.InstructionConst (Syntax.ConstValueI32 off)])
         _ -> Right [
           encodeLiteral v0]
       Core.TermMap v0 ->
@@ -558,7 +563,7 @@ encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
             mapLengthStoreInstrs,
             mapStoreInstrs,
             mapFinalInstrs]))))
-      Core.TermMaybe v0 -> Maybes.cases v0 (Right [
+      Core.TermOptional v0 -> Optionals.cases v0 (Right [
         Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\val -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs val)
       Core.TermPair v0 -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs (Pairs.first v0)) (\firstInstrs -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs (Pairs.second v0)) (\secondInstrs -> Right (Lists.concat [
         firstInstrs,
@@ -661,19 +666,19 @@ encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
       Core.TermVariable v0 ->
         let rawName = Core.unName v0
             lname = Formatting.convertCaseCamelToLowerSnake rawName
-        in (Logic.ifElse (Lists.null (Maybes.fromMaybe [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (Right [
+        in (Logic.ifElse (Lists.null (Optionals.fromOptional [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (Right [
           Syntax.InstructionLocalGet lname]) (Right [
           Syntax.InstructionConst (Syntax.ConstValueI32 0)]))
       Core.TermWrap v0 -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs (Core.wrappedTermBody v0)
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected term variant in WASM encoding"))
-
 encodeTermDefinition :: t0 -> t1 -> M.Map String Int -> M.Map Core.Name [(Core.Name, Int)] -> M.Map Core.Name [(Core.Name, Int)] -> M.Map String ([t2], t3) -> Packaging.TermDefinition -> Either Errors.Error Syntax.ModuleField
 encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tdef =
 
       let name = Packaging.termDefinitionName tdef
           term = Packaging.termDefinitionBody tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Core.unName name)
-          typ = Maybes.maybe Core.TypeUnit Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
+          typ =
+                  Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef)) Core.TypeUnit Core.typeSchemeBody
           extracted = extractLambdaParams term
           paramNames = Pairs.first extracted
           innerBody = Pairs.second extracted
@@ -682,7 +687,8 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
         let typeParamCount = Lists.length typeParams
             lambdaParamCount = Lists.length lambdaParamNameStrs
             syntheticCount = Logic.ifElse (Equality.gt typeParamCount lambdaParamCount) (Math.sub typeParamCount lambdaParamCount) 0
-            syntheticParamNames = Logic.ifElse (Equality.gt syntheticCount 0) (Lists.map (\i -> Strings.cat2 "arg_synth_" (Literals.showInt32 i)) (Math.range 0 (Math.sub syntheticCount 1))) []
+            syntheticParamNames =
+                    Logic.ifElse (Equality.gt syntheticCount 0) (Lists.map (\i -> Strings.cat2 "arg_synth_" (Literals.showInt32 i)) (Math.range 0 (Math.sub syntheticCount 1))) []
             paramNameStrs = Lists.concat2 lambdaParamNameStrs syntheticParamNames
             wasmParams =
                     Lists.map (\pn -> Syntax.Param {
@@ -695,7 +701,7 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
             resultTypes = [
                   Syntax.ValTypeI32]
             dBody = Strip.deannotateTerm innerBody
-            scrutineeInstrs = Maybes.cases (Lists.maybeHead paramNameStrs) [] (\p0 -> [
+            scrutineeInstrs = Optionals.cases (Lists.maybeHead paramNameStrs) [] (\p0 -> [
                   Syntax.InstructionLocalGet p0])
         in (Eithers.bind (case dBody of
           Core.TermProject v0 -> encodeProjection cx g fieldOffsets v0 scrutineeInstrs
@@ -718,7 +724,6 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
               Syntax.typeUseResults = resultTypes},
             Syntax.funcLocals = wasmLocals,
             Syntax.funcBody = bodyInstrs})))))))
-
 encodeType :: t0 -> t1 -> Core.Type -> Either t2 [Syntax.ValType]
 encodeType cx g t =
 
@@ -733,7 +738,6 @@ encodeType cx g t =
         Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
         _ -> Right [
           Syntax.ValTypeI32]
-
 encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either t2 [Syntax.ModuleField]
 encodeTypeDefinition cx g tdef =
 
@@ -749,7 +753,6 @@ encodeTypeDefinition cx g tdef =
               Syntax.funcTypeParams = paramTypes,
               Syntax.funcTypeResults = resultTypes}})]))
         _ -> Right []
-
 encodeValType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.ValType
 encodeValType cx g t =
 
@@ -762,7 +765,6 @@ encodeValType cx g t =
         Core.TypeVoid -> Right Syntax.ValTypeI32
         Core.TypeForall v0 -> encodeValType cx g (Core.forallTypeBody v0)
         _ -> Right Syntax.ValTypeI32
-
 extractLambdaParams :: Core.Term -> ([Core.Name], Core.Term)
 extractLambdaParams term =
 
@@ -782,7 +784,6 @@ extractLambdaParams term =
         Core.TermTypeLambda v0 -> extractLambdaParams (Core.typeLambdaBody v0)
         Core.TermTypeApplication v0 -> extractLambdaParams (Core.typeApplicationTermBody v0)
         _ -> ([], term)
-
 extractParamTypes :: t0 -> t1 -> Core.Type -> Either t2 [Syntax.ValType]
 extractParamTypes cx g t =
 
@@ -791,24 +792,21 @@ extractParamTypes cx g t =
         Core.TypeFunction v0 -> Eithers.bind (encodeValType cx g (Core.functionTypeDomain v0)) (\domType -> Eithers.bind (extractParamTypes cx g (Core.functionTypeCodomain v0)) (\rest -> Right (Lists.cons domType rest)))
         Core.TypeForall v0 -> extractParamTypes cx g (Core.forallTypeBody v0)
         _ -> Right []
-
 extractSignature :: t0 -> t1 -> Core.Type -> Either t2 ([Syntax.ValType], [Syntax.ValType])
 extractSignature cx g t =
     Eithers.bind (extractParamTypes cx g t) (\params -> Eithers.bind (encodeType cx g t) (\results -> Right (clampValTypesToI32 params, (clampValTypesToI32 results))))
-
 hexEscapeString :: Int -> String
 hexEscapeString b =
 
-      let byte = Maybes.fromMaybe 0 (Math.maybeMod b 256)
+      let byte = Optionals.fromOptional 0 (Math.maybeMod b 256)
           digitToHex =
                   \d -> Logic.ifElse (Equality.lt d 10) (Strings.fromList [
                     Math.add d 48]) (Strings.fromList [
                     Math.add d 87])
       in (Strings.cat [
         "\\",
-        (digitToHex (Maybes.fromMaybe 0 (Math.maybeDiv byte 16))),
-        (digitToHex (Maybes.fromMaybe 0 (Math.maybeMod byte 16)))])
-
+        (digitToHex (Optionals.fromOptional 0 (Math.maybeDiv byte 16))),
+        (digitToHex (Optionals.fromOptional 0 (Math.maybeMod byte 16)))])
 moduleToWasm :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToWasm mod defs cx g =
 
@@ -907,8 +905,8 @@ moduleToWasm mod defs cx g =
             importFields =
                     Lists.map (\fname ->
                       let parts = Strings.splitOn "." fname
-                          modName = Strings.intercalate "." (Lists.reverse (Maybes.fromMaybe [] (Lists.maybeTail (Lists.reverse parts))))
-                          sig = Maybes.fromMaybe defaultSig (Maps.lookup fname funcSigs)
+                          modName = Strings.intercalate "." (Lists.reverse (Optionals.fromOptional [] (Lists.maybeTail (Lists.reverse parts))))
+                          sig = Optionals.fromOptional defaultSig (Maps.lookup fname funcSigs)
                           sigParams = Pairs.first sig
                           sigResults = Pairs.second sig
                           wasmImportParams =
@@ -942,10 +940,8 @@ moduleToWasm mod defs cx g =
                         funcExports,
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))
-            filePath =
-                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "wat") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "wat") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
-
 peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)
 peelLambdaApp term args =
     Logic.ifElse (Lists.null args) ([], term) (
@@ -954,11 +950,10 @@ peelLambdaApp term args =
         Core.TermLambda v0 ->
           let paramName = Core.lambdaParameter v0
               body = Core.lambdaBody v0
-              restArgs = Maybes.fromMaybe [] (Lists.maybeTail args)
+              restArgs = Optionals.fromOptional [] (Lists.maybeTail args)
               inner = peelLambdaApp body restArgs
           in (Lists.cons paramName (Pairs.first inner), (Pairs.second inner))
         _ -> ([], term))
-
 stringDataSegment :: Ord t0 => (M.Map String t0 -> Syntax.ModuleField)
 stringDataSegment offsets =
 
@@ -969,10 +964,10 @@ stringDataSegment offsets =
                         len = Strings.length s
                         lenBytes =
                                 [
-                                  Maybes.fromMaybe 0 (Math.maybeMod len 256),
-                                  (Maybes.fromMaybe 0 (Math.maybeMod (Maybes.fromMaybe 0 (Math.maybeDiv len 256)) 256)),
-                                  (Maybes.fromMaybe 0 (Math.maybeMod (Maybes.fromMaybe 0 (Math.maybeDiv len 65536)) 256)),
-                                  (Maybes.fromMaybe 0 (Math.maybeMod (Maybes.fromMaybe 0 (Math.maybeDiv len 16777216)) 256))]
+                                  Optionals.fromOptional 0 (Math.maybeMod len 256),
+                                  (Optionals.fromOptional 0 (Math.maybeMod (Optionals.fromOptional 0 (Math.maybeDiv len 256)) 256)),
+                                  (Optionals.fromOptional 0 (Math.maybeMod (Optionals.fromOptional 0 (Math.maybeDiv len 65536)) 256)),
+                                  (Optionals.fromOptional 0 (Math.maybeMod (Optionals.fromOptional 0 (Math.maybeDiv len 16777216)) 256))]
                         contentBytes = Strings.toList s
                         allBytes = Lists.concat2 lenBytes contentBytes
                     in (Strings.cat (Lists.map (\b -> hexEscapeString b) allBytes))

@@ -8,7 +8,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "alter, defined in terms of lookup/insert/delete via maybe."}}}]},
+                  "value": {"literal": {"string": "alter, defined in terms of lookup/insert/delete via optionals.cases."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -18,31 +18,31 @@
                         "body": {
                           "application": {
                             "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "m"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "vNew"},
+                                        "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.insert"}}}}}}},
+                                "parameter": "vNew"}},
+                            "function": {
                               "application": {
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "m"},
-                                    "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.lookup"}}}}},
-                                "function": {"variable": "f"}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "m"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "vNew"},
-                                            "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.insert"}}}}}}},
-                                    "parameter": "vNew"}},
+                                    "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.delete"}}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {"variable": "m"},
-                                        "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.delete"}}}}},
-                                    "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "m"},
+                                            "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.lookup"}}}}},
+                                        "function": {"variable": "f"}}},
+                                    "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
                         "parameter": "m"}},
                     "parameter": "k"}},
                 "parameter": "f"}}}},
@@ -62,7 +62,7 @@
             {
               "isLazy": false,
               "name": "arg0",
-              "type": {"function": {"codomain": {"maybe": {"variable": "v"}}, "domain": {"maybe": {"variable": "v"}}}}},
+              "type": {"function": {"codomain": {"optional": {"variable": "v"}}, "domain": {"optional": {"variable": "v"}}}}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "k"}},
             {"isLazy": false, "name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
@@ -288,7 +288,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "findWithDefault, defined in terms of lookup + fromMaybe."}}}]},
+                  "value": {"literal": {"string": "findWithDefault, defined in terms of lookup + fromOptional."}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -301,7 +301,7 @@
                               "application": {
                                 "argument": {"variable": "m"},
                                 "function": {"application": {"argument": {"variable": "k"}, "function": {"variable": "hydra.lib.maps.lookup"}}}}},
-                            "function": {"application": {"argument": {"variable": "def"}, "function": {"variable": "hydra.lib.maybes.fromMaybe"}}}}},
+                            "function": {"application": {"argument": {"variable": "def"}, "function": {"variable": "hydra.lib.optionals.fromOptional"}}}}},
                         "parameter": "m"}},
                     "parameter": "k"}},
                 "parameter": "def"}}}},
@@ -390,7 +390,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "k"}},
             {"isLazy": false, "name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}],
-          "result": {"type": {"maybe": {"variable": "v"}}},
+          "result": {"type": {"optional": {"variable": "v"}}},
           "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "k"}, {"constraints": [], "name": "v"}]}}},
     {
       "primitive": {

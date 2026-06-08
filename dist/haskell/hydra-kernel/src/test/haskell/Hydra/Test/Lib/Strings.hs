@@ -486,7 +486,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -497,7 +497,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -508,7 +508,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 111))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 111))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -519,7 +519,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 97))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 97))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -530,7 +530,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\241"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 241))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 241))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -541,7 +541,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\19990"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -552,7 +552,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "e\769"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 769))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 769))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -563,7 +563,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -574,7 +574,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -585,7 +585,7 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

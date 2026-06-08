@@ -15,7 +15,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "name",
                     "type": {
@@ -126,7 +126,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "elements",
                     "type": {

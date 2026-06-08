@@ -10,7 +10,7 @@ producing output identical to the Haskell, Java, Python, and Lisp hosts for all 
 - **Bootstrapping host**: loads Hydra modules from JSON and generates Haskell, Java, Python, and Scala
 - **231 primitive functions** across 12 categories (chars, equality, eithers, lists, literals,
   logic, maps, math, maybes, pairs, sets, strings)
-- **Lazy evaluation support** via Scala's by-name parameters for `ifElse`, `maybe`, `fromMaybe`, etc.
+- **Lazy evaluation support** via Scala's by-name parameters for `ifElse`, `cases`, `fromOptional`, etc.
   (other target languages thunk lazy primitive arguments instead, driven by per-parameter `isLazy`
   metadata — see [Lazy evaluation and thunking](../../docs/recipes/new-implementation.md#lazy-evaluation-and-thunking))
 

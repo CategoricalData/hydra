@@ -504,7 +504,7 @@ typeParameter :: TypeDefinition
 typeParameter = def "TypeParameter" $ T.record [
   "modifiers">: T.list $ java "TypeParameterModifier",
   "identifier">: java "TypeIdentifier",
-  "bound">: T.maybe $ java "TypeBound"]
+  "bound">: T.optional $ java "TypeBound"]
 
 --TypeParameterModifier:
 --  Annotation
@@ -531,7 +531,7 @@ type_ = def "Type" $ T.union [
 wildcard :: TypeDefinition
 wildcard = def "Wildcard" $ T.record [
   "annotations">: T.list $ java "Annotation",
-  "wildcard">: T.maybe $ java "WildcardBounds"]
+  "wildcard">: T.optional $ java "WildcardBounds"]
 
 --WildcardBounds:
 wildcardBounds :: TypeDefinition
@@ -554,7 +554,7 @@ ambiguousName = def "AmbiguousName" $ T.wrap $ T.list $ java "Identifier"
 --  AmbiguousName . Identifier
 expressionName :: TypeDefinition
 expressionName = def "ExpressionName" $ T.record [
-  "qualifier">: T.maybe $ java "AmbiguousName",
+  "qualifier">: T.optional $ java "AmbiguousName",
   "identifier">: java "Identifier"]
 
 --MethodName:
@@ -568,7 +568,7 @@ moduleNameDef = def "ModuleName" $ T.record [
 --  Identifier
   "identifier">: java "Identifier",
 --  ModuleName . Identifier
-  "name">: T.maybe $ java "ModuleName"]
+  "name">: T.optional $ java "ModuleName"]
 
 --PackageName:
 --  Identifier
@@ -588,7 +588,7 @@ typeName = def "TypeName" $ T.record [
 --  TypeIdentifier
   "identifier">: java "TypeIdentifier",
 --  PackageOrTypeName . TypeIdentifier
-  "qualifier">: T.maybe $ java "PackageOrTypeName"]
+  "qualifier">: T.optional $ java "PackageOrTypeName"]
 
 --Productions from §7 (Packages and Modules)
 
@@ -665,7 +665,7 @@ moduleDirective_Requires = def "ModuleDirective_Requires" $ T.record [
 --  [PackageDeclaration] {ImportDeclaration} {TopLevelClassOrInterfaceDeclaration}
 ordinaryCompilationUnit :: TypeDefinition
 ordinaryCompilationUnit = def "OrdinaryCompilationUnit" $ T.record [
-  "package">: T.maybe $ java "PackageDeclaration",
+  "package">: T.optional $ java "PackageDeclaration",
   "imports">: T.list $ java "ImportDeclaration",
   "types">: T.list $ java "TopLevelClassOrInterfaceDeclarationWithComments"]
 
@@ -720,7 +720,7 @@ topLevelClassOrInterfaceDeclarationWithComments :: TypeDefinition
 topLevelClassOrInterfaceDeclarationWithComments = def "TopLevelClassOrInterfaceDeclarationWithComments" $
   T.record [
     "value">: java "TopLevelClassOrInterfaceDeclaration",
-    "comments">: T.maybe T.string]
+    "comments">: T.optional T.string]
 
 --TypeImportOnDemandDeclaration:
 --  import PackageOrTypeName . * ;
@@ -750,7 +750,7 @@ classBodyDeclarationWithComments :: TypeDefinition
 classBodyDeclarationWithComments = def "ClassBodyDeclarationWithComments" $
   T.record [
     "value">: java "ClassBodyDeclaration",
-    "comments">: T.maybe T.string]
+    "comments">: T.optional T.string]
 
 --ClassDeclaration:
 classDeclaration :: TypeDefinition
@@ -809,7 +809,7 @@ classModifier = def "ClassModifier" $ T.union [
 --  { [ExplicitConstructorInvocation] [BlockStatements] }
 constructorBody :: TypeDefinition
 constructorBody = def "ConstructorBody" $ T.record [
-  "invocation">: T.maybe $ java "ExplicitConstructorInvocation",
+  "invocation">: T.optional $ java "ExplicitConstructorInvocation",
   "statements">: T.list $ java "BlockStatement"]
 
 --ConstructorDeclaration:
@@ -818,7 +818,7 @@ constructorDeclaration :: TypeDefinition
 constructorDeclaration = def "ConstructorDeclaration" $ T.record [
   "modifiers">: T.list $ java "ConstructorModifier",
   "constructor">: java "ConstructorDeclarator",
-  "throws">: T.maybe $ java "Throws",
+  "throws">: T.optional $ java "Throws",
   "body">: java "ConstructorBody"]
 
 --ConstructorDeclarator:
@@ -827,7 +827,7 @@ constructorDeclarator :: TypeDefinition
 constructorDeclarator = def "ConstructorDeclarator" $ T.record [
   "parameters">: T.list $ java "TypeParameter",
   "name">: java "SimpleTypeName",
-  "receiverParameter">: T.maybe $ java "ReceiverParameter",
+  "receiverParameter">: T.optional $ java "ReceiverParameter",
   "formalParameters">: nonemptyList $ java "FormalParameter"]
 
 --ConstructorModifier:
@@ -858,8 +858,8 @@ enumConstant :: TypeDefinition
 enumConstant = def "EnumConstant" $ T.record [
   "modifiers">: T.list $ java "EnumConstantModifier",
   "identifier">: java "Identifier",
-  "arguments">: T.maybe $ T.list $ java "Expression",
-  "body">: T.maybe $ java "ClassBody"]
+  "arguments">: T.optional $ T.list $ java "Expression",
+  "body">: T.optional $ java "ClassBody"]
 
 --EnumConstantModifier:
 --  Annotation
@@ -901,7 +901,7 @@ explicitConstructorInvocation_Variant = def "ExplicitConstructorInvocation_Varia
   "this">: T.unit,
 --  [TypeArguments] super ( [ArgumentList] ) ;
 --  ExpressionName . [TypeArguments] super ( [ArgumentList] ) ;
-  "super">: T.maybe $ java "ExpressionName",
+  "super">: T.optional $ java "ExpressionName",
 --  Primary . [TypeArguments] super ( [ArgumentList] ) ;
   "primary">: java "Primary"]
 
@@ -973,7 +973,7 @@ methodDeclaration = def "MethodDeclaration" $ T.record [
 methodDeclarator :: TypeDefinition
 methodDeclarator = def "MethodDeclarator" $ T.record [
   "identifier">: java "Identifier",
-  "receiverParameter">: T.maybe $ java "ReceiverParameter",
+  "receiverParameter">: T.optional $ java "ReceiverParameter",
   "formalParameters">: nonemptyList $ java "FormalParameter"]
 
 --MethodHeader:
@@ -984,7 +984,7 @@ methodHeader = def "MethodHeader" $ T.record [
   "parameters">: T.list $ java "TypeParameter",
   "result">: java "Result",
   "declarator">: java "MethodDeclarator",
-  "throws">: T.maybe $ java "Throws"]
+  "throws">: T.optional $ java "Throws"]
 
 --MethodModifier:
 --  (one of)
@@ -1010,7 +1010,7 @@ normalClassDeclaration = def "NormalClassDeclaration" $ T.record [
   "modifiers">: T.list $ java "ClassModifier",
   "identifier">: java "TypeIdentifier",
   "parameters">: T.list $ java "TypeParameter",
-  "extends">: T.maybe $ java "ClassType",
+  "extends">: T.optional $ java "ClassType",
   "implements">: T.list $ java "InterfaceType",
 --  ClassPermits:
 --    permits TypeName {, TypeName}
@@ -1024,7 +1024,7 @@ receiverParameter :: TypeDefinition
 receiverParameter = def "ReceiverParameter" $ T.record [
   "annotations">: T.list $ java "Annotation",
   "unannType">: java "UnannType",
-  "identifier">: T.maybe $ java "Identifier"]
+  "identifier">: T.optional $ java "Identifier"]
 
 --Result:
 result :: TypeDefinition
@@ -1101,14 +1101,14 @@ variableArityParameter = def "VariableArityParameter" $ T.record [
 variableDeclarator :: TypeDefinition
 variableDeclarator = def "VariableDeclarator" $ T.record [
   "id">: java "VariableDeclaratorId",
-  "initializer">: T.maybe $ java "VariableInitializer"]
+  "initializer">: T.optional $ java "VariableInitializer"]
 
 --VariableDeclaratorId:
 --  Identifier [Dims]
 variableDeclaratorId :: TypeDefinition
 variableDeclaratorId = def "VariableDeclaratorId" $ T.record [
   "identifier">: java "Identifier",
-  "dims">: T.maybe $ java "Dims"]
+  "dims">: T.optional $ java "Dims"]
 
 --VariableInitializer:
 variableInitializer :: TypeDefinition
@@ -1227,8 +1227,8 @@ annotationInterfaceElementDeclaration = def "AnnotationInterfaceElementDeclarati
   "modifiers">: T.list $ java "AnnotationInterfaceElementModifier",
   "type">: java "UnannType",
   "identifier">: java "Identifier",
-  "dims">: T.maybe $ java "Dims",
-  "default">: T.maybe $ java "DefaultValue"]
+  "dims">: T.optional $ java "Dims",
+  "default">: T.optional $ java "DefaultValue"]
 
 --AnnotationInterfaceElementModifier:
 --  (one of)
@@ -1335,7 +1335,7 @@ interfaceMemberDeclarationWithComments :: TypeDefinition
 interfaceMemberDeclarationWithComments = def "InterfaceMemberDeclarationWithComments" $
   T.record [
     "value">: java "InterfaceMemberDeclaration",
-    "comments">: T.maybe T.string]
+    "comments">: T.optional T.string]
 
 --InterfaceMethodDeclaration:
 --  {InterfaceMethodModifier} MethodHeader MethodBody
@@ -1410,7 +1410,7 @@ singleElementAnnotation :: TypeDefinition
 singleElementAnnotation = def "SingleElementAnnotation" $ T.record [
 --  @ TypeName ( ElementValue )
   "name">: java "TypeName",
-  "value">: T.maybe $ java "ElementValue"]
+  "value">: T.optional $ java "ElementValue"]
 
 --  Productions from §10 (Arrays)
 
@@ -1468,7 +1468,7 @@ expressionStatement = def "ExpressionStatement" $ T.wrap $ java "StatementExpres
 --  if ( Expression ) StatementNoShortIf else Statement
 ifThenElseStatement :: TypeDefinition
 ifThenElseStatement = def "IfThenElseStatement" $ T.record [
-  "cond">: T.maybe $ java "Expression",
+  "cond">: T.optional $ java "Expression",
   "then">: java "StatementNoShortIf",
   "else">: java "Statement"]
 
@@ -1476,7 +1476,7 @@ ifThenElseStatement = def "IfThenElseStatement" $ T.record [
 --  if ( Expression ) StatementNoShortIf else StatementNoShortIf
 ifThenElseStatementNoShortIf :: TypeDefinition
 ifThenElseStatementNoShortIf = def "IfThenElseStatementNoShortIf" $ T.record [
-  "cond">: T.maybe $ java "Expression",
+  "cond">: T.optional $ java "Expression",
   "then">: java "StatementNoShortIf",
   "else">: java "StatementNoShortIf"]
 
@@ -1690,20 +1690,20 @@ basicForStatementNoShortIf = def "BasicForStatementNoShortIf" $ T.record [
 --BreakStatement:
 --  break [Identifier] ;
 breakStatement :: TypeDefinition
-breakStatement = def "BreakStatement" $ T.wrap $ T.maybe $ java "Identifier"
+breakStatement = def "BreakStatement" $ T.wrap $ T.optional $ java "Identifier"
 
 --CasePattern:
 --  Pattern [Guard]
 casePattern :: TypeDefinition
 casePattern = def "CasePattern" $ T.record [
   "pattern">: java "Pattern",
-  "guard">: T.maybe $ java "Guard"]
+  "guard">: T.optional $ java "Guard"]
 
 --CatchClause:
 --  catch ( CatchFormalParameter ) Block
 catchClause :: TypeDefinition
 catchClause = def "CatchClause" $ T.record [
-  "parameter">: T.maybe $ java "CatchFormalParameter",
+  "parameter">: T.optional $ java "CatchFormalParameter",
   "block">: java "Block"]
 
 --CatchFormalParameter:
@@ -1729,7 +1729,7 @@ catches = def "Catches" $ T.wrap $ T.list $ java "CatchClause"
 --ContinueStatement:
 --  continue [Identifier] ;
 continueStatement :: TypeDefinition
-continueStatement = def "ContinueStatement" $ T.wrap $ T.maybe $ java "Identifier"
+continueStatement = def "ContinueStatement" $ T.wrap $ T.optional $ java "Identifier"
 
 --DoStatement:
 --  do Statement while ( Expression ) ;
@@ -1765,9 +1765,9 @@ finally_ = def "Finally" $ T.wrap $ java "Block"
 
 forCond :: TypeDefinition
 forCond = def "ForCond" $ T.record [
-  "init">: T.maybe $ java "ForInit",
-  "cond">: T.maybe $ java "Expression",
-  "update">: T.maybe $ java "ForUpdate"]
+  "init">: T.optional $ java "ForInit",
+  "cond">: T.optional $ java "Expression",
+  "update">: T.optional $ java "ForUpdate"]
 
 --ForInit:
 forInit :: TypeDefinition
@@ -1848,7 +1848,7 @@ resource_Local = def "Resource_Local" $ T.record [
 --ReturnStatement:
 --  return [Expression] ;
 returnStatement :: TypeDefinition
-returnStatement = def "ReturnStatement" $ T.wrap $ T.maybe $ java "Expression"
+returnStatement = def "ReturnStatement" $ T.wrap $ T.optional $ java "Expression"
 
 --SynchronizedStatement:
 --  synchronized ( Expression ) Block
@@ -1880,7 +1880,7 @@ tryStatement_Simple = def "TryStatement_Simple" $ T.record [
 tryStatement_WithFinally :: TypeDefinition
 tryStatement_WithFinally = def "TryStatement_WithFinally" $ T.record [
   "block">: java "Block",
-  "catches">: T.maybe $ java "Catches",
+  "catches">: T.optional $ java "Catches",
   "finally">: java "Finally"]
 
 --TryWithResourcesStatement:
@@ -1889,8 +1889,8 @@ tryWithResourcesStatement :: TypeDefinition
 tryWithResourcesStatement = def "TryWithResourcesStatement" $ T.record [
   "resourceSpecification">: java "ResourceSpecification",
   "block">: java "Block",
-  "catches">: T.maybe $ java "Catches",
-  "finally">: T.maybe $ java "Finally"]
+  "catches">: T.optional $ java "Catches",
+  "finally">: T.optional $ java "Finally"]
 
 --TypePattern:
 --  LocalVariableDeclaration
@@ -1909,14 +1909,14 @@ variableAccess = def "VariableAccess" $ T.union [
 --  while ( Expression ) Statement
 whileStatement :: TypeDefinition
 whileStatement = def "WhileStatement" $ T.record [
-  "cond">: T.maybe $ java "Expression",
+  "cond">: T.optional $ java "Expression",
   "body">: java "Statement"]
 
 --WhileStatementNoShortIf:
 --  while ( Expression ) StatementNoShortIf
 whileStatementNoShortIf :: TypeDefinition
 whileStatementNoShortIf = def "WhileStatementNoShortIf" $ T.record [
-  "cond">: T.maybe $ java "Expression",
+  "cond">: T.optional $ java "Expression",
   "body">: java "StatementNoShortIf"]
 
 --YieldStatement (JEP 361, Java SE 14):
@@ -1955,7 +1955,7 @@ annotatedIdentifier = def "AnnotatedIdentifier" $ T.record [
 --ArrayAccess:
 arrayAccess :: TypeDefinition
 arrayAccess = def "ArrayAccess" $ T.record [
-  "expression">: T.maybe $ java "Expression",
+  "expression">: T.optional $ java "Expression",
   "variant">: java "ArrayAccess_Variant"]
 
 arrayAccess_Variant :: TypeDefinition
@@ -2008,13 +2008,13 @@ arrayCreationExpressionWithoutInitializer_ClassOrInterface :: TypeDefinition
 arrayCreationExpressionWithoutInitializer_ClassOrInterface = def "ArrayCreationExpressionWithoutInitializer_ClassOrInterface" $ T.record [
   "type">: java "ClassOrInterfaceType",
   "dimExprs">: nonemptyList $ java "DimExpr",
-  "dims">: T.maybe $ java "Dims"]
+  "dims">: T.optional $ java "Dims"]
 
 arrayCreationExpressionWithoutInitializer_Primitive :: TypeDefinition
 arrayCreationExpressionWithoutInitializer_Primitive = def "ArrayCreationExpressionWithoutInitializer_Primitive" $ T.record [
   "type">: java "PrimitiveTypeWithAnnotations",
   "dimExprs">: nonemptyList $ java "DimExpr",
-  "dims">: T.maybe $ java "Dims"]
+  "dims">: T.optional $ java "Dims"]
 
 --Assignment:
 --  LeftHandSide AssignmentOperator Expression
@@ -2081,7 +2081,7 @@ castExpression_RefAndBounds = def "CastExpression_RefAndBounds" $ T.record [
 --  Primary . UnqualifiedClassInstanceCreationExpression
 classInstanceCreationExpression :: TypeDefinition
 classInstanceCreationExpression = def "ClassInstanceCreationExpression" $ T.record [
-  "qualifier">: T.maybe $ java "ClassInstanceCreationExpression_Qualifier",
+  "qualifier">: T.optional $ java "ClassInstanceCreationExpression_Qualifier",
   "expression">: java "UnqualifiedClassInstanceCreationExpression"]
 
 classInstanceCreationExpression_Qualifier :: TypeDefinition
@@ -2106,7 +2106,7 @@ classLiteral = def "ClassLiteral" $ T.union [
 classOrInterfaceTypeToInstantiate :: TypeDefinition
 classOrInterfaceTypeToInstantiate = def "ClassOrInterfaceTypeToInstantiate" $ T.record [
   "identifiers">: nonemptyList $ java "AnnotatedIdentifier",
-  "typeArguments">: T.maybe $ java "TypeArgumentsOrDiamond"]
+  "typeArguments">: T.optional $ java "TypeArgumentsOrDiamond"]
 
 --ConditionalAndExpression:
 --  InclusiveOrExpression
@@ -2154,7 +2154,7 @@ constantExpression = def "ConstantExpression" $ T.wrap $ java "Expression"
 dimExpr :: TypeDefinition
 dimExpr = def "DimExpr" $ T.record [
   "annotations">: T.list $ java "Annotation",
-  "expression">: T.maybe $ java "Expression"]
+  "expression">: T.optional $ java "Expression"]
 
 --EqualityExpression:
 equalityExpression :: TypeDefinition
@@ -2555,4 +2555,4 @@ unqualifiedClassInstanceCreationExpression = def "UnqualifiedClassInstanceCreati
   "typeArguments">: T.list $ java "TypeArgument",
   "classOrInterface">: java "ClassOrInterfaceTypeToInstantiate",
   "arguments">: T.list $ java "Expression",
-  "body">: T.maybe $ java "ClassBody"]
+  "body">: T.optional $ java "ClassBody"]

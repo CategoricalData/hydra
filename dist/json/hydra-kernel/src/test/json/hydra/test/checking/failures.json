@@ -9,7 +9,7 @@
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "Failures"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                   {"name": "subgroups", "term": {"list": [{"variable": "hydra.test.checking.failures.failOnUntypedTests"}]}},
                   {
                     "name": "cases",
@@ -23,7 +23,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Fail on untyped (pre-inference) terms"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {"name": "subgroups", "term": {"list": [{"variable": "hydra.test.checking.failures.untypedLambdasTests"}]}},
               {
                 "name": "cases",
@@ -37,7 +37,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Untyped lambdas"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},

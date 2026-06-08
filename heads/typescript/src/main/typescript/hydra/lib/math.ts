@@ -2,8 +2,8 @@
 //
 // Signatures are flat (positional), matching Python's heads/python/lib/math.py.
 
-import type { Maybe } from "../runtime.js";
-import { Just, Nothing } from "../runtime.js";
+import type { Optional } from "../runtime.js";
+import { Given, None } from "../runtime.js";
 
 export const add = (a: number, b: number): number => a + b;
 export const sub = (a: number, b: number): number => a - b;
@@ -23,11 +23,11 @@ export const min = min_;
 export const ceil = (f: number): number => Math.ceil(f);
 export const floor = (f: number): number => Math.floor(f);
 
-export const maybeDiv = (a: number, b: number): Maybe<number> =>
-  b === 0 ? Nothing : Just(Math.trunc(a / b));
+export const maybeDiv = (a: number, b: number): Optional<number> =>
+  b === 0 ? None : Given(Math.trunc(a / b));
 
-export const maybeMod = (a: number, b: number): Maybe<number> =>
-  b === 0 ? Nothing : Just(a % b);
+export const maybeMod = (a: number, b: number): Optional<number> =>
+  b === 0 ? None : Given(a % b);
 
 // Haskell-style inclusive range `[a..b]`: includes both endpoints.
 // `range 1 3 = [1,2,3]`; `range 1 1 = [1]`; `range 2 1 = []`.

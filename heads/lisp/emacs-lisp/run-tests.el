@@ -32,7 +32,7 @@
             "lib/chars.el" "lib/eithers.el" "lib/equality.el"
             "lib/libraries.el"
             "lib/lists.el" "lib/literals.el" "lib/logic.el"
-            "lib/maps.el" "lib/math.el" "lib/maybes.el"
+            "lib/maps.el" "lib/math.el" "lib/optionals.el"
             "lib/pairs.el" "lib/regex.el" "lib/sets.el"
             "lib/strings.el"))))
 

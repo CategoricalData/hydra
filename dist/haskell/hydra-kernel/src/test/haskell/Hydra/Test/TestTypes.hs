@@ -70,11 +70,11 @@ mapOfStringsToIntsType =
       Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
       Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})
 optionalInt16Type :: Core.Type
-optionalInt16Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
+optionalInt16Type = Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
 optionalInt8Type :: Core.Type
-optionalInt8Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
+optionalInt8Type = Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
 optionalStringType :: Core.Type
-optionalStringType = Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)
+optionalStringType = Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)
 setOfStringsType :: Core.Type
 setOfStringsType = Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString)
 stringOrIntName :: Core.Name
@@ -98,7 +98,7 @@ testTypeBuddyListA =
           Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "tail"),
-          Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
+          Core.fieldTypeType = (Core.TypeOptional (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeBuddyListBName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}])})
 testTypeBuddyListAName :: Core.Name
@@ -113,7 +113,7 @@ testTypeBuddyListB =
           Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "tail"),
-          Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
+          Core.fieldTypeType = (Core.TypeOptional (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeBuddyListAName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}])})
 testTypeBuddyListBName :: Core.Name
@@ -177,7 +177,7 @@ testTypeIntList =
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "tail"),
-        Core.fieldTypeType = (Core.TypeMaybe (Core.TypeVariable testTypeIntListName))}]
+        Core.fieldTypeType = (Core.TypeOptional (Core.TypeVariable testTypeIntListName))}]
 testTypeIntListName :: Core.Name
 testTypeIntListName = Core.Name "IntList"
 testTypeLatLon :: Core.Type
@@ -214,7 +214,7 @@ testTypeList =
           Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "tail"),
-          Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
+          Core.fieldTypeType = (Core.TypeOptional (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeListName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}])})
 testTypeListName :: Core.Name

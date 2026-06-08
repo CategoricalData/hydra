@@ -19,7 +19,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -47,10 +47,10 @@ compactName namespaces name =
       let qualName = qualifyName name
           mns = Util.qualifiedNameModuleName qualName
           local = Util.qualifiedNameLocal qualName
-      in (Maybes.maybe (Core.unName name) (\ns -> Maybes.maybe local (\pre -> Strings.cat [
+      in (Optionals.cases mns (Core.unName name) (\ns -> Optionals.cases (Maps.lookup ns namespaces) local (\pre -> Strings.cat [
         pre,
         ":",
-        local]) (Maps.lookup ns namespaces)) mns)
+        local])))
 -- | Generate a fresh type variable name, threading InferenceContext
 freshName :: Typing.InferenceContext -> (Core.Name, Typing.InferenceContext)
 freshName cx =
@@ -95,7 +95,7 @@ nameToFilePath nsConv localConv ext name =
           local = Util.qualifiedNameLocal qualName
           nsToFilePath =
                   \nsArg -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unModuleName nsArg)))
-          prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
+          prefix = Optionals.cases ns "" (\n -> Strings.cat2 (nsToFilePath n) "/")
           suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
       in (Strings.cat [
         prefix,
@@ -123,7 +123,7 @@ qualifyName :: Core.Name -> Util.QualifiedName
 qualifyName name =
 
       let parts = Lists.reverse (Strings.splitOn "." (Core.unName name))
-      in (Maybes.maybe (Util.QualifiedName {
+      in (Optionals.cases (Lists.uncons parts) (Util.QualifiedName {
         Util.qualifiedNameModuleName = Nothing,
         Util.qualifiedNameLocal = (Core.unName name)}) (\uc ->
         let localName = Pairs.first uc
@@ -132,7 +132,7 @@ qualifyName name =
           Util.qualifiedNameModuleName = Nothing,
           Util.qualifiedNameLocal = (Core.unName name)}) (Util.QualifiedName {
           Util.qualifiedNameModuleName = (Just (Packaging.ModuleName (Strings.intercalate "." (Lists.reverse restReversed)))),
-          Util.qualifiedNameLocal = localName}))) (Lists.uncons parts))
+          Util.qualifiedNameLocal = localName}))))
 -- | Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext.
 restoreTrace :: Typing.InferenceContext -> Typing.InferenceContext -> Typing.InferenceContext
 restoreTrace baseCx newCx =
@@ -146,5 +146,5 @@ uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visite
 unqualifyName :: Util.QualifiedName -> Core.Name
 unqualifyName qname =
 
-      let prefix = Maybes.maybe "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".") (Util.qualifiedNameModuleName qname)
+      let prefix = Optionals.cases (Util.qualifiedNameModuleName qname) "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".")
       in (Core.Name (Strings.cat2 prefix (Util.qualifiedNameLocal qname)))

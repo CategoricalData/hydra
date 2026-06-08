@@ -819,7 +819,7 @@ module_ =
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.CaseAlternative {
-                  Core.caseAlternativeName = (Core.Name "maybeTerm"),
+                  Core.caseAlternativeName = (Core.Name "optionalTerm"),
                   Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -844,7 +844,7 @@ module_ =
                                     Core.fieldName = (Core.Name "name"),
                                     Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "maybeTerm"))}))},
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "optionalTerm"))}))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "term"),
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
@@ -1964,7 +1964,7 @@ module_ =
                                             Core.fieldTerm = Core.TermUnit}}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.CaseAlternative {
-                  Core.caseAlternativeName = (Core.Name "maybeElement"),
+                  Core.caseAlternativeName = (Core.Name "optionalElement"),
                   Core.caseAlternativeHandler = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -1989,7 +1989,7 @@ module_ =
                                     Core.fieldName = (Core.Name "name"),
                                     Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "maybeElement"))}))},
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "optionalElement"))}))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "term"),
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {

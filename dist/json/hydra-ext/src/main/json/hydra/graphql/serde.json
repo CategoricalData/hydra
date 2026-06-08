@@ -130,7 +130,7 @@
                           "application": {
                             "argument": {"variable": "def"},
                             "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
@@ -144,36 +144,37 @@
                           "application": {
                             "argument": {"variable": "def"},
                             "function": {"project": {"fieldName": "EnumValuesDefinition", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}, "variables": []}},
                       {
                         "name": "valuesExpr",
                         "term": {
                           "application": {
-                            "argument": {"variable": "values"},
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "vs"}, "function": {"unwrap": "hydra.graphql.syntax.EnumValuesDefinition"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.graphql.serde.enumValueDefinitionToExpr"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "domain": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"},
+                                "parameter": "vs"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "vs"}, "function": {"unwrap": "hydra.graphql.syntax.EnumValuesDefinition"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.graphql.serde.enumValueDefinitionToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "domain": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"},
-                                    "parameter": "vs"}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "values"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                        "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -191,7 +192,7 @@
                                         "argument": {"variable": "hydra.serialization.fullBlockStyle"},
                                         "function": {
                                           "application": {
-                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                             "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}}]},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"application": {"argument": {"variable": "desc"}, "function": {"variable": "hydra.graphql.serde.withDescription"}}}}}}},
@@ -242,7 +243,7 @@
                           "application": {
                             "argument": {"variable": "def"},
                             "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "ev",
                         "term": {
@@ -281,7 +282,7 @@
                           "application": {
                             "argument": {"variable": "def"},
                             "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
@@ -461,7 +462,7 @@
                           "application": {
                             "argument": {"variable": "def"},
                             "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
@@ -475,36 +476,37 @@
                           "application": {
                             "argument": {"variable": "def"},
                             "function": {"project": {"fieldName": "FieldsDefinition", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}, "variables": []}},
                       {
                         "name": "fieldsExpr",
                         "term": {
                           "application": {
-                            "argument": {"variable": "fields"},
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "fs"}, "function": {"unwrap": "hydra.graphql.syntax.FieldsDefinition"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.graphql.serde.fieldDefinitionToExpr"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "domain": {"variable": "hydra.graphql.syntax.FieldsDefinition"},
+                                "parameter": "fs"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"application": {"argument": {"variable": "fs"}, "function": {"unwrap": "hydra.graphql.syntax.FieldsDefinition"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.graphql.serde.fieldDefinitionToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "domain": {"variable": "hydra.graphql.syntax.FieldsDefinition"},
-                                    "parameter": "fs"}},
+                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "fields"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.ast.Expr"}}}},
-                                        "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}},
+                                        "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -522,7 +524,7 @@
                                         "argument": {"variable": "hydra.serialization.fullBlockStyle"},
                                         "function": {
                                           "application": {
-                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                             "function": {"variable": "hydra.serialization.curlyBracesList"}}}}}}}]},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"application": {"argument": {"variable": "desc"}, "function": {"variable": "hydra.graphql.serde.withDescription"}}}}}}},
@@ -780,22 +782,22 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.graphql.syntax.Description"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphql.syntax.Description"}}},
                                             "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                 {
                                   "application": {
                                     "argument": {"variable": "expr"},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.pure"}, "type": {"variable": "hydra.ast.Expr"}}}}}]},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}}}}]},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {"variable": "hydra.serialization.newlineSep"}}},
                     "domain": {"variable": "hydra.ast.Expr"},
                     "parameter": "expr"}},
-                "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                 "parameter": "mdesc"}}}},
         "name": "hydra.graphql.serde.withDescription",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+            {"isLazy": false, "name": "arg0", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.ast.Expr"}}],
           "result": {"type": {"variable": "hydra.ast.Expr"}},
           "typeParameters": []}}}],

@@ -6,7 +6,7 @@ import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
@@ -79,10 +79,10 @@ module_ = Module {
         \ Right of the list of contained values, in original order. The first application that returns Left\
         \ short-circuits the whole result to that Left.",
         "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."] mapList_,
-      toPrimitive "Map a function returning either over a maybe, or return Right Nothing if Nothing." mapMaybeSig [
-        "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value\
-        \ and returns the result with Right wrapped around Just.",
-        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."] mapMaybe_,
+      toPrimitive "Map a function returning either over an optional, or return Right none if none." mapOptionalSig [
+        "mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value\
+        \ and returns the result with Right wrapped around given.",
+        "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."] mapOptional_,
       toPrimitive "Map a function returning either over a set, collecting results or short-circuiting on Left." mapSetSig [
         "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns\
         \ Right, the result is Right of the set of contained values (deduplicated by the result type's\
@@ -181,9 +181,9 @@ mapListSig :: TermSignature
 mapListSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ee tz ty) Types.~> Types.list tx Types.~> ee tz (Types.list ty)) Nothing
 
--- mapMaybe : forall a b c. (a -> Either c b) -> Maybe a -> Either c (Maybe b)
-mapMaybeSig :: TermSignature
-mapMaybeSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
+-- mapOptional : forall a b c. (a -> Either c b) -> Maybe a -> Either c (Maybe b)
+mapOptionalSig :: TermSignature
+mapOptionalSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ee tz ty) Types.~> Types.optional tx Types.~> ee tz (Types.optional ty)) Nothing
 
 -- mapSet : forall a b c. ordering y => (a -> Either c b) -> Set a -> Either c (Set b)
@@ -332,15 +332,14 @@ mapList_ = define "mapList" $
       (right (list ([] :: [TypedTerm b])))
       (var "xs")
 
--- mapMaybe f m = maybe (Right Nothing) (\x -> map Just (f x)) m
-mapMaybe_ :: TypedTermDefinition ((a -> Either c b) -> Maybe a -> Either c (Maybe b))
-mapMaybe_ = define "mapMaybe" $
-  doc "Traverse a Maybe with an Either-returning function." $
+-- mapOptional f m = cases m (Right none) (\x -> map given (f x))
+mapOptional_ :: TypedTermDefinition ((a -> Either c b) -> Maybe a -> Either c (Maybe b))
+mapOptional_ = define "mapOptional" $
+  doc "Traverse an Optional with an Either-returning function." $
   "f" ~> "m" ~>
-    Maybes.maybe
+    Optionals.cases (var "m")
       (right nothing)
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x"))
-      (var "m")
 
 -- mapSet f s = map fromList (mapList f (toList s))
 mapSet_ :: TypedTermDefinition ((a -> Either c b) -> S.Set a -> Either c (S.Set b))

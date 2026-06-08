@@ -243,7 +243,7 @@
                                 "argument": {"literal": {"integer": {"int32": 2}}},
                                 "function": {"application": {"argument": {"variable": "x"}, "function": {"variable": "hydra.lib.math.maybeMod"}}}}},
                             "function": {
-                              "application": {"argument": {"literal": {"integer": {"int32": 0}}}, "function": {"variable": "hydra.lib.maybes.fromMaybe"}}}}},
+                              "application": {"argument": {"literal": {"integer": {"int32": 0}}}, "function": {"variable": "hydra.lib.optionals.fromOptional"}}}}},
                         "function": {"variable": "hydra.lib.equality.equal"}}}}},
                 "parameter": "x"}}}},
         "isPure": true,
@@ -357,7 +357,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
           "typeParameters": []}}},
     {
       "primitive": {
@@ -375,7 +375,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
           "typeParameters": []}}},
     {
       "primitive": {
@@ -390,7 +390,7 @@
         "name": "hydra.lib.math.maybePred",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
           "typeParameters": []}}},
     {
       "primitive": {
@@ -409,7 +409,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
           "typeParameters": []}}},
     {
       "primitive": {
@@ -424,7 +424,7 @@
         "name": "hydra.lib.math.maybeSucc",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"maybe": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
           "typeParameters": []}}},
     {
       "primitive": {

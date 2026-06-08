@@ -54,8 +54,8 @@ alter =
             Typing.parameterName = (Core.Name "arg0"),
             Typing.parameterDescription = Nothing,
             Typing.parameterType = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v"))),
-              Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v")))})),
+              Core.functionTypeDomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "v"))),
+              Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "v")))})),
             Typing.parameterIsLazy = False},
           Typing.Parameter {
             Typing.parameterName = (Core.Name "arg1"),
@@ -89,33 +89,33 @@ alter =
               Core.lambdaBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
-                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "vNew"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "vNew"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
+                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "vNew"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "vNew"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})),
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "alter, defined in terms of lookup/insert/delete via maybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "alter, defined in terms of lookup/insert/delete via optionals.cases.")))]))})))}
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
@@ -519,7 +519,7 @@ findWithDefault =
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.fromMaybe")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -529,7 +529,7 @@ findWithDefault =
         Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
           (
             Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "findWithDefault, defined in terms of lookup + fromMaybe.")))]))})))}
+            (Core.TermLiteral (Core.LiteralString "findWithDefault, defined in terms of lookup + fromOptional.")))]))})))}
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
@@ -685,7 +685,7 @@ lookup =
             Typing.parameterIsLazy = False}],
         Typing.termSignatureResult = Typing.Result {
           Typing.resultDescription = Nothing,
-          Typing.resultType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v")))}},
+          Typing.resultType = (Core.TypeOptional (Core.TypeVariable (Core.Name "v")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}

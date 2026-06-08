@@ -2,30 +2,49 @@
 -- | Rust code generator: converts Hydra type and term modules to Rust source code
 
 module Hydra.Rust.Coder where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Rust.Language as Language
 import qualified Hydra.Rust.Serde as Serde
 import qualified Hydra.Rust.Syntax as Syntax
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -118,7 +137,7 @@ encodeProjectionElim :: t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either
 encodeProjectionElim cx g proj marg =
 
       let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
-      in (Maybes.cases marg (Right (rustClosure [
+      in (Optionals.cases marg (Right (rustClosure [
         "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
         Syntax.fieldAccessExprObject = (rustExprPath "v"),
         Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
@@ -163,7 +182,7 @@ encodeTerm cx g term =
         k,
         v])))) (Maps.toList v0)) (\pairs -> Right (rustCall (rustExprPath "BTreeMap::from") [
         Syntax.ExpressionArray (Syntax.ArrayExprElements pairs)]))
-      Core.TermMaybe v0 -> Maybes.cases v0 (Right (rustExprPath "None")) (\val -> Eithers.bind (encodeTerm cx g val) (\sval -> Right (rustCall (rustExprPath "Some") [
+      Core.TermOptional v0 -> Optionals.cases v0 (Right (rustExprPath "None")) (\val -> Eithers.bind (encodeTerm cx g val) (\sval -> Right (rustCall (rustExprPath "Some") [
         sval])))
       Core.TermPair v0 -> Eithers.bind (encodeTerm cx g (Pairs.first v0)) (\f -> Eithers.bind (encodeTerm cx g (Pairs.second v0)) (\s -> Right (Syntax.ExpressionTuple [
         f,
@@ -213,7 +232,7 @@ encodeTermDefinition cx g tdef =
           term = Packaging.termDefinitionBody tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
           typ =
-                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef))
+                  Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature tdef)) (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
@@ -244,7 +263,7 @@ encodeType cx g t =
         Core.TypeList v0 -> Eithers.map (\enc -> rustApply1 "Vec" enc) (encodeType cx g v0)
         Core.TypeSet v0 -> Eithers.map (\enc -> rustApply1 "BTreeSet" enc) (encodeType cx g v0)
         Core.TypeMap v0 -> Eithers.bind (encodeType cx g (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (encodeType cx g (Core.mapTypeValues v0)) (\vt -> Right (rustApply2 "BTreeMap" kt vt)))
-        Core.TypeMaybe v0 -> Eithers.map (\enc -> rustApply1 "Option" enc) (encodeType cx g v0)
+        Core.TypeOptional v0 -> Eithers.map (\enc -> rustApply1 "Option" enc) (encodeType cx g v0)
         Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt -> Right (rustApply2 "Either" lt rt)))
         Core.TypePair v0 -> Eithers.bind (encodeType cx g (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g (Core.pairTypeSecond v0)) (\st -> Right (Syntax.TypeTuple [
           ft,
@@ -339,13 +358,13 @@ encodeUnionElim cx g cs marg =
                 Syntax.identifierPatternMutable = False,
                 Syntax.identifierPatternAtPattern = Nothing})]})),
           Syntax.matchArmGuard = Nothing,
-          Syntax.matchArmBody = armBody})))) caseFields) (\arms -> Eithers.bind (Maybes.cases defCase (Right arms) (\dt -> Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
+          Syntax.matchArmBody = armBody})))) caseFields) (\arms -> Eithers.bind (Optionals.cases defCase (Right arms) (\dt -> Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
         Core.applicationFunction = dt,
         Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\defBody -> Right (Lists.concat2 arms [
         Syntax.MatchArm {
           Syntax.matchArmPattern = Syntax.PatternWildcard,
           Syntax.matchArmGuard = Nothing,
-          Syntax.matchArmBody = defBody}])))) (\allArms -> Maybes.cases marg (Right (rustClosure [
+          Syntax.matchArmBody = defBody}])))) (\allArms -> Optionals.cases marg (Right (rustClosure [
         "v"] (Syntax.ExpressionMatch (Syntax.MatchExpr {
         Syntax.matchExprScrutinee = (rustExprPath "v"),
         Syntax.matchExprArms = allArms})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionMatch (Syntax.MatchExpr {
@@ -353,7 +372,7 @@ encodeUnionElim cx g cs marg =
         Syntax.matchExprArms = allArms})))))))
 encodeUnwrapElim :: t0 -> t1 -> Core.Name -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
 encodeUnwrapElim cx g name marg =
-    Maybes.cases marg (Right (rustClosure [
+    Optionals.cases marg (Right (rustClosure [
       "v"] (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
       Syntax.tupleIndexExprTuple = (rustExprPath "v"),
       Syntax.tupleIndexExprIndex = 0})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
@@ -370,8 +389,7 @@ moduleToRust mod defs cx g =
             crate = Syntax.Crate {
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
-            filePath =
-                    Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "rs") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "rs") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =
