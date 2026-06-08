@@ -4,14 +4,22 @@ module Hydra.Sources.Kernel.Lib.Maps where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
+import qualified Data.Map                    as M
 
 
 ns :: ModuleName
 ns = ModuleName "hydra.lib.maps"
+
+define :: String -> TypedTerm a -> TypedTermDefinition a
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
@@ -21,21 +29,21 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.maps module.")}
   where
     definitions = [
-      primNoDef "alter"           "Alter a value at a key using a function which sees the optional current value." alterSig [
+      toPrimitive "Alter a value at a key using a function which sees the optional current value." alterSig [
         "alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is\
         \ absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k\
         \ is removed from the result.",
         "A single primitive that subsumes insert, delete, and adjust.",
         "Requires an 'ordering' constraint on the key type.",
         "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v ->\
-        \ Map k v."],
-      primNoDef "bimap"           "Map functions over both the keys and values of a map." bimapSig [
+        \ Map k v."] alter_,
+      toPrimitive "Map functions over both the keys and values of a map." bimapSig [
         "bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m.",
         "Key collisions after applying fk are resolved by keeping the last binding encountered (host may\
         \ differ on collision policy if fk is not injective).",
         "Requires 'ordering' constraints on both the input and output key types.",
         "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) ->\
-        \ (fk k, fv v)) . toList."],
+        \ (fk k, fv v)) . toList."] bimap_,
       primNoDef "delete"          "Remove a key from a map." deleteSig [
         "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned\
         \ unchanged.",
@@ -49,21 +57,21 @@ module_ = Module {
         "empty is the map with no bindings.",
         "Requires an 'ordering' constraint on the key type.",
         "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
-      primNoDef "filter"          "Filter a map by value." filterSig [
+      toPrimitive "Filter a map by value." filterSig [
         "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is\
         \ true.",
         "Requires an 'ordering' constraint on the key type.",
-        "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
-      primNoDef "filterWithKey"   "Filter a map by key and value." filterWithKeySig [
+        "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."] filter_,
+      toPrimitive "Filter a map by key and value." filterWithKeySig [
         "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which\
         \ p(k, v) is true.",
         "Requires an 'ordering' constraint on the key type.",
-        "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
-      primNoDef "findWithDefault" "Look up a value with a default if the key is absent." findWithDefaultSig [
+        "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."] filterWithKey_,
+      toPrimitive "Look up a value with a default if the key is absent." findWithDefaultSig [
         "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise.\
         \ Equivalent to maybe(def, identity, lookup(k, m)).",
         "Requires an 'ordering' constraint on the key type.",
-        "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
+        "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."] findWithDefault_,
       primNoDef "fromList"        "Build a map from a list of key-value pairs." fromListSig [
         "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple\
         \ entries for the same key, the last one wins (matching Haskell's fromList behavior).",
@@ -83,17 +91,17 @@ module_ = Module {
         \ present.",
         "Requires an 'ordering' constraint on the key type.",
         "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
-      primNoDef "map"             "Map a function over the values of a map." mapSig [
+      toPrimitive "Map a function over the values of a map." mapSig [
         "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).",
         "Requires an 'ordering' constraint on the key type.",
-        "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
-      primNoDef "mapKeys"         "Map a function over the keys of a map." mapKeysSig [
+        "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."] map_,
+      toPrimitive "Map a function over the keys of a map." mapKeysSig [
         "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys\
         \ to the same image, key collisions are resolved by keeping the binding with the greater original\
         \ key (matching Haskell's mapKeys behavior).",
         "Requires 'ordering' constraints on both the input and output key types.",
         "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v ->\
-        \ Map k2 v."],
+        \ Map k2 v."] mapKeys_,
       primNoDef "member"          "Test whether a key is present in a map." memberSig [
         "member(k, m) returns true iff k is a key in m.",
         "Requires an 'ordering' constraint on the key type.",
@@ -238,3 +246,67 @@ toListSig = sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]
 unionSig :: TermSignature
 unionSig = sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]
   (mp tk tv Types.~> mp tk tv Types.~> mp tk tv)
+
+-- Default implementations.
+
+-- alter f k m = maybe (delete k m) (\v' -> insert k v' m) (f (lookup k m))
+alter_ :: TypedTermDefinition ((Maybe v -> Maybe v) -> k -> M.Map k v -> M.Map k v)
+alter_ = define "alter" $
+  doc "alter, defined in terms of lookup/insert/delete via maybe." $
+  "f" ~> "k" ~> "m" ~>
+    Maybes.maybe
+      (Maps.delete (var "k") (var "m"))
+      ("vNew" ~> Maps.insert (var "k") (var "vNew") (var "m"))
+      (var "f" @@ Maps.lookup (var "k") (var "m"))
+
+-- bimap fk fv m = fromList (map (\p -> (fk (first p), fv (second p))) (toList m))
+bimap_ :: TypedTermDefinition ((k1 -> k2) -> (v1 -> v2) -> M.Map k1 v1 -> M.Map k2 v2)
+bimap_ = define "bimap" $
+  doc "bimap on a map, defined via toList/fromList." $
+  "fk" ~> "fv" ~> "m" ~>
+    Maps.fromList $ Lists.map
+      ("p" ~> pair (var "fk" @@ Pairs.first (var "p")) (var "fv" @@ Pairs.second (var "p")))
+      (Maps.toList (var "m"))
+
+-- filter p m = fromList (filter (\pr -> p (second pr)) (toList m))
+filter_ :: TypedTermDefinition ((v -> Bool) -> M.Map k v -> M.Map k v)
+filter_ = define "filter" $
+  doc "filter on a map, defined via toList/fromList." $
+  "p" ~> "m" ~>
+    Maps.fromList $ Lists.filter
+      ("pr" ~> var "p" @@ Pairs.second (var "pr"))
+      (Maps.toList (var "m"))
+
+-- filterWithKey p m = fromList (filter (\pr -> p (first pr) (second pr)) (toList m))
+filterWithKey_ :: TypedTermDefinition ((k -> v -> Bool) -> M.Map k v -> M.Map k v)
+filterWithKey_ = define "filterWithKey" $
+  doc "filterWithKey on a map, defined via toList/fromList." $
+  "p" ~> "m" ~>
+    Maps.fromList $ Lists.filter
+      ("pr" ~> var "p" @@ Pairs.first (var "pr") @@ Pairs.second (var "pr"))
+      (Maps.toList (var "m"))
+
+-- findWithDefault def k m = fromMaybe def (lookup k m)
+findWithDefault_ :: TypedTermDefinition (v -> k -> M.Map k v -> v)
+findWithDefault_ = define "findWithDefault" $
+  doc "findWithDefault, defined in terms of lookup + fromMaybe." $
+  "def" ~> "k" ~> "m" ~>
+    Maybes.fromMaybe (var "def") (Maps.lookup (var "k") (var "m"))
+
+-- map f m = fromList (map (\p -> (first p, f (second p))) (toList m))
+map_ :: TypedTermDefinition ((v1 -> v2) -> M.Map k v1 -> M.Map k v2)
+map_ = define "map" $
+  doc "map over values, defined via toList/fromList." $
+  "f" ~> "m" ~>
+    Maps.fromList $ Lists.map
+      ("p" ~> pair (Pairs.first (var "p")) (var "f" @@ Pairs.second (var "p")))
+      (Maps.toList (var "m"))
+
+-- mapKeys f m = fromList (map (\p -> (f (first p), second p)) (toList m))
+mapKeys_ :: TypedTermDefinition ((k1 -> k2) -> M.Map k1 v -> M.Map k2 v)
+mapKeys_ = define "mapKeys" $
+  doc "map over keys, defined via toList/fromList." $
+  "f" ~> "m" ~>
+    Maps.fromList $ Lists.map
+      ("p" ~> pair (var "f" @@ Pairs.first (var "p")) (Pairs.second (var "p")))
+      (Maps.toList (var "m"))
