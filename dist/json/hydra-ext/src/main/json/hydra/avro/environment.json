@@ -1,183 +1,183 @@
 {
+  "name": "hydra.avro.environment",
+  "metadata": {"description": "Type definitions for the Avro code generation environment", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.coders"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.avro.environment.AvroQualifiedName",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro qualified name with optional namespace"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "namespace",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]},
-                        "body": {"optional": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]},
-                        "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.avro.environment.AvroQualifiedName"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An Avro foreign key annotation linking a field to another type"}}}]},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro qualified name with optional namespace"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.avro.environment.AvroForeignKey",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The Hydra type name referenced by this foreign key"}}}]},
-                        "body": {"variable": "hydra.core.Name"}}}},
+                              "value": {"literal": {"string": "The Hydra type name referenced by this foreign key"}}}]}}}},
                   {
                     "name": "constructor",
                     "type": {
                       "annotated": {
+                        "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A function which constructs element names from string values"}}}]},
-                        "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"literal": {"string": {}}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.avro.environment.AvroForeignKey"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                              "value": {"literal": {"string": "A function which constructs element names from string values"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An Avro primary key annotation identifying the element name field"}}}]},
+                    "value": {"literal": {"string": "An Avro foreign key annotation linking a field to another type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.avro.environment.AvroPrimaryKey",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "fieldName",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primary key field"}}}]},
-                        "body": {"variable": "hydra.core.Name"}}}},
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primary key field"}}}]}}}},
                   {
                     "name": "constructor",
                     "type": {
                       "annotated": {
+                        "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A function which constructs element names from string values"}}}]},
-                        "body": {"function": {"codomain": {"variable": "hydra.core.Name"}, "domain": {"literal": {"string": {}}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.avro.environment.AvroPrimaryKey"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                              "value": {"literal": {"string": "A function which constructs element names from string values"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Avro-to-Hydra code generation"}}}]},
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An Avro primary key annotation identifying the element name field"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.avro.environment.AvroEnvironment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "namedAdapters",
                     "type": {
                       "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Named adapters for previously processed schemas"}}}]},
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.avro.environment.AvroQualifiedName"},
                             "values": {
                               "application": {
-                                "argument": {"variable": "hydra.core.Term"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.json.model.Value"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.core.Type"},
                                         "function": {
-                                          "application": {"argument": {"variable": "hydra.avro.schema.Schema"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}},
+                                          "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                        "argument": {"variable": "hydra.core.Type"}}},
+                                    "argument": {"variable": "hydra.json.model.Value"}}},
+                                "argument": {"variable": "hydra.core.Term"}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Named adapters for previously processed schemas"}}}]}}}},
                   {
                     "name": "namespace",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]},
-                        "body": {"optional": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]}}}},
                   {
                     "name": "elements",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generated Hydra elements"}}}]},
-                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Binding"}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.avro.environment.AvroEnvironment"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Binding"}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generated Hydra elements"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted"}}}]},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Avro-to-Hydra code generation"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.avro.environment.EncodeEnvironment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "typeMap",
                     "type": {
                       "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All named types available for reference"}}}]},
-                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All named types available for reference"}}}]}}}},
                   {
                     "name": "emitted",
                     "type": {
                       "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Adapters for types that have already been fully emitted (emit references for these)"}}}]},
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.core.Name"},
                             "values": {
                               "application": {
-                                "argument": {"variable": "hydra.json.model.Value"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "hydra.core.Term"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "hydra.avro.schema.Schema"},
-                                        "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.avro.environment.EncodeEnvironment"}}],
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.coders"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
-  "metadata": {"comments": [], "description": "Type definitions for the Avro code generation environment", "seeAlso": []},
-  "name": "hydra.avro.environment"}
+                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                        "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                    "argument": {"variable": "hydra.core.Term"}}},
+                                "argument": {"variable": "hydra.json.model.Value"}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Adapters for types that have already been fully emitted (emit references for these)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted"}}}]}}}}}}]}

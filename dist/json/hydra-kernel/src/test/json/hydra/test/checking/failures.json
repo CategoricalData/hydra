@@ -1,52 +1,6 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type checking failure test cases"}}}]},
-            "body": {
-              "record": {
-                "fields": [
-                  {"name": "name", "term": {"literal": {"string": "Failures"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
-                  {"name": "subgroups", "term": {"list": [{"variable": "hydra.test.checking.failures.failOnUntypedTests"}]}},
-                  {
-                    "name": "cases",
-                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "name": "hydra.test.checking.failures.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "record": {
-            "fields": [
-              {"name": "name", "term": {"literal": {"string": "Fail on untyped (pre-inference) terms"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
-              {"name": "subgroups", "term": {"list": [{"variable": "hydra.test.checking.failures.untypedLambdasTests"}]}},
-              {
-                "name": "cases",
-                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "name": "hydra.test.checking.failures.failOnUntypedTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "record": {
-            "fields": [
-              {"name": "name", "term": {"literal": {"string": "Untyped lambdas"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
-              {
-                "name": "subgroups",
-                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
-              {
-                "name": "cases",
-                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "name": "hydra.test.checking.failures.untypedLambdasTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
+  "name": "hydra.test.checking.failures",
+  "metadata": {"description": "Type checking failure test cases", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.rewriting"},
@@ -72,5 +26,51 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Type checking failure test cases", "seeAlso": []},
-  "name": "hydra.test.checking.failures"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.checking.failures.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "Failures"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "subgroups", "term": {"list": [{"variable": "hydra.test.checking.failures.failOnUntypedTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type checking failure test cases"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.checking.failures.failOnUntypedTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "record": {
+            "typeName": "hydra.testing.TestGroup",
+            "fields": [
+              {"name": "name", "term": {"literal": {"string": "Fail on untyped (pre-inference) terms"}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "subgroups", "term": {"list": [{"variable": "hydra.test.checking.failures.untypedLambdasTests"}]}},
+              {
+                "name": "cases",
+                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}}}},
+    {
+      "term": {
+        "name": "hydra.test.checking.failures.untypedLambdasTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "record": {
+            "typeName": "hydra.testing.TestGroup",
+            "fields": [
+              {"name": "name", "term": {"literal": {"string": "Untyped lambdas"}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {
+                "name": "subgroups",
+                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+              {
+                "name": "cases",
+                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}}}}]}

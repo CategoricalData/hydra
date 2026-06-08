@@ -1,59 +1,59 @@
 {
+  "name": "hydra.haskell.environment",
+  "metadata": {"description": "Environment types for Haskell code generation", "comments": [], "seeAlso": []},
+  "dependencies": [],
   "definitions": [
     {
       "type": {
+        "name": "hydra.haskell.environment.HaskellModuleMetadata",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Metadata used to determine which standard imports are needed in a generated Haskell module"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "usesByteString",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"boolean": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}]},
-                        "body": {"literal": {"boolean": {}}}}}},
+                              "value": {"literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}]}}}},
                   {
                     "name": "usesInt",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"boolean": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}]},
-                        "body": {"literal": {"boolean": {}}}}}},
+                              "value": {"literal": {"string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}]}}}},
                   {
                     "name": "usesMap",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"boolean": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}]},
-                        "body": {"literal": {"boolean": {}}}}}},
+                              "value": {"literal": {"string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}]}}}},
                   {
                     "name": "usesSet",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"boolean": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}]},
-                        "body": {"literal": {"boolean": {}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.haskell.environment.HaskellModuleMetadata"}}],
-  "dependencies": [],
-  "metadata": {"comments": [], "description": "Environment types for Haskell code generation", "seeAlso": []},
-  "name": "hydra.haskell.environment"}
+                              "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Metadata used to determine which standard imports are needed in a generated Haskell module"}}}]}}}}}}]}

@@ -1,45 +1,45 @@
 {
+  "name": "hydra.protobuf.any",
+  "metadata": {
+    "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.protobuf.any.Any",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message."}}}]},
               "body": {
                 "record": [
                   {
                     "name": "typeUrl",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"string": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
-                                "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                                "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]}}}},
                   {
                     "name": "value",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"binary": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]},
-                        "body": {"literal": {"binary": {}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.protobuf.any.Any"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {
-    "comments": [],
-    "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto",
-    "seeAlso": []},
-  "name": "hydra.protobuf.any"}
+                              "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message."}}}]}}}}}}]}

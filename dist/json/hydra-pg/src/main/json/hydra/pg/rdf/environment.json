@@ -1,82 +1,82 @@
 {
+  "name": "hydra.pg.rdf.environment",
+  "metadata": {"description": "Environment types for property graph to RDF mapping", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.pg.rdf.environment.PgRdfEnvironment",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The environment for property graph to RDF mapping"}}}]},
               "body": {
                 "forall": {
+                  "parameter": "v",
                   "body": {
                     "record": [
                       {
                         "name": "encodeVertexId",
                         "type": {
                           "annotated": {
+                            "body": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.rdf.syntax.Iri"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A function which encodes a vertex id as an RDF IRI"}}}]},
-                            "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "v"}}}}}},
+                                  "value": {"literal": {"string": "A function which encodes a vertex id as an RDF IRI"}}}]}}}},
                       {
                         "name": "encodeVertexLabel",
                         "type": {
                           "annotated": {
+                            "body": {"function": {"domain": {"variable": "hydra.pg.model.VertexLabel"}, "codomain": {"variable": "hydra.rdf.syntax.Iri"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A function which encodes a vertex label as an RDF IRI"}}}]},
-                            "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.VertexLabel"}}}}}},
+                                  "value": {"literal": {"string": "A function which encodes a vertex label as an RDF IRI"}}}]}}}},
                       {
                         "name": "encodeEdgeId",
                         "type": {
                           "annotated": {
+                            "body": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.rdf.syntax.Iri"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A function which encodes an edge id as an RDF IRI"}}}]},
-                            "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "v"}}}}}},
+                                  "value": {"literal": {"string": "A function which encodes an edge id as an RDF IRI"}}}]}}}},
                       {
                         "name": "encodeEdgeLabel",
                         "type": {
                           "annotated": {
+                            "body": {"function": {"domain": {"variable": "hydra.pg.model.EdgeLabel"}, "codomain": {"variable": "hydra.rdf.syntax.Iri"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A function which encodes an edge label as an RDF IRI"}}}]},
-                            "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.EdgeLabel"}}}}}},
+                                  "value": {"literal": {"string": "A function which encodes an edge label as an RDF IRI"}}}]}}}},
                       {
                         "name": "encodePropertyKey",
                         "type": {
                           "annotated": {
+                            "body": {"function": {"domain": {"variable": "hydra.pg.model.PropertyKey"}, "codomain": {"variable": "hydra.rdf.syntax.Iri"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A function which encodes a property key as an RDF IRI"}}}]},
-                            "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.pg.model.PropertyKey"}}}}}},
+                                  "value": {"literal": {"string": "A function which encodes a property key as an RDF IRI"}}}]}}}},
                       {
                         "name": "encodePropertyValue",
                         "type": {
                           "annotated": {
+                            "body": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.rdf.syntax.Literal"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A function which encodes a property value as an RDF literal"}}}]},
-                            "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Literal"}, "domain": {"variable": "v"}}}}}}]},
-                  "parameter": "v"}}}},
-          "variables": []},
-        "name": "hydra.pg.rdf.environment.PgRdfEnvironment"}}],
-  "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
-  "metadata": {"comments": [], "description": "Environment types for property graph to RDF mapping", "seeAlso": []},
-  "name": "hydra.pg.rdf.environment"}
+                                  "value": {"literal": {"string": "A function which encodes a property value as an RDF literal"}}}]}}}}]}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The environment for property graph to RDF mapping"}}}]}}}}}}]}

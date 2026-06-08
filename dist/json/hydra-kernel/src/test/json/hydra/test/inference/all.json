@@ -1,32 +1,6 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all inference tests"}}}]},
-            "body": {
-              "record": {
-                "fields": [
-                  {"name": "name", "term": {"literal": {"string": "inference"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
-                  {
-                    "name": "subgroups",
-                    "term": {
-                      "list": [
-                        {"variable": "hydra.test.inference.algebraicTypes.allTests"},
-                        {"variable": "hydra.test.inference.algorithmW.allTests"},
-                        {"variable": "hydra.test.inference.classes.allTests"},
-                        {"variable": "hydra.test.inference.failures.allTests"},
-                        {"variable": "hydra.test.inference.fundamentals.allTests"},
-                        {"variable": "hydra.test.inference.kernelExamples.allTests"},
-                        {"variable": "hydra.test.inference.nominalTypes.allTests"}]}},
-                  {
-                    "name": "cases",
-                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "name": "hydra.test.inference.all.allTests",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []}}}],
+  "name": "hydra.test.inference.all",
+  "metadata": {"description": "Hydra's inference test suite", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.test.inference.algebraicTypes"},
     {"module": "hydra.test.inference.algorithmW"},
@@ -57,5 +31,31 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Hydra's inference test suite", "seeAlso": []},
-  "name": "hydra.test.inference.all"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.inference.all.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "inference"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {
+                      "list": [
+                        {"variable": "hydra.test.inference.algebraicTypes.allTests"},
+                        {"variable": "hydra.test.inference.algorithmW.allTests"},
+                        {"variable": "hydra.test.inference.classes.allTests"},
+                        {"variable": "hydra.test.inference.failures.allTests"},
+                        {"variable": "hydra.test.inference.fundamentals.allTests"},
+                        {"variable": "hydra.test.inference.kernelExamples.allTests"},
+                        {"variable": "hydra.test.inference.nominalTypes.allTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all inference tests"}}}]}}}}}]}

@@ -43,11 +43,11 @@ expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
       _ -> Left (Strings.cat2 (Strings.cat2 "expected " "JSON number") (Strings.cat2 " but found " (showValue value)))
--- | Extract an object from a JSON value, failing if the value is not an object
+-- | Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name.
 expectObject :: Model.Value -> Either String (M.Map String Model.Value)
 expectObject value =
     case value of
-      Model.ValueObject v0 -> Right v0
+      Model.ValueObject v0 -> Right (Maps.fromList v0)
       _ -> Left (Strings.cat2 (Strings.cat2 "expected " "JSON object") (Strings.cat2 " but found " (showValue value)))
 -- | Extract a string from a JSON value, failing if the value is not a string
 expectString :: Model.Value -> Either String String

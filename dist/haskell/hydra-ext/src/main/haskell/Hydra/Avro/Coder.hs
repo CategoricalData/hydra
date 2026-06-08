@@ -100,8 +100,8 @@ avroHydraAdapter cx schema env0 =
                 Core.mapTypeValues = (Coders.adapterTarget ad)})),
               Coders.adapterCoder = Coders.Coder {
                 Coders.coderEncode = (\cx1 -> \v -> case v of
-                  Model.ValueObject v1 -> Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) (Maps.toList v1))),
-                Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (ExtractCore.map (\t -> ExtractCore.string (Graph.Graph {
+                  Model.ValueObject v1 -> Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) v1)),
+                Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject (Maps.toList mp_)) (ExtractCore.map (\t -> ExtractCore.string (Graph.Graph {
                   Graph.graphBoundTerms = Maps.empty,
                   Graph.graphBoundTypes = Maps.empty,
                   Graph.graphClassConstraints = Maps.empty,
@@ -204,9 +204,9 @@ avroHydraAdapter cx schema env0 =
                         Coders.coderEncode = (\cx1 -> \jv -> case jv of
                           Model.ValueObject v2 -> Eithers.map (\fields -> Core.TermRecord (Core.Record {
                             Core.recordTypeName = hydraName,
-                            Core.recordFields = fields})) (Eithers.mapList (\e -> encodePair cx1 e) (Maps.toList v2))),
+                            Core.recordFields = fields})) (Eithers.mapList (\e -> encodePair cx1 e) v2)),
                         Coders.coderDecode = (\cx1 -> \t -> case t of
-                          Core.TermRecord v2 -> Eithers.map (\kvs -> Model.ValueObject (Maps.fromList kvs)) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))}},
+                          Core.TermRecord v2 -> Eithers.map (\kvs -> Model.ValueObject kvs) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))}},
                     env2))))))) (\adEnv2 ->
             let ad = Pairs.first adEnv2
                 env2 = Pairs.second adEnv2
@@ -368,7 +368,7 @@ encodeAnnotationValue v =
       Model.ValueObject v0 -> Core.TermMap (Maps.fromList (Lists.map (\entry ->
         let k = Pairs.first entry
             v_ = Pairs.second entry
-        in (Core.TermLiteral (Core.LiteralString k), (encodeAnnotationValue v_))) (Maps.toList v0)))
+        in (Core.TermLiteral (Core.LiteralString k), (encodeAnnotationValue v_))) v0))
       Model.ValueString v0 -> Core.TermLiteral (Core.LiteralString v0)
 -- | Construct an error result with a message in context
 err :: t0 -> String -> Either Errors.Error t1
@@ -382,7 +382,7 @@ expectArrayE cx value =
 expectObjectE :: t0 -> Model.Value -> Either t1 (M.Map String Model.Value)
 expectObjectE cx value =
     case value of
-      Model.ValueObject v0 -> Right v0
+      Model.ValueObject v0 -> Right (Maps.fromList v0)
 -- | Extract a JSON string or return an error
 expectStringE :: t0 -> Model.Value -> Either t1 String
 expectStringE cx value =

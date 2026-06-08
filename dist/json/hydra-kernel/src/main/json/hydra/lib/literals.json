@@ -1,820 +1,6 @@
 {
-  "definitions": [
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToDecimal(x) returns the exact decimal representation of x. Since decimal is arbitrary-precision and bigint is also arbitrary-precision, the conversion is lossless.",
-            "Total."],
-          "description": "Convert a bigint to a decimal.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToDecimal",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"decimal": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToInt16(x) returns x reduced modulo 2^16 and reinterpreted as a signed two's-complement int16. Values outside [-2^15, 2^15-1] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to an int16 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToInt16",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"int16": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToInt32(x) returns x reduced modulo 2^32 and reinterpreted as a signed two's-complement int32. Values outside [-2^31, 2^31-1] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to an int32 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToInt32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToInt64(x) returns x reduced modulo 2^64 and reinterpreted as a signed two's-complement int64. Values outside [-2^63, 2^63-1] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to an int64 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToInt64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"int64": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToInt8(x) returns x reduced modulo 2^8 and reinterpreted as a signed two's-complement int8. Values outside [-128, 127] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to an int8 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToInt8",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"int8": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToUint16(x) returns x reduced modulo 2^16 as an unsigned uint16. Values outside [0, 2^16-1] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to a uint16 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToUint16",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"uint16": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToUint32(x) returns x reduced modulo 2^32 as an unsigned uint32. Values outside [0, 2^32-1] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to a uint32 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToUint32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"uint32": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToUint64(x) returns x reduced modulo 2^64 as an unsigned uint64. Values outside [0, 2^64-1] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to a uint64 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToUint64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"uint64": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bigintToUint8(x) returns x reduced modulo 2^8 as an unsigned uint8. Values outside [0, 255] wrap silently with no exception.",
-            "Total."],
-          "description": "Convert a bigint to a uint8 (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.bigintToUint8",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"uint8": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "binaryToBytes(b) returns the bytes of b as an int32 list with values in [0, 255], preserving byte order.",
-            "The result list element type is int32 rather than uint8 because Hydra's primitive collections work most naturally with int32 indices.",
-            "Total."],
-          "description": "Convert binary data to a list of byte values.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.binaryToBytes",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"binary": {}}}}],
-          "result": {"type": {"list": {"literal": {"integer": {"int32": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "binaryToString(b) interprets the bytes of b as a UTF-8-encoded string and returns the decoded value.",
-            "The behavior on invalid UTF-8 byte sequences is host-defined: most hosts substitute the replacement character U+FFFD; some may signal an error or truncate.",
-            "Total in the sense that it does not raise from the kernel's perspective, but the result may carry the host's replacement semantics."],
-          "description": "Convert binary data to a UTF-8 string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.binaryToString",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"binary": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["decimalToBigint(x) returns x truncated toward zero. Fractional parts are discarded.", "Total."],
-          "description": "Convert a decimal to a bigint (truncating).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.decimalToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "decimalToFloat32(x) returns the IEEE 754 binary32 value closest to x under roundTiesToEven. Values outside the float32 representable range overflow to ±∞. Subnormal precision loss is silent.",
-            "Total."],
-          "description": "Convert a decimal to a float32.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.decimalToFloat32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
-          "result": {"type": {"literal": {"float": {"float32": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "decimalToFloat64(x) returns the IEEE 754 binary64 value closest to x under roundTiesToEven. Values outside the float64 representable range overflow to ±∞. Subnormal precision loss is silent.",
-            "Total."],
-          "description": "Convert a decimal to a float64.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.decimalToFloat64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
-          "result": {"type": {"literal": {"float": {"float64": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "float32ToDecimal(x) returns the exact decimal representation of the binary32 value x. Special float32 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary32 values are dyadic rationals.",
-            "Total."],
-          "description": "Convert a float32 to a decimal.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.float32ToDecimal",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}}],
-          "result": {"type": {"literal": {"decimal": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "float32ToFloat64(x) returns the binary64 value with the same numeric value as x; ±∞ and NaN pass through. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert a float32 to a float64.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.float32ToFloat64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}}],
-          "result": {"type": {"literal": {"float": {"float64": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "float64ToDecimal(x) returns the exact decimal representation of the binary64 value x. Special float64 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary64 values are dyadic rationals.",
-            "Total."],
-          "description": "Convert a float64 to a decimal.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.float64ToDecimal",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
-          "result": {"type": {"literal": {"decimal": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "float64ToFloat32(x) returns the binary32 value closest to x under roundTiesToEven. Values outside the binary32 range overflow to ±∞; subnormal precision loss is silent; NaN payload may be canonicalized by the host.",
-            "Total."],
-          "description": "Convert a float64 to a float32 (lossy).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.float64ToFloat32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
-          "result": {"type": {"literal": {"float": {"float32": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "int16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert an int16 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.int16ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "int32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert an int32 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.int32ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "int64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert an int64 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.int64ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["int8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.", "Total."],
-          "description": "Convert an int8 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.int8ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal.",
-            "Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure.",
-            "Total."],
-          "description": "Parse a string as a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"bigint": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon).",
-            "Total."],
-          "description": "Parse a string as a boolean.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readBoolean",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"boolean": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
-            "Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0).",
-            "Total."],
-          "description": "Parse a string as a decimal.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readDecimal",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"decimal": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
-            "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
-            "Total."],
-          "description": "Parse a string as a float32.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readFloat32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"float": {"float32": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
-            "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
-            "Total."],
-          "description": "Parse a string as a float64.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readFloat64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"float": {"float64": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1].",
-            "Total."],
-          "description": "Parse a string as an int16.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readInt16",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int16": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1].",
-            "Total."],
-          "description": "Parse a string as an int32.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readInt32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1].",
-            "Total."],
-          "description": "Parse a string as an int64.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readInt64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int64": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127].",
-            "Total."],
-          "description": "Parse a string as an int8.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readInt8",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int8": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input.",
-            "Total. The inverse of showString."],
-          "description": "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readString",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"string": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1].",
-            "Total."],
-          "description": "Parse a string as a uint16.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readUint16",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint16": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1].",
-            "Total."],
-          "description": "Parse a string as a uint32.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readUint32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint32": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1].",
-            "Total."],
-          "description": "Parse a string as a uint64.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readUint64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint64": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "readUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255].",
-            "Total."],
-          "description": "Parse a string as a uint8.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.readUint8",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint8": {}}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\").",
-            "Total. The inverse of readBigint."],
-          "description": "Render a bigint as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["showBoolean(true) = \"true\"; showBoolean(false) = \"false\".", "Total. The inverse of readBoolean."],
-          "description": "Render a boolean as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showBoolean",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with readDecimal.",
-            "Total."],
-          "description": "Render a decimal as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showDecimal",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"decimal": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
-            "Total."],
-          "description": "Render a float32 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showFloat32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
-            "Total."],
-          "description": "Render a float64 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showFloat64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float64": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt16."],
-          "description": "Render an int16 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showInt16",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt32."],
-          "description": "Render an int32 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showInt32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt64."],
-          "description": "Render an int64 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showInt64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt8."],
-          "description": "Render an int8 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showInt8",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "showString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
-            "Total. The inverse of readString."],
-          "description": "Render a string as a string-literal token (escaped and quoted).",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showString",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["showUint16(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint16."],
-          "description": "Render a uint16 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showUint16",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["showUint32(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint32."],
-          "description": "Render a uint32 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showUint32",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["showUint64(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint64."],
-          "description": "Render a uint64 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showUint64",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["showUint8(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint8."],
-          "description": "Render a uint8 as a string.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.showUint8",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}}],
-          "result": {"type": {"literal": {"string": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["stringToBinary(s) encodes s as a UTF-8 byte sequence and returns the result as binary data.", "Total."],
-          "description": "Convert a UTF-8 string to binary data.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.stringToBinary",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"literal": {"binary": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "uint16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert a uint16 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.uint16ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "uint32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert a uint32 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.uint32ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "uint64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert a uint64 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.uint64ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "uint8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
-            "Total."],
-          "description": "Convert a uint8 to a bigint.",
-          "seeAlso": []},
-        "name": "hydra.lib.literals.uint8ToBigint",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}},
-          "typeParameters": []}}}],
+  "name": "hydra.lib.literals",
+  "metadata": {"description": "Primitives in the hydra.lib.literals module.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -838,5 +24,819 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.literals module.", "seeAlso": []},
-  "name": "hydra.lib.literals"}
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToDecimal",
+        "metadata": {
+          "description": "Convert a bigint to a decimal.",
+          "comments": [
+            "bigintToDecimal(x) returns the exact decimal representation of x. Since decimal is arbitrary-precision and bigint is also arbitrary-precision, the conversion is lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"decimal": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToInt16",
+        "metadata": {
+          "description": "Convert a bigint to an int16 (truncating).",
+          "comments": [
+            "bigintToInt16(x) returns x reduced modulo 2^16 and reinterpreted as a signed two's-complement int16. Values outside [-2^15, 2^15-1] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"int16": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToInt32",
+        "metadata": {
+          "description": "Convert a bigint to an int32 (truncating).",
+          "comments": [
+            "bigintToInt32(x) returns x reduced modulo 2^32 and reinterpreted as a signed two's-complement int32. Values outside [-2^31, 2^31-1] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToInt64",
+        "metadata": {
+          "description": "Convert a bigint to an int64 (truncating).",
+          "comments": [
+            "bigintToInt64(x) returns x reduced modulo 2^64 and reinterpreted as a signed two's-complement int64. Values outside [-2^63, 2^63-1] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"int64": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToInt8",
+        "metadata": {
+          "description": "Convert a bigint to an int8 (truncating).",
+          "comments": [
+            "bigintToInt8(x) returns x reduced modulo 2^8 and reinterpreted as a signed two's-complement int8. Values outside [-128, 127] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"int8": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToUint16",
+        "metadata": {
+          "description": "Convert a bigint to a uint16 (truncating).",
+          "comments": [
+            "bigintToUint16(x) returns x reduced modulo 2^16 as an unsigned uint16. Values outside [0, 2^16-1] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"uint16": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToUint32",
+        "metadata": {
+          "description": "Convert a bigint to a uint32 (truncating).",
+          "comments": [
+            "bigintToUint32(x) returns x reduced modulo 2^32 as an unsigned uint32. Values outside [0, 2^32-1] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"uint32": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToUint64",
+        "metadata": {
+          "description": "Convert a bigint to a uint64 (truncating).",
+          "comments": [
+            "bigintToUint64(x) returns x reduced modulo 2^64 as an unsigned uint64. Values outside [0, 2^64-1] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"uint64": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.bigintToUint8",
+        "metadata": {
+          "description": "Convert a bigint to a uint8 (truncating).",
+          "comments": [
+            "bigintToUint8(x) returns x reduced modulo 2^8 as an unsigned uint8. Values outside [0, 255] wrap silently with no exception.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"uint8": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.binaryToBytes",
+        "metadata": {
+          "description": "Convert binary data to a list of byte values.",
+          "comments": [
+            "binaryToBytes(b) returns the bytes of b as an int32 list with values in [0, 255], preserving byte order.",
+            "The result list element type is int32 rather than uint8 because Hydra's primitive collections work most naturally with int32 indices.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"binary": {}}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.binaryToString",
+        "metadata": {
+          "description": "Convert binary data to a UTF-8 string.",
+          "comments": [
+            "binaryToString(b) interprets the bytes of b as a UTF-8-encoded string and returns the decoded value.",
+            "The behavior on invalid UTF-8 byte sequences is host-defined: most hosts substitute the replacement character U+FFFD; some may signal an error or truncate.",
+            "Total in the sense that it does not raise from the kernel's perspective, but the result may carry the host's replacement semantics."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"binary": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.decimalToBigint",
+        "metadata": {
+          "description": "Convert a decimal to a bigint (truncating).",
+          "comments": ["decimalToBigint(x) returns x truncated toward zero. Fractional parts are discarded.", "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.decimalToFloat32",
+        "metadata": {
+          "description": "Convert a decimal to a float32.",
+          "comments": [
+            "decimalToFloat32(x) returns the IEEE 754 binary32 value closest to x under roundTiesToEven. Values outside the float32 representable range overflow to ±∞. Subnormal precision loss is silent.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": {"float32": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.decimalToFloat64",
+        "metadata": {
+          "description": "Convert a decimal to a float64.",
+          "comments": [
+            "decimalToFloat64(x) returns the IEEE 754 binary64 value closest to x under roundTiesToEven. Values outside the float64 representable range overflow to ±∞. Subnormal precision loss is silent.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.float32ToDecimal",
+        "metadata": {
+          "description": "Convert a float32 to a decimal.",
+          "comments": [
+            "float32ToDecimal(x) returns the exact decimal representation of the binary32 value x. Special float32 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary32 values are dyadic rationals.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"decimal": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.float32ToFloat64",
+        "metadata": {
+          "description": "Convert a float32 to a float64.",
+          "comments": [
+            "float32ToFloat64(x) returns the binary64 value with the same numeric value as x; ±∞ and NaN pass through. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": {"float64": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.float64ToDecimal",
+        "metadata": {
+          "description": "Convert a float64 to a decimal.",
+          "comments": [
+            "float64ToDecimal(x) returns the exact decimal representation of the binary64 value x. Special float64 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary64 values are dyadic rationals.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"decimal": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.float64ToFloat32",
+        "metadata": {
+          "description": "Convert a float64 to a float32 (lossy).",
+          "comments": [
+            "float64ToFloat32(x) returns the binary32 value closest to x under roundTiesToEven. Values outside the binary32 range overflow to ±∞; subnormal precision loss is silent; NaN payload may be canonicalized by the host.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": {"float32": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.int16ToBigint",
+        "metadata": {
+          "description": "Convert an int16 to a bigint.",
+          "comments": [
+            "int16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.int32ToBigint",
+        "metadata": {
+          "description": "Convert an int32 to a bigint.",
+          "comments": [
+            "int32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.int64ToBigint",
+        "metadata": {
+          "description": "Convert an int64 to a bigint.",
+          "comments": [
+            "int64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.int8ToBigint",
+        "metadata": {
+          "description": "Convert an int8 to a bigint.",
+          "comments": ["int8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.", "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readBigint",
+        "metadata": {
+          "description": "Parse a string as a bigint.",
+          "comments": [
+            "readBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal.",
+            "Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"bigint": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readBoolean",
+        "metadata": {
+          "description": "Parse a string as a boolean.",
+          "comments": [
+            "readBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon).",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"boolean": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readDecimal",
+        "metadata": {
+          "description": "Parse a string as a decimal.",
+          "comments": [
+            "readDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
+            "Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0).",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"decimal": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readFloat32",
+        "metadata": {
+          "description": "Parse a string as a float32.",
+          "comments": [
+            "readFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
+            "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"float": {"float32": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readFloat64",
+        "metadata": {
+          "description": "Parse a string as a float64.",
+          "comments": [
+            "readFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
+            "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"float": {"float64": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readInt16",
+        "metadata": {
+          "description": "Parse a string as an int16.",
+          "comments": [
+            "readInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"int16": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readInt32",
+        "metadata": {
+          "description": "Parse a string as an int32.",
+          "comments": [
+            "readInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readInt64",
+        "metadata": {
+          "description": "Parse a string as an int64.",
+          "comments": [
+            "readInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"int64": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readInt8",
+        "metadata": {
+          "description": "Parse a string as an int8.",
+          "comments": [
+            "readInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"int8": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readString",
+        "metadata": {
+          "description": "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
+          "comments": [
+            "readString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input.",
+            "Total. The inverse of showString."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"string": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readUint16",
+        "metadata": {
+          "description": "Parse a string as a uint16.",
+          "comments": [
+            "readUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"uint16": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readUint32",
+        "metadata": {
+          "description": "Parse a string as a uint32.",
+          "comments": [
+            "readUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"uint32": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readUint64",
+        "metadata": {
+          "description": "Parse a string as a uint64.",
+          "comments": [
+            "readUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"uint64": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.readUint8",
+        "metadata": {
+          "description": "Parse a string as a uint8.",
+          "comments": [
+            "readUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255].",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": {"uint8": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showBigint",
+        "metadata": {
+          "description": "Render a bigint as a string.",
+          "comments": [
+            "showBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\").",
+            "Total. The inverse of readBigint."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showBoolean",
+        "metadata": {
+          "description": "Render a boolean as a string.",
+          "comments": ["showBoolean(true) = \"true\"; showBoolean(false) = \"false\".", "Total. The inverse of readBoolean."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showDecimal",
+        "metadata": {
+          "description": "Render a decimal as a string.",
+          "comments": [
+            "showDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with readDecimal.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showFloat32",
+        "metadata": {
+          "description": "Render a float32 as a string.",
+          "comments": [
+            "showFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showFloat64",
+        "metadata": {
+          "description": "Render a float64 as a string.",
+          "comments": [
+            "showFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showInt16",
+        "metadata": {
+          "description": "Render an int16 as a string.",
+          "comments": [
+            "showInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
+            "Total. The inverse of readInt16."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showInt32",
+        "metadata": {
+          "description": "Render an int32 as a string.",
+          "comments": [
+            "showInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
+            "Total. The inverse of readInt32."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showInt64",
+        "metadata": {
+          "description": "Render an int64 as a string.",
+          "comments": [
+            "showInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
+            "Total. The inverse of readInt64."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showInt8",
+        "metadata": {
+          "description": "Render an int8 as a string.",
+          "comments": [
+            "showInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
+            "Total. The inverse of readInt8."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showString",
+        "metadata": {
+          "description": "Render a string as a string-literal token (escaped and quoted).",
+          "comments": [
+            "showString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
+            "Total. The inverse of readString."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showUint16",
+        "metadata": {
+          "description": "Render a uint16 as a string.",
+          "comments": ["showUint16(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint16."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showUint32",
+        "metadata": {
+          "description": "Render a uint32 as a string.",
+          "comments": ["showUint32(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint32."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showUint64",
+        "metadata": {
+          "description": "Render a uint64 as a string.",
+          "comments": ["showUint64(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint64."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.showUint8",
+        "metadata": {
+          "description": "Render a uint8 as a string.",
+          "comments": ["showUint8(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint8."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.stringToBinary",
+        "metadata": {
+          "description": "Convert a UTF-8 string to binary data.",
+          "comments": ["stringToBinary(s) encodes s as a UTF-8 byte sequence and returns the result as binary data.", "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"binary": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.uint16ToBigint",
+        "metadata": {
+          "description": "Convert a uint16 to a bigint.",
+          "comments": [
+            "uint16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.uint32ToBigint",
+        "metadata": {
+          "description": "Convert a uint32 to a bigint.",
+          "comments": [
+            "uint32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.uint64ToBigint",
+        "metadata": {
+          "description": "Convert a uint64 to a bigint.",
+          "comments": [
+            "uint64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.uint8ToBigint",
+        "metadata": {
+          "description": "Convert a uint8 to a bigint.",
+          "comments": [
+            "uint8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+        "isPure": true,
+        "isTotal": true}}]}
