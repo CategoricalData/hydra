@@ -24,7 +24,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Names as Names
@@ -53,7 +53,7 @@ import qualified Data.Set as S
 addNamesToModuleNames :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.ModuleNames t0 -> Util.ModuleNames t0
 addNamesToModuleNames encodeModuleName names ns0 =
 
-      let nss = Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
+      let nss = Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
           toPair = \ns -> (ns, (encodeModuleName ns))
       in Util.ModuleNames {
         Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
@@ -89,7 +89,7 @@ analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams arg
     case (Strip.deannotateTerm t) of
       Core.TermLambda v0 -> Logic.ifElse argMode (
         let v = Core.lambdaParameter v0
-            dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v0)
+            dom = Optionals.cases (Core.lambdaDomain v0) (Core.TypeVariable (Core.Name "_")) (\x_ -> x_)
             body = Core.lambdaBody v0
             newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t)
@@ -118,7 +118,7 @@ definitionDependencyModuleNames defs =
                 Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionBody v0)
                 Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
           allNames = Sets.unions (Lists.map defNames defs)
-      in (Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
+      in (Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
 -- | Find dependency module names in all of a set of terms (Either version)
 dependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
 dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
@@ -129,7 +129,7 @@ dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
                     deannotatedTerm = Strip.deannotateTerm term
                     dataNames = Dependencies.termDependencyNames binds withPrims withNoms term
                     schemaNames =
-                            Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts)) (Core.bindingTypeScheme el)) Sets.empty
+                            Logic.ifElse withSchema (Optionals.cases (Core.bindingTypeScheme el) Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts))) Sets.empty
                 in (Logic.ifElse (Predicates.isEncodedType deannotatedTerm) (Eithers.map (\typ -> Sets.unions [
                   dataNames,
                   schemaNames,
@@ -139,7 +139,7 @@ dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
                   (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.term graph term))) (Right (Sets.unions [
                   dataNames,
                   schemaNames]))))
-      in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
+      in (Eithers.map (\namesList -> Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
 -- | Gather applications from a term, returning (args, baseTerm)
 gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
 gatherApplications term =
@@ -229,7 +229,7 @@ isTailRecursiveInTailPosition funcName term =
                   dflt = Core.caseStatementDefault v1
                   branchesOk =
                           Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.caseAlternativeHandler field))) True cases_
-                  dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
+                  dfltOk = Optionals.cases dflt True (\d -> isTailRecursiveInTailPosition funcName d)
                   argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
               in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
             _ -> Variables.isFreeVariableInTerm funcName term
@@ -251,7 +251,7 @@ moduleContainsBinaryLiterals mod =
                 _ -> False)
           termContainsBinary = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
           defTerms =
-                  Maybes.cat (Lists.map (\d -> case d of
+                  Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
@@ -267,7 +267,7 @@ moduleContainsDecimalLiterals mod =
                 _ -> False)
           termContainsDecimal = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
           defTerms =
-                  Maybes.cat (Lists.map (\d -> case d of
+                  Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
@@ -276,7 +276,7 @@ moduleDependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool
 moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
 
       let allBindings =
-              Maybes.cat (Lists.map (\d -> case d of
+              Optionals.cat (Lists.map (\d -> case d of
                 Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
                   let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                       dataTerm =
@@ -294,7 +294,7 @@ moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
                 Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Packaging.termDefinitionName v0),
                   Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                  Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                  Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyModuleNames cx graph binds withPrims withNoms withSchema allBindings))
 -- | Create module names mapping for definitions

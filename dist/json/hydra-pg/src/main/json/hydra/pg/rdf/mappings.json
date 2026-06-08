@@ -92,7 +92,7 @@
                                                                                                             "typeName": "hydra.shacl.model.CommonConstraint"}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}}}},
-                                                                                                  {"name": "deactivated", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"boolean": {}}}}}},
+                                                                                                  {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
                                                                                                   {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                                   {
                                                                                                     "name": "severity",
@@ -117,12 +117,12 @@
                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}}},
                                                                                           {
                                                                                             "name": "defaultValue",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.Node"}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.Node"}}}},
                                                                                           {"name": "description", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                           {"name": "name", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                           {
                                                                                             "name": "order",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"integer": {"bigint": {}}}}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": {"bigint": {}}}}}}},
                                                                                           {
                                                                                             "name": "path",
                                                                                             "term": {
@@ -779,7 +779,7 @@
                                                                                                 "name": "constraints",
                                                                                                 "term": {
                                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-                                                                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"boolean": {}}}}}},
+                                                                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
                                                                                               {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                               {
                                                                                                 "name": "severity",
@@ -1061,7 +1061,7 @@
                                           "record": {
                                             "fields": [
                                               {"name": "constraints", "term": {"variable": "constraints"}},
-                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"boolean": {}}}}}},
+                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
                                               {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                               {
                                                 "name": "severity",
@@ -1083,12 +1083,12 @@
                                       {"name": "constraints", "term": {"variable": "propConstraints"}},
                                       {
                                         "name": "defaultValue",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.Node"}}}},
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.Node"}}}},
                                       {"name": "description", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                       {"name": "name", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                       {
                                         "name": "order",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"integer": {"bigint": {}}}}}}},
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": {"bigint": {}}}}}}},
                                       {"name": "path", "term": {"variable": "path"}}],
                                     "typeName": "hydra.shacl.model.PropertyShape"}}}},
                             "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}},
@@ -1221,7 +1221,7 @@
                                                     "argument": {"variable": "propShapes"},
                                                     "function": {
                                                       "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}}}},
-                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"boolean": {}}}}}},
+                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
                                               {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                               {
                                                 "name": "severity",

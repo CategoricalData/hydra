@@ -49,23 +49,23 @@ yamlLanguage = define "yamlLanguage" $
     Variants.termVariantLiteral,
     Variants.termVariantList,
     Variants.termVariantMap,
-    Variants.termVariantMaybe,
+    Variants.termVariantOptional,
     Variants.termVariantRecord,
     Variants.termVariantUnit],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantLiteral,
     Variants.typeVariantList,
     Variants.typeVariantMap,
-    Variants.typeVariantMaybe,
+    Variants.typeVariantOptional,
     Variants.typeVariantRecord,
     Variants.typeVariantUnit,
     Variants.typeVariantVoid],
   "typePredicate">: lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just true) [
-    _Type_maybe>>: lambda "innerType" $
+    _Type_optional>>: lambda "innerType" $
       cases _Type (var "innerType")
         (Just true) [
-        _Type_maybe>>: constant false]]] $
+        _Type_optional>>: constant false]]] $
   Coders.language
     (Coders.languageName2 (string "hydra.yaml"))
     (Coders.languageConstraints2

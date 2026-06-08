@@ -201,7 +201,7 @@ caseExpression = define "CaseExpression" $
       T.list (lisp "CaseClause"),
     "default">:
       doc "Optional default clause" $
-      T.maybe (lisp "Expression")]
+      T.optional (lisp "Expression")]
 
 characterLiteral :: TypeDefinition
 characterLiteral = define "CharacterLiteral" $
@@ -251,7 +251,7 @@ condExpression = define "CondExpression" $
       T.list (lisp "CondClause"),
     "default">:
       doc "Optional default expression" $
-      T.maybe (lisp "Expression")]
+      T.optional (lisp "Expression")]
 
 consExpression :: TypeDefinition
 consExpression = define "ConsExpression" $
@@ -280,7 +280,7 @@ constantDefinition = define "ConstantDefinition" $
       lisp "Expression",
     "doc">:
       doc "Optional docstring" $
-      T.maybe (lisp "Docstring")]
+      T.optional (lisp "Docstring")]
 
 constructorPattern :: TypeDefinition
 constructorPattern = define "ConstructorPattern" $
@@ -486,7 +486,7 @@ fieldDefinition = define "FieldDefinition" $
       lisp "Symbol",
     "defaultValue">:
       doc "Optional default value" $
-      T.maybe (lisp "Expression")]
+      T.optional (lisp "Expression")]
 
 floatLiteral :: TypeDefinition
 floatLiteral = define "FloatLiteral" $
@@ -497,7 +497,7 @@ floatLiteral = define "FloatLiteral" $
       T.float64,
     "precision">:
       doc "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)" $
-      T.maybe T.string]
+      T.optional T.string]
 
 functionDefinition :: TypeDefinition
 functionDefinition = define "FunctionDefinition" $
@@ -514,10 +514,10 @@ functionDefinition = define "FunctionDefinition" $
       T.list (lisp "Symbol"),
     "restParam">:
       doc "Optional rest/variadic parameter" $
-      T.maybe (lisp "Symbol"),
+      T.optional (lisp "Symbol"),
     "doc">:
       doc "Optional docstring" $
-      T.maybe (lisp "Docstring"),
+      T.optional (lisp "Docstring"),
     "typeHints">:
       doc "Optional type hints for parameters and return type" $
       T.list (lisp "TypeHint"),
@@ -537,7 +537,7 @@ ifExpression = define "IfExpression" $
       lisp "Expression",
     "else">:
       doc "Optional else branch" $
-      T.maybe (lisp "Expression")]
+      T.optional (lisp "Expression")]
 
 importDeclaration :: TypeDefinition
 importDeclaration = define "ImportDeclaration" $
@@ -591,7 +591,7 @@ keyword = define "Keyword" $
       T.string,
     "namespace">:
       doc "Optional namespace (e.g. my.ns/foo in Clojure)" $
-      T.maybe T.string]
+      T.optional T.string]
 
 lambda :: TypeDefinition
 lambda = define "Lambda" $
@@ -602,13 +602,13 @@ lambda = define "Lambda" $
   T.record [
     "name">:
       doc "Optional name for self-referential lambdas (Clojure named fn)" $
-      T.maybe (lisp "Symbol"),
+      T.optional (lisp "Symbol"),
     "params">:
       doc "The parameter list" $
       T.list (lisp "Symbol"),
     "restParam">:
       doc "Optional rest parameter" $
-      T.maybe (lisp "Symbol"),
+      T.optional (lisp "Symbol"),
     "body">:
       doc "The lambda body" $
       T.list (lisp "Expression")]
@@ -711,7 +711,7 @@ macroDefinition = define "MacroDefinition" $
       T.list (lisp "Symbol"),
     "restParam">:
       doc "Optional rest parameter" $
-      T.maybe (lisp "Symbol"),
+      T.optional (lisp "Symbol"),
     "body">:
       doc "The macro body" $
       T.list (lisp "Expression")]
@@ -755,7 +755,7 @@ moduleDeclaration = define "ModuleDeclaration" $
       lisp "NamespaceName",
     "doc">:
       doc "Optional module documentation" $
-      T.maybe (lisp "Docstring")]
+      T.optional (lisp "Docstring")]
 
 namespaceName :: TypeDefinition
 namespaceName = define "NamespaceName" $
@@ -819,7 +819,7 @@ program = define "Program" $
       lisp "Dialect",
     "module">:
       doc "Optional module/namespace declaration" $
-      T.maybe (lisp "ModuleDeclaration"),
+      T.optional (lisp "ModuleDeclaration"),
     "imports">:
       doc "Import/require declarations" $
       T.list (lisp "ImportDeclaration"),
@@ -874,7 +874,7 @@ recordTypeDefinition = define "RecordTypeDefinition" $
       T.list (lisp "FieldDefinition"),
     "doc">:
       doc "Optional docstring" $
-      T.maybe (lisp "Docstring")]
+      T.optional (lisp "Docstring")]
 
 sExpression :: TypeDefinition
 sExpression = define "SExpression" $
@@ -956,10 +956,10 @@ topLevelFormWithComments = define "TopLevelFormWithComments" $
   T.record [
     "doc">:
       doc "Optional documentation string" $
-      T.maybe (lisp "Docstring"),
+      T.optional (lisp "Docstring"),
     "comment">:
       doc "Optional comment" $
-      T.maybe (lisp "Comment"),
+      T.optional (lisp "Comment"),
     "form">:
       doc "The form itself" $
       lisp "TopLevelForm"]
@@ -1058,7 +1058,7 @@ variableDefinition = define "VariableDefinition" $
       lisp "Expression",
     "doc">:
       doc "Optional docstring" $
-      T.maybe (lisp "Docstring")]
+      T.optional (lisp "Docstring")]
 
 variableReference :: TypeDefinition
 variableReference = define "VariableReference" $

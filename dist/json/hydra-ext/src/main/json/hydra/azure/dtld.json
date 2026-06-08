@@ -43,7 +43,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the command. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -56,7 +56,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -70,7 +70,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -83,7 +83,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -101,21 +101,21 @@
                               "value": {
                                 "literal": {
                                   "string": "This property is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time."}}}]},
-                        "body": {"maybe": {"variable": "hydra.azure.dtld.CommandType"}}}}},
+                        "body": {"optional": {"variable": "hydra.azure.dtld.CommandType"}}}}},
                   {
                     "name": "request",
                     "type": {
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A description of the input to the Command"}}}]},
-                        "body": {"maybe": {"variable": "hydra.azure.dtld.CommandPayload"}}}}},
+                        "body": {"optional": {"variable": "hydra.azure.dtld.CommandPayload"}}}}},
                   {
                     "name": "response",
                     "type": {
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A description of the output of the Command"}}}]},
-                        "body": {"maybe": {"variable": "hydra.azure.dtld.CommandPayload"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.azure.dtld.CommandPayload"}}}}}]}}},
           "variables": []},
         "name": "hydra.azure.dtld.Command"}},
     {
@@ -161,7 +161,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the payload. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -174,7 +174,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -188,7 +188,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -201,7 +201,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -276,7 +276,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the component. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -289,7 +289,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -303,7 +303,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -316,7 +316,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -381,7 +381,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the enum value. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -394,7 +394,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -408,7 +408,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -421,7 +421,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -470,7 +470,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the field. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -483,7 +483,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -497,7 +497,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -510,7 +510,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -569,7 +569,7 @@
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                     "body": {
-                      "maybe": {
+                      "optional": {
                         "annotated": {
                           "annotation": {
                             "map": [
@@ -588,7 +588,7 @@
                             "literal": {
                               "string": "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, and/or Components) of this interface"}}}]},
                     "body": {
-                      "maybe": {
+                      "optional": {
                         "annotated": {
                           "annotation": {
                             "map": [
@@ -602,7 +602,7 @@
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                     "body": {
-                      "maybe": {
+                      "optional": {
                         "annotated": {
                           "annotation": {
                             "map": [
@@ -615,7 +615,7 @@
                   "annotated": {
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                     "body": {
-                      "maybe": {
+                      "optional": {
                         "annotated": {
                           "annotation": {
                             "map": [
@@ -634,7 +634,7 @@
                             "literal": {
                               "string": "A set of DTMIs that refer to interfaces this interface inherits from. Interfaces can inherit from multiple interfaces."}}}]},
                     "body": {
-                      "maybe": {
+                      "optional": {
                         "annotated": {
                           "annotation": {
                             "map": [
@@ -650,7 +650,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "A set of IRIs or objects that refer to the reusable schemas within this interface."}}}]},
-                    "body": {"maybe": {"set": {"variable": "hydra.azure.dtld.Schema_Interface"}}}}}}]},
+                    "body": {"optional": {"set": {"variable": "hydra.azure.dtld.Schema_Interface"}}}}}}]},
           "variables": []},
         "name": "hydra.azure.dtld.Interface"}},
     {
@@ -709,7 +709,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the map key. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -722,7 +722,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -736,7 +736,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -749,7 +749,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -798,7 +798,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the map value. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -811,7 +811,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -825,7 +825,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -838,7 +838,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -902,7 +902,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the property. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -915,7 +915,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -929,7 +929,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -942,7 +942,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -959,7 +959,7 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {"string": "The unit type of the property. A semantic type is required for the unit property to be available."}}}]},
-                        "body": {"maybe": {"variable": "hydra.azure.dtld.Unit"}}}}},
+                        "body": {"optional": {"variable": "hydra.azure.dtld.Unit"}}}}},
                   {
                     "name": "writable",
                     "type": {
@@ -971,7 +971,7 @@
                               "value": {
                                 "literal": {
                                   "string": "A boolean value that indicates whether the property is writable by an external source, such as an application, or not. The default value is false (read-only)."}}}]},
-                        "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"boolean": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.azure.dtld.Property"}},
     {
@@ -1020,7 +1020,7 @@
                                 "literal": {
                                   "string": "The ID of the relationship description. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1033,7 +1033,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1047,7 +1047,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1060,7 +1060,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1078,7 +1078,7 @@
                               "value": {
                                 "literal": {
                                   "string": "The maximum multiplicity for the target of the relationship. The default value is infinite (there may be an unlimited number of relationship instances for this relationship)."}}}]},
-                        "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
+                        "body": {"optional": {"literal": {"integer": {"int32": {}}}}}}}},
                   {
                     "name": "minMultiplicity",
                     "type": {
@@ -1090,7 +1090,7 @@
                               "value": {
                                 "literal": {
                                   "string": "The minimum multiplicity for the target of the relationship. The default value is 0 (this relationship is permitted to have no instances). In DTDL v2, minMultiplicity must always be 0."}}}]},
-                        "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
+                        "body": {"optional": {"literal": {"integer": {"int32": {}}}}}}}},
                   {
                     "name": "properties",
                     "type": {
@@ -1101,7 +1101,7 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A set of Properties that define relationship-specific state"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1118,7 +1118,7 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {"string": "An interface ID. The default value (when target is not specified) is that the target may be any interface."}}}]},
-                        "body": {"maybe": {"variable": "hydra.azure.dtld.Interface"}}}}},
+                        "body": {"optional": {"variable": "hydra.azure.dtld.Interface"}}}}},
                   {
                     "name": "writable",
                     "type": {
@@ -1130,7 +1130,7 @@
                               "value": {
                                 "literal": {
                                   "string": "A boolean value that indicates whether the relationship is writable by an external source, such as an application, or not. The default value is false (read-only)."}}}]},
-                        "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"boolean": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.azure.dtld.Relationship"}},
     {
@@ -1188,7 +1188,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the array. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1201,7 +1201,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1215,7 +1215,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1228,7 +1228,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1305,7 +1305,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the enum. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1318,7 +1318,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1332,7 +1332,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1345,7 +1345,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1396,7 +1396,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1410,7 +1410,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1423,7 +1423,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1488,7 +1488,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the map. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1501,7 +1501,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1515,7 +1515,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1528,7 +1528,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1580,7 +1580,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the object. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1593,7 +1593,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1607,7 +1607,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1620,7 +1620,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1768,7 +1768,7 @@
                               "value": {
                                 "literal": {"string": "The ID of the telemetry. If no @id is provided, the digital twin interface processor will assign one."}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1781,7 +1781,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1795,7 +1795,7 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1808,7 +1808,7 @@
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]},
                         "body": {
-                          "maybe": {
+                          "optional": {
                             "annotated": {
                               "annotation": {
                                 "map": [
@@ -1825,7 +1825,7 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {"string": "The unit type of the Telemetry. A semantic type is required for the unit property to be available."}}}]},
-                        "body": {"maybe": {"variable": "hydra.azure.dtld.Unit"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.azure.dtld.Unit"}}}}}]}}},
           "variables": []},
         "name": "hydra.azure.dtld.Telemetry"}},
     {"type": {"body": {"body": {"wrap": {"unit": {}}}, "variables": []}, "name": "hydra.azure.dtld.Unit"}}],

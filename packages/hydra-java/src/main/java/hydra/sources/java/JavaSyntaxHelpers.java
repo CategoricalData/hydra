@@ -76,7 +76,7 @@ import hydra.java.syntax.VariableDeclaratorId;
 import hydra.java.syntax.VariableInitializer;
 import hydra.java.syntax.VariableModifier;
 import hydra.typed.TypedTerm;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 
@@ -102,7 +102,7 @@ public final class JavaSyntaxHelpers {
     }
 
     public static TypedTerm<ClassInstanceCreationExpression> classInstanceCreationExpression(
-            TypedTerm<Maybe<Expression>> qual,
+            TypedTerm<Optional<Expression>> qual,
             TypedTerm<hydra.java.syntax.UnqualifiedClassInstanceCreationExpression> unqual) {
         return Phantoms.record("hydra.java.syntax.ClassInstanceCreationExpression",
             Phantoms.field("qualifier", qual),
@@ -113,7 +113,7 @@ public final class JavaSyntaxHelpers {
         return Phantoms.inject("hydra.java.syntax.LambdaParameters", "tuple", formalParams);
     }
 
-    public static TypedTerm<VariableDeclaratorId> variableDeclaratorId(TypedTerm<Identifier> ident, TypedTerm<Maybe<Dims>> dims) {
+    public static TypedTerm<VariableDeclaratorId> variableDeclaratorId(TypedTerm<Identifier> ident, TypedTerm<Optional<Dims>> dims) {
         return Phantoms.record("hydra.java.syntax.VariableDeclaratorId",
             Phantoms.field("identifier", ident),
             Phantoms.field("dims", dims));

@@ -77,19 +77,19 @@ feature = define "Feature" $
          "of the geometry member SHALL be either a Geometry object as " ++
          "defined above or, in the case that the Feature is unlocated, a " ++
          "JSON null value.") $
-    T.maybe $ geoj "Geometry",
+    T.optional $ geoj "Geometry",
   "properties">:
     doc ("A Feature object has a member with the name \"properties\".  The " ++
          "value of the properties member is an object (any JSON object or a " ++
          "JSON null value).") $
-    T.maybe $ T.map T.string (json "Value"),
+    T.optional $ T.map T.string (json "Value"),
   "id">:
     doc ("If a Feature has a commonly used identifier, that identifier " ++
          "SHOULD be included as a member of the Feature object with the name " ++
          "\"id\", and the value of this member is either a JSON string or " ++
          "number.") $
-    T.maybe $ geoj "Id",
-  "bbox">: T.maybe $ geoj "BoundingBox"]
+    T.optional $ geoj "Id",
+  "bbox">: T.optional $ geoj "BoundingBox"]
 
 featureCollection :: TypeDefinition
 featureCollection = define "FeatureCollection" $
@@ -100,7 +100,7 @@ featureCollection = define "FeatureCollection" $
        "is possible for this array to be empty.") $
   T.record [
     "features">: T.list $ geoj "Feature",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 geoj :: String -> Type
 geoj = typeref ns
@@ -127,7 +127,7 @@ geometryCollection = define "GeometryCollection" $
        "GeoJSON Geometry object.  It is possible for this array to be empty.") $
   T.record [
     "geometries">: T.list $ geoj "Geometry",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 id_ :: TypeDefinition
 id_ = define "Id" $
@@ -144,7 +144,7 @@ lineString = define "LineString" $
        "more positions.") $
   T.record [
     "coordinates">: T.list $ geoj "Position",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 multiLineString :: TypeDefinition
 multiLineString = define "MultiLineString" $
@@ -152,7 +152,7 @@ multiLineString = define "MultiLineString" $
        "LineString coordinate arrays.") $
   T.record [
     "coordinates">: T.list $ geoj "LineString",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 multiPoint :: TypeDefinition
 multiPoint = define "MultiPoint" $
@@ -160,7 +160,7 @@ multiPoint = define "MultiPoint" $
        "positions.") $
   T.record [
     "coordinates">: T.list $ geoj "Point",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 multiPolygon :: TypeDefinition
 multiPolygon = define "MultiPolygon" $
@@ -168,7 +168,7 @@ multiPolygon = define "MultiPolygon" $
        "Polygon coordinate arrays.") $
   T.record [
     "coordinates">: T.list $ geoj "Polygon",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 object_ :: TypeDefinition
 object_ = define "Object" $
@@ -184,7 +184,7 @@ point = define "Point" $
   doc ("For type \"Point\", the \"coordinates\" member is a single position.") $
   T.record [
     "coordinates">: geoj "Position",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 polygon :: TypeDefinition
 polygon = define "Polygon" $
@@ -196,7 +196,7 @@ polygon = define "Polygon" $
        "present) bound holes within the surface.") $
   T.record [
     "coordinates">: T.list $ geoj "Position",
-    "bbox">: T.maybe $ geoj "BoundingBox"]
+    "bbox">: T.optional $ geoj "BoundingBox"]
 
 position :: TypeDefinition
 position = define "Position" $
@@ -208,4 +208,4 @@ position = define "Position" $
   T.record [
     "latitude">: T.float64,
     "longitude">: T.float64,
-    "altitude">: T.maybe T.float64]
+    "altitude">: T.optional T.float64]

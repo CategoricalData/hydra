@@ -19,7 +19,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -64,12 +64,12 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                   \b ->
                     let freeVars = Sets.toList (Sets.intersection boundVars (Variables.freeVariablesInTerm (Core.bindingTerm b)))
                         varTypePairs = Lists.map (\v -> (v, (Maps.lookup v types))) freeVars
-                        varTypes = Maybes.cat (Lists.map Pairs.second varTypePairs)
+                        varTypes = Optionals.cat (Lists.map Pairs.second varTypePairs)
                     in (Logic.ifElse (Logic.or (Lists.null freeVars) (Logic.not (Equality.equal (Lists.length varTypes) (Lists.length varTypePairs)))) (b, Nothing) (
                       Core.Binding {
                         Core.bindingName = (Core.bindingName b),
                         Core.bindingTerm = (wrapAfterTypeLambdas varTypePairs (Core.bindingTerm b)),
-                        Core.bindingTypeScheme = (Maybes.map (\ts -> Core.TypeScheme {
+                        Core.bindingTypeScheme = (Optionals.map (\ts -> Core.TypeScheme {
                           Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
                           Core.typeSchemeBody = (Lists.foldl (\acc -> \t -> Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = t,
@@ -81,18 +81,18 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                           Core.applicationFunction = t,
                           Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable (Core.bindingName b)) freeVars)))))
           results = Lists.map augment bindings
-      in (Lists.map Pairs.first results, (Typing.TermSubst (Maps.fromList (Maybes.cat (Lists.map Pairs.second results)))))
+      in (Lists.map Pairs.first results, (Typing.TermSubst (Maps.fromList (Optionals.cat (Lists.map Pairs.second results)))))
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: Core.Binding -> Bool
 bindingIsPolymorphic binding =
-    Maybes.maybe False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Core.bindingTypeScheme binding)
+    Optionals.cases (Core.bindingTypeScheme binding) False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts)))
 -- | Check if a binding's type uses any type variables from the given Graph. Returns True if the free type variables in the binding's type intersect with the type variables in scope (graphTypeVariables).
 bindingUsesContextTypeVars :: Graph.Graph -> Core.Binding -> Bool
 bindingUsesContextTypeVars cx binding =
-    Maybes.maybe False (\ts ->
+    Optionals.cases (Core.bindingTypeScheme binding) False (\ts ->
       let freeInType = Variables.freeVariablesInType (Core.typeSchemeBody ts)
           contextTypeVars = Graph.graphTypeVariables cx
-      in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingTypeScheme binding)
+      in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars))))
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
 countVarOccurrences :: Core.Name -> Core.Term -> Int
 countVarOccurrences name term =
@@ -156,9 +156,9 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     types = Maps.map Scoping.typeSchemeToFType (Graph.graphBoundTypes cx)
                     capturedTermVarTypePairs = Lists.map (\v -> (v, (Maps.lookup v types))) capturedTermVars
                     capturedTermVarTypes =
-                            Lists.map (\typ -> Strip.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs))
+                            Lists.map (\typ -> Strip.deannotateTypeParameters typ) (Optionals.cat (Lists.map Pairs.second capturedTermVarTypePairs))
                     freeInBindingType =
-                            Maybes.maybe Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeBody ts)) (Core.bindingTypeScheme b)
+                            Optionals.cases (Core.bindingTypeScheme b) Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeBody ts))
                     freeInCapturedVarTypes = Sets.unions (Lists.map (\t -> Variables.freeVariablesInType t) capturedTermVarTypes)
                     capturedTypeVars =
                             Sets.toList (Sets.intersection (Graph.graphTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes))
@@ -166,7 +166,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             Lexical.chooseUniqueName alreadyUsedNames (Core.Name (Strings.cat2 prefix (Core.unName (Core.bindingName b))))
                     newUsedNames = Sets.insert globalBindingName alreadyUsedNames
                     newTypeScheme =
-                            Logic.ifElse (Equality.equal (Lists.length capturedTermVarTypes) (Lists.length capturedTermVarTypePairs)) (Maybes.map (\ts -> Core.TypeScheme {
+                            Logic.ifElse (Equality.equal (Lists.length capturedTermVarTypes) (Lists.length capturedTermVarTypePairs)) (Optionals.map (\ts -> Core.TypeScheme {
                               Core.typeSchemeVariables = (Lists.nub (Lists.concat2 capturedTypeVars (Core.typeSchemeVariables ts))),
                               Core.typeSchemeBody = (Lists.foldl (\t -> \a -> Core.TypeFunction (Core.FunctionType {
                                 Core.functionTypeDomain = a,
@@ -176,12 +176,12 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     termWithLambdas =
                             Lists.foldl (\t -> \p -> Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Pairs.first p),
-                              Core.lambdaDomain = (Maybes.map (\dom -> Strip.deannotateTypeParameters dom) (Pairs.second p)),
+                              Core.lambdaDomain = (Optionals.map (\dom -> Strip.deannotateTypeParameters dom) (Pairs.second p)),
                               Core.lambdaBody = t})) strippedTerm (Lists.reverse capturedTermVarTypePairs)
                     termWithTypeLambdas =
                             Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
                               Core.typeLambdaParameter = v,
-                              Core.typeLambdaBody = t})) termWithLambdas (Lists.reverse (Maybes.maybe [] Core.typeSchemeVariables newTypeScheme))
+                              Core.typeLambdaBody = t})) termWithLambdas (Lists.reverse (Optionals.cases newTypeScheme [] Core.typeSchemeVariables))
                     withTypeApps =
                             Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                               Core.typeApplicationTermBody = t,
@@ -216,7 +216,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             keepUs = Pairs.second partitionPair
                             hoistedBindingNames = Lists.map Core.bindingName hoistUs
                             polyLetVariables =
-                                    Sets.fromList (Lists.filter (\v -> Maybes.maybe False Resolution.fTypeIsPolymorphic (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v (Graph.graphBoundTypes cx)))) (Sets.toList (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx))))
+                                    Sets.fromList (Lists.filter (\v -> Optionals.cases (Optionals.map Scoping.typeSchemeToFType (Maps.lookup v (Graph.graphBoundTypes cx))) False Resolution.fTypeIsPolymorphic) (Sets.toList (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx))))
                             boundTermVariables =
                                     Sets.union (Graph.graphLambdaVariables cx) (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx))
                             freeVariablesInEachBinding =
@@ -229,7 +229,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             bindingsWithCapturedVars =
                                     Lists.map (\b -> (
                                       b,
-                                      (Maybes.maybe [] (\vars -> Sets.toList (Sets.difference vars polyLetVariables)) (Maps.lookup (Core.bindingName b) capturedVarsMap)))) hoistUs
+                                      (Optionals.cases (Maps.lookup (Core.bindingName b) capturedVarsMap) [] (\vars -> Sets.toList (Sets.difference vars polyLetVariables))))) hoistUs
                             hoistPairsAndNames = Lists.foldl (hoistOne prefix cx) ([], alreadyUsedNames) bindingsWithCapturedVars
                             hoistPairs = Lists.reverse (Pairs.first hoistPairsAndNames)
                             hoistedBindings = Lists.map Pairs.first hoistPairs
@@ -240,7 +240,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             isCacheable =
                                     \name ->
                                       let multiRef = Equality.gte (countVarOccurrences name body) 2
-                                          isPoly = Maybes.maybe False (\b -> bindingIsPolymorphic b) (Maps.lookup name hoistBindingMap)
+                                          isPoly = Optionals.cases (Maps.lookup name hoistBindingMap) False (\b -> bindingIsPolymorphic b)
                                       in (Logic.and multiRef (Logic.not isPoly))
                             singleRefPairs = Lists.filter (\p -> Logic.not (isCacheable (Pairs.first p))) hoistNameReplacementPairs
                             multiRefPairs = Lists.filter (\p -> isCacheable (Pairs.first p)) hoistNameReplacementPairs
@@ -249,7 +249,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             bodySubst = Substitution.substituteInTerm bodyOnlySubst body
                             cacheBindings =
                                     Lists.map (\p ->
-                                      let origType = Maybes.maybe Nothing (\b -> Core.bindingTypeScheme b) (Maps.lookup (Pairs.first p) hoistBindingMap)
+                                      let origType = Optionals.cases (Maps.lookup (Pairs.first p) hoistBindingMap) Nothing (\b -> Core.bindingTypeScheme b)
                                       in Core.Binding {
                                         Core.bindingName = (Pairs.first p),
                                         Core.bindingTerm = (Pairs.second p),
@@ -398,7 +398,7 @@ hoistSubterms shouldHoist cx0 term0 =
                         bodyPathPrefix = Lists.concat2 path [
                               Paths.SubtermStepLetBody]
                         firstBindingName =
-                                Maybes.maybe "body" (\b -> Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName b)))) (Lists.maybeHead bindings)
+                                Optionals.cases (Lists.maybeHead bindings) "body" (\b -> Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName b))))
                         bodyPrefix = Strings.cat2 firstBindingName "_body"
                         bodyResult = processImmediateSubterm cx 1 bodyPrefix bodyPathPrefix body
                         newBody = Pairs.second bodyResult
@@ -447,13 +447,13 @@ normalizePathForHoisting :: [Paths.SubtermStep] -> [Paths.SubtermStep]
 normalizePathForHoisting path =
 
       let go =
-              \remaining -> Maybes.maybe remaining (\uc1 ->
+              \remaining -> Optionals.cases (Lists.uncons remaining) remaining (\uc1 ->
                 let first = Pairs.first uc1
                     afterFirst = Pairs.second uc1
-                in (Maybes.maybe remaining (\uc2 ->
+                in (Optionals.cases (Lists.uncons afterFirst) remaining (\uc2 ->
                   let second = Pairs.first uc2
                       rest = Pairs.second uc2
-                  in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Paths.SubtermStepLetBody (go rest)) (Lists.cons first (go afterFirst)))) (Lists.uncons afterFirst))) (Lists.uncons remaining)
+                  in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Paths.SubtermStepLetBody (go rest)) (Lists.cons first (go afterFirst))))))
       in (go path)
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.
 shouldHoistAll :: t0 -> t1 -> Bool

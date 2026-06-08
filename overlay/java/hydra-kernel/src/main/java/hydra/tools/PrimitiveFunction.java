@@ -12,7 +12,7 @@ import hydra.typing.InferenceContext;
 import hydra.typing.Parameter;
 import hydra.typing.TermSignature;
 import hydra.util.Either;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public abstract class PrimitiveFunction {
     /**
      * The 0-based positions of value parameters that must be passed lazily (thunked) at call sites
      * in hosts that distinguish strict from lazy evaluation (issue #391). Defaults to none; lazy
-     * primitives (e.g. maybes.maybe, logic.ifElse) override this. Mirrors Hydra.Dsl.Prims.lazyArgs
+     * primitives (e.g. maybes.cases, logic.ifElse) override this. Mirrors Hydra.Dsl.Prims.lazyArgs
      * on the Haskell host, which is the source of truth for the laziness metadata.
      * @return the lazy parameter positions
      */
@@ -99,11 +99,11 @@ public abstract class PrimitiveFunction {
             };
         PrimitiveDefinition definition = new PrimitiveDefinition(
             name(),
-            Maybe.nothing(),
+            Optional.none(),
             signatureWithLaziness(),
             Boolean.TRUE,
             Boolean.TRUE,
-            Maybe.nothing());
+            Optional.none());
         return new Primitive(definition, nativeImpl);
     }
 }

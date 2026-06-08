@@ -3,36 +3,53 @@
 
 module Hydra.Graphql.Coder where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Graphql.Language as Language
 import qualified Hydra.Graphql.Serde as Serde
 import qualified Hydra.Graphql.Syntax as Syntax
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 descriptionFromType :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Maybe Syntax.Description)
 descriptionFromType cx g typ =
-    Eithers.map (\mval -> Maybes.map (\s -> Syntax.Description (Syntax.StringValue s)) mval) (Annotations.getTypeDescription cx g typ)
+    Eithers.map (\mval -> Optionals.map (\s -> Syntax.Description (Syntax.StringValue s)) mval) (Annotations.getTypeDescription cx g typ)
 encodeEnumFieldName :: Core.Name -> Syntax.EnumValue
 encodeEnumFieldName name = Syntax.EnumValue (Syntax.Name (sanitize (Core.unName name)))
 encodeEnumFieldType :: t0 -> Graph.Graph -> Core.FieldType -> Either Errors.Error Syntax.EnumValueDefinition
@@ -85,10 +102,10 @@ encodeNamedType cx g prefixes name typ =
       Core.TypeEither v0 -> encodeNamedType cx g prefixes name (Core.TypeRecord [
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "left"),
-          Core.fieldTypeType = (Core.TypeMaybe (Core.eitherTypeLeft v0))},
+          Core.fieldTypeType = (Core.TypeOptional (Core.eitherTypeLeft v0))},
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "right"),
-          Core.fieldTypeType = (Core.TypeMaybe (Core.eitherTypeRight v0))}])
+          Core.fieldTypeType = (Core.TypeOptional (Core.eitherTypeRight v0))}])
       Core.TypePair v0 -> encodeNamedType cx g prefixes name (Core.TypeRecord [
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "first"),
@@ -140,7 +157,7 @@ encodeNamedType cx g prefixes name typ =
 encodeType :: t0 -> t1 -> M.Map Packaging.ModuleName String -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g prefixes typ =
     case (Strip.deannotateType typ) of
-      Core.TypeMaybe v0 -> case (Strip.deannotateType v0) of
+      Core.TypeOptional v0 -> case (Strip.deannotateType v0) of
         Core.TypeList v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1)
         Core.TypeSet v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1)
         Core.TypeMap v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes (Core.mapTypeValues v1))
@@ -149,10 +166,10 @@ encodeType cx g prefixes typ =
         Core.TypeEither _ -> Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.Name "hydra.util.Either"))))
         Core.TypeRecord _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type"))
         Core.TypeUnion _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type"))
-        Core.TypeWrap v1 -> encodeType cx g prefixes (Core.TypeMaybe v1)
+        Core.TypeWrap v1 -> encodeType cx g prefixes (Core.TypeOptional v1)
         Core.TypeVariable v1 -> Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes v1)))
-        Core.TypeForall v1 -> encodeType cx g prefixes (Core.TypeMaybe (Core.forallTypeBody v1))
-        Core.TypeApplication v1 -> encodeType cx g prefixes (Core.TypeMaybe (Core.applicationTypeFunction v1))
+        Core.TypeForall v1 -> encodeType cx g prefixes (Core.TypeOptional (Core.forallTypeBody v1))
+        Core.TypeApplication v1 -> encodeType cx g prefixes (Core.TypeOptional (Core.applicationTypeFunction v1))
         Core.TypeFunction _ -> Right (Syntax.TypeNamed (Syntax.NamedType (Syntax.Name "String")))
         Core.TypeUnit -> Right (Syntax.TypeNamed (Syntax.NamedType (Syntax.Name "Boolean")))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (ShowCore.type_ v0))))
@@ -180,14 +197,14 @@ encodeTypeName prefixes name =
       let qualName = Names.qualifyName name
           local = Util.qualifiedNameLocal qualName
           mns = Util.qualifiedNameModuleName qualName
-          prefix = Maybes.maybe "" (\ns_ -> Maybes.maybe "" (\p -> p) (Maps.lookup ns_ prefixes)) mns
+          prefix = Optionals.cases mns "" (\ns_ -> Optionals.cases (Maps.lookup ns_ prefixes) "" (\p -> p))
       in (Syntax.Name (Strings.cat2 prefix (sanitize local)))
 encodeUnionFieldType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
 encodeUnionFieldType cx g prefixes ft =
 
       let innerType = Core.fieldTypeType ft
           isUnit = Predicates.isUnitType (Strip.deannotateType innerType)
-          effectiveType = Logic.ifElse isUnit (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeBoolean)) (Core.TypeMaybe innerType)
+          effectiveType = Logic.ifElse isUnit (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeBoolean)) (Core.TypeOptional innerType)
       in (Eithers.bind (encodeType cx g prefixes effectiveType) (\gtype -> Eithers.bind (descriptionFromType cx g innerType) (\desc -> Right (Syntax.FieldDefinition {
         Syntax.fieldDefinitionDescription = desc,
         Syntax.fieldDefinitionName = (encodeFieldName (Core.fieldTypeName ft)),
@@ -201,12 +218,11 @@ moduleToGraphql mod defs cx g =
           typeDefs = Pairs.first partitioned
           prefixes =
                   (\modNs -> \tdefs ->
-                    let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.moduleNameOf (Packaging.typeDefinitionName td)) tdefs))
+                    let namespaces = Lists.nub (Optionals.cat (Lists.map (\td -> Names.moduleNameOf (Packaging.typeDefinitionName td)) tdefs))
                     in (Maps.fromList (Lists.map (\ns_ -> (
                       ns_,
                       (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unModuleName ns_)) "_")))) namespaces))) (Packaging.moduleName mod) typeDefs
-          filePath =
-                  Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "graphql") (Packaging.moduleName mod)
+          filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "graphql") (Packaging.moduleName mod)
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (
         filePath,
         (Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))

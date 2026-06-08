@@ -2,22 +2,43 @@
 -- | Coq code generator: converts Hydra modules to Coq source
 
 module Hydra.Coq.Coder where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Coq.Environment as Environment
 import qualified Hydra.Coq.Language as Language
 import qualified Hydra.Coq.Syntax as Syntax
 import qualified Hydra.Coq.Utils as Utils
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type
@@ -81,10 +102,10 @@ encodeLambdaTerm env lam =
 
       let paramName = sanitizeVar (Core.unName (Core.lambdaParameter lam))
           binder =
-                  Maybes.maybe (Syntax.BinderName (coqName paramName)) (\domTy -> Syntax.BinderType (Syntax.TypeBinders {
+                  Optionals.cases (Core.lambdaDomain lam) (Syntax.BinderName (coqName paramName)) (\domTy -> Syntax.BinderType (Syntax.TypeBinders {
                     Syntax.typeBindersNames = [
                       coqName paramName],
-                    Syntax.typeBindersType = (coqTypeTerm (encodeType env domTy))})) (Core.lambdaDomain lam)
+                    Syntax.typeBindersType = (coqTypeTerm (encodeType env domTy))}))
       in (Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {
         Syntax.funBinders = (Syntax.OpenBindersBinders [
           binder]),
@@ -229,8 +250,8 @@ encodeTerm env tm =
           encodeTerm env (Pairs.first kv),
           (encodeTerm env (Pairs.second kv))],
         acc]) (coqTermQualid "nil") (Maps.toList v0)
-      Core.TermMaybe v0 -> Maybes.maybe (coqTermQualid "None") (\v -> coqTermApp (coqTermQualid "Some") [
-        encodeTerm env v]) v0
+      Core.TermOptional v0 -> Optionals.cases v0 (coqTermQualid "None") (\v -> coqTermApp (coqTermQualid "Some") [
+        encodeTerm env v])
       Core.TermPair v0 -> coqTermApp (coqTermQualid "pair") [
         encodeTerm env (Pairs.first v0),
         (encodeTerm env (Pairs.second v0))]
@@ -248,8 +269,8 @@ encodeTerm env tm =
             encoded = encodeTerm env body
             isGround = Sets.null (Utils.collectFreeTypeVarsInType tyArg)
         in (Logic.ifElse (Logic.not isGround) encoded (case body of
-          Core.TermMaybe v1 -> Maybes.maybe (coqTermCast (coqTermQualid "None") (coqTypeTerm (coqTermApp (coqTermQualid "option") [
-            encodeType env tyArg]))) (\_ -> encoded) v1
+          Core.TermOptional v1 -> Optionals.cases v1 (coqTermCast (coqTermQualid "None") (coqTypeTerm (coqTermApp (coqTermQualid "option") [
+            encodeType env tyArg]))) (\_ -> encoded)
           Core.TermList v1 -> Logic.ifElse (Logic.and (Lists.null v1) (case tyArg of
             Core.TypeEither _ -> True
             Core.TypePair _ -> True
@@ -322,7 +343,7 @@ encodeType env ty =
         coqTermApp (coqTermQualid "prod") [
           encodeType env (Core.mapTypeKeys v0),
           (encodeType env (Core.mapTypeValues v0))]]
-      Core.TypeMaybe v0 -> coqTermApp (coqTermQualid "option") [
+      Core.TypeOptional v0 -> coqTermApp (coqTermQualid "option") [
         encodeType env v0]
       Core.TypePair v0 -> coqTermApp (coqTermQualid "prod") [
         encodeType env (Core.pairTypeFirst v0),
@@ -334,7 +355,7 @@ encodeType env ty =
       Core.TypeUnit -> coqTermQualid "unit"
       Core.TypeVariable v0 ->
         let raw = Core.unName v0
-            headSeg = Maybes.fromMaybe raw (Lists.maybeHead (Strings.splitOn "." raw))
+            headSeg = Optionals.fromOptional raw (Lists.maybeHead (Strings.splitOn "." raw))
         in (Logic.ifElse (Logic.or (Equality.equal headSeg "hydra") (Equality.equal headSeg "Build_hydra")) (coqTermQualid (resolveQualifiedName env raw)) (coqTermQualid raw))
       Core.TypeVoid -> coqTermQualid "Empty_set"
       Core.TypeWrap v0 -> encodeType env v0
@@ -412,9 +433,9 @@ encodeUnionElim env cs =
                           Syntax.pattern10_QualidPatterns = []}))]],
                     Syntax.equationTerm = body}
           defaultEqs =
-                  Maybes.maybe (Logic.ifElse (Maybes.maybe False (\n -> Logic.not (Equality.gte caseCount n)) expectedCount) [
-                    wildcardEq (coqTermQualid "hydra_unreachable")] []) (\defT -> Logic.ifElse (Maybes.maybe False (\n -> Equality.gte caseCount n) expectedCount) [] [
-                    wildcardEq (encodeTerm env defT)]) csDefault
+                  Optionals.cases csDefault (Logic.ifElse (Optionals.cases expectedCount False (\n -> Logic.not (Equality.gte caseCount n))) [
+                    wildcardEq (coqTermQualid "hydra_unreachable")] []) (\defT -> Logic.ifElse (Optionals.cases expectedCount False (\n -> Equality.gte caseCount n)) [] [
+                    wildcardEq (encodeTerm env defT)])
           allEqs = Lists.concat2 baseEqs defaultEqs
       in (Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {
         Syntax.funBinders = (Syntax.OpenBindersBinders [
@@ -449,20 +470,20 @@ extractLambdaBinders env tm =
         let param = Core.lambdaParameter v0
             mDomain = Core.lambdaDomain v0
             binder =
-                    Maybes.maybe (Syntax.BinderName (coqName (Core.unName param))) (\domTy -> Syntax.BinderType (Syntax.TypeBinders {
+                    Optionals.cases mDomain (Syntax.BinderName (coqName (Core.unName param))) (\domTy -> Syntax.BinderType (Syntax.TypeBinders {
                       Syntax.typeBindersNames = [
                         coqName (Core.unName param)],
-                      Syntax.typeBindersType = (coqTypeTerm (encodeType env domTy))})) mDomain
+                      Syntax.typeBindersType = (coqTypeTerm (encodeType env domTy))}))
         in (Lists.cons binder (extractLambdaBinders env (Core.lambdaBody v0)))
       _ -> []
 -- | True if the Maybe Type is the unit type, looking through annotations
 isUnitDomain :: Maybe Core.Type -> Bool
 isUnitDomain mty =
-    Maybes.maybe False (\ty -> case ty of
+    Optionals.cases mty False (\ty -> case ty of
       Core.TypeUnit -> True
       Core.TypeRecord v0 -> Lists.null v0
       Core.TypeAnnotated v0 -> isUnitDomain (Just (Core.annotatedTypeBody v0))
-      _ -> False) mty
+      _ -> False)
 -- | Detect a lambda over the unit type whose parameter is not referenced in the body
 isUnitLambda :: Core.Term -> Bool
 isUnitLambda tm =
@@ -477,7 +498,7 @@ localTypeName :: String -> String
 localTypeName s =
 
       let parts = Strings.splitOn "." s
-          localPart = Maybes.fromMaybe s (Lists.maybeLast parts)
+          localPart = Optionals.fromOptional s (Lists.maybeLast parts)
       in (sanitizeVar localPart)
 -- | Build a Coq Document from lists of type definitions and term definitions
 moduleToCoq :: Environment.CoqEnvironment -> [(String, Core.Type)] -> [(String, Core.Term)] -> Syntax.Document
@@ -510,16 +531,16 @@ resolveQualifiedName :: Environment.CoqEnvironment -> String -> String
 resolveQualifiedName env s =
 
       let parts = Strings.splitOn "." s
-          head1 = Maybes.fromMaybe s (Lists.maybeHead parts)
+          head1 = Optionals.fromOptional s (Lists.maybeHead parts)
           currentNs = Environment.coqEnvironmentCurrentNamespace env
           ambig = Environment.coqEnvironmentAmbiguousNames env
-      in (Logic.ifElse (Equality.equal head1 "Coq") (Maybes.fromMaybe s (Lists.maybeLast parts)) (Logic.ifElse (Equality.equal head1 "Build_hydra") (Strings.cat2 "Build_" (sanitizeStripped (Maybes.fromMaybe s (Lists.maybeLast parts)))) (Logic.ifElse (Equality.equal head1 "hydra") (
+      in (Logic.ifElse (Equality.equal head1 "Coq") (Optionals.fromOptional s (Lists.maybeLast parts)) (Logic.ifElse (Equality.equal head1 "Build_hydra") (Strings.cat2 "Build_" (sanitizeStripped (Optionals.fromOptional s (Lists.maybeLast parts)))) (Logic.ifElse (Equality.equal head1 "hydra") (
         let rest = Lists.drop 1 parts
-            head2 = Maybes.fromMaybe "" (Lists.maybeHead rest)
+            head2 = Optionals.fromOptional "" (Lists.maybeHead rest)
         in (Logic.ifElse (Equality.equal head2 "lib") (renameLibKeyword (Strings.intercalate "." (Lists.drop 1 rest))) (
-          let localRaw = Maybes.fromMaybe s (Lists.maybeLast parts)
+          let localRaw = Optionals.fromOptional s (Lists.maybeLast parts)
               localN = sanitizeStripped localRaw
-              sourceNs = Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))
+              sourceNs = Strings.intercalate "." (Optionals.fromOptional [] (Lists.maybeInit parts))
               isCurrent = Equality.equal sourceNs currentNs
               isAmbig = Sets.member localRaw ambig
               isCollisionProne =
@@ -561,12 +582,12 @@ termReferencesVar name tm =
       Core.TermAnnotated v0 -> termReferencesVar name (Core.annotatedTermBody v0)
       Core.TermApplication v0 -> Logic.or (termReferencesVar name (Core.applicationFunction v0)) (termReferencesVar name (Core.applicationArgument v0))
       Core.TermLambda v0 -> termReferencesVar name (Core.lambdaBody v0)
-      Core.TermCases v0 -> Logic.or (Maybes.isJust (Lists.find (\f -> termReferencesVar name (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Maybes.maybe False (\d -> termReferencesVar name d) (Core.caseStatementDefault v0))
-      Core.TermLet v0 -> Logic.or (Maybes.isJust (Lists.find (\b -> termReferencesVar name (Core.bindingTerm b)) (Core.letBindings v0))) (termReferencesVar name (Core.letBody v0))
-      Core.TermList v0 -> Maybes.isJust (Lists.find (\el -> termReferencesVar name el) v0)
-      Core.TermMaybe v0 -> Maybes.maybe False (\el -> termReferencesVar name el) v0
+      Core.TermCases v0 -> Logic.or (Optionals.isGiven (Lists.find (\f -> termReferencesVar name (Core.caseAlternativeHandler f)) (Core.caseStatementCases v0))) (Optionals.cases (Core.caseStatementDefault v0) False (\d -> termReferencesVar name d))
+      Core.TermLet v0 -> Logic.or (Optionals.isGiven (Lists.find (\b -> termReferencesVar name (Core.bindingTerm b)) (Core.letBindings v0))) (termReferencesVar name (Core.letBody v0))
+      Core.TermList v0 -> Optionals.isGiven (Lists.find (\el -> termReferencesVar name el) v0)
+      Core.TermOptional v0 -> Optionals.cases v0 False (\el -> termReferencesVar name el)
       Core.TermPair v0 -> Logic.or (termReferencesVar name (Pairs.first v0)) (termReferencesVar name (Pairs.second v0))
-      Core.TermRecord v0 -> Maybes.isJust (Lists.find (\f -> termReferencesVar name (Core.fieldTerm f)) (Core.recordFields v0))
+      Core.TermRecord v0 -> Optionals.isGiven (Lists.find (\f -> termReferencesVar name (Core.fieldTerm f)) (Core.recordFields v0))
       Core.TermInject v0 -> termReferencesVar name (Core.fieldTerm (Core.injectionField v0))
       Core.TermEither v0 -> Eithers.either (\l -> termReferencesVar name l) (\r -> termReferencesVar name r) v0
       Core.TermTypeApplication v0 -> termReferencesVar name (Core.typeApplicationTermBody v0)
@@ -578,8 +599,8 @@ unionConstructorName :: String -> String -> String
 unionConstructorName typeName fieldName =
 
       let parts = Strings.splitOn "." typeName
-          localPart = Maybes.fromMaybe typeName (Lists.maybeLast parts)
-          prefixParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
+          localPart = Optionals.fromOptional typeName (Lists.maybeLast parts)
+          prefixParts = Optionals.fromOptional [] (Lists.maybeInit parts)
           prefix = Logic.ifElse (Lists.null prefixParts) "" (Strings.cat2 (Strings.intercalate "." prefixParts) ".")
           sanitized = sanitizeVar localPart
       in (Strings.cat [

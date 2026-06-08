@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -178,7 +178,7 @@ pgElementToJson = define "pgElementToJson" $
             "labelJson">: Json.valueString (unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"))] $
             Eithers.map
               ("propsJson" ~>
-                Json.valueObject (Maps.fromList $ Maybes.cat $ list [
+                Json.valueObject (Maps.fromList $ Optionals.cat $ list [
                   just (pair (string "label") (var "labelJson")),
                   just (pair (string "id") (Json.valueString $ ShowCore.term @@ var "term")),
                   var "propsJson"]))
@@ -191,7 +191,7 @@ pgElementToJson = define "pgElementToJson" $
                 "labelJson">: Json.valueString (unwrap PG._EdgeLabel @@ (project PG._Edge PG._Edge_label @@ var "edge"))] $
                 Eithers.map
                   ("propsJson" ~>
-                    Json.valueObject (Maps.fromList $ Maybes.cat $ list [
+                    Json.valueObject (Maps.fromList $ Optionals.cat $ list [
                       just (pair (string "label") (var "labelJson")),
                       just (pair (string "id") (Json.valueString $ ShowCore.term @@ var "term")),
                       just (pair (string "out") (Json.valueString $ ShowCore.term @@ var "termOut")),

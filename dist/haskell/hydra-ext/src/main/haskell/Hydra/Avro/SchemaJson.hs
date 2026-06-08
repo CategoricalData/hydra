@@ -2,9 +2,15 @@
 -- | JSON serialization and deserialization for Avro schemas
 
 module Hydra.Avro.SchemaJson where
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Parser as Parser
 import qualified Hydra.Json.Writer as Writer
@@ -14,10 +20,22 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -92,7 +110,7 @@ avro_values = "values"
 -- | Decode aliases from a JSON object map
 decodeAliases :: t0 -> M.Map String Model.Value -> Either t1 (Maybe [String])
 decodeAliases cx m =
-    Eithers.bind (optArrayE cx avro_aliases m) (\mArr -> Maybes.maybe (Right Nothing) (\arr -> Eithers.map (\strs -> Maybes.pure strs) (Eithers.mapList (expectStringE cx) arr)) mArr)
+    Eithers.bind (optArrayE cx avro_aliases m) (\mArr -> Optionals.cases mArr (Right Nothing) (\arr -> Eithers.map (\strs -> Optionals.pure strs) (Eithers.mapList (expectStringE cx) arr)))
 -- | Decode an Avro array schema from a JSON object map
 decodeArraySchema :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.Schema
 decodeArraySchema cx m =
@@ -107,7 +125,7 @@ decodeEnum cx m =
 -- | Decode an Avro field from a JSON object map
 decodeField :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.Field
 decodeField cx m =
-    Eithers.bind (requireStringE cx avro_name m) (\name -> Eithers.bind (optStringE cx avro_doc m) (\fdoc -> Eithers.bind (requireE cx avro_type m) (\typeJson -> Eithers.bind (decodeSchema cx typeJson) (\fieldType -> Eithers.bind (Eithers.bind (optStringE cx avro_order m) (\mOrd -> Eithers.mapMaybe (decodeOrder cx) mOrd)) (\order -> Eithers.bind (decodeAliases cx m) (\aliases -> Right (Schema.Field {
+    Eithers.bind (requireStringE cx avro_name m) (\name -> Eithers.bind (optStringE cx avro_doc m) (\fdoc -> Eithers.bind (requireE cx avro_type m) (\typeJson -> Eithers.bind (decodeSchema cx typeJson) (\fieldType -> Eithers.bind (Eithers.bind (optStringE cx avro_order m) (\mOrd -> Eithers.mapOptional (decodeOrder cx) mOrd)) (\order -> Eithers.bind (decodeAliases cx m) (\aliases -> Right (Schema.Field {
       Schema.fieldName = name,
       Schema.fieldDoc = fdoc,
       Schema.fieldType = fieldType,
@@ -140,9 +158,9 @@ decodeNamedSchema cx m namedTypeResult =
 -- | Decode an Avro schema from a JSON object given the type name
 decodeObjectSchema :: t0 -> M.Map String Model.Value -> String -> Either Errors.Error Schema.Schema
 decodeObjectSchema cx m typeName =
-    Logic.ifElse (Equality.equal typeName "array") (decodeArraySchema cx m) (Logic.ifElse (Equality.equal typeName "map") (decodeMapSchema cx m) (Logic.ifElse (Equality.equal typeName "record") (decodeNamedSchema cx m (decodeRecord cx m)) (Logic.ifElse (Equality.equal typeName "enum") (decodeNamedSchema cx m (decodeEnum cx m)) (Logic.ifElse (Equality.equal typeName "fixed") (decodeNamedSchema cx m (decodeFixed cx m)) (Maybes.maybe (err cx (Strings.cat [
+    Logic.ifElse (Equality.equal typeName "array") (decodeArraySchema cx m) (Logic.ifElse (Equality.equal typeName "map") (decodeMapSchema cx m) (Logic.ifElse (Equality.equal typeName "record") (decodeNamedSchema cx m (decodeRecord cx m)) (Logic.ifElse (Equality.equal typeName "enum") (decodeNamedSchema cx m (decodeEnum cx m)) (Logic.ifElse (Equality.equal typeName "fixed") (decodeNamedSchema cx m (decodeFixed cx m)) (Optionals.cases (decodePrimitiveName typeName) (err cx (Strings.cat [
       "unknown type: ",
-      typeName])) (\p -> Right (Schema.SchemaPrimitive p)) (decodePrimitiveName typeName))))))
+      typeName])) (\p -> Right (Schema.SchemaPrimitive p)))))))
 -- | Decode an Avro field ordering from a string
 decodeOrder :: t0 -> String -> Either Errors.Error Schema.Order
 decodeOrder cx o =
@@ -162,7 +180,7 @@ decodeRecord cx m =
 decodeSchema :: t0 -> Model.Value -> Either Errors.Error Schema.Schema
 decodeSchema cx v =
     case v of
-      Model.ValueString v0 -> Maybes.maybe (Right (Schema.SchemaReference v0)) (\p -> Right (Schema.SchemaPrimitive p)) (decodePrimitiveName v0)
+      Model.ValueString v0 -> Optionals.cases (decodePrimitiveName v0) (Right (Schema.SchemaReference v0)) (\p -> Right (Schema.SchemaPrimitive p))
       Model.ValueArray v0 -> Eithers.map (\decoded -> Schema.SchemaUnion (Schema.Union decoded)) (Eithers.mapList (decodeSchema cx) v0)
       Model.ValueObject v0 -> Eithers.bind (requireStringE cx avro_type v0) (\typeName -> decodeObjectSchema cx v0 typeName)
       _ -> err cx (Strings.cat [
@@ -185,8 +203,8 @@ encodeEnum e =
         ("type", (Model.ValueString "enum"))],
       [
         ("symbols", (Model.ValueArray (Lists.map (\s -> Model.ValueString s) (Schema.enumSymbols e))))],
-      (Maybes.maybe [] (\d -> [
-        ("default", (Model.ValueString d))]) (Schema.enumDefault e))]
+      (Optionals.cases (Schema.enumDefault e) [] (\d -> [
+        ("default", (Model.ValueString d))]))]
 -- | Encode an Avro field to a JSON object
 encodeField :: Schema.Field -> Model.Value
 encodeField f =
@@ -195,14 +213,14 @@ encodeField f =
         ("name", (Model.ValueString (Schema.fieldName f)))],
       [
         ("type", (encodeSchema (Schema.fieldType f)))],
-      (Maybes.maybe [] (\d -> [
-        ("doc", (Model.ValueString d))]) (Schema.fieldDoc f)),
-      (Maybes.maybe [] (\d -> [
-        ("default", d)]) (Schema.fieldDefault f)),
-      (Maybes.maybe [] (\o -> [
-        encodeOrder o]) (Schema.fieldOrder f)),
-      (Maybes.maybe [] (\als -> [
-        ("aliases", (Model.ValueArray (Lists.map (\a -> Model.ValueString a) als)))]) (Schema.fieldAliases f)),
+      (Optionals.cases (Schema.fieldDoc f) [] (\d -> [
+        ("doc", (Model.ValueString d))])),
+      (Optionals.cases (Schema.fieldDefault f) [] (\d -> [
+        ("default", d)])),
+      (Optionals.cases (Schema.fieldOrder f) [] (\o -> [
+        encodeOrder o])),
+      (Optionals.cases (Schema.fieldAliases f) [] (\als -> [
+        ("aliases", (Model.ValueArray (Lists.map (\a -> Model.ValueString a) als)))])),
       (encodeAnnotations (Schema.fieldAnnotations f))]))
 -- | Encode an Avro fixed type as key-value pairs
 encodeFixed :: Schema.Fixed -> [(String, Model.Value)]
@@ -222,12 +240,12 @@ encodeNamed n =
     Model.ValueObject (Maps.fromList (Lists.concat [
       [
         ("name", (Model.ValueString (Schema.namedName n)))],
-      (Maybes.maybe [] (\ns -> [
-        ("namespace", (Model.ValueString ns))]) (Schema.namedNamespace n)),
-      (Maybes.maybe [] (\d -> [
-        ("doc", (Model.ValueString d))]) (Schema.namedDoc n)),
-      (Maybes.maybe [] (\als -> [
-        ("aliases", (Model.ValueArray (Lists.map (\a -> Model.ValueString a) als)))]) (Schema.namedAliases n)),
+      (Optionals.cases (Schema.namedNamespace n) [] (\ns -> [
+        ("namespace", (Model.ValueString ns))])),
+      (Optionals.cases (Schema.namedDoc n) [] (\d -> [
+        ("doc", (Model.ValueString d))])),
+      (Optionals.cases (Schema.namedAliases n) [] (\als -> [
+        ("aliases", (Model.ValueArray (Lists.map (\a -> Model.ValueString a) als)))])),
       (encodeNamedType (Schema.namedType n)),
       (encodeAnnotations (Schema.namedAnnotations n))]))
 -- | Encode the specific variant of a named Avro type
@@ -303,31 +321,31 @@ expectStringE cx value =
 -- | Extract annotation entries (keys starting with @) from a JSON object map
 getAnnotations :: M.Map String t0 -> M.Map String t0
 getAnnotations m =
-    Maps.fromList (Maybes.cat (Lists.map (\entry ->
+    Maps.fromList (Optionals.cat (Lists.map (\entry ->
       let k = Pairs.first entry
           v = Pairs.second entry
-      in (Logic.ifElse (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 k)) 64) (Maybes.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))
+      in (Logic.ifElse (Equality.equal (Optionals.fromOptional 0 (Strings.maybeCharAt 0 k)) 64) (Optionals.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))
 -- | Look up an optional array attribute in a JSON object map
 optArrayE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe [Model.Value]))
 optArrayE cx fname m =
-    Maybes.maybe (Right Nothing) (\v -> Eithers.map (\a -> Maybes.pure a) (expectArrayE cx v)) (Maps.lookup fname m)
+    Optionals.cases (Maps.lookup fname m) (Right Nothing) (\v -> Eithers.map (\a -> Optionals.pure a) (expectArrayE cx v))
 -- | Look up an optional attribute in a JSON object map
 optE :: Ord t0 => (t0 -> M.Map t0 t1 -> Maybe t1)
 optE k m = Maps.lookup k m
 -- | Look up an optional string attribute in a JSON object map
 optStringE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe String))
 optStringE cx fname m =
-    Maybes.maybe (Right Nothing) (\v -> Eithers.map (\s -> Maybes.pure s) (expectStringE cx v)) (Maps.lookup fname m)
+    Optionals.cases (Maps.lookup fname m) (Right Nothing) (\v -> Eithers.map (\s -> Optionals.pure s) (expectStringE cx v))
 -- | Look up a required array attribute in a JSON object map
 requireArrayE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error [Model.Value]
 requireArrayE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectArrayE cx v)
 -- | Look up a required attribute in a JSON object map
 requireE :: t0 -> String -> M.Map String t1 -> Either Errors.Error t1
 requireE cx fname m =
-    Maybes.maybe (err cx (Strings.cat [
+    Optionals.cases (Maps.lookup fname m) (err cx (Strings.cat [
       "required attribute ",
       (Literals.showString fname),
-      " not found"])) (\v -> Right v) (Maps.lookup fname m)
+      " not found"])) (\v -> Right v)
 -- | Look up a required number attribute in a JSON object map
 requireNumberE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error Sci.Scientific
 requireNumberE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectNumberE cx v)

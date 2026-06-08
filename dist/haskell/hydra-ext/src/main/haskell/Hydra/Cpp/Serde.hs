@@ -3,14 +3,35 @@
 
 module Hydra.Cpp.Serde where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
 import qualified Hydra.Cpp.Syntax as Syntax
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Convert an access specifier to an expression
@@ -165,9 +186,9 @@ classDeclarationToExpr cd =
           mbody = Syntax.classDeclarationBody cd
           key = Syntax.classSpecifierKey spec
           isEnum = Logic.or (Equality.equal key Syntax.ClassKeyEnum) (Equality.equal key Syntax.ClassKeyEnumClass)
-      in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.withSemi (Serialization.spaceSep (Optionals.cat [
         Just (classSpecifierToExpr spec),
-        (Maybes.map (\body -> classBodyToExpr isEnum body) mbody)])))
+        (Optionals.map (\body -> classBodyToExpr isEnum body) mbody)])))
 -- | Convert a class key to an expression
 classKeyToExpr :: Syntax.ClassKey -> Ast.Expr
 classKeyToExpr k =
@@ -225,7 +246,7 @@ constructorDeclarationToExpr cd =
           params = Syntax.constructorDeclarationParameters cd
           inits = Syntax.constructorDeclarationInitializers cd
           body = Syntax.constructorDeclarationBody cd
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.noSep [
           Serialization.cst name,
           (Serialization.parenListAdaptive (Lists.map parameterToExpr params))]),
@@ -255,10 +276,10 @@ defineDirectiveToExpr dd =
         [
           Serialization.cst "#define",
           (Serialization.cst name)],
-        (Maybes.maybe [] (\ps -> [
-          Serialization.parenListAdaptive (Lists.map (\p -> Serialization.cst p) ps)]) params),
-        (Maybes.maybe [] (\r -> [
-          Serialization.cst r]) replacement)]))
+        (Optionals.cases params [] (\ps -> [
+          Serialization.parenListAdaptive (Lists.map (\p -> Serialization.cst p) ps)])),
+        (Optionals.cases replacement [] (\r -> [
+          Serialization.cst r]))]))
 -- | Convert a destructor declaration to an expression
 destructorDeclarationToExpr :: Syntax.DestructorDeclaration -> Ast.Expr
 destructorDeclarationToExpr dd =
@@ -564,9 +585,9 @@ lambdaExpressionToExpr le =
       in (Serialization.spaceSep [
         captureListToExpr captures,
         (Logic.ifElse (Lists.null params) (Serialization.parens (Serialization.cst "")) (Serialization.parenListAdaptive (Lists.map parameterToExpr params))),
-        (Maybes.maybe (Serialization.cst "") (\t -> Serialization.spaceSep [
+        (Optionals.cases retType (Serialization.cst "") (\t -> Serialization.spaceSep [
           Serialization.cst "->",
-          (typeExpressionToExpr t)]) retType),
+          (typeExpressionToExpr t)])),
         (compoundStatementToExpr body)])
 -- | Convert a left shift operation to an expression
 leftShiftOperationToExpr :: Syntax.LeftShiftOperation -> Ast.Expr
@@ -608,11 +629,11 @@ lineDirectiveToExpr ld =
         [
           Serialization.cst "#line",
           (Serialization.cst (Literals.showInt32 lineNumber))],
-        (Maybes.maybe [] (\f -> [
+        (Optionals.cases filename [] (\f -> [
           Serialization.cst (Strings.cat [
             "\"",
             f,
-            "\""])]) filename)]))
+            "\""])]))]))
 -- | Convert a literal to an expression
 literalToExpr :: Syntax.Literal -> Ast.Expr
 literalToExpr l =
@@ -780,8 +801,8 @@ optionalToExpr opt =
         Serialization.cst "std::optional<",
         (typeExpressionToExpr valType),
         (Serialization.cst ">"),
-        (Maybes.maybe (Serialization.cst "{}") (\v -> Serialization.curlyBracesList Nothing Serialization.inlineStyle [
-          expressionToExpr v]) val)])
+        (Optionals.cases val (Serialization.cst "{}") (\v -> Serialization.curlyBracesList Nothing Serialization.inlineStyle [
+          expressionToExpr v]))])
 -- | Convert overloaded lambdas to an expression
 overloadedLambdasToExpr :: Syntax.OverloadedLambdas -> Ast.Expr
 overloadedLambdasToExpr ol =
@@ -805,9 +826,9 @@ parameterToExpr p =
         [
           typeExpressionToExpr typ,
           nameExpr],
-        (Maybes.maybe [] (\expr -> [
+        (Optionals.cases defaultVal [] (\expr -> [
           Serialization.cst "=",
-          (expressionToExpr expr)]) defaultVal)]))
+          (expressionToExpr expr)]))]))
 -- | Convert a pattern match to an expression
 patternMatchToExpr :: Syntax.PatternMatch -> Ast.Expr
 patternMatchToExpr pm =
@@ -881,7 +902,7 @@ programToExpr prog =
           includes = Syntax.programIncludes prog
           decls = Syntax.programDeclarations prog
           separate = \sep -> \defs -> Logic.ifElse (Lists.null defs) Nothing (Just (sep defs))
-      in (Serialization.doubleNewlineSep (Maybes.cat [
+      in (Serialization.doubleNewlineSep (Optionals.cat [
         separate Serialization.newlineSep (Lists.map preprocessorDirectiveToExpr preps),
         (separate Serialization.newlineSep (Lists.map includeDirectiveToExpr includes)),
         (separate Serialization.doubleNewlineSep (Lists.map declarationToExpr decls))]))
@@ -962,9 +983,9 @@ selectionStatementToExpr ss =
           Serialization.cst "if",
           (Serialization.parens (expressionToExpr cond))],
         (statementToExpr thenBranch),
-        (Maybes.maybe (Serialization.cst "") (\stmt -> Serialization.newlineSep [
+        (Optionals.cases elseBranch (Serialization.cst "") (\stmt -> Serialization.newlineSep [
           Serialization.cst "else",
-          (statementToExpr stmt)]) elseBranch)])
+          (statementToExpr stmt)]))])
 -- | Convert a set to an expression
 setToExpr :: Syntax.Set -> Ast.Expr
 setToExpr s =
@@ -1159,13 +1180,13 @@ variableDeclarationToExpr commas vd =
           terminator = Logic.ifElse commas Serialization.withComma Serialization.withSemi
       in (terminator (Serialization.spaceSep (Lists.concat [
         Logic.ifElse isAuto [
-          Serialization.cst "auto"] (Maybes.maybe [] (\t -> [
-          typeExpressionToExpr t]) typ),
+          Serialization.cst "auto"] (Optionals.cases typ [] (\t -> [
+          typeExpressionToExpr t])),
         [
           Serialization.cst name],
-        (Maybes.maybe [] (\expr -> [
+        (Optionals.cases init [] (\expr -> [
           Serialization.cst "=",
-          (expressionToExpr expr)]) init)])))
+          (expressionToExpr expr)]))])))
 -- | Convert a vector to an expression
 vectorToExpr :: Syntax.Vector -> Ast.Expr
 vectorToExpr v =

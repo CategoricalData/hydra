@@ -100,7 +100,7 @@
                                                                 "body": {
                                                                   "inject": {
                                                                     "field": {
-                                                                      "name": "maybe",
+                                                                      "name": "optional",
                                                                       "term": {
                                                                         "application": {
                                                                           "argument": {"variable": "opt"},
@@ -109,17 +109,17 @@
                                                                               "argument": {"variable": "v"},
                                                                               "function": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "t0"}}},
+                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "t0"}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                     "typeName": "hydra.core.Term"}},
-                                                                "domain": {"maybe": {"variable": "t0"}},
+                                                                "domain": {"optional": {"variable": "t0"}},
                                                                 "parameter": "opt"}},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"maybe": {"variable": "t0"}}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"optional": {"variable": "t0"}}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                   "typeName": "hydra.core.Term"}},
-                                              "domain": {"list": {"maybe": {"variable": "t0"}}},
+                                              "domain": {"list": {"optional": {"variable": "t0"}}},
                                               "parameter": "xs"}}}}}],
                                   "typeName": "hydra.core.WrappedTerm"}}},
                             "typeName": "hydra.core.Term"}},
@@ -243,7 +243,7 @@
                                                           "body": {
                                                             "inject": {
                                                               "field": {
-                                                                "name": "maybe",
+                                                                "name": "optional",
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "opt"},
@@ -252,10 +252,10 @@
                                                                         "argument": {"variable": "hydra.encode.tabular.headerRow"},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.tabular.HeaderRow"}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.tabular.HeaderRow"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": {"maybe": {"variable": "hydra.tabular.HeaderRow"}},
+                                                          "domain": {"optional": {"variable": "hydra.tabular.HeaderRow"}},
                                                           "parameter": "opt"}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {

@@ -17,7 +17,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -50,7 +50,7 @@ convertCase from to original =
 
                           let splitOnUppercase =
                                   \acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
-                                    []] []) (Maybes.fromMaybe acc (Maybes.map (\uc -> Lists.cons (Lists.cons c (Pairs.first uc)) (Pairs.second uc)) (Lists.uncons acc)))
+                                    []] []) (Optionals.fromOptional acc (Optionals.map (\uc -> Lists.cons (Lists.cons c (Pairs.first uc)) (Pairs.second uc)) (Lists.uncons acc)))
                           in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
                             []] (Lists.reverse (Strings.toList (decapitalize original)))))
                     byUnderscores = Strings.splitOn "_" original
@@ -100,7 +100,7 @@ mapFirstLetter :: (String -> String) -> String -> String
 mapFirstLetter mapping s =
     Logic.ifElse (Strings.null s) s (
       let list = Strings.toList s
-      in (Maybes.fromMaybe s (Maybes.map (\uc ->
+      in (Optionals.fromOptional s (Optionals.map (\uc ->
         let firstLetter = mapping (Strings.fromList (Lists.pure (Pairs.first uc)))
         in (Strings.cat2 firstLetter (Strings.fromList (Pairs.second uc)))) (Lists.uncons list))))
 -- | Replace sequences of non-alphanumeric characters with single underscores
@@ -124,7 +124,7 @@ normalizeComment s =
       in (Logic.ifElse (Strings.null stripped) "" (
         let lastIdx = Math.sub (Strings.length stripped) 1
             appended = Strings.cat2 stripped "."
-        in (Maybes.maybe appended (\lastChar -> Logic.ifElse (Equality.equal lastChar 46) stripped appended) (Strings.maybeCharAt lastIdx stripped))))
+        in (Optionals.cases (Strings.maybeCharAt lastIdx stripped) appended (\lastChar -> Logic.ifElse (Equality.equal lastChar 46) stripped appended))))
 -- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: S.Set String -> String -> String
 sanitizeWithUnderscores reserved s = escapeWithUnderscore reserved (nonAlnumToUnderscores s)
@@ -178,7 +178,7 @@ withCharacterAliases original =
                 (124, "verbar"),
                 (125, "rcub"),
                 (126, "tilde")]
-          alias = \c -> Maybes.fromMaybe (Lists.pure c) (Maybes.map Strings.toList (Maps.lookup c aliases))
+          alias = \c -> Optionals.fromOptional (Lists.pure c) (Optionals.map Strings.toList (Maps.lookup c aliases))
       in (Strings.fromList (Lists.filter Chars.isAlphaNum (Lists.concat (Lists.map alias (Strings.toList original)))))
 -- | A simple soft line wrap which is suitable for code comments
 wrapLine :: Int -> String -> String
@@ -191,6 +191,6 @@ wrapLine maxlen input =
                             Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc)
                     prefix = Lists.reverse (Pairs.second spanResult)
                     suffix = Lists.reverse (Pairs.first spanResult)
-                in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Maybes.fromMaybe (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Maybes.map (\pfxInit -> helper (Lists.cons pfxInit prev) (Lists.concat2 suffix (Lists.drop maxlen rem))) (Lists.maybeInit prefix)))))
+                in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Optionals.fromOptional (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Optionals.map (\pfxInit -> helper (Lists.cons pfxInit prev) (Lists.concat2 suffix (Lists.drop maxlen rem))) (Lists.maybeInit prefix)))))
       in (Strings.fromList (Lists.intercalate [
         10] (helper [] (Strings.toList input))))

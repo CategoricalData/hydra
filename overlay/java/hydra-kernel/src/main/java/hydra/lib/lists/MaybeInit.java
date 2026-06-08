@@ -7,7 +7,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -43,13 +43,13 @@ public class MaybeInit extends PrimitiveFunction {
      * Apply the function to its single argument.
      * @param <X> the element type
      * @param list the list to get the init from
-     * @return a Maybe containing all elements except the last, or empty if the list is empty
+     * @return a Optional containing all elements except the last, or empty if the list is empty
      */
-    public static <X> Maybe<List<X>> apply(List<X> list) {
+    public static <X> Optional<List<X>> apply(List<X> list) {
         if (list.isEmpty()) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(ConsList.fromList(list).init());
+            return Optional.given(ConsList.fromList(list).init());
         }
     }
 }

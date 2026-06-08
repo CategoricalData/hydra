@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Relational as Relational
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -27,7 +27,7 @@ dataRow :: (t0 -> Core.Term) -> Tabular.DataRow t0 -> Core.Term
 dataRow v x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
-      Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\opt -> Core.TermMaybe (Maybes.map v opt)) xs)) (Tabular.unDataRow x))})
+      Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\opt -> Core.TermOptional (Optionals.map v opt)) xs)) (Tabular.unDataRow x))})
 -- | Encoder for hydra.tabular.HeaderRow
 headerRow :: Tabular.HeaderRow -> Core.Term
 headerRow x =
@@ -42,7 +42,7 @@ table v x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "header"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map headerRow opt)) (Tabular.tableHeader x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map headerRow opt)) (Tabular.tableHeader x))},
         Core.Field {
           Core.fieldName = (Core.Name "data"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (dataRow v) xs)) (Tabular.tableData x))}]})

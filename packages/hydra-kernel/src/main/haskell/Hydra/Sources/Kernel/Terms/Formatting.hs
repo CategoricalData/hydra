@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -101,8 +101,8 @@ convertCase = define "convertCase" $
       "byCaps">: lets [
         "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
           (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TypedTerm [Char]])))
-          (Maybes.fromMaybe (var "acc") $
-            Maybes.map ("uc" ~>
+          (Optionals.fromOptional (var "acc") $
+            Optionals.map ("uc" ~>
               Lists.cons (Lists.cons (var "c") (Pairs.first $ var "uc"))
                 (Pairs.second $ var "uc"))
               (Lists.uncons $ var "acc"))]
@@ -180,8 +180,8 @@ mapFirstLetter = define "mapFirstLetter" $
     (Strings.null $ var "s")
     (var "s")
     ("list" <~ Strings.toList (var "s") $
-     Maybes.fromMaybe (var "s") $
-       Maybes.map ("uc" ~>
+     Optionals.fromOptional (var "s") $
+       Optionals.map ("uc" ~>
          "firstLetter" <~ (var "mapping" @@ Strings.fromList (Lists.pure (Pairs.first $ var "uc"))) $
          Strings.cat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
          (Lists.uncons $ var "list"))
@@ -219,13 +219,10 @@ normalizeComment = define "normalizeComment" $
     -- by the null check above, so lastIdx is a valid index.
     ("lastIdx" <~ Math.sub (Strings.length (var "stripped")) (int32 1) $
      "appended" <~ Strings.cat2 (var "stripped") (string ".") $
-     Maybes.maybe
-       (var "appended")
-       ("lastChar" ~> Logic.ifElse
+     Optionals.cases (Strings.maybeCharAt (var "lastIdx") (var "stripped")) (var "appended") ("lastChar" ~> Logic.ifElse
          (Equality.equal (var "lastChar") (int32 46))
          (var "stripped")
-         (var "appended"))
-       (Strings.maybeCharAt (var "lastIdx") (var "stripped")))
+         (var "appended")))
 
 sanitizeWithUnderscores :: TypedTermDefinition (S.Set String -> String -> String)
 sanitizeWithUnderscores = define "sanitizeWithUnderscores" $
@@ -285,9 +282,9 @@ withCharacterAliases = define "withCharacterAliases" $
       pair (int32 124) (string "verbar"),
       pair (int32 125) (string "rcub"),
       pair (int32 126) (string "tilde")],
-    "alias">: lambda "c" $ Maybes.fromMaybe
+    "alias">: lambda "c" $ Optionals.fromOptional
       (Lists.pure $ var "c")
-      (Maybes.map (reify Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
+      (Optionals.map (reify Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
     $ Strings.fromList $ Lists.filter (reify Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
@@ -307,9 +304,9 @@ wrapLine = define "wrapLine" $
         (Logic.ifElse (Lists.null $ var "prefix")
           (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
           -- prefix is non-empty here (guarded above), so maybeInit is always Just.
-          (Maybes.fromMaybe
+          (Optionals.fromOptional
             (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
-            (Maybes.map
+            (Optionals.map
               ("pfxInit" ~> var "helper" @@ (Lists.cons (var "pfxInit") (var "prev")) @@ (Lists.concat2 (var "suffix") ((Lists.drop (var "maxlen") (var "rem")))))
               (Lists.maybeInit $ var "prefix"))))]
     $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list ([] :: [TypedTerm Char])) @@ (Strings.toList $ var "input")

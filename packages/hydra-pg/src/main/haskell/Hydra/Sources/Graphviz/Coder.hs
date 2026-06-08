@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -225,7 +225,7 @@ termLabel = define "termLabel" $
           _Literal_string>>: "s" ~> var "s"]
           @@ var "l"),
       _Term_map>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "<,>") (string "map")),
-      _Term_maybe>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "opt") (string "optional")),
+      _Term_optional>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "opt") (string "optional")),
       _Term_record>>: "rec" ~>
         var "simpleLabel" @@ Strings.cat2 (string "\x2227") (Names.compactName @@ var "namespaces" @@ (project _Record _Record_typeName @@ var "rec")),
       _Term_typeLambda>>: constant $ var "simpleLabel" @@ string "tyabs",
@@ -278,10 +278,7 @@ termToDotStmts = define "termToDotStmts" $
         "s">: Pairs.second $ var "tls"]
         $ pair (Names.uniqueLabel @@ var "vis" @@ var "l") (var "s"),
       -- Determine actual label and style
-      "labstyle">: Maybes.maybe
-        (var "labelOf" @@ var "visited" @@ var "currentTerm")
-        ("ls" ~> var "ls")
-        (var "mlabstyle"),
+      "labstyle">: Optionals.cases (var "mlabstyle") (var "labelOf" @@ var "visited" @@ var "currentTerm") ("ls" ~> var "ls"),
       "label">: Pairs.first $ var "labstyle",
       "style">: Pairs.second $ var "labstyle",
       "nodeStyle">: Logic.ifElse (var "isElement") nodeStyleElement (var "termNodeStyle"),
@@ -294,13 +291,10 @@ termToDotStmts = define "termToDotStmts" $
       -- Edge to parent (accessor edge)
       "toAccessorEdgeStmt">: lambdas ["acc", "sty", "i1", "i2"] $
         toEdgeStmt @@ var "i1" @@ var "i2" @@
-          (Maybes.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (ShowPaths.subtermStep @@ var "acc")),
+          (Optionals.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (ShowPaths.subtermStep @@ var "acc")),
       "edgeAttrs">: "lab" ~>
         wrap Dot._AttrList (list [list [record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "label"), Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]]]),
-      "parentStmt">: Maybes.maybe
-        (list ([] :: [TypedTerm Dot.Stmt]))
-        ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"])
-        (var "mparent"),
+      "parentStmt">: Optionals.cases (var "mparent") (list ([] :: [TypedTerm Dot.Stmt])) ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"]),
       "selfStmts">: Lists.concat (list [var "stmts", list [var "nodeStmt"], var "parentStmt"]),
       -- Default case: fold over subterms
       "dflt">: Lists.foldl
@@ -346,7 +340,7 @@ termToDotStmts = define "termToDotStmts" $
             "addBindingTerm">: lambdas ["stVis", "binding"] $ lets [
               "bname">: Core.bindingName $ var "binding",
               "bterm">: Core.bindingTerm $ var "binding",
-              "blab">: unwrap Dot._Id @@ (Maybes.fromMaybe (wrap Dot._Id (string "?")) (Maps.lookup (var "bname") (var "ids1")))]
+              "blab">: unwrap Dot._Id @@ (Optionals.fromOptional (wrap Dot._Id (string "?")) (Maps.lookup (var "bname") (var "ids1")))]
               $ var "encode"
                   @@ just (pair (var "blab") nodeStyleElement) @@ true @@ var "ids1" @@ just (var "selfId")
                   @@ var "stVis"
@@ -357,12 +351,9 @@ termToDotStmts = define "termToDotStmts" $
                 @@ var "stmts1"
                 @@ pair Paths.subtermStepLetBody (var "env"),
           _Term_variable>>: "name" ~>
-            Maybes.maybe
-              (var "dflt")
-              ("i" ~> pair
-                (Lists.concat2 (var "stmts") (list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ (Maybes.fromMaybe (var "selfId") (var "mparent")) @@ var "i"]))
-                (var "visited"))
-              (Maps.lookup (var "name") (var "ids"))]
+            Optionals.cases (Maps.lookup (var "name") (var "ids")) (var "dflt") ("i" ~> pair
+                (Lists.concat2 (var "stmts") (list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ (Optionals.fromOptional (var "selfId") (var "mparent")) @@ var "i"]))
+                (var "visited"))]
         @@ var "currentTerm"]
     $ Pairs.first $ var "encode"
         @@ nothing @@ false @@ Maps.empty @@ nothing
@@ -396,7 +387,7 @@ termToSubtermDotStmts = define "termToSubtermDotStmts" $
       "lab1">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_source @@ var "edge"),
       "lab2">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_target @@ var "edge"),
       "pathAccessors">: unwrap _SubtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "edge"),
-      "showPath">: Strings.intercalate (string "/") (Maybes.cat (Lists.map ShowPaths.subtermStep (var "pathAccessors")))]
+      "showPath">: Strings.intercalate (string "/") (Optionals.cat (Lists.map ShowPaths.subtermStep (var "pathAccessors")))]
       $ toEdgeStmt @@ wrap Dot._Id (var "lab1") @@ wrap Dot._Id (var "lab2") @@
           (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))]
     $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))

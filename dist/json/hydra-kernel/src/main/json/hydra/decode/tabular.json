@@ -218,20 +218,20 @@
                                                                           "application": {
                                                                             "argument": {"variable": "v"},
                                                                             "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.decodeMaybe"}, "type": {"variable": "t0"}}}}},
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"maybe": {"variable": "t0"}}}}}}}}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"optional": {"variable": "t0"}}}}}}}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "body": {
                                                                       "typeApplication": {"body": {"wrap": {"body": {"variable": "b"}, "typeName": "hydra.tabular.DataRow"}}, "type": {"variable": "t0"}}},
-                                                                    "domain": {"list": {"maybe": {"variable": "t0"}}},
+                                                                    "domain": {"list": {"optional": {"variable": "t0"}}},
                                                                     "parameter": "b"}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"list": {"maybe": {"variable": "t0"}}}}},
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"list": {"optional": {"variable": "t0"}}}}},
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.tabular.DataRow"}}}}},
                                                                     "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                         "domain": {"variable": "hydra.core.WrappedTerm"},
@@ -595,7 +595,7 @@
                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                     "type": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.tabular.DataRow"}}}}}},
                                                                                 "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.tabular.Table"}}}}}}}}},
-                                                                    "domain": {"maybe": {"variable": "hydra.tabular.HeaderRow"}},
+                                                                    "domain": {"optional": {"variable": "hydra.tabular.HeaderRow"}},
                                                                     "parameter": "field_header"}},
                                                                 "function": {
                                                                   "application": {
@@ -622,14 +622,14 @@
                                                                                             "body": {
                                                                                               "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}}}}}}}}}},
+                                                                                        "type": {"optional": {"variable": "hydra.tabular.HeaderRow"}}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
+                                                                            "type": {"optional": {"variable": "hydra.tabular.HeaderRow"}}}},
                                                                         "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.tabular.Table"}}}}}}}}}}},
                                                         "domain": {"variable": "hydra.core.Record"},
                                                         "parameter": "record"}},

@@ -71,7 +71,7 @@
 (format *error-output* "Loading native libraries...~%")
 (dolist (f '("lib/equality.lisp" "lib/maps.lisp" "lib/sets.lisp" "lib/lists.lisp"
              "lib/strings.lisp" "lib/logic.lisp" "lib/math.lisp" "lib/chars.lisp"
-             "lib/eithers.lisp" "lib/literals.lisp" "lib/maybes.lisp"
+             "lib/eithers.lisp" "lib/literals.lisp" "lib/optionals.lisp"
              "lib/pairs.lisp" "lib/regex.lisp"))
   (load (head-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
 

@@ -2,6 +2,14 @@
 -- | Serialization functions for converting JSON Schema documents to JSON values
 
 module Hydra.Json.Schema.Serde where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Schema as Schema
 import qualified Hydra.Json.Writer as Writer
@@ -9,8 +17,21 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -55,11 +76,11 @@ jsonSchemaDocumentToJsonValue doc =
           schemaMap = fromObject (schemaToExpr root)
           restMap =
                   fromObject (toObject [
-                    (key_id, (Maybes.map (\i -> Model.ValueString i) mid)),
-                    (key_schema, (Maybes.pure (Model.ValueString "http://json-schema.org/2020-12/schema"))),
+                    (key_id, (Optionals.map (\i -> Model.ValueString i) mid)),
+                    (key_schema, (Optionals.pure (Model.ValueString "http://json-schema.org/2020-12/schema"))),
                     (
                       key_definitions,
-                      (Maybes.map (\mp -> Model.ValueObject (Maps.fromList (Lists.map (\p ->
+                      (Optionals.map (\mp -> Model.ValueObject (Maps.fromList (Lists.map (\p ->
                         let k = Pairs.first p
                             schema = Pairs.second p
                         in (Schema.unKeyword k, (schemaToExpr schema))) (Maps.toList mp)))) mdefs))])
@@ -242,10 +263,10 @@ stringRestrictionToExpr r =
 -- | Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values
 toObject :: [(String, (Maybe Model.Value))] -> Model.Value
 toObject pairs =
-    Model.ValueObject (Maps.fromList (Maybes.cat (Lists.map (\p ->
+    Model.ValueObject (Maps.fromList (Optionals.cat (Lists.map (\p ->
       let k = Pairs.first p
           mv = Pairs.second p
-      in (Maybes.map (\v -> (k, v)) mv)) pairs)))
+      in (Optionals.map (\v -> (k, v)) mv)) pairs)))
 -- | Encode a type name as a JSON string value
 typeNameToExpr :: Schema.TypeName -> Model.Value
 typeNameToExpr t =

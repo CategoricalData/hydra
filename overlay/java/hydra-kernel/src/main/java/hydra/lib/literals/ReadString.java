@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -56,13 +56,13 @@ public class ReadString extends PrimitiveFunction {
      * @param str the string to parse (must be surrounded by double quotes)
      * @return an Opt containing the unquoted string, or empty if the input is not properly quoted
      */
-    public static Maybe<String> apply(String str) {
+    public static Optional<String> apply(String str) {
         // In Haskell, readMaybe parses a string literal representation
         // For simple string reading, we just return the string wrapped in Some
         // A more sophisticated implementation might parse escaped strings
         if (str.startsWith("\"") && str.endsWith("\"") && str.length() >= 2) {
-            return Maybe.just(str.substring(1, str.length() - 1));
+            return Optional.given(str.substring(1, str.length() - 1));
         }
-        return Maybe.nothing();
+        return Optional.none();
     }
 }

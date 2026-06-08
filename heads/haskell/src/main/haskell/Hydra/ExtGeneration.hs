@@ -120,7 +120,7 @@ writeCoq basePath universeModules modulesToGenerate =
       -- Hydra primitive library functions are not Hydra modules — they are
       -- implemented host-side (in this case as Coq Definitions/Axioms in
       -- `hydra/lib/*.v`) and are therefore invisible to `globalAmbiguousNames`.
-      -- Collisions like `hydra.lib.maybes.maybe` vs `hydra.show.core.maybe`
+      -- Collisions like `hydra.lib.eithers.either` vs `hydra.show.core.either`
       -- only manifest at Coq's import level. Inject the lib primitive names
       -- into the ambiguous set so that cross-module references in the
       -- non-lib source (`hydra.show.core.maybe`) stay fully qualified.
@@ -147,12 +147,12 @@ coqLibPrimitiveNames = Set.fromList [
   "equal","even","exp","filter","filterWithKey","find","findAll",
   "findWithDefault","first","float32ToDecimal","float32ToFloat64",
   "float64ToDecimal","float64ToFloat32","floor","foldl","foldr","fromJust",
-  "fromLeft","fromList","fromMaybe","fromRight","group","gt","gte","head",
+  "fromLeft","fromList","fromOptional","fromRight","group","gt","gte","head",
   "identity","ifElse","init","insert","int16ToBigint","int32ToBigint",
   "int64ToBigint","int8ToBigint","intercalate","intersection","intersperse",
-  "isAlphaNum","isJust","isLeft","isLower","isNothing","isRight","isSpace",
+  "isAlphaNum","isGiven","isLeft","isLower","isNone","isRight","isSpace",
   "isUpper","keys","last","lefts","length","lines","log","logBase","lookup",
-  "lt","lte","map","mapKeys","mapList","mapMaybe","mapSet","matches","max",
+  "lt","lte","map","mapKeys","mapList","mapOptional","mapSet","matches","max",
   "maybe","maybeAt","maybeCharAt","maybeDiv","maybeHead","maybeInit",
   "maybeLast","maybeMod","maybePred","maybeRem","maybeSucc","maybeTail",
   "member","min","mod","mul","mulFloat64","negate","negateFloat64","not",

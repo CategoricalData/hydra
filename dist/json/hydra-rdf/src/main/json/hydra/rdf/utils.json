@@ -55,7 +55,7 @@
                 "body": {
                   "typeApplication": {
                     "body": {
-                      "typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                      "typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                     "type": {"literal": {"string": {}}}}},
                 "typeName": "hydra.rdf.syntax.LangStrings"}}}},
         "name": "hydra.rdf.utils.emptyLangStrings",
@@ -100,7 +100,7 @@
                                           "application": {"argument": {"literal": {"string": "base64Binary"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                       {
                                         "name": "languageTag",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                 "domain": {"literal": {"binary": {}}},
                                 "parameter": "s"}},
@@ -129,7 +129,7 @@
                                           "application": {"argument": {"literal": {"string": "boolean"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                       {
                                         "name": "languageTag",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                 "domain": {"literal": {"boolean": {}}},
                                 "parameter": "b"}},
@@ -158,7 +158,7 @@
                                                           "application": {"argument": {"literal": {"string": "float"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"float": {"float32": {}}}},
                                                 "parameter": "v"}},
@@ -178,7 +178,7 @@
                                                           "application": {"argument": {"literal": {"string": "double"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"float": {"float64": {}}}},
                                                 "parameter": "v"}},
@@ -211,7 +211,7 @@
                                                           "application": {"argument": {"literal": {"string": "integer"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"bigint": {}}}},
                                                 "parameter": "v"}},
@@ -231,7 +231,7 @@
                                                           "application": {"argument": {"literal": {"string": "byte"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"int8": {}}}},
                                                 "parameter": "v"}},
@@ -251,7 +251,7 @@
                                                           "application": {"argument": {"literal": {"string": "short"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"int16": {}}}},
                                                 "parameter": "v"}},
@@ -271,7 +271,7 @@
                                                           "application": {"argument": {"literal": {"string": "int"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"int32": {}}}},
                                                 "parameter": "v"}},
@@ -291,7 +291,7 @@
                                                           "application": {"argument": {"literal": {"string": "long"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"int64": {}}}},
                                                 "parameter": "v"}},
@@ -311,7 +311,7 @@
                                                           "application": {"argument": {"literal": {"string": "unsignedByte"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"uint8": {}}}},
                                                 "parameter": "v"}},
@@ -331,7 +331,7 @@
                                                           "application": {"argument": {"literal": {"string": "unsignedShort"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"uint16": {}}}},
                                                 "parameter": "v"}},
@@ -351,7 +351,7 @@
                                                           "application": {"argument": {"literal": {"string": "unsignedInt"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"uint32": {}}}},
                                                 "parameter": "v"}},
@@ -371,7 +371,7 @@
                                                           "application": {"argument": {"literal": {"string": "unsignedLong"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                                       {
                                                         "name": "languageTag",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                                 "domain": {"literal": {"integer": {"uint64": {}}}},
                                                 "parameter": "v"}},
@@ -393,7 +393,7 @@
                                           "application": {"argument": {"literal": {"string": "string"}}, "function": {"variable": "hydra.rdf.utils.xmlSchemaDatatypeIri"}}}},
                                       {
                                         "name": "languageTag",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}],
                                     "typeName": "hydra.rdf.syntax.Literal"}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "s"}},
@@ -627,7 +627,7 @@
                               "application": {
                                 "argument": {"variable": "qualName"},
                                 "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
-                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
+                            "typeScheme": {"body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                           {
                             "name": "local_",
                             "term": {
@@ -644,17 +644,18 @@
                                     {"literal": {"string": "urn:"}},
                                     {
                                       "application": {
-                                        "argument": {"variable": "gname"},
+                                        "argument": {"unwrap": "hydra.packaging.ModuleName"},
                                         "function": {
                                           "application": {
-                                            "argument": {"unwrap": "hydra.packaging.ModuleName"},
+                                            "argument": {"literal": {"string": ""}},
                                             "function": {
                                               "application": {
-                                                "argument": {"literal": {"string": ""}},
+                                                "argument": {"variable": "gname"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                    "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                    "type": {"literal": {"string": {}}}}}}}}}}},
                                     {"literal": {"string": "#"}},
                                     {"application": {"argument": {"variable": "local_"}, "function": {"variable": "hydra.formatting.decapitalize"}}},
                                     {

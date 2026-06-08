@@ -22,7 +22,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -57,14 +57,14 @@ import qualified Data.Set as S
 -- | True if every element of the list is equal to every other element (vacuously true for the empty list)
 allEqual :: Eq t0 => ([t0] -> Bool)
 allEqual els =
-    Maybes.maybe True (\uc ->
+    Optionals.cases (Lists.uncons els) True (\uc ->
       let h = Pairs.first uc
           t = Pairs.second uc
-      in (Lists.foldl (\b -> \x -> Logic.and b (Equality.equal x h)) True t)) (Lists.uncons els)
+      in (Lists.foldl (\b -> \x -> Logic.and b (Equality.equal x h)) True t))
 -- | Apply type arguments to a type, substituting forall-bound variables
 applyTypeArgumentsToType :: t0 -> Graph.Graph -> [Core.Type] -> Core.Type -> Either Errors.Error Core.Type
 applyTypeArgumentsToType cx tx typeArgs t =
-    Maybes.maybe (Right t) (\uc ->
+    Optionals.cases (Lists.uncons typeArgs) (Right t) (\uc ->
       let ah = Pairs.first uc
           at = Pairs.second uc
       in case t of
@@ -82,7 +82,7 @@ applyTypeArgumentsToType cx tx typeArgs t =
             (Formatting.showList ShowCore.type_ typeArgs),
             ". Context has vars: {",
             (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Graph.graphBoundTypes tx)))),
-            "}"])})))) (Lists.uncons typeArgs)
+            "}"])}))))
 -- | Check that a term has no unbound type variables (Either version)
 checkForUnboundTypeVariables :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error ()
 checkForUnboundTypeVariables cx tx term0 =
@@ -99,7 +99,7 @@ checkForUnboundTypeVariables cx tx term0 =
                                   in (Logic.ifElse (Sets.null badvars) (Right ()) (Left (Errors.ErrorChecking (Checking.CheckingErrorUnboundTypeVariables (Checking.UnboundTypeVariablesError {
                                     Checking.unboundTypeVariablesErrorVariables = badvars,
                                     Checking.unboundTypeVariablesErrorType = typ})))))
-                        checkOptional = \m -> Eithers.bind (Eithers.mapMaybe check m) (\_ -> Right ())
+                        checkOptional = \m -> Eithers.bind (Eithers.mapOptional check m) (\_ -> Right ())
                     in case term of
                       Core.TermLambda v0 -> Eithers.bind (checkOptional (Core.lambdaDomain v0)) (\_ -> recurse (Core.lambdaBody v0))
                       Core.TermLet v0 ->
@@ -107,7 +107,7 @@ checkForUnboundTypeVariables cx tx term0 =
                                 \b ->
                                   let bterm = Core.bindingTerm b
                                       newVars =
-                                              Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingTypeScheme b)
+                                              Optionals.cases (Core.bindingTypeScheme b) vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts)))
                                       newTrace = Lists.cons (Core.unName (Core.bindingName b)) trace
                                   in (checkRecursive newVars newTrace (Just b) bterm)
                         in (Eithers.bind (Eithers.mapList forBinding (Core.letBindings v0)) (\_ -> recurse (Core.letBody v0)))
@@ -138,7 +138,7 @@ checkSameType cx tx desc types =
               Left (Errors.ErrorChecking (Checking.CheckingErrorUnequalTypes (Checking.UnequalTypesError {
                 Checking.unequalTypesErrorTypes = types,
                 Checking.unequalTypesErrorDescription = desc})))
-      in (Logic.ifElse (typesAllEffectivelyEqual tx types) (Maybes.maybe unequalErr (\t -> Right t) (Lists.maybeHead types)) unequalErr)
+      in (Logic.ifElse (typesAllEffectivelyEqual tx types) (Optionals.cases (Lists.maybeHead types) unequalErr (\t -> Right t)) unequalErr)
 -- | Check that a term has the expected type
 checkType :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Core.Type -> Either Errors.Error ()
 checkType cx tx term typ =
@@ -161,7 +161,7 @@ checkTypeSubst cx tx subst =
                     Core.TypeWrap _ -> True
                     _ -> False
           badVars =
-                  Sets.fromList (Lists.filter (\v -> Maybes.maybe False isNominal (Lexical.dereferenceSchemaType v (Graph.graphSchemaTypes tx))) (Sets.toList suspectVars))
+                  Sets.fromList (Lists.filter (\v -> Optionals.cases (Lexical.dereferenceSchemaType v (Graph.graphSchemaTypes tx)) False isNominal) (Sets.toList suspectVars))
           badPairs = Lists.filter (\p -> Sets.member (Pairs.first p) badVars) (Maps.toList s)
           printPair = \p -> Strings.cat2 (Strings.cat2 (Core.unName (Pairs.first p)) " --> ") (ShowCore.type_ (Pairs.second p))
       in (Logic.ifElse (Sets.null badVars) (Right subst) (Left (Errors.ErrorChecking (Checking.CheckingErrorIncorrectUnification (Checking.IncorrectUnificationError {
@@ -208,7 +208,7 @@ typeOf cx tx typeArgs term =
         Core.TermList v0 -> typeOfList cx1 tx typeArgs v0
         Core.TermLiteral v0 -> typeOfLiteral cx1 tx typeArgs v0
         Core.TermMap v0 -> typeOfMap cx1 tx typeArgs v0
-        Core.TermMaybe v0 -> typeOfMaybe cx1 tx typeArgs v0
+        Core.TermOptional v0 -> typeOfMaybe cx1 tx typeArgs v0
         Core.TermPair v0 -> typeOfPair cx1 tx typeArgs v0
         Core.TermProject v0 -> typeOfProjection cx1 tx typeArgs v0
         Core.TermRecord v0 -> typeOfRecord cx1 tx typeArgs v0
@@ -265,9 +265,9 @@ typeOfCaseStatement cx tx typeArgs cs =
           dflt = Core.caseStatementDefault cs
           cases = Core.caseStatementCases cs
           cterms = Lists.map Core.caseAlternativeHandler cases
-      in (Eithers.bind (Eithers.mapMaybe (\e -> typeOf cx tx [] e) dflt) (\dfltResult ->
-        let tdflt = Maybes.map Pairs.first dfltResult
-            cx2 = Maybes.maybe cx Pairs.second dfltResult
+      in (Eithers.bind (Eithers.mapOptional (\e -> typeOf cx tx [] e) dflt) (\dfltResult ->
+        let tdflt = Optionals.map Pairs.first dfltResult
+            cx2 = Optionals.cases dfltResult cx Pairs.second
             foldResult =
                     Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
                       let types = Pairs.first accR
@@ -285,7 +285,7 @@ typeOfCaseStatement cx tx typeArgs cs =
                         in (Eithers.bind (ExtractCore.functionType t) (\ft -> Right (Lists.concat2 cods (Lists.pure (Core.functionTypeCodomain ft)), cx3))))) (Right ([], cx3)) tcterms
           in (Eithers.bind fcodsResult (\fcodsR ->
             let fcods = Pairs.first fcodsR
-                cods = Maybes.cat (Lists.cons tdflt (Lists.map Maybes.pure fcods))
+                cods = Optionals.cat (Lists.cons tdflt (Lists.map Optionals.pure fcods))
             in (Eithers.bind (checkSameType cx3 tx "case branches" cods) (\cod -> Right (
               Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Resolution.nominalApplication tname typeArgs),
@@ -304,9 +304,9 @@ typeOfEither cx tx typeArgs et =
                     Checking.typeArityMismatchErrorExpectedArity = 2,
                     Checking.typeArityMismatchErrorActualArity = n,
                     Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
-      in (Maybes.maybe arityErr (\uc0 ->
+      in (Optionals.cases (Lists.uncons typeArgs) arityErr (\uc0 ->
         let ta0 = Pairs.first uc0
-        in (Maybes.maybe arityErr (\uc1 ->
+        in (Optionals.cases (Lists.uncons (Pairs.second uc0)) arityErr (\uc1 ->
           let ta1 = Pairs.first uc1
           in (Logic.ifElse (Equality.equal n 2) (Eithers.either (\leftTerm -> Eithers.bind (typeOf cx tx [] leftTerm) (\result ->
             let leftType = Pairs.first result
@@ -322,7 +322,7 @@ typeOfEither cx tx typeArgs et =
               Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = ta0,
                 Core.eitherTypeRight = rightType}),
-              cx2)))) et) arityErr)) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs))
+              cx2)))) et) arityErr)))))
 -- | Reconstruct the type of a union injection (Either/InferenceContext version)
 typeOfInjection :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core.Injection -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfInjection cx tx typeArgs injection =
@@ -344,7 +344,7 @@ typeOfLambda cx tx typeArgs l =
       let v = Core.lambdaParameter l
           mdom = Core.lambdaDomain l
           body = Core.lambdaBody l
-      in (Eithers.bind (Maybes.maybe (Left (Errors.ErrorChecking (Checking.CheckingErrorUntypedLambda (Checking.UntypedLambdaError {
+      in (Eithers.bind (Optionals.cases mdom (Left (Errors.ErrorChecking (Checking.CheckingErrorUntypedLambda (Checking.UntypedLambdaError {
       })))) (\dom ->
         let types2 = Maps.insert v (Scoping.fTypeToTypeScheme dom) (Graph.graphBoundTypes tx)
         in (Eithers.bind (typeOf cx (Graph.Graph {
@@ -362,7 +362,7 @@ typeOfLambda cx tx typeArgs l =
             Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = dom,
               Core.functionTypeCodomain = cod}),
-            cx2))))) mdom) (\tbodyResult ->
+            cx2)))))) (\tbodyResult ->
         let tbody = Pairs.first tbodyResult
             cx3 = Pairs.second tbodyResult
         in (Eithers.bind (applyTypeArgumentsToType cx3 tx typeArgs tbody) (\applied -> Right (applied, cx3)))))
@@ -374,8 +374,8 @@ typeOfLet cx tx typeArgs letTerm =
           body = Core.letBody letTerm
           bnames = Lists.map Core.bindingName bs
           bindingType =
-                  \b -> Maybes.maybe (Left (Errors.ErrorChecking (Checking.CheckingErrorUntypedLetBinding (Checking.UntypedLetBindingError {
-                    Checking.untypedLetBindingErrorBinding = b})))) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Core.bindingTypeScheme b)
+                  \b -> Optionals.cases (Core.bindingTypeScheme b) (Left (Errors.ErrorChecking (Checking.CheckingErrorUntypedLetBinding (Checking.UntypedLetBindingError {
+                    Checking.untypedLetBindingErrorBinding = b})))) (\ts -> Right (Scoping.typeSchemeToFType ts))
           btypesResult =
                   Lists.foldl (\acc -> \b -> Eithers.bind acc (\accR ->
                     let types = Pairs.first accR
@@ -406,7 +406,7 @@ typeOfList cx tx typeArgs els =
                 Checking.typeArityMismatchErrorExpectedArity = 1,
                 Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
                 Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
-      in (Logic.ifElse (Lists.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Maybes.maybe listArityErr (\ta0 -> Right (Core.TypeList ta0, cx)) (Lists.maybeHead typeArgs)) listArityErr) (
+      in (Logic.ifElse (Lists.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Optionals.cases (Lists.maybeHead typeArgs) listArityErr (\ta0 -> Right (Core.TypeList ta0, cx))) listArityErr) (
         let foldResult =
                 Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
                   let types = Pairs.first accR
@@ -437,15 +437,15 @@ typeOfMap cx tx typeArgs m =
                 Checking.typeArityMismatchErrorExpectedArity = 2,
                 Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
                 Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
-      in (Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Maybes.maybe mapArityErr (\uc0 ->
+      in (Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Optionals.cases (Lists.uncons typeArgs) mapArityErr (\uc0 ->
         let ta0 = Pairs.first uc0
-        in (Maybes.maybe mapArityErr (\uc1 ->
+        in (Optionals.cases (Lists.uncons (Pairs.second uc0)) mapArityErr (\uc1 ->
           let ta1 = Pairs.first uc1
           in (Right (
             Core.TypeMap (Core.MapType {
               Core.mapTypeKeys = ta0,
               Core.mapTypeValues = ta1}),
-            cx))) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs)) mapArityErr) (
+            cx)))))) mapArityErr) (
         let pairs = Maps.toList m
             keyFoldResult =
                     Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
@@ -482,18 +482,18 @@ typeOfMaybe cx tx typeArgs mt =
                 let n = Lists.length typeArgs
                     maybeArityErr =
                             Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
-                              Checking.typeArityMismatchErrorType = (Core.TypeMaybe Core.TypeUnit),
+                              Checking.typeArityMismatchErrorType = (Core.TypeOptional Core.TypeUnit),
                               Checking.typeArityMismatchErrorExpectedArity = 1,
                               Checking.typeArityMismatchErrorActualArity = n,
                               Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
-                in (Logic.ifElse (Equality.equal n 1) (Maybes.maybe maybeArityErr (\ta0 -> Right (Core.TypeMaybe ta0, cx)) (Lists.maybeHead typeArgs)) maybeArityErr)
+                in (Logic.ifElse (Equality.equal n 1) (Optionals.cases (Lists.maybeHead typeArgs) maybeArityErr (\ta0 -> Right (Core.TypeOptional ta0, cx))) maybeArityErr)
           forJust =
                   \term -> Eithers.bind (typeOf cx tx [] term) (\tResult ->
                     let termType = Pairs.first tResult
                         cx2 = Pairs.second tResult
-                        t = Core.TypeMaybe termType
+                        t = Core.TypeOptional termType
                     in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2))))
-      in (Maybes.maybe forNothing forJust mt)
+      in (Optionals.cases mt forNothing forJust)
 -- | Reconstruct the type of a pair (Either/InferenceContext version)
 typeOfPair :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> (Core.Term, Core.Term) -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfPair cx tx typeArgs p =
@@ -524,15 +524,15 @@ typeOfPrimitive :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core
 typeOfPrimitive cx tx typeArgs name =
 
       let rawTs =
-              Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
-      in (Maybes.maybe (Left (Errors.ErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
+              Optionals.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
+      in (Optionals.cases rawTs (Left (Errors.ErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
         ErrorCore.undefinedTermVariableErrorLocation = (Paths.SubtermPath []),
         ErrorCore.undefinedTermVariableErrorName = name}))) (\tsRaw ->
         let instResult = Resolution.instantiateTypeScheme cx tsRaw
             ts = Pairs.first instResult
             cx2 = Pairs.second instResult
             t = Scoping.typeSchemeToFType ts
-        in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))) rawTs)
+        in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))))
 -- | Reconstruct the type of a record projection (Either/InferenceContext version)
 typeOfProjection :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core.Projection -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfProjection cx tx typeArgs p =
@@ -579,7 +579,7 @@ typeOfSet cx tx typeArgs els =
                 Checking.typeArityMismatchErrorExpectedArity = 1,
                 Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
                 Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
-      in (Logic.ifElse (Sets.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Maybes.maybe setArityErr (\ta0 -> Right (Core.TypeSet ta0, cx)) (Lists.maybeHead typeArgs)) setArityErr) (
+      in (Logic.ifElse (Sets.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Optionals.cases (Lists.maybeHead typeArgs) setArityErr (\ta0 -> Right (Core.TypeSet ta0, cx))) setArityErr) (
         let foldResult =
                 Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
                   let types = Pairs.first accR
@@ -657,9 +657,9 @@ typeOfVariable cx tx typeArgs name =
                         t = Pairs.first tResult
                         cx2 = Pairs.second tResult
                     in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
-      in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
+      in (Optionals.cases rawTypeScheme (Optionals.cases (Optionals.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))) (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
         ErrorCore.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
-        ErrorCore.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
+        ErrorCore.untypedTermVariableErrorName = name}))) forScheme) forScheme)
 -- | Reconstruct the type of a wrapped term (Either/InferenceContext version)
 typeOfWrappedTerm :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core.WrappedTerm -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfWrappedTerm cx tx typeArgs wt =

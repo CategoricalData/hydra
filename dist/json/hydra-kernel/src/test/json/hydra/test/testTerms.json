@@ -140,7 +140,7 @@
               {
                 "name": "typeScheme",
                 "term": {
-                  "maybe": {
+                  "optional": {
                     "record": {
                       "fields": [
                         {"name": "variables", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
@@ -154,7 +154,7 @@
                           "name": "constraints",
                           "term": {
                             "typeApplication": {
-                              "body": {"maybe": null},
+                              "body": {"optional": null},
                               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                       "typeName": "hydra.core.TypeScheme"}}}}],
             "typeName": "hydra.core.Binding"}},
@@ -182,7 +182,7 @@
               {
                 "name": "typeScheme",
                 "term": {
-                  "maybe": {
+                  "optional": {
                     "record": {
                       "fields": [
                         {"name": "variables", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
@@ -215,7 +215,7 @@
                           "name": "constraints",
                           "term": {
                             "typeApplication": {
-                              "body": {"maybe": null},
+                              "body": {"optional": null},
                               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}],
                       "typeName": "hydra.core.TypeScheme"}}}}],
             "typeName": "hydra.core.Binding"}},

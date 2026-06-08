@@ -406,14 +406,14 @@ accessorBody = def "AccessorBody" $ T.union [
 
 accessorDeclaration :: TypeDefinition
 accessorDeclaration = def "AccessorDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
-  "modifier">: T.maybe $ csharp "AccessorModifier",
+  "attributes">: T.optional $ csharp "Attributes",
+  "modifier">: T.optional $ csharp "AccessorModifier",
   "body">: csharp "AccessorBody"]
 
 accessorDeclarations :: TypeDefinition
 accessorDeclarations = def "AccessorDeclarations" $ T.union [
-  "get">: T.maybe $ csharp "AccessorDeclaration",
-  "set">: T.maybe $ csharp "AccessorDeclaration"]
+  "get">: T.optional $ csharp "AccessorDeclaration",
+  "set">: T.optional $ csharp "AccessorDeclaration"]
 
 accessorModifier :: TypeDefinition
 accessorModifier = def "AccessorModifier" $ T.enum [
@@ -427,7 +427,7 @@ accessorModifier = def "AccessorModifier" $ T.enum [
 
 accessorsEventDeclaration :: TypeDefinition
 accessorsEventDeclaration = def "AccessorsEventDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "EventModifier",
   "type">: csharp "Type",
   "name">: csharp "MemberName",
@@ -435,7 +435,7 @@ accessorsEventDeclaration = def "AccessorsEventDeclaration" $ T.record [
 
 addRemoveAccessorDeclaration :: TypeDefinition
 addRemoveAccessorDeclaration = def "AddRemoveAccessorDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "body">: csharp "Block"]
 
 additiveExpression :: TypeDefinition
@@ -479,7 +479,7 @@ anonymousMethodExpression = def "AnonymousMethodExpression" $ T.record [
 
 argument :: TypeDefinition
 argument = def "Argument" $ T.record [
-  "name">: T.maybe $ csharp "Identifier",
+  "name">: T.optional $ csharp "Identifier",
   "value">: csharp "ArgumentValue"]
 
 argumentList :: TypeDefinition
@@ -545,7 +545,7 @@ assignmentOperator = def "AssignmentOperator" $ T.union [
 attribute :: TypeDefinition
 attribute = def "Attribute" $ T.record [
   "name">: csharp "AttributeName",
-  "arguments">: T.maybe $ csharp "AttributeArguments"]
+  "arguments">: T.optional $ csharp "AttributeArguments"]
 
 attributeArgumentExpression :: TypeDefinition
 attributeArgumentExpression = def "AttributeArgumentExpression" $ T.wrap $
@@ -554,8 +554,8 @@ attributeArgumentExpression = def "AttributeArgumentExpression" $ T.wrap $
 
 attributeArguments :: TypeDefinition
 attributeArguments = def "AttributeArguments" $ T.record [
-  "positonal">: T.maybe $ csharp "PositionalArgumentList",
-  "named">: T.maybe $ csharp "NamedArgumentList"]
+  "positonal">: T.optional $ csharp "PositionalArgumentList",
+  "named">: T.optional $ csharp "NamedArgumentList"]
 
 attributeList :: TypeDefinition
 attributeList = def "AttributeList" $ T.wrap $ nonemptyList $ csharp "Attribute"
@@ -566,7 +566,7 @@ attributeName = def "AttributeName" $ T.wrap $
 
 attributeSection :: TypeDefinition
 attributeSection = def "AttributeSection" $ T.record [
-  "target">: T.maybe $ csharp "AttributeTarget",
+  "target">: T.optional $ csharp "AttributeTarget",
   "attributes">: csharp "AttributeList"]
 
 attributeTarget :: TypeDefinition
@@ -585,7 +585,7 @@ baseAccess = def "BaseAccess" $ T.union [
 baseAccessWithIdentifier :: TypeDefinition
 baseAccessWithIdentifier = def "BaseAccessWithIdentifier" $ T.record [
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 binaryAdditiveExpression :: TypeDefinition
 binaryAdditiveExpression = def "BinaryAdditiveExpression" $ T.record [
@@ -661,7 +661,7 @@ block = def "Block" $ T.wrap $
 blockPropertyBody :: TypeDefinition
 blockPropertyBody = def "BlockPropertyBody" $ T.record [
   "accessors">: csharp "AccessorDeclarations",
-  "initializer">: T.maybe $ csharp "VariableInitializer"]
+  "initializer">: T.optional $ csharp "VariableInitializer"]
 
 booleanExpression :: TypeDefinition
 booleanExpression = def "BooleanExpression" $ T.wrap $
@@ -679,7 +679,7 @@ catchClauses = def "CatchClauses" $ T.union [
 
 classBase :: TypeDefinition
 classBase = def "ClassBase" $ T.union [
-  "class">: T.maybe $ csharp "ClassType",
+  "class">: T.optional $ csharp "ClassType",
   "interfaces">: T.list $ csharp "InterfaceType"]
 
 classBody :: TypeDefinition
@@ -692,8 +692,8 @@ classDeclaration = def "ClassDeclaration" $ T.record [
   "modifiers">: T.list $ csharp "ClassModifier",
   "partial">: T.boolean,
   "name">: csharp "Identifier",
-  "parameters">: T.maybe $ csharp "TypeParameterList",
-  "base">: T.maybe $ csharp "ClassBase",
+  "parameters">: T.optional $ csharp "TypeParameterList",
+  "base">: T.optional $ csharp "ClassBase",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause",
   "body">: csharp "ClassBody"]
 
@@ -754,7 +754,7 @@ conditionalOrExpression = def "ConditionalOrExpression" $ T.union [
 
 constantDeclaration :: TypeDefinition
 constantDeclaration = def "ConstantDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "ConstantModifier",
   "type">: csharp "Type",
   "declarators">: nonemptyList $ csharp "ConstantDeclarator"]
@@ -784,7 +784,7 @@ constructorBody = def "ConstructorBody" $ T.union [
 
 constructorDeclaration :: TypeDefinition
 constructorDeclaration = def "ConstructorDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "ConstructorModifier",
   "declarator">: csharp "ConstructorDeclarator",
   "body">: csharp "ConstructorBody"]
@@ -792,13 +792,13 @@ constructorDeclaration = def "ConstructorDeclaration" $ T.record [
 constructorDeclarator :: TypeDefinition
 constructorDeclarator = def "ConstructorDeclarator" $ T.record [
   "name">: csharp "Identifier",
-  "parameters">: T.maybe $ csharp "FormalParameterList",
-  "initializer">: T.maybe $ csharp "ConstructorInitializer"]
+  "parameters">: T.optional $ csharp "FormalParameterList",
+  "initializer">: T.optional $ csharp "ConstructorInitializer"]
 
 constructorInitializer :: TypeDefinition
 constructorInitializer = def "ConstructorInitializer" $ T.union [
-  "base">: T.maybe $ csharp "ArgumentList",
-  "this">: T.maybe $ csharp "ArgumentList"]
+  "base">: T.optional $ csharp "ArgumentList",
+  "this">: T.optional $ csharp "ArgumentList"]
 
 constructorModifier :: TypeDefinition
 constructorModifier = def "ConstructorModifier" $ T.enum [
@@ -857,18 +857,18 @@ delegateCreationExpression = def "DelegateCreationExpression" $ T.record [
 
 delegateDeclaration :: TypeDefinition
 delegateDeclaration = def "DelegateDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "DelegateModifier",
   "returnType">: csharp "ReturnType",
-  "refKind">: T.maybe $ csharp "RefKind",
-  "refReturnType">: T.maybe $ csharp "Type",
+  "refKind">: T.optional $ csharp "RefKind",
+  "refReturnType">: T.optional $ csharp "Type",
   "header">: csharp "DelegateHeader"]
 
 delegateHeader :: TypeDefinition
 delegateHeader = def "DelegateHeader" $ T.record [
   "name">: csharp "Identifier",
-  "typeParameters">: T.maybe $ csharp "VariantTypeParameters",
-  "parameters">: T.maybe $ csharp "FormalParameterList",
+  "typeParameters">: T.optional $ csharp "VariantTypeParameters",
+  "parameters">: T.optional $ csharp "FormalParameterList",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause"]
 
 delegateModifier :: TypeDefinition
@@ -888,12 +888,12 @@ dependentAccess :: TypeDefinition
 dependentAccess = def "DependentAccess" $ T.union [
   "memberAccess">: csharp "DependentAccessForMember",
   "elementAccess">: csharp "ArgumentList",
-  "invocation">: T.maybe $ csharp "ArgumentList"]
+  "invocation">: T.optional $ csharp "ArgumentList"]
 
 dependentAccessForMember :: TypeDefinition
 dependentAccessForMember = def "DependentAccessForMember" $ T.record [
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 designation :: TypeDefinition
 designation = def "Designation" $ T.wrap $
@@ -942,17 +942,17 @@ enumBody = def "EnumBody" $ T.wrap $
 
 enumDeclaration :: TypeDefinition
 enumDeclaration = def "EnumDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "EnumModifier",
   "name">: csharp "Identifier",
-  "base">: T.maybe $ csharp "EnumBase",
-  "body">: T.maybe $ csharp "EnumBody"]
+  "base">: T.optional $ csharp "EnumBase",
+  "body">: T.optional $ csharp "EnumBody"]
 
 enumMemberDeclaration :: TypeDefinition
 enumMemberDeclaration = def "EnumMemberDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "name">: csharp "Identifier",
-  "value">: T.maybe $ csharp "ConstantExpression"]
+  "value">: T.optional $ csharp "ConstantExpression"]
 
 enumModifier :: TypeDefinition
 enumModifier = def "EnumModifier" $ T.enum [
@@ -1004,7 +1004,7 @@ eventModifier = def "EventModifier" $ T.enum [
 exceptionSpecifier :: TypeDefinition
 exceptionSpecifier = def "ExceptionSpecifier" $ T.record [
   "type">: csharp "Type",
-  "identifier">: T.maybe $ csharp "Identifier"]
+  "identifier">: T.optional $ csharp "Identifier"]
 
 exclusiveOrExpression :: TypeDefinition
 exclusiveOrExpression = def "ExclusiveOrExpression" $ T.union [
@@ -1013,7 +1013,7 @@ exclusiveOrExpression = def "ExclusiveOrExpression" $ T.union [
 
 explicitAnonymousFunctionParameter :: TypeDefinition
 explicitAnonymousFunctionParameter = def "ExplicitAnonymousFunctionParameter" $ T.record [
-  "modifier">: T.maybe $ csharp "AnonymousFunctionParameterModifier",
+  "modifier">: T.optional $ csharp "AnonymousFunctionParameterModifier",
   "type">: csharp "Type",
   "identifier">: csharp "Identifier"]
 
@@ -1025,7 +1025,7 @@ explicitlyTypedLocalVariableDeclaration = def "ExplicitlyTypedLocalVariableDecla
 explicitlyTypedLocalVariableDeclarator :: TypeDefinition
 explicitlyTypedLocalVariableDeclarator = def "ExplicitlyTypedLocalVariableDeclarator" $ T.record [
   "identifier">: csharp "Identifier",
-  "initializer">: T.maybe $ csharp "LocalVariableInitializer"]
+  "initializer">: T.optional $ csharp "LocalVariableInitializer"]
 
 expression :: TypeDefinition
 expression = def "Expression" $ T.union [
@@ -1041,7 +1041,7 @@ externAliasDirective = def "ExternAliasDirective" $ T.wrap $
 
 fieldDeclaration :: TypeDefinition
 fieldDeclaration = def "FieldDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "FieldModifier",
   "type">: csharp "Type",
   "declarators">: nonemptyList $ csharp "VariableDeclarator"]
@@ -1066,7 +1066,7 @@ finalizerBody = def "FinalizerBody" $ T.union [
 
 finalizerDeclaration :: TypeDefinition
 finalizerDeclaration = def "FinalizerDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "extern">: T.boolean,
   "unsafe">: T.boolean,
   "name">: csharp "Identifier",
@@ -1074,11 +1074,11 @@ finalizerDeclaration = def "FinalizerDeclaration" $ T.record [
 
 fixedParameter :: TypeDefinition
 fixedParameter = def "FixedParameter" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
-  "modifier">: T.maybe $ csharp "ParameterModifier",
+  "attributes">: T.optional $ csharp "Attributes",
+  "modifier">: T.optional $ csharp "ParameterModifier",
   "type">: csharp "Type",
   "identifier">: csharp "Identifier",
-  "defaultArgument">: T.maybe $ csharp "Expression"]
+  "defaultArgument">: T.optional $ csharp "Expression"]
 
 floatingPointType :: TypeDefinition
 floatingPointType = def "FloatingPointType" $ T.union [
@@ -1092,14 +1092,14 @@ forInitializer = def "ForInitializer" $ T.union [
 
 forStatement :: TypeDefinition
 forStatement = def "ForStatement" $ T.record [
-  "initializer">: T.maybe $ csharp "ForInitializer",
-  "condition">: T.maybe $ csharp "BooleanExpression",
-  "iterator">: T.maybe $ csharp "StatementExpressionList",
+  "initializer">: T.optional $ csharp "ForInitializer",
+  "condition">: T.optional $ csharp "BooleanExpression",
+  "iterator">: T.optional $ csharp "StatementExpressionList",
   "body">: csharp "EmbeddedStatement"]
 
 foreachStatement :: TypeDefinition
 foreachStatement = def "ForeachStatement" $ T.record [
-  "kind">: T.maybe $ csharp "RefKind",
+  "kind">: T.optional $ csharp "RefKind",
   "type">: csharp "LocalVariableType",
   "identifier">: csharp "Identifier",
   "expression">: csharp "Expression",
@@ -1108,11 +1108,11 @@ foreachStatement = def "ForeachStatement" $ T.record [
 formalParameterList :: TypeDefinition
 formalParameterList = def "FormalParameterList" $ T.record [
   "fixed">: T.list $ csharp "FixedParameter",
-  "array">: T.maybe $ csharp "ParameterArray"]
+  "array">: T.optional $ csharp "ParameterArray"]
 
 fromClause :: TypeDefinition
 fromClause = def "FromClause" $ T.record [
-  "type">: T.maybe $ csharp "Type",
+  "type">: T.optional $ csharp "Type",
   "identifier">: csharp "Identifier",
   "in">: csharp "Expression"]
 
@@ -1135,7 +1135,7 @@ groupClause = def "GroupClause" $ T.record [
 identifierNamespaceOrTypeName :: TypeDefinition
 identifierNamespaceOrTypeName = def "IdentifierNamespaceOrTypeName" $ T.record [
   "identifier">: csharp "Identifier",
-  "arguments">: T.maybe $ csharp "TypeArgumentList"]
+  "arguments">: T.optional $ csharp "TypeArgumentList"]
 
 ifStatement :: TypeDefinition
 ifStatement = def "IfStatement" $ T.record [
@@ -1171,7 +1171,7 @@ indexerDeclaration = def "IndexerDeclaration" $ T.union [
 indexerDeclarator :: TypeDefinition
 indexerDeclarator = def "IndexerDeclarator" $ T.record [
   "type">: csharp "Type",
-  "interface">: T.maybe $ csharp "InterfaceType",
+  "interface">: T.optional $ csharp "InterfaceType",
   "parameters">: csharp "FormalParameterList"]
 
 indexerModifier :: TypeDefinition
@@ -1212,33 +1212,33 @@ integralType = def "IntegralType" $ T.union [
 
 interfaceAccessors :: TypeDefinition
 interfaceAccessors = def "InterfaceAccessors" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
-  "get">: T.maybe $ csharp "Attributes",
-  "set">: T.maybe $ csharp "Attributes"]
+  "attributes">: T.optional $ csharp "Attributes",
+  "get">: T.optional $ csharp "Attributes",
+  "set">: T.optional $ csharp "Attributes"]
 
 interfaceDeclaration :: TypeDefinition
 interfaceDeclaration = def "InterfaceDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "InterfaceModifier",
   "partial">: T.boolean,
   "name">: csharp "Identifier",
-  "parameters">: T.maybe $ csharp "VariantTypeParameters",
+  "parameters">: T.optional $ csharp "VariantTypeParameters",
   "base">: T.list $ csharp "InterfaceType",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause",
   "body">: T.list $ csharp "InterfaceMemberDeclaration"]
 
 interfaceEventDeclaration :: TypeDefinition
 interfaceEventDeclaration = def "InterfaceEventDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "new">: T.boolean,
   "type">: csharp "Type",
   "name">: csharp "Identifier"]
 
 interfaceIndexerDeclaration :: TypeDefinition
 interfaceIndexerDeclaration = def "InterfaceIndexerDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "new">: T.boolean,
-  "refKind">: T.maybe $ csharp "RefKind",
+  "refKind">: T.optional $ csharp "RefKind",
   "type">: csharp "Type",
   "parameters">: csharp "FormalParameterList",
   "accessors">: csharp "InterfaceAccessors"]
@@ -1252,17 +1252,17 @@ interfaceMemberDeclaration = def "InterfaceMemberDeclaration" $ T.union [
 
 interfaceMethodDeclaration :: TypeDefinition
 interfaceMethodDeclaration = def "InterfaceMethodDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "new">: T.boolean,
   "returnType">: csharp "ReturnType",
-  "refKind">: T.maybe $ csharp "RefKind",
+  "refKind">: T.optional $ csharp "RefKind",
   "header">: csharp "InterfaceMethodHeader"]
 
 interfaceMethodHeader :: TypeDefinition
 interfaceMethodHeader = def "InterfaceMethodHeader" $ T.record [
   "name">: csharp "Identifier",
-  "parameters">: T.maybe $ csharp "FormalParameterList",
-  "typeParameters">: T.maybe $ csharp "TypeParameterList",
+  "parameters">: T.optional $ csharp "FormalParameterList",
+  "typeParameters">: T.optional $ csharp "TypeParameterList",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause"]
 
 interfaceModifier :: TypeDefinition
@@ -1276,9 +1276,9 @@ interfaceModifier = def "InterfaceModifier" $ T.enum [
 
 interfacePropertyDeclaration :: TypeDefinition
 interfacePropertyDeclaration = def "InterfacePropertyDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "new">: T.boolean,
-  "refKind">: T.maybe $ csharp "RefKind",
+  "refKind">: T.optional $ csharp "RefKind",
   "type">: csharp "Type",
   "name">: csharp "Identifier",
   "accessors">: csharp "InterfaceAccessors"]
@@ -1301,7 +1301,7 @@ interpolatedVerbatimStringExpression = def "InterpolatedVerbatimStringExpression
 invocationExpression :: TypeDefinition
 invocationExpression = def "InvocationExpression" $ T.record [
   "expression">: csharp "PrimaryExpression",
-  "arguments">: T.maybe $ csharp "ArgumentList"]
+  "arguments">: T.optional $ csharp "ArgumentList"]
 
 isPatternExpression :: TypeDefinition
 isPatternExpression = def "IsPatternExpression" $ T.record [
@@ -1322,12 +1322,12 @@ iterationStatement = def "IterationStatement" $ T.union [
 
 joinClause :: TypeDefinition
 joinClause = def "JoinClause" $ T.record [
-  "type">: T.maybe $ csharp "Type",
+  "type">: T.optional $ csharp "Type",
   "identifier">: csharp "Identifier",
   "in">: csharp "Expression",
   "on">: csharp "Expression",
   "equals">: csharp "Expression",
-  "into">: T.maybe $ csharp "Identifier"]
+  "into">: T.optional $ csharp "Identifier"]
 
 jumpStatement :: TypeDefinition
 jumpStatement = def "JumpStatement" $ T.union [
@@ -1335,7 +1335,7 @@ jumpStatement = def "JumpStatement" $ T.union [
   "continue">: T.unit,
   "goto">: csharp "GotoStatement",
   "return">: csharp "ReturnStatement",
-  "throw">: T.maybe $ csharp "Expression"]
+  "throw">: T.optional $ csharp "Expression"]
 
 labeledStatement :: TypeDefinition
 labeledStatement = def "LabeledStatement" $ T.record [
@@ -1372,7 +1372,7 @@ localFunctionDeclaration = def "LocalFunctionDeclaration" $ T.union [
 localFunctionHeader :: TypeDefinition
 localFunctionHeader = def "LocalFunctionHeader" $ T.record [
   "identifier">: csharp "Identifier",
-  "typeParameters">: T.maybe $ csharp "TypeParameterList",
+  "typeParameters">: T.optional $ csharp "TypeParameterList",
   "parameters">: csharp "FormalParameterList",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause"]
 
@@ -1406,7 +1406,7 @@ memberAccess :: TypeDefinition
 memberAccess = def "MemberAccess" $ T.record [
   "head">: csharp "MemberAccessHead",
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 memberAccessHead :: TypeDefinition
 memberAccessHead = def "MemberAccessHead" $ T.union [
@@ -1432,7 +1432,7 @@ memberInitializer = def "MemberInitializer" $ T.record [
 
 memberName :: TypeDefinition
 memberName = def "MemberName" $ T.record [
-  "interfaceType">: T.maybe $ csharp "TypeName",
+  "interfaceType">: T.optional $ csharp "TypeName",
   "identifier">: csharp "Identifier"]
 
 methodBody :: TypeDefinition
@@ -1450,8 +1450,8 @@ methodDeclaration = def "MethodDeclaration" $ T.union [
 methodHeader :: TypeDefinition
 methodHeader = def "MethodHeader" $ T.record [
   "name">: csharp "MemberName",
-  "typeParameters">: T.maybe $ csharp "TypeParameterList",
-  "parameters">: T.maybe $ csharp "FormalParameterList",
+  "typeParameters">: T.optional $ csharp "TypeParameterList",
+  "parameters">: T.optional $ csharp "FormalParameterList",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause"]
 
 methodModifier :: TypeDefinition
@@ -1491,7 +1491,7 @@ namedEntity = def "NamedEntity" $ T.record [
 namedEntityPart :: TypeDefinition
 namedEntityPart = def "NamedEntityPart" $ T.record [
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 namedEntityTarget :: TypeDefinition
 namedEntityTarget = def "NamedEntityTarget" $ T.union [
@@ -1542,7 +1542,7 @@ nonArrayTypeArrayCreationExpression = def "NonArrayTypeArrayCreationExpression" 
   "type">: csharp "NonArrayType",
   "expressions">: csharp "ExpressionList",
   "rankSpecifiers">: T.list $ csharp "RankSpecifier",
-  "initializer">: T.maybe $ csharp "ArrayInitializer"]
+  "initializer">: T.optional $ csharp "ArrayInitializer"]
 
 nonAssignmentExpression :: TypeDefinition
 nonAssignmentExpression = def "NonAssignmentExpression" $ T.union [
@@ -1566,7 +1566,7 @@ nullConditionalElementAccess = def "NullConditionalElementAccess" $ T.record [
 nullConditionalInvocationExpression :: TypeDefinition
 nullConditionalInvocationExpression = def "NullConditionalInvocationExpression" $ T.record [
   "head">: csharp "NullConditionalInvocationExpressionHead",
-  "arguments">: T.maybe $ csharp "ArgumentList"]
+  "arguments">: T.optional $ csharp "ArgumentList"]
 
 nullConditionalInvocationExpressionHead :: TypeDefinition
 nullConditionalInvocationExpressionHead = def "NullConditionalInvocationExpressionHead" $ T.union [
@@ -1577,14 +1577,14 @@ nullConditionalMemberAccess :: TypeDefinition
 nullConditionalMemberAccess = def "NullConditionalMemberAccess" $ T.record [
   "expression">: csharp "PrimaryExpression",
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList",
+  "typeArguments">: T.optional $ csharp "TypeArgumentList",
   "dependentAccess">: T.list $ csharp "DependentAccess"]
 
 nullConditionalProjectionInitializer :: TypeDefinition
 nullConditionalProjectionInitializer = def "NullConditionalProjectionInitializer" $ T.record [
   "expression">: csharp "PrimaryExpression",
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 numericType :: TypeDefinition
 numericType = def "NumericType" $ T.union [
@@ -1595,8 +1595,8 @@ numericType = def "NumericType" $ T.union [
 objectCreationExpression :: TypeDefinition
 objectCreationExpression = def "ObjectCreationExpression" $ T.record [
   "type">: csharp "Type",
-  "arguments">: T.maybe $ csharp "ArgumentList",
-  "initializer">: T.maybe $ csharp "ObjectOrCollectionInitializer"]
+  "arguments">: T.optional $ csharp "ArgumentList",
+  "initializer">: T.optional $ csharp "ObjectOrCollectionInitializer"]
 
 objectOrCollectionInitializer :: TypeDefinition
 objectOrCollectionInitializer = def "ObjectOrCollectionInitializer" $ T.union [
@@ -1611,7 +1611,7 @@ operatorBody = def "OperatorBody" $ T.union [
 
 operatorDeclaration :: TypeDefinition
 operatorDeclaration = def "OperatorDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "OperatorModifier",
   "declarator">: csharp "OperatorDeclarator",
   "body">: csharp "OperatorBody"]
@@ -1632,7 +1632,7 @@ operatorModifier = def "OperatorModifier" $ T.enum [
 ordering :: TypeDefinition
 ordering = def "Ordering" $ T.record [
   "expression">: csharp "Expression",
-  "direction">: T.maybe $ csharp "OrderingDirection"]
+  "direction">: T.optional $ csharp "OrderingDirection"]
 
 orderingDirection :: TypeDefinition
 orderingDirection = def "OrderingDirection" $ T.enum [
@@ -1671,7 +1671,7 @@ overloadableUnaryOperator = def "OverloadableUnaryOperator" $ T.enum [
 
 parameterArray :: TypeDefinition
 parameterArray = def "ParameterArray" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "type">: csharp "ArrayType",
   "identifier">: csharp "Identifier"]
 
@@ -1694,7 +1694,7 @@ pattern_ = def "Pattern" $ T.union [
 
 positionalArgument :: TypeDefinition
 positionalArgument = def "PositionalArgument" $ T.record [
-  "name">: T.maybe $ csharp "Identifier",
+  "name">: T.optional $ csharp "Identifier",
   "value">: csharp "AttributeArgumentExpression"]
 
 positionalArgumentList :: TypeDefinition
@@ -1735,7 +1735,7 @@ primaryNoArrayCreationExpression = def "PrimaryNoArrayCreationExpression" $ T.un
   "postDecrement">: csharp "PrimaryExpression",
   "objectCreation">: csharp "ObjectCreationExpression",
   "delegateCreation">: csharp "DelegateCreationExpression",
-  "anonymousObjectCreation">: T.maybe $ csharp "MemberDeclaratorList",
+  "anonymousObjectCreation">: T.optional $ csharp "MemberDeclaratorList",
   "typeof">: csharp "TypeofExpression",
   "sizeof">: csharp "UnmanagedType",
   "checked">: csharp "Expression",
@@ -1776,7 +1776,7 @@ qualifiedAliasMember :: TypeDefinition
 qualifiedAliasMember = def "QualifiedAliasMember" $ T.record [
   "alias">: csharp "Identifier",
   "member">: csharp "Identifier",
-  "arguments">: T.maybe $ csharp "TypeArgumentList"]
+  "arguments">: T.optional $ csharp "TypeArgumentList"]
 
 qualifiedIdentifier :: TypeDefinition
 qualifiedIdentifier = def "QualifiedIdentifier" $ T.wrap $
@@ -1786,13 +1786,13 @@ qualifiedNamespaceOrTypeName :: TypeDefinition
 qualifiedNamespaceOrTypeName = def "QualifiedNamespaceOrTypeName" $ T.record [
   "namespaceOrType">: csharp "NamespaceOrTypeName",
   "identifier">: csharp "Identifier",
-  "arguments">: T.maybe $ csharp "TypeArgumentList"]
+  "arguments">: T.optional $ csharp "TypeArgumentList"]
 
 queryBody :: TypeDefinition
 queryBody = def "QueryBody" $ T.record [
   "clauses">: T.list $ csharp "QueryBodyClause",
   "selectOrGroup">: csharp "SelectOrGroupClause",
-  "continuation">: T.maybe $ csharp "QueryContinuation"]
+  "continuation">: T.optional $ csharp "QueryContinuation"]
 
 queryBodyClause :: TypeDefinition
 queryBodyClause = def "QueryBodyClause" $ T.union [
@@ -1834,8 +1834,8 @@ refConditionalExpression = def "RefConditionalExpression" $ T.record [
 
 refGetAccessorDeclaration :: TypeDefinition
 refGetAccessorDeclaration = def "RefGetAccessorDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
-  "modifier">: T.maybe $ csharp "AccessorModifier",
+  "attributes">: T.optional $ csharp "Attributes",
+  "modifier">: T.optional $ csharp "AccessorModifier",
   "body">: csharp "RefAccessorBody"]
 
 refIndexerBody :: TypeDefinition
@@ -1845,7 +1845,7 @@ refIndexerBody = def "RefIndexerBody" $ T.union [
 
 refIndexerDeclaration :: TypeDefinition
 refIndexerDeclaration = def "RefIndexerDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "IndexerModifier",
   "refKind">: csharp "RefKind",
   "declarator">: csharp "IndexerDeclarator",
@@ -1913,7 +1913,7 @@ refPropertyBody = def "RefPropertyBody" $ T.union [
 
 refReturnMethodDeclaration :: TypeDefinition
 refReturnMethodDeclaration = def "RefReturnMethodDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "RefMethodModifier",
   "kind">: csharp "RefKind",
   "returnType">: csharp "ReturnType",
@@ -1922,7 +1922,7 @@ refReturnMethodDeclaration = def "RefReturnMethodDeclaration" $ T.record [
 
 refReturnPropertyDeclaration :: TypeDefinition
 refReturnPropertyDeclaration = def "RefReturnPropertyDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "PropertyModifier",
   "refKind">: csharp "RefKind",
   "type">: csharp "Type",
@@ -1945,8 +1945,8 @@ referenceType = def "ReferenceType" $ T.union [
 regularInterpolation :: TypeDefinition
 regularInterpolation = def "RegularInterpolation" $ T.record [
   "expression">: csharp "Expression",
-  "width">: T.maybe $ csharp "Expression",
-  "format">: T.maybe T.string]
+  "width">: T.optional $ csharp "Expression",
+  "format">: T.optional T.string]
 
 relationalExpression :: TypeDefinition
 relationalExpression = def "RelationalExpression" $ T.union [
@@ -2013,7 +2013,7 @@ simpleConditionalExpression = def "SimpleConditionalExpression" $ T.record [
 simpleName :: TypeDefinition
 simpleName = def "SimpleName" $ T.record [
   "identifier">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 simpleType :: TypeDefinition
 simpleType = def "SimpleType" $ T.union [
@@ -2022,26 +2022,26 @@ simpleType = def "SimpleType" $ T.union [
 
 specificCatchClause :: TypeDefinition
 specificCatchClause = def "SpecificCatchClause" $ T.record [
-  "specifier">: T.maybe $ csharp "ExceptionSpecifier",
-  "filter">: T.maybe $ csharp "BooleanExpression",
+  "specifier">: T.optional $ csharp "ExceptionSpecifier",
+  "filter">: T.optional $ csharp "BooleanExpression",
   "body">: csharp "Block"]
 
 stackallocExpression :: TypeDefinition
 stackallocExpression = def "StackallocExpression" $ T.record [
-  "type">: T.maybe $ csharp "UnmanagedType",
-  "expression">: T.maybe $ csharp "ConstantExpression",
+  "type">: T.optional $ csharp "UnmanagedType",
+  "expression">: T.optional $ csharp "ConstantExpression",
   "initializer">: T.list $ csharp "Expression"]
 
 standardEventDeclaration :: TypeDefinition
 standardEventDeclaration = def "StandardEventDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "EventModifier",
   "type">: csharp "Type",
   "declarators">: csharp "VariableDeclarators"]
 
 standardIndexerDeclaration :: TypeDefinition
 standardIndexerDeclaration = def "StandardIndexerDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "IndexerModifier",
   "declarator">: csharp "IndexerDeclarator",
   "body">: csharp "IndexerBody"]
@@ -2055,7 +2055,7 @@ standardLocalFunctionDeclaration = def "StandardLocalFunctionDeclaration" $ T.re
 
 standardMethodDeclaration :: TypeDefinition
 standardMethodDeclaration = def "StandardMethodDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "MethodModifier",
   "returnType">: csharp "ReturnType",
   "header">: csharp "MethodHeader",
@@ -2063,7 +2063,7 @@ standardMethodDeclaration = def "StandardMethodDeclaration" $ T.record [
 
 standardPropertyDeclaration :: TypeDefinition
 standardPropertyDeclaration = def "StandardPropertyDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "PropertyModifier",
   "type">: csharp "Type",
   "name">: csharp "MemberName",
@@ -2098,7 +2098,7 @@ staticConstructorBody = def "StaticConstructorBody" $ T.union [
 
 staticConstructorDeclaration :: TypeDefinition
 staticConstructorDeclaration = def "StaticConstructorDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: csharp "StaticConstructorModifiers",
   "name">: csharp "Identifier",
   "body">: csharp "StaticConstructorBody"]
@@ -2110,12 +2110,12 @@ staticConstructorModifiers = def "StaticConstructorModifiers" $ T.record [
 
 structDeclaration :: TypeDefinition
 structDeclaration = def "StructDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: T.list $ csharp "StructModifier",
   "ref">: T.boolean,
   "partial">: T.boolean,
   "name">: csharp "Identifier",
-  "parameters">: T.maybe $ csharp "TypeParameterList",
+  "parameters">: T.optional $ csharp "TypeParameterList",
   "interfaces">: T.list $ csharp "InterfaceType",
   "constraints">: T.list $ csharp "TypeParameterConstraintsClause",
   "body">: T.list $ csharp "StructMemberDeclaration"]
@@ -2158,7 +2158,7 @@ structType = def "StructType" $ T.union [
 switchBranch :: TypeDefinition
 switchBranch = def "SwitchBranch" $ T.record [
   "pattern">: csharp "Pattern",
-  "guard">: T.maybe $ csharp "Expression"]
+  "guard">: T.optional $ csharp "Expression"]
 
 switchLabel :: TypeDefinition
 switchLabel = def "SwitchLabel" $ T.union [
@@ -2179,11 +2179,11 @@ tryStatement :: TypeDefinition
 tryStatement = def "TryStatement" $ T.record [
   "body">: csharp "Block",
   "catches">: csharp "CatchClauses",
-  "finally">: T.maybe $ csharp "Block"]
+  "finally">: T.optional $ csharp "Block"]
 
 tupleElement :: TypeDefinition
 tupleElement = def "TupleElement" $ T.record [
-  "name">: T.maybe $ csharp "Identifier",
+  "name">: T.optional $ csharp "Identifier",
   "expression">: csharp "Expression"]
 
 tupleExpression :: TypeDefinition
@@ -2198,7 +2198,7 @@ tupleType = def "TupleType" $ T.wrap $
 tupleTypeElement :: TypeDefinition
 tupleTypeElement = def "TupleTypeElement" $ T.record [
   "type">: csharp "Type",
-  "identifier">: T.maybe $ csharp "Identifier"]
+  "identifier">: T.optional $ csharp "Identifier"]
 
 typeArgumentList :: TypeDefinition
 typeArgumentList = def "TypeArgumentList" $ T.wrap $ T.list $ csharp "Type"
@@ -2221,8 +2221,8 @@ typeParameter = def "TypeParameter" $ T.wrap $
 
 typeParameterConstraints :: TypeDefinition
 typeParameterConstraints = def "TypeParameterConstraints" $ T.record [
-  "primary">: T.maybe $ csharp "PrimaryConstraint",
-  "secondary">: T.maybe $ csharp "SecondaryConstraints",
+  "primary">: T.optional $ csharp "PrimaryConstraint",
+  "secondary">: T.optional $ csharp "SecondaryConstraints",
   "constructor">: T.boolean]
 
 typeParameterConstraintsClause :: TypeDefinition
@@ -2235,7 +2235,7 @@ typeParameterList = def "TypeParameterList" $ T.wrap $ nonemptyList $ csharp "Ty
 
 typeParameterPart :: TypeDefinition
 typeParameterPart = def "TypeParameterPart" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "name">: csharp "TypeParameter"]
 
 type_ :: TypeDefinition
@@ -2279,7 +2279,7 @@ unboundTypeNamePart :: TypeDefinition
 unboundTypeNamePart = def "UnboundTypeNamePart" $ T.record [
   "identifier">: csharp "Identifier",
   "aliased">: T.boolean,
-  "dimension">: T.maybe T.int32]
+  "dimension">: T.optional T.int32]
 
 unmanagedType :: TypeDefinition
 unmanagedType = def "UnmanagedType" $ T.union [
@@ -2310,7 +2310,7 @@ valueType = def "ValueType" $ T.union [
 variableDeclarator :: TypeDefinition
 variableDeclarator = def "VariableDeclarator" $ T.record [
   "identifier">: csharp "Identifier",
-  "initializer">: T.maybe $ csharp "VariableInitializer"]
+  "initializer">: T.optional $ csharp "VariableInitializer"]
 
 variableDeclarators :: TypeDefinition
 variableDeclarators = def "VariableDeclarators" $ T.wrap $ nonemptyList $ csharp "VariableDeclarator"
@@ -2331,8 +2331,8 @@ varianceAnnotation = def "VarianceAnnotation" $ T.enum [
 
 variantTypeParameter :: TypeDefinition
 variantTypeParameter = def "VariantTypeParameter" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
-  "variance">: T.maybe $ csharp "VarianceAnnotation",
+  "attributes">: T.optional $ csharp "Attributes",
+  "variance">: T.optional $ csharp "VarianceAnnotation",
   "parameter">: csharp "TypeParameter"]
 
 variantTypeParameters :: TypeDefinition
@@ -2341,8 +2341,8 @@ variantTypeParameters = def "VariantTypeParameters" $ T.wrap $ T.list $ csharp "
 verbatimInterpolation :: TypeDefinition
 verbatimInterpolation = def "VerbatimInterpolation" $ T.record [
   "expression">: csharp "Expression",
-  "width">: T.maybe $ csharp "ConstantExpression",
-  "format">: T.maybe T.string]
+  "width">: T.optional $ csharp "ConstantExpression",
+  "format">: T.optional T.string]
 
 whileStatement :: TypeDefinition
 whileStatement = def "WhileStatement" $ T.record [
@@ -2363,7 +2363,7 @@ fixedPointerDeclarator = def "FixedPointerDeclarator" $ T.union [
 
 fixedSizeBufferDeclaration :: TypeDefinition
 fixedSizeBufferDeclaration = def "FixedSizeBufferDeclaration" $ T.record [
-  "attributes">: T.maybe $ csharp "Attributes",
+  "attributes">: T.optional $ csharp "Attributes",
   "modifiers">: nonemptyList $ csharp "FixedSizeBufferModifier",
   "elementType">: csharp "Type",
   "declarators">: nonemptyList $ csharp "FixedSizeBufferDeclarator"]
@@ -2396,9 +2396,9 @@ pointerMemberAccess :: TypeDefinition
 pointerMemberAccess = def "PointerMemberAccess" $ T.record [
   "pointer">: csharp "PrimaryExpression",
   "member">: csharp "Identifier",
-  "typeArguments">: T.maybe $ csharp "TypeArgumentList"]
+  "typeArguments">: T.optional $ csharp "TypeArgumentList"]
 
 pointerType :: TypeDefinition
 pointerType = def "PointerType" $ T.union [
-  "valueType">: T.maybe $ csharp "ValueType",
+  "valueType">: T.optional $ csharp "ValueType",
   "pointerDepth">: T.int32]

@@ -2,12 +2,16 @@
 -- | Functions for transforming property graph mappings into property graph elements.
 
 module Hydra.Demos.Genpg.Transform where
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Typing as Typing
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Haskell.Lib.Chars as Chars
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
@@ -15,16 +19,27 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
-import qualified Hydra.Pg.Model as Model
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Pg.Model as PgModel
+import qualified Hydra.Query as Query
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -48,16 +63,16 @@ decodeCell colType mvalue =
                               value]
                     in case typ of
                       Core.TypeLiteral v0 -> case v0 of
-                        Core.LiteralTypeBoolean -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralBoolean parsed)))) (Literals.readBoolean value)
+                        Core.LiteralTypeBoolean -> Optionals.cases (Literals.readBoolean value) (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralBoolean parsed))))
                         Core.LiteralTypeFloat v1 -> case v1 of
-                          Core.FloatTypeFloat32 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 parsed))))) (Literals.readFloat32 value)
-                          Core.FloatTypeFloat64 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 parsed))))) (Literals.readFloat64 value)
+                          Core.FloatTypeFloat32 -> Optionals.cases (Literals.readFloat32 value) (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 parsed)))))
+                          Core.FloatTypeFloat64 -> Optionals.cases (Literals.readFloat64 value) (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 parsed)))))
                           _ -> Left (Strings.cat [
                             "Unsupported float type for column ",
                             cname])
                         Core.LiteralTypeInteger v1 -> case v1 of
-                          Core.IntegerTypeInt32 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 parsed))))) (Literals.readInt32 value)
-                          Core.IntegerTypeInt64 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 parsed))))) (Literals.readInt64 value)
+                          Core.IntegerTypeInt32 -> Optionals.cases (Literals.readInt32 value) (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 parsed)))))
+                          Core.IntegerTypeInt64 -> Optionals.cases (Literals.readInt64 value) (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 parsed)))))
                           _ -> Left (Strings.cat [
                             "Unsupported integer type for column ",
                             cname])
@@ -68,7 +83,7 @@ decodeCell colType mvalue =
                       _ -> Left (Strings.cat [
                         "Unsupported type for column ",
                         cname])
-      in (Maybes.maybe (Right Nothing) decodeValue mvalue)
+      in (Optionals.cases mvalue (Right Nothing) decodeValue)
 -- | Decode a single data row based on column types
 decodeRow :: [Tabular.ColumnType] -> Tabular.DataRow String -> Either String (Tabular.DataRow Core.Term)
 decodeRow colTypes row =
@@ -89,87 +104,87 @@ decodeTable tableType table =
         Tabular.tableHeader = header,
         Tabular.tableData = decodedRows}) (Eithers.mapList (\row -> decodeRow colTypes row) rows))
 -- | Check if an element is an edge
-elementIsEdge :: Model.Element t0 -> Bool
+elementIsEdge :: PgModel.Element t0 -> Bool
 elementIsEdge el =
     (\x -> case x of
-      Model.ElementEdge _ -> True
+      PgModel.ElementEdge _ -> True
       _ -> False) el
 -- | Check if an element is a vertex
-elementIsVertex :: Model.Element t0 -> Bool
+elementIsVertex :: PgModel.Element t0 -> Bool
 elementIsVertex el =
     (\x -> case x of
-      Model.ElementVertex _ -> True
+      PgModel.ElementVertex _ -> True
       _ -> False) el
 -- | Group element specifications by their source table
-elementSpecsByTable :: Model.LazyGraph Core.Term -> Either String (M.Map String ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
+elementSpecsByTable :: PgModel.LazyGraph Core.Term -> Either String (M.Map String ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term]))
 elementSpecsByTable graph =
 
-      let vertices = Model.lazyGraphVertices graph
-          edges = Model.lazyGraphEdges graph
+      let vertices = PgModel.lazyGraphVertices graph
+          edges = PgModel.lazyGraphEdges graph
       in (Eithers.bind (Eithers.mapList (\v -> Eithers.map (\t -> (t, v)) (tableForVertex v)) vertices) (\vertexPairs -> Eithers.bind (Eithers.mapList (\e -> Eithers.map (\t -> (t, e)) (tableForEdge e)) edges) (\edgePairs ->
         let addVertex =
                 \m -> \p ->
                   let table = Pairs.first p
                       v = Pairs.second p
                       existing = Maps.lookup table m
-                      current = Maybes.fromMaybe ([], []) existing
+                      current = Optionals.fromOptional ([], []) existing
                   in (Maps.insert table (Lists.cons v (Pairs.first current), (Pairs.second current)) m)
             addEdge =
                     \m -> \p ->
                       let table = Pairs.first p
                           e = Pairs.second p
                           existing = Maps.lookup table m
-                          current = Maybes.fromMaybe ([], []) existing
+                          current = Optionals.fromOptional ([], []) existing
                       in (Maps.insert table (Pairs.first current, (Lists.cons e (Pairs.second current))) m)
             vertexMap = Lists.foldl addVertex Maps.empty vertexPairs
         in (Right (Lists.foldl addEdge vertexMap edgePairs)))))
 -- | Evaluate an edge specification against a record term to produce an optional edge
-evaluateEdge :: Typing.InferenceContext -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Edge Core.Term))
+evaluateEdge :: Typing.InferenceContext -> Graph.Graph -> PgModel.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (PgModel.Edge Core.Term))
 evaluateEdge cx g edgeSpec record =
 
-      let label = Model.edgeLabel edgeSpec
-          idSpec = Model.edgeId edgeSpec
-          outSpec = Model.edgeOut edgeSpec
-          inSpec = Model.edgeIn edgeSpec
-          propSpecs = Model.edgeProperties edgeSpec
+      let label = PgModel.edgeLabel edgeSpec
+          idSpec = PgModel.edgeId edgeSpec
+          outSpec = PgModel.edgeOut edgeSpec
+          inSpec = PgModel.edgeIn edgeSpec
+          propSpecs = PgModel.edgeProperties edgeSpec
       in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = idSpec,
         Core.applicationArgument = record}))) (\id -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = outSpec,
-        Core.applicationArgument = record}))) (\_term -> ExtractCore.maybeTerm (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
+        Core.applicationArgument = record}))) (\_term -> ExtractCore.optionalTerm (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = inSpec,
-        Core.applicationArgument = record}))) (\_term -> ExtractCore.maybeTerm (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
-        Model.edgeLabel = label,
-        Model.edgeId = id,
-        Model.edgeOut = outId,
-        Model.edgeIn = inId,
-        Model.edgeProperties = props}) mInId)))))))
+        Core.applicationArgument = record}))) (\_term -> ExtractCore.optionalTerm (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Optionals.bind mOutId (\outId -> Optionals.map (\inId -> PgModel.Edge {
+        PgModel.edgeLabel = label,
+        PgModel.edgeId = id,
+        PgModel.edgeOut = outId,
+        PgModel.edgeIn = inId,
+        PgModel.edgeProperties = props}) mInId)))))))
 -- | Evaluate property specifications against a record term
 evaluateProperties :: Ord t0 => (Typing.InferenceContext -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either Errors.Error (M.Map t0 Core.Term))
 evaluateProperties cx g specs record =
 
       let extractMaybe =
               \k -> \term -> case term of
-                Core.TermMaybe v0 -> Right (Maybes.map (\v -> (k, v)) v0)
-      in (Eithers.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Eithers.mapList (\pair ->
+                Core.TermOptional v0 -> Right (Optionals.map (\v -> (k, v)) v0)
+      in (Eithers.map (\pairs -> Maps.fromList (Optionals.cat pairs)) (Eithers.mapList (\pair ->
         let k = Pairs.first pair
             spec = Pairs.second pair
         in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
           Core.applicationFunction = spec,
           Core.applicationArgument = record}))) (\value -> extractMaybe k (Strip.deannotateTerm value)))) (Maps.toList specs)))
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
-evaluateVertex :: Typing.InferenceContext -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Vertex Core.Term))
+evaluateVertex :: Typing.InferenceContext -> Graph.Graph -> PgModel.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (PgModel.Vertex Core.Term))
 evaluateVertex cx g vertexSpec record =
 
-      let label = Model.vertexLabel vertexSpec
-          idSpec = Model.vertexId vertexSpec
-          propSpecs = Model.vertexProperties vertexSpec
+      let label = PgModel.vertexLabel vertexSpec
+          idSpec = PgModel.vertexId vertexSpec
+          propSpecs = PgModel.vertexProperties vertexSpec
       in (Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = idSpec,
-        Core.applicationArgument = record}))) (\_term -> ExtractCore.maybeTerm (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.map (\id -> Model.Vertex {
-        Model.vertexLabel = label,
-        Model.vertexId = id,
-        Model.vertexProperties = props}) mId))))
+        Core.applicationArgument = record}))) (\_term -> ExtractCore.optionalTerm (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Optionals.map (\id -> PgModel.Vertex {
+        PgModel.vertexLabel = label,
+        PgModel.vertexId = id,
+        PgModel.vertexProperties = props}) mId))))
 -- | Find table names referenced in a term by looking for record projections
 findTablesInTerm :: Core.Term -> S.Set String
 findTablesInTerm term =
@@ -183,11 +198,11 @@ findTablesInTerms terms = Sets.unions (Lists.map findTablesInTerm terms)
 listAny :: (t0 -> Bool) -> [t0] -> Bool
 listAny pred xs = Logic.not (Lists.null (Lists.filter pred xs))
 -- | Construct a LazyGraph from vertices and edges
-makeLazyGraph :: [Model.Vertex t0] -> [Model.Edge t0] -> Model.LazyGraph t0
+makeLazyGraph :: [PgModel.Vertex t0] -> [PgModel.Edge t0] -> PgModel.LazyGraph t0
 makeLazyGraph vertices edges =
-    Model.LazyGraph {
-      Model.lazyGraphVertices = vertices,
-      Model.lazyGraphEdges = edges}
+    PgModel.LazyGraph {
+      PgModel.lazyGraphVertices = vertices,
+      PgModel.lazyGraphEdges = edges}
 -- | Normalize a CSV field value - empty becomes Nothing
 normalizeField :: String -> Maybe String
 normalizeField s = Logic.ifElse (Strings.null s) Nothing (Just s)
@@ -221,13 +236,13 @@ parseSingleLine line =
 parseTableLines :: Bool -> [String] -> Either String (Tabular.Table String)
 parseTableLines hasHeader rawLines =
     Eithers.bind (Eithers.mapList (\ln -> parseSingleLine ln) rawLines) (\parsedRows ->
-      let rows = Maybes.cat parsedRows
-      in (Logic.ifElse hasHeader (Maybes.maybe (Left "empty rows: cannot parse header") (\p ->
+      let rows = Optionals.cat parsedRows
+      in (Logic.ifElse hasHeader (Optionals.cases (Lists.uncons rows) (Left "empty rows: cannot parse header") (\p ->
         let headerRow = Pairs.first p
             dataRows = Pairs.second p
-        in (Logic.ifElse (listAny (\m -> Maybes.isNothing m) headerRow) (Left "null header column(s)") (Right (Tabular.Table {
-          Tabular.tableHeader = (Just (Tabular.HeaderRow (Maybes.cat headerRow))),
-          Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) dataRows)})))) (Lists.uncons rows)) (Right (Tabular.Table {
+        in (Logic.ifElse (listAny (\m -> Optionals.isNone m) headerRow) (Left "null header column(s)") (Right (Tabular.Table {
+          Tabular.tableHeader = (Just (Tabular.HeaderRow (Optionals.cat headerRow))),
+          Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) dataRows)}))))) (Right (Tabular.Table {
         Tabular.tableHeader = Nothing,
         Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) rows)}))))
 -- | Strip leading and trailing whitespace from a string
@@ -240,34 +255,34 @@ stripWhitespace s =
           trimRight = Lists.reverse (Lists.dropWhile isSpaceChar (Lists.reverse trimLeft))
       in (Strings.fromList trimRight)
 -- | Get the table name for an edge specification. Returns an error if not exactly one table is referenced.
-tableForEdge :: Model.Edge Core.Term -> Either String String
+tableForEdge :: PgModel.Edge Core.Term -> Either String String
 tableForEdge edge =
 
-      let label = Model.edgeLabel edge
-          id = Model.edgeId edge
-          outId = Model.edgeOut edge
-          inId = Model.edgeIn edge
-          props = Model.edgeProperties edge
+      let label = PgModel.edgeLabel edge
+          id = PgModel.edgeId edge
+          outId = PgModel.edgeOut edge
+          inId = PgModel.edgeIn edge
+          props = PgModel.edgeProperties edge
           tables =
                   findTablesInTerms (Lists.concat2 [
                     id,
                     outId,
                     inId] (Maps.elems props))
-      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Maybes.maybe (Left "unreachable: empty tables set") (\x -> Right x) (Lists.maybeHead (Sets.toList tables))) (Left (Strings.cat [
+      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Optionals.cases (Lists.maybeHead (Sets.toList tables)) (Left "unreachable: empty tables set") (\x -> Right x)) (Left (Strings.cat [
         "Specification for ",
-        (Model.unEdgeLabel label),
+        (PgModel.unEdgeLabel label),
         " edges has wrong number of tables"])))
 -- | Get the table name for a vertex specification. Returns an error if not exactly one table is referenced.
-tableForVertex :: Model.Vertex Core.Term -> Either String String
+tableForVertex :: PgModel.Vertex Core.Term -> Either String String
 tableForVertex vertex =
 
-      let label = Model.vertexLabel vertex
-          id = Model.vertexId vertex
-          props = Model.vertexProperties vertex
+      let label = PgModel.vertexLabel vertex
+          id = PgModel.vertexId vertex
+          props = PgModel.vertexProperties vertex
           tables = findTablesInTerms (Lists.cons id (Maps.elems props))
-      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Maybes.maybe (Left "unreachable: empty tables set") (\x -> Right x) (Lists.maybeHead (Sets.toList tables))) (Left (Strings.cat [
+      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Optionals.cases (Lists.maybeHead (Sets.toList tables)) (Left "unreachable: empty tables set") (\x -> Right x)) (Left (Strings.cat [
         "Specification for ",
-        (Model.unVertexLabel label),
+        (PgModel.unVertexLabel label),
         " vertices has wrong number of tables"])))
 -- | Build a map from table name to table type
 tableTypesByName :: [Tabular.TableType] -> M.Map Relational.RelationName Tabular.TableType
@@ -285,12 +300,12 @@ termRowToRecord tableType row =
           let cname = Relational.unColumnName (Tabular.columnTypeName colType)
           in Core.Field {
             Core.fieldName = (Core.Name cname),
-            Core.fieldTerm = (Core.TermMaybe mvalue)}) colTypes cells)}))
+            Core.fieldTerm = (Core.TermOptional mvalue)}) colTypes cells)}))
 -- | Transform a record through vertex and edge specifications to produce vertices and edges
-transformRecord :: Typing.InferenceContext -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
+transformRecord :: Typing.InferenceContext -> Graph.Graph -> [PgModel.Vertex Core.Term] -> [PgModel.Edge Core.Term] -> Core.Term -> Either Errors.Error ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term])
 transformRecord cx g vspecs especs record =
-    Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Maybes.cat mVertices, (Maybes.cat mEdges))))
+    Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Optionals.cat mVertices, (Optionals.cat mEdges))))
 -- | Transform all rows from a table through vertex/edge specifications
-transformTableRows :: Typing.InferenceContext -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
+transformTableRows :: Typing.InferenceContext -> Graph.Graph -> [PgModel.Vertex Core.Term] -> [PgModel.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term])
 transformTableRows cx g vspecs especs tableType rows =
     Eithers.map (\pairs -> Lists.foldl concatPairs ([], []) pairs) (Eithers.mapList (\row -> transformRecord cx g vspecs especs (termRowToRecord tableType row)) rows)

@@ -344,12 +344,12 @@ typeOfEitherDef = define "typeOfEither" $
       Eithers.bind (ref typeOfDef @@ var "tx" @@ list [] @@ var "leftTerm") ("leftType" ~>
       Eithers.bind (ref checkTypeVariablesDef @@ var "tx" @@ var "leftType") ("_" ~>
       right $ Core.typeEither $ Core.eitherType (var "leftType")
-        (Maybes.fromMaybe (Core.typeVariable $ Core.name $ string "a") (Lists.maybeAt (int32 1) $ var "typeArgs")))))
+        (Optionals.fromOptional (Core.typeVariable $ Core.name $ string "a") (Lists.maybeAt (int32 1) $ var "typeArgs")))))
     ("rightTerm" ~>
       Eithers.bind (ref typeOfDef @@ var "tx" @@ list [] @@ var "rightTerm") ("rightType" ~>
       Eithers.bind (ref checkTypeVariablesDef @@ var "tx" @@ var "rightType") ("_" ~>
       right $ Core.typeEither $ Core.eitherType
-        (Maybes.fromMaybe (Core.typeVariable $ Core.name $ string "a") (Lists.maybeAt (int32 0) $ var "typeArgs")) (var "rightType"))))
+        (Optionals.fromOptional (Core.typeVariable $ Core.name $ string "a") (Lists.maybeAt (int32 0) $ var "typeArgs")) (var "rightType"))))
     (var "et"))
 ```
 
@@ -829,7 +829,7 @@ stack test
 4. **Understand the distinction:**
    - **Hydra union types** (defined with `union` combinator in DSL) → use `cases`
    - **Haskell built-in types** (like `Prelude.Either`, `Prelude.Maybe`) →
-     use library functions (`Eithers.either_`, `Maybes.maybe`)
+     use library functions (`Eithers.either_`, `Optionals.cases`)
 
 5. **Don't skip bootstrap patching** - Manual patching is necessary to break the circular dependency
 

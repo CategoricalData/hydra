@@ -180,7 +180,7 @@ encodedName :: Name -> TypedTerm Name
 encodedName = wrap _Name . string . unName
 
 encodedOptional :: TypedTerm (Maybe a) -> TypedTerm Term
-encodedOptional = inject _Term _Term_maybe
+encodedOptional = inject _Term _Term_optional
 
 encodedPair :: TypedTerm (a, b) -> TypedTerm Term
 encodedPair = inject _Term _Term_pair
@@ -328,7 +328,7 @@ opt :: Maybe (TypedTerm a) -> TypedTerm (Maybe a)
 opt mc = TypedTerm $ Terms.optional (unTypedTerm <$> mc)
 
 optCases :: AsTerm f (a -> b) => TypedTerm (Maybe a) -> TypedTerm b -> f -> TypedTerm b
-optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing (asTerm ifJust) arg
+optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.optionals.cases") arg ifNothing (asTerm ifJust)
 
 -- | Create a pair
 -- Example: pair (string "age") (int32 32)
@@ -374,7 +374,7 @@ reify f = case (unTypedTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TypedTerm lhs
   TermEither (Prelude.Left _) -> lambda "x" $ TypedTerm $ TermEither $ Prelude.Left $ Terms.var "x"
   TermEither (Prelude.Right _) -> lambda "x" $ TypedTerm $ TermEither $ Prelude.Right $ Terms.var "x"
-  TermMaybe (Just _) -> primitive _maybes_pure
+  TermOptional (Just _) -> primitive _optionals_pure
   TermInject (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
 

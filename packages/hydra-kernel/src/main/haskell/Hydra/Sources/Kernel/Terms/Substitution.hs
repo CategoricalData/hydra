@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -112,7 +112,7 @@ composeTypeSubstNonEmpty :: TypedTermDefinition (TypeSubst -> TypeSubst -> TypeS
 composeTypeSubstNonEmpty = define "composeTypeSubstNonEmpty" $
   doc "Compose two non-empty type substitutions (internal helper)" $
   lambdas ["s1", "s2"] $ lets [
-    "isExtra">: lambdas ["k", "v"] $ Maybes.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
+    "isExtra">: lambdas ["k", "v"] $ Optionals.isNone (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
     "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
     Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (substInType @@ var "s2") $ Typing.unTypeSubst $ var "s1"
 
@@ -136,12 +136,9 @@ substInClassConstraints = define "substInClassConstraints" $
   "substMap" <~ Typing.unTypeSubst (var "subst") $
   -- Helper to insert a constraint, merging with existing if present
   "insertOrMerge" <~ ("varName" ~> "metadata" ~> "acc" ~>
-    Maybes.maybe
-      (Maps.insert (var "varName") (var "metadata") (var "acc"))
-      ("existing" ~>
+    Optionals.cases (Maps.lookup (var "varName") (var "acc")) (Maps.insert (var "varName") (var "metadata") (var "acc")) ("existing" ~>
         "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "metadata")) $
-        Maps.insert (var "varName") (var "merged") (var "acc"))
-      (Maps.lookup (var "varName") (var "acc"))) $
+        Maps.insert (var "varName") (var "merged") (var "acc"))) $
   -- For each (varName, metadata) in constraints:
   -- 1. Look up varName in the substitution
   -- 2. If not found, keep (varName, metadata) in result
@@ -150,7 +147,8 @@ substInClassConstraints = define "substInClassConstraints" $
     ("acc" ~> "pair" ~>
       "varName" <~ Pairs.first (var "pair") $
       "metadata" <~ Pairs.second (var "pair") $
-      Maybes.maybe
+      Optionals.cases
+        (Maps.lookup (var "varName") (var "substMap"))
         -- Not in substitution: keep original
         (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
         -- In substitution: propagate constraint to all free variables in the target type
@@ -159,8 +157,7 @@ substInClassConstraints = define "substInClassConstraints" $
           Lists.foldl
             ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
             (var "acc")
-            (var "freeVars"))
-        (Maps.lookup (var "varName") (var "substMap")))
+            (var "freeVars")))
     Maps.empty
     (Maps.toList $ var "constraints")
 
@@ -192,18 +189,12 @@ substInTypeNonEmpty = define "substInTypeNonEmpty" $
   "subst" ~> "typ0" ~>
     lets [
       "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
-        _Type_forall>>: lambda "lt" $ Maybes.maybe
-          (var "recurse" @@ var "typ")
-          (lambda "styp" $ Core.typeForall $ Core.forallType
+        _Type_forall>>: lambda "lt" $ Optionals.cases (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")) (var "recurse" @@ var "typ") (lambda "styp" $ Core.typeForall $ Core.forallType
             (Core.forallTypeParameter $ var "lt")
             (substInType
               @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
-              @@ (Core.forallTypeBody $ var "lt")))
-          (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")),
-        _Type_variable>>: lambda "v" $ Maybes.maybe
-          (var "typ")
-          (lambda "styp" $ var "styp")
-          (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
+              @@ (Core.forallTypeBody $ var "lt"))),
+        _Type_variable>>: lambda "v" $ Optionals.cases (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst")) (var "typ") (lambda "styp" $ var "styp")],
       "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.delete (var "v") (Typing.unTypeSubst $ var "subst")] $
       (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
 
@@ -223,7 +214,7 @@ substInTypeScheme = define "substInTypeScheme" $
       (Core.typeSchemeVariables $ var "ts")
       (substInType @@ var "scopedSubst" @@ (Core.typeSchemeBody $ var "ts"))
       -- Also apply the substitution to the constraints
-      (Maybes.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
+      (Optionals.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
 
 substTypesInTerm :: TypedTermDefinition (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $
@@ -233,13 +224,13 @@ substTypesInTerm = define "substTypesInTerm" $
       "dflt">: var "recurse" @@ var "term",
       "forLambda">: lambda "l" $ Core.termLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
-        (Maybes.map (substInType @@ var "subst") $ Core.lambdaDomain $ var "l")
+        (Optionals.map (substInType @@ var "subst") $ Core.lambdaDomain $ var "l")
         (substTypesInTerm @@ var "subst" @@ (Core.lambdaBody $ var "l")),
       "forLet">: lambda "l" $ lets [
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (substTypesInTerm @@ var "subst" @@ (Core.bindingTerm $ var "b"))
-          (Maybes.map (substInTypeScheme @@ var "subst") (Core.bindingTypeScheme $ var "b"))] $
+          (Optionals.map (substInTypeScheme @@ var "subst") (Core.bindingTypeScheme $ var "b"))] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
           (substTypesInTerm @@ var "subst" @@ (Core.letBody $ var "l")),
@@ -307,10 +298,7 @@ substituteInTerm = define "substituteInTerm" $
         (Just $ var "recurse" @@ var "term") [
         _Term_lambda>>: "l" ~> var "withLambda" @@ var "l",
         _Term_let>>: "l" ~> var "withLet" @@ var "l",
-        _Term_variable>>: lambda "name" $ Maybes.maybe
-          (var "recurse" @@ var "term")
-          (lambda "sterm" $ var "sterm")
-          (Maps.lookup (var "name") (var "s"))]] $
+        _Term_variable>>: lambda "name" $ Optionals.cases (Maps.lookup (var "name") (var "s")) (var "recurse" @@ var "term") (lambda "sterm" $ var "sterm")]] $
     Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
 
 -- W: subst'

@@ -9,7 +9,7 @@
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "common"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                   {
                     "name": "subgroups",
                     "term": {
@@ -22,7 +22,7 @@
                         {"variable": "hydra.test.lib.logic.allTests"},
                         {"variable": "hydra.test.lib.maps.allTests"},
                         {"variable": "hydra.test.lib.math.allTests"},
-                        {"variable": "hydra.test.lib.maybes.allTests"},
+                        {"variable": "hydra.test.lib.optionals.allTests"},
                         {"variable": "hydra.test.lib.pairs.allTests"},
                         {"variable": "hydra.test.lib.regex.allTests"},
                         {"variable": "hydra.test.lib.sets.allTests"},
@@ -65,7 +65,7 @@
     {"module": "hydra.test.lib.logic"},
     {"module": "hydra.test.lib.maps"},
     {"module": "hydra.test.lib.math"},
-    {"module": "hydra.test.lib.maybes"},
+    {"module": "hydra.test.lib.optionals"},
     {"module": "hydra.test.lib.pairs"},
     {"module": "hydra.test.lib.regex"},
     {"module": "hydra.test.lib.sets"},

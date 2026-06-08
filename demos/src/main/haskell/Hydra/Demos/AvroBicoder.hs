@@ -136,7 +136,7 @@ runReverseDemo = do
   let personType = Core.TypeRecord [
         Core.FieldType (Core.Name "name") (Core.TypeLiteral (Core.LiteralTypeString)),
         Core.FieldType (Core.Name "age") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-        Core.FieldType (Core.Name "email") (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeString))),
+        Core.FieldType (Core.Name "email") (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeString))),
         Core.FieldType (Core.Name "address") (Core.TypeVariable addressName),
         Core.FieldType (Core.Name "tags") (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeString)))]
   let typeMap = M.fromList [(addressName, addressType), (personName, personType)]
@@ -160,7 +160,7 @@ runReverseDemo = do
       let personTerm = Core.TermRecord $ Core.Record personName [
             Core.Field (Core.Name "name") (Core.TermLiteral (Core.LiteralString "Alice Smith")),
             Core.Field (Core.Name "age") (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30))),
-            Core.Field (Core.Name "email") (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "alice@example.com")))),
+            Core.Field (Core.Name "email") (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "alice@example.com")))),
             Core.Field (Core.Name "address") (Core.TermRecord $ Core.Record addressName [
               Core.Field (Core.Name "street") (Core.TermLiteral (Core.LiteralString "123 Main St")),
               Core.Field (Core.Name "city") (Core.TermLiteral (Core.LiteralString "Springfield")),

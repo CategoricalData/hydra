@@ -36,24 +36,30 @@
           "annotated": {
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core package name"}}}]},
             "body": {
-              "maybe": {
+              "optional": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "core"}}]},
                   "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
         "name": "hydra.java.names.hydraCorePackageName",
-        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []}}},
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"optional": {"variable": "hydra.java.syntax.PackageName"}}},
+          "typeParameters": []}}},
     {
       "term": {
         "body": {
           "annotated": {
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.util package name"}}}]},
             "body": {
-              "maybe": {
+              "optional": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "util"}}]},
                   "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
         "name": "hydra.java.names.hydraUtilPackageName",
-        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []}}},
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"optional": {"variable": "hydra.java.syntax.PackageName"}}},
+          "typeParameters": []}}},
     {
       "term": {
         "body": {"literal": {"string": "instance"}},
@@ -65,12 +71,15 @@
           "annotated": {
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The java.lang package name"}}}]},
             "body": {
-              "maybe": {
+              "optional": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "java"}}, {"literal": {"string": "lang"}}]},
                   "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
         "name": "hydra.java.names.javaLangPackageName",
-        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []}}},
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"optional": {"variable": "hydra.java.syntax.PackageName"}}},
+          "typeParameters": []}}},
     {
       "term": {
         "body": {
@@ -112,24 +121,30 @@
           "annotated": {
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The java.util.function package name"}}}]},
             "body": {
-              "maybe": {
+              "optional": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "java"}}, {"literal": {"string": "util"}}, {"literal": {"string": "function"}}]},
                   "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
         "name": "hydra.java.names.javaUtilFunctionPackageName",
-        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []}}},
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"optional": {"variable": "hydra.java.syntax.PackageName"}}},
+          "typeParameters": []}}},
     {
       "term": {
         "body": {
           "annotated": {
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The java.util package name"}}}]},
             "body": {
-              "maybe": {
+              "optional": {
                 "application": {
                   "argument": {"list": [{"literal": {"string": "java"}}, {"literal": {"string": "util"}}]},
                   "function": {"variable": "hydra.java.names.javaPackageName"}}}}}},
         "name": "hydra.java.names.javaUtilPackageName",
-        "signature": {"parameters": [], "result": {"type": {"maybe": {"variable": "hydra.java.syntax.PackageName"}}}, "typeParameters": []}}},
+        "signature": {
+          "parameters": [],
+          "result": {"type": {"optional": {"variable": "hydra.java.syntax.PackageName"}}},
+          "typeParameters": []}}},
     {
       "term": {
         "body": {"literal": {"string": "other"}},

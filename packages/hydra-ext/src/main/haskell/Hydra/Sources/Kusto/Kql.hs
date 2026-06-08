@@ -292,14 +292,14 @@ pipelineExpression = define "PipelineExpression" $
 printCommand :: TypeDefinition
 printCommand = define "PrintCommand" $
   T.record [
-    "column">: T.maybe $ kql "ColumnName",
+    "column">: T.optional $ kql "ColumnName",
     "expression">: kql "Expression"]
 
 projection :: TypeDefinition
 projection = define "Projection" $
   T.record [
     "expression">: kql "Expression",
-    "alias">: T.maybe $ kql "ColumnName"]
+    "alias">: T.optional $ kql "ColumnName"]
 
 propertyExpression :: TypeDefinition
 propertyExpression = define "PropertyExpression" $
@@ -321,7 +321,7 @@ sortBy :: TypeDefinition
 sortBy = define "SortBy" $
   T.record [
     "column">: kql "ColumnName",
-    "order">: T.maybe $ kql "Order"]
+    "order">: T.optional $ kql "Order"]
 
 summarizeCommand :: TypeDefinition
 summarizeCommand = define "SummarizeCommand" $
@@ -360,9 +360,9 @@ unionCommand :: TypeDefinition
 unionCommand = define "UnionCommand" $
   T.record [
     "parameters">: T.list $ kql "Parameter",
-    "kind">: T.maybe $ kql "UnionKind",
-    "withSource">: T.maybe $ kql "ColumnName",
-    "isFuzzy">: T.maybe T.boolean,
+    "kind">: T.optional $ kql "UnionKind",
+    "withSource">: T.optional $ kql "ColumnName",
+    "isFuzzy">: T.optional T.boolean,
     "tables">: nonemptyList $ kql "TableName"]
 
 unionKind :: TypeDefinition

@@ -318,8 +318,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in optional type is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -368,8 +368,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in optional (just)",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "foo")))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "bar")))))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "foo")))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "bar")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -964,7 +964,7 @@ allTests =
                       Core.IntegerValueInt32 v2 -> v2
                       _ -> 0
                     _ -> 0
-                  _ -> 0)) 0 (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))))),
+                  _ -> 0)) 0 (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},

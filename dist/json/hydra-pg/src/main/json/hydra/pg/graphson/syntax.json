@@ -118,7 +118,7 @@
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {"name": "label", "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
+              {"name": "label", "type": {"optional": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
               {
                 "name": "inEdges",
                 "type": {
@@ -148,7 +148,7 @@
         "body": {
           "body": {
             "record": [
-              {"name": "id", "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+              {"name": "id", "type": {"optional": {"variable": "hydra.pg.graphson.syntax.Value"}}},
               {"name": "value", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
           "variables": []},
         "name": "hydra.pg.graphson.syntax.VertexPropertyValue"}}],

@@ -67,7 +67,7 @@
           "body": {
             "record": [
               {"name": "specifier", "type": {"variable": "hydra.cpp.syntax.ClassSpecifier"}},
-              {"name": "body", "type": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}}}]},
+              {"name": "body", "type": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.ClassDeclaration"}},
     {
@@ -110,8 +110,8 @@
           "body": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
-              {"name": "parameters", "type": {"maybe": {"list": {"literal": {"string": {}}}}}},
-              {"name": "replacement", "type": {"maybe": {"literal": {"string": {}}}}}]},
+              {"name": "parameters", "type": {"optional": {"list": {"literal": {"string": {}}}}}},
+              {"name": "replacement", "type": {"optional": {"literal": {"string": {}}}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.DefineDirective"}},
     {
@@ -142,7 +142,7 @@
           "body": {
             "record": [
               {"name": "lineNumber", "type": {"literal": {"integer": {"int32": {}}}}},
-              {"name": "filename", "type": {"maybe": {"literal": {"string": {}}}}}]},
+              {"name": "filename", "type": {"optional": {"literal": {"string": {}}}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.LineDirective"}},
     {
@@ -283,7 +283,7 @@
               {"name": "type", "type": {"variable": "hydra.cpp.syntax.TypeExpression"}},
               {"name": "name", "type": {"literal": {"string": {}}}},
               {"name": "unnamed", "type": {"literal": {"boolean": {}}}},
-              {"name": "defaultValue", "type": {"maybe": {"variable": "hydra.cpp.syntax.Expression"}}}]},
+              {"name": "defaultValue", "type": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.Parameter"}},
     {
@@ -302,9 +302,9 @@
         "body": {
           "body": {
             "record": [
-              {"name": "type", "type": {"maybe": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+              {"name": "type", "type": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
               {"name": "name", "type": {"literal": {"string": {}}}},
-              {"name": "initializer", "type": {"maybe": {"variable": "hydra.cpp.syntax.Expression"}}},
+              {"name": "initializer", "type": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}},
               {"name": "isAuto", "type": {"literal": {"boolean": {}}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.VariableDeclaration"}},
@@ -825,7 +825,7 @@
             "record": [
               {"name": "captures", "type": {"variable": "hydra.cpp.syntax.CaptureList"}},
               {"name": "parameters", "type": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}},
-              {"name": "returnType", "type": {"maybe": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+              {"name": "returnType", "type": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
               {"name": "body", "type": {"variable": "hydra.cpp.syntax.CompoundStatement"}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.LambdaExpression"}},
@@ -927,7 +927,7 @@
             "record": [
               {"name": "condition", "type": {"variable": "hydra.cpp.syntax.Expression"}},
               {"name": "thenBranch", "type": {"variable": "hydra.cpp.syntax.Statement"}},
-              {"name": "elseBranch", "type": {"maybe": {"variable": "hydra.cpp.syntax.Statement"}}}]},
+              {"name": "elseBranch", "type": {"optional": {"variable": "hydra.cpp.syntax.Statement"}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.SelectionStatement"}},
     {
@@ -1186,7 +1186,7 @@
           "body": {
             "record": [
               {"name": "valueType", "type": {"variable": "hydra.cpp.syntax.TypeExpression"}},
-              {"name": "value", "type": {"maybe": {"variable": "hydra.cpp.syntax.Expression"}}}]},
+              {"name": "value", "type": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}}]},
           "variables": []},
         "name": "hydra.cpp.syntax.Optional"}},
     {"type": {"body": {"body": {"literal": {"string": {}}}, "variables": []}, "name": "hydra.cpp.syntax.Identifier"}},

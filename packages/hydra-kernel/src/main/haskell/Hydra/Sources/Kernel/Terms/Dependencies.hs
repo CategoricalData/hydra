@@ -35,7 +35,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -186,10 +186,7 @@ inlineType = define "inlineType" $
     "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
       (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
-        Maybes.maybe
-          (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
-          (inlineType @@ var "schema")
-          (Maps.lookup (var "v") (var "schema"))]) $
+        Optionals.cases (Maps.lookup (var "v") (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
     "tr" <<~ var "recurse" @@ var "typ" $
     var "afterRecurse" @@ var "tr") $
   Rewriting.rewriteTypeM @@ var "f" @@ var "typ"
@@ -248,7 +245,7 @@ pruneLet = define "pruneLet" $
   "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
       (Variables.freeVariablesInTerm @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
         (Core.letBody $ var "l")
-        (Maybes.fromMaybe Core.termUnit (Maps.lookup (var "n") (var "bindingMap")))))) $
+        (Optionals.fromOptional Core.termUnit (Maps.lookup (var "n") (var "bindingMap")))))) $
   "reachable" <~ Sorting.findReachableNodes @@ var "adj" @@ var "rootName" $
   "prunedBindings" <~ Lists.filter
     ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))
@@ -349,7 +346,7 @@ toShortNames = define "toShortNames" $
   "original" ~>
   "addName" <~ ("acc" ~> "name" ~>
     "local" <~ Names.localNameOf @@ var "name" $
-    "group" <~ Maybes.fromMaybe Sets.empty (Maps.lookup (var "local") (var "acc")) $
+    "group" <~ Optionals.fromOptional Sets.empty (Maps.lookup (var "local") (var "acc")) $
     Maps.insert (var "local") (Sets.insert (var "name") (var "group")) (var "acc")) $
   "groupNamesByLocal" <~ ("names" ~> Lists.foldl (var "addName") Maps.empty (var "names")) $
   "groups" <~ var "groupNamesByLocal" @@ var "original" $
@@ -381,7 +378,7 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
     pair (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
       (list ([] :: [TypedTerm Name]))
       (Sets.toList $ Sets.intersection (var "keys") $ Variables.freeVariablesInTerm @@ var "term")) $
-  "toPair" <~ ("name" ~> pair (var "name") $ Maybes.fromMaybe
+  "toPair" <~ ("name" ~> pair (var "name") $ Optionals.fromOptional
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
     (Maps.lookup (var "name") (var "bindingMap"))) $
   Lists.map (reify $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
@@ -406,7 +403,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $
   "sorted" <~ Sorting.topologicalSortComponents @@ Lists.map (var "toPair") (var "defs") $
-  Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
+  Lists.map ("names" ~> Optionals.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
     var "sorted")
 
 typeDependencyNames :: TypedTermDefinition (Bool -> Type -> S.Set Name)

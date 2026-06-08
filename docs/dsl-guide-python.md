@@ -562,12 +562,12 @@ import hydra.dsl.meta.lib.equality as Equality
 eq = Equality.equal_name(name_a, name_b)
 ```
 
-### Maybes (`hydra.dsl.meta.lib.maybes`)
+### Optionals (`hydra.dsl.meta.lib.optionals`)
 
 ```python
-import hydra.dsl.meta.lib.maybes as Maybes
+import hydra.dsl.meta.lib.optionals as Optionals
 
-mapped = Maybes.map_(fn, maybe_val)
+mapped = Optionals.map_(fn, optional_val)
 ```
 
 ## Type definitions

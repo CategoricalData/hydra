@@ -16,7 +16,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -90,7 +90,7 @@ instantiateTemplate cx minimal schema tname t =
           let kt = Core.mapTypeKeys v0
               vt = Core.mapTypeValues v0
           in (Logic.ifElse minimal (Right (Core.TermMap Maps.empty)) (Eithers.bind (inst tname kt) (\ke -> Eithers.bind (inst tname vt) (\ve -> Right (Core.TermMap (Maps.singleton ke ve))))))
-        Core.TypeMaybe v0 -> Logic.ifElse minimal (Right (Core.TermMaybe Nothing)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermMaybe (Just e))))
+        Core.TypeOptional v0 -> Logic.ifElse minimal (Right (Core.TermOptional Nothing)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermOptional (Just e))))
         Core.TypeRecord v0 ->
           let toField =
                   \ft -> Eithers.bind (inst tname (Core.fieldTypeType ft)) (\e -> Right (Core.Field {
@@ -101,9 +101,9 @@ instantiateTemplate cx minimal schema tname t =
             Core.recordFields = dfields}))))
         Core.TypeSet v0 -> Logic.ifElse minimal (Right (Core.TermSet Sets.empty)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermSet (Sets.fromList [
           e]))))
-        Core.TypeVariable v0 -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 schema) (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "bound type variable",
-          Errors.unexpectedShapeErrorActual = (Strings.cat2 "unbound variable " (Core.unName v0))})))) (inst v0) (Maps.lookup v0 schema)
+          Errors.unexpectedShapeErrorActual = (Strings.cat2 "unbound variable " (Core.unName v0))})))) (inst v0)
         Core.TypeWrap v0 -> Eithers.bind (inst tname v0) (\e -> Right (Core.TermWrap (Core.WrappedTerm {
           Core.wrappedTermTypeName = tname,
           Core.wrappedTermBody = e})))

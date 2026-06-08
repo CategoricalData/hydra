@@ -257,7 +257,7 @@ attribute = define "Attribute" $
       T.list T.string,
     "tokens">:
       doc "The attribute arguments as a raw token string" $
-      T.maybe T.string]
+      T.optional T.string]
 
 binaryExpr :: TypeDefinition
 binaryExpr = define "BinaryExpr" $
@@ -291,7 +291,7 @@ block = define "Block" $
       T.list $ rust "Statement",
     "expression">:
       doc "An optional trailing expression" $
-      T.maybe $ rust "Expression"]
+      T.optional $ rust "Expression"]
 
 
 -- ================================================================================================
@@ -332,7 +332,7 @@ closureExpr = define "ClosureExpr" $
       T.list $ rust "ClosureParam",
     "returnType">:
       doc "Optional return type annotation" $
-      T.maybe $ rust "Type",
+      T.optional $ rust "Type",
     "body">:
       doc "The closure body" $
       rust "Expression"]
@@ -346,7 +346,7 @@ closureParam = define "ClosureParam" $
       rust "Pattern",
     "type">:
       doc "Optional type annotation" $
-      T.maybe $ rust "Type"]
+      T.optional $ rust "Type"]
 
 compoundAssignExpr :: TypeDefinition
 compoundAssignExpr = define "CompoundAssignExpr" $
@@ -387,7 +387,7 @@ constDef = define "ConstDef" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 crate :: TypeDefinition
 crate = define "Crate" $
@@ -409,7 +409,7 @@ enumDef = define "EnumDef" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "variants">:
       doc "The enum variants" $
       T.list $ rust "EnumVariant",
@@ -421,7 +421,7 @@ enumDef = define "EnumDef" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 enumVariant :: TypeDefinition
 enumVariant = define "EnumVariant" $
@@ -435,7 +435,7 @@ enumVariant = define "EnumVariant" $
       rust "EnumVariantBody",
     "doc">:
       doc "Optional doc comment for the variant" $
-      T.maybe T.string]
+      T.optional T.string]
 
 enumVariantBody :: TypeDefinition
 enumVariantBody = define "EnumVariantBody" $
@@ -539,10 +539,10 @@ expression = define "Expression" $
       rust "RangeExpr",
     "return">:
       doc "A return expression" $
-      T.maybe $ rust "Expression",
+      T.optional $ rust "Expression",
     "break">:
       doc "A break expression" $
-      T.maybe $ rust "Expression",
+      T.optional $ rust "Expression",
     "continue">:
       doc "A continue expression" $
       T.unit,
@@ -591,7 +591,7 @@ fieldPattern = define "FieldPattern" $
       T.string,
     "pattern">:
       doc "The field pattern (None for shorthand)" $
-      T.maybe $ rust "Pattern"]
+      T.optional $ rust "Pattern"]
 
 fieldValue :: TypeDefinition
 fieldValue = define "FieldValue" $
@@ -602,7 +602,7 @@ fieldValue = define "FieldValue" $
       T.string,
     "value">:
       doc "The field value (None for shorthand syntax)" $
-      T.maybe $ rust "Expression"]
+      T.optional $ rust "Expression"]
 
 floatLiteral :: TypeDefinition
 floatLiteral = define "FloatLiteral" $
@@ -613,7 +613,7 @@ floatLiteral = define "FloatLiteral" $
       T.float64,
     "suffix">:
       doc "Optional type suffix" $
-      T.maybe T.string]
+      T.optional T.string]
 
 
 -- ================================================================================================
@@ -632,13 +632,13 @@ fnDef = define "FnDef" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "params">:
       doc "The function parameters" $
       T.list $ rust "FnParam",
     "returnType">:
       doc "The return type (None means ())" $
-      T.maybe $ rust "Type",
+      T.optional $ rust "Type",
     "body">:
       doc "The function body" $
       rust "Block",
@@ -656,7 +656,7 @@ fnDef = define "FnDef" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 fnParam :: TypeDefinition
 fnParam = define "FnParam" $
@@ -686,7 +686,7 @@ forExpr = define "ForExpr" $
   T.record [
     "label">:
       doc "Optional loop label" $
-      T.maybe T.string,
+      T.optional T.string,
     "pattern">:
       doc "The loop variable pattern" $
       rust "Pattern",
@@ -751,7 +751,7 @@ identifierPattern = define "IdentifierPattern" $
       T.boolean,
     "atPattern">:
       doc "Optional sub-pattern (e.g., x @ Some(_))" $
-      T.maybe $ rust "Pattern"]
+      T.optional $ rust "Pattern"]
 
 ifCondition :: TypeDefinition
 ifCondition = define "IfCondition" $
@@ -776,7 +776,7 @@ ifExpr = define "IfExpr" $
       rust "Block",
     "elseBranch">:
       doc "An optional else branch" $
-      T.maybe $ rust "Expression"]
+      T.optional $ rust "Expression"]
 
 implBlock :: TypeDefinition
 implBlock = define "ImplBlock" $
@@ -787,10 +787,10 @@ implBlock = define "ImplBlock" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "trait">:
       doc "The trait being implemented, if any" $
-      T.maybe $ rust "TypePath",
+      T.optional $ rust "TypePath",
     "negative">:
       doc "Whether this is a negative impl" $
       T.boolean,
@@ -827,13 +827,13 @@ implMethod = define "ImplMethod" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "params">:
       doc "The method parameters (including self)" $
       T.list $ rust "MethodParam",
     "returnType">:
       doc "The return type (None means ())" $
-      T.maybe $ rust "Type",
+      T.optional $ rust "Type",
     "body">:
       doc "The method body" $
       rust "Block",
@@ -845,7 +845,7 @@ implMethod = define "ImplMethod" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 
 -- ================================================================================================
@@ -872,7 +872,7 @@ integerLiteral = define "IntegerLiteral" $
       T.bigint,
     "suffix">:
       doc "Optional type suffix" $
-      T.maybe T.string]
+      T.optional T.string]
 
 item :: TypeDefinition
 item = define "Item" $
@@ -918,7 +918,7 @@ itemWithComments = define "ItemWithComments" $
   T.record [
     "doc">:
       doc "Optional documentation comment" $
-      T.maybe T.string,
+      T.optional T.string,
     "visibility">:
       doc "The item's visibility" $
       rust "Visibility",
@@ -955,10 +955,10 @@ letStatement = define "LetStatement" $
       T.boolean,
     "type">:
       doc "Optional type annotation" $
-      T.maybe $ rust "Type",
+      T.optional $ rust "Type",
     "init">:
       doc "Optional initializer expression" $
-      T.maybe $ rust "Expression"]
+      T.optional $ rust "Expression"]
 
 lifetime :: TypeDefinition
 lifetime = define "Lifetime" $
@@ -1003,7 +1003,7 @@ loopExpr = define "LoopExpr" $
   T.record [
     "label">:
       doc "Optional loop label" $
-      T.maybe T.string,
+      T.optional T.string,
     "body">:
       doc "The loop body" $
       rust "Block"]
@@ -1041,7 +1041,7 @@ matchArm = define "MatchArm" $
       rust "Pattern",
     "guard">:
       doc "Optional guard expression" $
-      T.maybe $ rust "Expression",
+      T.optional $ rust "Expression",
     "body">:
       doc "The body expression" $
       rust "Expression"]
@@ -1099,13 +1099,13 @@ modDef = define "ModDef" $
       T.string,
     "body">:
       doc "The module body (None for external file)" $
-      T.maybe $ T.list $ rust "Item",
+      T.optional $ T.list $ rust "Item",
     "public">:
       doc "Whether the module is public" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 
 -- ================================================================================================
@@ -1121,7 +1121,7 @@ parenthesizedArgs = define "ParenthesizedArgs" $
       T.list $ rust "Type",
     "output">:
       doc "The output type" $
-      T.maybe $ rust "Type"]
+      T.optional $ rust "Type"]
 
 pathSegment :: TypeDefinition
 pathSegment = define "PathSegment" $
@@ -1184,10 +1184,10 @@ rangeExpr = define "RangeExpr" $
   T.record [
     "from">:
       doc "The lower bound (optional)" $
-      T.maybe $ rust "Expression",
+      T.optional $ rust "Expression",
     "to">:
       doc "The upper bound (optional)" $
-      T.maybe $ rust "Expression",
+      T.optional $ rust "Expression",
     "inclusive">:
       doc "Whether the range is inclusive" $
       T.boolean]
@@ -1198,10 +1198,10 @@ rangePattern = define "RangePattern" $
   T.record [
     "from">:
       doc "The lower bound" $
-      T.maybe $ rust "Pattern",
+      T.optional $ rust "Pattern",
     "to">:
       doc "The upper bound" $
-      T.maybe $ rust "Pattern",
+      T.optional $ rust "Pattern",
     "inclusive">:
       doc "Whether the range is inclusive" $
       T.boolean]
@@ -1255,7 +1255,7 @@ referenceType = define "ReferenceType" $
   T.record [
     "lifetime">:
       doc "Optional lifetime annotation" $
-      T.maybe $ rust "Lifetime",
+      T.optional $ rust "Lifetime",
     "mutable">:
       doc "Whether the reference is mutable" $
       T.boolean,
@@ -1309,7 +1309,7 @@ staticDef = define "StaticDef" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 structBody :: TypeDefinition
 structBody = define "StructBody" $
@@ -1337,7 +1337,7 @@ structDef = define "StructDef" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "body">:
       doc "The struct body (named fields, tuple fields, or unit)" $
       rust "StructBody",
@@ -1349,7 +1349,7 @@ structDef = define "StructDef" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 structExpr :: TypeDefinition
 structExpr = define "StructExpr" $
@@ -1363,7 +1363,7 @@ structExpr = define "StructExpr" $
       T.list $ rust "FieldValue",
     "rest">:
       doc "Optional base expression for struct update syntax" $
-      T.maybe $ rust "Expression"]
+      T.optional $ rust "Expression"]
 
 structField :: TypeDefinition
 structField = define "StructField" $
@@ -1380,7 +1380,7 @@ structField = define "StructField" $
       T.boolean,
     "doc">:
       doc "Optional doc comment for the field" $
-      T.maybe T.string]
+      T.optional T.string]
 
 structPattern :: TypeDefinition
 structPattern = define "StructPattern" $
@@ -1408,10 +1408,10 @@ traitConst = define "TraitConst" $
       rust "Type",
     "default">:
       doc "Optional default value" $
-      T.maybe $ rust "Expression",
+      T.optional $ rust "Expression",
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 
 -- ================================================================================================
@@ -1430,7 +1430,7 @@ traitDef = define "TraitDef" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "superTraits">:
       doc "Supertraits" $
       T.list $ rust "TypeParamBound",
@@ -1445,7 +1445,7 @@ traitDef = define "TraitDef" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 traitItem :: TypeDefinition
 traitItem = define "TraitItem" $
@@ -1473,19 +1473,19 @@ traitMethod = define "TraitMethod" $
       T.list $ rust "GenericParam",
     "whereClause">:
       doc "Optional where clause" $
-      T.maybe $ rust "WhereClause",
+      T.optional $ rust "WhereClause",
     "params">:
       doc "The method parameters (including self)" $
       T.list $ rust "MethodParam",
     "returnType">:
       doc "The return type" $
-      T.maybe $ rust "Type",
+      T.optional $ rust "Type",
     "defaultBody">:
       doc "Optional default body" $
-      T.maybe $ rust "Block",
+      T.optional $ rust "Block",
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 traitType :: TypeDefinition
 traitType = define "TraitType" $
@@ -1499,10 +1499,10 @@ traitType = define "TraitType" $
       T.list $ rust "TypeParamBound",
     "default">:
       doc "Optional default type" $
-      T.maybe $ rust "Type",
+      T.optional $ rust "Type",
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 tupleField :: TypeDefinition
 tupleField = define "TupleField" $
@@ -1560,7 +1560,7 @@ typeAlias = define "TypeAlias" $
       T.boolean,
     "doc">:
       doc "Optional doc comment" $
-      T.maybe T.string]
+      T.optional T.string]
 
 
 -- ================================================================================================
@@ -1786,7 +1786,7 @@ whileExpr = define "WhileExpr" $
   T.record [
     "label">:
       doc "Optional loop label" $
-      T.maybe T.string,
+      T.optional T.string,
     "condition">:
       doc "The condition" $
       rust "IfCondition",

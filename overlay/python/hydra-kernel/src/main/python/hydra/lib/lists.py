@@ -11,7 +11,7 @@ from collections.abc import Callable, Sequence
 from functools import reduce
 from typing import Any, TypeVar
 
-from hydra.dsl.python import Maybe, Just, Nothing
+from hydra.dsl.python import Optional, Given, None_
 from hydra.python.util import ConsList
 
 A = TypeVar('A')
@@ -81,12 +81,12 @@ def filter(f: Callable[[A], bool], values: Sequence[A]) -> Sequence[A]:
     return ConsList.from_iterable(v for v in values if f(v))
 
 
-def find(predicate: Callable[[A], bool], values: Sequence[A]) -> Maybe[A]:
+def find(predicate: Callable[[A], bool], values: Sequence[A]) -> Optional[A]:
     """Find the first element matching a predicate."""
     for v in values:
         if predicate(v):
-            return Just(v)
-    return Nothing()
+            return Given(v)
+    return None_()
 
 
 def foldl(f: Callable[[B, A], B], initial: B, values: Sequence[A]) -> B:
@@ -160,33 +160,33 @@ def map(f: Callable[[A], B], values: Sequence[A]) -> Sequence[B]:
     return ConsList.from_iterable(f(v) for v in values)
 
 
-def maybe_at(i: int, values: Sequence[A]) -> Maybe[A]:
-    """Get the element at a specified index, returning Nothing if out of bounds."""
-    return Just(values[i]) if 0 <= i < len(values) else Nothing()
+def maybe_at(i: int, values: Sequence[A]) -> Optional[A]:
+    """Get the element at a specified index, returning none if out of bounds."""
+    return Given(values[i]) if 0 <= i < len(values) else None_()
 
 
-def maybe_head(values: Sequence[A]) -> Maybe[A]:
-    """Get the first element of a list, returning Nothing if the list is empty."""
-    return Just(values[0]) if len(values) > 0 else Nothing()
+def maybe_head(values: Sequence[A]) -> Optional[A]:
+    """Get the first element of a list, returning none if the list is empty."""
+    return Given(values[0]) if len(values) > 0 else None_()
 
 
-def maybe_init(values: Sequence[A]) -> Maybe[Sequence[A]]:
-    """Return all elements except the last, returning Nothing if empty."""
+def maybe_init(values: Sequence[A]) -> Optional[Sequence[A]]:
+    """Return all elements except the last, returning none if empty."""
     if len(values) == 0:
-        return Nothing()
-    return Just(_to_cons(values).init())
+        return None_()
+    return Given(_to_cons(values).init())
 
 
-def maybe_last(values: Sequence[A]) -> Maybe[A]:
-    """Get the last element of a list, returning Nothing if the list is empty."""
-    return Just(values[-1]) if len(values) > 0 else Nothing()
+def maybe_last(values: Sequence[A]) -> Optional[A]:
+    """Get the last element of a list, returning none if the list is empty."""
+    return Given(values[-1]) if len(values) > 0 else None_()
 
 
-def maybe_tail(values: Sequence[A]) -> Maybe[Sequence[A]]:
-    """Get all elements except the first, returning Nothing if empty."""
+def maybe_tail(values: Sequence[A]) -> Optional[Sequence[A]]:
+    """Get all elements except the first, returning none if empty."""
     if len(values) == 0:
-        return Nothing()
-    return Just(_to_cons(values).tail)
+        return None_()
+    return Given(_to_cons(values).tail)
 
 
 def nub(values: Sequence[A]) -> Sequence[A]:
@@ -289,12 +289,12 @@ def transpose(values: Sequence[Sequence[A]]) -> Sequence[Sequence[A]]:
     return ConsList.from_iterable(rows)
 
 
-def uncons(values: Sequence[A]) -> Maybe[tuple[A, Sequence[A]]]:
-    """Split a list into its head and tail, returning Nothing if empty."""
+def uncons(values: Sequence[A]) -> Optional[tuple[A, Sequence[A]]]:
+    """Split a list into its head and tail, returning none if empty."""
     if len(values) == 0:
-        return Nothing()
+        return None_()
     cl = _to_cons(values)
-    return Just((cl.head, cl.tail))
+    return Given((cl.head, cl.tail))
 
 
 def zip(values1: Sequence[A], values2: Sequence[B]) -> Sequence[tuple[A, B]]:

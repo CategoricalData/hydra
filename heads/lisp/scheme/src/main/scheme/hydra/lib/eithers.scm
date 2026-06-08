@@ -12,7 +12,7 @@
           hydra_lib_eithers_lefts
           hydra_lib_eithers_map
           hydra_lib_eithers_map_list
-          hydra_lib_eithers_map_maybe
+          hydra_lib_eithers_map_optional
           hydra_lib_eithers_map_set
           hydra_lib_eithers_partition_eithers
           hydra_lib_eithers_foldl
@@ -108,18 +108,18 @@
                       result
                       (loop (cdr rest) (cons (either-val result) acc)))))))))
 
-    ;; map_maybe :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-    (define hydra_lib_eithers_map_maybe
+    ;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
+    (define hydra_lib_eithers_map_optional
       (lambda (f)
         (lambda (m)
-          (if (or (null? m) (and (pair? m) (eq? (car m) 'nothing)))
-              (list 'right (list 'nothing))
-              (let ((val (if (and (pair? m) (or (eq? (car m) 'just) (eq? (car m) 'maybe)))
+          (if (or (null? m) (and (pair? m) (eq? (car m) 'none)))
+              (list 'right (list 'none))
+              (let ((val (if (and (pair? m) (or (eq? (car m) 'given) (eq? (car m) 'optional)))
                              (cadr m) m)))
                 (let ((result (f val)))
                   (if (eq? (either-tag result) 'left)
                       result
-                      (list 'right (list 'just (either-val result))))))))))
+                      (list 'right (list 'given (either-val result))))))))))
 
     ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
     ;; Iterates the input set via the public sets API (vlist/vhash-aware) and

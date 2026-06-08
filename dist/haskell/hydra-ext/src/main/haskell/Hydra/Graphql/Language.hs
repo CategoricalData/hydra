@@ -2,10 +2,30 @@
 -- | Language constraints and reserved words for GraphQL
 
 module Hydra.Graphql.Language where
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -37,7 +57,7 @@ graphqlLanguage =
         Sets.fromList [
           Variants.TermVariantList,
           Variants.TermVariantLiteral,
-          Variants.TermVariantMaybe,
+          Variants.TermVariantOptional,
           Variants.TermVariantRecord,
           Variants.TermVariantInject]
     typeVariants =
@@ -53,14 +73,14 @@ graphqlLanguage =
           Variants.TypeVariantSet,
           Variants.TypeVariantUnit,
           Variants.TypeVariantWrap,
-          Variants.TypeVariantMaybe,
+          Variants.TypeVariantOptional,
           Variants.TypeVariantRecord,
           Variants.TypeVariantUnion,
           Variants.TypeVariantVariable]
     typePredicate =
         \typ -> case (Strip.deannotateType typ) of
-          Core.TypeMaybe v0 -> case (Strip.deannotateType v0) of
-            Core.TypeMaybe _ -> False
+          Core.TypeOptional v0 -> case (Strip.deannotateType v0) of
+            Core.TypeOptional _ -> False
             _ -> True
           _ -> True
 -- | A set of reserved words in GraphQL

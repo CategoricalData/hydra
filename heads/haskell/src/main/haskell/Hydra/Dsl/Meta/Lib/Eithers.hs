@@ -53,9 +53,9 @@ map = primitive2 _eithers_map
 mapList :: TypedTerm (a -> Either e b) -> TypedTerm [a] -> TypedTerm (Either e [b])
 mapList = primitive2 _eithers_mapList
 
--- | Map a function returning Either over a Maybe, or return Right Nothing if Nothing.
-mapMaybe :: TypedTerm (a -> Either c b) -> TypedTerm (Maybe a) -> TypedTerm (Either c (Maybe b))
-mapMaybe = primitive2 _eithers_mapMaybe
+-- | Map a function returning Either over an optional, or return Right Nothing if Nothing.
+mapOptional :: TypedTerm (a -> Either c b) -> TypedTerm (Maybe a) -> TypedTerm (Either c (Maybe b))
+mapOptional = primitive2 _eithers_mapOptional
 
 -- | Map a function returning Either over a Set, collecting results or short-circuiting on Left.
 mapSet :: TypedTerm (a -> Either c b) -> TypedTerm (S.Set a) -> TypedTerm (Either c (S.Set b))

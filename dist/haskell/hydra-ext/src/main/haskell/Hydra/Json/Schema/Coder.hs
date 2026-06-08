@@ -3,9 +3,15 @@
 
 module Hydra.Json.Schema.Coder where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -17,18 +23,29 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
 import qualified Hydra.Reflect as Reflect
-import qualified Hydra.Show.Variants as Variants
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Show.Variants as ShowVariants
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -112,7 +129,7 @@ isRequiredField ft =
 
       let typ = Core.fieldTypeType ft
       in case (Strip.deannotateType typ) of
-        Core.TypeMaybe _ -> False
+        Core.TypeOptional _ -> False
         _ -> True
 -- | Build the JSON Schema type-restriction list for a type name, optionally widening to allow null
 jsType :: Bool -> Schema.TypeName -> [Schema.Restriction]
@@ -145,7 +162,7 @@ nameToPath name =
       let qn = Names.qualifyName name
           mns = Util.qualifiedNameModuleName qn
           local = Util.qualifiedNameLocal qn
-          nsPart = Maybes.maybe "" (\ns -> Strings.cat2 (Packaging.unModuleName ns) ".") mns
+          nsPart = Optionals.cases mns "" (\ns -> Strings.cat2 (Packaging.unModuleName ns) ".")
       in (Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
 -- | Build the JSON Schema restriction list for a pair type
 pairRestrictions :: Bool -> [Schema.Restriction] -> [Schema.Restriction] -> [Schema.Restriction]
@@ -176,7 +193,7 @@ transitiveTypeDeps typeMap visited rootType =
           step =
                   \acc -> \n -> Logic.ifElse (Sets.member n acc) acc (
                     let acc1 = Sets.insert n acc
-                    in (Maybes.maybe acc1 (\t -> transitiveTypeDeps typeMap acc1 t) (Maps.lookup n typeMap)))
+                    in (Optionals.cases (Maps.lookup n typeMap) acc1 (\t -> transitiveTypeDeps typeMap acc1 t)))
       in (Lists.foldl step visited (Sets.toList directDeps))
 -- | Build a JSON Schema document for a single named type, with $defs covering its transitive dependencies and short-name substitution applied
 typeDefToDocument :: t0 -> Graph.Graph -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either Errors.Error (String, Schema.Document)
@@ -185,11 +202,11 @@ typeDefToDocument cx g typeMap rootName rootType =
       let depNames = Sets.toList (transitiveTypeDeps typeMap Sets.empty rootType)
           allNames = Lists.concat2 [
                 rootName] (Lists.filter (\n -> Logic.not (Equality.equal n rootName)) depNames)
-          allTypes = Lists.map (\n -> Maybes.fromMaybe (Core.TypeVariable n) (Maps.lookup n typeMap)) allNames
+          allTypes = Lists.map (\n -> Optionals.fromOptional (Core.TypeVariable n) (Maps.lookup n typeMap)) allNames
           nameSubst = Dependencies.toShortNames allNames
           types = Lists.map (\t -> Variables.substituteTypeVariables nameSubst t) allTypes
-          names = Lists.map (\n -> Maybes.fromMaybe n (Maps.lookup n nameSubst)) allNames
-          subRoot = Maybes.fromMaybe rootName (Maps.lookup rootName nameSubst)
+          names = Lists.map (\n -> Optionals.fromOptional n (Maps.lookup n nameSubst)) allNames
+          subRoot = Optionals.fromOptional rootName (Maps.lookup rootName nameSubst)
           pairs = Lists.zip names types
       in (Eithers.bind (Eithers.mapList (\p -> typeToKeywordSchemaPair cx g (Pairs.first p) (Pairs.second p)) pairs) (\schemas -> Right (
         nameToPath rootName,
@@ -202,8 +219,8 @@ typeDefToDocument cx g typeMap rootName rootType =
 typeToExpr :: t0 -> Graph.Graph -> Bool -> Core.Type -> Either Errors.Error [Schema.Restriction]
 typeToExpr cx g optional typ =
     case typ of
-      Core.TypeAnnotated _ -> Eithers.bind (typeToExpr cx g optional (Strip.deannotateType typ)) (\res -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Right (Lists.concat2 (Maybes.maybe [] (\d -> [
-        Schema.RestrictionDescription d]) mdesc) res)))
+      Core.TypeAnnotated _ -> Eithers.bind (typeToExpr cx g optional (Strip.deannotateType typ)) (\res -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Right (Lists.concat2 (Optionals.cases mdesc [] (\d -> [
+        Schema.RestrictionDescription d])) res)))
       Core.TypeApplication v0 -> typeToExpr cx g optional (Core.applicationTypeFunction v0)
       Core.TypeEither v0 ->
         let lt = Core.eitherTypeLeft v0
@@ -220,7 +237,7 @@ typeToExpr cx g optional typ =
         let vt = Core.mapTypeValues v0
         in (Eithers.bind (typeToExpr cx g False vt) (\vRes -> Right (Lists.concat2 (jsType optional Schema.TypeNameObject) [
           Schema.RestrictionObject (Schema.ObjectRestrictionAdditionalProperties (Schema.AdditionalItemsSchema (Schema.Schema vRes)))])))
-      Core.TypeMaybe v0 -> typeToExpr cx g True v0
+      Core.TypeOptional v0 -> typeToExpr cx g True v0
       Core.TypePair v0 ->
         let ft = Core.pairTypeFirst v0
             st = Core.pairTypeSecond v0
@@ -232,7 +249,7 @@ typeToExpr cx g optional typ =
       Core.TypeVariable v0 -> Right [
         referenceRestriction v0]
       Core.TypeWrap v0 -> typeToExpr cx g optional v0
-      _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "JSON Schema: unsupported type variant: " (Variants.typeVariant (Reflect.typeVariant typ)))))
+      _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "JSON Schema: unsupported type variant: " (ShowVariants.typeVariant (Reflect.typeVariant typ)))))
 -- | Build a (Keyword, Schema) pair for a named type, used as a $defs entry
 typeToKeywordSchemaPair :: t0 -> Graph.Graph -> Core.Name -> Core.Type -> Either Errors.Error (Schema.Keyword, Schema.Schema)
 typeToKeywordSchemaPair cx g name typ =

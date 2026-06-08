@@ -41,16 +41,16 @@
                                                 "parameter": "s"}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"literal": {"string": {}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": {"string": {}}}}},
                                                 "type": {"variable": "hydra.graphql.syntax.Description"}}}}}}},
-                                    "domain": {"maybe": {"literal": {"string": {}}}},
+                                    "domain": {"optional": {"literal": {"string": {}}}},
                                     "parameter": "mval"}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"maybe": {"literal": {"string": {}}}}}},
-                                        "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"optional": {"literal": {"string": {}}}}}},
+                                        "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                     "type": {"variable": "hydra.errors.Error"}}}}}}},
                         "domain": {"variable": "hydra.core.Type"},
                         "parameter": "typ"}},
@@ -67,7 +67,7 @@
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
           "result": {
             "type": {
-              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}}},
+              "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}}},
           "typeParameters": [{"constraints": [], "name": "t0"}]}}},
     {
       "term": {
@@ -123,11 +123,11 @@
                                                         "function": {"variable": "hydra.graphql.coder.encodeEnumFieldName"}}}},
                                                   {
                                                     "name": "Directives",
-                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}}],
+                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}}],
                                                 "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
-                                "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                                "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                                 "parameter": "desc"}},
                             "function": {
                               "application": {
@@ -147,7 +147,7 @@
                                     "body": {
                                       "typeApplication": {
                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                        "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                     "type": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}}}}}},
                         "domain": {"variable": "hydra.core.FieldType"},
                         "parameter": "ft"}},
@@ -223,15 +223,15 @@
                                                                     "function": {"variable": "hydra.graphql.coder.encodeFieldName"}}}},
                                                               {
                                                                 "name": "ArgumentsDefinition",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}}},
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}}},
                                                               {"name": "Type", "term": {"variable": "gtype"}},
                                                               {
                                                                 "name": "Directives",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}}],
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}}],
                                                             "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
-                                            "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                                            "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                                             "parameter": "desc"}},
                                         "function": {
                                           "application": {
@@ -251,7 +251,7 @@
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                    "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                                    "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                                 "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}}}}},
                                     "domain": {"variable": "hydra.graphql.syntax.Type"},
                                     "parameter": "gtype"}},
@@ -551,18 +551,18 @@
                                                                                               "function": {"application": {"argument": {"variable": "prefixes"}, "function": {"variable": "hydra.graphql.coder.encodeTypeName"}}}}}},
                                                                                         {
                                                                                           "name": "ImplementsInterfaces",
-                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}}},
+                                                                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}}},
                                                                                         {
                                                                                           "name": "Directives",
-                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}},
+                                                                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}},
                                                                                         {
                                                                                           "name": "FieldsDefinition",
-                                                                                          "term": {"maybe": {"wrap": {"body": {"variable": "gfields"}, "typeName": "hydra.graphql.syntax.FieldsDefinition"}}}}],
+                                                                                          "term": {"optional": {"wrap": {"body": {"variable": "gfields"}, "typeName": "hydra.graphql.syntax.FieldsDefinition"}}}}],
                                                                                       "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}},
                                                                                 "typeName": "hydra.graphql.syntax.TypeDefinition"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}},
-                                                                "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                                                                "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                                                                 "parameter": "desc"}},
                                                             "function": {
                                                               "application": {
@@ -581,7 +581,7 @@
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                        "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                                                        "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                                                     "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}}}}},
                                                         "domain": {"list": {"variable": "hydra.graphql.syntax.FieldDefinition"}},
                                                         "parameter": "gfields"}},
@@ -661,18 +661,18 @@
                                                                                                   "function": {"application": {"argument": {"variable": "prefixes"}, "function": {"variable": "hydra.graphql.coder.encodeTypeName"}}}}}},
                                                                                             {
                                                                                               "name": "ImplementsInterfaces",
-                                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}}},
+                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}}},
                                                                                             {
                                                                                               "name": "Directives",
-                                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}},
+                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}},
                                                                                             {
                                                                                               "name": "FieldsDefinition",
-                                                                                              "term": {"maybe": {"wrap": {"body": {"variable": "gfields"}, "typeName": "hydra.graphql.syntax.FieldsDefinition"}}}}],
+                                                                                              "term": {"optional": {"wrap": {"body": {"variable": "gfields"}, "typeName": "hydra.graphql.syntax.FieldsDefinition"}}}}],
                                                                                           "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}},
                                                                                     "typeName": "hydra.graphql.syntax.TypeDefinition"}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                         "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}},
-                                                                    "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                                                                    "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                                                                     "parameter": "desc"}},
                                                                 "function": {
                                                                   "application": {
@@ -691,7 +691,7 @@
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                            "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                                                            "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                                                         "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}}}}},
                                                             "domain": {"list": {"variable": "hydra.graphql.syntax.FieldDefinition"}},
                                                             "parameter": "gfields"}},
@@ -765,15 +765,15 @@
                                                                                                       "function": {"application": {"argument": {"variable": "prefixes"}, "function": {"variable": "hydra.graphql.coder.encodeTypeName"}}}}}},
                                                                                                 {
                                                                                                   "name": "Directives",
-                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}},
+                                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}},
                                                                                                 {
                                                                                                   "name": "EnumValuesDefinition",
-                                                                                                  "term": {"maybe": {"wrap": {"body": {"variable": "values"}, "typeName": "hydra.graphql.syntax.EnumValuesDefinition"}}}}],
+                                                                                                  "term": {"optional": {"wrap": {"body": {"variable": "values"}, "typeName": "hydra.graphql.syntax.EnumValuesDefinition"}}}}],
                                                                                               "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}},
                                                                                         "typeName": "hydra.graphql.syntax.TypeDefinition"}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                             "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}},
-                                                                        "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                                                                        "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                                                                         "parameter": "desc"}},
                                                                     "function": {
                                                                       "application": {
@@ -792,7 +792,7 @@
                                                                             "body": {
                                                                               "typeApplication": {
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                                                                "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                                                             "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}}}}},
                                                                 "domain": {"list": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}},
                                                                 "parameter": "values"}},
@@ -861,7 +861,7 @@
                                                                       "term": {
                                                                         "inject": {
                                                                           "field": {
-                                                                            "name": "maybe",
+                                                                            "name": "optional",
                                                                             "term": {
                                                                               "application": {"argument": {"variable": "et"}, "function": {"project": {"fieldName": "left", "typeName": "hydra.core.EitherType"}}}}},
                                                                           "typeName": "hydra.core.Type"}}}],
@@ -875,7 +875,7 @@
                                                                       "term": {
                                                                         "inject": {
                                                                           "field": {
-                                                                            "name": "maybe",
+                                                                            "name": "optional",
                                                                             "term": {
                                                                               "application": {"argument": {"variable": "et"}, "function": {"project": {"fieldName": "right", "typeName": "hydra.core.EitherType"}}}}},
                                                                           "typeName": "hydra.core.Type"}}}],
@@ -1635,7 +1635,7 @@
                                                               "lambda": {
                                                                 "body": {
                                                                   "application": {
-                                                                    "argument": {"inject": {"field": {"name": "maybe", "term": {"variable": "wt"}}, "typeName": "hydra.core.Type"}},
+                                                                    "argument": {"inject": {"field": {"name": "optional", "term": {"variable": "wt"}}, "typeName": "hydra.core.Type"}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "prefixes"},
@@ -1686,7 +1686,7 @@
                                                                     "argument": {
                                                                       "inject": {
                                                                         "field": {
-                                                                          "name": "maybe",
+                                                                          "name": "optional",
                                                                           "term": {
                                                                             "application": {"argument": {"variable": "ft"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.ForallType"}}}}},
                                                                         "typeName": "hydra.core.Type"}},
@@ -1714,7 +1714,7 @@
                                                                     "argument": {
                                                                       "inject": {
                                                                         "field": {
-                                                                          "name": "maybe",
+                                                                          "name": "optional",
                                                                           "term": {
                                                                             "application": {
                                                                               "argument": {"variable": "at"},
@@ -1808,7 +1808,7 @@
                                                         "typeName": "hydra.core.Type"}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
                                                 "parameter": "et"}},
-                                            "name": "maybe"},
+                                            "name": "optional"},
                                           {
                                             "handler": {
                                               "lambda": {
@@ -2373,47 +2373,48 @@
                           "application": {
                             "argument": {"variable": "qualName"},
                             "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.util.QualifiedName"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                       {
                         "name": "prefix",
                         "term": {
                           "application": {
-                            "argument": {"variable": "mns"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"lambda": {"body": {"variable": "p"}, "domain": {"literal": {"string": {}}}, "parameter": "p"}},
+                                    "function": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "prefixes"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "ns_"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                        "argument": {"literal": {"string": ""}},
                                         "function": {
                                           "application": {
-                                            "argument": {"lambda": {"body": {"variable": "p"}, "domain": {"literal": {"string": {}}}, "parameter": "p"}},
-                                            "function": {
+                                            "argument": {
                                               "application": {
-                                                "argument": {"literal": {"string": ""}},
+                                                "argument": {"variable": "prefixes"},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}}}},
-                                    "domain": {"variable": "hydra.packaging.ModuleName"},
-                                    "parameter": "ns_"}},
+                                                  "application": {
+                                                    "argument": {"variable": "ns_"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
+                                "parameter": "ns_"}},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": ""}},
                                 "function": {
                                   "application": {
-                                    "argument": {"literal": {"string": ""}},
+                                    "argument": {"variable": "mns"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                        "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                        "type": {"literal": {"string": {}}}}}}}}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "wrap": {
@@ -2467,13 +2468,13 @@
                                     "name": "effectiveType",
                                     "term": {
                                       "application": {
-                                        "argument": {"inject": {"field": {"name": "maybe", "term": {"variable": "innerType"}}, "typeName": "hydra.core.Type"}},
+                                        "argument": {"inject": {"field": {"name": "optional", "term": {"variable": "innerType"}}, "typeName": "hydra.core.Type"}},
                                         "function": {
                                           "application": {
                                             "argument": {
                                               "inject": {
                                                 "field": {
-                                                  "name": "maybe",
+                                                  "name": "optional",
                                                   "term": {
                                                     "inject": {
                                                       "field": {
@@ -2513,15 +2514,15 @@
                                                                         "function": {"variable": "hydra.graphql.coder.encodeFieldName"}}}},
                                                                   {
                                                                     "name": "ArgumentsDefinition",
-                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}}},
+                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}}},
                                                                   {"name": "Type", "term": {"variable": "gtype"}},
                                                                   {
                                                                     "name": "Directives",
-                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}}],
+                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.graphql.syntax.Directives"}}}}],
                                                                 "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
-                                                "domain": {"maybe": {"variable": "hydra.graphql.syntax.Description"}},
+                                                "domain": {"optional": {"variable": "hydra.graphql.syntax.Description"}},
                                                 "parameter": "desc"}},
                                             "function": {
                                               "application": {
@@ -2540,7 +2541,7 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                        "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}}},
+                                                        "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}}},
                                                     "type": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}}}}},
                                         "domain": {"variable": "hydra.graphql.syntax.Type"},
                                         "parameter": "gtype"}},
@@ -2668,8 +2669,9 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
-                                                                                "type": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}}}}}},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
+                                                                                "type": {"optional": {"variable": "hydra.packaging.ModuleName"}}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
                                                             "typeScheme": {"body": {"list": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
                                                         "body": {

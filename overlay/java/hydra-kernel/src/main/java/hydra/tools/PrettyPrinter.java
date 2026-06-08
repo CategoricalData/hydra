@@ -9,7 +9,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.WrappedTerm;
 import hydra.lib.literals.ShowString;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -297,11 +297,11 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Maybe instance) {
-                    Maybe<Term> opt = instance.value;
+                public Consumer<StringBuilder> visit(Term.Optional instance) {
+                    Optional<Term> opt = instance.value;
                     return sb -> {
-                        if (opt.isJust()) {
-                            var("just", term(opt.fromJust())).accept(sb);
+                        if (opt.isGiven()) {
+                            var("just", term(opt.fromGiven())).accept(sb);
                         } else {
                             sb.append("nothing");
                         }

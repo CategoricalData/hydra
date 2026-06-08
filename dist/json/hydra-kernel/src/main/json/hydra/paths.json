@@ -197,10 +197,14 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a value in a map by index"}}}]},
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
-                    "name": "maybeTerm",
+                    "name": "optionalTerm",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the term inside a Just value"}}}]},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Access the term inside a given (present) optional value"}}}]},
                         "body": {"unit": {}}}}},
                   {
                     "name": "productTerm",
@@ -457,7 +461,7 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the value type of a map type"}}}]},
                         "body": {"unit": {}}}}},
                   {
-                    "name": "maybeElement",
+                    "name": "optionalElement",
                     "type": {
                       "annotated": {
                         "annotation": {

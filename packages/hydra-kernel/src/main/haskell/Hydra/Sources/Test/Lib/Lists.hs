@@ -440,24 +440,24 @@ intListList :: [[Int]] -> TypedTerm Term
 intListList lists = list (intList <$> lists)
 
 optionalInt32 :: Maybe Int -> TypedTerm Term
-optionalInt32 Nothing = Core.termMaybe nothing
-optionalInt32 (Just x) = Core.termMaybe  $ just (int32 x)
+optionalInt32 Nothing = Core.termOptional nothing
+optionalInt32 (Just x) = Core.termOptional  $ just (int32 x)
 
 optionalIntAndIntList :: Maybe (Int, [Int]) -> TypedTerm Term
-optionalIntAndIntList Nothing = Core.termMaybe nothing
-optionalIntAndIntList (Just (x, xs)) = Core.termMaybe $ just (pair (int32 x) (intList xs))
+optionalIntAndIntList Nothing = Core.termOptional nothing
+optionalIntAndIntList (Just (x, xs)) = Core.termOptional $ just (pair (int32 x) (intList xs))
 
 optionalIntList :: Maybe [Int] -> TypedTerm Term
-optionalIntList Nothing = Core.termMaybe nothing
-optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
+optionalIntList Nothing = Core.termOptional nothing
+optionalIntList (Just xs) = Core.termOptional $ just (intList xs)
 
 optionalString :: Maybe String -> TypedTerm Term
-optionalString Nothing = Core.termMaybe nothing
-optionalString (Just x) = Core.termMaybe  $ just (string x)
+optionalString Nothing = Core.termOptional nothing
+optionalString (Just x) = Core.termOptional  $ just (string x)
 
 optionalStringList :: Maybe [String] -> TypedTerm Term
-optionalStringList Nothing = Core.termMaybe nothing
-optionalStringList (Just xs) = Core.termMaybe $ just (stringList xs)
+optionalStringList Nothing = Core.termOptional nothing
+optionalStringList (Just xs) = Core.termOptional $ just (stringList xs)
 
 stringList :: [String] -> TypedTerm Term
 stringList els = list (string <$> els)

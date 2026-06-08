@@ -17,7 +17,7 @@ import           Hydra.Dsl.Meta.Phantoms      as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals    as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Packaging          as Packaging
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
@@ -196,10 +196,7 @@ showDef d = Phantoms.cases _Definition d Nothing [
       Strings.concat [
         Core.unName (Packaging.termDefinitionName (var "td")),
         Phantoms.string " :: ",
-        Maybes.maybe
-          (Phantoms.string "<no scheme>")
-          ("ts" ~> ShowCore.typeScheme # var "ts")
-          (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature (var "td"))),
+        Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> ShowCore.typeScheme # var "ts"),
         Phantoms.string " = ",
         ShowCore.term # (Packaging.termDefinitionBody (var "td")),
         Phantoms.string "\n"],

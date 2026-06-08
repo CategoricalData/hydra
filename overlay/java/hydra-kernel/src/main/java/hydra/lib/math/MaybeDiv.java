@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -43,9 +43,9 @@ public class MaybeDiv extends PrimitiveFunction {
     /**
      * Divides the first number by the second.
      * @param dividend the dividend
-     * @return a function that takes a divisor and returns a Maybe containing the quotient
+     * @return a function that takes a divisor and returns a Optional containing the quotient
      */
-    public static Function<Integer, Maybe<Integer>> apply(Integer dividend) {
+    public static Function<Integer, Optional<Integer>> apply(Integer dividend) {
         return (divisor) -> apply(dividend, divisor);
     }
 
@@ -53,13 +53,13 @@ public class MaybeDiv extends PrimitiveFunction {
      * Divides the first number by the second.
      * @param dividend the dividend
      * @param divisor the divisor
-     * @return a Maybe containing the quotient, or empty if divisor is zero
+     * @return a Optional containing the quotient, or empty if divisor is zero
      */
-    public static Maybe<Integer> apply(Integer dividend, Integer divisor) {
+    public static Optional<Integer> apply(Integer dividend, Integer divisor) {
         if (divisor == 0) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(Math.floorDiv(dividend, divisor));
+            return Optional.given(Math.floorDiv(dividend, divisor));
         }
     }
 }

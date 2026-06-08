@@ -21,7 +21,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -61,7 +61,7 @@ elementReference namespaces name =
           local = Util.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
           mns = Util.qualifiedNameModuleName qname
-      in (Maybes.cases (Util.qualifiedNameModuleName qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
+      in (Optionals.cases (Util.qualifiedNameModuleName qname) (simpleName local) (\ns -> Optionals.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
         let aliasStr = Syntax.unModuleName mn
         in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
           aliasStr,
@@ -91,7 +91,7 @@ namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Er
 namespacesForModule mod cx g =
     Eithers.bind (Analysis.moduleDependencyModuleNames cx g True True True True mod) (\termNss ->
       let knownNss =
-              Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Lists.concat2 (Maps.keys (Graph.graphSchemaTypes g)) (Maps.keys (Graph.graphBoundTerms g)))))
+              Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Lists.concat2 (Maps.keys (Graph.graphSchemaTypes g)) (Maps.keys (Graph.graphBoundTerms g)))))
           rawDeclaredNss = Sets.fromList (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))
           declaredNss = Sets.fromList (Lists.filter (\ns -> Sets.member ns knownNss) (Sets.toList rawDeclaredNss))
           ownNs = Packaging.moduleName mod
@@ -111,8 +111,8 @@ namespacesForModule mod cx g =
           maxSegs =
                   Lists.foldl (\a -> \b -> Logic.ifElse (Equality.gt a b) a b) 1 (Lists.map (\nm -> Lists.length (segmentsOf nm)) nssAsList)
           initialState = Maps.fromList (Lists.map (\nm -> (nm, 1)) nssAsList)
-          segsFor = \nm -> Maybes.fromMaybe [] (Maps.lookup nm segsMap)
-          takenFor = \state -> \nm -> Maybes.fromMaybe 1 (Maps.lookup nm state)
+          segsFor = \nm -> Optionals.fromOptional [] (Maps.lookup nm segsMap)
+          takenFor = \state -> \nm -> Optionals.fromOptional 1 (Maps.lookup nm state)
           growStep =
                   \state -> \_ign ->
                     let aliasEntries =
@@ -125,27 +125,27 @@ namespacesForModule mod cx g =
                         aliasCounts =
                                 Lists.foldl (\m -> \e ->
                                   let k = Pairs.second (Pairs.second (Pairs.second e))
-                                  in (Maps.insert k (Math.add 1 (Maybes.fromMaybe 0 (Maps.lookup k m))) m)) Maps.empty aliasEntries
+                                  in (Maps.insert k (Math.add 1 (Optionals.fromOptional 0 (Maps.lookup k m))) m)) Maps.empty aliasEntries
                         aliasMinSegs =
                                 Lists.foldl (\m -> \e ->
                                   let segCount = Pairs.first (Pairs.second (Pairs.second e))
                                       k = Pairs.second (Pairs.second (Pairs.second e))
                                       existing = Maps.lookup k m
-                                  in (Maps.insert k (Maybes.cases existing segCount (\prev -> Logic.ifElse (Equality.lt segCount prev) segCount prev)) m)) Maps.empty aliasEntries
+                                  in (Maps.insert k (Optionals.cases existing segCount (\prev -> Logic.ifElse (Equality.lt segCount prev) segCount prev)) m)) Maps.empty aliasEntries
                         aliasMinSegsCount =
                                 Lists.foldl (\m -> \e ->
                                   let segCount = Pairs.first (Pairs.second (Pairs.second e))
                                       k = Pairs.second (Pairs.second (Pairs.second e))
-                                      minSegs = Maybes.fromMaybe segCount (Maps.lookup k aliasMinSegs)
-                                  in (Logic.ifElse (Equality.equal segCount minSegs) (Maps.insert k (Math.add 1 (Maybes.fromMaybe 0 (Maps.lookup k m))) m) m)) Maps.empty aliasEntries
+                                      minSegs = Optionals.fromOptional segCount (Maps.lookup k aliasMinSegs)
+                                  in (Logic.ifElse (Equality.equal segCount minSegs) (Maps.insert k (Math.add 1 (Optionals.fromOptional 0 (Maps.lookup k m))) m) m)) Maps.empty aliasEntries
                     in (Maps.fromList (Lists.map (\e ->
                       let nm = Pairs.first e
                           n = Pairs.first (Pairs.second e)
                           segCount = Pairs.first (Pairs.second (Pairs.second e))
                           aliasStr = Pairs.second (Pairs.second (Pairs.second e))
-                          count = Maybes.fromMaybe 0 (Maps.lookup aliasStr aliasCounts)
-                          minSegs = Maybes.fromMaybe segCount (Maps.lookup aliasStr aliasMinSegs)
-                          minSegsCount = Maybes.fromMaybe 0 (Maps.lookup aliasStr aliasMinSegsCount)
+                          count = Optionals.fromOptional 0 (Maps.lookup aliasStr aliasCounts)
+                          minSegs = Optionals.fromOptional segCount (Maps.lookup aliasStr aliasMinSegs)
+                          minSegsCount = Optionals.fromOptional 0 (Maps.lookup aliasStr aliasMinSegsCount)
                           canGrow =
                                   Logic.and (Equality.gt count 1) (Logic.and (Equality.gt segCount n) (Logic.or (Equality.gt segCount minSegs) (Equality.gt minSegsCount 1)))
                           newN = Logic.ifElse canGrow (Math.add n 1) n
@@ -210,7 +210,7 @@ toTypeApplication types =
                 Syntax.qualifiedNameQualifiers = [],
                 Syntax.qualifiedNameUnqualified = (Syntax.NamePart "")}))
           app =
-                  \l -> Maybes.fromMaybe dummyType (Maybes.map (\p -> Logic.ifElse (Lists.null (Pairs.second p)) (Pairs.first p) (Syntax.TypeApplication (Syntax.ApplicationType {
+                  \l -> Optionals.fromOptional dummyType (Optionals.map (\p -> Logic.ifElse (Lists.null (Pairs.second p)) (Pairs.first p) (Syntax.TypeApplication (Syntax.ApplicationType {
                     Syntax.applicationTypeContext = (app (Pairs.second p)),
                     Syntax.applicationTypeArgument = (Pairs.first p)}))) (Lists.uncons l))
       in (app (Lists.reverse types))
@@ -220,7 +220,7 @@ typeNameForRecord sname =
 
       let snameStr = Core.unName sname
           parts = Strings.splitOn "." snameStr
-      in (Maybes.fromMaybe snameStr (Lists.maybeLast parts))
+      in (Optionals.fromOptional snameStr (Lists.maybeLast parts))
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
 unionFieldReference :: S.Set Core.Name -> Util.ModuleNames Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 unionFieldReference boundNames namespaces sname fname =

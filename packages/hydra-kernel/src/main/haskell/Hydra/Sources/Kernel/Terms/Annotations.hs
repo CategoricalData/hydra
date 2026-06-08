@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -119,11 +119,9 @@ aggregateAnnotations :: TypedTermDefinition ((x -> Maybe y) -> (y -> x) -> (y ->
 aggregateAnnotations = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
   "getValue" ~> "getX" ~> "getAnns" ~> "t" ~>
-  "toPairs" <~ ("rest" ~> "t" ~> Maybes.maybe (var "rest")
-    (lambda "yy" (var "toPairs"
+  "toPairs" <~ ("rest" ~> "t" ~> Optionals.cases (var "getValue" @@ var "t") (var "rest") (lambda "yy" (var "toPairs"
       @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy")) (var "rest")
-      @@ (var "getX" @@ var "yy")))
-    (var "getValue" @@ var "t")) $
+      @@ (var "getX" @@ var "yy")))) $
   Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TypedTerm [(Name, Term)]]) @@ var "t"))
 
 commentsFromBinding :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Either Error (Maybe String))
@@ -145,10 +143,7 @@ getDescription :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name T
 getDescription = define "getDescription" $
   doc "Get description from annotations map (Either version)" $
   "cx" ~> "graph" ~> "anns" ~>
-  Maybes.maybe
-    (right nothing)
-    ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ var "graph" @@ var "term"))
-    (Maps.lookup (Core.nameLift keyDescription) (var "anns"))
+  Optionals.cases (Maps.lookup (Core.nameLift keyDescription) (var "anns")) (right nothing) ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ var "graph" @@ var "term"))
 
 getTermAnnotation :: TypedTermDefinition (Name -> Term -> Maybe Term)
 getTermAnnotation = define "getTermAnnotation" $
@@ -169,10 +164,7 @@ getType :: TypedTermDefinition (Graph -> M.Map Name Term -> Prelude.Either Decod
 getType = define "getType" $
   doc "Get type from annotations" $
   "graph" ~> "anns" ~>
-  Maybes.maybe
-    (right nothing)
-    ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
-    (Maps.lookup (Constants.keyType) (var "anns"))
+  Optionals.cases (Maps.lookup (Constants.keyType) (var "anns")) (right nothing) ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
 
 getTypeAnnotation :: TypedTermDefinition (Name -> Type -> Maybe Term)
 getTypeAnnotation = define "getTypeAnnotation" $
@@ -187,15 +179,12 @@ getTypeClasses = define "getTypeClasses" $
     ("de" ~> Error.errorDecoding $ var "de")
     ("x" ~> var "x")
     (decoderFor _Name @@ var "graph" @@ var "term")) $
-  Maybes.maybe
-    (right Maps.empty)
-    ("term" ~>
+  Optionals.cases (getTermAnnotation @@ Constants.keyClasses @@ var "term") (right Maps.empty) ("term" ~>
       ExtractCore.map
         @@ var "decodeName"
         @@ (ExtractCore.setOf @@ var "decodeName" @@ var "graph")
         @@ var "graph"
         @@ (var "term"))
-    (getTermAnnotation @@ Constants.keyClasses @@ var "term")
 
 getTypeDescription :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error (Maybe String))
 getTypeDescription = define "getTypeDescription" $
@@ -206,7 +195,7 @@ getTypeDescription = define "getTypeDescription" $
 hasDescription :: TypedTermDefinition (M.Map Name Term -> Bool)
 hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
-  "anns" ~> Maybes.isJust (Maps.lookup (Constants.keyDescription) (var "anns"))
+  "anns" ~> Optionals.isGiven (Maps.lookup (Constants.keyDescription) (var "anns"))
 
 hasTypeDescription :: TypedTermDefinition (Type -> Bool)
 hasTypeDescription = define "hasTypeDescription" $
@@ -218,15 +207,13 @@ isNativeType = define "isNativeType" $
   doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
     <> " or as a Hydra type expression.") $
   "el" ~>
-  "isFlaggedAsFirstClassType" <~ Maybes.fromMaybe false (
-    Maybes.map
+  "isFlaggedAsFirstClassType" <~ Optionals.fromOptional false (
+    Optionals.map
       (constant true)
       (getTermAnnotation @@ Constants.keyFirstClassType @@ (Core.bindingTerm (var "el")))) $
-  Maybes.maybe false
-    ("ts" ~> Logic.and
+  Optionals.cases (Core.bindingTypeScheme (var "el")) false ("ts" ~> Logic.and
       (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
       (Logic.not (var "isFlaggedAsFirstClassType")))
-    (Core.bindingTypeScheme (var "el"))
 
 normalizeTermAnnotations :: TypedTermDefinition (Term -> Term)
 normalizeTermAnnotations = define "normalizeTermAnnotations" $
@@ -258,7 +245,7 @@ setDescription = define "setDescription" $
   doc "Set description in annotations" $
   "d" ~> setAnnotation
     @@ Constants.keyDescription
-    @@ Maybes.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
+    @@ Optionals.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
 
 setTermAnnotation :: TypedTermDefinition (Name -> Maybe Term -> Term -> Term)
 setTermAnnotation = define "setTermAnnotation" $
@@ -275,12 +262,12 @@ setTermDescription = define "setTermDescription" $
   doc "Set term description" $
   "d" ~> setTermAnnotation
     @@ Constants.keyDescription
-    @@ Maybes.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
+    @@ Optionals.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
 
 setType :: TypedTermDefinition (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setType = define "setType" $
   doc "Set type in annotations" $
-  "mt" ~> setAnnotation @@ Constants.keyType @@ Maybes.map (encoderFor _Type) (var "mt")
+  "mt" ~> setAnnotation @@ Constants.keyType @@ Optionals.map (encoderFor _Type) (var "mt")
 
 setTypeAnnotation :: TypedTermDefinition (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotation = define "setTypeAnnotation" $
@@ -312,7 +299,7 @@ setTypeDescription = define "setTypeDescription" $
   doc "Set type description" $
   "d" ~> setTypeAnnotation
     @@ Constants.keyDescription
-    @@ Maybes.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
+    @@ Optionals.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
 
 termAnnotationInternal :: TypedTermDefinition (Term -> M.Map Name Term)
 termAnnotationInternal = define "termAnnotationInternal" $
@@ -369,11 +356,11 @@ getAnnotationMap = define "getAnnotationMap" $
     "fromEntry" <~ ("p" ~>
       "k" <~ Pairs.first (var "p") $
       "v" <~ Pairs.second (var "p") $
-      Maybes.map ("n" ~> pair (var "n") (var "v")) (var "extractName" @@ var "k")) $
+      Optionals.map ("n" ~> pair (var "n") (var "v")) (var "extractName" @@ var "k")) $
     cases _Term (var "t")
       (Just Maps.empty) [
       _Term_map>>: "m" ~> Maps.fromList
-        (Maybes.cat (Lists.map (var "fromEntry") (Maps.toList (var "m"))))]
+        (Optionals.cat (Lists.map (var "fromEntry") (Maps.toList (var "m"))))]
 
 -- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a
 -- TermVariable. Inverse of getAnnotationMap on map-shaped inputs.

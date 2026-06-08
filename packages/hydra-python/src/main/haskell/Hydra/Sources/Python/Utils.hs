@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -175,22 +175,18 @@ annotatedExpression :: TypedTermDefinition (Maybe String -> Py.Expression -> Py.
 annotatedExpression = def "annotatedExpression" $
   doc "Annotate an expression with an optional comment using Annotated[]" $
   "mcomment" ~> "expr" ~>
-    Maybes.maybe (var "expr")
-      ("c" ~>
+    Optionals.cases (var "mcomment") (var "expr") ("c" ~>
         pyPrimaryToPyExpression @@
           (primaryWithExpressionSlices
             @@ (pyNameToPyPrimary @@ (PyDsl.name $ string "Annotated"))
             @@ list [var "expr", doubleQuotedString @@ var "c"]))
-      (var "mcomment")
 
 -- | Annotate a statement with an optional comment
 annotatedStatement :: TypedTermDefinition (Maybe String -> Py.Statement -> Py.Statement)
 annotatedStatement = def "annotatedStatement" $
   doc "Annotate a statement with an optional comment" $
   lambdas ["mcomment", "stmt"] $
-    Maybes.maybe (var "stmt")
-      (lambda "c" $ PyDsl.statementAnnotated $ PyDsl.annotatedStatement (var "c") (var "stmt"))
-      (var "mcomment")
+    Optionals.cases (var "mcomment") (var "stmt") (lambda "c" $ PyDsl.statementAnnotated $ PyDsl.annotatedStatement (var "c") (var "stmt"))
 
 -- | Create an assignment statement from name and annotated rhs
 assignment :: TypedTermDefinition (Py.Name -> Py.AnnotatedRhs -> Py.Statement)
@@ -245,12 +241,12 @@ decodePyComparisonToPyAwaitPrimary = def "decodePyComparisonToPyAwaitPrimary" $
     "termRhs">: PyDsl.termRhs $ var "sumRhs"] $
     -- Check if any intermediate optional fields are set (which would indicate non-simple structure)
     Logic.ifElse (Logic.not $ Lists.null $ var "rhs") nothing $
-    Logic.ifElse (Maybes.isJust $ var "orLhs") nothing $
-    Logic.ifElse (Maybes.isJust $ var "xorLhs") nothing $
-    Logic.ifElse (Maybes.isJust $ var "andLhs") nothing $
-    Logic.ifElse (Maybes.isJust $ var "shiftLhs") nothing $
-    Logic.ifElse (Maybes.isJust $ var "sumLhs") nothing $
-    Logic.ifElse (Maybes.isJust $ var "termLhs") nothing $
+    Logic.ifElse (Optionals.isGiven $ var "orLhs") nothing $
+    Logic.ifElse (Optionals.isGiven $ var "xorLhs") nothing $
+    Logic.ifElse (Optionals.isGiven $ var "andLhs") nothing $
+    Logic.ifElse (Optionals.isGiven $ var "shiftLhs") nothing $
+    Logic.ifElse (Optionals.isGiven $ var "sumLhs") nothing $
+    Logic.ifElse (Optionals.isGiven $ var "termLhs") nothing $
     -- Now match on termRhs to see if it's a simple factor
     (match Py._Factor (Just nothing) [
       Py._Factor_simple>>: lambda "power" $ decodePyPowerToPyPrimary @@ var "power"]
@@ -263,7 +259,7 @@ decodePyConjunctionToPyPrimary = def "decodePyConjunctionToPyPrimary" $
   lambda "c" $ lets [
     "inversions">: PyDsl.unConjunction $ var "c"] $
     Logic.ifElse (Equality.equal (Lists.length $ var "inversions") (int32 1))
-      (Maybes.bind (Lists.maybeHead $ var "inversions") (lambda "i" $ decodePyInversionToPyPrimary @@ var "i"))
+      (Optionals.bind (Lists.maybeHead $ var "inversions") (lambda "i" $ decodePyInversionToPyPrimary @@ var "i"))
       nothing
 
 -- | Decode an Expression to a Primary if possible
@@ -275,7 +271,7 @@ decodePyExpressionToPyPrimary = def "decodePyExpressionToPyPrimary" $
       Py._Expression_simple>>: lambda "disj" $ lets [
         "conjunctions">: PyDsl.unDisjunction $ var "disj"] $
         Logic.ifElse (Equality.equal (Lists.length $ var "conjunctions") (int32 1))
-          (Maybes.bind (Lists.maybeHead $ var "conjunctions") (lambda "c2" $ decodePyConjunctionToPyPrimary @@ var "c2"))
+          (Optionals.bind (Lists.maybeHead $ var "conjunctions") (lambda "c2" $ decodePyConjunctionToPyPrimary @@ var "c2"))
           nothing]
     @@ var "e")
 
@@ -367,10 +363,7 @@ indentedBlock :: TypedTermDefinition (Maybe String -> [[Py.Statement]] -> Py.Blo
 indentedBlock = def "indentedBlock" $
   doc "Create an indented block with optional comment" $
   lambdas ["mcomment", "stmts"] $ lets [
-    "commentGroup">: Maybes.maybe
-      (list ([] :: [TypedTerm Py.Statement]))
-      (lambda "s" $ list [commentStatement @@ var "s"])
-      (var "mcomment"),
+    "commentGroup">: Optionals.cases (var "mcomment") (list ([] :: [TypedTerm Py.Statement])) (lambda "s" $ list [commentStatement @@ var "s"]),
     "groups">: Lists.filter (lambda "g" $ Logic.not $ Lists.null $ var "g")
       (Lists.cons (var "commentGroup") (var "stmts"))] $
     Logic.ifElse (Lists.null $ var "groups")
@@ -402,7 +395,8 @@ orExpression = def "orExpression" $
   doc "Build an or-expression from multiple primaries" $
   "prims" ~>
     "build" <~ ("prev" ~> "ps" ~>
-      Maybes.maybe
+      Optionals.cases
+        (Lists.uncons $ var "ps")
         -- Unreachable fallback: callers ensure 'ps' is non-empty on entry.
         (PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ (PyDsl.primarySimple $ PyDsl.atomEllipsis)))
         (lambda "p" $
@@ -410,8 +404,7 @@ orExpression = def "orExpression" $
             (PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ Pairs.first (var "p")))
             (var "build"
               @@ (just $ PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ Pairs.first (var "p")))
-              @@ Pairs.second (var "p")))
-        (Lists.uncons $ var "ps")) $
+              @@ Pairs.second (var "p")))) $
     pyBitwiseOrToPyExpression @@ (var "build" @@ nothing @@ var "prims")
 
 -- | Create a primary with parameters (subscript)
@@ -426,7 +419,7 @@ primaryWithExpressionSlices :: TypedTermDefinition (Py.Primary -> [Py.Expression
 primaryWithExpressionSlices = def "primaryWithExpressionSlices" $
   doc "Create a Primary with expression slices" $
   lambdas ["prim", "exprs"] $
-    Maybes.fromMaybe (var "prim") (Maybes.map
+    Optionals.fromOptional (var "prim") (Optionals.map
       (lambda "p" $
         primaryWithSlices @@ var "prim"
           @@ (pyExpressionToPySlice @@ Pairs.first (var "p"))
@@ -549,11 +542,8 @@ pyExpressionToPyPrimary :: TypedTermDefinition (Py.Expression -> Py.Primary)
 pyExpressionToPyPrimary = def "pyExpressionToPyPrimary" $
   doc "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary" $
   lambda "e" $
-    Maybes.maybe
-      (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
-        PyDsl.namedExpressionSimple $ var "e")
-      (lambda "prim" $ var "prim")
-      (decodePyExpressionToPyPrimary @@ var "e")
+    Optionals.cases (decodePyExpressionToPyPrimary @@ var "e") (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
+        PyDsl.namedExpressionSimple $ var "e") (lambda "prim" $ var "prim")
 
 -- | Convert an Expression to a SimpleStatement
 pyExpressionToPySimpleStatement :: TypedTermDefinition (Py.Expression -> Py.SimpleStatement)

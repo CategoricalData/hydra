@@ -125,7 +125,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]},
-                        "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}}},
+                        "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}}},
                   {
                     "name": "local",
                     "type": {

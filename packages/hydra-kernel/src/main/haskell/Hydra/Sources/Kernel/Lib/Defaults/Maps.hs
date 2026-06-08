@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math      as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals    as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
@@ -91,30 +91,32 @@ alter_ = define "alter" $
       -- Apply function to get new value: funTerm (Just v) or funTerm Nothing
       "newVal" <~ Core.termApplication (Core.application
         (var "funTerm")
-        (Core.termMaybe (var "currentVal"))) $
+        (Core.termOptional (var "currentVal"))) $
       -- Result depends on newVal:
       -- If newVal is Nothing, delete the key
       -- If newVal is Just v', insert/update with v'
+      -- cases newVal (delete key) (\newV -> insert key newV mapTerm)
       right $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termVariable $ encodedName _maybes_maybe)
-            -- default: delete key from map
+            (Core.termVariable $ encodedName _optionals_cases)
+            -- scrutinee: newVal
+            (var "newVal"))
+          -- default: delete key from map
+          (Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termVariable $ encodedName _maps_delete)
+              (var "keyTerm"))
+            (var "mapTerm")))
+        -- function: insert new value (as a term-level lambda)
+        (Core.termLambda $ Core.lambda (wrap _Name $ string "newV") nothing $
+          Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termVariable $ encodedName _maps_delete)
+                (Core.termVariable $ encodedName _maps_insert)
                 (var "keyTerm"))
-              (var "mapTerm")))
-          -- function: insert new value (as a term-level lambda)
-          (Core.termLambda $ Core.lambda (wrap _Name $ string "newV") nothing $
-            Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termVariable $ encodedName _maps_insert)
-                  (var "keyTerm"))
-                (Core.termVariable $ wrap _Name $ string "newV"))
-              (var "mapTerm")))
-        (var "newVal")]
+              (Core.termVariable $ wrap _Name $ string "newV"))
+            (var "mapTerm"))]
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
@@ -207,7 +209,7 @@ findWithDefault_ = define "findWithDefault" $
   -- Build: fromMaybe default (lookup key map)
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termVariable $ encodedName _maybes_fromMaybe)
+      (Core.termVariable $ encodedName _optionals_fromOptional)
       (var "defaultTerm"))
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application

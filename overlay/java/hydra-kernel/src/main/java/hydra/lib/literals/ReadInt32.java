@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -57,11 +57,11 @@ public class ReadInt32 extends PrimitiveFunction {
      * @param str the string to parse
      * @return an Opt containing the parsed Integer, or empty if parsing fails
      */
-    public static Maybe<Integer> apply(String str) {
+    public static Optional<Integer> apply(String str) {
         try {
-            return Maybe.just(Integer.parseInt(str));
+            return Optional.given(Integer.parseInt(str));
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

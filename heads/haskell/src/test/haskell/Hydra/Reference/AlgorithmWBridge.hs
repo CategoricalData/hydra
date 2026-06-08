@@ -73,7 +73,7 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body _) = do
       Core.TypeList et -> TyList <$> toStlc et
       Core.TypeLiteral lt -> pure $ TyLit lt
 --      TypeMap MapType |
---      TypeMaybe Type |
+--      TypeOptional Type |
       Core.TypePair (Core.PairType first second) -> TyProd <$> toStlc first <*> toStlc second
 --      TypeRecord RowType |
 --      TypeSet Type |

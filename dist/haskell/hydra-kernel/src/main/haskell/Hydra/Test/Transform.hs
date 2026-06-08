@@ -15,7 +15,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -111,8 +111,8 @@ transformToCompiledTests tg =
           desc = Testing.testGroupDescription tg
           subgroups = Testing.testGroupSubgroups tg
           cases_ = Testing.testGroupCases tg
-          transformedCases = Maybes.cat (Lists.map (\tc -> transformTestCase tc) cases_)
-          transformedSubgroups = Maybes.cat (Lists.map (\sg -> transformToCompiledTests sg) subgroups)
+          transformedCases = Optionals.cat (Lists.map (\tc -> transformTestCase tc) cases_)
+          transformedSubgroups = Optionals.cat (Lists.map (\sg -> transformToCompiledTests sg) subgroups)
       in (Logic.ifElse (Logic.and (Lists.null transformedCases) (Lists.null transformedSubgroups)) Nothing (Just (Testing.TestGroup {
         Testing.testGroupName = name_,
         Testing.testGroupDescription = desc,

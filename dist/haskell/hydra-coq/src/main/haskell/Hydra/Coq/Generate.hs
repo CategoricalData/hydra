@@ -2,26 +2,47 @@
 -- | Coq code generation driver — pre-passes, sentence producers, and per-module pipeline
 
 module Hydra.Coq.Generate where
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Coq.Coder as Coder
 import qualified Hydra.Coq.Environment as Environment
+import qualified Hydra.Coq.Language as Language
 import qualified Hydra.Coq.Serde as Serde
 import qualified Hydra.Coq.Syntax as Syntax
 import qualified Hydra.Coq.Utils as Utils
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -33,16 +54,16 @@ buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_ =
       let typeOfType = Core.TypeVariable (Core.Name "Type")
           typeAxioms = Lists.map (\nt -> Coder.encodeAxiomDefinitionPair env (Pairs.first nt, typeOfType)) typeDefs
           termAxioms =
-                  Maybes.cat (Lists.map (\td ->
+                  Optionals.cat (Lists.map (\td ->
                     let name = Pairs.first td
                         tvars = Pairs.first (Pairs.second (Pairs.second td))
                         mty = Pairs.second (Pairs.second (Pairs.second td))
-                    in (Maybes.maybe Nothing (\schemeTy ->
+                    in (Optionals.cases mty Nothing (\schemeTy ->
                       let wrapped =
                               Lists.foldr (\v -> \t -> Core.TypeForall (Core.ForallType {
                                 Core.forallTypeParameter = v,
                                 Core.forallTypeBody = t})) schemeTy tvars
-                      in (Just (Coder.encodeAxiomDefinitionPair env (name, wrapped)))) mty)) termDefs)
+                      in (Just (Coder.encodeAxiomDefinitionPair env (name, wrapped)))))) termDefs)
           deps = Utils.moduleDependencyNames mod_
           depSentences = dependencyImports deps
           allSentences = Lists.cons Coder.standardImports (Lists.concat2 depSentences (Lists.concat2 typeAxioms termAxioms))
@@ -65,10 +86,10 @@ buildFullModule env fieldMap mod_ nsStr path desc typeDefs termDefs =
                     let cyc = Pairs.first cg
                         grp = Pairs.second cg
                         enriched =
-                                Maybes.cat (Lists.map (\nt ->
+                                Optionals.cat (Lists.map (\nt ->
                                   let nm = Pairs.first nt
                                       t = Pairs.second nt
-                                  in (Maybes.map (\rec ->
+                                  in (Optionals.map (\rec ->
                                     let body2 = Utils.normalizeInnerTypeLambdas (Utils.rewriteTermFields fieldMap t)
                                         rest = Pairs.second rec
                                         vs = Pairs.first rest
@@ -110,9 +131,9 @@ buildFullModule env fieldMap mod_ nsStr path desc typeDefs termDefs =
           allQualifiedNamesFromTerms =
                   Sets.unions (Lists.map (\td -> Utils.collectQualifiedNamesInTerm (Pairs.first (Pairs.second td))) termDefs)
           allQualifiedNamesFromTermTypes =
-                  Sets.unions (Maybes.cat (Lists.map (\td ->
+                  Sets.unions (Optionals.cat (Lists.map (\td ->
                     let mty = Pairs.second (Pairs.second (Pairs.second td))
-                    in (Maybes.map (\ty ->
+                    in (Optionals.map (\ty ->
                       let ep = Utils.extractTypeParams ty
                           bodyTy = Pairs.second ep
                       in (Utils.collectQualifiedNamesInType bodyTy)) mty)) termDefs))
@@ -122,7 +143,7 @@ buildFullModule env fieldMap mod_ nsStr path desc typeDefs termDefs =
           strStartsWith =
                   \pref -> \s -> Logic.and (Equality.gte (Strings.length s) (Strings.length pref)) (Equality.equal (Strings.fromList (Lists.take (Strings.length pref) (Strings.toList s))) pref)
           hasStrictSuffix =
-                  \nsC -> \otherList -> Maybes.isJust (Lists.find (\other -> Logic.and (Logic.not (Equality.equal other nsC)) (strStartsWith (Strings.cat [
+                  \nsC -> \otherList -> Optionals.isGiven (Lists.find (\other -> Logic.and (Logic.not (Equality.equal other nsC)) (strStartsWith (Strings.cat [
                     nsC,
                     "."]) other)) otherList)
           referencedNs =
@@ -176,10 +197,10 @@ encodeMutualGroupText env group =
                         coqBody = Coder.encodeTerm env body2
                         bodyText = Serialization.printExpr (Serialization.parenthesize (Serde.termToExpr coqBody))
                         typeText =
-                                Maybes.maybe "_" (\ty ->
+                                Optionals.cases mType "_" (\ty ->
                                   let ep = Utils.extractTypeParams ty
                                       bodyTy = Pairs.second ep
-                                  in (Serialization.printExpr (Serialization.parenthesize (Serde.typeToExpr (Syntax.Type (Coder.encodeType env bodyTy)))))) mType
+                                  in (Serialization.printExpr (Serialization.parenthesize (Serde.typeToExpr (Syntax.Type (Coder.encodeType env bodyTy))))))
                     in (name, (typeText, bodyText))) group
           allTypeVarNames =
                   Lists.nub (Lists.concat (Lists.map (\td ->
@@ -240,7 +261,7 @@ encodeMutualGroupText env group =
                         fi = Pairs.second iFi
                         nm = Pairs.first fi
                         t = Pairs.first (Pairs.second fi)
-                        projText0 = Maybes.fromMaybe "" (Maps.lookup i (Maps.fromList (Lists.zip (Math.range 0 (Math.sub n 1)) projExprs)))
+                        projText0 = Optionals.fromOptional "" (Maps.lookup i (Maps.fromList (Lists.zip (Math.range 0 (Math.sub n 1)) projExprs)))
                         projText = replaceBundle projText0 bundleName
                         argsDef = implicitArgsLine nm allTypeVarNames
                     in (Strings.cat [
@@ -273,10 +294,10 @@ encodeTermGroupSingleton env td =
           binders = mkTypeBinders body2 typeVars
           typeBinders = Pairs.second binders
           returnType =
-                  Maybes.maybe Nothing (\ty ->
+                  Optionals.cases mType Nothing (\ty ->
                     let ep = Utils.extractTypeParams ty
                         bodyTy = Pairs.second ep
-                    in (Just (Syntax.Type (Coder.encodeType env bodyTy)))) mType
+                    in (Just (Syntax.Type (Coder.encodeType env bodyTy))))
       in [
         Syntax.Sentence {
           Syntax.sentenceComment = Nothing,
@@ -330,7 +351,7 @@ generateArgumentsDecls typeDefs =
                         in (Lists.cons constrLine fieldLines))
                       _ -> []
           triples =
-                  Maybes.cat (Lists.map (\nt ->
+                  Optionals.cat (Lists.map (\nt ->
                     let name = Pairs.first nt
                         ty = Pairs.second nt
                         ep = Utils.extractTypeParams ty
@@ -348,7 +369,7 @@ generateTypeGroup env group =
 
       let cyclic = Pairs.first group
           defs = Pairs.second group
-      in (Logic.ifElse (Logic.and (Logic.not cyclic) (Equality.equal (Lists.length defs) 1)) (Maybes.fromMaybe [] (Maybes.map (\d -> generateTypeSentence env (Pairs.first d) (Pairs.second d)) (Lists.maybeHead defs))) (
+      in (Logic.ifElse (Logic.and (Logic.not cyclic) (Equality.equal (Lists.length defs) 1)) (Optionals.fromOptional [] (Optionals.map (\d -> generateTypeSentence env (Pairs.first d) (Pairs.second d)) (Lists.maybeHead defs))) (
         let groupNames = Sets.fromList (Lists.map (\d -> Pairs.first d) defs)
             hasPositivity = Utils.hasPositivityIssue groupNames defs
             sanitizedGroup =
@@ -441,20 +462,20 @@ globalAmbiguousNames modules =
                               Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), nsStr)
                               Packaging.DefinitionTerm v0 -> Just (Utils.localName (Core.unName (Packaging.termDefinitionName v0)), nsStr)
                               _ -> Nothing
-                in (Maybes.cat (Lists.map fromDef (Packaging.moduleDefinitions m)))) modules)
+                in (Optionals.cat (Lists.map fromDef (Packaging.moduleDefinitions m)))) modules)
           nameToNs =
                   Lists.foldl (\acc -> \np ->
                     let n = Pairs.first np
                         nsVal = Pairs.second np
-                        existing = Maybes.fromMaybe Sets.empty (Maps.lookup n acc)
+                        existing = Optionals.fromOptional Sets.empty (Maps.lookup n acc)
                     in (Maps.insert n (Sets.insert nsVal existing) acc)) Maps.empty allNames
-      in (Sets.fromList (Maybes.cat (Lists.map (\entry -> Logic.ifElse (Equality.gte (Lists.length (Sets.toList (Pairs.second entry))) 2) (Just (Pairs.first entry)) Nothing) (Maps.toList nameToNs))))
+      in (Sets.fromList (Optionals.cat (Lists.map (\entry -> Logic.ifElse (Equality.gte (Lists.length (Sets.toList (Pairs.second entry))) 2) (Just (Pairs.first entry)) Nothing) (Maps.toList nameToNs))))
 -- | Collect all type definitions from every module and run buildConstructorCounts over them
 globalConstructorCounts :: [Packaging.Module] -> M.Map String Int
 globalConstructorCounts modules =
 
       let allTypeDefs =
-              Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\def_ -> case def_ of
+              Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\def_ -> case def_ of
                 Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions m))) modules)
       in (Utils.buildConstructorCounts allTypeDefs)
@@ -468,7 +489,7 @@ globalSanitizedAccessors modules =
       let allTypeGroups =
               Lists.concat (Lists.map (\m ->
                 let typeDefs =
-                        Maybes.cat (Lists.map (\def_ -> case def_ of
+                        Optionals.cat (Lists.map (\def_ -> case def_ of
                           Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                           _ -> Nothing) (Packaging.moduleDefinitions m))
                 in (Utils.sortTypeDefsSCC typeDefs)) modules)
@@ -585,7 +606,7 @@ makeOneAccessor typeName constrPat fieldVars idx ft =
                     "_",
                     fn]
           returnExpr =
-                  Coder.coqTermQualid (Maybes.fromMaybe "" (Maps.lookup idx (Maps.fromList (Lists.zip (Math.range 0 (Math.sub (Lists.length fieldVars) 1)) fieldVars))))
+                  Coder.coqTermQualid (Optionals.fromOptional "" (Maps.lookup idx (Maps.fromList (Lists.zip (Math.range 0 (Math.sub (Lists.length fieldVars) 1)) fieldVars))))
           matchExpr =
                   Syntax.TermTerm100 (Syntax.Term100Term10 (Syntax.Term10OneTerm (Syntax.OneTermTerm1 (Syntax.Term1Term0 (Syntax.Term0Match (Syntax.Match {
                     Syntax.matchCaseItems = [
@@ -618,7 +639,7 @@ makeOneAccessor typeName constrPat fieldVars idx ft =
 -- | Emit nested `prod (T1) (prod ...)` textual type expression
 makeProdType :: [String] -> String
 makeProdType ts =
-    Maybes.fromMaybe "unit" (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Strings.cat [
+    Optionals.fromOptional "unit" (Optionals.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Strings.cat [
       "prod (",
       (Pairs.first p),
       ") (",
@@ -627,7 +648,7 @@ makeProdType ts =
 -- | Emit a nested `(pair (b1) (...))` textual value expression
 makeProdVal :: [String] -> String
 makeProdVal bs =
-    Maybes.fromMaybe "tt" (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length bs) 1) (Pairs.first p) (Strings.cat [
+    Optionals.fromOptional "tt" (Optionals.map (\p -> Logic.ifElse (Equality.equal (Lists.length bs) 1) (Pairs.first p) (Strings.cat [
       "(pair (",
       (Pairs.first p),
       ") (",
@@ -681,26 +702,26 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
       let nsStr = Packaging.unModuleName (Packaging.moduleName mod_)
           path = namespaceToPath nsStr
           desc =
-                  Maybes.maybe "" (\d -> Strings.cat [
+                  Optionals.cases (Optionals.bind (Packaging.moduleMetadata mod_) (\em -> Packaging.entityMetadataDescription em)) "" (\d -> Strings.cat [
                     "(* ",
                     d,
-                    " *)\n\n"]) ((Maybes.bind (Packaging.moduleMetadata mod_) Packaging.entityMetadataDescription))
+                    " *)\n\n"])
           axiomOnlyModules =
                   [
                     "hydra.hoisting",
                     "hydra.inference"]
           isAxiomOnly = Lists.elem nsStr axiomOnlyModules
           typeDefs =
-                  Maybes.cat (Lists.map (\def_ -> case def_ of
+                  Optionals.cat (Lists.map (\def_ -> case def_ of
                     Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                     _ -> Nothing) defs)
           termDefs =
-                  Maybes.cat (Lists.map (\def_ -> case def_ of
+                  Optionals.cat (Lists.map (\def_ -> case def_ of
                     Packaging.DefinitionTerm v0 ->
                       let msig = Packaging.termDefinitionSignature v0
-                          mts = Maybes.map Scoping.termSignatureToTypeScheme msig
-                          vs = Maybes.maybe [] (\ts -> Core.typeSchemeVariables ts) mts
-                          mty = Maybes.map (\ts -> Core.typeSchemeBody ts) mts
+                          mts = Optionals.map Scoping.termSignatureToTypeScheme msig
+                          vs = Optionals.cases mts [] (\ts -> Core.typeSchemeVariables ts)
+                          mty = Optionals.map (\ts -> Core.typeSchemeBody ts) mts
                       in (Just (Utils.localName (Core.unName (Packaging.termDefinitionName v0)), (Packaging.termDefinitionBody v0, (vs, mty))))
                     _ -> Nothing) defs)
           localDefNames =
@@ -719,10 +740,10 @@ namespaceToPath :: String -> String
 namespaceToPath ns =
 
       let parts = Strings.splitOn "." ns
-          dirParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
+          dirParts = Optionals.fromOptional [] (Lists.maybeInit parts)
           fileName =
                   Strings.cat [
-                    Maybes.fromMaybe ns (Lists.maybeLast parts),
+                    Optionals.fromOptional ns (Lists.maybeLast parts),
                     ".v"]
       in (Logic.ifElse (Lists.null dirParts) fileName (Strings.cat [
         Strings.intercalate "/" dirParts,

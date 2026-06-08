@@ -16,7 +16,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -160,7 +160,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "filter values starting with a",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Maybes.fromMaybe 0 (Maybes.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Optionals.fromOptional 0 (Optionals.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) (M.fromList [
                   (1, "a"),
                   (2, "b"),
                   (3, "ab")]))),
@@ -172,7 +172,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "filter all",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Maybes.fromMaybe 0 (Maybes.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Optionals.fromOptional 0 (Optionals.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) (M.fromList [
                   (1, "b"),
                   (2, "c")]))),
                 Testing.universalTestCaseExpected = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) M.empty)})),
@@ -181,7 +181,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty map",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Maybes.fromMaybe 0 (Maybes.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) M.empty)),
+                Testing.universalTestCaseActual = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Optionals.fromOptional 0 (Optionals.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) M.empty)),
                 Testing.universalTestCaseExpected = (\_ -> (\m -> ShowCore.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) M.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -355,26 +355,26 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "find existing key",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Maps.lookup 2 (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Maps.lookup 2 (M.fromList [
                   (1, "a"),
                   (2, "b")]))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Just "b"))})),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Just "b"))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "key not found",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Maps.lookup 3 (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Maps.lookup 3 (M.fromList [
                   (1, "a"),
                   (2, "b")]))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) Nothing)})),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lookup in empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Maps.lookup 1 M.empty)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Maps.lookup 1 M.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

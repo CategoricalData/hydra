@@ -13,7 +13,7 @@
               "body": {
                 "record": [
                   {"name": "pathExpression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
-                  {"name": "resultProjection", "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.expressions.ResultProjection"}}}]}}},
+                  {"name": "resultProjection", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.expressions.ResultProjection"}}}]}}},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.expressions.QueryExpression"}},
     {
@@ -504,7 +504,7 @@
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract properties from path elements"}}}]},
               "body": {
                 "record": [
-                  {"name": "alias", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "alias", "type": {"optional": {"literal": {"string": {}}}}},
                   {"name": "source", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PropertySource"}}]}}},
           "variables": []},
         "name": "com.gdblab.pathAlgebra.expressions.PropertyExtraction"}},

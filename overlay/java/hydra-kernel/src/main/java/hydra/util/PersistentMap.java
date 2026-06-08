@@ -138,10 +138,10 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
     public abstract boolean isEmpty();
 
     /**
-     * Looks up a key, returning a Maybe.
+     * Looks up a key, returning a Optional.
      */
     @SuppressWarnings("unchecked")
-    public Maybe<V> lookup(K key) {
+    public Optional<V> lookup(K key) {
         PersistentMap<K, V> node = this;
         while (node instanceof Node) {
             Node<K, V> n = (Node<K, V>) node;
@@ -151,10 +151,10 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
             } else if (cmp > 0) {
                 node = n.right;
             } else {
-                return Maybe.just(n.value);
+                return Optional.given(n.value);
             }
         }
-        return Maybe.nothing();
+        return Optional.none();
     }
 
     /**
@@ -350,16 +350,16 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
 
     /**
      * Applies a function to alter the value for a key.
-     * The function receives Maybe.nothing() if the key is absent, or Maybe.just(v) if present.
-     * If the function returns Maybe.nothing(), the key is removed.
-     * If the function returns Maybe.just(v), the key is set to v.
+     * The function receives Optional.none() if the key is absent, or Optional.given(v) if present.
+     * If the function returns Optional.none(), the key is removed.
+     * If the function returns Optional.given(v), the key is set to v.
      */
-    public PersistentMap<K, V> alter(Function<Maybe<V>, Maybe<V>> f, K key) {
-        Maybe<V> current = lookup(key);
-        Maybe<V> result = f.apply(current);
-        if (result.isJust()) {
-            return insert(key, result.fromJust());
-        } else if (current.isJust()) {
+    public PersistentMap<K, V> alter(Function<Optional<V>, Optional<V>> f, K key) {
+        Optional<V> current = lookup(key);
+        Optional<V> result = f.apply(current);
+        if (result.isGiven()) {
+            return insert(key, result.fromGiven());
+        } else if (current.isGiven()) {
             return delete(key);
         } else {
             return this;
@@ -565,7 +565,7 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
     @SuppressWarnings("unchecked")
     public boolean containsKey(Object key) {
         try {
-            return lookup((K) key).isJust();
+            return lookup((K) key).isGiven();
         } catch (ClassCastException e) {
             return false;
         }
