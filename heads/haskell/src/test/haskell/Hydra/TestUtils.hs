@@ -11,7 +11,6 @@ import Hydra.Generation (moduleAsBindings, showError)
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
-import qualified Hydra.DefaultsPrimitives as DefaultPrims
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
 import qualified Hydra.Sources.Kernel.Types.Errors as TypeError
@@ -116,43 +115,6 @@ checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
 
 eval :: Term -> Either String Term
 eval term = case reduceTerm testContext testGraph True term of
-    Left err -> Left (showError err)
-    Right result -> Right result
-
--- | A test graph where eval-mode primitives replace native ones where available.
--- Eval primitives operate at the term level (building application terms) rather than
--- using native Haskell implementations, testing that the eval approach is correct.
-evalTestGraph :: Graph
-evalTestGraph = elementsToGraph evalCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
-  where
-    kernelTermBindings = L.concat $ fmap moduleAsBindings
-      [ TermAnnotations.module_
-      , TermConstants.module_
-      , TermDecodeCore.module_
-      , TermDependencies.module_
-      , TermEncodeCore.module_
-      , TermExtractCore.module_
-      , TermLexical.module_
-      , TermRewriting.module_
-      , TermScoping.module_
-      , TermShowCore.module_
-      , TermStrip.module_
-      , TermVariables.module_
-      ]
-    dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
-
--- | A core graph with eval primitives merged over the standard ones.
--- Standard primitives are kept for functions that don't have eval implementations.
--- Eval primitives override the standard ones where they exist.
-evalCoreGraph :: Graph
-evalCoreGraph = hydraCoreGraph {
-  graphPrimitives = M.union evalPrimMap (graphPrimitives hydraCoreGraph)}
-  where
-    evalPrimMap = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p))
-      (L.concat (libraryPrimitives <$> DefaultPrims.defaultLibraries))
-
-evalEval :: Term -> Either String Term
-evalEval term = case reduceTerm testContext evalTestGraph True term of
     Left err -> Left (showError err)
     Right result -> Right result
 
