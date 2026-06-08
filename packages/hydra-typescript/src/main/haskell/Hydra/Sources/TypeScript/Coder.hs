@@ -1390,7 +1390,7 @@ importsToText = def "importsToText" $
 -- per-parameter `isLazy` metadata (the `parameterIsLazy` flag on the
 -- primitive's signature), looked up via `lazyFlagsForPrimitive`. This
 -- replaces the former hard-coded primitive-name table (issue #391); the
--- kernel signatures in Hydra.Sources.Kernel.Lib.{Logic,Maybes,Eithers,Maps}
+-- kernel signatures in Hydra.Sources.Kernel.Lib.{Logic,Optionals,Eithers,Maps}
 -- are the single source of truth.
 --
 -- The TS-side primitive accepts either a value or a thunk and calls the
