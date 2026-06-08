@@ -118,7 +118,9 @@ subtermStep cx raw =
                               _ -> Left (Errors.DecodingError "expected int32 value")
                             _ -> Left (Errors.DecodingError "expected int32 literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "maybeTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepMaybeTerm) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "optionalTerm",
+                        (\input -> Eithers.map (\t -> Paths.SubtermStepOptionalTerm) (ExtractCore.decodeUnit cx input))),
                       (
                         Core.Name "productTerm",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepProductTerm t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
@@ -232,8 +234,8 @@ subtypeStep cx raw =
                       (Core.Name "mapKeys", (\input -> Eithers.map (\t -> Paths.SubtypeStepMapKeys) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "mapValues", (\input -> Eithers.map (\t -> Paths.SubtypeStepMapValues) (ExtractCore.decodeUnit cx input))),
                       (
-                        Core.Name "maybeElement",
-                        (\input -> Eithers.map (\t -> Paths.SubtypeStepMaybeElement) (ExtractCore.decodeUnit cx input))),
+                        Core.Name "optionalElement",
+                        (\input -> Eithers.map (\t -> Paths.SubtypeStepOptionalElement) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "pairFirst", (\input -> Eithers.map (\t -> Paths.SubtypeStepPairFirst) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "pairSecond", (\input -> Eithers.map (\t -> Paths.SubtypeStepPairSecond) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "recordField", (\input -> Eithers.map (\t -> Paths.SubtypeStepRecordField t) (DecodeCore.name cx input))),

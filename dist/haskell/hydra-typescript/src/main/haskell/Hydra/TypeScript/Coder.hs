@@ -273,8 +273,8 @@ encodeTerm cx g currentNs term =
         encodeTerm cx g currentNs (Pairs.first v0),
         (encodeTerm cx g currentNs (Pairs.second v0))])
       Core.TermOptional v0 -> Optionals.cases v0 (tsAsAny (tsObject [
-        ("tag", (tsExprStr "nothing"))])) (\v -> tsAsAny (tsObject [
-        ("tag", (tsExprStr "just")),
+        ("tag", (tsExprStr "none"))])) (\v -> tsAsAny (tsObject [
+        ("tag", (tsExprStr "given")),
         ("value", (encodeTerm cx g currentNs v))]))
       Core.TermRecord v0 ->
         let fields = Core.recordFields v0
@@ -420,12 +420,12 @@ encodeType cx g t =
         Core.TypeOptional v0 -> Eithers.map (\enc -> Syntax.TypeExpressionUnion [
           Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
-              Syntax.stringLiteralValue = "just",
+              Syntax.stringLiteralValue = "given",
               Syntax.stringLiteralSingleQuote = False}))),
             (tsPropSig "value" False enc)],
           (Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
-              Syntax.stringLiteralValue = "nothing",
+              Syntax.stringLiteralValue = "none",
               Syntax.stringLiteralSingleQuote = False})))])]) (encodeType cx g v0)
         Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt ->
           let leftArm =

@@ -1714,7 +1714,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "pair": {
-                                                                            "first": {"wrap": {"body": {"literal": {"string": "maybeTerm"}}, "typeName": "hydra.core.Name"}},
+                                                                            "first": {"wrap": {"body": {"literal": {"string": "optionalTerm"}}, "typeName": "hydra.core.Name"}},
                                                                             "second": {
                                                                               "lambda": {
                                                                                 "body": {
@@ -1741,7 +1741,7 @@
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "lambda": {
-                                                                                            "body": {"inject": {"field": {"name": "maybeTerm", "term": {"variable": "t"}}, "typeName": "hydra.paths.SubtermStep"}},
+                                                                                            "body": {"inject": {"field": {"name": "optionalTerm", "term": {"variable": "t"}}, "typeName": "hydra.paths.SubtermStep"}},
                                                                                             "domain": {"unit": {}},
                                                                                             "parameter": "t"}},
                                                                                         "function": {
@@ -3914,7 +3914,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "pair": {
-                                                                            "first": {"wrap": {"body": {"literal": {"string": "maybeElement"}}, "typeName": "hydra.core.Name"}},
+                                                                            "first": {"wrap": {"body": {"literal": {"string": "optionalElement"}}, "typeName": "hydra.core.Name"}},
                                                                             "second": {
                                                                               "lambda": {
                                                                                 "body": {
@@ -3941,7 +3941,7 @@
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "lambda": {
-                                                                                            "body": {"inject": {"field": {"name": "maybeElement", "term": {"variable": "t"}}, "typeName": "hydra.paths.SubtypeStep"}},
+                                                                                            "body": {"inject": {"field": {"name": "optionalElement", "term": {"variable": "t"}}, "typeName": "hydra.paths.SubtypeStep"}},
                                                                                             "domain": {"unit": {}},
                                                                                             "parameter": "t"}},
                                                                                         "function": {

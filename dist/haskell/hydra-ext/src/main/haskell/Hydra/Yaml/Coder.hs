@@ -179,13 +179,13 @@ termCoder typ cx g =
                     YamlModel.NodeSequence v0 -> Eithers.bind (Eithers.mapList (\node -> Coders.coderDecode lc cx2 node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError "expected sequence"))
           encodeMaybe =
-                  \maybeElementCoder -> \cx2 -> \maybeTerm ->
-                    let strippedMaybeTerm = Strip.deannotateTerm maybeTerm
+                  \maybeElementCoder -> \cx2 -> \optionalTerm ->
+                    let strippedMaybeTerm = Strip.deannotateTerm optionalTerm
                     in case strippedMaybeTerm of
                       Core.TermOptional v0 -> Optionals.cases v0 (Right (YamlModel.NodeScalar YamlModel.ScalarNull)) (\innerTerm -> Eithers.bind (Coders.coderEncode maybeElementCoder cx2 innerTerm) (\encodedInner -> Right encodedInner))
                       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                         "expected optional term, found: ",
-                        (ShowCore.term maybeTerm)])))
+                        (ShowCore.term optionalTerm)])))
           decodeMaybe =
                   \maybeElementCoder -> \cx2 -> \yamlVal -> case yamlVal of
                     YamlModel.NodeScalar v0 -> case v0 of

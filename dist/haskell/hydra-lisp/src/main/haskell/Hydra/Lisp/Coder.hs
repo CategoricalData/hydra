@@ -268,8 +268,8 @@ encodeTerm dialect cx g term =
         Syntax.mapEntryValue = v})))) (Maps.toList v0)) (\pairs -> Right (Syntax.ExpressionMap (Syntax.MapLiteral {
         Syntax.mapLiteralEntries = pairs})))
       Core.TermOptional v0 -> Optionals.cases v0 (Right (lispApp (lispVar "list") [
-        lispKeyword "nothing"])) (\val -> Eithers.bind (encodeTerm dialect cx g val) (\sval -> Right (lispApp (lispVar "list") [
-        lispKeyword "just",
+        lispKeyword "none"])) (\val -> Eithers.bind (encodeTerm dialect cx g val) (\sval -> Right (lispApp (lispVar "list") [
+        lispKeyword "given",
         sval])))
       Core.TermPair v0 -> Eithers.bind (encodeTerm dialect cx g (Pairs.first v0)) (\f -> Eithers.bind (encodeTerm dialect cx g (Pairs.second v0)) (\s -> Right (lispListExpr [
         f,

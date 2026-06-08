@@ -386,24 +386,6 @@ mapType typ =
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "map type",
           Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
--- | Extract an optional value from a term, applying a function to the value if present
-maybeTerm :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error (Maybe t0)
-maybeTerm f graph term0 =
-    Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
-      Core.TermOptional v0 -> Optionals.cases v0 (Right Nothing) (\t -> Eithers.map Optionals.pure (f t))
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "maybe value",
-        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
--- | Extract the base type from an optional type
-maybeType :: Core.Type -> Either Errors.Error Core.Type
-maybeType typ =
-
-      let stripped = Strip.deannotateType typ
-      in case stripped of
-        Core.TypeOptional v0 -> Right v0
-        _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-          Errors.unexpectedShapeErrorExpected = "maybe type",
-          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 -- | Ensure a function has the expected number of arguments
 nArgs :: Core.Name -> Int -> [t0] -> Either Errors.Error ()
 nArgs name n args =
@@ -413,6 +395,24 @@ nArgs name n args =
         " arguments to primitive ",
         (Literals.showString (Core.unName name))]),
       Errors.unexpectedShapeErrorActual = (Literals.showInt32 (Lists.length args))}))))
+-- | Extract an optional value from a term, applying a function to the value if present
+optionalTerm :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error (Maybe t0)
+optionalTerm f graph term0 =
+    Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
+      Core.TermOptional v0 -> Optionals.cases v0 (Right Nothing) (\t -> Eithers.map Optionals.pure (f t))
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "optional value",
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
+-- | Extract the base type from an optional type
+optionalType :: Core.Type -> Either Errors.Error Core.Type
+optionalType typ =
+
+      let stripped = Strip.deannotateType typ
+      in case stripped of
+        Core.TypeOptional v0 -> Right v0
+        _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          Errors.unexpectedShapeErrorExpected = "optional type",
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 -- | Extract a pair of values from a term, applying functions to each component
 pair :: (Core.Term -> Either Errors.Error t0) -> (Core.Term -> Either Errors.Error t1) -> Graph.Graph -> Core.Term -> Either Errors.Error (t0, t1)
 pair kf vf graph term0 =

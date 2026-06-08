@@ -365,7 +365,7 @@ rewriteAndFoldTermWithPath f term0 =
                                             Paths.SubtermStepMapValue (Pairs.first r)]) (Pairs.first rk) (Pairs.second kv)
                                   in (Math.add (Pairs.first r) 1, (Pairs.first rv, (Lists.cons (Pairs.second rk, (Pairs.second rv)) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) (Maps.toList v0)
                     in (Pairs.first (Pairs.second rr), (Core.TermMap (Maps.fromList (Lists.reverse (Pairs.second (Pairs.second rr))))))
-                  Core.TermOptional v0 -> Optionals.cases v0 dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermOptional (Just t1)) Paths.SubtermStepMaybeTerm val0 t)
+                  Core.TermOptional v0 -> Optionals.cases v0 dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermOptional (Just t1)) Paths.SubtermStepOptionalTerm val0 t)
                   Core.TermPair v0 ->
                     let rf = recurse (Lists.concat2 path [
                           Paths.SubtermStepProductTerm 0]) val0 (Pairs.first v0)
@@ -913,7 +913,7 @@ subtermsWithSteps x =
         (Paths.SubtermStepMapKey 0, (Pairs.first p)),
         (Paths.SubtermStepMapValue 0, (Pairs.second p))]) (Maps.toList v0))
       Core.TermOptional v0 -> Optionals.cases v0 [] (\t -> [
-        (Paths.SubtermStepMaybeTerm, t)])
+        (Paths.SubtermStepOptionalTerm, t)])
       Core.TermPair _ -> []
       Core.TermProject _ -> []
       Core.TermRecord v0 -> Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0)

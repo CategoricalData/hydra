@@ -32,7 +32,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "apply(mf, mx) returns Just(f x) when mf is Just(f) and mx is Just(x), and Nothing if either is Nothing.",
+            "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.",
             "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
             "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
           "description": "Applicative apply for optionals: combine an optional function and an optional argument.",
@@ -73,7 +73,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "bind(m, f) returns f(x) when m is Just(x), and Nothing when m is Nothing.",
+            "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
             "The monadic bind for optionals; used to chain computations that may be absent.",
             "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
           "description": "Monadic bind for optionals.",
@@ -94,7 +94,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "cases(m, def, f) returns f(x) when m is Just(x), and def when m is Nothing.",
+            "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
             "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
             "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
           "description": "Case analysis on an optional, with cases-style argument order.",
@@ -151,7 +151,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "cat(xs) returns the list of contained values from Just elements of xs, in original order; Nothing elements are discarded.",
+            "cat(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
             "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
           "description": "Concatenate optionals, keeping only the present values.",
           "seeAlso": []},
@@ -190,7 +190,7 @@
         "metadata": {
           "comments": [
             "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
-            "If either f or the second stage produces Nothing, the result is Nothing.",
+            "If either f or the second stage produces none, the result is none.",
             "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
           "description": "Kleisli composition for optionals.",
           "seeAlso": []},
@@ -234,7 +234,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "fromOptional(def, m) returns x when m is Just(x), and def when m is Nothing.",
+            "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
             "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
           "description": "Return the value contained in an optional, falling back to a default if absent.",
           "seeAlso": []},
@@ -266,9 +266,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "isGiven(m) returns true iff m is a Just variant.",
+            "isGiven(m) returns true iff m is a given variant.",
             "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
-          "description": "Test whether an optional is present (Just).",
+          "description": "Test whether an optional is present (given).",
           "seeAlso": []},
         "name": "hydra.lib.optionals.isGiven",
         "signature": {
@@ -295,9 +295,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "isNone(m) returns true iff m is the Nothing variant.",
+            "isNone(m) returns true iff m is the none variant.",
             "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
-          "description": "Test whether an optional is absent (Nothing).",
+          "description": "Test whether an optional is absent (none).",
           "seeAlso": []},
         "name": "hydra.lib.optionals.isNone",
         "signature": {
@@ -333,7 +333,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "map(f, m) returns Just(f x) when m is Just(x), and Nothing when m is Nothing.",
+            "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
             "The functor instance for optionals.",
             "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
           "description": "Map a function over an optional.",
@@ -372,7 +372,7 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from Just results in original order; Nothing results are discarded.",
+            "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.",
             "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
           "description": "Map a partial function over a list, keeping only the present results.",
           "seeAlso": []},
@@ -390,15 +390,15 @@
       "primitive": {
         "defaultImplementation": {
           "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a value in Just."}}}]},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a value in given."}}}]},
             "body": {"lambda": {"body": {"optional": {"variable": "x"}}, "parameter": "x"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
           "comments": [
-            "pure(x) = Just(x). The applicative pure for optionals.",
+            "pure(x) = given(x). The applicative pure for optionals.",
             "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
-          "description": "Wrap a value in Just.",
+          "description": "Wrap a value in given.",
           "seeAlso": []},
         "name": "hydra.lib.optionals.pure",
         "signature": {
@@ -428,9 +428,9 @@
         "isTotal": true,
         "metadata": {
           "comments": [
-            "toList(m) returns [x] when m is Just(x), and the empty list when m is Nothing.",
+            "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
             "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
-          "description": "Convert an optional to a list: Just x maps to [x], Nothing to [].",
+          "description": "Convert an optional to a list: given x maps to [x], none to [].",
           "seeAlso": []},
         "name": "hydra.lib.optionals.toList",
         "signature": {
