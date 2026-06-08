@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -58,18 +58,18 @@ public class ReadUint64 extends PrimitiveFunction {
     /**
      * Attempts to parse a string into a BigInteger representing uint64 (0-18446744073709551615).
      * @param str the string to parse
-     * @return a Maybe containing the parsed BigInteger, or empty if parsing fails or value is out of range
+     * @return a Optional containing the parsed BigInteger, or empty if parsing fails or value is out of range
      */
-    public static Maybe<BigInteger> apply(String str) {
+    public static Optional<BigInteger> apply(String str) {
         try {
             BigInteger n = new BigInteger(str);
             if (n.compareTo(BigInteger.ZERO) >= 0 && n.compareTo(MAX_UINT64) <= 0) {
-                return Maybe.just(n);
+                return Optional.given(n);
             } else {
-                return Maybe.nothing();
+                return Optional.none();
             }
         } catch (NumberFormatException e) {
-            return Maybe.nothing();
+            return Optional.none();
         }
     }
 }

@@ -20,7 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -112,14 +112,12 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
     ("nt" ~> CoqCoderSource.encodeAxiomDefinitionPair @@ var "env" @@
       pair (Pairs.first $ var "nt") (var "typeOfType"))
     (var "typeDefs") $
-  "termAxioms" <~ (Maybes.cat $ Lists.map
+  "termAxioms" <~ (Optionals.cat $ Lists.map
     ("td" ~>
       "name" <~ (Pairs.first $ var "td") $
       "tvars" <~ (Pairs.first $ Pairs.second $ Pairs.second $ var "td") $
       "mty" <~ (Pairs.second $ Pairs.second $ Pairs.second $ var "td") $
-      Maybes.maybe
-        (Phantoms.nothing :: TypedTerm (Maybe C.Sentence))
-        ("schemeTy" ~>
+      Optionals.cases (var "mty") (Phantoms.nothing :: TypedTerm (Maybe C.Sentence)) ("schemeTy" ~>
           -- Re-wrap the TypeScheme's forall binders around the body type so
           -- the emitted axiom has well-scoped type variables:
           -- `Axiom f : forall (t0 : Type) (t1 : Type), <body>`.
@@ -129,8 +127,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
             (var "schemeTy")
             (var "tvars") $
           Phantoms.just $ CoqCoderSource.encodeAxiomDefinitionPair @@ var "env" @@
-            pair (var "name") (var "wrapped"))
-        (var "mty"))
+            pair (var "name") (var "wrapped")))
     (var "termDefs")) $
   "deps" <~ (CoqUtils.moduleDependencyNames @@ var "mod_") $
   "depSentences" <~ (dependencyImports @@ var "deps") $
@@ -173,11 +170,11 @@ buildFullModule = define "buildFullModule" $
     ("cg" ~>
       "cyc" <~ Pairs.first (var "cg") $
       "grp" <~ Pairs.second (var "cg") $
-      "enriched" <~ Maybes.cat (Lists.map
+      "enriched" <~ Optionals.cat (Lists.map
         ("nt" ~>
           "nm" <~ Pairs.first (var "nt") $
           "t" <~ Pairs.second (var "nt") $
-          Maybes.map
+          Optionals.map
             ("rec" ~>
               "body2" <~ (CoqUtils.normalizeInnerTypeLambdas @@
                 (CoqUtils.rewriteTermFields @@ var "fieldMap" @@ var "t")) $
@@ -241,10 +238,10 @@ buildFullModule = define "buildFullModule" $
     ("td" ~> CoqUtils.collectQualifiedNamesInTerm @@
       (Pairs.first (Pairs.second (var "td"))))
     (var "termDefs")) $
-  "allQualifiedNamesFromTermTypes" <~ (Sets.unions $ Maybes.cat $ Lists.map
+  "allQualifiedNamesFromTermTypes" <~ (Sets.unions $ Optionals.cat $ Lists.map
     ("td" ~>
       "mty" <~ Pairs.second (Pairs.second (Pairs.second (var "td"))) $
-      Maybes.map
+      Optionals.map
         ("ty" ~> lets [
           "ep">: CoqUtils.extractTypeParams @@ var "ty",
           "bodyTy">: Pairs.second (var "ep")] $
@@ -266,7 +263,7 @@ buildFullModule = define "buildFullModule" $
         (Strings.fromList $ Lists.take (Strings.length $ var "pref") (Strings.toList $ var "s"))
         (var "pref"))) $
   "hasStrictSuffix" <~ ("nsC" ~> "otherList" ~>
-    Maybes.isJust $ Lists.find
+    Optionals.isGiven $ Lists.find
       ("other" ~> Logic.and
         (Logic.not (Equality.equal (var "other") (var "nsC")))
         (var "strStartsWith" @@
@@ -344,16 +341,13 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
       "bodyText" <~ (Serialization.printExpr @@
         (Serialization.parenthesize @@ (CoqSerdeSource.termToExpr @@ var "coqBody"))) $
-      "typeText" <~ Maybes.maybe
-        (string "_")
-        ("ty" ~>
+      "typeText" <~ Optionals.cases (var "mType") (string "_") ("ty" ~>
           "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
           "bodyTy" <~ Pairs.second (var "ep") $
           Serialization.printExpr @@
             (Serialization.parenthesize @@
               (CoqSerdeSource.typeToExpr @@
-                (CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy"))))
-        (var "mType") $
+                (CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy")))) $
       pair (var "name") (pair (var "typeText") (var "bodyText")))
     (var "group")) $
   -- Collect type variable binders across the whole group.
@@ -424,7 +418,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       "fi" <~ Pairs.second (var "iFi") $
       "nm" <~ Pairs.first (var "fi") $
       "t" <~ Pairs.first (Pairs.second (var "fi")) $
-      "projText0" <~ Maybes.fromMaybe (string "") (Maps.lookup (var "i")
+      "projText0" <~ Optionals.fromOptional (string "") (Maps.lookup (var "i")
         (Maps.fromList $ Lists.zip
           (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
           (var "projExprs"))) $
@@ -463,13 +457,10 @@ encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
   "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
   "binders" <~ (mkTypeBinders @@ var "body2" @@ var "typeVars") $
   "typeBinders" <~ Pairs.second (var "binders") $
-  "returnType" <~ Maybes.maybe
-    (Phantoms.nothing :: TypedTerm (Maybe C.Type))
-    ("ty" ~>
+  "returnType" <~ Optionals.cases (var "mType") (Phantoms.nothing :: TypedTerm (Maybe C.Type)) ("ty" ~>
       "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
       "bodyTy" <~ Pairs.second (var "ep") $
-      Phantoms.just $ CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy")
-    (var "mType") $
+      Phantoms.just $ CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy") $
   list [CSyntax.sentence
     (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
     (CSyntax.sentenceContentDefinition $ CSyntax.definition
@@ -533,7 +524,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
             Lists.cons (var "constrLine") (var "fieldLines"))]) $
   -- For each (name, ty), peel forall binders and only emit lines when there
   -- are actual type parameters to make implicit.
-  "triples" <~ (Maybes.cat $ Lists.map
+  "triples" <~ (Optionals.cat $ Lists.map
     ("nt" ~>
       "name" <~ (Pairs.first $ var "nt") $
       "ty" <~ (Pairs.second $ var "nt") $
@@ -565,7 +556,7 @@ generateTypeGroup = define "generateTypeGroup" $
   Logic.ifElse
     (Logic.and (Logic.not $ var "cyclic") (Equality.equal (Lists.length $ var "defs") (int32 1)))
     -- Non-cyclic singleton: delegate.
-    (Maybes.fromMaybe (list ([] :: [TypedTerm C.Sentence])) (Maybes.map
+    (Optionals.fromOptional (list ([] :: [TypedTerm C.Sentence])) (Optionals.map
       (lambda "d" $
         generateTypeSentence @@ var "env" @@ (Pairs.first $ var "d") @@ (Pairs.second $ var "d"))
       (Lists.maybeHead $ var "defs")))
@@ -686,21 +677,21 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
             _Definition_term>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.termDefinitionName $ var "td")))
               (var "nsStr")]] $
-        Maybes.cat $ Lists.map (var "fromDef") (Packaging.moduleDefinitions $ var "m"))
+        Optionals.cat $ Lists.map (var "fromDef") (Packaging.moduleDefinitions $ var "m"))
       (var "modules"),
     -- Group by local name, collecting the set of namespaces each name appears in.
     "nameToNs">: Lists.foldl
       ("acc" ~> "np" ~>
         "n" <~ Pairs.first (var "np") $
         "nsVal" <~ Pairs.second (var "np") $
-        "existing" <~ Maybes.fromMaybe
+        "existing" <~ Optionals.fromOptional
           (Sets.empty :: TypedTerm (S.Set String))
           (Maps.lookup (var "n") (var "acc")) $
         Maps.insert (var "n") (Sets.insert (var "nsVal") (var "existing")) (var "acc"))
       (Maps.empty :: TypedTerm (M.Map String (S.Set String)))
       (var "allNames")] $
     -- A name is ambiguous iff it appears in >= 2 distinct namespaces.
-    Sets.fromList $ Maybes.cat $ Lists.map
+    Sets.fromList $ Optionals.cat $ Lists.map
       ("entry" ~> Logic.ifElse
         (Equality.gte (Lists.length $ Sets.toList $ Pairs.second $ var "entry") (int32 2))
         (Phantoms.just $ Pairs.first $ var "entry")
@@ -714,7 +705,7 @@ globalConstructorCounts = define "globalConstructorCounts" $
   doc "Collect all type definitions from every module and run buildConstructorCounts over them" $
   lambda "modules" $ lets [
     "allTypeDefs">: Lists.concat $ Lists.map
-      ("m" ~> Maybes.cat $ Lists.map
+      ("m" ~> Optionals.cat $ Lists.map
         ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
           _Definition_type>>: "td" ~> Phantoms.just $ pair
             (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
@@ -740,7 +731,7 @@ globalSanitizedAccessors = define "globalSanitizedAccessors" $
   lambda "modules" $ lets [
     "allTypeGroups">: Lists.concat $ Lists.map
       ("m" ~> lets [
-        "typeDefs">: Maybes.cat $ Lists.map
+        "typeDefs">: Optionals.cat $ Lists.map
           ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
@@ -889,7 +880,7 @@ makeOneAccessor = define "makeOneAccessor" $
     string "_",
     var "fn"]) $
   "returnExpr" <~ (CoqCoderSource.coqTermQualid @@
-    (Maybes.fromMaybe (string "") (Maps.lookup (var "idx")
+    (Optionals.fromOptional (string "") (Maps.lookup (var "idx")
       (Maps.fromList $ Lists.zip
         (Math.range (int32 0) (Math.sub (Lists.length $ var "fieldVars") (int32 1)))
         (var "fieldVars"))))) $
@@ -929,7 +920,7 @@ makeProdType :: TypedTermDefinition ([String] -> String)
 makeProdType = define "makeProdType" $
   doc "Emit nested `prod (T1) (prod ...)` textual type expression" $
   lambda "ts" $
-    Maybes.fromMaybe (string "unit") (Maybes.map
+    Optionals.fromOptional (string "unit") (Optionals.map
       (lambda "p" $
         Logic.ifElse (Equality.equal (Lists.length $ var "ts") (int32 1))
           (Pairs.first $ var "p")
@@ -948,7 +939,7 @@ makeProdVal :: TypedTermDefinition ([String] -> String)
 makeProdVal = define "makeProdVal" $
   doc "Emit a nested `(pair (b1) (...))` textual value expression" $
   lambda "bs" $
-    Maybes.fromMaybe (string "tt") (Maybes.map
+    Optionals.fromOptional (string "tt") (Optionals.map
       (lambda "p" $
         Logic.ifElse (Equality.equal (Lists.length $ var "bs") (int32 1))
           (Pairs.first $ var "p")
@@ -1047,32 +1038,26 @@ moduleToCoq = define "moduleToCoq" $
   lambdas ["fieldMap", "constrCounts", "ambiguousNames", "globalSanitizedAcc", "mod_", "defs"] $
   "nsStr" <~ (Packaging.unModuleName (Packaging.moduleName $ var "mod_")) $
   "path" <~ (namespaceToPath @@ var "nsStr") $
-  "desc" <~ Maybes.maybe
-    (string "")
-    ("d" ~> Strings.cat (list [string "(* ", var "d", string " *)\n\n"]))
-    ((Maybes.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) $
+  "desc" <~ Optionals.cases ((Optionals.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.cat (list [string "(* ", var "d", string " *)\n\n"])) $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
   "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
   "isAxiomOnly" <~ ((Lists.elem :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
     (var "nsStr") (var "axiomOnlyModules")) $
   -- Extract type and term definitions from the adapted definition list.
-  "typeDefs" <~ Maybes.cat (Lists.map
+  "typeDefs" <~ Optionals.cat (Lists.map
     ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
       _Definition_type>>: "td" ~> Phantoms.just $ pair
         (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
         (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
     (var "defs")) $
-  "termDefs" <~ Maybes.cat (Lists.map
+  "termDefs" <~ Optionals.cat (Lists.map
     ("def_" ~> cases _Definition (var "def_")
       (Just (Phantoms.nothing :: TypedTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
         "msig" <~ (Packaging.termDefinitionSignature $ var "td") $
-        "mts" <~ Maybes.map Scoping.termSignatureToTypeScheme (var "msig") $
-        "vs" <~ Maybes.maybe
-          (list ([] :: [TypedTerm Name]))
-          ("ts" ~> Core.typeSchemeVariables $ var "ts")
-          (var "mts") $
-        "mty" <~ Maybes.map ("ts" ~> Core.typeSchemeBody $ var "ts") (var "mts") $
+        "mts" <~ Optionals.map Scoping.termSignatureToTypeScheme (var "msig") $
+        "vs" <~ Optionals.cases (var "mts") (list ([] :: [TypedTerm Name])) ("ts" ~> Core.typeSchemeVariables $ var "ts") $
+        "mty" <~ Optionals.map ("ts" ~> Core.typeSchemeBody $ var "ts") (var "mts") $
         Phantoms.just $ pair
           (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.termDefinitionName $ var "td")))
           (pair
@@ -1114,8 +1099,8 @@ namespaceToPath = define "namespaceToPath" $
   doc "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (var "ns"),
-    "dirParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
-    "fileName">: Strings.cat (list [Maybes.fromMaybe (var "ns") (Lists.maybeLast (var "parts")), string ".v"])] $
+    "dirParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
+    "fileName">: Strings.cat (list [Optionals.fromOptional (var "ns") (Lists.maybeLast (var "parts")), string ".v"])] $
     Logic.ifElse (Lists.null (var "dirParts"))
       (var "fileName")
       (Strings.cat (list [

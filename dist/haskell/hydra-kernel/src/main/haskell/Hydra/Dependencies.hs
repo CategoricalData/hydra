@@ -19,7 +19,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -139,7 +139,7 @@ inlineType schema typ =
               \recurse -> \typ2 ->
                 let afterRecurse =
                         \tr -> case tr of
-                          Core.TypeVariable v0 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such type in schema: " (Core.unName v0))))) (inlineType schema) (Maps.lookup v0 schema)
+                          Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 schema) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such type in schema: " (Core.unName v0))))) (inlineType schema)
                           _ -> Right tr
                 in (Eithers.bind (recurse typ2) (\tr -> afterRecurse tr))
       in (Rewriting.rewriteTypeM f typ)
@@ -188,7 +188,7 @@ pruneLet l =
       let bindingMap = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) (Core.letBindings l))
           rootName = Core.Name "[[[root]]]"
           adj =
-                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (Variables.freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Maybes.fromMaybe Core.TermUnit (Maps.lookup n bindingMap))))
+                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (Variables.freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Optionals.fromOptional Core.TermUnit (Maps.lookup n bindingMap))))
           reachable = Sorting.findReachableNodes adj rootName
           prunedBindings = Lists.filter (\b -> Sets.member (Core.bindingName b) reachable) (Core.letBindings l)
       in Core.Let {
@@ -216,7 +216,7 @@ replaceTypedefs types typ0 =
                               \ts ->
                                 let t = Core.typeSchemeBody ts
                                 in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ)
-                  in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v0 types))
+                  in (Optionals.cases (Maps.lookup v0 types) typ (\ts -> forTypeScheme ts))
                 Core.TypeWrap _ -> typ
                 _ -> recurse typ
       in (Rewriting.rewriteType rewrite typ0)
@@ -273,7 +273,7 @@ toShortNames original =
       let addName =
               \acc -> \name ->
                 let local = Names.localNameOf name
-                    group = Maybes.fromMaybe Sets.empty (Maps.lookup local acc)
+                    group = Optionals.fromOptional Sets.empty (Maps.lookup local acc)
                 in (Maps.insert local (Sets.insert name group) acc)
           groupNamesByLocal = \names -> Lists.foldl addName Maps.empty names
           groups = groupNamesByLocal original
@@ -302,7 +302,7 @@ topologicalSortBindingMap bindingMap =
                         term = Pairs.second nameAndTerm
                     in (name, (Logic.ifElse (hasTypeAnnotation term) [] (Sets.toList (Sets.intersection keys (Variables.freeVariablesInTerm term)))))
           toPair =
-                  \name -> (name, (Maybes.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap)))
+                  \name -> (name, (Optionals.fromOptional (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap)))
       in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 -- | Topological sort of elements based on their dependencies
 topologicalSortBindings :: [Core.Binding] -> Either [[Core.Name]] [Core.Name]
@@ -320,7 +320,7 @@ topologicalSortTypeDefinitions defs =
                 (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionBody def)))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
-      in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
+      in (Lists.map (\names -> Optionals.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
 -- | Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references
 typeDependencyNames :: Bool -> Core.Type -> S.Set Core.Name
 typeDependencyNames withSchema typ =

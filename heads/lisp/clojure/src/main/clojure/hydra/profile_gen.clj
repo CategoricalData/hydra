@@ -224,7 +224,7 @@
                       (let [mod (nth term-mods idx)
                             defs (nth def-lists idx)
                             ;; Refresh module elements from inferred graph
-                            refreshed-els ((r 'hydra_lib_maybes_cat)
+                            refreshed-els ((r 'hydra_lib_optionals_cat)
                                             (mapv (fn [e]
                                                     (((r 'hydra_lib_lists_find)
                                                        (fn [b] (((r 'hydra_lib_equality_equal) (:name b)) (:name e))))

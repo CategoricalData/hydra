@@ -56,7 +56,7 @@ annotations :: TypeDefinition
 annotations = define "Annotations" $
   doc "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
   T.record [
-    "doc">: T.maybe T.string,
+    "doc">: T.optional T.string,
     "deprecated">: T.boolean]
 
 enumField :: TypeDefinition
@@ -129,13 +129,13 @@ property_ :: TypeDefinition
 property_ = define "Property" $
   T.record [
     "key">: pdl "PropertyKey",
-    "value">: T.maybe $ json "Value"]
+    "value">: T.optional $ json "Value"]
 
 qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
   T.record [
     "name">: pdl "Name",
-    "namespace">: T.maybe $ pdl "Namespace"]
+    "namespace">: T.optional $ pdl "Namespace"]
 
 recordField :: TypeDefinition
 recordField = define "RecordField" $
@@ -144,7 +144,7 @@ recordField = define "RecordField" $
     "name">: pdl "FieldName",
     "value">: pdl "Schema",
     "optional">: T.boolean,
-    "default">: T.maybe $ json "Value",
+    "default">: T.optional $ json "Value",
     "annotations">: pdl "Annotations"]
 
 recordSchema :: TypeDefinition
@@ -170,7 +170,7 @@ schemaFile :: TypeDefinition
 schemaFile = define "SchemaFile" $
   T.record [
     "namespace">: pdl "Namespace",
-    "package">: T.maybe $ pdl "Package",
+    "package">: T.optional $ pdl "Package",
     "imports">: T.list $ pdl "QualifiedName",
     "schemas">: T.list $ pdl "NamedSchema"]
 
@@ -178,7 +178,7 @@ unionMember :: TypeDefinition
 unionMember = define "UnionMember" $
   doc "Note: annotations are only available for aliased members" $
   T.record [
-    "alias">: T.maybe $ pdl "FieldName",
+    "alias">: T.optional $ pdl "FieldName",
     "value">: pdl "Schema",
     "annotations">: pdl "Annotations"]
 

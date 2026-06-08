@@ -326,43 +326,43 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "optional string with value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)) (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))))})),
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)) (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "hello")))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "hello")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "optional string nothing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)) (Core.TermMaybe Nothing))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString)) (Core.TermOptional Nothing))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "optional int with value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested optional: nothing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))) (Core.TermMaybe Nothing))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))) (Core.TermOptional Nothing))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested optional: just nothing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))) (Core.TermMaybe (Just (Core.TermMaybe Nothing))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermMaybe Nothing))))})),
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))) (Core.TermOptional (Just (Core.TermOptional Nothing))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermOptional Nothing))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested optional: just just value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))) (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))))))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))))))})),
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))) (Core.TermOptional (Just (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "hello")))))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "hello")))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -414,13 +414,13 @@ allTests =
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "email"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "name"),
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "email"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}]) (Core.TermRecord (Core.Record {
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
                     Core.Field {
@@ -428,7 +428,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Alice"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "email"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "alice@example.com"))))}]})))),
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "alice@example.com"))))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
@@ -437,7 +437,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Alice"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "email"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "alice@example.com"))))}]})))})),
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "alice@example.com"))))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -449,13 +449,13 @@ allTests =
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "email"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "name"),
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "email"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))}]) (Core.TermRecord (Core.Record {
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))}]) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
                     Core.Field {
@@ -463,7 +463,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Alice"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "email"),
-                      Core.fieldTerm = (Core.TermMaybe Nothing)}]})))),
+                      Core.fieldTerm = (Core.TermOptional Nothing)}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
@@ -472,7 +472,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Alice"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "email"),
-                      Core.fieldTerm = (Core.TermMaybe Nothing)}]})))})),
+                      Core.fieldTerm = (Core.TermOptional Nothing)}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -484,19 +484,19 @@ allTests =
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "email"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))},
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "age"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "name"),
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "email"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))},
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral Core.LiteralTypeString))},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "age"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}]) (Core.TermRecord (Core.Record {
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}]) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
                     Core.Field {
@@ -504,10 +504,10 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Bob"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "email"),
-                      Core.fieldTerm = (Core.TermMaybe Nothing)},
+                      Core.fieldTerm = (Core.TermOptional Nothing)},
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))))}]})))),
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
@@ -516,10 +516,10 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "Bob"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "email"),
-                      Core.fieldTerm = (Core.TermMaybe Nothing)},
+                      Core.fieldTerm = (Core.TermOptional Nothing)},
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))))}]})))})),
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -531,13 +531,13 @@ allTests =
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "value"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeRecord [
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "name"),
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
                   Core.FieldType {
                     Core.fieldTypeName = (Core.Name "value"),
-                    Core.fieldTypeType = (Core.TypeMaybe (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))}]) (Core.TermRecord (Core.Record {
+                    Core.fieldTypeType = (Core.TypeOptional (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))}]) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
                     Core.Field {
@@ -545,7 +545,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "value"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))}]})))),
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))}]})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "test"),
                   Core.recordFields = [
@@ -554,7 +554,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "value"),
-                      Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))}]})))})),
+                      Core.fieldTerm = (Core.TermOptional (Just (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

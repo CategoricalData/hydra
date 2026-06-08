@@ -389,16 +389,15 @@ for recursive code that relies on short-circuiting.
 Which arguments are lazy is recorded directly in each primitive's metadata: every value parameter
 of a primitive's signature carries an `isLazy` flag (`Typing.Parameter.isLazy`). Coders read these
 flags rather than hard-coding primitive names, so the set of lazy positions has a single source of
-truth — the kernel signatures in `Hydra.Sources.Kernel.Lib.{Logic,Maybes,Eithers,Maps}` (set via
+truth — the kernel signatures in `Hydra.Sources.Kernel.Lib.{Logic,Optionals,Eithers,Maps}` (set via
 the `lazySig [positions]` helper). The primitives that are lazy today, and the positions the flags
 mark, are:
 
 | Primitive | Lazy parameter(s) | Why |
 |-----------|-------------------|-----|
 | `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
-| `hydra.lib.maybes.cases` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
-| `hydra.lib.maybes.maybe` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
-| `hydra.lib.maybes.fromMaybe` | the default value | Only evaluated when the Maybe is Nothing |
+| `hydra.lib.optionals.cases` | the `none`-case default value | Only evaluated when the optional is none |
+| `hydra.lib.optionals.fromOptional` | the default value | Only evaluated when the optional is none |
 | `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
 | `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
 | `hydra.lib.maps.findWithDefault` | the default value | Only evaluated when the key is absent |
@@ -500,7 +499,7 @@ layers in the kernel JSON. The head of `App(App(App(TypeApp(Var "ifElse", T)), c
 *not* `Var "ifElse"` — your `termHeadVariable`-equivalent helper must recurse through
 `Term_typeApplication` (and `Term_annotated`) to find the underlying variable name. If you skip
 this, your detection will fire only for monomorphic primitives and silently miss most of the
-kernel's `ifElse`/`cases`/`fromMaybe` call sites. The Python coder handles this in
+kernel's `ifElse`/`cases`/`fromOptional` call sites. The Python coder handles this in
 `flatten_application` (which also unwraps annotations); the TypeScript coder does the same in
 `termHeadVariable`.
 
@@ -522,7 +521,7 @@ In addition to the implementations themselves, you need supporting infrastructur
 The generated kernel code imports a small set of types that must exist before anything compiles.
 These are language-specific representations of Hydra's core algebraic types:
 
-- **Maybe/Optional** (with explicit `Just`/`Nothing` or equivalent)
+- **Optional** (with explicit present/absent cases — e.g. `Given`/`None_` or equivalent)
 - **Either** (with `Left`/`Right`)
 - **Unit** (the empty product type)
 - **Lazy** (memoized deferred evaluation — needed for recursive let bindings)
@@ -531,7 +530,7 @@ These are language-specific representations of Hydra's core algebraic types:
 | Language | Module |
 |----------|--------|
 | Java | [hydra/util/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/util) (`Maybe`, `Either`, `Lazy`, `Unit`, `Pair`, `Tuple`) |
-| Python | [hydra/dsl/python.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/dsl/python.py) (`Just`/`Nothing`, `Left`/`Right`, `FrozenDict`, `frozenlist`, `Node`) |
+| Python | [hydra/dsl/python.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/dsl/python.py) (`Given`/`None_`, `Left`/`Right`, `FrozenDict`, `frozenlist`, `Node`) |
 
 ## Step 9: Create test runners
 

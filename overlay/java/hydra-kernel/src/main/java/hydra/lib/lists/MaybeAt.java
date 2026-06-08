@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -44,13 +44,13 @@ public class MaybeAt extends PrimitiveFunction {
      * @param <X> the element type
      * @param index the zero-based index
      * @param list the list to get the element from
-     * @return a Maybe containing the element at the index, or empty if out of bounds
+     * @return a Optional containing the element at the index, or empty if out of bounds
      */
-    public static <X> Maybe<X> apply(int index, List<X> list) {
+    public static <X> Optional<X> apply(int index, List<X> list) {
         if (index < 0 || index >= list.size()) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(list.get(index));
+            return Optional.given(list.get(index));
         }
     }
 }

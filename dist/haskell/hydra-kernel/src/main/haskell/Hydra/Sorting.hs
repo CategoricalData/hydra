@@ -17,7 +17,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Packaging as Packaging
@@ -43,7 +43,7 @@ adjacencyListToMap pairs =
     Lists.foldl (\mp -> \p ->
       let k = Pairs.first p
           vs = Pairs.second p
-          existing = Maybes.maybe [] Equality.identity (Maps.lookup k mp)
+          existing = Optionals.cases (Maps.lookup k mp) [] Equality.identity
       in (Maps.insert k (Lists.concat2 existing vs) mp)) Maps.empty pairs
 -- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key (Nothing for unknown vertices).
 adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> Maybe t0)))
@@ -68,7 +68,7 @@ adjacencyListsToGraph edges0 =
                     let v = Pairs.first vkNeighbors
                         kNeighbors = Pairs.second vkNeighbors
                         neighbors = Pairs.second kNeighbors
-                    in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges)
+                    in (v, (Optionals.mapOptional (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges)
           vertexToKey = \v -> Maps.lookup v vertexMap
       in (graph, vertexToKey)
 -- | Construct an OrderingIsomorphism between two orderings of the same elements. The two list arguments must be permutations of each other; the result is a pair of mappings that transport an element list from one ordering to the other.
@@ -78,11 +78,11 @@ createOrderingIsomorphism sourceOrd targetOrd =
       let sourceToTargetMapping =
               \els ->
                 let mp = Maps.fromList (Lists.zip sourceOrd els)
-                in (Maybes.cat (Lists.map (\n -> Maps.lookup n mp) targetOrd))
+                in (Optionals.cat (Lists.map (\n -> Maps.lookup n mp) targetOrd))
           targetToSourceMapping =
                   \els ->
                     let mp = Maps.fromList (Lists.zip targetOrd els)
-                    in (Maybes.cat (Lists.map (\n -> Maps.lookup n mp) sourceOrd))
+                    in (Optionals.cat (Lists.map (\n -> Maps.lookup n mp) sourceOrd))
       in Topology.OrderingIsomorphism {
         Topology.orderingIsomorphismEncode = sourceToTargetMapping,
         Topology.orderingIsomorphismDecode = targetToSourceMapping}
@@ -110,7 +110,7 @@ popStackUntil :: Int -> Topology.TarjanState -> ([Int], Topology.TarjanState)
 popStackUntil v st0 =
 
       let go =
-              \acc -> \st -> Maybes.maybe (Lists.reverse acc, st) (\uc ->
+              \acc -> \st -> Optionals.cases (Lists.uncons (Topology.tarjanStateStack st)) (Lists.reverse acc, st) (\uc ->
                 let x = Pairs.first uc
                     xs = Pairs.second uc
                     newSt =
@@ -130,7 +130,7 @@ popStackUntil v st0 =
                               Topology.tarjanStateOnStack = (Sets.delete x (Topology.tarjanStateOnStack st)),
                               Topology.tarjanStateSccs = (Topology.tarjanStateSccs newSt)}
                     acc_ = Lists.cons x acc
-                in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2))) (Lists.uncons (Topology.tarjanStateStack st))
+                in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2)))
       in (go [] st0)
 -- | Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered.
 propagateTags :: (Ord t0, Ord t1) => ([(t0, [t0])] -> [(t0, [t1])] -> [(t0, (S.Set t1))])
@@ -141,8 +141,8 @@ propagateTags edges nodeTags =
           allNodes = Sets.toList (Sets.fromList (Lists.concat2 (Lists.map Pairs.first edges) (Lists.map Pairs.first nodeTags)))
           getTagsForNode =
                   \node ->
-                    let reachable = findReachableNodes (\n -> Sets.fromList (Maybes.maybe [] Equality.identity (Maps.lookup n adjMap))) node
-                    in (Sets.unions (Lists.map (\n -> Maybes.maybe Sets.empty Equality.identity (Maps.lookup n tagMap)) (Sets.toList reachable)))
+                    let reachable = findReachableNodes (\n -> Sets.fromList (Optionals.cases (Maps.lookup n adjMap) [] Equality.identity)) node
+                    in (Sets.unions (Lists.map (\n -> Optionals.cases (Maps.lookup n tagMap) Sets.empty Equality.identity) (Sets.toList reachable)))
       in (Lists.map (\n -> (n, (getTagsForNode n))) allNodes)
 -- | Visit a vertex and recursively explore its successors
 strongConnect :: M.Map Int [Int] -> Int -> Topology.TarjanState -> Topology.TarjanState
@@ -218,7 +218,7 @@ topologicalSortComponents pairs =
 
       let graphResult = adjacencyListsToGraph pairs
           g = Pairs.first graphResult
-      in (Lists.map (\comp -> Maybes.mapMaybe (Pairs.second graphResult) comp) (stronglyConnectedComponents g))
+      in (Lists.map (\comp -> Optionals.mapOptional (Pairs.second graphResult) comp) (stronglyConnectedComponents g))
 -- | Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.
 topologicalSortNodes :: Ord t1 => ((t0 -> t1) -> (t0 -> [t1]) -> [t0] -> [[t0]])
 topologicalSortNodes getKey getAdj nodes =
@@ -226,4 +226,4 @@ topologicalSortNodes getKey getAdj nodes =
       let nodesByKey = Maps.fromList (Lists.map (\n -> (getKey n, n)) nodes)
           pairs = Lists.map (\n -> (getKey n, (getAdj n))) nodes
           comps = topologicalSortComponents pairs
-      in (Lists.map (\c -> Maybes.cat (Lists.map (\k -> Maps.lookup k nodesByKey) c)) comps)
+      in (Lists.map (\c -> Optionals.cat (Lists.map (\k -> Maps.lookup k nodesByKey) c)) comps)

@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
@@ -132,10 +132,7 @@ qualifyUnionFieldName :: TypedTermDefinition (String -> Y.Maybe Name -> Name -> 
 qualifyUnionFieldName = def "qualifyUnionFieldName" $
   doc "Qualify a union field name, optionally prefixing with the Scala type name" $
   lambda "dlft" $ lambda "sname" $ lambda "fname" $
-    Maybes.maybe
-      (var "dlft")
-      ("n" ~> (scalaTypeName @@ true @@ var "n") ++ string ".")
-      (var "sname")
+    Optionals.cases (var "sname") (var "dlft") ("n" ~> (scalaTypeName @@ true @@ var "n") ++ string ".")
     ++ (scalaEscapeName @@ (Core.unName $ var "fname"))
 
 sapply :: TypedTermDefinition (Scala.Data -> [Scala.Data] -> Scala.Data)
@@ -195,7 +192,7 @@ scalaEscapeName = def "scalaEscapeName" $
       -- Names ending in _ cause lexer ambiguity with _: type ascription
       (Logic.and
         (Equality.gt (Strings.length (var "sanitized3")) (int32 0))
-        (Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (Math.sub (Strings.length (var "sanitized3")) (int32 1)) (var "sanitized3"))) (int32 95)))] $
+        (Equality.equal (Optionals.fromOptional (int32 0) (Strings.maybeCharAt (Math.sub (Strings.length (var "sanitized3")) (int32 1)) (var "sanitized3"))) (int32 95)))] $
     Logic.ifElse (var "needsBackticks")
       (Strings.cat (list [string "`", var "sanitized3", string "`"]))
       (var "sanitized3")
@@ -245,7 +242,7 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Packaging.unModuleName (Maybes.fromMaybe (wrap _ModuleName (string "")) (Util.qualifiedNameModuleName $ var "qname")),
+    "prefix">: Packaging.unModuleName (Optionals.fromOptional (wrap _ModuleName (string "")) (Util.qualifiedNameModuleName $ var "qname")),
     "local">: scalaEscapeName @@ (Util.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 

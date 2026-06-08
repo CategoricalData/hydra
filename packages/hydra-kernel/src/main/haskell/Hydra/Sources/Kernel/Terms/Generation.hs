@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -170,13 +170,11 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
   -- the 0 fallback is unreachable.
   "escapeToUnicode" <~ ("b" ~>
     list [int32 0x5C, int32 0x75, int32 0x30, int32 0x30,
-          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "b") (int32 16))),
-          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
+          var "hexDigit" @@ (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "b") (int32 16))),
+          var "hexDigit" @@ (Optionals.fromOptional (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
   -- go :: Bool -> Bool -> [Int32] -> [Int32]
   "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
-    Maybes.maybe
-      (TypedTerm (Terms.list []) :: TypedTerm [Int])
-      ("uc" ~>
+    Optionals.cases (Lists.uncons $ var "bytes") (TypedTerm (Terms.list []) :: TypedTerm [Int]) ("uc" ~>
        "b" <~ Pairs.first (var "uc") $
        "bs" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "esc")
@@ -192,8 +190,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
                -- control char: replace with \uXXXX
                (Lists.concat2 (var "escapeToUnicode" @@ var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
                -- normal byte
-               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))
-      (Lists.uncons $ var "bytes")) $
+               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))) $
   var "go" @@ boolean False @@ boolean False @@ var "input"
 
 -- | Decode a single module from a JSON value.
@@ -257,7 +254,7 @@ generateCoderModules = define "generateCoderModules" $
     (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
   "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
   "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
-  Eithers.map ("results" ~> Maybes.cat (var "results")) $
+  Eithers.map ("results" ~> Optionals.cat (var "results")) $
     Eithers.mapList ("m" ~> var "codec" @@ var "cx" @@ var "graph" @@ var "m") (var "typeModules")
 
 -- | Perform type inference on a graph and generate its lexicon.
@@ -363,14 +360,14 @@ generateSourceFiles = define "generateSourceFiles" $
           (Packaging.moduleName $ var "m")
           (Packaging.moduleMetadata $ var "m")
           (Packaging.moduleDependencies $ var "m")
-          (Maybes.cat $ Lists.map
+          (Optionals.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
               _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
-              _Definition_term>>: "td" ~> Maybes.map
+              _Definition_term>>: "td" ~> Optionals.map
                 ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                   (Core.bindingName $ var "b")
                   nothing
-                  (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+                  (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
                   (Core.bindingTerm $ var "b")))
                 (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els")),
               _Definition_primitive>>: "pd" ~> just (Packaging.definitionPrimitive (var "pd"))])
@@ -502,7 +499,7 @@ inferModulesGiven = define "inferModulesGiven" $
       "bs" <~ moduleTermBindings (var "m") $
       Logic.ifElse (var "isTarget")
         (var "bs")
-        (Lists.filter ("b" ~> Maybes.isNothing (Core.bindingTypeScheme (var "b"))) (var "bs")))
+        (Lists.filter ("b" ~> Optionals.isNone (Core.bindingTypeScheme (var "b"))) (var "bs")))
     (var "closureMods")) $
   -- Primitive defaultImplementation bindings: included only for target modules
   -- so we run a signature-consistency check whenever a primitive module is
@@ -525,7 +522,7 @@ inferModulesGiven = define "inferModulesGiven" $
       "bs" <~ moduleTermBindings (var "m") $
       Logic.ifElse (var "isTarget")
         (TypedTerm (Terms.list []) :: TypedTerm [Binding])
-        (Lists.filter ("b" ~> Maybes.isJust (Core.bindingTypeScheme (var "b"))) (var "bs")))
+        (Lists.filter ("b" ~> Optionals.isGiven (Core.bindingTypeScheme (var "b"))) (var "bs")))
     (var "closureMods")) $
   "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "bindingsToInfer" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
@@ -609,7 +606,7 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
   "closure" <~ Sets.union
     (transitiveDeps @@ ("m" ~> Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "m"))) @@ var "nsMap" @@ var "modules")
     (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleName (var "m")) (var "modules")) $
-  Maybes.cat $ Lists.map
+  Optionals.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (Sets.toList $ var "closure")
 
@@ -623,10 +620,10 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
 -- (where they'd be treated as ordinary term definitions); they only feed
 -- the inference pass.
 modulePrimitiveDefaultBindings :: TypedTerm Module -> TypedTerm [Binding]
-modulePrimitiveDefaultBindings m = Maybes.cat $ Lists.map
+modulePrimitiveDefaultBindings m = Optionals.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_primitive>>: "pd" ~>
-      Maybes.map
+      Optionals.map
         ("impl" ~> Core.binding
           (Packaging.primitiveDefinitionName $ var "pd")
           (var "impl")
@@ -636,13 +633,13 @@ modulePrimitiveDefaultBindings m = Maybes.cat $ Lists.map
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
 moduleTermBindings :: TypedTerm Module -> TypedTerm [Binding]
-moduleTermBindings m = Maybes.cat $ Lists.map
+moduleTermBindings m = Optionals.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_term>>: "td" ~>
       just (Core.binding
         (Packaging.termDefinitionName $ var "td")
         (Packaging.termDefinitionBody $ var "td")
-        (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
+        (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
   (Packaging.moduleDefinitions m)
 
 -- | Compute the transitive closure of type dependencies for a set of modules.
@@ -706,7 +703,7 @@ generateCoderModules
 -- | Extract type definitions from a module as Bindings (for elementsToGraph compatibility).
 -- Each TypeDefinition is converted to a Binding by encoding the type as a term.
 moduleTypeBindings :: TypedTerm Module -> TypedTerm [Binding]
-moduleTypeBindings m = Maybes.cat $ Lists.map
+moduleTypeBindings m = Optionals.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
       just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -714,7 +711,7 @@ moduleTypeBindings m = Maybes.cat $ Lists.map
 
 -- | Extract type definition names from a module.
 moduleTypeNames :: TypedTerm Module -> TypedTerm [Name]
-moduleTypeNames m = Maybes.cat $ Lists.map
+moduleTypeNames m = Optionals.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
   (Packaging.moduleDefinitions m)
@@ -748,8 +745,8 @@ modulesToGraph = define "modulesToGraph" $
   -- read-only lookup that lets incremental inference skip re-solving known definitions.
   "universeDataElements" <~ Lists.concat (Lists.map
       ("m" ~> moduleTermBindings (var "m")) (var "universeModules")) $
-  "universeBoundTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
-    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+  "universeBoundTypes" <~ Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+    Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
       (Core.bindingTypeScheme (var "b"))) (var "universeDataElements"))) $
   Graph.graphWithBoundTypes (var "baseGraph") (var "universeBoundTypes")
 
@@ -780,14 +777,14 @@ refreshModule = define "refreshModule" $
       (Packaging.moduleName $ var "m")
       (Packaging.moduleMetadata $ var "m")
       (Packaging.moduleDependencies $ var "m")
-      (Maybes.cat $ Lists.map
+      (Optionals.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [
           _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
-          _Definition_term>>: "td" ~> Maybes.map
+          _Definition_term>>: "td" ~> Optionals.map
             ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
               (Core.bindingName $ var "b")
               nothing
-              (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+              (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
               (Core.bindingTerm $ var "b")))
             (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
               (var "inferredElements")),

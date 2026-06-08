@@ -15,7 +15,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -75,10 +75,10 @@ error cx raw =
                         Core.Name "unexpectedTypeVariant",
                         (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTypeVariant t) (ErrorCore.unexpectedTypeVariantError cx input))),
                       (Core.Name "unification", (\input -> Eithers.map (\t -> Errors.ErrorUnification t) (unificationError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.ExtractionError
 extractionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ExtractionError
@@ -109,10 +109,10 @@ extractionError cx raw =
                       (
                         Core.Name "unexpectedShape",
                         (\input -> Eithers.map (\t -> Errors.ExtractionErrorUnexpectedShape t) (unexpectedShapeError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.InferenceError
 inferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.InferenceError
@@ -129,10 +129,10 @@ inferenceError cx raw =
                       (
                         Core.Name "unification",
                         (\input -> Eithers.map (\t -> Errors.InferenceErrorUnification t) (unificationInferenceError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.MultipleBindingsError
 multipleBindingsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.MultipleBindingsError
@@ -239,10 +239,10 @@ resolutionError cx raw =
                       (
                         Core.Name "unexpectedShape",
                         (\input -> Eithers.map (\t -> Errors.ResolutionErrorUnexpectedShape t) (unexpectedShapeError cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.errors.UnexpectedShapeError
 unexpectedShapeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnexpectedShapeError

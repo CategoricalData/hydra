@@ -6,7 +6,7 @@ import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -111,11 +111,11 @@ public class Environment {
 
     public static final Module module_ = new Module(
         NS,
-        Maybe.just(new EntityMetadata(
-            Maybe.just("Environment types for Java code generation"),
+        Optional.given(new EntityMetadata(
+            Optional.given("Environment types for Java code generation"),
             java.util.List.of(),
             java.util.List.of(),
-            Maybe.nothing())),
+            Optional.none())),
         DEPENDENCIES,
         DEFINITIONS);
 }

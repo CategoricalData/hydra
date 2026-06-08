@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -230,7 +230,7 @@ curlyBracesList = define "curlyBracesList" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "{}")
       (brackets @@ curlyBraces @@ var "style" @@
-        (symbolSep @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
+        (symbolSep @@ (Optionals.fromOptional (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
 customIndent :: TypedTermDefinition (String -> String -> String)
 customIndent = define "customIndent" $
@@ -252,11 +252,9 @@ customIndentBlock = define "customIndentBlock" $
       (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Maybes.maybe (cst @@ string "")
-      ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
+    Optionals.cases (Lists.maybeHead $ var "els") (cst @@ string "") ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (var "head")
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
-      (Lists.maybeHead $ var "els")
 
 dotSep :: TypedTermDefinition ([Expr] -> Expr)
 dotSep = define "dotSep" $
@@ -293,7 +291,7 @@ expressionLength = define "expressionLength" $
     _Ws_breakAndIndent>>: "s" ~> int32 10000,
     _Ws_doubleBreak>>: constant $ int32 10000]) $
   "blockStyleLength" <~ ("style" ~>
-    "mindentLen" <~ Maybes.maybe (int32 0) (reify Strings.length) (Ast.blockStyleIndent $ var "style") $
+    "mindentLen" <~ Optionals.cases (Ast.blockStyleIndent $ var "style") (int32 0) (reify Strings.length) $
     "nlBeforeLen" <~ Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0) $
     "nlAfterLen" <~ Logic.ifElse (Ast.blockStyleNewlineAfterContent $ var "style") (int32 1) (int32 0) $
     Math.add (var "mindentLen") $ Math.add (var "nlBeforeLen") (var "nlAfterLen")) $
@@ -451,9 +449,7 @@ orSep = define "orSep" $
   doc "Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content" $
   "style" ~> "l" ~>
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
-    Maybes.maybe (cst @@ string "")
-      ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
-      (Lists.maybeHead $ var "l")
+    Optionals.cases (Lists.maybeHead $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
 
 parenList :: TypedTermDefinition (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
@@ -586,8 +582,8 @@ printExpr = define "printExpr" $
         _IndentStyle_subsequentLines>>: "pre" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
             (var "lns")
-            (Maybes.fromMaybe (var "lns") $
-              Maybes.map
+            (Optionals.fromOptional (var "lns") $
+              Optionals.map
                 ("uc" ~> Lists.cons (Pairs.first $ var "uc") $
                   Lists.map (var "indentLine" @@ var "pre") (Pairs.second $ var "uc"))
                 (Lists.uncons $ var "lns"))] $
@@ -615,10 +611,7 @@ printExpr = define "printExpr" $
       "spadlIsNewline" <~ var "isNewlineWs" @@ var "spadl" $
       "spadrIsNewline" <~ var "isNewlineWs" @@ var "spadr" $
       "joinElements" <~ ("acc" ~> "el" ~>
-        "elStartsWithNewline" <~ Maybes.maybe
-          (boolean False)
-          ("c" ~> Equality.equal (var "c") (int32 10))
-          (Strings.maybeCharAt (int32 0) (var "el")) $
+        "elStartsWithNewline" <~ Optionals.cases (Strings.maybeCharAt (int32 0) (var "el")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
         "elIsEmpty" <~ Equality.equal (var "el") (string "") $
         -- Suppress whitespace padding when the next element either
         -- starts with `\n` (whitespace would dangle on previous line)
@@ -637,10 +630,7 @@ printExpr = define "printExpr" $
           (string "")
           (var "pad" @@ var "spadr") $
         Strings.cat $ list [var "acc", var "padlEff", var "ssym", var "padrEff", var "el"]) $
-      Maybes.maybe
-        (string "")
-        ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements")))
-        (Lists.maybeHead $ var "printedElements"),
+      Optionals.cases (Lists.maybeHead $ var "printedElements") (string "") ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements"))),
     _Expr_op>>: "opExpr" ~>
       "op" <~ Ast.opExprOp (var "opExpr") $
       "sym" <~ Ast.unSymbol (Ast.opSymbol $ var "op") $
@@ -680,10 +670,7 @@ printExpr = define "printExpr" $
         (string "")
         (var "pad" @@ var "padl") $
       "padrPad" <~ (var "pad" @@ var "padr") $
-      "rhsStartsWithNewline" <~ Maybes.maybe
-        (boolean False)
-        ("c" ~> Equality.equal (var "c") (int32 10))
-        (Strings.maybeCharAt (int32 0) (var "rhs")) $
+      "rhsStartsWithNewline" <~ Optionals.cases (Strings.maybeCharAt (int32 0) (var "rhs")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
       "padrEffective" <~ Logic.ifElse
         (Logic.and (var "rhsStartsWithNewline")
                    (Logic.not $ var "padrIsNewline"))
@@ -700,7 +687,7 @@ printExpr = define "printExpr" $
       "doIndent" <~ Ast.blockStyleIndent (var "style") $
       "nlBefore" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
       "nlAfter" <~ Ast.blockStyleNewlineAfterContent (var "style") $
-      "ibody" <~ Maybes.maybe (var "body") ("pre" ~> customIndent @@ var "pre" @@ var "body") (var "doIndent") $
+      "ibody" <~ Optionals.cases (var "doIndent") (var "body") ("pre" ~> customIndent @@ var "pre" @@ var "body") $
       "pre" <~ Logic.ifElse (var "nlBefore") (string "\n") (string "") $
       "suf" <~ Logic.ifElse (var "nlAfter") (string "\n") (string "") $
       var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]
@@ -714,9 +701,7 @@ sep :: TypedTermDefinition (Op -> [Expr] -> Expr)
 sep = define "sep" $
   doc "Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list." $
   "op" ~> "els" ~>
-    Maybes.maybe (cst @@ string "")
-      ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
-      (Lists.maybeHead $ var "els")
+    Optionals.cases (Lists.maybeHead $ var "els") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
 
 spaceSep :: TypedTermDefinition ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
@@ -747,7 +732,7 @@ structuralSep = define "structuralSep" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
-        (Maybes.fromMaybe (cst @@ string "") (Lists.maybeHead $ var "els"))
+        (Optionals.fromOptional (cst @@ string "") (Lists.maybeHead $ var "els"))
         (Ast.exprSeq $ Ast.seqExpr (var "op") (var "els")))
 
 structuralSpaceSep :: TypedTermDefinition ([Expr] -> Expr)
@@ -792,9 +777,7 @@ symbolSep = define "symbolSep" $
       (Ast.padding Ast.wsNone (var "break"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Maybes.maybe (cst @@ string "")
-      ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
-      (Lists.maybeHead $ var "l")
+    Optionals.cases (Lists.maybeHead $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
 
 tabIndent :: TypedTermDefinition (Expr -> Expr)
 tabIndent = define "tabIndent" $

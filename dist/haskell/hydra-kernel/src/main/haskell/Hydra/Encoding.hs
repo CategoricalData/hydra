@@ -20,7 +20,7 @@ import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -62,12 +62,12 @@ encodeBindingName n =
       let parts = Strings.splitOn "." (Core.unName n)
           localPart = Formatting.decapitalize (Names.localNameOf n)
           localResult = Core.Name localPart
-      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsUc ->
+      in (Optionals.cases (Lists.maybeInit parts) localResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) localResult (\nsUc ->
         let tail = Pairs.second nsUc
         in (Core.Name (Strings.intercalate "." (Lists.concat2 [
           "hydra",
           "encode"] (Lists.concat2 tail [
-          localPart]))))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
+          localPart])))))))
 -- | Generate an encoder for an Either type
 encodeEitherType :: Core.EitherType -> Core.Term
 encodeEitherType et =
@@ -267,7 +267,7 @@ encodeMapType mt =
 -- | Transform a type module into an encoder module
 encodeModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 encodeModule cx graph mod =
-    Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
+    Eithers.bind (filterTypeBindings cx graph (Optionals.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
         let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
             dataTerm =
@@ -298,7 +298,7 @@ encodeModule cx graph mod =
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionMetadata = Nothing,
-        Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+        Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
         Packaging.termDefinitionBody = (Core.bindingTerm b)})) encodedBindings)})))))
 -- | Generate an encoder module name from a source module name
 encodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
@@ -306,9 +306,9 @@ encodeModuleName ns =
 
       let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           fallback = Packaging.ModuleName (Packaging.unModuleName ns)
-      in (Maybes.maybe fallback (\uc -> Packaging.ModuleName (Strings.cat [
+      in (Optionals.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.encode.",
-        (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
+        (Strings.intercalate "." (Pairs.second uc))])))
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term
 encodeName n =
@@ -324,10 +324,10 @@ encodeOptionalType elemType =
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybe"),
+          Core.fieldName = (Core.Name "optional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.map")),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.map")),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))}}))})
 -- | Generate an encoder for a pair type
@@ -415,7 +415,7 @@ encodeType x =
       Core.TypeList v0 -> encodeListType v0
       Core.TypeLiteral v0 -> encodeLiteralType v0
       Core.TypeMap v0 -> encodeMapType v0
-      Core.TypeMaybe v0 -> encodeOptionalType v0
+      Core.TypeOptional v0 -> encodeOptionalType v0
       Core.TypePair v0 -> encodePairType v0
       Core.TypeRecord v0 -> encodeRecordType v0
       Core.TypeSet v0 -> encodeSetType v0
@@ -462,7 +462,7 @@ encodeTypeNamed ename typ =
       Core.TypeList v0 -> encodeListType v0
       Core.TypeLiteral v0 -> encodeLiteralType v0
       Core.TypeMap v0 -> encodeMapType v0
-      Core.TypeMaybe v0 -> encodeOptionalType v0
+      Core.TypeOptional v0 -> encodeOptionalType v0
       Core.TypePair v0 -> encodePairType v0
       Core.TypeRecord v0 -> encodeRecordTypeNamed ename v0
       Core.TypeSet v0 -> encodeSetType v0
@@ -547,7 +547,7 @@ encoderCollectOrdVars typ =
         encoderCollectTypeVarsFromType (Core.mapTypeKeys v0),
         (encoderCollectOrdVars (Core.mapTypeKeys v0)),
         (encoderCollectOrdVars (Core.mapTypeValues v0))]
-      Core.TypeMaybe v0 -> encoderCollectOrdVars v0
+      Core.TypeOptional v0 -> encoderCollectOrdVars v0
       Core.TypePair v0 -> Lists.concat2 (encoderCollectOrdVars (Core.pairTypeFirst v0)) (encoderCollectOrdVars (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) v0)
       Core.TypeSet v0 -> Lists.concat2 (encoderCollectTypeVarsFromType v0) (encoderCollectOrdVars v0)
@@ -563,7 +563,7 @@ encoderCollectTypeVarsFromType typ =
       Core.TypeForall v0 -> encoderCollectTypeVarsFromType (Core.forallTypeBody v0)
       Core.TypeList v0 -> encoderCollectTypeVarsFromType v0
       Core.TypeMap v0 -> Lists.concat2 (encoderCollectTypeVarsFromType (Core.mapTypeKeys v0)) (encoderCollectTypeVarsFromType (Core.mapTypeValues v0))
-      Core.TypeMaybe v0 -> encoderCollectTypeVarsFromType v0
+      Core.TypeOptional v0 -> encoderCollectTypeVarsFromType v0
       Core.TypePair v0 -> Lists.concat2 (encoderCollectTypeVarsFromType (Core.pairTypeFirst v0)) (encoderCollectTypeVarsFromType (Core.pairTypeSecond v0))
       Core.TypeRecord v0 -> Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) v0)
       Core.TypeSet v0 -> encoderCollectTypeVarsFromType v0
@@ -591,7 +591,7 @@ encoderFullResultType typ =
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (encoderFullResultType (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (encoderFullResultType (Core.mapTypeValues v0))})
-      Core.TypeMaybe v0 -> Core.TypeMaybe (encoderFullResultType v0)
+      Core.TypeOptional v0 -> Core.TypeOptional (encoderFullResultType v0)
       Core.TypePair v0 -> Core.TypePair (Core.PairType {
         Core.pairTypeFirst = (encoderFullResultType (Core.pairTypeFirst v0)),
         Core.pairTypeSecond = (encoderFullResultType (Core.pairTypeSecond v0))})
@@ -622,7 +622,7 @@ encoderFullResultTypeNamed ename typ =
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (encoderFullResultType (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (encoderFullResultType (Core.mapTypeValues v0))})
-      Core.TypeMaybe v0 -> Core.TypeMaybe (encoderFullResultType v0)
+      Core.TypeOptional v0 -> Core.TypeOptional (encoderFullResultType v0)
       Core.TypePair v0 -> Core.TypePair (Core.PairType {
         Core.pairTypeFirst = (encoderFullResultType (Core.pairTypeFirst v0)),
         Core.pairTypeSecond = (encoderFullResultType (Core.pairTypeSecond v0))})
@@ -693,7 +693,7 @@ encoderTypeSchemeNamed ename typ =
 -- | Filter bindings to only encodable type definitions
 filterTypeBindings :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
-    Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
+    Eithers.map Optionals.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 -- | Check if a binding is encodable (serializable type)
 isEncodableBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isEncodableBinding cx graph b =

@@ -7,7 +7,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.Map;
@@ -54,17 +54,17 @@ public class Alter extends PrimitiveFunction {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
                 Term f = args.get(0);
                 Term key = args.get(1);
-                Maybe<Term> currentValue = Lookup.apply(key, mp);
+                Optional<Term> currentValue = Lookup.apply(key, mp);
                 Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                     hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
                 if (r.isLeft()) return (Either) r;
-                Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
+                Either<Error_, Optional<Term>> maybeResult = hydra.extract.Core.optionalTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
-                Maybe<Term> newValue = ((Either.Right<Error_, Maybe<Term>>) maybeResult).value;
+                Optional<Term> newValue = ((Either.Right<Error_, Optional<Term>>) maybeResult).value;
                 PersistentMap<Term, Term> base = PersistentMap.coerce(mp);
-                PersistentMap<Term, Term> result = newValue.isJust()
-                    ? base.insert(key, newValue.fromJust())
+                PersistentMap<Term, Term> result = newValue.isGiven()
+                    ? base.insert(key, newValue.fromGiven())
                     : base.delete(key);
                 return Either.right(Terms.map(result));
             });
@@ -78,7 +78,7 @@ public class Alter extends PrimitiveFunction {
      * @return a curried function that takes a key and a map and returns the modified map
      */
     public static <K, V> Function<K, Function<Map<K, V>, Map<K, V>>> apply(
-            Function<Maybe<V>, Maybe<V>> f) {
+            Function<Optional<V>, Optional<V>> f) {
         return key -> mp -> apply(f, key, mp);
     }
 
@@ -91,10 +91,10 @@ public class Alter extends PrimitiveFunction {
      * @param mp the map to alter
      * @return the modified map
      */
-    public static <K, V> Map<K, V> apply(Function<Maybe<V>, Maybe<V>> f, K key, Map<K, V> mp) {
-        Maybe<V> current = mp.containsKey(key) ? Maybe.just(mp.get(key)) : Maybe.nothing();
-        Maybe<V> newValue = f.apply(current);
+    public static <K, V> Map<K, V> apply(Function<Optional<V>, Optional<V>> f, K key, Map<K, V> mp) {
+        Optional<V> current = mp.containsKey(key) ? Optional.given(mp.get(key)) : Optional.none();
+        Optional<V> newValue = f.apply(current);
         PersistentMap<K, V> base = PersistentMap.coerce(mp);
-        return newValue.isJust() ? base.insert(key, newValue.fromJust()) : base.delete(key);
+        return newValue.isGiven() ? base.insert(key, newValue.fromGiven()) : base.delete(key);
     }
 }

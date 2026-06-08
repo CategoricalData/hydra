@@ -9,7 +9,7 @@
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "validation"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                   {
                     "name": "subgroups",
                     "term": {"list": [{"variable": "hydra.test.validate.core.allTests"}, {"variable": "hydra.test.validate.packaging.allTests"}]}},

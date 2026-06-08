@@ -6,7 +6,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Algebraic types"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -27,7 +27,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unit"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -46,7 +46,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unit term"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -140,7 +140,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -152,7 +152,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Unit term in polymorphic context"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -189,7 +189,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {"name": "body", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.Lambda"}}},
                                                           "typeName": "hydra.core.Term"}},
@@ -286,7 +286,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -298,7 +298,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Pairs"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -320,7 +320,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Basic pairs"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -473,7 +473,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -610,7 +610,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -758,7 +758,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -770,7 +770,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic pairs"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -807,7 +807,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -950,7 +950,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -982,7 +982,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -1125,7 +1125,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -1157,7 +1157,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -1168,7 +1168,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "y"}}, "typeName": "hydra.core.Name"}}},
-                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                 {
                                                                                   "name": "body",
                                                                                   "term": {
@@ -1338,7 +1338,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -1370,7 +1370,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -1509,7 +1509,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -1521,7 +1521,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Pairs in complex contexts"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -1717,7 +1717,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -1791,7 +1791,7 @@
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
                                                                                 "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                             "typeName": "hydra.core.Binding"}}]}},
                                                                   {
                                                                     "name": "body",
@@ -1894,7 +1894,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -1906,7 +1906,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested pairs"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -2146,7 +2146,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -2318,7 +2318,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -2509,7 +2509,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -2521,7 +2521,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Pairs with complex types"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -2725,7 +2725,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -2913,7 +2913,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -2925,7 +2925,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eithers"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -2948,7 +2948,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Left values"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -3105,7 +3105,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -3246,7 +3246,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -3387,7 +3387,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -3399,7 +3399,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Right values"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -3556,7 +3556,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -3697,7 +3697,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -3838,7 +3838,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -3850,7 +3850,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic eithers"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -3887,7 +3887,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -4034,7 +4034,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -4066,7 +4066,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -4213,7 +4213,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -4245,7 +4245,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "flag"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -4256,7 +4256,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                 {
                                                                                   "name": "body",
                                                                                   "term": {
@@ -4478,7 +4478,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -4490,7 +4490,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eithers in complex contexts"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -4668,7 +4668,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -4736,7 +4736,7 @@
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
                                                                                 "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                             "typeName": "hydra.core.Binding"}}]}},
                                                                   {
                                                                     "name": "body",
@@ -4849,7 +4849,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -4861,7 +4861,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested eithers"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -5060,7 +5060,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -5243,7 +5243,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -5384,7 +5384,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -5560,7 +5560,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -5752,7 +5752,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -5764,7 +5764,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Eithers with complex types"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -5961,7 +5961,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -6153,7 +6153,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -6165,7 +6165,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Optionals"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {
@@ -6187,7 +6187,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Monomorphic optionals"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -6218,7 +6218,7 @@
                                                     "application": {
                                                       "argument": {
                                                         "inject": {
-                                                          "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                          "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
                                                         "application": {
@@ -6291,7 +6291,7 @@
                                                                 "term": {
                                                                   "inject": {
                                                                     "field": {
-                                                                      "name": "maybe",
+                                                                      "name": "optional",
                                                                       "term": {
                                                                         "inject": {
                                                                           "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
@@ -6304,7 +6304,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -6331,9 +6331,9 @@
                                                       "argument": {
                                                         "inject": {
                                                           "field": {
-                                                            "name": "maybe",
+                                                            "name": "optional",
                                                             "term": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -6407,7 +6407,7 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
@@ -6425,7 +6425,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -6452,9 +6452,9 @@
                                                       "argument": {
                                                         "inject": {
                                                           "field": {
-                                                            "name": "maybe",
+                                                            "name": "optional",
                                                             "term": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -6522,7 +6522,7 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
@@ -6535,7 +6535,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -6562,9 +6562,9 @@
                                                       "argument": {
                                                         "inject": {
                                                           "field": {
-                                                            "name": "maybe",
+                                                            "name": "optional",
                                                             "term": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "literal",
@@ -6632,7 +6632,7 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
@@ -6645,7 +6645,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -6657,7 +6657,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Polymorphic optionals"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -6694,15 +6694,15 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
                                                                       "inject": {
                                                                         "field": {
-                                                                          "name": "maybe",
+                                                                          "name": "optional",
                                                                           "term": {
-                                                                            "maybe": {
+                                                                            "optional": {
                                                                               "inject": {
                                                                                 "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                 "typeName": "hydra.core.Term"}}}},
@@ -6795,7 +6795,7 @@
                                                                               "term": {
                                                                                 "inject": {
                                                                                   "field": {
-                                                                                    "name": "maybe",
+                                                                                    "name": "optional",
                                                                                     "term": {
                                                                                       "inject": {
                                                                                         "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
@@ -6810,7 +6810,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -6842,12 +6842,12 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
                                                                       "inject": {
-                                                                        "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                        "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                         "typeName": "hydra.core.Term"}}}],
                                                                 "typeName": "hydra.core.Lambda"}}},
                                                           "typeName": "hydra.core.Term"}},
@@ -6947,7 +6947,7 @@
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
-                                                                                                  "name": "maybe",
+                                                                                                  "name": "optional",
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
@@ -6964,7 +6964,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -6996,7 +6996,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
@@ -7007,7 +7007,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "flag"}}, "typeName": "hydra.core.Name"}}},
-                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
                                                                                 {
                                                                                   "name": "body",
                                                                                   "term": {
@@ -7056,9 +7056,9 @@
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "field": {
-                                                                                                                    "name": "maybe",
+                                                                                                                    "name": "optional",
                                                                                                                     "term": {
-                                                                                                                      "maybe": {
+                                                                                                                      "optional": {
                                                                                                                         "inject": {
                                                                                                                           "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                           "typeName": "hydra.core.Term"}}}},
@@ -7069,7 +7069,7 @@
                                                                                                 "name": "argument",
                                                                                                 "term": {
                                                                                                   "inject": {
-                                                                                                    "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                    "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                             "typeName": "hydra.core.Application"}}},
                                                                                       "typeName": "hydra.core.Term"}}}],
@@ -7180,7 +7180,7 @@
                                                                                             "term": {
                                                                                               "inject": {
                                                                                                 "field": {
-                                                                                                  "name": "maybe",
+                                                                                                  "name": "optional",
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
@@ -7197,7 +7197,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -7209,7 +7209,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Optionals in complex contexts"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -7272,9 +7272,9 @@
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
-                                                                                      "name": "maybe",
+                                                                                      "name": "optional",
                                                                                       "term": {
-                                                                                        "maybe": {
+                                                                                        "optional": {
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "record",
@@ -7307,7 +7307,7 @@
                                                                                                                   "name": "term",
                                                                                                                   "term": {
                                                                                                                     "inject": {
-                                                                                                                      "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                      "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                                               "typeName": "hydra.core.Field"}}]}}],
                                                                                                   "typeName": "hydra.core.Record"}}},
@@ -7402,7 +7402,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -7446,9 +7446,9 @@
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {
-                                                                                      "name": "maybe",
+                                                                                      "name": "optional",
                                                                                       "term": {
-                                                                                        "maybe": {
+                                                                                        "optional": {
                                                                                           "inject": {
                                                                                             "field": {
                                                                                               "name": "literal",
@@ -7463,7 +7463,7 @@
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
                                                                                 "name": "typeScheme",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}],
                                                                             "typeName": "hydra.core.Binding"}}]}},
                                                                   {
                                                                     "name": "body",
@@ -7534,7 +7534,7 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
@@ -7552,7 +7552,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -7564,7 +7564,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Nested optionals"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -7596,14 +7596,14 @@
                                                       "argument": {
                                                         "inject": {
                                                           "field": {
-                                                            "name": "maybe",
+                                                            "name": "optional",
                                                             "term": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
-                                                                    "name": "maybe",
+                                                                    "name": "optional",
                                                                     "term": {
-                                                                      "maybe": {
+                                                                      "optional": {
                                                                         "inject": {
                                                                           "field": {
                                                                             "name": "literal",
@@ -7672,11 +7672,11 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
-                                                              "name": "maybe",
+                                                              "name": "optional",
                                                               "term": {
                                                                 "inject": {
                                                                   "field": {
@@ -7690,7 +7690,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -7717,9 +7717,9 @@
                                                       "argument": {
                                                         "inject": {
                                                           "field": {
-                                                            "name": "maybe",
+                                                            "name": "optional",
                                                             "term": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "list",
@@ -7824,7 +7824,7 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
@@ -7847,7 +7847,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}},
                     {
@@ -7880,9 +7880,9 @@
                                                                 {
                                                                   "inject": {
                                                                     "field": {
-                                                                      "name": "maybe",
+                                                                      "name": "optional",
                                                                       "term": {
-                                                                        "maybe": {
+                                                                        "optional": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",
@@ -7891,14 +7891,14 @@
                                                                     "typeName": "hydra.core.Term"}},
                                                                 {
                                                                   "inject": {
-                                                                    "field": {"name": "maybe", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                    "field": {"name": "optional", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Term"}}}},
                                                                     "typeName": "hydra.core.Term"}},
                                                                 {
                                                                   "inject": {
                                                                     "field": {
-                                                                      "name": "maybe",
+                                                                      "name": "optional",
                                                                       "term": {
-                                                                        "maybe": {
+                                                                        "optional": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",
@@ -7971,7 +7971,7 @@
                                                         "term": {
                                                           "inject": {
                                                             "field": {
-                                                              "name": "maybe",
+                                                              "name": "optional",
                                                               "term": {
                                                                 "inject": {
                                                                   "field": {
@@ -7985,7 +7985,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},
@@ -7997,7 +7997,7 @@
           "record": {
             "fields": [
               {"name": "name", "term": {"literal": {"string": "Optionals with complex types"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -8029,9 +8029,9 @@
                                                       "argument": {
                                                         "inject": {
                                                           "field": {
-                                                            "name": "maybe",
+                                                            "name": "optional",
                                                             "term": {
-                                                              "maybe": {
+                                                              "optional": {
                                                                 "inject": {
                                                                   "field": {
                                                                     "name": "map",
@@ -8119,7 +8119,7 @@
                                                   "argument": {
                                                     "inject": {
                                                       "field": {
-                                                        "name": "maybe",
+                                                        "name": "optional",
                                                         "term": {
                                                           "inject": {
                                                             "field": {
@@ -8156,7 +8156,7 @@
                                               "parameter": "_"}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                 "typeName": "hydra.testing.TestCase"}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
                         "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
             "typeName": "hydra.testing.TestGroup"}},

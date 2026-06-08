@@ -45,7 +45,7 @@
                                 (visit (:codomain ft)))
                     :list (visit (second t))
                     :set (visit (second t))
-                    :maybe (visit (second t))
+                    :optional (visit (second t))
                     :map (let [mt (second t)]
                            (visit (:keys mt))
                            (visit (:values mt)))
@@ -87,10 +87,10 @@
                           (into {} (map (fn [[k v]]
                                          [k (->hydra_core_type_variable_constraints (wrap-constraints v))])
                                        constraints)))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
          maybe-constraints (if constraint-map
-                             (list :just constraint-map)
-                             (list :nothing))]
+                             (list :given constraint-map)
+                             (list :none))]
      (->hydra_core_type_scheme vars fun-type maybe-constraints))))
 
 (defn- build-prim-def
@@ -98,7 +98,7 @@
   [pname variables inputs output constraints]
   (let [ts (build-type-scheme variables inputs output constraints)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition pname (list :nothing) sig true true (list :nothing))))
+    (->hydra_packaging_primitive_definition pname (list :none) sig true true (list :none))))
 
 (defn lazy-args
   "Mirror of Hydra.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
@@ -276,25 +276,25 @@
 
 (defn tc-optional [el-coder]
   (->hydra_graph_term_coder
-   (list :maybe (:type el-coder))
+   (list :optional (:type el-coder))
    (fn [cx g t]
-     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_maybe_term)
+     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_optional_term)
         (fn [term] ((.encode el-coder) cx g term)))
        g) t))
    (fn [cx mv]
      (cond
        ;; nil or empty list → Nothing
-       (or (nil? mv) (and (sequential? mv) (empty? mv))) (list :right (list :maybe nil))
-       ;; (:nothing) → Nothing
-       (and (sequential? mv) (= (first mv) :nothing)) (list :right (list :maybe nil))
-       ;; (:just val) → Just val
-       (and (sequential? mv) (= (first mv) :just))
+       (or (nil? mv) (and (sequential? mv) (empty? mv))) (list :right (list :optional nil))
+       ;; (:none) → Nothing
+       (and (sequential? mv) (= (first mv) :none)) (list :right (list :optional nil))
+       ;; (:given val) → Just val
+       (and (sequential? mv) (= (first mv) :given))
        (let [r ((.decode el-coder) cx (second mv))]
-         (if (= (first r) :left) r (list :right (list :maybe (second r)))))
+         (if (= (first r) :left) r (list :right (list :optional (second r)))))
        ;; bare value → Just val
        :else
        (let [r ((.decode el-coder) cx mv)]
-         (if (= (first r) :left) r (list :right (list :maybe (second r)))))))))
+         (if (= (first r) :left) r (list :right (list :optional (second r)))))))))
 
 (defn tc-either [left-coder right-coder]
   (->hydra_graph_term_coder

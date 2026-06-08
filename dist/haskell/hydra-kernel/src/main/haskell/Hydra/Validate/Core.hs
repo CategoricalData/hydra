@@ -16,7 +16,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Packaging as Packaging
@@ -41,7 +41,7 @@ import qualified Data.Set as S
 -- | Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFinding :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFinding p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -54,7 +54,7 @@ appendFinding p acc finding =
 -- | Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingType :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingType p acc finding =
-    Maybes.cases finding acc (\rp ->
+    Optionals.cases finding acc (\rp ->
       let ruleName = Pairs.first rp
           payload = Pairs.second rp
           errs = Validation.validationResultErrors acc
@@ -70,7 +70,7 @@ checkDuplicateBindings path bindings =
 
       let names = Lists.map Core.bindingName bindings
           dup = findDuplicate names
-      in (Maybes.map (\name -> ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
+      in (Optionals.map (\name -> ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
         ErrorCore.duplicateBindingErrorLocation = path,
         ErrorCore.duplicateBindingErrorName = name})) dup)
 -- | Check for duplicate field names in a list of field types
@@ -79,13 +79,13 @@ checkDuplicateFieldTypes fields mkError =
 
       let names = Lists.map Core.fieldTypeName fields
           dup = findDuplicateFieldType names
-      in (Maybes.cases dup Nothing (\name -> mkError name))
+      in (Optionals.cases dup Nothing (\name -> mkError name))
 -- | Check for duplicate field names in a list of fields
 checkDuplicateFields :: Paths.SubtermPath -> [Core.Name] -> Maybe ErrorCore.InvalidTermError
 checkDuplicateFields path names =
 
       let dup = findDuplicate names
-      in (Maybes.map (\name -> ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
+      in (Optionals.map (\name -> ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
         ErrorCore.duplicateFieldErrorLocation = path,
         ErrorCore.duplicateFieldErrorName = name})) dup)
 -- | Check that a literal value's type matches an expected literal type
@@ -101,7 +101,7 @@ checkShadowing :: Paths.SubtermPath -> Graph.Graph -> [Core.Name] -> Maybe Error
 checkShadowing path cx names =
 
       let result =
-              Lists.foldl (\acc -> \name -> Maybes.cases acc (Logic.ifElse (Logic.or (Maybes.isJust (Maps.lookup name (Graph.graphBoundTerms cx))) (Sets.member name (Graph.graphLambdaVariables cx))) (Just (ErrorCore.InvalidTermErrorTermVariableShadowing (ErrorCore.TermVariableShadowingError {
+              Lists.foldl (\acc -> \name -> Optionals.cases acc (Logic.ifElse (Logic.or (Optionals.isGiven (Maps.lookup name (Graph.graphBoundTerms cx))) (Sets.member name (Graph.graphLambdaVariables cx))) (Just (ErrorCore.InvalidTermErrorTermVariableShadowing (ErrorCore.TermVariableShadowingError {
                 ErrorCore.termVariableShadowingErrorLocation = path,
                 ErrorCore.termVariableShadowingErrorName = name}))) Nothing) (\_ -> acc)) Nothing names
       in result
@@ -113,9 +113,9 @@ checkTerm p typed path cx term =
         let body = Core.annotatedTermBody v0
             annMap = Annotations.getAnnotationMap (Core.annotatedTermAnnotation v0)
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTermAnnotation")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTermAnnotation", f)) (Logic.ifElse (Maps.null annMap) (Just (ErrorCore.InvalidTermErrorEmptyTermAnnotation (ErrorCore.EmptyTermAnnotationError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTermAnnotation")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTermAnnotation", f)) (Logic.ifElse (Maps.null annMap) (Just (ErrorCore.InvalidTermErrorEmptyTermAnnotation (ErrorCore.EmptyTermAnnotationError {
             ErrorCore.emptyTermAnnotationErrorLocation = path}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.nestedTermAnnotation")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.nestedTermAnnotation", f)) (case body of
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.nestedTermAnnotation")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.nestedTermAnnotation", f)) (case body of
             Core.TermAnnotated _ -> Just (ErrorCore.InvalidTermErrorNestedTermAnnotation (ErrorCore.NestedTermAnnotationError {
               ErrorCore.nestedTermAnnotationErrorLocation = path}))
             _ -> Nothing)) Nothing)])
@@ -123,7 +123,7 @@ checkTerm p typed path cx term =
         let fun = Core.applicationFunction v0
             arg = Core.applicationArgument v0
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.constantCondition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.constantCondition", f)) (case fun of
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.constantCondition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.constantCondition", f)) (case fun of
             Core.TermVariable v1 -> Logic.ifElse (Equality.equal (Core.unName v1) "hydra.lib.logic.ifElse") (case arg of
               Core.TermLiteral v2 -> case v2 of
                 Core.LiteralBoolean v3 -> Just (ErrorCore.InvalidTermErrorConstantCondition (ErrorCore.ConstantConditionError {
@@ -132,14 +132,14 @@ checkTerm p typed path cx term =
                 _ -> Nothing
               _ -> Nothing) Nothing
             _ -> Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.selfApplication")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.selfApplication", f)) (case fun of
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.selfApplication")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.selfApplication", f)) (case fun of
             Core.TermVariable v1 -> case arg of
               Core.TermVariable v2 -> Logic.ifElse (Equality.equal v1 v2) (Just (ErrorCore.InvalidTermErrorSelfApplication (ErrorCore.SelfApplicationError {
                 ErrorCore.selfApplicationErrorLocation = path,
                 ErrorCore.selfApplicationErrorName = v1}))) Nothing
               _ -> Nothing
             _ -> Nothing)) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.unnecessaryIdentityApplication")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.unnecessaryIdentityApplication", f)) (case fun of
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.unnecessaryIdentityApplication")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.unnecessaryIdentityApplication", f)) (case fun of
             Core.TermLambda v1 ->
               let param = Core.lambdaParameter v1
                   body = Core.lambdaBody v1
@@ -148,7 +148,7 @@ checkTerm p typed path cx term =
                   ErrorCore.unnecessaryIdentityApplicationErrorLocation = path}))) Nothing
                 _ -> Nothing
             _ -> Nothing)) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.redundantWrapUnwrap")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.redundantWrapUnwrap", f)) (case fun of
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.redundantWrapUnwrap")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.redundantWrapUnwrap", f)) (case fun of
             Core.TermUnwrap v1 -> case arg of
               Core.TermWrap v2 ->
                 let wrapName = Core.wrappedTermTypeName v2
@@ -161,72 +161,72 @@ checkTerm p typed path cx term =
         let tname = Core.recordTypeName v0
             flds = Core.recordFields v0
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
             ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateField")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateField", f)) (checkDuplicateFields path (Lists.map Core.fieldName flds))) Nothing)])
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateField")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateField", f)) (checkDuplicateFields path (Lists.map Core.fieldName flds))) Nothing)])
       Core.TermLet v0 ->
         let bindings = Core.letBindings v0
             names = Lists.map Core.bindingName bindings
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings", f)) (Logic.ifElse (Lists.null bindings) (Just (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyLetBindings", f)) (Logic.ifElse (Lists.null bindings) (Just (ErrorCore.InvalidTermErrorEmptyLetBindings (ErrorCore.EmptyLetBindingsError {
             ErrorCore.emptyLetBindingsErrorLocation = path}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateBinding")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateBinding", f)) (checkDuplicateBindings path bindings)) Nothing),
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateBinding")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateBinding", f)) (checkDuplicateBindings path bindings)) Nothing),
           Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.invalidLetBindingName")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.invalidLetBindingName", f)) (firstError (Lists.map (\bname -> Logic.ifElse (isValidName bname) Nothing (Just (ErrorCore.InvalidTermErrorInvalidLetBindingName (ErrorCore.InvalidLetBindingNameError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.invalidLetBindingName")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.invalidLetBindingName", f)) (firstError (Lists.map (\bname -> Logic.ifElse (isValidName bname) Nothing (Just (ErrorCore.InvalidTermErrorInvalidLetBindingName (ErrorCore.InvalidLetBindingNameError {
             ErrorCore.invalidLetBindingNameErrorLocation = path,
             ErrorCore.invalidLetBindingNameErrorName = bname})))) names))) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInBindingType")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInBindingType", f)) (Logic.ifElse typed (firstError (Lists.map (\b -> Maybes.cases (Core.bindingTypeScheme b) Nothing (\ts -> checkUndefinedTypeVariablesInTypeScheme path cx ts (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInBindingType (ErrorCore.UndefinedTypeVariableInBindingTypeError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInBindingType")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInBindingType", f)) (Logic.ifElse typed (firstError (Lists.map (\b -> Optionals.cases (Core.bindingTypeScheme b) Nothing (\ts -> checkUndefinedTypeVariablesInTypeScheme path cx ts (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInBindingType (ErrorCore.UndefinedTypeVariableInBindingTypeError {
             ErrorCore.undefinedTypeVariableInBindingTypeErrorLocation = path,
             ErrorCore.undefinedTypeVariableInBindingTypeErrorName = uvName}))))) bindings)) Nothing)) Nothing)])
       Core.TermInject v0 ->
         let tname = Core.injectionTypeName v0
-        in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
+        in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
           ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)) Nothing)
       Core.TermLambda v0 ->
         let paramName = Core.lambdaParameter v0
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.termVariableShadowing")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.termVariableShadowing", f)) (Logic.ifElse (Maybes.isJust (Maps.lookup paramName (Graph.graphBoundTerms cx))) (Just (ErrorCore.InvalidTermErrorTermVariableShadowing (ErrorCore.TermVariableShadowingError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.termVariableShadowing")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.termVariableShadowing", f)) (Logic.ifElse (Optionals.isGiven (Maps.lookup paramName (Graph.graphBoundTerms cx))) (Just (ErrorCore.InvalidTermErrorTermVariableShadowing (ErrorCore.TermVariableShadowingError {
             ErrorCore.termVariableShadowingErrorLocation = path,
             ErrorCore.termVariableShadowingErrorName = paramName}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.invalidLambdaParameterName")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.invalidLambdaParameterName", f)) (Logic.ifElse (isValidName paramName) Nothing (Just (ErrorCore.InvalidTermErrorInvalidLambdaParameterName (ErrorCore.InvalidLambdaParameterNameError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.invalidLambdaParameterName")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.invalidLambdaParameterName", f)) (Logic.ifElse (isValidName paramName) Nothing (Just (ErrorCore.InvalidTermErrorInvalidLambdaParameterName (ErrorCore.InvalidLambdaParameterNameError {
             ErrorCore.invalidLambdaParameterNameErrorLocation = path,
             ErrorCore.invalidLambdaParameterNameErrorName = paramName}))))) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain", f)) (Logic.ifElse typed (Maybes.cases (Core.lambdaDomain v0) Nothing (\dom -> checkUndefinedTypeVariablesInType path cx dom (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInLambdaDomain (ErrorCore.UndefinedTypeVariableInLambdaDomainError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain", f)) (Logic.ifElse typed (Optionals.cases (Core.lambdaDomain v0) Nothing (\dom -> checkUndefinedTypeVariablesInType path cx dom (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInLambdaDomain (ErrorCore.UndefinedTypeVariableInLambdaDomainError {
             ErrorCore.undefinedTypeVariableInLambdaDomainErrorLocation = path,
             ErrorCore.undefinedTypeVariableInLambdaDomainErrorName = uvName}))))) Nothing)) Nothing)])
       Core.TermProject v0 ->
         let tname = Core.projectionTypeName v0
-        in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
+        in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
           ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)) Nothing)
       Core.TermCases v0 ->
         let tname = Core.caseStatementTypeName v0
             csDefault = Core.caseStatementDefault v0
             csCases = Core.caseStatementCases v0
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
             ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyCaseStatement")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyCaseStatement", f)) (Logic.ifElse (Logic.and (Lists.null csCases) (Maybes.isNothing csDefault)) (Just (ErrorCore.InvalidTermErrorEmptyCaseStatement (ErrorCore.EmptyCaseStatementError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyCaseStatement")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyCaseStatement", f)) (Logic.ifElse (Logic.and (Lists.null csCases) (Optionals.isNone csDefault)) (Just (ErrorCore.InvalidTermErrorEmptyCaseStatement (ErrorCore.EmptyCaseStatementError {
             ErrorCore.emptyCaseStatementErrorLocation = path,
             ErrorCore.emptyCaseStatementErrorTypeName = tname}))) Nothing)) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateField")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateField", f)) (checkDuplicateFields path (Lists.map Core.caseAlternativeName csCases))) Nothing)])
-      Core.TermTypeApplication v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication", f)) (Logic.ifElse typed (checkUndefinedTypeVariablesInType path cx (Core.typeApplicationTermType v0) (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInTypeApplication (ErrorCore.UndefinedTypeVariableInTypeApplicationError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.duplicateField")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.duplicateField", f)) (checkDuplicateFields path (Lists.map Core.caseAlternativeName csCases))) Nothing)])
+      Core.TermTypeApplication v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication", f)) (Logic.ifElse typed (checkUndefinedTypeVariablesInType path cx (Core.typeApplicationTermType v0) (\uvName -> Just (ErrorCore.InvalidTermErrorUndefinedTypeVariableInTypeApplication (ErrorCore.UndefinedTypeVariableInTypeApplicationError {
         ErrorCore.undefinedTypeVariableInTypeApplicationErrorLocation = path,
         ErrorCore.undefinedTypeVariableInTypeApplicationErrorName = uvName})))) Nothing)) Nothing
       Core.TermTypeLambda v0 ->
         let tvName = Core.typeLambdaParameter v0
         in (firstFinding [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.typeVariableShadowingInTypeLambda")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.typeVariableShadowingInTypeLambda", f)) (Logic.ifElse (Sets.member tvName (Sets.delete tvName (Graph.graphTypeVariables cx))) (Just (ErrorCore.InvalidTermErrorTypeVariableShadowingInTypeLambda (ErrorCore.TypeVariableShadowingInTypeLambdaError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.typeVariableShadowingInTypeLambda")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.typeVariableShadowingInTypeLambda", f)) (Logic.ifElse (Sets.member tvName (Sets.delete tvName (Graph.graphTypeVariables cx))) (Just (ErrorCore.InvalidTermErrorTypeVariableShadowingInTypeLambda (ErrorCore.TypeVariableShadowingInTypeLambdaError {
             ErrorCore.typeVariableShadowingInTypeLambdaErrorLocation = path,
             ErrorCore.typeVariableShadowingInTypeLambdaErrorName = tvName}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.invalidTypeLambdaParameterName")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.invalidTypeLambdaParameterName", f)) (Logic.ifElse (isValidName tvName) Nothing (Just (ErrorCore.InvalidTermErrorInvalidTypeLambdaParameterName (ErrorCore.InvalidTypeLambdaParameterNameError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.invalidTypeLambdaParameterName")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.invalidTypeLambdaParameterName", f)) (Logic.ifElse (isValidName tvName) Nothing (Just (ErrorCore.InvalidTermErrorInvalidTypeLambdaParameterName (ErrorCore.InvalidTypeLambdaParameterNameError {
             ErrorCore.invalidTypeLambdaParameterNameErrorLocation = path,
             ErrorCore.invalidTypeLambdaParameterNameErrorName = tvName}))))) Nothing)])
-      Core.TermVariable v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTermVariable")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTermVariable", f)) (Logic.ifElse (Logic.or (Maybes.isJust (Maps.lookup v0 (Graph.graphBoundTerms cx))) (Logic.or (Sets.member v0 (Graph.graphLambdaVariables cx)) (Maybes.isJust (Maps.lookup v0 (Graph.graphPrimitives cx))))) Nothing (Just (ErrorCore.InvalidTermErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
+      Core.TermVariable v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.undefinedTermVariable")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.undefinedTermVariable", f)) (Logic.ifElse (Logic.or (Optionals.isGiven (Maps.lookup v0 (Graph.graphBoundTerms cx))) (Logic.or (Sets.member v0 (Graph.graphLambdaVariables cx)) (Optionals.isGiven (Maps.lookup v0 (Graph.graphPrimitives cx))))) Nothing (Just (ErrorCore.InvalidTermErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
         ErrorCore.undefinedTermVariableErrorLocation = path,
         ErrorCore.undefinedTermVariableErrorName = v0}))))) Nothing
       Core.TermWrap v0 ->
         let tname = Core.wrappedTermTypeName v0
-        in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
+        in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
           ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)) Nothing)
       _ -> Nothing
 -- | Check a type for type variables not bound in the current scope
@@ -235,14 +235,14 @@ checkUndefinedTypeVariablesInType path cx typ mkError =
 
       let freeVars = Variables.freeVariablesInType typ
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
-      in (Maybes.maybe Nothing (\firstUndefined -> mkError firstUndefined) (Lists.maybeHead (Sets.toList undefined)))
+      in (Optionals.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
 -- | Check a type scheme for type variables not bound by the scheme or the current scope
 checkUndefinedTypeVariablesInTypeScheme :: t0 -> Graph.Graph -> Core.TypeScheme -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
 
       let freeVars = Variables.freeVariablesInTypeScheme ts
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
-      in (Maybes.maybe Nothing (\firstUndefined -> mkError firstUndefined) (Lists.maybeHead (Sets.toList undefined)))
+      in (Optionals.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
 -- | Return an error if the given type is TypeVoid
 checkVoid :: Core.Type -> Maybe ErrorCore.InvalidTypeError
 checkVoid typ =
@@ -262,7 +262,7 @@ findDuplicate names =
               Lists.foldl (\acc -> \name ->
                 let seen = Pairs.first acc
                     dup = Pairs.second acc
-                in (Maybes.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
+                in (Optionals.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
       in (Pairs.second result)
 -- | Find the first duplicate name in a list (for field type validation)
 findDuplicateFieldType :: Ord t0 => ([t0] -> Maybe t0)
@@ -272,20 +272,20 @@ findDuplicateFieldType names =
               Lists.foldl (\acc -> \name ->
                 let seen = Pairs.first acc
                     dup = Pairs.second acc
-                in (Maybes.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
+                in (Optionals.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
       in (Pairs.second result)
 -- | Return the first error from a list of optional errors, or nothing if all are valid
 firstError :: [Maybe t0] -> Maybe t0
-firstError checks = Lists.foldl (\acc -> \check -> Maybes.cases acc check (\_ -> acc)) Nothing checks
+firstError checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
 -- | Return the first rule-tagged finding from a list, or nothing if all are valid
 firstFinding :: [Maybe t0] -> Maybe t0
-firstFinding checks = Lists.foldl (\acc -> \check -> Maybes.cases acc check (\_ -> acc)) Nothing checks
+firstFinding checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
 -- | Return the first rule-tagged type finding from a list, or nothing if all are valid
 firstFindingType :: [Maybe t0] -> Maybe t0
-firstFindingType checks = Lists.foldl (\acc -> \check -> Maybes.cases acc check (\_ -> acc)) Nothing checks
+firstFindingType checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
 -- | Return the first type error from a list of optional errors, or nothing if all are valid
 firstTypeError :: [Maybe t0] -> Maybe t0
-firstTypeError checks = Lists.foldl (\acc -> \check -> Maybes.cases acc check (\_ -> acc)) Nothing checks
+firstTypeError checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
 -- | Check whether a name is valid at an introduction site. Currently rejects empty strings.
 isValidName :: Core.Name -> Bool
 isValidName name = Logic.not (Equality.equal (Core.unName name) "")
@@ -364,7 +364,7 @@ type_ p acc boundVars typ =
         Core.TypeMap v0 ->
           let acc2 = type_ p acc1 boundVars (Core.mapTypeKeys v0)
           in (type_ p acc2 boundVars (Core.mapTypeValues v0))
-        Core.TypeMaybe v0 -> type_ p acc1 boundVars v0
+        Core.TypeOptional v0 -> type_ p acc1 boundVars v0
         Core.TypePair v0 ->
           let acc2 = type_ p acc1 boundVars (Core.pairTypeFirst v0)
           in (type_ p acc2 boundVars (Core.pairTypeSecond v0))
@@ -381,64 +381,64 @@ validateTypeNode p boundVars typ =
         let body = Core.annotatedTypeBody v0
             annMap = Annotations.getAnnotationMap (Core.annotatedTypeAnnotation v0)
         in (firstFindingType [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyTypeAnnotation")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyTypeAnnotation", f)) (Logic.ifElse (Maps.null annMap) (Just (ErrorCore.InvalidTypeErrorEmptyTypeAnnotation (ErrorCore.EmptyTypeAnnotationError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyTypeAnnotation")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyTypeAnnotation", f)) (Logic.ifElse (Maps.null annMap) (Just (ErrorCore.InvalidTypeErrorEmptyTypeAnnotation (ErrorCore.EmptyTypeAnnotationError {
             ErrorCore.emptyTypeAnnotationErrorLocation = (Paths.SubtermPath [])}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.nestedTypeAnnotation")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.nestedTypeAnnotation", f)) (case body of
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.nestedTypeAnnotation")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.nestedTypeAnnotation", f)) (case body of
             Core.TypeAnnotated _ -> Just (ErrorCore.InvalidTypeErrorNestedTypeAnnotation (ErrorCore.NestedTypeAnnotationError {
               ErrorCore.nestedTypeAnnotationErrorLocation = (Paths.SubtermPath [])}))
             _ -> Nothing)) Nothing)])
       Core.TypeEither v0 -> firstFindingType [
-        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeLeft v0))) Nothing,
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeRight v0))) Nothing)]
+        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeLeft v0))) Nothing,
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeRight v0))) Nothing)]
       Core.TypeForall v0 ->
         let paramName = Core.forallTypeParameter v0
         in (firstFindingType [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.typeVariableShadowingInForall")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.typeVariableShadowingInForall", f)) (Logic.ifElse (Sets.member paramName boundVars) (Just (ErrorCore.InvalidTypeErrorTypeVariableShadowingInForall (ErrorCore.TypeVariableShadowingInForallError {
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.typeVariableShadowingInForall")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.typeVariableShadowingInForall", f)) (Logic.ifElse (Sets.member paramName boundVars) (Just (ErrorCore.InvalidTypeErrorTypeVariableShadowingInForall (ErrorCore.TypeVariableShadowingInForallError {
             ErrorCore.typeVariableShadowingInForallErrorLocation = (Paths.SubtermPath []),
             ErrorCore.typeVariableShadowingInForallErrorName = paramName}))) Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.invalidForallParameterName")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.invalidForallParameterName", f)) (Logic.ifElse (isValidName paramName) Nothing (Just (ErrorCore.InvalidTypeErrorInvalidForallParameterName (ErrorCore.InvalidForallParameterNameError {
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.invalidForallParameterName")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.invalidForallParameterName", f)) (Logic.ifElse (isValidName paramName) Nothing (Just (ErrorCore.InvalidTypeErrorInvalidForallParameterName (ErrorCore.InvalidForallParameterNameError {
             ErrorCore.invalidForallParameterNameErrorLocation = (Paths.SubtermPath []),
             ErrorCore.invalidForallParameterNameErrorName = paramName}))))) Nothing)])
-      Core.TypeFunction v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.functionTypeCodomain v0))) Nothing
-      Core.TypeList v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid v0)) Nothing
+      Core.TypeFunction v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.functionTypeCodomain v0))) Nothing
+      Core.TypeList v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid v0)) Nothing
       Core.TypeMap v0 ->
         let keyType = Core.mapTypeKeys v0
         in (firstFindingType [
-          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.nonComparableMapKeyType")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.nonComparableMapKeyType", f)) (case keyType of
+          Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.nonComparableMapKeyType")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.nonComparableMapKeyType", f)) (case keyType of
             Core.TypeFunction _ -> Just (ErrorCore.InvalidTypeErrorNonComparableMapKeyType (ErrorCore.NonComparableMapKeyTypeError {
               ErrorCore.nonComparableMapKeyTypeErrorLocation = (Paths.SubtermPath []),
               ErrorCore.nonComparableMapKeyTypeErrorKeyType = keyType}))
             _ -> Nothing)) Nothing,
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid keyType)) Nothing),
-          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.mapTypeValues v0))) Nothing)])
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid keyType)) Nothing),
+          (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.mapTypeValues v0))) Nothing)])
       Core.TypePair v0 -> firstFindingType [
-        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.pairTypeFirst v0))) Nothing,
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.pairTypeSecond v0))) Nothing)]
+        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.pairTypeFirst v0))) Nothing,
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.pairTypeSecond v0))) Nothing)]
       Core.TypeRecord v0 -> firstFindingType [
-        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyRecordType")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyRecordType", f)) (Logic.ifElse (Lists.null v0) (Just (ErrorCore.InvalidTypeErrorEmptyRecordType (ErrorCore.EmptyRecordTypeError {
+        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyRecordType")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyRecordType", f)) (Logic.ifElse (Lists.null v0) (Just (ErrorCore.InvalidTypeErrorEmptyRecordType (ErrorCore.EmptyRecordTypeError {
           ErrorCore.emptyRecordTypeErrorLocation = (Paths.SubtermPath [])}))) Nothing)) Nothing,
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.duplicateRecordTypeFieldNames")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.duplicateRecordTypeFieldNames", f)) (checkDuplicateFieldTypes v0 (\dupName -> Just (ErrorCore.InvalidTypeErrorDuplicateRecordTypeFieldNames (ErrorCore.DuplicateRecordTypeFieldNamesError {
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.duplicateRecordTypeFieldNames")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.duplicateRecordTypeFieldNames", f)) (checkDuplicateFieldTypes v0 (\dupName -> Just (ErrorCore.InvalidTypeErrorDuplicateRecordTypeFieldNames (ErrorCore.DuplicateRecordTypeFieldNamesError {
           ErrorCore.duplicateRecordTypeFieldNamesErrorLocation = (Paths.SubtermPath []),
           ErrorCore.duplicateRecordTypeFieldNamesErrorName = dupName}))))) Nothing),
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))) Nothing)]
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))) Nothing)]
       Core.TypeSet v0 -> firstFindingType [
-        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.nonComparableSetElementType")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.nonComparableSetElementType", f)) (case v0 of
+        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.nonComparableSetElementType")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.nonComparableSetElementType", f)) (case v0 of
           Core.TypeFunction _ -> Just (ErrorCore.InvalidTypeErrorNonComparableSetElementType (ErrorCore.NonComparableSetElementTypeError {
             ErrorCore.nonComparableSetElementTypeErrorLocation = (Paths.SubtermPath []),
             ErrorCore.nonComparableSetElementTypeErrorElementType = v0}))
           _ -> Nothing)) Nothing,
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid v0)) Nothing)]
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid v0)) Nothing)]
       Core.TypeUnion v0 -> firstFindingType [
-        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyUnionType")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyUnionType", f)) (Logic.ifElse (Lists.null v0) (Just (ErrorCore.InvalidTypeErrorEmptyUnionType (ErrorCore.EmptyUnionTypeError {
+        Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.emptyUnionType")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.emptyUnionType", f)) (Logic.ifElse (Lists.null v0) (Just (ErrorCore.InvalidTypeErrorEmptyUnionType (ErrorCore.EmptyUnionTypeError {
           ErrorCore.emptyUnionTypeErrorLocation = (Paths.SubtermPath [])}))) Nothing)) Nothing,
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion", f)) (Logic.ifElse (Equality.equal (Lists.length v0) 1) (Maybes.maybe Nothing (\singleField -> Just (ErrorCore.InvalidTypeErrorSingleVariantUnion (ErrorCore.SingleVariantUnionError {
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion", f)) (Logic.ifElse (Equality.equal (Lists.length v0) 1) (Optionals.cases (Lists.maybeHead v0) Nothing (\singleField -> Just (ErrorCore.InvalidTypeErrorSingleVariantUnion (ErrorCore.SingleVariantUnionError {
           ErrorCore.singleVariantUnionErrorLocation = (Paths.SubtermPath []),
-          ErrorCore.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)}))) (Lists.maybeHead v0)) Nothing)) Nothing),
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames", f)) (checkDuplicateFieldTypes v0 (\dupName -> Just (ErrorCore.InvalidTypeErrorDuplicateUnionTypeFieldNames (ErrorCore.DuplicateUnionTypeFieldNamesError {
+          ErrorCore.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)})))) Nothing)) Nothing),
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames", f)) (checkDuplicateFieldTypes v0 (\dupName -> Just (ErrorCore.InvalidTypeErrorDuplicateUnionTypeFieldNames (ErrorCore.DuplicateUnionTypeFieldNamesError {
           ErrorCore.duplicateUnionTypeFieldNamesErrorLocation = (Paths.SubtermPath []),
           ErrorCore.duplicateUnionTypeFieldNamesErrorName = dupName}))))) Nothing),
-        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))) Nothing)]
-      Core.TypeVariable v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.undefinedTypeVariable")) (Maybes.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.undefinedTypeVariable", f)) (Logic.ifElse (Sets.member v0 boundVars) Nothing (Just (ErrorCore.InvalidTypeErrorUndefinedTypeVariable (ErrorCore.UndefinedTypeVariableError {
+        (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))) Nothing)]
+      Core.TypeVariable v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.undefinedTypeVariable")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.undefinedTypeVariable", f)) (Logic.ifElse (Sets.member v0 boundVars) Nothing (Just (ErrorCore.InvalidTypeErrorUndefinedTypeVariable (ErrorCore.UndefinedTypeVariableError {
         ErrorCore.undefinedTypeVariableErrorLocation = (Paths.SubtermPath []),
         ErrorCore.undefinedTypeVariableErrorName = v0}))))) Nothing
       _ -> Nothing

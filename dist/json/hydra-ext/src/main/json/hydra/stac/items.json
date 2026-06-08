@@ -30,7 +30,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The displayed title for clients and users."}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "description",
                     "type": {
@@ -42,7 +42,7 @@
                               "value": {
                                 "literal": {
                                   "string": "A description of the Asset providing additional details, such as how it was processed or created. CommonMark 0.29 syntax MAY be used for rich text representation."}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "type",
                     "type": {
@@ -54,7 +54,7 @@
                               "value": {
                                 "literal": {
                                   "string": "Media type of the asset. See the common media types in the best practice doc for commonly used asset types."}}}]},
-                        "body": {"maybe": {"variable": "hydra.stac.items.MediaType"}}}}},
+                        "body": {"optional": {"variable": "hydra.stac.items.MediaType"}}}}},
                   {
                     "name": "roles",
                     "type": {
@@ -129,7 +129,7 @@
                               "value": {
                                 "literal": {
                                   "string": "The id of the STAC Collection this Item references to (see collection relation type). This field is required if such a relation type is present and is not allowed otherwise. This field provides an easy way for a user to search for any Items that belong in a specified Collection. Must be a non-empty string."}}}]},
-                        "body": {"maybe": {"variable": "hydra.geojson.model.Id"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.geojson.model.Id"}}}}}]}}},
           "variables": []},
         "name": "hydra.stac.items.Item"}},
     {
@@ -174,7 +174,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Media type of the referenced entity."}}}]},
-                        "body": {"maybe": {"variable": "hydra.stac.items.MediaType"}}}}},
+                        "body": {"optional": {"variable": "hydra.stac.items.MediaType"}}}}},
                   {
                     "name": "title",
                     "type": {
@@ -184,7 +184,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A human readable title to be used in rendered displays of the link."}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.stac.items.Link"}},
     {

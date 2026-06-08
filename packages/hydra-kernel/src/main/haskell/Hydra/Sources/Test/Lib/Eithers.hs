@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
@@ -68,7 +68,7 @@ showIntList :: TypedTerm ([Int] -> String)
 showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showMaybeInt :: TypedTerm (Maybe Int -> String)
-showMaybeInt = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showInt32 @@ Phantoms.var "mx"
+showMaybeInt = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
 
 showPairIntListStringList :: TypedTerm (([Int], [String]) -> String)
 showPairIntListStringList = Phantoms.lambda "p" $ ShowCore.pair_ @@ showIntList @@ showStrList @@ Phantoms.var "p"
@@ -108,7 +108,7 @@ allTests = definitionInModule module_ "allTests" $
       eithersPartitionEithers,
       eithersMap,
       eithersMapList,
-      eithersMapMaybe]
+      eithersMapOptional]
 
 eithersBimap :: TypedTerm TestGroup
 eithersBimap = subgroup "bimap" [
@@ -220,8 +220,8 @@ eithersMapList = subgroup "mapList" [
       (Eithers.mapList mapFn (Phantoms.list (Phantoms.int32 <$> input)))
       expected
 
-eithersMapMaybe :: TypedTerm TestGroup
-eithersMapMaybe = subgroup "mapMaybe" [
+eithersMapOptional :: TypedTerm TestGroup
+eithersMapOptional = subgroup "mapOptional" [
   test "just succeeds" (Phantoms.just (Phantoms.int32 5)) (Phantoms.right (Phantoms.just (Phantoms.int32 10))),
   test "just fails" (Phantoms.just (Phantoms.int32 0)) (Phantoms.left (Phantoms.string "zero")),
   test "nothing" (Phantoms.nothing :: TypedTerm (Maybe Int)) (Phantoms.right (Phantoms.nothing :: TypedTerm (Maybe Int)))]
@@ -231,7 +231,7 @@ eithersMapMaybe = subgroup "mapMaybe" [
         (Phantoms.left (Phantoms.string "zero"))
         (Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
     test name input expected = evalPair name showEitherStringMaybeInt
-      (Eithers.mapMaybe mapFn input)
+      (Eithers.mapOptional mapFn input)
       expected
 
 eithersPartitionEithers :: TypedTerm TestGroup

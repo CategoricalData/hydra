@@ -15,7 +15,7 @@ import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Packaging as Packaging
@@ -141,14 +141,14 @@ rewriteAndFoldTerm f term0 =
                         Core.applicationFunction = (Pairs.second rlhs),
                         Core.applicationArgument = (Pairs.second rrhs)})))
                   Core.TermCases v0 ->
-                    let rmd = Maybes.map (recurse val0) (Core.caseStatementDefault v0)
-                        val1 = Maybes.maybe val0 Pairs.first rmd
+                    let rmd = Optionals.map (recurse val0) (Core.caseStatementDefault v0)
+                        val1 = Optionals.cases rmd val0 Pairs.first
                         rcases = forCaseAlternatives val1 (Core.caseStatementCases v0)
                     in (
                       Pairs.first rcases,
                       (Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                        Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                        Core.caseStatementDefault = (Optionals.map Pairs.second rmd),
                         Core.caseStatementCases = (Pairs.second rcases)})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse val0 l
@@ -170,7 +170,7 @@ rewriteAndFoldTerm f term0 =
                       Core.letBody = (Pairs.second renv)})) (Pairs.first renv) (Core.letBindings v0))
                   Core.TermList v0 -> forMany recurse (\x -> Core.TermList x) val0 v0
                   Core.TermMap v0 -> forMany forPair (\pairs -> Core.TermMap (Maps.fromList pairs)) val0 (Maps.toList v0)
-                  Core.TermMaybe v0 -> Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermMaybe (Just t1)) val0 t) v0
+                  Core.TermOptional v0 -> Optionals.cases v0 dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t)
                   Core.TermPair v0 ->
                     let rf = recurse val0 (Pairs.first v0)
                         rs = recurse (Pairs.first rf) (Pairs.second v0)
@@ -306,16 +306,16 @@ rewriteAndFoldTermWithPath f term0 =
                         Core.applicationArgument = (Pairs.second rrhs)})))
                   Core.TermCases v0 ->
                     let rmd =
-                            Maybes.map (\def -> recurse (Lists.concat2 path [
+                            Optionals.map (\def -> recurse (Lists.concat2 path [
                               Paths.SubtermStepUnionCasesDefault]) val0 def) (Core.caseStatementDefault v0)
-                        val1 = Maybes.maybe val0 Pairs.first rmd
+                        val1 = Optionals.cases rmd val0 Pairs.first
                         rcases =
                                 forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.caseAlternativeName f2), (Core.caseAlternativeHandler f2))) (Core.caseStatementCases v0))
                     in (
                       Pairs.first rcases,
                       (Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                        Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                        Core.caseStatementDefault = (Optionals.map Pairs.second rmd),
                         Core.caseStatementCases = (Lists.map (\ft -> Core.CaseAlternative {
                           Core.caseAlternativeName = (Pairs.first ft),
                           Core.caseAlternativeHandler = (Pairs.second ft)}) (Lists.zip (Lists.map Core.caseAlternativeName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
@@ -365,7 +365,7 @@ rewriteAndFoldTermWithPath f term0 =
                                             Paths.SubtermStepMapValue (Pairs.first r)]) (Pairs.first rk) (Pairs.second kv)
                                   in (Math.add (Pairs.first r) 1, (Pairs.first rv, (Lists.cons (Pairs.second rk, (Pairs.second rv)) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) (Maps.toList v0)
                     in (Pairs.first (Pairs.second rr), (Core.TermMap (Maps.fromList (Lists.reverse (Pairs.second (Pairs.second rr))))))
-                  Core.TermMaybe v0 -> Maybes.maybe dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermMaybe (Just t1)) Paths.SubtermStepMaybeTerm val0 t) v0
+                  Core.TermOptional v0 -> Optionals.cases v0 dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermOptional (Just t1)) Paths.SubtermStepOptionalTerm val0 t)
                   Core.TermPair v0 ->
                     let rf = recurse (Lists.concat2 path [
                           Paths.SubtermStepProductTerm 0]) val0 (Pairs.first v0)
@@ -446,7 +446,7 @@ rewriteTerm f term0 =
                     Core.applicationArgument = (recurse (Core.applicationArgument v0))})
                   Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                    Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
+                    Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v0)),
                     Core.caseStatementCases = (Lists.map forCaseAlternative (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
@@ -457,7 +457,7 @@ rewriteTerm f term0 =
                   Core.TermList v0 -> Core.TermList (Lists.map recurse v0)
                   Core.TermLiteral v0 -> Core.TermLiteral v0
                   Core.TermMap v0 -> Core.TermMap (forMap v0)
-                  Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map recurse v0)
+                  Core.TermOptional v0 -> Core.TermOptional (Optionals.map recurse v0)
                   Core.TermPair v0 -> Core.TermPair (recurse (Pairs.first v0), (recurse (Pairs.second v0)))
                   Core.TermProject v0 -> Core.TermProject v0
                   Core.TermRecord v0 -> Core.TermRecord (Core.Record {
@@ -513,7 +513,7 @@ rewriteTermM f term0 =
                     let n = Core.caseStatementTypeName v0
                         def = Core.caseStatementDefault v0
                         csCases = Core.caseStatementCases v0
-                    in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
+                    in (Eithers.bind (Optionals.cases def (Right Nothing) (\t -> Eithers.map Optionals.pure (recurse t))) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = n,
                       Core.caseStatementDefault = rdef,
                       Core.caseStatementCases = rcases})) (Eithers.mapList forCaseAlternative csCases)))
@@ -535,7 +535,7 @@ rewriteTermM f term0 =
                   Core.TermList v0 -> Eithers.bind (Eithers.mapList recurse v0) (\rels -> Right (Core.TermList rels))
                   Core.TermLiteral v0 -> Right (Core.TermLiteral v0)
                   Core.TermMap v0 -> Eithers.bind (Eithers.mapList forPair (Maps.toList v0)) (\pairs -> Right (Core.TermMap (Maps.fromList pairs)))
-                  Core.TermMaybe v0 -> Eithers.bind (Eithers.mapMaybe recurse v0) (\rm -> Right (Core.TermMaybe rm))
+                  Core.TermOptional v0 -> Eithers.bind (Eithers.mapOptional recurse v0) (\rm -> Right (Core.TermOptional rm))
                   Core.TermPair v0 -> Eithers.bind (recurse (Pairs.first v0)) (\rf -> Eithers.bind (recurse (Pairs.second v0)) (\rs -> Right (Core.TermPair (rf, rs))))
                   Core.TermProject v0 -> Right (Core.TermProject v0)
                   Core.TermRecord v0 ->
@@ -609,7 +609,7 @@ rewriteTermWithContext f cx0 term0 =
                     Core.applicationArgument = (recurse (Core.applicationArgument v0))})
                   Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                    Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
+                    Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v0)),
                     Core.caseStatementCases = (Lists.map forCaseAlternative (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
                   Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
@@ -620,7 +620,7 @@ rewriteTermWithContext f cx0 term0 =
                   Core.TermList v0 -> Core.TermList (Lists.map recurse v0)
                   Core.TermLiteral v0 -> Core.TermLiteral v0
                   Core.TermMap v0 -> Core.TermMap (forMap v0)
-                  Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map recurse v0)
+                  Core.TermOptional v0 -> Core.TermOptional (Optionals.map recurse v0)
                   Core.TermPair v0 -> Core.TermPair (recurse (Pairs.first v0), (recurse (Pairs.second v0)))
                   Core.TermProject v0 -> Core.TermProject v0
                   Core.TermRecord v0 -> Core.TermRecord (Core.Record {
@@ -677,7 +677,7 @@ rewriteTermWithContextM f cx0 term0 =
                     let n = Core.caseStatementTypeName v0
                         def = Core.caseStatementDefault v0
                         csCases = Core.caseStatementCases v0
-                    in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
+                    in (Eithers.bind (Optionals.cases def (Right Nothing) (\t -> Eithers.map Optionals.pure (recurse t))) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
                       Core.caseStatementTypeName = n,
                       Core.caseStatementDefault = rdef,
                       Core.caseStatementCases = rcases})) (Eithers.mapList forCaseAlternative csCases)))
@@ -699,7 +699,7 @@ rewriteTermWithContextM f cx0 term0 =
                   Core.TermList v0 -> Eithers.bind (Eithers.mapList recurse v0) (\rels -> Right (Core.TermList rels))
                   Core.TermLiteral v0 -> Right (Core.TermLiteral v0)
                   Core.TermMap v0 -> Eithers.bind (Eithers.mapList forPair (Maps.toList v0)) (\pairs -> Right (Core.TermMap (Maps.fromList pairs)))
-                  Core.TermMaybe v0 -> Eithers.bind (Eithers.mapMaybe recurse v0) (\rm -> Right (Core.TermMaybe rm))
+                  Core.TermOptional v0 -> Eithers.bind (Eithers.mapOptional recurse v0) (\rm -> Right (Core.TermOptional rm))
                   Core.TermPair v0 -> Eithers.bind (recurse (Pairs.first v0)) (\rfirst -> Eithers.bind (recurse (Pairs.second v0)) (\rsecond -> Right (Core.TermPair (rfirst, rsecond))))
                   Core.TermProject v0 -> Right (Core.TermProject v0)
                   Core.TermRecord v0 ->
@@ -792,7 +792,7 @@ rewriteType f typ0 =
                   Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
                     Core.mapTypeKeys = (recurse (Core.mapTypeKeys v0)),
                     Core.mapTypeValues = (recurse (Core.mapTypeValues v0))})
-                  Core.TypeMaybe v0 -> Core.TypeMaybe (recurse v0)
+                  Core.TypeOptional v0 -> Core.TypeOptional (recurse v0)
                   Core.TypeRecord v0 -> Core.TypeRecord (Lists.map forField v0)
                   Core.TypeSet v0 -> Core.TypeSet (recurse v0)
                   Core.TypeUnion v0 -> Core.TypeUnion (Lists.map forField v0)
@@ -831,7 +831,7 @@ rewriteTypeM f typ0 =
                 Core.TypeMap v0 -> Eithers.bind (recurse (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (recurse (Core.mapTypeValues v0)) (\vt -> Right (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = kt,
                   Core.mapTypeValues = vt}))))
-                Core.TypeMaybe v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeMaybe rt))
+                Core.TypeOptional v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeOptional rt))
                 Core.TypeRecord v0 ->
                   let forField =
                           \f2 -> Eithers.bind (recurse (Core.fieldTypeType f2)) (\t -> Right (Core.FieldType {
@@ -860,8 +860,8 @@ subterms x =
       Core.TermApplication v0 -> [
         Core.applicationFunction v0,
         (Core.applicationArgument v0)]
-      Core.TermCases v0 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-        t]) (Core.caseStatementDefault v0)) (Lists.map Core.caseAlternativeHandler (Core.caseStatementCases v0))
+      Core.TermCases v0 -> Lists.concat2 (Optionals.cases (Core.caseStatementDefault v0) [] (\t -> [
+        t])) (Lists.map Core.caseAlternativeHandler (Core.caseStatementCases v0))
       Core.TermEither v0 -> Eithers.either (\l -> [
         l]) (\r -> [
         r]) v0
@@ -873,8 +873,8 @@ subterms x =
       Core.TermMap v0 -> Lists.concat (Lists.map (\p -> [
         Pairs.first p,
         (Pairs.second p)]) (Maps.toList v0))
-      Core.TermMaybe v0 -> Maybes.maybe [] (\t -> [
-        t]) v0
+      Core.TermOptional v0 -> Optionals.cases v0 [] (\t -> [
+        t])
       Core.TermPair v0 -> [
         Pairs.first v0,
         (Pairs.second v0)]
@@ -901,8 +901,8 @@ subtermsWithSteps x =
       Core.TermApplication v0 -> [
         (Paths.SubtermStepApplicationFunction, (Core.applicationFunction v0)),
         (Paths.SubtermStepApplicationArgument, (Core.applicationArgument v0))]
-      Core.TermCases v0 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-        (Paths.SubtermStepUnionCasesDefault, t)]) (Core.caseStatementDefault v0)) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.caseAlternativeName f), (Core.caseAlternativeHandler f))) (Core.caseStatementCases v0))
+      Core.TermCases v0 -> Lists.concat2 (Optionals.cases (Core.caseStatementDefault v0) [] (\t -> [
+        (Paths.SubtermStepUnionCasesDefault, t)])) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.caseAlternativeName f), (Core.caseAlternativeHandler f))) (Core.caseStatementCases v0))
       Core.TermEither _ -> []
       Core.TermLambda v0 -> [
         (Paths.SubtermStepLambdaBody, (Core.lambdaBody v0))]
@@ -912,8 +912,8 @@ subtermsWithSteps x =
       Core.TermMap v0 -> Lists.concat (Lists.map (\p -> [
         (Paths.SubtermStepMapKey 0, (Pairs.first p)),
         (Paths.SubtermStepMapValue 0, (Pairs.second p))]) (Maps.toList v0))
-      Core.TermMaybe v0 -> Maybes.maybe [] (\t -> [
-        (Paths.SubtermStepMaybeTerm, t)]) v0
+      Core.TermOptional v0 -> Optionals.cases v0 [] (\t -> [
+        (Paths.SubtermStepOptionalTerm, t)])
       Core.TermPair _ -> []
       Core.TermProject _ -> []
       Core.TermRecord v0 -> Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0)
@@ -955,7 +955,7 @@ subtypes x =
       Core.TypeMap v0 -> [
         Core.mapTypeKeys v0,
         (Core.mapTypeValues v0)]
-      Core.TypeMaybe v0 -> [
+      Core.TypeOptional v0 -> [
         v0]
       Core.TypeRecord v0 -> Lists.map Core.fieldTypeType v0
       Core.TypeSet v0 -> [

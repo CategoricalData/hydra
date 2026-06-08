@@ -19,7 +19,7 @@ import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
@@ -45,8 +45,8 @@ buildJavaTestModule testModule testGroup testBody =
 
       let ns_ = Packaging.moduleName testModule
           parts = Strings.splitOn "." (Packaging.unModuleName ns_)
-          packageName = Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))
-          className_ = Strings.cat2 (Formatting.capitalize (Maybes.fromMaybe "" (Lists.maybeLast parts))) "Test"
+          packageName = Strings.intercalate "." (Optionals.fromOptional [] (Lists.maybeInit parts))
+          className_ = Strings.cat2 (Formatting.capitalize (Optionals.fromOptional "" (Lists.maybeLast parts))) "Test"
           groupName_ = Testing.testGroupName testGroup
           standardImports =
                   [
@@ -146,8 +146,8 @@ generateTestFileWithJavaCodec testModule testGroup =
       let testModuleContent = buildJavaTestModule testModule testGroup testBody
           ns_ = Packaging.moduleName testModule
           parts = Strings.splitOn "." (Packaging.unModuleName ns_)
-          dirParts = Lists.drop 1 (Maybes.fromMaybe [] (Lists.maybeInit parts))
-          className_ = Strings.cat2 (Formatting.capitalize (Maybes.fromMaybe "" (Lists.maybeLast parts))) "Test"
+          dirParts = Lists.drop 1 (Optionals.fromOptional [] (Lists.maybeInit parts))
+          className_ = Strings.cat2 (Formatting.capitalize (Optionals.fromOptional "" (Lists.maybeLast parts))) "Test"
           fileName = Strings.cat2 className_ ".java"
           filePath =
                   Strings.cat [

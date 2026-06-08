@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from hydra.dsl.python import Just, Maybe, NOTHING, frozenlist
+from hydra.dsl.python import Given, Optional, NONE_, frozenlist
 
 
 def matches(pattern: str, input: str) -> bool:
@@ -12,12 +12,12 @@ def matches(pattern: str, input: str) -> bool:
     return re.fullmatch(pattern, input) is not None
 
 
-def find(pattern: str, input: str) -> Maybe[str]:
+def find(pattern: str, input: str) -> Optional[str]:
     """Find the first substring matching a regex pattern."""
     m = re.search(pattern, input)
     if m is not None:
-        return Just(m.group())
-    return NOTHING
+        return Given(m.group())
+    return NONE_
 
 
 def find_all(pattern: str, input: str) -> frozenlist[str]:

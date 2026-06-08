@@ -39,7 +39,7 @@
                         (visit (function_type-codomain ft))))
                      ((eq tag :list) (visit (second t_)))
                      ((eq tag :set) (visit (second t_)))
-                     ((eq tag :maybe) (visit (second t_)))
+                     ((eq tag :optional) (visit (second t_)))
                      ((eq tag :map)
                       (let ((mt (second t_)))
                         (visit (map_type-keys mt))
@@ -84,17 +84,17 @@
                                      (make-type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
          (maybe-constraints (if constraint-map
-                                (list :just constraint-map)
-                                (list :nothing))))
+                                (list :given constraint-map)
+                                (list :none))))
     (make-type_scheme vars fun-type maybe-constraints)))
 
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
 ;; ============================================================================
 ;; Error helpers
@@ -252,24 +252,24 @@
             (list :right (list :map (funcall hydra_lib_maps_from_list (nreverse result))))))))))
 
 (defun tc-optional (el-coder)
-  (make-term_coder (list :maybe (term_coder-type el-coder))
+  (make-term_coder (list :optional (term_coder-type el-coder))
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall hydra_extract_core_maybe_term
+          (funcall (funcall (funcall hydra_extract_core_optional_term
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
       (lambda (mv)
         (cond
-          ((null mv) (list :right (list :maybe nil)))
-          ((and (consp mv) (eq (first mv) :nothing)) (list :right (list :maybe nil)))
-          ((and (consp mv) (eq (first mv) :just))
+          ((null mv) (list :right (list :optional nil)))
+          ((and (consp mv) (eq (first mv) :none)) (list :right (list :optional nil)))
+          ((and (consp mv) (eq (first mv) :given))
            (let ((r (funcall (funcall (term_coder-decode el-coder) cx) (second mv))))
-             (if (eq (first r) :left) r (list :right (list :maybe (second r))))))
+             (if (eq (first r) :left) r (list :right (list :optional (second r))))))
           (t
            (let ((r (funcall (funcall (term_coder-decode el-coder) cx) mv)))
-             (if (eq (first r) :left) r (list :right (list :maybe (second r)))))))))))
+             (if (eq (first r) :left) r (list :right (list :optional (second r)))))))))))
 
 (defun tc-either (left-coder right-coder)
   (make-term_coder (list :either (make-either_type (term_coder-type left-coder) (term_coder-type right-coder)))

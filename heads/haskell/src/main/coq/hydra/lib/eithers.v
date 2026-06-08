@@ -89,7 +89,7 @@ Fixpoint mapList (x y z : Type) (f : x -> z + y) (xs : list x) : z + list y :=
   end.
 Arguments mapList {x y z}.
 
-Definition mapMaybe (x y z : Type) (f : x -> z + y) (mx : option x) : z + option y :=
+Definition mapOptional (x y z : Type) (f : x -> z + y) (mx : option x) : z + option y :=
   match mx with
   | None => inr None
   | Some v =>
@@ -98,7 +98,7 @@ Definition mapMaybe (x y z : Type) (f : x -> z + y) (mx : option x) : z + option
     | inr w => inr (Some w)
     end
   end.
-Arguments mapMaybe {x y z}.
+Arguments mapOptional {x y z}.
 
 Definition mapSet (x y z : Type) (f : x -> z + y) (xs : list x) : z + list y :=
   mapList f xs.

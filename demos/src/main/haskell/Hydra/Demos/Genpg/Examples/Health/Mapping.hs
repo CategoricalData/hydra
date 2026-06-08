@@ -7,12 +7,12 @@ import Hydra.Typed (TypedTerm)
 import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
 import Hydra.Dsl.Pg.Mappings (column, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 
 labeledIntId :: String -> TypedTerm (r -> Maybe Int) -> TypedTerm (r -> String)
-labeledIntId itype iid = lambda "r" $ Maybes.map
+labeledIntId itype iid = lambda "r" $ Optionals.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,
     string "_",

@@ -109,27 +109,27 @@ def max_(x: TypedTerm, y: TypedTerm) -> TypedTerm:
 
 
 def maybe_div(x: TypedTerm, y: TypedTerm) -> TypedTerm:
-    """Divide two integers using integer division, returning Nothing on division by zero."""
+    """Divide two integers using integer division, returning none on division by zero."""
     return primitive2(x, y)
 
 
 def maybe_mod(a: TypedTerm, b: TypedTerm) -> TypedTerm:
-    """Mathematical modulo, returning Nothing on division by zero."""
+    """Mathematical modulo, returning none on division by zero."""
     return primitive2(a, b)
 
 
 def maybe_pred(x: TypedTerm) -> TypedTerm:
-    """Return the predecessor (x - 1), returning Nothing on minBound."""
+    """Return the predecessor (x - 1), returning none on minBound."""
     return primitive1(x)
 
 
 def maybe_rem(a: TypedTerm, b: TypedTerm) -> TypedTerm:
-    """Integer remainder, returning Nothing on division by zero."""
+    """Integer remainder, returning none on division by zero."""
     return primitive2(a, b)
 
 
 def maybe_succ(x: TypedTerm) -> TypedTerm:
-    """Return the successor (x + 1), returning Nothing on maxBound."""
+    """Return the successor (x + 1), returning none on maxBound."""
     return primitive1(x)
 
 

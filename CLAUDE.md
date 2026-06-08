@@ -203,11 +203,14 @@ Feature worktrees have active Claude sessions and own conflict resolution
 (pull *integration* into the feature branch first, resolve there, then merge
 upward). `integration` and `main` are passive, typically with no attached
 session. `staging` is the only intermediate tier with active checks — its
-session runs `/sync`, `/bootstrap`, and any user-specified additional checks
-before a batch advances to `main`. Don't promote up the chain reflexively;
-wait for each tier to drain its current batch.
+session runs a repeating loop: pull from `integration` (and, when directed, a
+named remote branch) → `/sync` → `/bootstrap` → push to `origin/main` (with
+user confirmation) → monitor CI, fixing failures and re-running the failing
+step until green. Don't promote up the chain reflexively; wait for each tier to
+drain its current batch.
 
-For the full sequence, cadence rules, and conflict patterns, see
+For the full sequence, cadence rules, conflict patterns, and the staging
+session's sync → bootstrap → push → monitor-CI loop, see
 [claude/branch-flow.md](claude/branch-flow.md).
 
 ### Cross-worktree communication

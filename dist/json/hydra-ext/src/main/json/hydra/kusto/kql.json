@@ -308,7 +308,7 @@
         "body": {
           "body": {
             "record": [
-              {"name": "column", "type": {"maybe": {"variable": "hydra.kusto.kql.ColumnName"}}},
+              {"name": "column", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
               {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
           "variables": []},
         "name": "hydra.kusto.kql.PrintCommand"}},
@@ -318,7 +318,7 @@
           "body": {
             "record": [
               {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "alias", "type": {"maybe": {"variable": "hydra.kusto.kql.ColumnName"}}}]},
+              {"name": "alias", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}}]},
           "variables": []},
         "name": "hydra.kusto.kql.Projection"}},
     {
@@ -376,7 +376,7 @@
           "body": {
             "record": [
               {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "order", "type": {"maybe": {"variable": "hydra.kusto.kql.Order"}}}]},
+              {"name": "order", "type": {"optional": {"variable": "hydra.kusto.kql.Order"}}}]},
           "variables": []},
         "name": "hydra.kusto.kql.SortBy"}},
     {
@@ -409,9 +409,9 @@
           "body": {
             "record": [
               {"name": "parameters", "type": {"list": {"variable": "hydra.kusto.kql.Parameter"}}},
-              {"name": "kind", "type": {"maybe": {"variable": "hydra.kusto.kql.UnionKind"}}},
-              {"name": "withSource", "type": {"maybe": {"variable": "hydra.kusto.kql.ColumnName"}}},
-              {"name": "isFuzzy", "type": {"maybe": {"literal": {"boolean": {}}}}},
+              {"name": "kind", "type": {"optional": {"variable": "hydra.kusto.kql.UnionKind"}}},
+              {"name": "withSource", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
+              {"name": "isFuzzy", "type": {"optional": {"literal": {"boolean": {}}}}},
               {"name": "tables", "type": {"list": {"variable": "hydra.kusto.kql.TableName"}}}]},
           "variables": []},
         "name": "hydra.kusto.kql.UnionCommand"}},

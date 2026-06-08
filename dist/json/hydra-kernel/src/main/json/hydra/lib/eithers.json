@@ -515,39 +515,38 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Traverse a Maybe with an Either-returning function."}}}]},
+                  "value": {"literal": {"string": "Traverse an Optional with an Either-returning function."}}}]},
             "body": {
               "lambda": {
                 "body": {
                   "lambda": {
                     "body": {
                       "application": {
-                        "argument": {"variable": "m"},
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"lambda": {"body": {"optional": {"variable": "y"}}, "parameter": "y"}},
+                                    "function": {"variable": "hydra.lib.eithers.map"}}}}},
+                            "parameter": "x"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"lambda": {"body": {"maybe": {"variable": "y"}}, "parameter": "y"}},
-                                        "function": {"variable": "hydra.lib.eithers.map"}}}}},
-                                "parameter": "x"}},
-                            "function": {
-                              "application": {"argument": {"either": {"right": {"maybe": null}}}, "function": {"variable": "hydra.lib.maybes.maybe"}}}}}}},
+                            "argument": {"either": {"right": {"optional": null}}},
+                            "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
                     "parameter": "m"}},
                 "parameter": "f"}}}},
         "isPure": true,
         "isTotal": true,
         "metadata": {
           "comments": [
-            "mapMaybe(f, m) returns Right Nothing if m is Nothing; otherwise applies f to the contained value and returns the result with Right wrapped around Just.",
+            "mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value and returns the result with Right wrapped around given.",
             "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
-          "description": "Map a function returning either over a maybe, or return Right Nothing if Nothing.",
+          "description": "Map a function returning either over an optional, or return Right none if none.",
           "seeAlso": []},
-        "name": "hydra.lib.eithers.mapMaybe",
+        "name": "hydra.lib.eithers.mapOptional",
         "signature": {
           "parameters": [
             {
@@ -555,8 +554,8 @@
               "name": "arg0",
               "type": {
                 "function": {"codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "y"}}}, "domain": {"variable": "x"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "x"}}}],
-          "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"maybe": {"variable": "y"}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "x"}}}],
+          "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"optional": {"variable": "y"}}}}},
           "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
     {
       "primitive": {

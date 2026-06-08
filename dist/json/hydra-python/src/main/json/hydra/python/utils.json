@@ -15,45 +15,44 @@
                   "lambda": {
                     "body": {
                       "application": {
-                        "argument": {"variable": "mcomment"},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
                                   "application": {
                                     "argument": {
+                                      "list": [
+                                        {"variable": "expr"},
+                                        {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.python.utils.doubleQuotedString"}}}]},
+                                    "function": {
                                       "application": {
                                         "argument": {
-                                          "list": [
-                                            {"variable": "expr"},
-                                            {"application": {"argument": {"variable": "c"}, "function": {"variable": "hydra.python.utils.doubleQuotedString"}}}]},
-                                        "function": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"wrap": {"body": {"literal": {"string": "Annotated"}}, "typeName": "hydra.python.syntax.Name"}},
-                                                "function": {"variable": "hydra.python.utils.pyNameToPyPrimary"}}},
-                                            "function": {"variable": "hydra.python.utils.primaryWithExpressionSlices"}}}}},
-                                    "function": {"variable": "hydra.python.utils.pyPrimaryToPyExpression"}}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "c"}},
+                                            "argument": {"wrap": {"body": {"literal": {"string": "Annotated"}}, "typeName": "hydra.python.syntax.Name"}},
+                                            "function": {"variable": "hydra.python.utils.pyNameToPyPrimary"}}},
+                                        "function": {"variable": "hydra.python.utils.primaryWithExpressionSlices"}}}}},
+                                "function": {"variable": "hydra.python.utils.pyPrimaryToPyExpression"}}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "c"}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "expr"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "expr"},
+                                "argument": {"variable": "mcomment"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Expression"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}}}}}},
                     "domain": {"variable": "hydra.python.syntax.Expression"},
                     "parameter": "expr"}},
-                "domain": {"maybe": {"literal": {"string": {}}}},
+                "domain": {"optional": {"literal": {"string": {}}}},
                 "parameter": "mcomment"}}}},
         "name": "hydra.python.utils.annotatedExpression",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg0", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.syntax.Expression"}}],
           "result": {"type": {"variable": "hydra.python.syntax.Expression"}},
           "typeParameters": []}}},
@@ -70,38 +69,37 @@
                   "lambda": {
                     "body": {
                       "application": {
-                        "argument": {"variable": "mcomment"},
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "inject": {
+                                "field": {
+                                  "name": "annotated",
+                                  "term": {
+                                    "record": {
+                                      "fields": [{"name": "comment", "term": {"variable": "c"}}, {"name": "statement", "term": {"variable": "stmt"}}],
+                                      "typeName": "hydra.python.syntax.AnnotatedStatement"}}},
+                                "typeName": "hydra.python.syntax.Statement"}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "c"}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "inject": {
-                                    "field": {
-                                      "name": "annotated",
-                                      "term": {
-                                        "record": {
-                                          "fields": [{"name": "comment", "term": {"variable": "c"}}, {"name": "statement", "term": {"variable": "stmt"}}],
-                                          "typeName": "hydra.python.syntax.AnnotatedStatement"}}},
-                                    "typeName": "hydra.python.syntax.Statement"}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "c"}},
+                            "argument": {"variable": "stmt"},
                             "function": {
                               "application": {
-                                "argument": {"variable": "stmt"},
+                                "argument": {"variable": "mcomment"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Statement"}}},
-                                    "type": {"literal": {"string": {}}}}}}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.python.syntax.Statement"}}}}}}}}},
                     "domain": {"variable": "hydra.python.syntax.Statement"},
                     "parameter": "stmt"}},
-                "domain": {"maybe": {"literal": {"string": {}}}},
+                "domain": {"optional": {"literal": {"string": {}}}},
                 "parameter": "mcomment"}}}},
         "name": "hydra.python.utils.annotatedStatement",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg0", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.python.syntax.Statement"}}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}},
           "typeParameters": []}}},
@@ -135,7 +133,7 @@
                                     {"name": "rhs", "term": {"variable": "rhs"}},
                                     {
                                       "name": "typeComment",
-                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                                   "typeName": "hydra.python.syntax.UntypedAssignment"}}},
                             "typeName": "hydra.python.syntax.Assignment"}},
                         "function": {"variable": "hydra.python.utils.pyAssignmentToPyStatement"}}},
@@ -263,7 +261,7 @@
                           "application": {
                             "argument": {"variable": "lhs"},
                             "function": {"project": {"fieldName": "lhs", "typeName": "hydra.python.syntax.BitwiseOr"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.python.syntax.BitwiseOr"}}, "variables": []}},
                       {
                         "name": "orRhs",
                         "term": {
@@ -277,7 +275,7 @@
                           "application": {
                             "argument": {"variable": "orRhs"},
                             "function": {"project": {"fieldName": "lhs", "typeName": "hydra.python.syntax.BitwiseXor"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.python.syntax.BitwiseXor"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.python.syntax.BitwiseXor"}}, "variables": []}},
                       {
                         "name": "xorRhs",
                         "term": {
@@ -291,7 +289,7 @@
                           "application": {
                             "argument": {"variable": "xorRhs"},
                             "function": {"project": {"fieldName": "lhs", "typeName": "hydra.python.syntax.BitwiseAnd"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.python.syntax.BitwiseAnd"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.python.syntax.BitwiseAnd"}}, "variables": []}},
                       {
                         "name": "andRhs",
                         "term": {
@@ -305,7 +303,7 @@
                           "application": {
                             "argument": {"variable": "andRhs"},
                             "function": {"project": {"fieldName": "lhs", "typeName": "hydra.python.syntax.ShiftExpression"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.python.syntax.ShiftLhs"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.python.syntax.ShiftLhs"}}, "variables": []}},
                       {
                         "name": "shiftRhs",
                         "term": {
@@ -319,7 +317,7 @@
                           "application": {
                             "argument": {"variable": "shiftRhs"},
                             "function": {"project": {"fieldName": "lhs", "typeName": "hydra.python.syntax.Sum"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.python.syntax.SumLhs"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.python.syntax.SumLhs"}}, "variables": []}},
                       {
                         "name": "sumRhs",
                         "term": {
@@ -333,7 +331,7 @@
                           "application": {
                             "argument": {"variable": "sumRhs"},
                             "function": {"project": {"fieldName": "lhs", "typeName": "hydra.python.syntax.Term"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.python.syntax.TermLhs"}}, "variables": []}},
+                        "typeScheme": {"body": {"optional": {"variable": "hydra.python.syntax.TermLhs"}}, "variables": []}},
                       {
                         "name": "termRhs",
                         "term": {
@@ -369,83 +367,83 @@
                                                                 "domain": {"variable": "hydra.python.syntax.Power"},
                                                                 "parameter": "power"}},
                                                             "name": "simple"}],
-                                                        "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                        "default": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                                         "typeName": "hydra.python.syntax.Factor"}}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "termLhs"},
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}}},
                                                         "function": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "sumLhs"},
                                                         "function": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}}},
                                                     "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
                                         "function": {
                                           "application": {
-                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "shiftLhs"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}}},
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                         "function": {
                                           "application": {
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "andLhs"},
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}}},
                                             "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                     "function": {
                                       "application": {
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "xorLhs"},
                                             "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}}},
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                 "function": {
                                   "application": {
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "orLhs"},
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.isJust"}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}},
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}},
                         "function": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -457,13 +455,13 @@
                                           "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}},
                                     "function": {"variable": "hydra.lib.logic.not"}}},
                                 "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Comparison"},
                 "parameter": "c"}}}},
         "name": "hydra.python.utils.decodePyComparisonToPyAwaitPrimary",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Comparison"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}},
+          "result": {"type": {"optional": {"variable": "hydra.python.syntax.Primary"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -483,7 +481,7 @@
                         "typeScheme": {"body": {"list": {"variable": "hydra.python.syntax.Inversion"}}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                         "function": {
                           "application": {
                             "argument": {
@@ -504,7 +502,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.python.syntax.Inversion"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.bind"}, "type": {"variable": "hydra.python.syntax.Inversion"}}},
                                         "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                             "function": {
                               "application": {
@@ -520,13 +518,13 @@
                                               "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.python.syntax.Inversion"}}}}},
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                 "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Conjunction"},
                 "parameter": "c"}}}},
         "name": "hydra.python.utils.decodePyConjunctionToPyPrimary",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Conjunction"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}},
+          "result": {"type": {"optional": {"variable": "hydra.python.syntax.Primary"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -555,7 +553,7 @@
                                         "typeScheme": {"body": {"list": {"variable": "hydra.python.syntax.Conjunction"}}, "variables": []}}],
                                     "body": {
                                       "application": {
-                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                         "function": {
                                           "application": {
                                             "argument": {
@@ -576,7 +574,7 @@
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.maybes.bind"}, "type": {"variable": "hydra.python.syntax.Conjunction"}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.bind"}, "type": {"variable": "hydra.python.syntax.Conjunction"}}},
                                                         "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                                             "function": {
                                               "application": {
@@ -592,18 +590,18 @@
                                                               "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.python.syntax.Conjunction"}}}}},
                                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
                                 "domain": {"variable": "hydra.python.syntax.Disjunction"},
                                 "parameter": "disj"}},
                             "name": "simple"}],
-                        "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                        "default": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                         "typeName": "hydra.python.syntax.Expression"}}}},
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "e"}}}},
         "name": "hydra.python.utils.decodePyExpressionToPyPrimary",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Expression"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}},
+          "result": {"type": {"optional": {"variable": "hydra.python.syntax.Primary"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -629,14 +627,14 @@
                                 "domain": {"variable": "hydra.python.syntax.Comparison"},
                                 "parameter": "comparison"}},
                             "name": "simple"}],
-                        "default": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                        "default": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                         "typeName": "hydra.python.syntax.Inversion"}}}},
                 "domain": {"variable": "hydra.python.syntax.Inversion"},
                 "parameter": "i"}}}},
         "name": "hydra.python.utils.decodePyInversionToPyPrimary",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Inversion"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}},
+          "result": {"type": {"optional": {"variable": "hydra.python.syntax.Primary"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -670,21 +668,21 @@
                         "typeScheme": {"body": {"variable": "hydra.python.syntax.Primary"}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"maybe": {"variable": "prim"}},
+                        "argument": {"optional": {"variable": "prim"}},
                         "function": {
                           "application": {
-                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                             "function": {
                               "application": {
                                 "argument": {"variable": "await"},
                                 "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Power"},
                 "parameter": "p"}}}},
         "name": "hydra.python.utils.decodePyPowerToPyPrimary",
         "signature": {
           "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Power"}}],
-          "result": {"type": {"maybe": {"variable": "hydra.python.syntax.Primary"}}},
+          "result": {"type": {"optional": {"variable": "hydra.python.syntax.Primary"}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -746,7 +744,7 @@
                                                 "application": {"argument": {"variable": "expr"}, "function": {"variable": "hydra.python.utils.pyExpressionToPyAnnotatedRhs"}}}},
                                             {
                                               "name": "typeComment",
-                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                                           "typeName": "hydra.python.syntax.UntypedAssignment"}}},
                                     "typeName": "hydra.python.syntax.Assignment"}},
                                 "function": {"variable": "hydra.python.utils.pyAssignmentToPyStatement"}}}}},
@@ -966,11 +964,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "cls"}}, "typeName": "hydra.python.syntax.Name"}}},
                                         {
                                           "name": "annotation",
-                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
+                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
                                       "typeName": "hydra.python.syntax.Param"}}},
                                 {
                                   "name": "typeComment",
-                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                               "typeName": "hydra.python.syntax.ParamNoDefault"}},
                           {
                             "record": {
@@ -983,18 +981,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "item"}}, "typeName": "hydra.python.syntax.Name"}}},
                                         {
                                           "name": "annotation",
-                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
+                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
                                       "typeName": "hydra.python.syntax.Param"}}},
                                 {
                                   "name": "typeComment",
-                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                               "typeName": "hydra.python.syntax.ParamNoDefault"}}]}},
                     {
                       "name": "paramWithDefault",
                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.ParamWithDefault"}}}},
                     {
                       "name": "starEtc",
-                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StarEtc"}}}}],
+                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.StarEtc"}}}}],
                   "typeName": "hydra.python.syntax.ParamNoDefaultParameters"}}},
             "typeName": "hydra.python.syntax.Parameters"}},
         "name": "hydra.python.utils.getItemParams",
@@ -1017,23 +1015,22 @@
                             "name": "commentGroup",
                             "term": {
                               "application": {
-                                "argument": {"variable": "mcomment"},
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "list": [{"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.python.utils.commentStatement"}}}]},
+                                    "domain": {"literal": {"string": {}}},
+                                    "parameter": "s"}},
                                 "function": {
                                   "application": {
-                                    "argument": {
-                                      "lambda": {
-                                        "body": {
-                                          "list": [{"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.python.utils.commentStatement"}}}]},
-                                        "domain": {"literal": {"string": {}}},
-                                        "parameter": "s"}},
+                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.Statement"}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                        "argument": {"variable": "mcomment"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
-                                            "type": {"literal": {"string": {}}}}}}}}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                            "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}}}}}}}},
                             "typeScheme": {"body": {"list": {"variable": "hydra.python.syntax.Statement"}}, "variables": []}},
                           {
                             "name": "groups",
@@ -1102,12 +1099,12 @@
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Block"}}}}}}}}}}},
                     "domain": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}},
                     "parameter": "stmts"}},
-                "domain": {"maybe": {"literal": {"string": {}}}},
+                "domain": {"optional": {"literal": {"string": {}}}},
                 "parameter": "mcomment"}}}},
         "name": "hydra.python.utils.indentedBlock",
         "signature": {
           "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg0", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}}}],
           "result": {"type": {"variable": "hydra.python.syntax.Block"}},
           "typeParameters": []}}},
@@ -1179,7 +1176,7 @@
                               "application": {"argument": {"variable": "mcomment"}, "function": {"variable": "hydra.python.utils.annotatedStatement"}}}}},
                         "domain": {"variable": "hydra.python.syntax.Expression"},
                         "parameter": "expr"}},
-                    "domain": {"maybe": {"literal": {"string": {}}}},
+                    "domain": {"optional": {"literal": {"string": {}}}},
                     "parameter": "mcomment"}},
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
@@ -1187,7 +1184,7 @@
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}},
-            {"isLazy": false, "name": "arg1", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.python.syntax.Expression"}}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}},
           "typeParameters": []}}},
@@ -1212,71 +1209,50 @@
                                 "body": {
                                   "application": {
                                     "argument": {
-                                      "application": {
-                                        "argument": {"variable": "ps"},
-                                        "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "hydra.python.syntax.Primary"}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "p"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
-                                                            "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                    "argument": {"variable": "p"},
                                                     "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "maybe": {
-                                                            "record": {
-                                                              "fields": [
-                                                                {"name": "lhs", "term": {"variable": "prev"}},
-                                                                {
-                                                                  "name": "rhs",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "p"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
-                                                                              "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
-                                                                      "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
-                                                              "typeName": "hydra.python.syntax.BitwiseOr"}}},
-                                                        "function": {"variable": "build"}}}}},
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                        "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {"name": "lhs", "term": {"variable": "prev"}},
-                                                          {
-                                                            "name": "rhs",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "p"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
-                                                                        "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
-                                                                "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
-                                                        "typeName": "hydra.python.syntax.BitwiseOr"}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
+                                                      "optional": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {"name": "lhs", "term": {"variable": "prev"}},
+                                                            {
+                                                              "name": "rhs",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "p"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                                          "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                                  "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
+                                                          "typeName": "hydra.python.syntax.BitwiseOr"}}},
+                                                    "function": {"variable": "build"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {"name": "lhs", "term": {"variable": "prev"}},
+                                                      {
+                                                        "name": "rhs",
+                                                        "term": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
@@ -1284,41 +1260,64 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                                                     "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.Primary"}}}}},
-                                                        "function": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}}}}}},
-                                            "domain": {
-                                              "pair": {"first": {"variable": "hydra.python.syntax.Primary"}, "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}},
-                                            "parameter": "p"}},
+                                                            "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
+                                                    "typeName": "hydra.python.syntax.BitwiseOr"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "p"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                                "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.Primary"}}}}},
+                                                    "function": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}}}}}},
+                                        "domain": {
+                                          "pair": {"first": {"variable": "hydra.python.syntax.Primary"}, "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}},
+                                        "parameter": "p"}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "record": {
+                                            "fields": [
+                                              {"name": "lhs", "term": {"variable": "prev"}},
+                                              {
+                                                "name": "rhs",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "simple",
+                                                          "term": {"inject": {"field": {"name": "ellipsis", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.Atom"}}},
+                                                        "typeName": "hydra.python.syntax.Primary"}},
+                                                    "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
+                                            "typeName": "hydra.python.syntax.BitwiseOr"}},
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "record": {
-                                                "fields": [
-                                                  {"name": "lhs", "term": {"variable": "prev"}},
-                                                  {
-                                                    "name": "rhs",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "inject": {
-                                                            "field": {
-                                                              "name": "simple",
-                                                              "term": {"inject": {"field": {"name": "ellipsis", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.Atom"}}},
-                                                            "typeName": "hydra.python.syntax.Primary"}},
-                                                        "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
-                                                "typeName": "hydra.python.syntax.BitwiseOr"}},
+                                              "application": {
+                                                "argument": {"variable": "ps"},
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "hydra.python.syntax.Primary"}}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}},
-                                                "type": {
-                                                  "pair": {"first": {"variable": "hydra.python.syntax.Primary"}, "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.optionals.cases"},
+                                                    "type": {
+                                                      "pair": {"first": {"variable": "hydra.python.syntax.Primary"}, "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}}}}}},
                                 "domain": {"list": {"variable": "hydra.python.syntax.Primary"}},
                                 "parameter": "ps"}},
-                            "domain": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}},
+                            "domain": {"optional": {"variable": "hydra.python.syntax.BitwiseOr"}},
                             "parameter": "prev"}},
                         "typeScheme": {
                           "body": {
@@ -1327,7 +1326,7 @@
                                 "function": {
                                   "codomain": {"variable": "hydra.python.syntax.BitwiseOr"},
                                   "domain": {"list": {"variable": "hydra.python.syntax.Primary"}}}},
-                              "domain": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                              "domain": {"optional": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                           "variables": []}}],
                     "body": {
                       "application": {
@@ -1336,7 +1335,7 @@
                             "argument": {"variable": "prims"},
                             "function": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}},
+                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}},
                                 "function": {"variable": "build"}}}}},
                         "function": {"variable": "hydra.python.utils.pyBitwiseOrToPyExpression"}}}}},
                 "domain": {"list": {"variable": "hydra.python.syntax.Primary"}},
@@ -1450,7 +1449,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"variable": "hydra.lib.maybes.map"},
+                                        "body": {"variable": "hydra.lib.optionals.map"},
                                         "type": {
                                           "pair": {
                                             "first": {"variable": "hydra.python.syntax.Expression"},
@@ -1460,7 +1459,7 @@
                           "application": {
                             "argument": {"variable": "prim"},
                             "function": {
-                              "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
+                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                     "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
                     "parameter": "exprs"}},
                 "domain": {"variable": "hydra.python.syntax.Primary"},
@@ -1770,7 +1769,7 @@
                     "fields": [
                       {
                         "name": "lhs",
-                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                       {
                         "name": "rhs",
                         "term": {
@@ -1778,7 +1777,7 @@
                             "fields": [
                               {
                                 "name": "lhs",
-                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                               {
                                 "name": "rhs",
                                 "term": {
@@ -1786,7 +1785,7 @@
                                     "fields": [
                                       {
                                         "name": "lhs",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                       {
                                         "name": "rhs",
                                         "term": {
@@ -1794,7 +1793,7 @@
                                             "fields": [
                                               {
                                                 "name": "lhs",
-                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                               {
                                                 "name": "rhs",
                                                 "term": {
@@ -1802,7 +1801,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lhs",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                       {
                                                         "name": "rhs",
                                                         "term": {
@@ -1810,7 +1809,7 @@
                                                             "fields": [
                                                               {
                                                                 "name": "lhs",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                               {
                                                                 "name": "rhs",
                                                                 "term": {
@@ -1847,7 +1846,7 @@
                                                                                   "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                             {
                                                                               "name": "rhs",
-                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                           "typeName": "hydra.python.syntax.Power"}}},
                                                                     "typeName": "hydra.python.syntax.Factor"}}}],
                                                             "typeName": "hydra.python.syntax.Term"}}}],
@@ -1955,33 +1954,33 @@
               "lambda": {
                 "body": {
                   "application": {
-                    "argument": {
-                      "application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.python.utils.decodePyExpressionToPyPrimary"}}},
+                    "argument": {"lambda": {"body": {"variable": "prim"}, "domain": {"variable": "hydra.python.syntax.Primary"}, "parameter": "prim"}},
                     "function": {
                       "application": {
-                        "argument": {"lambda": {"body": {"variable": "prim"}, "domain": {"variable": "hydra.python.syntax.Primary"}, "parameter": "prim"}},
+                        "argument": {
+                          "inject": {
+                            "field": {
+                              "name": "simple",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "group",
+                                    "term": {
+                                      "inject": {
+                                        "field": {
+                                          "name": "expression",
+                                          "term": {"inject": {"field": {"name": "simple", "term": {"variable": "e"}}, "typeName": "hydra.python.syntax.NamedExpression"}}},
+                                        "typeName": "hydra.python.syntax.Group"}}},
+                                  "typeName": "hydra.python.syntax.Atom"}}},
+                            "typeName": "hydra.python.syntax.Primary"}},
                         "function": {
                           "application": {
                             "argument": {
-                              "inject": {
-                                "field": {
-                                  "name": "simple",
-                                  "term": {
-                                    "inject": {
-                                      "field": {
-                                        "name": "group",
-                                        "term": {
-                                          "inject": {
-                                            "field": {
-                                              "name": "expression",
-                                              "term": {"inject": {"field": {"name": "simple", "term": {"variable": "e"}}, "typeName": "hydra.python.syntax.NamedExpression"}}},
-                                            "typeName": "hydra.python.syntax.Group"}}},
-                                      "typeName": "hydra.python.syntax.Atom"}}},
-                                "typeName": "hydra.python.syntax.Primary"}},
+                              "application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.python.utils.decodePyExpressionToPyPrimary"}}},
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                 "type": {"variable": "hydra.python.syntax.Primary"}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Expression"},
                 "parameter": "e"}}}},
@@ -2253,10 +2252,10 @@
                             {"name": "name", "term": {"variable": "name"}},
                             {
                               "name": "bound",
-                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
+                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
                             {
                               "name": "default",
-                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}}],
+                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}}],
                           "typeName": "hydra.python.syntax.SimpleTypeParameter"}}},
                     "typeName": "hydra.python.syntax.TypeParameter"}},
                 "domain": {"variable": "hydra.python.syntax.Name"},
@@ -2286,7 +2285,7 @@
                     "fields": [
                       {
                         "name": "lhs",
-                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                       {
                         "name": "rhs",
                         "term": {
@@ -2294,7 +2293,7 @@
                             "fields": [
                               {
                                 "name": "lhs",
-                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                               {
                                 "name": "rhs",
                                 "term": {
@@ -2302,7 +2301,7 @@
                                     "fields": [
                                       {
                                         "name": "lhs",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                       {
                                         "name": "rhs",
                                         "term": {
@@ -2310,7 +2309,7 @@
                                             "fields": [
                                               {
                                                 "name": "lhs",
-                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                               {
                                                 "name": "rhs",
                                                 "term": {
@@ -2318,7 +2317,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lhs",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                       {
                                                         "name": "rhs",
                                                         "term": {
@@ -2326,7 +2325,7 @@
                                                             "fields": [
                                                               {
                                                                 "name": "lhs",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                               {
                                                                 "name": "rhs",
                                                                 "term": {
@@ -2344,7 +2343,7 @@
                                                                                   "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                             {
                                                                               "name": "rhs",
-                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                           "typeName": "hydra.python.syntax.Power"}}},
                                                                     "typeName": "hydra.python.syntax.Factor"}}}],
                                                             "typeName": "hydra.python.syntax.Term"}}}],
@@ -2372,7 +2371,7 @@
                     "fields": [
                       {
                         "name": "lhs",
-                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                       {
                         "name": "rhs",
                         "term": {
@@ -2380,7 +2379,7 @@
                             "fields": [
                               {
                                 "name": "lhs",
-                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                               {
                                 "name": "rhs",
                                 "term": {
@@ -2388,7 +2387,7 @@
                                     "fields": [
                                       {
                                         "name": "lhs",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                       {
                                         "name": "rhs",
                                         "term": {
@@ -2396,7 +2395,7 @@
                                             "fields": [
                                               {
                                                 "name": "lhs",
-                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                               {
                                                 "name": "rhs",
                                                 "term": {
@@ -2404,7 +2403,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lhs",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                       {
                                                         "name": "rhs",
                                                         "term": {
@@ -2422,7 +2421,7 @@
                                                                           "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                     {
                                                                       "name": "rhs",
-                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                   "typeName": "hydra.python.syntax.Power"}}},
                                                             "typeName": "hydra.python.syntax.Factor"}}}],
                                                     "typeName": "hydra.python.syntax.Term"}}}],
@@ -2528,7 +2527,7 @@
                           "term": {
                             "wrap": {
                               "body": {
-                                "maybe": {
+                                "optional": {
                                   "record": {
                                     "fields": [
                                       {
@@ -2553,7 +2552,7 @@
                                                 "function": {"variable": "hydra.python.utils.functionCall"}}}}}},
                                       {
                                         "name": "from",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}}],
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}}],
                                     "typeName": "hydra.python.syntax.RaiseExpression"}}},
                               "typeName": "hydra.python.syntax.RaiseStatement"}}},
                         "typeName": "hydra.python.syntax.SimpleStatement"}},
@@ -2581,7 +2580,7 @@
                           "term": {
                             "wrap": {
                               "body": {
-                                "maybe": {
+                                "optional": {
                                   "record": {
                                     "fields": [
                                       {
@@ -2606,7 +2605,7 @@
                                                 "function": {"variable": "hydra.python.utils.functionCall"}}}}}},
                                       {
                                         "name": "from",
-                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}}],
+                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}}],
                                     "typeName": "hydra.python.syntax.RaiseExpression"}}},
                               "typeName": "hydra.python.syntax.RaiseStatement"}}},
                         "typeName": "hydra.python.syntax.SimpleStatement"}},
@@ -2675,18 +2674,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "self"}}, "typeName": "hydra.python.syntax.Name"}}},
                                         {
                                           "name": "annotation",
-                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
+                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
                                       "typeName": "hydra.python.syntax.Param"}}},
                                 {
                                   "name": "typeComment",
-                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                               "typeName": "hydra.python.syntax.ParamNoDefault"}}]}},
                     {
                       "name": "paramWithDefault",
                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.ParamWithDefault"}}}},
                     {
                       "name": "starEtc",
-                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StarEtc"}}}}],
+                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.StarEtc"}}}}],
                   "typeName": "hydra.python.syntax.ParamNoDefaultParameters"}}},
             "typeName": "hydra.python.syntax.Parameters"}},
         "name": "hydra.python.utils.selfOnlyParams",
@@ -2715,11 +2714,11 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "self"}}, "typeName": "hydra.python.syntax.Name"}}},
                                         {
                                           "name": "annotation",
-                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
+                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
                                       "typeName": "hydra.python.syntax.Param"}}},
                                 {
                                   "name": "typeComment",
-                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                               "typeName": "hydra.python.syntax.ParamNoDefault"}},
                           {
                             "record": {
@@ -2732,18 +2731,18 @@
                                         {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "other"}}, "typeName": "hydra.python.syntax.Name"}}},
                                         {
                                           "name": "annotation",
-                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
+                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Annotation"}}}}],
                                       "typeName": "hydra.python.syntax.Param"}}},
                                 {
                                   "name": "typeComment",
-                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
+                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TypeComment"}}}}],
                               "typeName": "hydra.python.syntax.ParamNoDefault"}}]}},
                     {
                       "name": "paramWithDefault",
                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.ParamWithDefault"}}}},
                     {
                       "name": "starEtc",
-                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StarEtc"}}}}],
+                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.StarEtc"}}}}],
                   "typeName": "hydra.python.syntax.ParamNoDefaultParameters"}}},
             "typeName": "hydra.python.syntax.Parameters"}},
         "name": "hydra.python.utils.selfOtherParams",
@@ -2795,7 +2794,7 @@
                                     {"name": "value", "term": {"variable": "s"}},
                                     {
                                       "name": "prefix",
-                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}}},
+                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}}},
                                     {"name": "quoteStyle", "term": {"variable": "style"}}],
                                   "typeName": "hydra.python.syntax.String"}}},
                             "typeName": "hydra.python.syntax.Atom"}},
@@ -2848,7 +2847,8 @@
                                 {"name": "value", "term": {"variable": "s"}},
                                 {
                                   "name": "prefix",
-                                  "term": {"maybe": {"inject": {"field": {"name": "raw", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.StringPrefix"}}}},
+                                  "term": {
+                                    "optional": {"inject": {"field": {"name": "raw", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.StringPrefix"}}}},
                                 {
                                   "name": "quoteStyle",
                                   "term": {"inject": {"field": {"name": "tripleDouble", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
@@ -2900,7 +2900,7 @@
                                   "application": {"argument": {"variable": "mcomment"}, "function": {"variable": "hydra.python.utils.annotatedStatement"}}}}},
                             "domain": {"variable": "hydra.python.syntax.Expression"},
                             "parameter": "tyexpr"}},
-                        "domain": {"maybe": {"literal": {"string": {}}}},
+                        "domain": {"optional": {"literal": {"string": {}}}},
                         "parameter": "mcomment"}},
                     "domain": {"list": {"variable": "hydra.python.syntax.TypeParameter"}},
                     "parameter": "tparams"}},
@@ -2911,7 +2911,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.python.syntax.TypeParameter"}}},
-            {"isLazy": false, "name": "arg2", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg2", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.python.syntax.Expression"}}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}},
           "typeParameters": []}}},
@@ -2990,7 +2990,7 @@
                                                                                                   "fields": [
                                                                                                     {
                                                                                                       "name": "lhs",
-                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                                     {
                                                                                                       "name": "rhs",
                                                                                                       "term": {
@@ -2998,7 +2998,7 @@
                                                                                                           "fields": [
                                                                                                             {
                                                                                                               "name": "lhs",
-                                                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                                             {
                                                                                                               "name": "rhs",
                                                                                                               "term": {
@@ -3006,7 +3006,7 @@
                                                                                                                   "fields": [
                                                                                                                     {
                                                                                                                       "name": "lhs",
-                                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                                     {
                                                                                                                       "name": "rhs",
                                                                                                                       "term": {
@@ -3014,7 +3014,7 @@
                                                                                                                           "fields": [
                                                                                                                             {
                                                                                                                               "name": "lhs",
-                                                                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                                             {
                                                                                                                               "name": "rhs",
                                                                                                                               "term": {
@@ -3022,7 +3022,7 @@
                                                                                                                                   "fields": [
                                                                                                                                     {
                                                                                                                                       "name": "lhs",
-                                                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                                     {
                                                                                                                                       "name": "rhs",
                                                                                                                                       "term": {
@@ -3030,7 +3030,7 @@
                                                                                                                                           "fields": [
                                                                                                                                             {
                                                                                                                                               "name": "lhs",
-                                                                                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                                             {
                                                                                                                                               "name": "rhs",
                                                                                                                                               "term": {
@@ -3062,7 +3062,7 @@
                                                                                                                                                                 "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                                           {
                                                                                                                                                             "name": "rhs",
-                                                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                                         "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                                   "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                                           "typeName": "hydra.python.syntax.Term"}}}],
@@ -3082,7 +3082,7 @@
                                                         {
                                                           "name": "rhs",
                                                           "term": {
-                                                            "maybe": {
+                                                            "optional": {
                                                               "application": {"argument": {"variable": "quotedExpr"}, "function": {"variable": "hydra.python.utils.pyExpressionToPyAnnotatedRhs"}}}}}],
                                                       "typeName": "hydra.python.syntax.TypedAssignment"}}},
                                                 "typeName": "hydra.python.syntax.Assignment"}},
@@ -3091,7 +3091,7 @@
                                           "application": {"argument": {"variable": "mcomment"}, "function": {"variable": "hydra.python.utils.annotatedStatement"}}}}}}},
                                 "domain": {"variable": "hydra.python.syntax.Expression"},
                                 "parameter": "tyexpr"}},
-                            "domain": {"maybe": {"literal": {"string": {}}}},
+                            "domain": {"optional": {"literal": {"string": {}}}},
                             "parameter": "mcomment"}},
                         "domain": {"variable": "t0"},
                         "parameter": "_tparams"}},
@@ -3103,7 +3103,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}},
             {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg2", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg2", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.python.syntax.Expression"}}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}},
           "typeParameters": [{"constraints": [], "name": "t0"}]}}},
@@ -3205,7 +3205,7 @@
                                                                                                                 "fields": [
                                                                                                                   {
                                                                                                                     "name": "lhs",
-                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                                                   {
                                                                                                                     "name": "rhs",
                                                                                                                     "term": {
@@ -3213,7 +3213,7 @@
                                                                                                                         "fields": [
                                                                                                                           {
                                                                                                                             "name": "lhs",
-                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                                                           {
                                                                                                                             "name": "rhs",
                                                                                                                             "term": {
@@ -3221,7 +3221,7 @@
                                                                                                                                 "fields": [
                                                                                                                                   {
                                                                                                                                     "name": "lhs",
-                                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                                                   {
                                                                                                                                     "name": "rhs",
                                                                                                                                     "term": {
@@ -3229,7 +3229,7 @@
                                                                                                                                         "fields": [
                                                                                                                                           {
                                                                                                                                             "name": "lhs",
-                                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                                                           {
                                                                                                                                             "name": "rhs",
                                                                                                                                             "term": {
@@ -3237,7 +3237,7 @@
                                                                                                                                                 "fields": [
                                                                                                                                                   {
                                                                                                                                                     "name": "lhs",
-                                                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                                                   {
                                                                                                                                                     "name": "rhs",
                                                                                                                                                     "term": {
@@ -3245,7 +3245,7 @@
                                                                                                                                                         "fields": [
                                                                                                                                                           {
                                                                                                                                                             "name": "lhs",
-                                                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                                                           {
                                                                                                                                                             "name": "rhs",
                                                                                                                                                             "term": {
@@ -3275,7 +3275,7 @@
                                                                                                                                                                               "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                                                         {
                                                                                                                                                                           "name": "rhs",
-                                                                                                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                                                       "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                                                 "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                                                         "typeName": "hydra.python.syntax.Term"}}}],
@@ -3315,7 +3315,7 @@
                                                                     "fields": [
                                                                       {
                                                                         "name": "decorators",
-                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
                                                                       {
                                                                         "name": "raw",
                                                                         "term": {
@@ -3328,13 +3328,13 @@
                                                                               {
                                                                                 "name": "typeParams",
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}}},
-                                                                              {"name": "params", "term": {"maybe": {"variable": "hydra.python.utils.getItemParams"}}},
+                                                                              {"name": "params", "term": {"optional": {"variable": "hydra.python.utils.getItemParams"}}},
                                                                               {
                                                                                 "name": "returnType",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
                                                                               {
                                                                                 "name": "funcTypeComment",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
                                                                               {
                                                                                 "name": "block",
                                                                                 "term": {
@@ -3342,7 +3342,7 @@
                                                                                     "argument": {"list": [{"list": [{"variable": "returnObject"}]}]},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                                                                         "function": {"variable": "hydra.python.utils.indentedBlock"}}}}}}],
                                                                             "typeName": "hydra.python.syntax.FunctionDefRaw"}}}],
                                                                     "typeName": "hydra.python.syntax.FunctionDefinition"}}},
@@ -3361,7 +3361,7 @@
                                                                 "fields": [
                                                                   {
                                                                     "name": "decorators",
-                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
                                                                   {"name": "name", "term": {"variable": "metaName"}},
                                                                   {
                                                                     "name": "typeParams",
@@ -3369,7 +3369,7 @@
                                                                   {
                                                                     "name": "arguments",
                                                                     "term": {
-                                                                      "maybe": {
+                                                                      "optional": {
                                                                         "application": {
                                                                           "argument": {
                                                                             "list": [
@@ -3399,7 +3399,7 @@
                                                                                                                       "fields": [
                                                                                                                         {
                                                                                                                           "name": "lhs",
-                                                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                                                         {
                                                                                                                           "name": "rhs",
                                                                                                                           "term": {
@@ -3407,7 +3407,7 @@
                                                                                                                               "fields": [
                                                                                                                                 {
                                                                                                                                   "name": "lhs",
-                                                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                                                                 {
                                                                                                                                   "name": "rhs",
                                                                                                                                   "term": {
@@ -3415,7 +3415,7 @@
                                                                                                                                       "fields": [
                                                                                                                                         {
                                                                                                                                           "name": "lhs",
-                                                                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                                                         {
                                                                                                                                           "name": "rhs",
                                                                                                                                           "term": {
@@ -3423,7 +3423,7 @@
                                                                                                                                               "fields": [
                                                                                                                                                 {
                                                                                                                                                   "name": "lhs",
-                                                                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                                                                 {
                                                                                                                                                   "name": "rhs",
                                                                                                                                                   "term": {
@@ -3431,7 +3431,7 @@
                                                                                                                                                       "fields": [
                                                                                                                                                         {
                                                                                                                                                           "name": "lhs",
-                                                                                                                                                          "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                                          "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                                                         {
                                                                                                                                                           "name": "rhs",
                                                                                                                                                           "term": {
@@ -3439,7 +3439,7 @@
                                                                                                                                                               "fields": [
                                                                                                                                                                 {
                                                                                                                                                                   "name": "lhs",
-                                                                                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                                                                 {
                                                                                                                                                                   "name": "rhs",
                                                                                                                                                                   "term": {
@@ -3469,7 +3469,7 @@
                                                                                                                                                                                     "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                                                               {
                                                                                                                                                                                 "name": "rhs",
-                                                                                                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                                                             "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                                                       "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                                                               "typeName": "hydra.python.syntax.Term"}}}],
@@ -3494,7 +3494,7 @@
                                                                         "argument": {"list": [{"list": [{"variable": "getItemMethod"}]}]},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                                                             "function": {"variable": "hydra.python.utils.indentedBlock"}}}}}}],
                                                                 "typeName": "hydra.python.syntax.ClassDefinition"}},
                                                             "function": {"variable": "hydra.python.utils.pyClassDefinitionToPyStatement"}}},
@@ -3582,7 +3582,7 @@
                                                                                                                     "fields": [
                                                                                                                       {
                                                                                                                         "name": "lhs",
-                                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                                                       {
                                                                                                                         "name": "rhs",
                                                                                                                         "term": {
@@ -3590,7 +3590,7 @@
                                                                                                                             "fields": [
                                                                                                                               {
                                                                                                                                 "name": "lhs",
-                                                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                                                               {
                                                                                                                                 "name": "rhs",
                                                                                                                                 "term": {
@@ -3598,7 +3598,7 @@
                                                                                                                                     "fields": [
                                                                                                                                       {
                                                                                                                                         "name": "lhs",
-                                                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                                                       {
                                                                                                                                         "name": "rhs",
                                                                                                                                         "term": {
@@ -3606,7 +3606,7 @@
                                                                                                                                             "fields": [
                                                                                                                                               {
                                                                                                                                                 "name": "lhs",
-                                                                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                                                               {
                                                                                                                                                 "name": "rhs",
                                                                                                                                                 "term": {
@@ -3614,7 +3614,7 @@
                                                                                                                                                     "fields": [
                                                                                                                                                       {
                                                                                                                                                         "name": "lhs",
-                                                                                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                                                       {
                                                                                                                                                         "name": "rhs",
                                                                                                                                                         "term": {
@@ -3622,7 +3622,7 @@
                                                                                                                                                             "fields": [
                                                                                                                                                               {
                                                                                                                                                                 "name": "lhs",
-                                                                                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                                                               {
                                                                                                                                                                 "name": "rhs",
                                                                                                                                                                 "term": {
@@ -3649,7 +3649,7 @@
                                                                                                                                                                                   "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                                                             {
                                                                                                                                                                               "name": "rhs",
-                                                                                                                                                                              "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                                                           "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                                                     "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                                                             "typeName": "hydra.python.syntax.Term"}}}],
@@ -3682,7 +3682,7 @@
                                                                                     "fields": [
                                                                                       {
                                                                                         "name": "decorators",
-                                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
                                                                                       {"name": "name", "term": {"variable": "name"}},
                                                                                       {
                                                                                         "name": "typeParams",
@@ -3690,7 +3690,7 @@
                                                                                       {
                                                                                         "name": "arguments",
                                                                                         "term": {
-                                                                                          "maybe": {
+                                                                                          "optional": {
                                                                                             "record": {
                                                                                               "fields": [
                                                                                                 {
@@ -3713,7 +3713,7 @@
                                                                                             "argument": {"variable": "bodyGroups"},
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                                                                                 "function": {"variable": "hydra.python.utils.indentedBlock"}}}}}}],
                                                                                     "typeName": "hydra.python.syntax.ClassDefinition"}},
                                                                                 "function": {"variable": "hydra.python.utils.pyClassDefinitionToPyStatement"}}},
@@ -3725,7 +3725,7 @@
                             "parameter": "extraStmts"}},
                         "domain": {"variable": "hydra.python.syntax.Expression"},
                         "parameter": "tyexpr"}},
-                    "domain": {"maybe": {"literal": {"string": {}}}},
+                    "domain": {"optional": {"literal": {"string": {}}}},
                     "parameter": "mcomment"}},
                 "domain": {"variable": "hydra.python.syntax.Name"},
                 "parameter": "name"}}}},
@@ -3733,7 +3733,7 @@
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}},
-            {"isLazy": false, "name": "arg1", "type": {"maybe": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"optional": {"literal": {"string": {}}}}},
             {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.python.syntax.Expression"}},
             {"isLazy": false, "name": "arg3", "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}],
           "result": {"type": {"list": {"variable": "hydra.python.syntax.Statement"}}},
@@ -3834,7 +3834,7 @@
                                                                                                         "fields": [
                                                                                                           {
                                                                                                             "name": "lhs",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                                           {
                                                                                                             "name": "rhs",
                                                                                                             "term": {
@@ -3842,7 +3842,7 @@
                                                                                                                 "fields": [
                                                                                                                   {
                                                                                                                     "name": "lhs",
-                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                                                   {
                                                                                                                     "name": "rhs",
                                                                                                                     "term": {
@@ -3850,7 +3850,7 @@
                                                                                                                         "fields": [
                                                                                                                           {
                                                                                                                             "name": "lhs",
-                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                                           {
                                                                                                                             "name": "rhs",
                                                                                                                             "term": {
@@ -3858,7 +3858,7 @@
                                                                                                                                 "fields": [
                                                                                                                                   {
                                                                                                                                     "name": "lhs",
-                                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                                                   {
                                                                                                                                     "name": "rhs",
                                                                                                                                     "term": {
@@ -3866,7 +3866,7 @@
                                                                                                                                         "fields": [
                                                                                                                                           {
                                                                                                                                             "name": "lhs",
-                                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                                           {
                                                                                                                                             "name": "rhs",
                                                                                                                                             "term": {
@@ -3874,7 +3874,7 @@
                                                                                                                                                 "fields": [
                                                                                                                                                   {
                                                                                                                                                     "name": "lhs",
-                                                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                                                   {
                                                                                                                                                     "name": "rhs",
                                                                                                                                                     "term": {
@@ -3904,7 +3904,7 @@
                                                                                                                                                                       "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                                                 {
                                                                                                                                                                   "name": "rhs",
-                                                                                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                                               "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                                         "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                                                 "typeName": "hydra.python.syntax.Term"}}}],
@@ -3947,7 +3947,7 @@
                                                                                                         "fields": [
                                                                                                           {
                                                                                                             "name": "lhs",
-                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
                                                                                                           {
                                                                                                             "name": "rhs",
                                                                                                             "term": {
@@ -3955,7 +3955,7 @@
                                                                                                                 "fields": [
                                                                                                                   {
                                                                                                                     "name": "lhs",
-                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
                                                                                                                   {
                                                                                                                     "name": "rhs",
                                                                                                                     "term": {
@@ -3963,7 +3963,7 @@
                                                                                                                         "fields": [
                                                                                                                           {
                                                                                                                             "name": "lhs",
-                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
                                                                                                                           {
                                                                                                                             "name": "rhs",
                                                                                                                             "term": {
@@ -3971,7 +3971,7 @@
                                                                                                                                 "fields": [
                                                                                                                                   {
                                                                                                                                     "name": "lhs",
-                                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
                                                                                                                                   {
                                                                                                                                     "name": "rhs",
                                                                                                                                     "term": {
@@ -3979,7 +3979,7 @@
                                                                                                                                         "fields": [
                                                                                                                                           {
                                                                                                                                             "name": "lhs",
-                                                                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
                                                                                                                                           {
                                                                                                                                             "name": "rhs",
                                                                                                                                             "term": {
@@ -3987,7 +3987,7 @@
                                                                                                                                                 "fields": [
                                                                                                                                                   {
                                                                                                                                                     "name": "lhs",
-                                                                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
                                                                                                                                                   {
                                                                                                                                                     "name": "rhs",
                                                                                                                                                     "term": {
@@ -4014,7 +4014,7 @@
                                                                                                                                                                       "typeName": "hydra.python.syntax.AwaitPrimary"}}},
                                                                                                                                                                 {
                                                                                                                                                                   "name": "rhs",
-                                                                                                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
+                                                                                                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}],
                                                                                                                                                               "typeName": "hydra.python.syntax.Power"}}},
                                                                                                                                                         "typeName": "hydra.python.syntax.Factor"}}}],
                                                                                                                                                 "typeName": "hydra.python.syntax.Term"}}}],
@@ -4068,7 +4068,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "decorators",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
                                                       {
                                                         "name": "raw",
                                                         "term": {
@@ -4079,13 +4079,13 @@
                                                               {
                                                                 "name": "typeParams",
                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}}},
-                                                              {"name": "params", "term": {"maybe": {"variable": "hydra.python.utils.selfOtherParams"}}},
+                                                              {"name": "params", "term": {"optional": {"variable": "hydra.python.utils.selfOtherParams"}}},
                                                               {
                                                                 "name": "returnType",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
                                                               {
                                                                 "name": "funcTypeComment",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
                                                               {
                                                                 "name": "block",
                                                                 "term": {
@@ -4093,7 +4093,7 @@
                                                                     "argument": {"list": [{"list": [{"variable": "returnIsinstance"}]}]},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                                                         "function": {"variable": "hydra.python.utils.indentedBlock"}}}}}}],
                                                             "typeName": "hydra.python.syntax.FunctionDefRaw"}}}],
                                                     "typeName": "hydra.python.syntax.FunctionDefinition"}}},
@@ -4160,7 +4160,7 @@
                                                             "fields": [
                                                               {
                                                                 "name": "decorators",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
                                                               {
                                                                 "name": "raw",
                                                                 "term": {
@@ -4173,13 +4173,13 @@
                                                                       {
                                                                         "name": "typeParams",
                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}}},
-                                                                      {"name": "params", "term": {"maybe": {"variable": "hydra.python.utils.selfOnlyParams"}}},
+                                                                      {"name": "params", "term": {"optional": {"variable": "hydra.python.utils.selfOnlyParams"}}},
                                                                       {
                                                                         "name": "returnType",
-                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
+                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
                                                                       {
                                                                         "name": "funcTypeComment",
-                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
+                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
                                                                       {
                                                                         "name": "block",
                                                                         "term": {
@@ -4187,7 +4187,7 @@
                                                                             "argument": {"list": [{"list": [{"variable": "returnHash"}]}]},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}},
                                                                                 "function": {"variable": "hydra.python.utils.indentedBlock"}}}}}}],
                                                                     "typeName": "hydra.python.syntax.FunctionDefRaw"}}}],
                                                             "typeName": "hydra.python.syntax.FunctionDefinition"}}},

@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -123,7 +123,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
       Variants.termVariantList,
       Variants.termVariantLiteral,
       Variants.termVariantMap,
-      Variants.termVariantMaybe,
+      Variants.termVariantOptional,
       Variants.termVariantPair,
       Variants.termVariantRecord,
       Variants.termVariantSet,
@@ -142,7 +142,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
       Variants.typeVariantList,
       Variants.typeVariantLiteral,
       Variants.typeVariantMap,
-      Variants.typeVariantMaybe,
+      Variants.typeVariantOptional,
       Variants.typeVariantPair,
       Variants.typeVariantRecord,
       Variants.typeVariantSet,

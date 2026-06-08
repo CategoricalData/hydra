@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -136,10 +136,10 @@ instantiateTemplate = define "instantiateTemplate" $
           "ke" ~>
           Eithers.bind (var "inst" @@ var "tname" @@ var "vt") (
             "ve" ~> right (Core.termMap (Maps.singleton (var "ke") (var "ve")))))),
-    _Type_maybe>>: "ot" ~> Logic.ifElse (var "minimal")
-      (right (Core.termMaybe nothing))
+    _Type_optional>>: "ot" ~> Logic.ifElse (var "minimal")
+      (right (Core.termOptional nothing))
       (Eithers.bind (var "inst" @@ var "tname" @@ var "ot") (
-        "e" ~> right (Core.termMaybe (just (var "e"))))),
+        "e" ~> right (Core.termOptional (just (var "e"))))),
     _Type_record>>: "rt" ~>
       "toField" <~ ("ft" ~>
         Eithers.bind (var "inst" @@ var "tname" @@ (Core.fieldTypeType (var "ft"))) (
@@ -151,10 +151,7 @@ instantiateTemplate = define "instantiateTemplate" $
       (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "vname" ~>
-      Maybes.maybe
-        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname")))))
-        (var "inst" @@ var "vname")
-        (Maps.lookup (var "vname") (var "schema")),
+      Optionals.cases (Maps.lookup (var "vname") (var "schema")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname"))))) (var "inst" @@ var "vname"),
     _Type_wrap>>: "wt" ~>
       Eithers.bind (var "inst" @@ var "tname" @@ var "wt") (
         "e" ~> right (Core.termWrap (Core.wrappedTerm (var "tname") (var "e"))))]

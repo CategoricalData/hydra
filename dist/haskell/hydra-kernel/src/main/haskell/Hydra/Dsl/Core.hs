@@ -1652,13 +1652,13 @@ termMap x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
--- | DSL injection for the maybe variant of hydra.core.Term
-termMaybe :: Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm Core.Term
-termMaybe x =
+-- | DSL injection for the optional variant of hydra.core.Term
+termOptional :: Typed.TypedTerm (Maybe Core.Term) -> Typed.TypedTerm Core.Term
+termOptional x =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "maybe"),
+        Core.fieldName = (Core.Name "optional"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the pair variant of hydra.core.Term
 termPair :: Typed.TypedTerm (Core.Term, Core.Term) -> Typed.TypedTerm Core.Term
@@ -1932,13 +1932,13 @@ typeMap x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
--- | DSL injection for the maybe variant of hydra.core.Type
-typeMaybe :: Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.Type
-typeMaybe x =
+-- | DSL injection for the optional variant of hydra.core.Type
+typeOptional :: Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.Type
+typeOptional x =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "maybe"),
+        Core.fieldName = (Core.Name "optional"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the pair variant of hydra.core.Type
 typePair :: Typed.TypedTerm Core.PairType -> Typed.TypedTerm Core.Type

@@ -109,7 +109,7 @@ individualEncoderTestCases = do
     H.it "optional type" $ do
       H.shouldBe
         (strip $ EncodeCore.type_ (Types.optional Types.string) :: Term)
-        (strip $ inject _Type _Type_maybe $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
+        (strip $ inject _Type _Type_optional $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
@@ -203,7 +203,7 @@ individualDecoderTestCases = do
     H.it "optional type" $ do
       shouldSucceedWith
         (decodeE $ DecodeCore.type_ (testGraph) $
-          inject _Type _Type_maybe $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
+          inject _Type _Type_optional $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
         (Types.optional Types.string)
 
 decodeInvalidTerms :: H.SpecWith ()

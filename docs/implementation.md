@@ -240,7 +240,7 @@ def "Term" $
     "list">: list $ core "Term",
     "literal">: core "Literal",
     "map">: Types.map (core "Term") (core "Term"),
-    "maybe">: optional $ core "Term",
+    "optional">: optional $ core "Term",
     "pair">: Types.pair (core "Term") (core "Term"),
     "record">: core "Record",
     "set">: set $ core "Term",
@@ -284,7 +284,7 @@ def "TermVariant" $
   doc "The identifier of a term constructor" $
   enum [
     "annotated", "application", "either", "function",
-    "let", "list", "literal", "map", "maybe",
+    "let", "list", "literal", "map", "optional",
     "pair", "record", "set", "typeApplication",
     "typeLambda", "union", "unit", "variable", "wrap"
   ]
@@ -450,7 +450,7 @@ Hydra/Dsl/Meta/Lib/
 ├── Chars.hs       # isAlpha, isDigit, toUpper, toLower
 ├── Math.hs        # add, sub, mul, div, sin, cos, sqrt, etc.
 ├── Logic.hs       # and, or, not, ifElse
-├── Maybes.hs      # fromMaybe, maybe, isJust, etc.
+├── Optionals.hs   # fromOptional, cases, isGiven, etc.
 ├── Eithers.hs     # either, isLeft, rights, etc.
 ├── Equality.hs    # equal, compare, gt, lt, etc.
 ├── Pairs.hs       # fst, snd, curry, uncurry
@@ -567,7 +567,7 @@ and is **the** canonical registry for its module name:
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
 | **hydra.lib.maps** | 20 | `lookup`, `insert`, `keys`, `toList` |
 | **hydra.lib.math** | 46 | `add`, `mul`, `sin`, `sqrt`, `abs` |
-| **hydra.lib.maybes** | 13 | `fromMaybe`, `maybe`, `isJust` |
+| **hydra.lib.optionals** | 12 | `fromOptional`, `cases`, `isGiven` |
 | **hydra.lib.pairs** | 3 | `first`, `second`, `bimap` |
 | **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
 | **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
@@ -595,7 +595,7 @@ def "PrimitiveDefinition" $
     "isPure">:                doc "Purity flag (defaults to True)" $ core "Boolean",
     "isTotal">:               doc "Totality flag (defaults to True)" $ core "Boolean",
     "defaultImplementation">: doc "Optional reference implementation in Hydra terms" $
-                                T.maybe (core "Term")
+                                T.optional (core "Term")
   ]
 ```
 
@@ -623,8 +623,8 @@ in #156; the `InferenceContext` parameter replaced the legacy `Context` in #368.
 The kernel modules `Hydra/Sources/Kernel/Lib/<Sub>.hs` declare every primitive
 as a `PrimitiveDefinition` (an arm of `Definition` alongside `term` and `type`),
 collectively forming **the** primitive registry. The 13 modules — `Chars`,
-`Eithers`, `Equality`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Maybes`,
-`Pairs`, `Regex`, `Sets`, `Strings` — declare 241 primitives total.
+`Eithers`, `Equality`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Optionals`,
+`Pairs`, `Regex`, `Sets`, `Strings` — declare 240 primitives total.
 
 Example (`Hydra/Sources/Kernel/Lib/Logic.hs`):
 
@@ -702,7 +702,7 @@ eliminate this duplication.
 
 ### Default implementations
 
-`PrimitiveDefinition.defaultImplementation : Maybe Term` carries an optional
+`PrimitiveDefinition.defaultImplementation : optional<Term>` carries an optional
 declarative reference implementation in pure Hydra terms. Two uses:
 
 - **Fallback for minimal interpreters.** A host that doesn't ship a native
@@ -834,7 +834,7 @@ The same primitive works with any type supporting equality.
 
 #### Pattern 2: Default implementations
 
-A `PrimitiveDefinition` carries an optional `defaultImplementation : Maybe Term`
+A `PrimitiveDefinition` carries an optional `defaultImplementation : optional<Term>`
 — a declarative reference implementation in pure Hydra terms. The kernel
 registry declares each primitive with one of two helpers:
 

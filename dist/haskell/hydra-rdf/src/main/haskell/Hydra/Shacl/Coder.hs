@@ -3,44 +3,65 @@
 
 module Hydra.Shacl.Coder where
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as JsonModel
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
 import qualified Hydra.Rdf.Syntax as Syntax
 import qualified Hydra.Rdf.Utils as Utils
-import qualified Hydra.Shacl.Model as Model
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Shacl.Model as ShaclModel
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Construct CommonProperties from a list of constraints, using defaults for other fields
-common :: [Model.CommonConstraint] -> Model.CommonProperties
+common :: [ShaclModel.CommonConstraint] -> ShaclModel.CommonProperties
 common constraints =
-    Model.CommonProperties {
-      Model.commonPropertiesConstraints = (Sets.fromList constraints),
-      Model.commonPropertiesDeactivated = Nothing,
-      Model.commonPropertiesMessage = (Syntax.LangStrings Maps.empty),
-      Model.commonPropertiesSeverity = Model.SeverityInfo,
-      Model.commonPropertiesTargetClass = Sets.empty,
-      Model.commonPropertiesTargetNode = Sets.empty,
-      Model.commonPropertiesTargetObjectsOf = Sets.empty,
-      Model.commonPropertiesTargetSubjectsOf = Sets.empty}
+    ShaclModel.CommonProperties {
+      ShaclModel.commonPropertiesConstraints = (Sets.fromList constraints),
+      ShaclModel.commonPropertiesDeactivated = Nothing,
+      ShaclModel.commonPropertiesMessage = (Syntax.LangStrings Maps.empty),
+      ShaclModel.commonPropertiesSeverity = ShaclModel.SeverityInfo,
+      ShaclModel.commonPropertiesTargetClass = Sets.empty,
+      ShaclModel.commonPropertiesTargetNode = Sets.empty,
+      ShaclModel.commonPropertiesTargetObjectsOf = Sets.empty,
+      ShaclModel.commonPropertiesTargetSubjectsOf = Sets.empty}
 -- | Default CommonProperties with empty constraints and default severity
-defaultCommonProperties :: Model.CommonProperties
+defaultCommonProperties :: ShaclModel.CommonProperties
 defaultCommonProperties = common []
 -- | Convert a binding's name to an RDF IRI
 elementIri :: Core.Binding -> Syntax.Iri
@@ -59,7 +80,7 @@ encodeField rname subject field cx g =
           Lists.concat2 (Utils.triplesOf descs) (Utils.forObjects subject (Utils.propertyIri rname (Core.fieldName field)) (Utils.subjectsOf descs)),
           cx2))))
 -- | Encode a FieldType as a SHACL property shape Definition
-encodeFieldType :: Core.Name -> Maybe Integer -> Core.FieldType -> t0 -> Either Errors.Error (Model.Definition Model.PropertyShape)
+encodeFieldType :: Core.Name -> Maybe Integer -> Core.FieldType -> t0 -> Either Errors.Error (ShaclModel.Definition ShaclModel.PropertyShape)
 encodeFieldType rname order ft cx =
 
       let fname = Core.fieldTypeName ft
@@ -67,26 +88,26 @@ encodeFieldType rname order ft cx =
           iri = Utils.propertyIri rname fname
           forType =
                   \mn -> \mx -> \t -> case (Strip.deannotateType t) of
-                    Core.TypeMaybe v0 -> forType (Just 0) mx v0
+                    Core.TypeOptional v0 -> forType (Just 0) mx v0
                     Core.TypeSet v0 -> forType mn Nothing v0
                     _ -> forTypeDefault mn mx t
           forTypeDefault =
                   \mn -> \mx -> \t -> Eithers.map (\_cp ->
                     let baseProp = property iri
-                        minC = Maybes.map (\_n -> Model.PropertyShapeConstraintMinCount _n) mn
-                        maxC = Maybes.map (\_n -> Model.PropertyShapeConstraintMaxCount _n) mx
-                    in Model.Definition {
-                      Model.definitionIri = iri,
-                      Model.definitionTarget = Model.PropertyShape {
-                        Model.propertyShapeCommon = _cp,
-                        Model.propertyShapeConstraints = (Sets.fromList (Maybes.cat [
+                        minC = Optionals.map (\_n -> ShaclModel.PropertyShapeConstraintMinCount _n) mn
+                        maxC = Optionals.map (\_n -> ShaclModel.PropertyShapeConstraintMaxCount _n) mx
+                    in ShaclModel.Definition {
+                      ShaclModel.definitionIri = iri,
+                      ShaclModel.definitionTarget = ShaclModel.PropertyShape {
+                        ShaclModel.propertyShapeCommon = _cp,
+                        ShaclModel.propertyShapeConstraints = (Sets.fromList (Optionals.cat [
                           minC,
                           maxC])),
-                        Model.propertyShapeDefaultValue = Nothing,
-                        Model.propertyShapeDescription = (Syntax.LangStrings Maps.empty),
-                        Model.propertyShapeName = (Syntax.LangStrings Maps.empty),
-                        Model.propertyShapeOrder = order,
-                        Model.propertyShapePath = iri}}) (encodeType rname t cx)
+                        ShaclModel.propertyShapeDefaultValue = Nothing,
+                        ShaclModel.propertyShapeDescription = (Syntax.LangStrings Maps.empty),
+                        ShaclModel.propertyShapeName = (Syntax.LangStrings Maps.empty),
+                        ShaclModel.propertyShapeOrder = order,
+                        ShaclModel.propertyShapePath = iri}}) (encodeType rname t cx)
       in (forType (Just 1) (Just 1) ftype)
 -- | Encode a list of terms as RDF list structure
 encodeList :: Syntax.Resource -> [Core.Term] -> Int -> Graph.Graph -> Either Errors.Error ([Syntax.Description], Int)
@@ -96,7 +117,7 @@ encodeList subj terms cx0 g =
         Syntax.Description {
           Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
           Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}],
-      cx0)) (Maybes.maybe (Right ([], cx0)) (\p ->
+      cx0)) (Optionals.cases (Lists.uncons terms) (Right ([], cx0)) (\p ->
       let pair1 = Utils.nextBlankNode cx0
           node1 = Pairs.first pair1
           cx1 = Pairs.second pair1
@@ -116,13 +137,13 @@ encodeList subj terms cx0 g =
               Syntax.Description {
                 Syntax.descriptionSubject = (Utils.resourceToNode subj),
                 Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}],
-            cx4)) (encodeList next (Pairs.second p) cx3 g))))) (Lists.uncons terms))
+            cx4)) (encodeList next (Pairs.second p) cx3 g))))))
 -- | Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint
-encodeLiteralType :: Core.LiteralType -> Model.CommonProperties
+encodeLiteralType :: Core.LiteralType -> ShaclModel.CommonProperties
 encodeLiteralType lt =
 
       let xsd = \local -> common [
-            Model.CommonConstraintDatatype (Utils.xmlSchemaDatatypeIri local)]
+            ShaclModel.CommonConstraintDatatype (Utils.xmlSchemaDatatypeIri local)]
       in case lt of
         Core.LiteralTypeBinary -> xsd "base64Binary"
         Core.LiteralTypeBoolean -> xsd "boolean"
@@ -168,9 +189,9 @@ encodeTerm subject term cx g =
         let descs = Pairs.first _dr
             cx1 = Pairs.second _dr
         in (
-          Maybes.fromMaybe descs (Maybes.map (\p -> Lists.cons (withType (Core.wrappedTermTypeName v0) (Pairs.first p)) (Pairs.second p)) (Lists.uncons descs)),
+          Optionals.fromOptional descs (Optionals.map (\p -> Lists.cons (withType (Core.wrappedTermTypeName v0) (Pairs.first p)) (Pairs.second p)) (Lists.uncons descs)),
           cx1)) (encodeTerm subject (Core.wrappedTermBody v0) cx g)
-      Core.TermMaybe v0 -> Maybes.maybe (Right ([], cx)) (\_inner -> encodeTerm subject _inner cx g) v0
+      Core.TermOptional v0 -> Optionals.cases v0 (Right ([], cx)) (\_inner -> encodeTerm subject _inner cx g)
       Core.TermRecord v0 ->
         let rname = Core.recordTypeName v0
             fields = Core.recordFields v0
@@ -196,7 +217,7 @@ encodeTerm subject term cx g =
           (Pairs.second _r))) (encodeField rname subject field cx g))
       _ -> unexpectedE "RDF-compatible term" "unsupported term variant"
 -- | Encode a Hydra type as SHACL CommonProperties
-encodeType :: Core.Name -> Core.Type -> t0 -> Either Errors.Error Model.CommonProperties
+encodeType :: Core.Name -> Core.Type -> t0 -> Either Errors.Error ShaclModel.CommonProperties
 encodeType tname typ cx =
 
       let any = Right (common [])
@@ -208,16 +229,16 @@ encodeType tname typ cx =
         Core.TypePair _ -> any
         Core.TypeWrap _ -> any
         Core.TypeRecord v0 -> Eithers.map (\_props -> common [
-          Model.CommonConstraintProperty (Sets.fromList (Lists.map (\_p -> Model.ReferenceDefinition _p) _props))]) (Eithers.mapList (\_pair -> encodeFieldType tname (Just (Pairs.first _pair)) (Pairs.second _pair) cx) (Lists.zip (Lists.map (\_i -> Literals.int32ToBigint _i) (Math.range 0 (Lists.length v0))) v0))
+          ShaclModel.CommonConstraintProperty (Sets.fromList (Lists.map (\_p -> ShaclModel.ReferenceDefinition _p) _props))]) (Eithers.mapList (\_pair -> encodeFieldType tname (Just (Pairs.first _pair)) (Pairs.second _pair) cx) (Lists.zip (Lists.map (\_i -> Literals.int32ToBigint _i) (Math.range 0 (Lists.length v0))) v0))
         Core.TypeSet _ -> any
         Core.TypeUnion v0 -> Eithers.map (\_props -> common [
-          Model.CommonConstraintXone (Sets.fromList (Lists.map (\_p -> Model.ReferenceAnonymous (node [
-            Model.CommonConstraintProperty (Sets.fromList [
-              Model.ReferenceDefinition _p])])) _props))]) (Eithers.mapList (\_ft -> encodeFieldType tname Nothing _ft cx) v0)
+          ShaclModel.CommonConstraintXone (Sets.fromList (Lists.map (\_p -> ShaclModel.ReferenceAnonymous (node [
+            ShaclModel.CommonConstraintProperty (Sets.fromList [
+              ShaclModel.ReferenceDefinition _p])])) _props))]) (Eithers.mapList (\_ft -> encodeFieldType tname Nothing _ft cx) v0)
         Core.TypeUnit -> any
         Core.TypeVariable v0 -> Right (common [
-          Model.CommonConstraintNode (Sets.fromList [
-            Model.ReferenceNamed (Utils.nameToIri v0)])])
+          ShaclModel.CommonConstraintNode (Sets.fromList [
+            ShaclModel.ReferenceNamed (Utils.nameToIri v0)])])
         _ -> unexpectedE "type" "unsupported type variant"
 -- | Construct an error result with the given message
 err :: String -> Either Errors.Error t0
@@ -225,35 +246,35 @@ err msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 -- | Fold over a list, accumulating results and threading context through each step
 foldAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
 foldAccumResult f cx xs =
-    Maybes.maybe (Right ([], cx)) (\p -> Eithers.bind (f cx (Pairs.first p)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Pairs.second p)))) (Lists.uncons xs)
+    Optionals.cases (Lists.uncons xs) (Right ([], cx)) (\p -> Eithers.bind (f cx (Pairs.first p)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Pairs.second p))))
 -- | Construct a SHACL node shape from a list of common constraints
-node :: [Model.CommonConstraint] -> Model.Shape
-node constraints = Model.ShapeNode (Model.NodeShape {
-  Model.nodeShapeCommon = (common constraints)})
+node :: [ShaclModel.CommonConstraint] -> ShaclModel.Shape
+node constraints = ShaclModel.ShapeNode (ShaclModel.NodeShape {
+  ShaclModel.nodeShapeCommon = (common constraints)})
 -- | Construct a default property shape with the given IRI as its path
-property :: Syntax.Iri -> Model.PropertyShape
+property :: Syntax.Iri -> ShaclModel.PropertyShape
 property iri =
-    Model.PropertyShape {
-      Model.propertyShapeCommon = defaultCommonProperties,
-      Model.propertyShapeConstraints = Sets.empty,
-      Model.propertyShapeDefaultValue = Nothing,
-      Model.propertyShapeDescription = (Syntax.LangStrings Maps.empty),
-      Model.propertyShapeName = (Syntax.LangStrings Maps.empty),
-      Model.propertyShapeOrder = Nothing,
-      Model.propertyShapePath = iri}
+    ShaclModel.PropertyShape {
+      ShaclModel.propertyShapeCommon = defaultCommonProperties,
+      ShaclModel.propertyShapeConstraints = Sets.empty,
+      ShaclModel.propertyShapeDefaultValue = Nothing,
+      ShaclModel.propertyShapeDescription = (Syntax.LangStrings Maps.empty),
+      ShaclModel.propertyShapeName = (Syntax.LangStrings Maps.empty),
+      ShaclModel.propertyShapeOrder = Nothing,
+      ShaclModel.propertyShapePath = iri}
 -- | Encode a module's type elements as a SHACL ShapesGraph
-shaclCoder :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Model.ShapesGraph, t0)
+shaclCoder :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (ShaclModel.ShapesGraph, t0)
 shaclCoder mod cx g =
 
       let typeEls =
-              Maybes.cat (Lists.map (\d -> case d of
+              Optionals.cat (Lists.map (\d -> case d of
                 Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
                   let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                       dataTerm =
                               Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                                 Core.annotatedTermBody = (EncodeCore.type_ typ),
-                                Core.annotatedTermAnnotation = Annotations.wrapAnnotationMap (Maps.fromList [
-                                  (Constants.keyType, schemaTerm)])}))
+                                Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                                  (Constants.keyType, schemaTerm)]))}))
                   in Core.Binding {
                     Core.bindingName = name,
                     Core.bindingTerm = dataTerm,
@@ -263,11 +284,11 @@ shaclCoder mod cx g =
                       Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
           toShape =
-                  \el -> Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_t -> _t) (DecodeCore.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
-                    Model.definitionIri = (elementIri el),
-                    Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
-                      Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))
-      in (Eithers.map (\_shapes -> (Model.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
+                  \el -> Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_t -> _t) (DecodeCore.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> ShaclModel.Definition {
+                    ShaclModel.definitionIri = (elementIri el),
+                    ShaclModel.definitionTarget = (ShaclModel.ShapeNode (ShaclModel.NodeShape {
+                      ShaclModel.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))
+      in (Eithers.map (\_shapes -> (ShaclModel.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
 -- | Construct an error for unexpected input, given expected and found descriptions
 unexpectedE :: String -> String -> Either Errors.Error t0
 unexpectedE expected found =

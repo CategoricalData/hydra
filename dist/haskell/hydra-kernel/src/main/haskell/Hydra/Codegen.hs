@@ -32,7 +32,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -80,13 +80,13 @@ escapeControlCharsInJson input =
                     117,
                     48,
                     48,
-                    (hexDigit (Maybes.fromMaybe 0 (Math.maybeDiv b 16))),
-                    (hexDigit (Maybes.fromMaybe 0 (Math.maybeMod b 16)))]
+                    (hexDigit (Optionals.fromOptional 0 (Math.maybeDiv b 16))),
+                    (hexDigit (Optionals.fromOptional 0 (Math.maybeMod b 16)))]
           go =
-                  \inStr -> \esc -> \bytes -> Maybes.maybe [] (\uc ->
+                  \inStr -> \esc -> \bytes -> Optionals.cases (Lists.uncons bytes) [] (\uc ->
                     let b = Pairs.first uc
                         bs = Pairs.second uc
-                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs))))))) (Lists.uncons bytes)
+                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs)))))))
       in (go False False input)
 -- | Format a primitive for the lexicon
 formatPrimitive :: Graph.Primitive -> String
@@ -101,7 +101,7 @@ formatTermBinding :: Core.Binding -> String
 formatTermBinding binding =
 
       let name = Core.unName (Core.bindingName binding)
-          typeStr = Maybes.maybe "?" (\scheme -> ShowCore.typeScheme scheme) (Core.bindingTypeScheme binding)
+          typeStr = Optionals.cases (Core.bindingTypeScheme binding) "?" (\scheme -> ShowCore.typeScheme scheme)
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 -- | Format a type binding for the lexicon
 formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.Error String
@@ -114,7 +114,7 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
       let universe = Maps.fromList (Lists.map (\m -> (Packaging.moduleName m, m)) (Lists.concat2 universeModules universeModules))
           closureModules = moduleDepsTransitive universe universeModules
           schemaElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
                       let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                           dataTerm =
@@ -131,17 +131,17 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           allElements = Lists.concat2 schemaElements dataElements
           graph = Lexical.elementsToGraph bsGraph schemaTypes allElements
-      in (Eithers.map (\results -> Maybes.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
+      in (Eithers.map (\results -> Optionals.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
 -- | Generate the lexicon content from a graph
 generateLexicon :: Graph.Graph -> Either Errors.Error String
 generateLexicon graph =
@@ -169,7 +169,7 @@ generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsTo
           doHoistCaseStatements = Logic.not (Sets.member Coders.LanguageFeatureNestedCaseStatements features)
           doHoistPolymorphicLetBindings = Logic.not (Sets.member Coders.LanguageFeatureNestedPolymorphicLetBindings features)
           typeModulesToGenerate =
-                  Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+                  Lists.filter (\mod -> Logic.not (Lists.null (Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
                       let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                           dataTerm =
@@ -186,15 +186,15 @@ generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsTo
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions mod))))) modsToGenerate
           termModulesToGenerate =
-                  Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+                  Lists.filter (\mod -> Logic.not (Lists.null (Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions mod))))) modsToGenerate
           closureMods = moduleDepsTransitive namespaceMap modsToGenerate
           schemaElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
                       let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                           dataTerm =
@@ -211,18 +211,18 @@ generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsTo
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) closureMods)
           dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) closureMods)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes2 = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           dataGraph = Lexical.elementsToGraph bsGraph schemaTypes2 dataElements
       in (Eithers.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Right []) (
         let nameLists =
-                Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType v0 -> Just (Packaging.typeDefinitionName v0)
                   _ -> Nothing) (Packaging.moduleDefinitions m))) typeModulesToGenerate
         in (Eithers.bind (Adapt.schemaGraphToDefinitions constraints schemaGraph nameLists cx) (\schemaResult ->
@@ -255,12 +255,12 @@ generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsTo
                         Packaging.moduleName = (Packaging.moduleName m),
                         Packaging.moduleMetadata = (Packaging.moduleMetadata m),
                         Packaging.moduleDependencies = (Packaging.moduleDependencies m),
-                        Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
+                        Packaging.moduleDefinitions = (Optionals.cat (Lists.map (\d -> case d of
                           Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
-                          Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+                          Packaging.DefinitionTerm v0 -> Optionals.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                             Packaging.termDefinitionName = (Core.bindingName b),
                             Packaging.termDefinitionMetadata = Nothing,
-                            Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+                            Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
                             Packaging.termDefinitionBody = (Core.bindingTerm b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) els)
                           Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))}
               allBindings = Lexical.graphToBindings g1
@@ -277,11 +277,11 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
 
       let g0 = modulesToGraph bsGraph kernelModules kernelModules
           dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) kernelModules)
       in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
@@ -292,11 +292,11 @@ inferModules cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
           dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) universeMods)
       in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
@@ -314,19 +314,19 @@ inferModulesGiven cx bsGraph universeMods targetMods =
                   Lists.concat (Lists.map (\m ->
                     let isTarget = Sets.member (Packaging.moduleName m) targetNamespaces
                         bs =
-                                Maybes.cat (Lists.map (\d -> case d of
+                                Optionals.cat (Lists.map (\d -> case d of
                                   Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                                     Core.bindingName = (Packaging.termDefinitionName v0),
                                     Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                                    Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                                    Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                                   _ -> Nothing) (Packaging.moduleDefinitions m))
-                    in (Logic.ifElse isTarget bs (Lists.filter (\b -> Maybes.isNothing (Core.bindingTypeScheme b)) bs))) closureMods)
+                    in (Logic.ifElse isTarget bs (Lists.filter (\b -> Optionals.isNone (Core.bindingTypeScheme b)) bs))) closureMods)
           primitiveBindings =
                   Lists.concat (Lists.map (\m ->
                     let isTarget = Sets.member (Packaging.moduleName m) targetNamespaces
                         bs =
-                                Maybes.cat (Lists.map (\d -> case d of
-                                  Packaging.DefinitionPrimitive v0 -> Maybes.map (\impl -> Core.Binding {
+                                Optionals.cat (Lists.map (\d -> case d of
+                                  Packaging.DefinitionPrimitive v0 -> Optionals.map (\impl -> Core.Binding {
                                     Core.bindingName = (Packaging.primitiveDefinitionName v0),
                                     Core.bindingTerm = impl,
                                     Core.bindingTypeScheme = (Just (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))}) (Packaging.primitiveDefinitionDefaultImplementation v0)
@@ -337,13 +337,13 @@ inferModulesGiven cx bsGraph universeMods targetMods =
                   Lists.concat (Lists.map (\m ->
                     let isTarget = Sets.member (Packaging.moduleName m) targetNamespaces
                         bs =
-                                Maybes.cat (Lists.map (\d -> case d of
+                                Optionals.cat (Lists.map (\d -> case d of
                                   Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                                     Core.bindingName = (Packaging.termDefinitionName v0),
                                     Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                                    Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                                    Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                                   _ -> Nothing) (Packaging.moduleDefinitions m))
-                    in (Logic.ifElse isTarget [] (Lists.filter (\b -> Maybes.isJust (Core.bindingTypeScheme b)) bs))) closureMods)
+                    in (Logic.ifElse isTarget [] (Lists.filter (\b -> Optionals.isGiven (Core.bindingTypeScheme b)) bs))) closureMods)
       in (Eithers.bind (Inference.inferGraphTypes cx bindingsToInfer g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
             newlyInferredBindings = Pairs.second inferResult
@@ -396,7 +396,7 @@ moduleDepsTransitive nsMap modules =
 
       let closure =
               Sets.union (transitiveDeps (\m -> Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies m)) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleName m) modules))
-      in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
+      in (Optionals.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
 -- | Convert a module name to a file path (e.g., hydra.core -> hydra/core)
 moduleNameToPath :: Packaging.ModuleName -> String
 moduleNameToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unModuleName ns))
@@ -443,7 +443,7 @@ modulesToGraph bsGraph universeModules modules =
       let universe = Maps.fromList (Lists.map (\m -> (Packaging.moduleName m, m)) (Lists.concat2 universeModules modules))
           closureModules = moduleDepsTransitive universe modules
           schemaElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
                       let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                           dataTerm =
@@ -460,24 +460,24 @@ modulesToGraph bsGraph universeModules modules =
                           Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) closureModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           baseGraph = Lexical.elementsToGraph bsGraph schemaTypes dataElements
           universeDataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionBody v0),
-                      Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                      Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) universeModules)
           universeBoundTypes =
-                  Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingTypeScheme b)) universeDataElements))
+                  Maps.fromList (Optionals.cat (Lists.map (\b -> Optionals.map (\ts -> (Core.bindingName b, ts)) (Core.bindingTypeScheme b)) universeDataElements))
       in Graph.Graph {
         Graph.graphBoundTerms = (Graph.graphBoundTerms baseGraph),
         Graph.graphBoundTypes = universeBoundTypes,
@@ -490,21 +490,21 @@ modulesToGraph bsGraph universeModules modules =
 -- | Rebuild a module's term definitions using freshly inferred bindings
 refreshModule :: [Core.Binding] -> Packaging.Module -> Packaging.Module
 refreshModule inferredElements m =
-    Logic.ifElse (Logic.not (Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+    Logic.ifElse (Logic.not (Logic.not (Lists.null (Optionals.cat (Lists.map (\d -> case d of
       Packaging.DefinitionTerm v0 -> Just (Core.Binding {
         Core.bindingName = (Packaging.termDefinitionName v0),
         Core.bindingTerm = (Packaging.termDefinitionBody v0),
-        Core.bindingTypeScheme = (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+        Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
       _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
       Packaging.moduleName = (Packaging.moduleName m),
       Packaging.moduleMetadata = (Packaging.moduleMetadata m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
-      Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
+      Packaging.moduleDefinitions = (Optionals.cat (Lists.map (\d -> case d of
         Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
-        Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+        Packaging.DefinitionTerm v0 -> Optionals.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionMetadata = Nothing,
-          Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+          Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)
         Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))})
 -- | Compute transitive closure of module dependencies
@@ -517,7 +517,7 @@ transitiveDeps getDeps nsMap startMods =
                   \pending -> \visited -> Logic.ifElse (Sets.null pending) visited (
                     let newVisited = Sets.union visited pending
                         nextDeps =
-                                Sets.fromList (Lists.concat (Lists.map (\nsv -> Maybes.maybe [] (\depMod -> getDeps depMod) (Maps.lookup nsv nsMap)) (Sets.toList pending)))
+                                Sets.fromList (Lists.concat (Lists.map (\nsv -> Optionals.cases (Maps.lookup nsv nsMap) [] (\depMod -> getDeps depMod)) (Sets.toList pending)))
                         newPending = Sets.difference nextDeps newVisited
                     in (go newPending newVisited))
       in (go initialDeps Sets.empty)

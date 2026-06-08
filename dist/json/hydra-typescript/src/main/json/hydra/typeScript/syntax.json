@@ -433,7 +433,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Optional JSDoc documentation comment to emit above this property"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.PropertySignature"}},
     {
@@ -456,13 +456,13 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional constraint (extends clause)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}},
                   {
                     "name": "default",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional default type"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.TypeParameter"}},
     {
@@ -643,7 +643,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A yield expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
                   {
                     "name": "await",
                     "type": {
@@ -726,7 +726,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional function name"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Identifier"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}}},
                   {
                     "name": "params",
                     "type": {
@@ -1125,7 +1125,7 @@
             "annotated": {
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An array destructuring pattern [a, b, c]"}}}]},
-              "body": {"list": {"maybe": {"variable": "hydra.typeScript.syntax.Pattern"}}}}},
+              "body": {"list": {"optional": {"variable": "hydra.typeScript.syntax.Pattern"}}}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ArrayPattern"}},
     {
@@ -1350,7 +1350,7 @@
               "body": {
                 "record": [
                   {"name": "id", "type": {"variable": "hydra.typeScript.syntax.Pattern"}},
-                  {"name": "init", "type": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}]}}},
+                  {"name": "init", "type": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.VariableDeclarator"}},
     {
@@ -1373,7 +1373,7 @@
                 "record": [
                   {"name": "test", "type": {"variable": "hydra.typeScript.syntax.Expression"}},
                   {"name": "consequent", "type": {"variable": "hydra.typeScript.syntax.Statement"}},
-                  {"name": "alternate", "type": {"maybe": {"variable": "hydra.typeScript.syntax.Statement"}}}]}}},
+                  {"name": "alternate", "type": {"optional": {"variable": "hydra.typeScript.syntax.Statement"}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.IfStatement"}},
     {
@@ -1402,7 +1402,7 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The test expression (Nothing for default)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
                   {
                     "name": "consequent",
                     "type": {
@@ -1424,19 +1424,19 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Initialization"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.ForInit"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.ForInit"}}}}},
                   {
                     "name": "test",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test condition"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
                   {
                     "name": "update",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Update expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
                   {"name": "body", "type": {"variable": "hydra.typeScript.syntax.Statement"}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ForStatement"}},
@@ -1532,8 +1532,8 @@
               "body": {
                 "record": [
                   {"name": "block", "type": {"variable": "hydra.typeScript.syntax.BlockStatement"}},
-                  {"name": "handler", "type": {"maybe": {"variable": "hydra.typeScript.syntax.CatchClause"}}},
-                  {"name": "finalizer", "type": {"maybe": {"variable": "hydra.typeScript.syntax.BlockStatement"}}}]}}},
+                  {"name": "handler", "type": {"optional": {"variable": "hydra.typeScript.syntax.CatchClause"}}},
+                  {"name": "finalizer", "type": {"optional": {"variable": "hydra.typeScript.syntax.BlockStatement"}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.TryStatement"}},
     {
@@ -1553,7 +1553,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The catch parameter (can be omitted in ES2019+)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Pattern"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Pattern"}}}}},
                   {"name": "body", "type": {"variable": "hydra.typeScript.syntax.BlockStatement"}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.CatchClause"}},
@@ -1572,7 +1572,7 @@
           "body": {
             "annotated": {
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A return statement"}}}]},
-              "body": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+              "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ReturnStatement"}},
     {
@@ -1581,7 +1581,7 @@
           "body": {
             "annotated": {
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A break statement"}}}]},
-              "body": {"maybe": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
+              "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.BreakStatement"}},
     {
@@ -1590,7 +1590,7 @@
           "body": {
             "annotated": {
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A continue statement"}}}]},
-              "body": {"maybe": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
+              "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ContinueStatement"}},
     {
@@ -1652,7 +1652,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional superclass"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}}},
                   {
                     "name": "body",
                     "type": {
@@ -1904,7 +1904,7 @@
               "body": {
                 "record": [
                   {"name": "specifiers", "type": {"list": {"variable": "hydra.typeScript.syntax.ExportSpecifier"}}},
-                  {"name": "source", "type": {"maybe": {"variable": "hydra.typeScript.syntax.StringLiteral"}}}]}}},
+                  {"name": "source", "type": {"optional": {"variable": "hydra.typeScript.syntax.StringLiteral"}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.NamedExport"}},
     {
@@ -1916,7 +1916,7 @@
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export all declaration (export * from ...)"}}}]},
               "body": {
                 "record": [
-                  {"name": "exported", "type": {"maybe": {"variable": "hydra.typeScript.syntax.Identifier"}}},
+                  {"name": "exported", "type": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}},
                   {"name": "source", "type": {"variable": "hydra.typeScript.syntax.StringLiteral"}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ExportAllDeclaration"}},
@@ -2349,14 +2349,14 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type expression"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}},
                   {
                     "name": "paramName",
                     "type": {
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional parameter name (for @param)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.Identifier"}}}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}}},
                   {
                     "name": "description",
                     "type": {
@@ -2385,7 +2385,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation comment"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ModuleItemWithComments"}},
     {
@@ -2408,7 +2408,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional documentation comment"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.StatementWithComments"}},
     {
@@ -2431,7 +2431,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional JSDoc comment"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.FunctionDeclarationWithComments"}},
     {
@@ -2454,7 +2454,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional JSDoc comment"}}}]},
-                        "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []},
         "name": "hydra.typeScript.syntax.ClassDeclarationWithComments"}}],
   "dependencies": [{"module": "hydra.core"}],

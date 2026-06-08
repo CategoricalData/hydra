@@ -76,7 +76,7 @@ edgeStmt = define "EdgeStmt" $
   T.record [
     "left">: dot "NodeOrSubgraph",
     "right">: nonemptyList $ dot "NodeOrSubgraph",
-    "attributes">: T.maybe $ dot "AttrList"]
+    "attributes">: T.optional $ dot "AttrList"]
 
 equalityPair :: TypeDefinition
 equalityPair = define "EqualityPair" $
@@ -90,7 +90,7 @@ graph_ = define "Graph" $
   T.record [
     "strict">: T.boolean,
     "directed">: T.boolean,
-    "id">: T.maybe $ dot "Id",
+    "id">: T.optional $ dot "Id",
     "statements">: T.list $ dot "Stmt"]
 
 id_ :: TypeDefinition
@@ -101,7 +101,7 @@ nodeId :: TypeDefinition
 nodeId = define "NodeId" $
   T.record [
     "id">: dot "Id",
-    "port">: T.maybe $ dot "Port"]
+    "port">: T.optional $ dot "Port"]
 
 nodeOrSubgraph :: TypeDefinition
 nodeOrSubgraph = define "NodeOrSubgraph" $
@@ -114,15 +114,15 @@ nodeStmt :: TypeDefinition
 nodeStmt = define "NodeStmt" $
   T.record [
     "id">: dot "NodeId",
-    "attributes">: T.maybe $ dot "AttrList"]
+    "attributes">: T.optional $ dot "AttrList"]
 
 --port	:	':' ID [ ':' compass_pt ]
 --      |	':' compass_pt
 port :: TypeDefinition
 port = define "Port" $
   T.record [
-    "id">: T.maybe $ dot "Id",
-    "position">: T.maybe $ dot "CompassPt"]
+    "id">: T.optional $ dot "Id",
+    "position">: T.optional $ dot "CompassPt"]
 
 --stmt_list	:	[ stmt [ ';' ] stmt_list ]
 --stmt	:	node_stmt
@@ -143,9 +143,9 @@ stmt = define "Stmt" $
 subgraph :: TypeDefinition
 subgraph = define "Subgraph" $
   T.record [
-    "subgraphId">: T.maybe $ dot "SubgraphId",
+    "subgraphId">: T.optional $ dot "SubgraphId",
     "statements">: T.list $ dot "Stmt"]
 
 subgraphId :: TypeDefinition
 subgraphId = define "SubgraphId" $
-  T.wrap $ T.maybe $ dot "Id"
+  T.wrap $ T.optional $ dot "Id"

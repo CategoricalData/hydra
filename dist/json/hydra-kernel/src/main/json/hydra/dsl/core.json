@@ -1827,7 +1827,7 @@
                               "annotated": {
                                 "annotation": {
                                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional type scheme of the bound term"}}}]},
-                                "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}},
+                                "body": {"optional": {"variable": "hydra.core.TypeScheme"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "typeScheme"}},
                     "domain": {
@@ -1880,7 +1880,7 @@
                     "annotated": {
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional type scheme of the bound term"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}},
+                      "body": {"optional": {"variable": "hydra.core.TypeScheme"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.core.Binding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -2061,7 +2061,7 @@
                   "annotated": {
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional type scheme of the bound term"}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}},
+                    "body": {"optional": {"variable": "hydra.core.TypeScheme"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -2456,7 +2456,7 @@
                           "annotated": {
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional type scheme of the bound term"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}},
+                            "body": {"optional": {"variable": "hydra.core.TypeScheme"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.core.Binding"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -2477,7 +2477,7 @@
                     "annotated": {
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional type scheme of the bound term"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.TypeScheme"}}}},
+                      "body": {"optional": {"variable": "hydra.core.TypeScheme"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.core.Binding"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -3023,7 +3023,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Term"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "default"}},
                 "domain": {
@@ -3059,7 +3059,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -3202,7 +3202,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                    "body": {"optional": {"variable": "hydra.core.Term"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -3528,7 +3528,7 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Term"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -3554,7 +3554,7 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -7411,7 +7411,7 @@
                           "annotated": {
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional domain type for the lambda"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Type"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "domain"}},
                 "domain": {
@@ -7444,7 +7444,7 @@
                     "annotated": {
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional domain type for the lambda"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}},
             {
               "isLazy": false,
@@ -7575,7 +7575,7 @@
                   "annotated": {
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional domain type for the lambda"}}}]},
-                    "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                    "body": {"optional": {"variable": "hydra.core.Type"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -7889,7 +7889,7 @@
                           "annotated": {
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional domain type for the lambda"}}}]},
-                            "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                            "body": {"optional": {"variable": "hydra.core.Type"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.core.Lambda"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -7910,7 +7910,7 @@
                     "annotated": {
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional domain type for the lambda"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Type"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.core.Lambda"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -11478,7 +11478,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.core.Term"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.core.Term"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -11498,7 +11498,7 @@
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybe"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optional"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
@@ -11511,10 +11511,10 @@
                     "argument": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional value"}}}]},
-                        "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                        "body": {"optional": {"variable": "hydra.core.Term"}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
-        "name": "hydra.dsl.core.termMaybe",
+        "name": "hydra.dsl.core.termOptional",
         "signature": {
           "parameters": [
             {
@@ -11525,7 +11525,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional value"}}}]},
-                      "body": {"maybe": {"variable": "hydra.core.Term"}}}},
+                      "body": {"optional": {"variable": "hydra.core.Term"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.core.Term"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -12618,7 +12618,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the maybe variant of hydra.core.Type"}}}]},
+                  "value": {"literal": {"string": "DSL injection for the optional variant of hydra.core.Type"}}}]},
             "body": {
               "lambda": {
                 "body": {
@@ -12638,7 +12638,7 @@
                                   "term": {
                                     "record": {
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "maybe"}}, "typeName": "hydra.core.Name"}}},
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "optional"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.typed.TypedTerm"}}}}],
@@ -12654,7 +12654,7 @@
                         "body": {"variable": "hydra.core.Type"}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
-        "name": "hydra.dsl.core.typeMaybe",
+        "name": "hydra.dsl.core.typeOptional",
         "signature": {
           "parameters": [
             {
@@ -14114,7 +14114,7 @@
                                         "literal": {
                                           "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]},
                                 "body": {
-                                  "maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
+                                  "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "constraints"}},
                     "domain": {
@@ -14171,7 +14171,7 @@
                               "literal": {
                                 "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]},
                       "body": {
-                        "maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
+                        "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.core.TypeScheme"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
@@ -14357,7 +14357,7 @@
                             "literal": {
                               "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]},
                     "body": {
-                      "maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
+                      "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -14756,7 +14756,7 @@
                                     "literal": {
                                       "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]},
                             "body": {
-                              "maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
+                              "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.core.TypeScheme"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
@@ -14783,7 +14783,7 @@
                               "literal": {
                                 "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]},
                       "body": {
-                        "maybe": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
+                        "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.core.TypeScheme"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},

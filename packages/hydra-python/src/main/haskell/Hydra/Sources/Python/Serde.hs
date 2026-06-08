@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -314,8 +314,8 @@ bitwiseAndToExpr = def "bitwiseAndToExpr" $
   lambda "band" $ lets [
     "lhs">: project Py._BitwiseAnd Py._BitwiseAnd_lhs @@ var "band",
     "rhs">: project Py._BitwiseAnd Py._BitwiseAnd_rhs @@ var "band"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
-      Maybes.map (lambda "l" $
+    Serialization.spaceSep @@ Optionals.cat (list [
+      Optionals.map (lambda "l" $
         Serialization.spaceSep @@ list [bitwiseAndToExpr @@ var "l", Serialization.cst @@ string "&"])
         (var "lhs"),
       just $ shiftExpressionToExpr @@ var "rhs"])
@@ -326,8 +326,8 @@ bitwiseOrToExpr = def "bitwiseOrToExpr" $
   lambda "bor" $ lets [
     "lhs">: project Py._BitwiseOr Py._BitwiseOr_lhs @@ var "bor",
     "rhs">: project Py._BitwiseOr Py._BitwiseOr_rhs @@ var "bor"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
-      Maybes.map (lambda "l" $
+    Serialization.spaceSep @@ Optionals.cat (list [
+      Optionals.map (lambda "l" $
         Serialization.spaceSep @@ list [bitwiseOrToExpr @@ var "l", Serialization.cst @@ string "|"])
         (var "lhs"),
       just $ bitwiseXorToExpr @@ var "rhs"])
@@ -338,8 +338,8 @@ bitwiseXorToExpr = def "bitwiseXorToExpr" $
   lambda "bxor" $ lets [
     "lhs">: project Py._BitwiseXor Py._BitwiseXor_lhs @@ var "bxor",
     "rhs">: project Py._BitwiseXor Py._BitwiseXor_rhs @@ var "bxor"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
-      Maybes.map (lambda "l" $
+    Serialization.spaceSep @@ Optionals.cat (list [
+      Optionals.map (lambda "l" $
         Serialization.spaceSep @@ list [bitwiseXorToExpr @@ var "l", Serialization.cst @@ string "^"])
         (var "lhs"),
       just $ bitwiseAndToExpr @@ var "rhs"])
@@ -371,10 +371,10 @@ caseBlockToExpr = def "caseBlockToExpr" $
     "body">: project Py._CaseBlock Py._CaseBlock_body @@ var "cb"] $
     Serialization.newlineSep @@ list [
       Serialization.noSep @@ list [
-        Serialization.spaceSep @@ Maybes.cat (list [
+        Serialization.spaceSep @@ Optionals.cat (list [
           just $ Serialization.cst @@ string "case",
           just $ patternsToExpr @@ var "patterns",
-          Maybes.map guardToExpr (var "guard")]),
+          Optionals.map guardToExpr (var "guard")]),
         Serialization.cst @@ string ":"],
       blockToExpr @@ var "body"]
 
@@ -386,13 +386,13 @@ classDefinitionToExpr = def "classDefinitionToExpr" $
     "name">: project Py._ClassDefinition Py._ClassDefinition_name @@ var "cd",
     "args">: project Py._ClassDefinition Py._ClassDefinition_arguments @@ var "cd",
     "body">: project Py._ClassDefinition Py._ClassDefinition_body @@ var "cd",
-    "argPart">: Maybes.map (lambda "a" $ Serialization.noSep @@ list [
+    "argPart">: Optionals.map (lambda "a" $ Serialization.noSep @@ list [
       Serialization.cst @@ string "(",
       argsToExpr @@ var "a",
       Serialization.cst @@ string ")"]) (var "args")] $
-    Serialization.newlineSep @@ Maybes.cat (list [
-      Maybes.map decoratorsToExpr (var "decs"),
-      just $ Serialization.noSep @@ Maybes.cat (list [
+    Serialization.newlineSep @@ Optionals.cat (list [
+      Optionals.map decoratorsToExpr (var "decs"),
+      just $ Serialization.noSep @@ Optionals.cat (list [
         just $ Serialization.spaceSep @@ list [Serialization.cst @@ string "class", nameToExpr @@ var "name"],
         var "argPart",
         just $ Serialization.cst @@ string ":"]),
@@ -405,11 +405,11 @@ classPatternToExpr = def "classPatternToExpr" $
     "noa">: project Py._ClassPattern Py._ClassPattern_nameOrAttribute @@ var "cp",
     "pos">: project Py._ClassPattern Py._ClassPattern_positionalPatterns @@ var "cp",
     "kw">: project Py._ClassPattern Py._ClassPattern_keywordPatterns @@ var "cp"] $
-    Serialization.noSep @@ Maybes.cat (list [
+    Serialization.noSep @@ Optionals.cat (list [
       just $ nameOrAttributeToExpr @@ var "noa",
       just $ Serialization.cst @@ string "(",
-      Maybes.map positionalPatternsToExpr (var "pos"),
-      Maybes.map keywordPatternsToExpr (var "kw"),
+      Optionals.map positionalPatternsToExpr (var "pos"),
+      Optionals.map keywordPatternsToExpr (var "kw"),
       just $ Serialization.cst @@ string ")"])
 
 closedPatternToExpr :: TypedTermDefinition (Py.ClosedPattern -> Expr)
@@ -529,9 +529,9 @@ dottedAsNameToExpr = def "dottedAsNameToExpr" $
   lambda "dan" $ lets [
     "name">: project Py._DottedAsName Py._DottedAsName_name @@ var "dan",
     "alias">: project Py._DottedAsName Py._DottedAsName_as @@ var "dan"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ dottedNameToExpr @@ var "name",
-      Maybes.map (lambda "a" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "as", nameToExpr @@ var "a"]) (var "alias")])
+      Optionals.map (lambda "a" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "as", nameToExpr @@ var "a"]) (var "alias")])
 
 dottedNameToExpr :: TypedTermDefinition (Py.DottedName -> Expr)
 dottedNameToExpr = def "dottedNameToExpr" $
@@ -609,14 +609,14 @@ functionDefRawToExpr = def "functionDefRawToExpr" $
     "tparamPart">: Logic.ifElse (Lists.null (var "tparams"))
       nothing
       (just $ Serialization.bracketList @@ Serialization.inlineStyle @@ Lists.map typeParameterToExpr (var "tparams")),
-    "paramPart">: Maybes.map parametersToExpr (var "params"),
-    "retPart">: Maybes.map (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", expressionToExpr @@ var "t"]) (var "retType")] $
+    "paramPart">: Optionals.map parametersToExpr (var "params"),
+    "retPart">: Optionals.map (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", expressionToExpr @@ var "t"]) (var "retType")] $
     Serialization.newlineSep @@ list [
       Serialization.noSep @@ list [
-        Serialization.spaceSep @@ Maybes.cat (list [
+        Serialization.spaceSep @@ Optionals.cat (list [
           var "asyncKw",
           just $ Serialization.cst @@ string "def",
-          just $ Serialization.noSep @@ Maybes.cat (list [
+          just $ Serialization.noSep @@ Optionals.cat (list [
             just $ nameToExpr @@ var "name",
             var "tparamPart",
             just $ Serialization.cst @@ string "(",
@@ -632,8 +632,8 @@ functionDefinitionToExpr = def "functionDefinitionToExpr" $
   lambda "fd" $ lets [
     "decs">: project Py._FunctionDefinition Py._FunctionDefinition_decorators @@ var "fd",
     "raw">: project Py._FunctionDefinition Py._FunctionDefinition_raw @@ var "fd"] $
-    Serialization.newlineSep @@ Maybes.cat (list [
-      Maybes.map decoratorsToExpr (var "decs"),
+    Serialization.newlineSep @@ Optionals.cat (list [
+      Optionals.map decoratorsToExpr (var "decs"),
       just $ functionDefRawToExpr @@ var "raw"])
 
 groupToExpr :: TypedTermDefinition (Py.Group -> Expr)
@@ -658,13 +658,10 @@ importFromAsNameToExpr = def "importFromAsNameToExpr" $
   lambda "ifan" $ lets [
     "name">: project Py._ImportFromAsName Py._ImportFromAsName_name @@ var "ifan",
     "alias">: project Py._ImportFromAsName Py._ImportFromAsName_as @@ var "ifan"] $
-    Maybes.maybe
-      (nameToExpr @@ var "name")
-      (lambda "a" $ Serialization.spaceSep @@ list [
+    Optionals.cases (var "alias") (nameToExpr @@ var "name") (lambda "a" $ Serialization.spaceSep @@ list [
         nameToExpr @@ var "name",
         Serialization.cst @@ string "as",
         nameToExpr @@ var "a"])
-      (var "alias")
 
 importFromTargetsToExpr :: TypedTermDefinition (Py.ImportFromTargets -> Expr)
 importFromTargetsToExpr = def "importFromTargetsToExpr" $
@@ -689,10 +686,10 @@ importFromToExpr = def "importFromToExpr" $
     "prefixes">: project Py._ImportFrom Py._ImportFrom_prefixes @@ var "if_",
     "name">: project Py._ImportFrom Py._ImportFrom_dottedName @@ var "if_",
     "targets">: project Py._ImportFrom Py._ImportFrom_targets @@ var "if_",
-    "lhs">: Serialization.noSep @@ Maybes.cat (
+    "lhs">: Serialization.noSep @@ Optionals.cat (
       Lists.concat (list [
         Lists.map (lambda "p" $ just $ relativeImportPrefixToExpr @@ var "p") (var "prefixes"),
-        list [Maybes.map dottedNameToExpr (var "name")]]))] $
+        list [Optionals.map dottedNameToExpr (var "name")]]))] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "from",
       var "lhs",
@@ -901,9 +898,9 @@ paramToExpr = def "paramToExpr" $
   lambda "p" $ lets [
     "name">: project Py._Param Py._Param_name @@ var "p",
     "ann">: project Py._Param Py._Param_annotation @@ var "p"] $
-    Serialization.noSep @@ Maybes.cat (list [
+    Serialization.noSep @@ Optionals.cat (list [
       just $ nameToExpr @@ var "name",
-      Maybes.map annotationToExpr (var "ann")])
+      Optionals.map annotationToExpr (var "ann")])
 
 parametersToExpr :: TypedTermDefinition (Py.Parameters -> Expr)
 parametersToExpr = def "parametersToExpr" $
@@ -958,9 +955,9 @@ powerToExpr = def "powerToExpr" $
   lambda "p" $ lets [
     "lhs">: project Py._Power Py._Power_lhs @@ var "p",
     "rhs">: project Py._Power Py._Power_rhs @@ var "p"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ awaitPrimaryToExpr @@ var "lhs",
-      Maybes.map (lambda "r" $
+      Optionals.map (lambda "r" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "**", factorToExpr @@ var "r"])
         (var "rhs")])
 
@@ -1009,9 +1006,9 @@ raiseExpressionToExpr = def "raiseExpressionToExpr" $
   lambda "re" $ lets [
     "expr">: project Py._RaiseExpression Py._RaiseExpression_expression @@ var "re",
     "from_">: project Py._RaiseExpression Py._RaiseExpression_from @@ var "re"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ expressionToExpr @@ var "expr",
-      Maybes.map (lambda "f" $
+      Optionals.map (lambda "f" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "from", expressionToExpr @@ var "f"])
         (var "from_")])
 
@@ -1019,9 +1016,9 @@ raiseStatementToExpr :: TypedTermDefinition (Py.RaiseStatement -> Expr)
 raiseStatementToExpr = def "raiseStatementToExpr" $
   doc "Serialize a raise statement" $
   lambda "rs" $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.cst @@ string "raise",
-      Maybes.map raiseExpressionToExpr (unwrap Py._RaiseStatement @@ var "rs")])
+      Optionals.map raiseExpressionToExpr (unwrap Py._RaiseStatement @@ var "rs")])
 
 relativeImportPrefixToExpr :: TypedTermDefinition (Py.RelativeImportPrefix -> Expr)
 relativeImportPrefixToExpr = def "relativeImportPrefixToExpr" $
@@ -1183,7 +1180,7 @@ stringToExpr = def "stringToExpr" $
   doc "Serialize a Python string literal" $
   lambda "s" $ lets [
     "content">: project Py._String Py._String_value @@ var "s",
-    "prefix">: Maybes.maybe (string "") stringPrefixToText (project Py._String Py._String_prefix @@ var "s"),
+    "prefix">: Optionals.cases (project Py._String Py._String_prefix @@ var "s") (string "") stringPrefixToText,
     "style">: project Py._String Py._String_quoteStyle @@ var "s"] $
     cases Py._QuoteStyle (var "style") Nothing [
       Py._QuoteStyle_single>>: constant $ Serialization.cst @@ (Strings.cat2 (var "prefix") (escapePythonString @@ false @@ var "content")),
@@ -1268,9 +1265,9 @@ tupleToExpr = def "tupleToExpr" $
   doc "Serialize a Python tuple" $
   lambda "t" $ lets [
     "es">: unwrap Py._Tuple @@ var "t"] $
-    Maybes.fromMaybe
+    Optionals.fromOptional
       (Serialization.parenListAdaptive @@ Lists.map starNamedExpressionToExpr (var "es"))
-      (Maybes.map
+      (Optionals.map
         (lambda "firstEs" $
           Logic.ifElse (Equality.equal (Lists.length (var "es")) (int32 1))
             (Serialization.parens @@ (Serialization.noSep @@ list [
@@ -1286,7 +1283,7 @@ typeAliasToExpr = def "typeAliasToExpr" $
     "name">: project Py._TypeAlias Py._TypeAlias_name @@ var "ta",
     "tparams">: project Py._TypeAlias Py._TypeAlias_typeParams @@ var "ta",
     "expr">: project Py._TypeAlias Py._TypeAlias_expression @@ var "ta",
-    "alias">: Serialization.noSep @@ Maybes.cat (list [
+    "alias">: Serialization.noSep @@ Optionals.cat (list [
       just $ nameToExpr @@ var "name",
       Logic.ifElse (Lists.null (var "tparams"))
         nothing
@@ -1313,10 +1310,10 @@ typedAssignmentToExpr = def "typedAssignmentToExpr" $
     "lhs">: project Py._TypedAssignment Py._TypedAssignment_lhs @@ var "ta",
     "typ">: project Py._TypedAssignment Py._TypedAssignment_type @@ var "ta",
     "rhs">: project Py._TypedAssignment Py._TypedAssignment_rhs @@ var "ta"] $
-    Serialization.spaceSep @@ Maybes.cat (list [
+    Serialization.spaceSep @@ Optionals.cat (list [
       just $ Serialization.noSep @@ list [singleTargetToExpr @@ var "lhs", Serialization.cst @@ string ":"],
       just $ expressionToExpr @@ var "typ",
-      Maybes.map annotatedRhsToExpr (var "rhs")])
+      Optionals.map annotatedRhsToExpr (var "rhs")])
 
 untypedAssignmentToExpr :: TypedTermDefinition (Py.UntypedAssignment -> Expr)
 untypedAssignmentToExpr = def "untypedAssignmentToExpr" $
@@ -1341,7 +1338,7 @@ whileStatementToExpr = def "whileStatementToExpr" $
     "cond">: project Py._WhileStatement Py._WhileStatement_condition @@ var "ws",
     "body">: project Py._WhileStatement Py._WhileStatement_body @@ var "ws",
     "else_">: project Py._WhileStatement Py._WhileStatement_else @@ var "ws"] $
-    Serialization.newlineSep @@ Maybes.cat (list [
+    Serialization.newlineSep @@ Optionals.cat (list [
       just $ Serialization.newlineSep @@ list [
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "while",
@@ -1349,7 +1346,7 @@ whileStatementToExpr = def "whileStatementToExpr" $
             namedExpressionToExpr @@ var "cond",
             Serialization.cst @@ string ":"]],
         blockToExpr @@ var "body"],
-      Maybes.map (lambda "eb" $
+      Optionals.map (lambda "eb" $
         Serialization.newlineSep @@ list [
           Serialization.cst @@ string "else:",
           blockToExpr @@ var "eb"])

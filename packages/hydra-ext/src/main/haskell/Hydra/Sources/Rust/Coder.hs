@@ -15,7 +15,7 @@ import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
@@ -247,7 +247,7 @@ encodeProjectionElim :: TypedTermDefinition (InferenceContext -> Graph -> Projec
 encodeProjectionElim = def "encodeProjectionElim" $
   "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied projection: |v| v.field
           (right (rustClosure @@ list [string "v"] @@
             (inject R._Expression R._Expression_fieldAccess $
@@ -337,8 +337,8 @@ encodeTerm = def "encodeTerm" $
          right (rustCall @@ (rustExprPath @@ string "BTreeMap::from") @@
            list [inject R._Expression R._Expression_array $
              inject R._ArrayExpr R._ArrayExpr_elements (var "pairs")]),
-     _Term_maybe>>: lambda "mt" $
-       Maybes.cases (var "mt")
+     _Term_optional>>: lambda "mt" $
+       Optionals.cases (var "mt")
          (right (rustExprPath @@ string "None"))
          (lambda "val" $
            "sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "val") $
@@ -407,10 +407,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ Maybes.maybe
-      (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (reify Core.typeSchemeBody)
-      (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) $
+    "typ" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [
@@ -462,7 +459,7 @@ encodeType = def "encodeType" $
         "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
         "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
           right (rustApply2 @@ string "BTreeMap" @@ var "kt" @@ var "vt"),
-      _Type_maybe>>: lambda "inner" $
+      _Type_optional>>: lambda "inner" $
         Eithers.map (lambda "enc" $ rustApply1 @@ string "Option" @@ var "enc")
           (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
       _Type_either>>: lambda "et" $
@@ -610,7 +607,7 @@ encodeUnionElim = def "encodeUnionElim" $
                 R._MatchArm_body>>: var "armBody"]))
           (var "caseFields")) $
         -- Add default arm if present
-        "allArms" <<~ (Maybes.cases (var "defCase")
+        "allArms" <<~ (Optionals.cases (var "defCase")
           (right (var "arms"))
           (lambda "dt" $
             "defBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "dt") (Core.termVariable (wrap _Name (string "v")))))) $
@@ -619,7 +616,7 @@ encodeUnionElim = def "encodeUnionElim" $
                 R._MatchArm_pattern>>: inject R._Pattern R._Pattern_wildcard unit,
                 R._MatchArm_guard>>: nothing,
                 R._MatchArm_body>>: var "defBody"]])))) $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: |v| match v { ... }
           (right (rustClosure @@ list [string "v"] @@
             (inject R._Expression R._Expression_match $
@@ -638,7 +635,7 @@ encodeUnionElim = def "encodeUnionElim" $
 encodeUnwrapElim :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
   "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
-        Maybes.cases (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: |v| v.0
           (right (rustClosure @@ list [string "v"] @@
             (inject R._Expression R._Expression_tupleIndex $
