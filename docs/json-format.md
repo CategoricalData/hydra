@@ -128,14 +128,32 @@ Consumers may rely on this order (e.g., for stable digests, for deterministic co
 
 A *record term* (`Term.record`, i.e., a runtime record value) encodes as a **JSON object**
 keyed by field name.
-**Key order in a record-term object is alphabetical by field name** (lexicographic sort).
-This is a property of the encoder, not of the source type.
-Consumers must not depend on key order in a record-term object — JSON objects are unordered
-by spec — but if they reproduce the encoding for a digest, they must follow this rule.
+**Key order in a record-term object preserves the field order of the record** — the same
+declaration order that the record type uses, not an alphabetical sort.
+This is a property of the encoder: the encoder walks the record's fields in order and emits
+them in that order.
 
-The two rules are different on purpose:
-record types appear in the AST and need declaration order to round-trip the source;
-record terms are runtime data and need a canonical order for byte-stable output.
+JSON objects are order-agnostic *by spec* — `{"a": 1, "b": 2}` and `{"b": 2, "a": 1}` denote
+the same JSON value — but every tool that emits JSON nonetheless chooses *some* order. Hydra
+chooses to preserve declaration order rather than alphabetize. This makes Hydra-generated JSON
+both **deterministic** (the same value always serializes to the same bytes) and **intuitive**
+(fields read in the order the author declared them — e.g. a `PrimitiveDefinition`'s
+`defaultImplementation` stays last, where it was written, instead of floating to the front
+under an alphabetical sort).
+
+The two rules are now aligned on purpose:
+both record types and record terms preserve declaration order.
+A consumer that reproduces the encoding for a digest must emit record-term keys in field order.
+
+> **Order-sensitive equality.** Because the `Value.object` payload is an *ordered list of
+> key/value pairs* (`[(string, Value)]`), not an unordered map, **equality of `Value` objects
+> is order-sensitive.** Two objects with the same pairs in a different order are equal *as JSON*
+> (per the spec) but **not equal as Hydra `Value`s**. Anything that compares, hashes, or
+> deduplicates `Value`s — round-trip tests, digest computation, structural diffs — must account
+> for this: a re-serialization that reorders fields will not compare equal to the original
+> `Value`, even though both are valid encodings of the same JSON. Decoders that only need to
+> *look fields up by name* (the common case) are unaffected — they collapse the pair list into a
+> name-keyed map at the boundary and never observe order.
 
 ## Optional fields
 
@@ -339,7 +357,7 @@ the encoder must produce identical bytes for identical input across runs and acr
 Most ordering questions are settled by other rules above:
 
 - Record types preserve DSL declaration order ([Records](#records)).
-- Record-term object keys are alphabetical by field name ([Records](#records)).
+- Record-term object keys preserve the record's field (declaration) order ([Records](#records)).
 - `Type.map` / `Term.map` arrays preserve the source map's iteration order ([Maps](#maps)).
 - Tagged-union objects have exactly one key.
 
@@ -352,8 +370,8 @@ the canonical example.
 For these, writers must emit keys in **lexicographic order** (Unicode code-point order, equivalent to
 `LC_ALL=C` sort).
 This rule does **not** apply to `Map` values, which use the `[{"key", "value"}]` envelope and preserve
-source-map iteration order, nor to record-term JSON objects (alphabetical by field name, which is the same
-rule applied separately).
+source-map iteration order, nor to record-term JSON objects (which preserve field declaration order — a
+separate rule; see [Records](#records)).
 
 ### Manifest array values
 
@@ -429,7 +447,7 @@ A conforming encoder must:
 
 - Emit byte-identical output for byte-identical input modules.
 - Preserve declared field order in record types (see [Records](#records)).
-- Sort record-term object keys alphabetically by field name.
+- Preserve field (declaration) order in record-term object keys (see [Records](#records)).
 - Sort plain JSON-object keys lexicographically (e.g., `digest.json`'s `hashes`)
   and `manifest.json` array values lexicographically (see [Stability of byte order](#stability-of-byte-order)).
 - Emit `null` only for `Maybe.Nothing`; never as a generic sentinel.
