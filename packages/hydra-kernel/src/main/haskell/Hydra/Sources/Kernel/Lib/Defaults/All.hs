@@ -51,8 +51,6 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Lib.Defaults.Lists as DefaultLists
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Maybes as DefaultMaybes
-import qualified Hydra.Sources.Kernel.Lib.Defaults.Pairs as DefaultPairs
 
 
 ns :: ModuleName
@@ -70,9 +68,7 @@ define = definitionInModuleName ns
 -- native Haskell implementations registered via DefaultsPrimitives.
 defaultLibModules :: [Module]
 defaultLibModules = [
-  DefaultLists.module_,
-  DefaultMaybes.module_,
-  DefaultPairs.module_
+  DefaultLists.module_
   ]
 
 -- | Module names of all default library modules

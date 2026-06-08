@@ -11,16 +11,12 @@ import Hydra.Sources.Libraries
 import Hydra.Dsl.Prims as Prims
 
 import qualified Hydra.Lib.Defaults.Lists as DefaultLists
-import qualified Hydra.Lib.Defaults.Maybes as DefaultMaybes
-import qualified Hydra.Lib.Defaults.Pairs as DefaultPairs
 
 
 -- | All default-library implementations, to be used as replacements for standard libraries in test mode.
 defaultLibraries :: [Library]
 defaultLibraries = [
-  defaultLibLists,
-  defaultLibMaybes,
-  defaultLibPairs]
+  defaultLibLists]
 
 -- Helpers
 
@@ -126,29 +122,6 @@ defaultLibLists = standardLibrary _hydra_lib_lists [
     _ -> unexpected cx "lists.zipWith" 3]
 
 -- ---- Maps ----
-
--- ---- Maybes ----
-
-defaultLibMaybes :: Library
-defaultLibMaybes = standardLibrary _hydra_lib_maybes [
-  mkPrim _maybes_cases 3 $ \cx g args -> case args of
-    [t, def, f] -> DefaultMaybes.cases cx g t def f
-    _ -> unexpected cx "maybes.cases" 3,
-  mkPrim _maybes_maybe 3 $ \cx g args -> case args of
-    [def, f, t] -> DefaultMaybes.maybe cx g def f t
-    _ -> unexpected cx "maybes.maybe" 3]
-
--- ---- Pairs ----
-
-defaultLibPairs :: Library
-defaultLibPairs = standardLibrary _hydra_lib_pairs [
-  mkPrim _pairs_first 1 $ \cx g args -> case args of
-    [p] -> DefaultPairs.first cx g p
-    _ -> unexpected cx "pairs.first" 1,
-  mkPrim _pairs_second 1 $ \cx g args -> case args of
-    [p] -> DefaultPairs.second cx g p
-    _ -> unexpected cx "pairs.second" 1]
-
 
 -- | Error helper for wrong argument count
 unexpected :: InferenceContext -> String -> Int -> Either Error Term
