@@ -324,13 +324,13 @@
 (defun alter-is-nothing-p (m)
   (or (null m)
       (and (consp m) (eq (first m) :none))
-      (and (consp m) (eq (first m) :maybe)
+      (and (consp m) (eq (first m) :optional)
            (or (null (cdr m)) (null (second m))))))
 
 (defun alter-get-value (m)
   (cond
     ((and (consp m) (eq (first m) :given)) (second m))
-    ((and (consp m) (eq (first m) :maybe))
+    ((and (consp m) (eq (first m) :optional))
      (let ((body (second m)))
        (if (and (consp body) (eq (first body) :given))
            (second body)

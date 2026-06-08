@@ -102,13 +102,13 @@
 (defun alter-is-nothing-p (m)
   (or (null m)
       (and (consp m) (eq (car m) :none))
-      (and (consp m) (eq (car m) :maybe)
+      (and (consp m) (eq (car m) :optional)
            (or (null (cdr m)) (null (cadr m))))))
 
 (defun alter-get-value (m)
   (cond
     ((and (consp m) (eq (car m) :given)) (cadr m))
-    ((and (consp m) (eq (car m) :maybe))
+    ((and (consp m) (eq (car m) :optional))
      (let ((body (cadr m)))
        (if (and (consp body) (eq (car body) :given))
            (cadr body)
