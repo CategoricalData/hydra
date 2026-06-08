@@ -17,7 +17,7 @@ import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -71,9 +71,9 @@ dataParamToExpr dp =
 
       let name = Syntax.paramDataName dp
           stype = Syntax.paramDataDecltpe dp
-      in (Serialization.noSep (Maybes.cat [
-        Maybes.pure (nameToExpr name),
-        (Maybes.map (\t -> Serialization.spaceSep [
+      in (Serialization.noSep (Optionals.cat [
+        Optionals.pure (nameToExpr name),
+        (Optionals.map (\t -> Serialization.spaceSep [
           Serialization.cst ":",
           (typeToExpr t)]) stype)]))
 -- | Convert a data reference to an expression
@@ -100,19 +100,19 @@ defnToExpr def =
             scod = Syntax.defDefnDecltpe v0
             body = Syntax.defDefnBody v0
             tparamsExpr =
-                    Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))
+                    Logic.ifElse (Lists.null tparams) Nothing (Optionals.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))
             scodExpr =
-                    Maybes.map (\t -> Serialization.spaceSep [
+                    Optionals.map (\t -> Serialization.spaceSep [
                       Serialization.cst ":",
                       (typeToExpr t)]) scod
             paramssExprs = Lists.map (\ps -> Serialization.parenListAdaptive (Lists.map dataParamToExpr ps)) paramss
             nameAndParams =
-                    Serialization.noSep (Maybes.cat (Lists.concat [
+                    Serialization.noSep (Optionals.cat (Lists.concat [
                       [
-                        Maybes.pure (dataNameToExpr name)],
+                        Optionals.pure (dataNameToExpr name)],
                       [
                         tparamsExpr],
-                      (Lists.map (\pe -> Maybes.pure pe) paramssExprs),
+                      (Lists.map (\pe -> Optionals.pure pe) paramssExprs),
                       [
                         scodExpr]]))
             bodyExpr = termToExpr body
@@ -132,27 +132,27 @@ defnToExpr def =
         let name = Syntax.typeDefnName v0
             tparams = Syntax.typeDefnTparams v0
             body = Syntax.typeDefnBody v0
-        in (Serialization.spaceSep (Maybes.cat [
-          Maybes.pure (Serialization.cst "type"),
-          (Maybes.pure (typeNameToExpr name)),
-          (Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))),
-          (Maybes.pure (Serialization.cst "=")),
-          (Maybes.pure (typeToExpr body))]))
+        in (Serialization.spaceSep (Optionals.cat [
+          Optionals.pure (Serialization.cst "type"),
+          (Optionals.pure (typeNameToExpr name)),
+          (Logic.ifElse (Lists.null tparams) Nothing (Optionals.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))),
+          (Optionals.pure (Serialization.cst "=")),
+          (Optionals.pure (typeToExpr body))]))
       Syntax.DefnVal v0 ->
         let mods = Syntax.valDefnMods v0
             pats = Syntax.valDefnPats v0
             typ = Syntax.valDefnDecltpe v0
             rhs = Syntax.valDefnRhs v0
             nameStr =
-                    Maybes.fromMaybe "" (Maybes.map (\firstPat ->
+                    Optionals.fromOptional "" (Optionals.map (\firstPat ->
                       let patName =
                               case firstPat of
                                 Syntax.PatVar v1 -> Syntax.varPatName v1
                       in (Syntax.unPredefString (Syntax.nameDataValue patName))) (Lists.maybeHead pats))
             nameAndType =
-                    Maybes.maybe (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
+                    Optionals.cases typ (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
                       Serialization.cst (Strings.cat2 nameStr ":"),
-                      (typeToExpr t)]) typ
+                      (typeToExpr t)])
             valKeyword = Logic.ifElse (Lists.null mods) "val" "lazy val"
         in (Serialization.spaceSep [
           Serialization.cst valKeyword,
@@ -166,12 +166,12 @@ defnToExpr def =
             ctor = Syntax.classDefnCtor v0
             paramss = Syntax.primaryCtorParamss ctor
             tparamsExpr =
-                    Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))
+                    Logic.ifElse (Lists.null tparams) Nothing (Optionals.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))
             paramsExpr =
-                    Logic.ifElse (Lists.null paramss) Nothing (Maybes.pure (Serialization.parenListAdaptive (Lists.map dataParamToExpr (Lists.concat paramss))))
+                    Logic.ifElse (Lists.null paramss) Nothing (Optionals.pure (Serialization.parenListAdaptive (Lists.map dataParamToExpr (Lists.concat paramss))))
             nameAndParams =
-                    Serialization.noSep (Maybes.cat [
-                      Maybes.pure (typeNameToExpr name),
+                    Serialization.noSep (Optionals.cat [
+                      Optionals.pure (typeNameToExpr name),
                       tparamsExpr,
                       paramsExpr])
         in (Serialization.spaceSep (Lists.concat [
@@ -187,9 +187,9 @@ defnToExpr def =
             enumHeader =
                     Serialization.spaceSep [
                       Serialization.cst "enum",
-                      (Serialization.noSep (Maybes.cat [
-                        Maybes.pure (typeNameToExpr name),
-                        (Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams))))])),
+                      (Serialization.noSep (Optionals.cat [
+                        Optionals.pure (typeNameToExpr name),
+                        (Logic.ifElse (Lists.null tparams) Nothing (Optionals.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams))))])),
                       (Serialization.cst ":")]
             enumCases =
                     Lists.map (\s -> Serialization.spaceSep [
@@ -247,7 +247,7 @@ importerToExpr imp =
                   case ref of
                     Syntax.RefDataName v0 -> Syntax.unPredefString (Syntax.nameDataValue v0)
           forImportees =
-                  Logic.ifElse (Lists.null importees) (Serialization.cst "") (Logic.ifElse (Equality.equal (Lists.length importees) 1) (Maybes.fromMaybe (Serialization.cst "") (Maybes.map (\firstImp -> Serialization.noSep [
+                  Logic.ifElse (Lists.null importees) (Serialization.cst "") (Logic.ifElse (Equality.equal (Lists.length importees) 1) (Optionals.fromOptional (Serialization.cst "") (Optionals.map (\firstImp -> Serialization.noSep [
                     Serialization.cst ".",
                     case firstImp of
                       Syntax.ImporteeWildcard -> Serialization.cst "*"
@@ -393,7 +393,7 @@ typeToExpr typ =
           (Serialization.bracketList Serialization.inlineStyle (Lists.map typeToExpr args))])
       Syntax.TypeFunction v0 ->
         let cod = Syntax.functionTypeRes v0
-            dom = Maybes.fromMaybe cod (Lists.maybeHead (Syntax.functionTypeParams v0))
+            dom = Optionals.fromOptional cod (Lists.maybeHead (Syntax.functionTypeParams v0))
         in (Serialization.ifx functionArrowOp (typeToExpr dom) (typeToExpr cod))
       Syntax.TypeLambda v0 ->
         let params = Syntax.lambdaTypeTparams v0

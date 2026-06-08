@@ -8,7 +8,7 @@
   "Library namespaces whose public vars should be globalized."
   ["hydra.lib.chars" "hydra.lib.eithers" "hydra.lib.equality"
    "hydra.lib.lists" "hydra.lib.literals" "hydra.lib.logic"
-   "hydra.lib.maps" "hydra.lib.math" "hydra.lib.maybes"
+   "hydra.lib.maps" "hydra.lib.math" "hydra.lib.optionals"
    "hydra.lib.pairs" "hydra.lib.sets" "hydra.lib.strings"])
 
 (defn globalize-ns-vars!
@@ -76,14 +76,14 @@
    "hydra.test.transform" "hydra.test.utils" "hydra.yaml.model"
    "hydra.json.yaml.decode" "hydra.json.yaml.encode" "hydra.eval.lib.eithers"
    "hydra.eval.lib.equality" "hydra.eval.lib.lists" "hydra.eval.lib.logic"
-   "hydra.eval.lib.maps" "hydra.eval.lib.math" "hydra.eval.lib.maybes"
+   "hydra.eval.lib.maps" "hydra.eval.lib.math" "hydra.eval.lib.optionals"
    "hydra.eval.lib.pairs" "hydra.eval.lib.sets" "hydra.dsls"
    ;; Test namespaces
    "hydra.test.testEnv" "hydra.test.testGraph" "hydra.test.testTerms"
    "hydra.test.testTypes" "hydra.test.testSuite" "hydra.test.lib.chars"
    "hydra.test.lib.eithers" "hydra.test.lib.equality" "hydra.test.lib.lists"
    "hydra.test.lib.literals" "hydra.test.lib.logic" "hydra.test.lib.maps"
-   "hydra.test.lib.math" "hydra.test.lib.maybes" "hydra.test.lib.pairs"
+   "hydra.test.lib.math" "hydra.test.lib.optionals" "hydra.test.lib.pairs"
    "hydra.test.lib.regex" "hydra.test.lib.sets" "hydra.test.lib.strings"
    "hydra.test.hoisting.all" "hydra.test.hoisting.cases" "hydra.test.hoisting.let"
    "hydra.test.annotations" "hydra.test.dependencies" "hydra.test.differentiation"
@@ -133,7 +133,7 @@
    "hydra.decode.coders" "hydra.decode.core" "hydra.decode.json.model"
    "hydra.decode.parsing" "hydra.decode.relational" "hydra.decode.testing"
    "hydra.decode.topology" "hydra.decode.util" "hydra.decode.variants"
-   "hydra.eval.lib.eithers" "hydra.eval.lib.maybes" "hydra.eval.lib.sets"
+   "hydra.eval.lib.eithers" "hydra.eval.lib.optionals" "hydra.eval.lib.sets"
    "hydra.extract.util" "hydra.annotations"
    "hydra.decode.packaging" "hydra.decode.paths" "hydra.decode.typed"
    "hydra.decode.query" "hydra.environment" "hydra.templates"
@@ -155,7 +155,7 @@
   ["hydra.test.checking.failures" "hydra.test.dependencies"
    "hydra.test.formatting" "hydra.test.hoisting.cases" "hydra.test.hoisting.let"
    "hydra.test.json.roundtrip" "hydra.test.json.writer" "hydra.test.json.yaml"
-   "hydra.test.lib.eithers" "hydra.test.lib.maps" "hydra.test.lib.maybes"
+   "hydra.test.lib.eithers" "hydra.test.lib.maps" "hydra.test.lib.optionals"
    "hydra.test.lib.pairs" "hydra.test.lib.sets" "hydra.test.rewriting"
    "hydra.test.serialization" "hydra.test.sorting" "hydra.test.strip"
    "hydra.test.substitution" "hydra.test.testTypes" "hydra.test.unification"

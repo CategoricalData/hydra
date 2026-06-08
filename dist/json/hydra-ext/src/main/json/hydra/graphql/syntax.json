@@ -49,9 +49,9 @@
           "body": {
             "record": [
               {"name": "OperationType", "type": {"variable": "hydra.graphql.syntax.OperationType"}},
-              {"name": "Name", "type": {"maybe": {"variable": "hydra.graphql.syntax.Name"}}},
-              {"name": "VariablesDefinition", "type": {"maybe": {"variable": "hydra.graphql.syntax.VariablesDefinition"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Name", "type": {"optional": {"variable": "hydra.graphql.syntax.Name"}}},
+              {"name": "VariablesDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.VariablesDefinition"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.OperationDefinition_Sequence"}},
@@ -84,11 +84,11 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Alias", "type": {"maybe": {"variable": "hydra.graphql.syntax.Alias"}}},
+              {"name": "Alias", "type": {"optional": {"variable": "hydra.graphql.syntax.Alias"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Arguments", "type": {"maybe": {"variable": "hydra.graphql.syntax.Arguments"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "SelectionSet", "type": {"maybe": {"variable": "hydra.graphql.syntax.SelectionSet"}}}]},
+              {"name": "Arguments", "type": {"optional": {"variable": "hydra.graphql.syntax.Arguments"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "SelectionSet", "type": {"optional": {"variable": "hydra.graphql.syntax.SelectionSet"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.Field"}},
     {
@@ -117,7 +117,7 @@
           "body": {
             "record": [
               {"name": "FragmentName", "type": {"variable": "hydra.graphql.syntax.FragmentName"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.FragmentSpread"}},
     {
@@ -125,8 +125,8 @@
         "body": {
           "body": {
             "record": [
-              {"name": "TypeCondition", "type": {"maybe": {"variable": "hydra.graphql.syntax.TypeCondition"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "TypeCondition", "type": {"optional": {"variable": "hydra.graphql.syntax.TypeCondition"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InlineFragment"}},
@@ -137,7 +137,7 @@
             "record": [
               {"name": "FragmentName", "type": {"variable": "hydra.graphql.syntax.FragmentName"}},
               {"name": "TypeCondition", "type": {"variable": "hydra.graphql.syntax.TypeCondition"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.FragmentDefinition"}},
@@ -213,8 +213,8 @@
             "record": [
               {"name": "Variable", "type": {"variable": "hydra.graphql.syntax.Variable"}},
               {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
-              {"name": "DefaultValue", "type": {"maybe": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "DefaultValue", "type": {"optional": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.VariablesDefinition"}},
     {
@@ -262,7 +262,7 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Arguments", "type": {"maybe": {"variable": "hydra.graphql.syntax.Arguments"}}}]},
+              {"name": "Arguments", "type": {"optional": {"variable": "hydra.graphql.syntax.Arguments"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.Directive"}},
     {
@@ -306,8 +306,8 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "RootOperationTypeDefinition", "type": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.SchemaDefinition"}},
@@ -325,7 +325,7 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "RootOperationTypeDefinition", "type": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.SchemaExtension_Sequence"}},
@@ -373,9 +373,9 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.ScalarTypeDefinition"}},
     {
@@ -392,11 +392,11 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"maybe": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "FieldsDefinition", "type": {"maybe": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}]},
+              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "FieldsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.ObjectTypeDefinition"}},
     {
@@ -415,8 +415,8 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"maybe": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.ObjectTypeExtension_Sequence"}},
@@ -426,8 +426,8 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"maybe": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.ObjectTypeExtension_Sequence2"}},
     {
@@ -462,7 +462,7 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Amp", "type": {"maybe": {"unit": {}}}},
+              {"name": "Amp", "type": {"optional": {"unit": {}}}},
               {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.ImplementsInterfaces_Sequence2"}},
@@ -475,11 +475,11 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ArgumentsDefinition", "type": {"maybe": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
+              {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
               {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.FieldDefinition"}},
     {
@@ -491,11 +491,11 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
               {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
-              {"name": "DefaultValue", "type": {"maybe": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "DefaultValue", "type": {"optional": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InputValueDefinition"}},
     {
@@ -512,10 +512,10 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"maybe": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InterfaceTypeDefinition_Sequence"}},
@@ -524,10 +524,10 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
               {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InterfaceTypeDefinition_Sequence2"}},
     {
@@ -546,8 +546,8 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"maybe": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence"}},
@@ -557,7 +557,7 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"maybe": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
               {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence2"}},
@@ -575,10 +575,10 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "UnionMemberTypes", "type": {"maybe": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "UnionMemberTypes", "type": {"optional": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.UnionTypeDefinition"}},
     {
@@ -604,7 +604,7 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Or", "type": {"maybe": {"unit": {}}}},
+              {"name": "Or", "type": {"optional": {"unit": {}}}},
               {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.UnionMemberTypes_Sequence2"}},
@@ -623,7 +623,7 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "UnionMemberTypes", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.UnionTypeExtension_Sequence"}},
@@ -641,10 +641,10 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "EnumValuesDefinition", "type": {"maybe": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "EnumValuesDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.EnumTypeDefinition"}},
     {
@@ -656,9 +656,9 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "EnumValue", "type": {"variable": "hydra.graphql.syntax.EnumValue"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.EnumValueDefinition"}},
     {
@@ -676,7 +676,7 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "EnumValuesDefinition", "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.EnumTypeExtension_Sequence"}},
@@ -703,9 +703,9 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "InputFieldsDefinition", "type": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InputObjectTypeDefinition_Sequence"}},
@@ -714,9 +714,9 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InputObjectTypeDefinition_Sequence2"}},
     {
@@ -738,7 +738,7 @@
           "body": {
             "record": [
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"maybe": {"variable": "hydra.graphql.syntax.Directives"}}},
+              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
               {"name": "InputFieldsDefinition", "type": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.InputObjectTypeExtension_Sequence"}},
@@ -756,10 +756,10 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Description", "type": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}},
+              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ArgumentsDefinition", "type": {"maybe": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
-              {"name": "Repeatable", "type": {"maybe": {"unit": {}}}},
+              {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
+              {"name": "Repeatable", "type": {"optional": {"unit": {}}}},
               {"name": "DirectiveLocations", "type": {"variable": "hydra.graphql.syntax.DirectiveLocations"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.DirectiveDefinition"}},
@@ -786,7 +786,7 @@
         "body": {
           "body": {
             "record": [
-              {"name": "Or", "type": {"maybe": {"unit": {}}}},
+              {"name": "Or", "type": {"optional": {"unit": {}}}},
               {"name": "DirectiveLocation", "type": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}]},
           "variables": []},
         "name": "hydra.graphql.syntax.DirectiveLocations_Sequence2"}},

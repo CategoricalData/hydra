@@ -308,7 +308,7 @@ flattenAppsAndForalls = go
       Core.TypeApplication (Core.ApplicationType f _) -> go f
       Core.TypeList l -> Core.TypeList (go l)
       Core.TypeSet s -> Core.TypeSet (go s)
-      Core.TypeMaybe m -> Core.TypeMaybe (go m)
+      Core.TypeOptional m -> Core.TypeOptional (go m)
       Core.TypeMap (Core.MapType k v) ->
         Core.TypeMap (Core.MapType (go (unwrapToScalar k)) (go v))
       Core.TypePair (Core.PairType a b) ->
@@ -372,7 +372,7 @@ inlineRefs names = go
         | otherwise        -> t
       Core.TypeList l -> Core.TypeList (go l)
       Core.TypeSet s -> Core.TypeSet (go s)
-      Core.TypeMaybe m -> Core.TypeMaybe (go m)
+      Core.TypeOptional m -> Core.TypeOptional (go m)
       Core.TypeMap (Core.MapType k v) ->
         Core.TypeMap (Core.MapType (go k) (go v))
       Core.TypePair (Core.PairType a b) ->

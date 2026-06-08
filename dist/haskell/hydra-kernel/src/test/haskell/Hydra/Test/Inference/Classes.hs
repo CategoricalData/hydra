@@ -493,7 +493,7 @@ testGroupForLetBindings =
                       Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                         Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                         Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
-                      Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t1")))}))})),
+                      Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t1")))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (
                       Core.Name "t0",
@@ -712,7 +712,7 @@ testGroupForMonomorphicConstraints =
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeBody = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                  Core.typeSchemeBody = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -972,7 +972,7 @@ testGroupForPartialApplication =
                       Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                         Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                         Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
-                      Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t1")))}))})),
+                      Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t1")))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (
                       Core.Name "t0",
@@ -1155,7 +1155,7 @@ testGroupForPrimitiveReferences =
                       Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
                         Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                         Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
-                      Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t1")))}))})),
+                      Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t1")))}))})),
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (
                       Core.Name "t0",

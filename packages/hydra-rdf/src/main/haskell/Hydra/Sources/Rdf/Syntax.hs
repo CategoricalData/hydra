@@ -75,7 +75,7 @@ iriOrLiteral = define "IriOrLiteral" $
 langStrings :: TypeDefinition
 langStrings = define "LangStrings" $
   doc "A convenience type which provides at most one string value per language, and optionally a value without a language" $
-  T.wrap $ T.map (T.maybe $ rdf "LanguageTag") T.string
+  T.wrap $ T.map (T.optional $ rdf "LanguageTag") T.string
 
 languageTag :: TypeDefinition
 languageTag = define "LanguageTag" $
@@ -94,7 +94,7 @@ literal_ = define "Literal" $
       rdf "Iri",
     "languageTag">:
       doc "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString" $
-      T.maybe $ rdf "LanguageTag"]
+      T.optional $ rdf "LanguageTag"]
 
 node_ :: TypeDefinition
 node_ = define "Node" $
@@ -123,7 +123,7 @@ quad = define "Quad" $
     "subject">: rdf "Resource",
     "predicate">: rdf "Iri",
     "object">: rdf "Node",
-    "graph">: T.maybe $ rdf "Iri"]
+    "graph">: T.optional $ rdf "Iri"]
 
 rdf :: String -> Type
 rdf = typeref ns

@@ -10,7 +10,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Query as Query
 import qualified Hydra.Rewriting as Rewriting
@@ -43,10 +43,10 @@ comparisonConstraint cx raw =
                       (
                         Core.Name "greaterThanOrEqual",
                         (\input -> Eithers.map (\t -> Query.ComparisonConstraintGreaterThanOrEqual) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Edge
 edge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Edge
@@ -82,10 +82,10 @@ node cx raw =
                       (Core.Name "term", (\input -> Eithers.map (\t -> Query.NodeTerm t) (DecodeCore.term cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Query.NodeVariable t) (variable cx input))),
                       (Core.Name "wildcard", (\input -> Eithers.map (\t -> Query.NodeWildcard) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.Path
 path :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Path
@@ -100,10 +100,10 @@ path cx raw =
                       (Core.Name "step", (\input -> Eithers.map (\t -> Query.PathStep t) (step cx input))),
                       (Core.Name "regex", (\input -> Eithers.map (\t -> Query.PathRegex t) (regexSequence cx input))),
                       (Core.Name "inverse", (\input -> Eithers.map (\t -> Query.PathInverse t) (path cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.PathEquation
 pathEquation :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PathEquation
@@ -134,10 +134,10 @@ pattern cx raw =
                         Core.Name "disjunction",
                         (\input -> Eithers.map (\t -> Query.PatternDisjunction t) (ExtractCore.decodeList pattern cx input))),
                       (Core.Name "graph", (\input -> Eithers.map (\t -> Query.PatternGraph t) (graphPattern cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.PatternImplication
 patternImplication :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PatternImplication
@@ -216,10 +216,10 @@ regexQuantifier cx raw =
                             _ -> Left (Errors.DecodingError "expected int32 literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "range", (\input -> Eithers.map (\t -> Query.RegexQuantifierRange t) (range cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.RegexSequence
 regexSequence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexSequence
@@ -244,10 +244,10 @@ step cx raw =
                       (Core.Name "edge", (\input -> Eithers.map (\t -> Query.StepEdge t) (edge cx input))),
                       (Core.Name "project", (\input -> Eithers.map (\t -> Query.StepProject t) (DecodeCore.projection cx input))),
                       (Core.Name "compare", (\input -> Eithers.map (\t -> Query.StepCompare t) (comparisonConstraint cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.query.TriplePattern
 triplePattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.TriplePattern

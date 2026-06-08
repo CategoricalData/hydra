@@ -154,8 +154,8 @@
         (lambda (xs)
           (let loop ((rest xs))
             (cond
-              ((null? rest) (list 'nothing))
-              ((pred (car rest)) (list 'just (car rest)))
+              ((null? rest) (list 'none))
+              ((pred (car rest)) (list 'given (car rest)))
               (else (loop (cdr rest))))))))
 
     ;; foldl :: (b -> a -> b) -> b -> [a] -> b
@@ -217,22 +217,22 @@
       (lambda (n)
         (lambda (xs)
           (if (and (>= n 0) (< n (length xs)))
-              (list 'just (list-ref xs n))
-              (list 'nothing)))))
+              (list 'given (list-ref xs n))
+              (list 'none)))))
 
     ;; maybe_head :: [a] -> Maybe a
     (define hydra_lib_lists_maybe_head
       (lambda (xs)
         (if (null? xs)
-            (list 'nothing)
-            (list 'just (car xs)))))
+            (list 'none)
+            (list 'given (car xs)))))
 
     ;; maybe_init :: [a] -> Maybe [a]
     (define hydra_lib_lists_maybe_init
       (lambda (xs)
         (if (null? xs)
-            (list 'nothing)
-            (list 'just (let loop ((rest xs))
+            (list 'none)
+            (list 'given (let loop ((rest xs))
                           (if (null? (cdr rest))
                               '()
                               (cons (car rest) (loop (cdr rest)))))))))
@@ -241,8 +241,8 @@
     (define hydra_lib_lists_maybe_last
       (lambda (xs)
         (if (null? xs)
-            (list 'nothing)
-            (list 'just (let loop ((rest xs))
+            (list 'none)
+            (list 'given (let loop ((rest xs))
                           (if (null? (cdr rest))
                               (car rest)
                               (loop (cdr rest))))))))
@@ -251,8 +251,8 @@
     (define hydra_lib_lists_maybe_tail
       (lambda (xs)
         (if (null? xs)
-            (list 'nothing)
-            (list 'just (cdr xs)))))
+            (list 'none)
+            (list 'given (cdr xs)))))
 
     ;; nub :: [a] -> [a]  (remove duplicates, keeping first occurrence)
     (define hydra_lib_lists_nub
@@ -347,8 +347,8 @@
     (define hydra_lib_lists_uncons
       (lambda (xs)
         (if (null? xs)
-            (list 'nothing)
-            (list 'just (list (car xs) (cdr xs))))))
+            (list 'none)
+            (list 'given (list (car xs) (cdr xs))))))
 
     ;; zip :: [a] -> [b] -> [Pair a b]
     (define hydra_lib_lists_zip

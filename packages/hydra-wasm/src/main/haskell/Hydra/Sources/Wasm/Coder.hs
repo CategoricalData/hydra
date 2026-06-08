@@ -16,7 +16,7 @@ import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
@@ -125,7 +125,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
       "tscheme" <~ Pairs.second (var "nameSchemePair") $
       "tbody" <~ Core.typeSchemeBody (var "tscheme") $
       "mfields" <~ (var "recordFieldsOf" @@ var "tbody") $
-      Maybes.cases (var "mfields")
+      Optionals.cases (var "mfields")
         (nothing :: TypedTerm (Maybe (Name, [(Name, Int)])))
         (lambda "fts" $
           "namedOffsets" <~ (Lists.map
@@ -142,7 +142,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
               (var "fts"))) $
           just (pair (var "tname") (var "namedOffsets")))) $
     "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
-    "entries" <~ (Maybes.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
+    "entries" <~ (Optionals.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
     Maps.fromList (var "entries")
 
 -- | Build a universe-wide map from snake-cased function names to Wasm signatures.
@@ -171,17 +171,17 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
         (lambda "sig" $ just (pair (var "snakeName") (var "sig")))
         (var "sigEither")) $
     -- Primitives: walk graph.primitives -> Map Name Primitive, extract type from each.
-    "primEntries" <~ Maybes.cat (Lists.map
+    "primEntries" <~ Optionals.cat (Lists.map
       (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ DslGraph.primitiveDefinition (Pairs.second (var "kv")))))
       (Maps.toList (DslGraph.graphPrimitives (var "g")))) $
     -- Cross-module bound term types: walk graph.boundTypes -> Map Name TypeScheme.
-    "boundEntries" <~ Maybes.cat (Lists.map
+    "boundEntries" <~ Optionals.cat (Lists.map
       (lambda "kv" $ var "toSigEntry" @@ var "kv")
       (Maps.toList (DslGraph.graphBoundTypes (var "g")))) $
     -- Current module's own term defs: use their optional TypeScheme field directly.
-    "localEntries" <~ Maybes.cat (Lists.map
+    "localEntries" <~ Optionals.cat (Lists.map
       (lambda "td" $
-        Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "td"))
+        Optionals.bind (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "td"))
           (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
       (var "termDefs")) $
     Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"]))
@@ -207,7 +207,7 @@ buildStringOffsets = def "buildStringOffsets" $
       (var "strs")) $
     "rawEnd" <~ Pairs.second (var "final") $
     -- Round up to the next 16-byte boundary so the bump pointer starts aligned.
-    "aligned" <~ Math.mul (Maybes.fromMaybe (int32 0) (Math.maybeDiv (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
+    "aligned" <~ Math.mul (Optionals.fromOptional (int32 0) (Math.maybeDiv (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
     pair (Pairs.first (var "final")) (var "aligned")
 
 -- | Build a universe-wide variant-tag table from a Graph. For each union type defined
@@ -235,7 +235,7 @@ buildVariantIndexes = def "buildVariantIndexes" $
       "tscheme" <~ Pairs.second (var "nameSchemePair") $
       "tbody" <~ Core.typeSchemeBody (var "tscheme") $
       "mfields" <~ (var "unionFieldsOf" @@ var "tbody") $
-      Maybes.cases (var "mfields")
+      Optionals.cases (var "mfields")
         (nothing :: TypedTerm (Maybe (Name, [(Name, Int)])))
         (lambda "fts" $
           "namedIndexes" <~ (Lists.map
@@ -252,7 +252,7 @@ buildVariantIndexes = def "buildVariantIndexes" $
               (var "fts"))) $
           just (pair (var "tname") (var "namedIndexes")))) $
     "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
-    "entries" <~ (Maybes.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
+    "entries" <~ (Optionals.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
     Maps.fromList (var "entries")
 
 -- | Clamp a list of Wasm value types to all-i32. The coder's function bodies still
@@ -369,7 +369,7 @@ encodeApplication = def "encodeApplication" $
     [_Term_variable>>: lambda "name" $
        "rawName" <~ Core.unName (var "name") $
        "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ var "rawName") $
-       Logic.ifElse (Lists.null (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
+       Logic.ifElse (Lists.null (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
          -- Local variable head: the local holds a closure value — a pointer into
          -- linear memory to an 8-byte record {table_idx:i32 at 0, env:i32 at 4}.
          -- Dispatch by loading env + table_idx, pushing env + (first) real arg,
@@ -383,12 +383,12 @@ encodeApplication = def "encodeApplication" $
          -- through it will trap at runtime, which is distinguishable from a
          -- correctly-constructed closure dispatch.
          ("mFirstArg" <~ Lists.maybeHead (var "args") $
-          "firstArgInstrs" <~ Maybes.cases (var "mFirstArg")
+          "firstArgInstrs" <~ Optionals.cases (var "mFirstArg")
             -- Zero-arg closure call: push placeholder. Real zero-arg closures
             -- need a separate signature (to come).
             (list [inject W._Instruction W._Instruction_const $
               inject W._ConstValue W._ConstValue_i32 (int32 0)])
-            (lambda "_a" $ Maybes.fromMaybe (list ([] :: [TypedTerm W.Instruction])) (Lists.maybeHead (var "realArgInstrs"))) $
+            (lambda "_a" $ Optionals.fromOptional (list ([] :: [TypedTerm W.Instruction])) (Lists.maybeHead (var "realArgInstrs"))) $
           -- Drop extra args beyond the first (M4b: single-arg closures only).
           "extraArgDropInstrs" <~ Lists.concat (Lists.map
             (lambda "ai" $ Lists.concat2 (var "ai")
@@ -427,9 +427,7 @@ encodeApplication = def "encodeApplication" $
          -- to match the callee's param count.
          ("mSig" <~ Maps.lookup (var "lname") (var "funcSigs") $
           "callerArgCount" <~ Lists.length (var "args") $
-          "calleeParamCount" <~ Maybes.maybe (var "callerArgCount")
-            (lambda "sig" $ Lists.length (Pairs.first (var "sig")))
-            (var "mSig") $
+          "calleeParamCount" <~ Optionals.cases (var "mSig") (var "callerArgCount") (lambda "sig" $ Lists.length (Pairs.first (var "sig"))) $
           "padCount" <~ Math.sub (var "calleeParamCount") (var "callerArgCount") $
           "padInstrs" <~ Lists.concat (Lists.replicate
             (Logic.ifElse (Equality.gt (var "padCount") (int32 0)) (var "padCount") (int32 0))
@@ -446,7 +444,7 @@ encodeApplication = def "encodeApplication" $
      -- side effect. Projection takes only one "real" arg, so extra args would be a
      -- type error at the Hydra level anyway.
      _Term_project>>: lambda "proj" $
-       Maybes.cases (Lists.maybeHead (var "args"))
+       Optionals.cases (Lists.maybeHead (var "args"))
          -- No args: treat as a bare projection function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
@@ -456,7 +454,7 @@ encodeApplication = def "encodeApplication" $
      -- Case statement applied to args: the first arg is the union value being dispatched
      -- on. Encode just that first arg as the scrutinee, same pattern as _Term_project.
      _Term_cases>>: lambda "cs" $
-       Maybes.cases (Lists.maybeHead (var "args"))
+       Optionals.cases (Lists.maybeHead (var "args"))
          -- No args: treat as a bare cases function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
@@ -554,7 +552,7 @@ encodeCases = def "encodeCases" $
     -- branch to; its body is an `i32.const 0` placeholder.
     "defaultArmLabel" <~ (string "_default") $
     "mDefault" <~ Core.caseStatementDefault (var "cs") $
-    "defaultArmBody" <<~ Maybes.cases (var "mDefault")
+    "defaultArmBody" <<~ Optionals.cases (var "mDefault")
       (right (list [inject W._Instruction W._Instruction_const $
         inject W._ConstValue W._ConstValue_i32 (int32 0)]))
       (lambda "defTerm" $
@@ -567,15 +565,15 @@ encodeCases = def "encodeCases" $
     -- type isn't found (e.g. dispatching on a locally-defined union not visible
     -- to the coder), every tag routes to the default.
     "explicitLabelForName" <~ (lambda "fname" $
-      Maybes.fromMaybe (var "defaultArmLabel")
-        (Maybes.map
+      Optionals.fromOptional (var "defaultArmLabel")
+        (Optionals.map
           (reify Pairs.first)
           (Lists.find
             (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
             (var "explicitArms")))) $
     "typeName" <~ Core.caseStatementTypeName (var "cs") $
     "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
-    "brTableLabels" <~ Maybes.cases (var "mUnionVariants")
+    "brTableLabels" <~ Optionals.cases (var "mUnionVariants")
       -- Fallback: no variant info for this type. Use the explicit-arm labels
       -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
       -- explicit arms hit the default.
@@ -730,15 +728,15 @@ encodeProjection = def "encodeProjection" $
     -- Compute the offset if the type is known and the field exists in it. Returns
     -- Maybe Int — Nothing if the type is unknown or the field name doesn't match
     -- any entry in the type's field list.
-    "mOffset" <~ (Maybes.cases (var "mFields")
+    "mOffset" <~ (Optionals.cases (var "mFields")
       (nothing :: TypedTerm (Maybe Int))
       (lambda "pairs" $
         -- Find the first pair (fn, off) where fn == fieldName.
         "matching" <~ Lists.filter
           (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
           (var "pairs") $
-        Maybes.map (reify Pairs.second) (Lists.maybeHead (var "matching")))) $
-    Maybes.cases (var "mOffset")
+        Optionals.map (reify Pairs.second) (Lists.maybeHead (var "matching")))) $
+    Optionals.cases (var "mOffset")
       -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
       (right (Lists.concat (list [
         var "scrutineeInstrs",
@@ -846,13 +844,13 @@ encodeTerm = def "encodeTerm" $
        -- Look up the tag in the universe-wide variant table. Fall back to 0 when the
        -- type or variant is unknown (shouldn't happen for well-formed Hydra terms).
        "mVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
-       "tag" <~ Maybes.cases (var "mVariants")
+       "tag" <~ Optionals.cases (var "mVariants")
          (int32 0)
          (lambda "pairs" $
            "matching" <~ Lists.filter
              (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
              (var "pairs") $
-           Maybes.cases (Lists.maybeHead (var "matching"))
+           Optionals.cases (Lists.maybeHead (var "matching"))
              (int32 0)
              (lambda "p" $ Pairs.second (var "p"))) $
        -- Compute payload instructions: `i32.const 0` for unit, else encode the term.
@@ -982,15 +980,15 @@ encodeTerm = def "encodeTerm" $
        cases _Literal (var "lit") (Just $
          right (list [encodeLiteral @@ var "lit"])) [
          _Literal_string>>: lambda "s" $
-           Maybes.maybe
+           Optionals.cases
+             (Maps.lookup (var "s") (var "stringOffsets"))
              -- Unknown string (shouldn't happen if collectStrings was run first):
              -- fall back to the placeholder.
              (right (list [inject W._Instruction W._Instruction_const $
                inject W._ConstValue W._ConstValue_i32 (int32 0)]))
              (lambda "off" $
                right (list [inject W._Instruction W._Instruction_const $
-                 inject W._ConstValue W._ConstValue_i32 (var "off")]))
-             (Maps.lookup (var "s") (var "stringOffsets"))],
+                 inject W._ConstValue W._ConstValue_i32 (var "off")]))],
      _Term_map>>: lambda "m" $
        -- Real map construction. Layout: `[length, k_0, v_0, ..., k_{N-1}, v_{N-1}]`,
        -- `(2N+1)*4` bytes. The length word is the number of entries (not the word
@@ -1059,8 +1057,8 @@ encodeTerm = def "encodeTerm" $
          var "mapLengthStoreInstrs",
          var "mapStoreInstrs",
          var "mapFinalInstrs"])),
-     _Term_maybe>>: lambda "mt" $
-       Maybes.cases (var "mt")
+     _Term_optional>>: lambda "mt" $
+       Optionals.cases (var "mt")
          -- Nothing: push 0 (null pointer / tag for None)
          (right (list [
            inject W._Instruction W._Instruction_const $
@@ -1240,7 +1238,7 @@ encodeTerm = def "encodeTerm" $
        -- Qualified names are cross-module function *references* (not calls): we push
        -- an i32 placeholder representing the function index. Actual calls are emitted
        -- from encodeApplication when the function is in head position.
-       Logic.ifElse (Lists.null (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
+       Logic.ifElse (Lists.null (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
          (right (list [inject W._Instruction W._Instruction_localGet (var "lname")]))
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)])),
@@ -1263,10 +1261,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
-    "typ" <~ Maybes.maybe
-      (Core.typeUnit)
-      (reify Core.typeSchemeBody)
-      (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) $
+    "typ" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeUnit) (reify Core.typeSchemeBody) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
     "paramNames" <~ Pairs.first (var "extracted") $
@@ -1318,7 +1313,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- Encode body: for bare eliminations (detected by extractLambdaParams producing synthetic
     -- param "arg_0"), pass local.get of the first Hydra param as the scrutinee.
     "dBody" <~ (Strip.deannotateTerm @@ var "innerBody") $
-    "scrutineeInstrs" <~ Maybes.cases (Lists.maybeHead (var "paramNameStrs"))
+    "scrutineeInstrs" <~ Optionals.cases (Lists.maybeHead (var "paramNameStrs"))
       (list ([] :: [TypedTerm W.Instruction]))
       (lambda "p0" $ list [inject W._Instruction W._Instruction_localGet (var "p0")]) $
     "rawBodyInstrs" <<~ (cases _Term (var "dBody") (Just $
@@ -1503,7 +1498,7 @@ extractSignature = def "extractSignature" $
 hexEscapeString :: TypedTermDefinition (Int -> String)
 hexEscapeString = def "hexEscapeString" $
   lambda "b" $
-    "byte" <~ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 256))) $
+    "byte" <~ (Optionals.fromOptional (int32 0) (Math.maybeMod (var "b") (int32 256))) $
     "digitToHex" <~ (lambda "d" $
       Logic.ifElse (Equality.lt (var "d") (int32 10))
         -- '0' = 48
@@ -1512,8 +1507,8 @@ hexEscapeString = def "hexEscapeString" $
         (Strings.fromList (list [Math.add (var "d") (int32 87)]))) $
     Strings.cat (list [
       string "\\",
-      var "digitToHex" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "byte") (int32 16))),
-      var "digitToHex" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "byte") (int32 16)))])
+      var "digitToHex" @@ (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "byte") (int32 16))),
+      var "digitToHex" @@ (Optionals.fromOptional (int32 0) (Math.maybeMod (var "byte") (int32 16)))])
 
 -- | Convert a Hydra module to a map of file paths to WAT source code strings.
 moduleToWasm :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
@@ -1654,8 +1649,8 @@ moduleToWasm = def "moduleToWasm" $
     "importFields" <~ Lists.map
       (lambda "fname" $
         "parts" <~ (Strings.splitOn (string ".") (var "fname")) $
-        "modName" <~ Strings.intercalate (string ".") (Lists.reverse (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeTail (Lists.reverse (var "parts"))))) $
-        "sig" <~ Maybes.fromMaybe (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs")) $
+        "modName" <~ Strings.intercalate (string ".") (Lists.reverse (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Lists.reverse (var "parts"))))) $
+        "sig" <~ Optionals.fromOptional (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs")) $
         "sigParams" <~ Pairs.first (var "sig") $
         "sigResults" <~ Pairs.second (var "sig") $
         "wasmImportParams" <~ Lists.map
@@ -1703,7 +1698,7 @@ peelLambdaApp = def "peelLambdaApp" $
          _Term_lambda>>: lambda "lam" $
            "paramName" <~ Core.lambdaParameter (var "lam") $
            "body" <~ Core.lambdaBody (var "lam") $
-           "restArgs" <~ Maybes.fromMaybe (list ([] :: [TypedTerm Term])) (Lists.maybeTail (var "args")) $
+           "restArgs" <~ Optionals.fromOptional (list ([] :: [TypedTerm Term])) (Lists.maybeTail (var "args")) $
            "inner" <~ (peelLambdaApp @@ var "body" @@ var "restArgs") $
              pair
                (Lists.cons (var "paramName") (Pairs.first (var "inner")))
@@ -1728,10 +1723,10 @@ stringDataSegment = def "stringDataSegment" $
       "s" <~ Pairs.first (var "entry") $
       "len" <~ Strings.length (var "s") $
       "lenBytes" <~ list [
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (var "len") (int32 256)),
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 256))) (int32 256)),
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 65536))) (int32 256)),
-        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 16777216))) (int32 256))] $
+        Optionals.fromOptional (int32 0) (Math.maybeMod (var "len") (int32 256)),
+        Optionals.fromOptional (int32 0) (Math.maybeMod (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "len") (int32 256))) (int32 256)),
+        Optionals.fromOptional (int32 0) (Math.maybeMod (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "len") (int32 65536))) (int32 256)),
+        Optionals.fromOptional (int32 0) (Math.maybeMod (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "len") (int32 16777216))) (int32 256))] $
       "contentBytes" <~ Strings.toList (var "s") $
       "allBytes" <~ Lists.concat2 (var "lenBytes") (var "contentBytes") $
         Strings.cat (Lists.map (lambda "b" $ hexEscapeString @@ var "b") (var "allBytes"))) $

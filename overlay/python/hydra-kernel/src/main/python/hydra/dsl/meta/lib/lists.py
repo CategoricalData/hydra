@@ -50,7 +50,7 @@ def filter(f: TypedTerm, values: TypedTerm) -> TypedTerm:
 
 
 def find(predicate: TypedTerm, values: TypedTerm) -> TypedTerm:
-    """Find the first element matching a predicate, returning Nothing if none matches."""
+    """Find the first element matching a predicate, returning none if none matches."""
     return primitive2(predicate, values)
 
 
@@ -90,27 +90,27 @@ def map(f: TypedTerm, values: TypedTerm) -> TypedTerm:
 
 
 def maybe_at(i: TypedTerm, values: TypedTerm) -> TypedTerm:
-    """Get the element at a specified index, returning Nothing if out of bounds."""
+    """Get the element at a specified index, returning none if out of bounds."""
     return primitive2(i, values)
 
 
 def maybe_head(values: TypedTerm) -> TypedTerm:
-    """Get the first element of a list, returning Nothing if the list is empty."""
+    """Get the first element of a list, returning none if the list is empty."""
     return primitive1(values)
 
 
 def maybe_init(values: TypedTerm) -> TypedTerm:
-    """Return all elements except the last, returning Nothing if the list is empty."""
+    """Return all elements except the last, returning none if the list is empty."""
     return primitive1(values)
 
 
 def maybe_last(values: TypedTerm) -> TypedTerm:
-    """Get the last element of a list, returning Nothing if the list is empty."""
+    """Get the last element of a list, returning none if the list is empty."""
     return primitive1(values)
 
 
 def maybe_tail(values: TypedTerm) -> TypedTerm:
-    """Get all elements except the first, returning Nothing if the list is empty."""
+    """Get all elements except the first, returning none if the list is empty."""
     return primitive1(values)
 
 
@@ -175,7 +175,7 @@ def transpose(values: TypedTerm) -> TypedTerm:
 
 
 def uncons(values: TypedTerm) -> TypedTerm:
-    """Decompose a list into its head and tail, returning Nothing if the list is empty."""
+    """Decompose a list into its head and tail, returning none if the list is empty."""
     return primitive1(values)
 
 

@@ -378,7 +378,7 @@ multiParameterPolymorphicProjectionsTests = define "multiParameterPolymorphicPro
   checkTest "project from Triple and use second field, which is another polymorphic record" []
     (lambda "triple" $ lambda "key" $
       match (TestTypes.testTypePersonOrSomethingName) nothing [
-        "person">: lambda "p" $ Core.termMaybe nothing,
+        "person">: lambda "p" $ Core.termOptional nothing,
         "other">: lambda "m" $ primitive _maps_lookup @@ var "key" @@ var "m"] @@
       (project (TestTypes.testTypeTripleName) (name "second") @@ var "triple"))
     (tylams ["t0", "t1", "t2", "t3"] $
@@ -389,7 +389,7 @@ multiParameterPolymorphicProjectionsTests = define "multiParameterPolymorphicPro
            T.var "t3"]) $
       lambdaTyped "key" (T.var "t1") $
       tyapp (match (TestTypes.testTypePersonOrSomethingName) nothing [
-        "person">: lambdaTyped "p" (Core.typeVariable $ TestTypes.testTypePersonName) (tyapp (Core.termMaybe nothing) (T.var "t2")),
+        "person">: lambdaTyped "p" (Core.typeVariable $ TestTypes.testTypePersonName) (tyapp (Core.termOptional nothing) (T.var "t2")),
         "other">: lambdaTyped "m" (T.map (T.var "t1") (T.var "t2")) $
           tyapps (primitive _maps_lookup) [T.var "t1", T.var "t2"] @@ var "key" @@ var "m"]) (T.map (T.var "t1") (T.var "t2")) @@
       (tyapps (project (TestTypes.testTypeTripleName) (name "second"))
@@ -546,23 +546,23 @@ recordProjectionsWithMutualRecursionTests = define "recordProjectionsWithMutualR
       (T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")))),
   checkTest "chained projections across mutual recursion" []
     (lambda "listA" $
-      primitive _maybes_maybe @@
-      Core.termMaybe nothing @@
+      primitive _optionals_cases @@
+      (project (TestTypes.testTypeBuddyListAName) (name "tail") @@ var "listA") @@
+      Core.termOptional nothing @@
       (lambda "listB" $
-        primitive _maybes_maybe @@
-        Core.termMaybe nothing @@
-        (project (TestTypes.testTypeBuddyListAName) (name "tail")) @@
-        (project (TestTypes.testTypeBuddyListBName) (name "tail") @@ var "listB")) @@
-      (project (TestTypes.testTypeBuddyListAName) (name "tail") @@ var "listA"))
+        primitive _optionals_cases @@
+        (project (TestTypes.testTypeBuddyListBName) (name "tail") @@ var "listB") @@
+        Core.termOptional nothing @@
+        (project (TestTypes.testTypeBuddyListAName) (name "tail"))))
     (tylam "t0" $ lambdaTyped "listA" (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")) $
-      tyapps (primitive _maybes_maybe) [T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")), T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")] @@
-      tyapp (Core.termMaybe nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
+      tyapps (primitive _optionals_cases) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
+      (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0") @@ var "listA") @@
+      tyapp (Core.termOptional nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
       (lambdaTyped "listB" (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) $
-        tyapps (primitive _maybes_maybe) [T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")), T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")] @@
-        tyapp (Core.termMaybe nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
-        (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0")) @@
-        (tyapp (project (TestTypes.testTypeBuddyListBName) (name "tail")) (T.var "t0") @@ var "listB")) @@
-      (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0") @@ var "listA"))
+        tyapps (primitive _optionals_cases) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
+        (tyapp (project (TestTypes.testTypeBuddyListBName) (name "tail")) (T.var "t0") @@ var "listB") @@
+        tyapp (Core.termOptional nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
+        (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0"))))
     (T.forAll "t0" $ T.function
       (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"))
       (T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))))]
@@ -593,15 +593,15 @@ recursiveRecordProjectionsTests = define "recursiveRecordProjectionsTests" $
   subgroup "Recursive record projections" [
   checkTest "nested projection from recursive record" []
     (lambda "intList" $
-     primitive _maybes_maybe @@
+     primitive _optionals_cases @@
+     (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList") @@
      int32 0 @@
-     (project (TestTypes.testTypeIntListName) (name "head")) @@
-     (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList"))
+     (project (TestTypes.testTypeIntListName) (name "head")))
     (lambdaTyped "intList" (Core.typeVariable $ TestTypes.testTypeIntListName) $
-     tyapps (primitive _maybes_maybe) [T.int32, Core.typeVariable $ TestTypes.testTypeIntListName] @@
+     tyapps (primitive _optionals_cases) [Core.typeVariable $ TestTypes.testTypeIntListName, T.int32] @@
+     (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList") @@
      int32 0 @@
-     (project (TestTypes.testTypeIntListName) (name "head")) @@
-     (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList"))
+     (project (TestTypes.testTypeIntListName) (name "head")))
     (T.function (Core.typeVariable $ TestTypes.testTypeIntListName) T.int32)]
 
 simpleRecordProjectionsTests :: TypedTermDefinition TestGroup
@@ -1366,7 +1366,7 @@ multipleWrappingLevelsTests :: TypedTermDefinition TestGroup
 multipleWrappingLevelsTests = define "multipleWrappingLevelsTests" $
   subgroup "Multiple wrapping levels" [
   noChange "wrapped in optional"
-    (Core.termMaybe $ just $ wrap (TestTypes.testTypeStringAliasName) (string "wrapped"))
+    (Core.termOptional $ just $ wrap (TestTypes.testTypeStringAliasName) (string "wrapped"))
     (T.optional $ Core.typeVariable $ TestTypes.testTypeStringAliasName),
   checkTest "list of wrapped polymorphic" []
     (list [wrap (TestTypes.testTypePolymorphicWrapperName) (list [int32 1]),
@@ -1383,8 +1383,8 @@ nestedWrappedTermsTests = define "nestedWrappedTermsTests" $
     (tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [tyapps (pair (int32 1) (string "a")) [T.int32, T.string]])) (T.pair T.int32 T.string))
     (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) (T.pair T.int32 T.string)),
   checkTest "wrapped optional" []
-    (wrap (TestTypes.testTypePolymorphicWrapperName) (list [Core.termMaybe $ just $ int32 42]))
-    (tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [Core.termMaybe $ just $ int32 42])) (T.optional T.int32))
+    (wrap (TestTypes.testTypePolymorphicWrapperName) (list [Core.termOptional $ just $ int32 42]))
+    (tyapp (wrap (TestTypes.testTypePolymorphicWrapperName) (list [Core.termOptional $ just $ int32 42])) (T.optional T.int32))
     (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) (T.optional T.int32)),
   checkTest "wrapped map" []
     (wrap (TestTypes.testTypePolymorphicWrapperName) (list [mapTerm [(string "key", int32 42)]]))
@@ -1508,22 +1508,22 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
 
   checkTest "unwrap with maybe to handle optional symmetric triple" []
     (lambda "mst" $
-      primitive _maybes_maybe @@
-      (Core.termMaybe nothing) @@
-      (lambda "st" $ Core.termMaybe $
-        just $ project (TestTypes.testTypeTripleName) (name "second") @@ (unwrap (TestTypes.testTypeSymmetricTripleName) @@ var "st")) @@
-      var "mst")
+      primitive _optionals_cases @@
+      var "mst" @@
+      (Core.termOptional nothing) @@
+      (lambda "st" $ Core.termOptional $
+        just $ project (TestTypes.testTypeTripleName) (name "second") @@ (unwrap (TestTypes.testTypeSymmetricTripleName) @@ var "st")))
     (tylams ["t0", "t1"] $
       lambdaTyped "mst" (T.optional $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]) $
-      tyapps (primitive _maybes_maybe)
-        [T.optional (T.var "t1"),
-         T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]] @@
-      tyapp (Core.termMaybe nothing) (T.var "t1") @@
+      tyapps (primitive _optionals_cases)
+        [T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"],
+         T.optional (T.var "t1")] @@
+      var "mst" @@
+      tyapp (Core.termOptional nothing) (T.var "t1") @@
       (lambdaTyped "st" (T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]) $
-        Core.termMaybe $ just $
+        Core.termOptional $ just $
         (tyapps (project (TestTypes.testTypeTripleName) (name "second")) [T.var "t0", T.var "t1", T.var "t0"] @@
-         (tyapps (unwrap (TestTypes.testTypeSymmetricTripleName)) [T.var "t0", T.var "t1"] @@ var "st"))) @@
-      var "mst")
+         (tyapps (unwrap (TestTypes.testTypeSymmetricTripleName)) [T.var "t0", T.var "t1"] @@ var "st"))))
     (T.forAlls ["t0", "t1"] $
       T.function
         (T.optional $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"])

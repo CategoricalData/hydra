@@ -14,7 +14,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -65,7 +65,7 @@ checkConflictingModuleNamesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty package: no conflicts",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -73,14 +73,14 @@ checkConflictingModuleNamesTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single module: no conflicts",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -97,14 +97,14 @@ checkConflictingModuleNamesTests =
                     Packaging.entityMetadataSeeAlso = [],
                     Packaging.entityMetadataLifecycle = Nothing})),
                   Packaging.moduleDependencies = [],
-                  Packaging.moduleDefinitions = []}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+                  Packaging.moduleDefinitions = []}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "distinct lowercase namespaces: no conflicts",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -130,14 +130,14 @@ checkConflictingModuleNamesTests =
                     Packaging.entityMetadataSeeAlso = [],
                     Packaging.entityMetadataLifecycle = Nothing})),
                   Packaging.moduleDependencies = [],
-                  Packaging.moduleDefinitions = []}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+                  Packaging.moduleDefinitions = []}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "case-insensitive collision: hydra.fooBar vs hydra.foobar",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkConflictingModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -163,10 +163,10 @@ checkConflictingModuleNamesTests =
                     Packaging.entityMetadataSeeAlso = [],
                     Packaging.entityMetadataLifecycle = Nothing})),
                   Packaging.moduleDependencies = [],
-                  Packaging.moduleDefinitions = []}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleName (ErrorPackaging.ConflictingModuleNameError {
+                  Packaging.moduleDefinitions = []}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleName (ErrorPackaging.ConflictingModuleNameError {
               ErrorPackaging.conflictingModuleNameErrorFirst = (Packaging.ModuleName "hydra.fooBar"),
-              ErrorPackaging.conflictingModuleNameErrorSecond = (Packaging.ModuleName "hydra.foobar")}))))})),
+              ErrorPackaging.conflictingModuleNameErrorSecond = (Packaging.ModuleName "hydra.foobar")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkConflictingVariantNamesTests :: Testing.TestGroup
@@ -179,7 +179,7 @@ checkConflictingVariantNamesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty module: no conflicts",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkConflictingVariantNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkConflictingVariantNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -187,8 +187,8 @@ checkConflictingVariantNamesTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkDefinitionDocumentationTests :: Testing.TestGroup
@@ -201,7 +201,7 @@ checkDefinitionDocumentationTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty module: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionDocumentation (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionDocumentation (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -209,14 +209,14 @@ checkDefinitionDocumentationTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "documented term def: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionDocumentation (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionDocumentation (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -232,14 +232,14 @@ checkDefinitionDocumentationTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "undocumented term def: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionDocumentation (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionDocumentation (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -252,10 +252,10 @@ checkDefinitionDocumentationTests =
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.bar"),
                   Packaging.termDefinitionMetadata = Nothing,
                   Packaging.termDefinitionSignature = Nothing,
-                  Packaging.termDefinitionBody = (Core.TermLiteral (Core.LiteralString "value"))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  Packaging.termDefinitionBody = (Core.TermLiteral (Core.LiteralString "value"))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
               ErrorPackaging.missingDocumentationErrorModuleName = (Packaging.ModuleName "hydra.foo"),
-              ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))))})),
+              ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkDefinitionModuleNamesTests :: Testing.TestGroup
@@ -268,7 +268,7 @@ checkDefinitionModuleNamesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty module: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionModuleNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionModuleNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -276,14 +276,14 @@ checkDefinitionModuleNamesTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "definition with matching namespace: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionModuleNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionModuleNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -299,14 +299,14 @@ checkDefinitionModuleNamesTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "definition outside namespace: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionModuleNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionModuleNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -322,10 +322,10 @@ checkDefinitionModuleNamesTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleName (ErrorPackaging.DefinitionNotInModuleNameError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleName (ErrorPackaging.DefinitionNotInModuleNameError {
               ErrorPackaging.definitionNotInModuleNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
-              ErrorPackaging.definitionNotInModuleNameErrorName = (Core.Name "hydra.baz.qux")}))))})),
+              ErrorPackaging.definitionNotInModuleNameErrorName = (Core.Name "hydra.baz.qux")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkDefinitionNameConventionTests :: Testing.TestGroup
@@ -338,7 +338,7 @@ checkDefinitionNameConventionTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty module: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -346,14 +346,14 @@ checkDefinitionNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "valid camelCase term def: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -369,14 +369,14 @@ checkDefinitionNameConventionTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "valid single-letter term def: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -392,14 +392,14 @@ checkDefinitionNameConventionTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "underscore in term def name: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -415,17 +415,17 @@ checkDefinitionNameConventionTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
               ErrorPackaging.invalidDefinitionNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.invalidDefinitionNameErrorName = (Core.Name "hydra.foo.bad_name"),
-              ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = Util.CaseConventionCamel}))))})),
+              ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = Util.CaseConventionCamel}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "uppercase-first term def name: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -441,11 +441,11 @@ checkDefinitionNameConventionTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorInvalidDefinitionName (ErrorPackaging.InvalidDefinitionNameError {
               ErrorPackaging.invalidDefinitionNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.invalidDefinitionNameErrorName = (Core.Name "hydra.foo.BadName"),
-              ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = Util.CaseConventionCamel}))))})),
+              ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = Util.CaseConventionCamel}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkDefinitionOrderingTests :: Testing.TestGroup
@@ -458,7 +458,7 @@ checkDefinitionOrderingTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty module: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -466,14 +466,14 @@ checkDefinitionOrderingTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single definition: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -489,14 +489,14 @@ checkDefinitionOrderingTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "two definitions in order: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -520,14 +520,14 @@ checkDefinitionOrderingTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "two definitions out of order: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -551,17 +551,17 @@ checkDefinitionOrderingTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
               ErrorPackaging.definitionsOutOfOrderErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = (Core.Name "hydra.foo.bbb"),
-              ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.aaa")}))))})),
+              ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.aaa")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "case-sensitive ASCII order (uppercase before lowercase)",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDefinitionOrdering (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -585,11 +585,11 @@ checkDefinitionOrderingTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
               ErrorPackaging.definitionsOutOfOrderErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = (Core.Name "hydra.foo.IndentedExpression"),
-              ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.IndentStyle")}))))})),
+              ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.IndentStyle")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkDuplicateDefinitionNamesTests :: Testing.TestGroup
@@ -602,7 +602,7 @@ checkDuplicateDefinitionNamesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty module: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDuplicateDefinitionNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDuplicateDefinitionNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -610,14 +610,14 @@ checkDuplicateDefinitionNamesTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "distinct names: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDuplicateDefinitionNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDuplicateDefinitionNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -641,14 +641,14 @@ checkDuplicateDefinitionNamesTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate names: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkDuplicateDefinitionNames (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDuplicateDefinitionNames (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -672,10 +672,10 @@ checkDuplicateDefinitionNamesTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName (ErrorPackaging.DuplicateDefinitionNameError {
               ErrorPackaging.duplicateDefinitionNameErrorModuleName = (Packaging.ModuleName "hydra.foo"),
-              ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))))})),
+              ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkDuplicateModuleNamesTests :: Testing.TestGroup
@@ -688,7 +688,7 @@ checkDuplicateModuleNamesTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty package: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkDuplicateModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDuplicateModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -696,14 +696,14 @@ checkDuplicateModuleNamesTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "distinct namespaces: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkDuplicateModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDuplicateModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -729,14 +729,14 @@ checkDuplicateModuleNamesTests =
                     Packaging.entityMetadataSeeAlso = [],
                     Packaging.entityMetadataLifecycle = Nothing})),
                   Packaging.moduleDependencies = [],
-                  Packaging.moduleDefinitions = []}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+                  Packaging.moduleDefinitions = []}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "duplicate namespaces: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkDuplicateModuleNames (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkDuplicateModuleNames (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -762,9 +762,9 @@ checkDuplicateModuleNamesTests =
                     Packaging.entityMetadataSeeAlso = [],
                     Packaging.entityMetadataLifecycle = Nothing})),
                   Packaging.moduleDependencies = [],
-                  Packaging.moduleDefinitions = []}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleName (ErrorPackaging.DuplicateModuleNameError {
-              ErrorPackaging.duplicateModuleNameErrorModuleName = (Packaging.ModuleName "hydra.foo")}))))})),
+                  Packaging.moduleDefinitions = []}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleName (ErrorPackaging.DuplicateModuleNameError {
+              ErrorPackaging.duplicateModuleNameErrorModuleName = (Packaging.ModuleName "hydra.foo")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkModuleNameConventionTests :: Testing.TestGroup
@@ -777,7 +777,7 @@ checkModuleNameConventionTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single segment lowercase: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra"),
@@ -785,14 +785,14 @@ checkModuleNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "dotted lowercase: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo.bar"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo.bar"),
@@ -800,14 +800,14 @@ checkModuleNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "dotted camelCase segments: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.test.testGraph"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.test.testGraph"),
@@ -815,14 +815,14 @@ checkModuleNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "uppercase first letter of segment: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.Foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.Foo"),
@@ -830,15 +830,15 @@ checkModuleNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention (ErrorPackaging.InvalidModuleNameConventionError {
-              ErrorPackaging.invalidModuleNameConventionErrorModuleName = (Packaging.ModuleName "hydra.Foo")}))))})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention (ErrorPackaging.InvalidModuleNameConventionError {
+              ErrorPackaging.invalidModuleNameConventionErrorModuleName = (Packaging.ModuleName "hydra.Foo")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "underscore in segment: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkModuleNameConvention (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo_bar"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo_bar"),
@@ -846,9 +846,9 @@ checkModuleNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.moduleDependencies = [],
-              Packaging.moduleDefinitions = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention (ErrorPackaging.InvalidModuleNameConventionError {
-              ErrorPackaging.invalidModuleNameConventionErrorModuleName = (Packaging.ModuleName "hydra.foo_bar")}))))})),
+              Packaging.moduleDefinitions = []})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention (ErrorPackaging.InvalidModuleNameConventionError {
+              ErrorPackaging.invalidModuleNameConventionErrorModuleName = (Packaging.ModuleName "hydra.foo_bar")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 checkPackageNameConventionTests :: Testing.TestGroup
@@ -861,7 +861,7 @@ checkPackageNameConventionTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single lowercase segment: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "hydra"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package hydra"),
@@ -869,14 +869,14 @@ checkPackageNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "hyphen-separated lowercase: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "hydra-kernel"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package hydra-kernel"),
@@ -884,14 +884,14 @@ checkPackageNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "uppercase first letter: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "Hydra-kernel"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package Hydra-kernel"),
@@ -899,15 +899,15 @@ checkPackageNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
-              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "Hydra-kernel")}))))})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
+              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "Hydra-kernel")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "underscore separator: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "hydra_kernel"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package hydra_kernel"),
@@ -915,15 +915,15 @@ checkPackageNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
-              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "hydra_kernel")}))))})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
+              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "hydra_kernel")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "dot separator: error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.checkPackageNameConvention (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "hydra.kernel"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package hydra.kernel"),
@@ -931,9 +931,9 @@ checkPackageNameConventionTests =
                 Packaging.entityMetadataSeeAlso = [],
                 Packaging.entityMetadataLifecycle = Nothing})),
               Packaging.packageDependencies = [],
-              Packaging.packageModules = []}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
-              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "hydra.kernel")}))))})),
+              Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
+              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "hydra.kernel")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 kernelModuleTests :: Testing.TestGroup
@@ -946,7 +946,7 @@ kernelModuleTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "valid module: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.kernelModule (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.kernelModule (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -962,14 +962,14 @@ kernelModuleTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) Nothing)})),
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "missing documentation surfaces",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.kernelModule (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.kernelModule (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -982,16 +982,16 @@ kernelModuleTests =
                   Packaging.termDefinitionName = (Core.Name "hydra.foo.bar"),
                   Packaging.termDefinitionMetadata = Nothing,
                   Packaging.termDefinitionSignature = Nothing,
-                  Packaging.termDefinitionBody = (Core.TermLiteral (Core.LiteralString "value"))})]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
+                  Packaging.termDefinitionBody = (Core.TermLiteral (Core.LiteralString "value"))})]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
               ErrorPackaging.missingDocumentationErrorModuleName = (Packaging.ModuleName "hydra.foo"),
-              ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))))})),
+              ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "out-of-order definitions surface",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (ValidatePackaging.kernelModule (Packaging.Module {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.kernelModule (Packaging.Module {
               Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
               Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
@@ -1015,11 +1015,11 @@ kernelModuleTests =
                   Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                     Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidModuleError e) (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}))]})) "valid" (\e -> ShowErrorPackaging.invalidModuleError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder (ErrorPackaging.DefinitionsOutOfOrderError {
               ErrorPackaging.definitionsOutOfOrderErrorModuleName = (Packaging.ModuleName "hydra.foo"),
               ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = (Core.Name "hydra.foo.bbb"),
-              ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.aaa")}))))})),
+              ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.aaa")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 kernelPackageTests :: Testing.TestGroup
@@ -1032,7 +1032,7 @@ kernelPackageTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "valid package: no error",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.kernelPackage (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.kernelPackage (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -1057,14 +1057,14 @@ kernelPackageTests =
                       Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                         Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                         Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) Nothing)})),
+                          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "invalid package name surfaces first",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.kernelPackage (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.kernelPackage (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "BadName"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package BadName"),
@@ -1089,15 +1089,15 @@ kernelPackageTests =
                       Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
                         Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
                         Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
-                          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
-              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "BadName")}))))})),
+                          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
+              ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "BadName")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "conflicting module namespace surfaces",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.kernelPackage (Packaging.Package {
+            Testing.universalTestCaseActual = (\_ -> Optionals.cases (ValidatePackaging.kernelPackage (Packaging.Package {
               Packaging.packageName = (Packaging.PackageName "test-pkg"),
               Packaging.packageMetadata = (Just (Packaging.EntityMetadata {
                 Packaging.entityMetadataDescription = (Just "Test package test-pkg"),
@@ -1123,10 +1123,10 @@ kernelPackageTests =
                     Packaging.entityMetadataSeeAlso = [],
                     Packaging.entityMetadataLifecycle = Nothing})),
                   Packaging.moduleDependencies = [],
-                  Packaging.moduleDefinitions = []}]}))),
-            Testing.universalTestCaseExpected = (\_ -> Maybes.maybe "valid" (\e -> ShowErrorPackaging.invalidPackageError e) (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleName (ErrorPackaging.ConflictingModuleNameError {
+                  Packaging.moduleDefinitions = []}]})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
+            Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorConflictingModuleName (ErrorPackaging.ConflictingModuleNameError {
               ErrorPackaging.conflictingModuleNameErrorFirst = (Packaging.ModuleName "hydra.foo"),
-              ErrorPackaging.conflictingModuleNameErrorSecond = (Packaging.ModuleName "hydra.foo")}))))})),
+              ErrorPackaging.conflictingModuleNameErrorSecond = (Packaging.ModuleName "hydra.foo")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 profileBehaviourTests :: Testing.TestGroup

@@ -13,7 +13,7 @@
         (hydra json yaml encode) (hydra json yaml decode)
         (hydra encode core)
         (hydra lib libraries) (hydra lib equality) (hydra lib maps)
-        (hydra lib maybes) (hydra lib pairs) (hydra lib sets) (hydra lib lists)
+        (hydra lib optionals) (hydra lib pairs) (hydra lib sets) (hydra lib lists)
         (hydra lib literals)
         (hydra test test_graph) (hydra test test_suite))
 

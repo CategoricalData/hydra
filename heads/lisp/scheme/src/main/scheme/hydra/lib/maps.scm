@@ -104,18 +104,18 @@
       (sort-entries-by-key (vhash-unique-entries vh)))
 
     ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
-    ;; Handle multiple Maybe representations.
+    ;; Handle multiple optional representations.
     (define (alter-is-nothing? m)
       (or (null? m)
-          (and (pair? m) (eq? (car m) 'nothing))
-          (and (pair? m) (eq? (car m) 'maybe)
+          (and (pair? m) (eq? (car m) 'none))
+          (and (pair? m) (eq? (car m) 'optional)
                (or (null? (cdr m)) (null? (cadr m))))))
     (define (alter-get-value m)
       (cond
-        ((and (pair? m) (eq? (car m) 'just)) (cadr m))
-        ((and (pair? m) (eq? (car m) 'maybe))
+        ((and (pair? m) (eq? (car m) 'given)) (cadr m))
+        ((and (pair? m) (eq? (car m) 'optional))
          (let ((body (cadr m)))
-           (if (and (pair? body) (eq? (car body) 'just))
+           (if (and (pair? body) (eq? (car body) 'given))
                (cadr body)
                body)))
         (else m)))
@@ -126,8 +126,8 @@
             (let* ((vh (ensure-vhash m))
                    (existing (vhash-assoc k vh))
                    (old-maybe (if existing
-                                  (list 'just (cdr existing))
-                                  (list 'nothing)))
+                                  (list 'given (cdr existing))
+                                  (list 'none)))
                    (new-maybe (f old-maybe)))
               (if (alter-is-nothing? new-maybe)
                   ;; Delete: rebuild without k
@@ -223,8 +223,8 @@
         (lambda (m)
           (let ((entry (vhash-assoc k (ensure-vhash m))))
             (if entry
-                (list 'just (cdr entry))
-                (list 'nothing))))))
+                (list 'given (cdr entry))
+                (list 'none))))))
 
     ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
     (define hydra_lib_maps_map

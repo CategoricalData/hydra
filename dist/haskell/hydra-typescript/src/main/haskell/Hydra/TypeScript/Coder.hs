@@ -22,7 +22,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -73,10 +73,10 @@ collectInnerTypeImports currentNs term =
       let subs = Rewriting.subterms term
           ownVars =
                   case (Strip.deannotateTerm term) of
-                    Core.TermLambda v0 -> Maybes.cases (Core.lambdaDomain v0) Sets.empty (\d -> Variables.freeVariablesInType d)
+                    Core.TermLambda v0 -> Optionals.cases (Core.lambdaDomain v0) Sets.empty (\d -> Variables.freeVariablesInType d)
                     Core.TermTypeApplication v0 -> Variables.freeVariablesInType (Core.typeApplicationTermType v0)
                     Core.TermTypeLambda _ -> Sets.empty
-                    Core.TermLet v0 -> Lists.foldl (\acc -> \b -> Maybes.cases (Core.bindingTypeScheme b) acc (\ts -> Sets.union acc (Variables.freeVariablesInType (Core.typeSchemeBody ts)))) Sets.empty (Core.letBindings v0)
+                    Core.TermLet v0 -> Lists.foldl (\acc -> \b -> Optionals.cases (Core.bindingTypeScheme b) acc (\ts -> Sets.union acc (Variables.freeVariablesInType (Core.typeSchemeBody ts)))) Sets.empty (Core.letBindings v0)
                     _ -> Sets.empty
           childVars = Lists.foldl (\acc -> \s -> Sets.union acc (collectInnerTypeImports currentNs s)) Sets.empty subs
       in (filterNonLocalNames currentNs (Sets.union ownVars childVars))
@@ -95,7 +95,7 @@ encodeBindingAsStatement cx g currentNs b =
       in case dterm of
         Core.TermLambda _ ->
           let innerFunDecl =
-                  functionDeclarationFromTerm cx g currentNs lname bterm (Maybes.bind (Core.bindingTypeScheme b) (\ts -> Just (Core.typeSchemeBody ts)))
+                  functionDeclarationFromTerm cx g currentNs lname bterm (Optionals.bind (Core.bindingTypeScheme b) (\ts -> Just (Core.typeSchemeBody ts)))
           in (Syntax.StatementFunctionDeclaration innerFunDecl)
         _ ->
           let expr = encodeTerm cx g currentNs bterm
@@ -190,7 +190,7 @@ encodeTerm cx g currentNs term =
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
-        in (Maybes.cases (Names.moduleNameOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
+        in (Optionals.cases (Names.moduleNameOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
           let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
               alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
           in (tsMember (tsExprIdent alias) local))))
@@ -235,11 +235,11 @@ encodeTerm cx g currentNs term =
             mName = termHeadVariable headTerm
             argc = Lists.length args
             lazyMaybe =
-                    Maybes.cases mName Nothing (\n ->
+                    Optionals.cases mName Nothing (\n ->
                       let lazyFlags = lazyFlagsForPrimitive g n
                           anyLazy = Lists.foldl (\b -> \f -> Logic.or b f) False lazyFlags
                       in (Logic.ifElse (Logic.and anyLazy (Equality.equal argc (Lists.length lazyFlags))) (Just (encodeLazyCall cx g currentNs headTerm args lazyFlags)) Nothing))
-        in (Maybes.cases lazyMaybe (
+        in (Optionals.cases lazyMaybe (
           let dHead = Strip.deannotateAndDetypeTerm headTerm
               encArgs = Lists.map (encodeTerm cx g currentNs) args
           in case dHead of
@@ -247,14 +247,14 @@ encodeTerm cx g currentNs term =
               let headExpr = encodeTerm cx g currentNs headTerm
               in headExpr) (
               let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionFieldName v1))
-                  firstA = Maybes.fromMaybe (tsExprIdent "undefined") (Lists.maybeHead encArgs)
+                  firstA = Optionals.fromOptional (tsExprIdent "undefined") (Lists.maybeHead encArgs)
                   restA = Lists.drop 1 encArgs
                   fieldExpr = tsMember firstA fname
               in (Logic.ifElse (Lists.null restA) fieldExpr (tsCall fieldExpr restA)))
             Core.TermUnwrap _ -> Logic.ifElse (Lists.null encArgs) (
               let headExpr = encodeTerm cx g currentNs headTerm
               in headExpr) (
-              let firstA = Maybes.fromMaybe (tsExprIdent "undefined") (Lists.maybeHead encArgs)
+              let firstA = Optionals.fromOptional (tsExprIdent "undefined") (Lists.maybeHead encArgs)
                   restA = Lists.drop 1 encArgs
                   valueExpr = tsMember firstA "value"
               in (Logic.ifElse (Lists.null restA) valueExpr (tsCall valueExpr restA)))
@@ -272,9 +272,9 @@ encodeTerm cx g currentNs term =
       Core.TermPair v0 -> tsAsAny (tsArray [
         encodeTerm cx g currentNs (Pairs.first v0),
         (encodeTerm cx g currentNs (Pairs.second v0))])
-      Core.TermMaybe v0 -> Maybes.cases v0 (tsAsAny (tsObject [
-        ("tag", (tsExprStr "nothing"))])) (\v -> tsAsAny (tsObject [
-        ("tag", (tsExprStr "just")),
+      Core.TermOptional v0 -> Optionals.cases v0 (tsAsAny (tsObject [
+        ("tag", (tsExprStr "none"))])) (\v -> tsAsAny (tsObject [
+        ("tag", (tsExprStr "given")),
         ("value", (encodeTerm cx g currentNs v))]))
       Core.TermRecord v0 ->
         let fields = Core.recordFields v0
@@ -334,7 +334,7 @@ encodeTerm cx g currentNs term =
                         Syntax.switchCaseConsequent = [
                           Syntax.StatementReturn (Just callExpr)]}) armFields
             defaultCase =
-                    Maybes.cases defaultMaybe (Syntax.SwitchCase {
+                    Optionals.cases defaultMaybe (Syntax.SwitchCase {
                       Syntax.switchCaseTest = Nothing,
                       Syntax.switchCaseConsequent = [
                         Syntax.StatementReturn (Just (tsCall (tsExprIdent "(() => { throw new Error('unmatched case'); })") []))]}) (\dt ->
@@ -370,7 +370,7 @@ encodeTermDefinition cx g currentNs td =
           mdoc = Eithers.either (\_ -> Nothing) (\x_ -> x_) (Annotations.getTermDescription cx g rawTerm)
           asExport = \stmt -> Syntax.ModuleItemExport (Syntax.ExportDeclarationDeclaration stmt)
           mScheme =
-                  Maybes.bind (Packaging.termDefinitionSignature td) (\sig -> Just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)))
+                  Optionals.bind (Packaging.termDefinitionSignature td) (\sig -> Just (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig)))
           dterm = Strip.deannotateTerm rawTerm
           funDecl = functionDeclarationFromTerm cx g currentNs lname rawTerm mScheme
           asFunDecl = asExport (Syntax.StatementFunctionDeclaration funDecl)
@@ -417,15 +417,15 @@ encodeType cx g t =
         Core.TypeList v0 -> Eithers.map (\enc -> tsParamApp1 "ReadonlyArray" enc) (encodeType cx g v0)
         Core.TypeSet v0 -> Eithers.map tsReadonlySet (encodeType cx g v0)
         Core.TypeMap v0 -> Eithers.bind (encodeType cx g (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (encodeType cx g (Core.mapTypeValues v0)) (\vt -> Right (tsReadonlyMap kt vt)))
-        Core.TypeMaybe v0 -> Eithers.map (\enc -> Syntax.TypeExpressionUnion [
+        Core.TypeOptional v0 -> Eithers.map (\enc -> Syntax.TypeExpressionUnion [
           Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
-              Syntax.stringLiteralValue = "just",
+              Syntax.stringLiteralValue = "given",
               Syntax.stringLiteralSingleQuote = False}))),
             (tsPropSig "value" False enc)],
           (Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
-              Syntax.stringLiteralValue = "nothing",
+              Syntax.stringLiteralValue = "none",
               Syntax.stringLiteralSingleQuote = False})))])]) (encodeType cx g v0)
         Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt ->
           let leftArm =
@@ -525,7 +525,7 @@ encodeTypeOrAny :: t0 -> t1 -> Core.Type -> Syntax.TypeExpression
 encodeTypeOrAny cx g typ = Eithers.either (\_e -> Syntax.TypeExpressionAny) (\te -> te) (encodeType cx g typ)
 filterNonLocalNames :: Packaging.ModuleName -> S.Set Core.Name -> S.Set Core.Name
 filterNonLocalNames currentNs names =
-    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.moduleNameOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
+    Sets.fromList (Optionals.cat (Lists.map (\n -> Optionals.cases (Names.moduleNameOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
 flattenApplication :: Core.Term -> (Core.Term, [Core.Term])
 flattenApplication t =
 
@@ -575,7 +575,7 @@ importsToText :: String -> Packaging.ModuleName -> S.Set Core.Name -> String
 importsToText kind currentNs names =
 
       let pairs =
-              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.moduleNameOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) Nothing (Just (ns, n)))) (Sets.toList names))
+              Optionals.cat (Lists.map (\n -> Optionals.cases (Names.moduleNameOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) Nothing (Just (ns, n)))) (Sets.toList names))
           transformLocal =
                   \s -> Logic.ifElse (Equality.equal kind "type") (Formatting.capitalize s) (Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords s)
           importKeyword = Logic.ifElse (Equality.equal kind "type") "import type" "import"
@@ -584,12 +584,12 @@ importsToText kind currentNs names =
                     let ns = Pairs.first p
                         n = Pairs.second p
                         local = transformLocal (Names.localNameOf n)
-                        existing = Maybes.fromMaybe [] (Maps.lookup ns acc)
+                        existing = Optionals.fromOptional [] (Maps.lookup ns acc)
                     in (Maps.insert ns (Lists.cons local existing) acc)) Maps.empty pairs
           currentSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName currentNs))
           currentDepth = Lists.length currentSegs
           currentIsTest =
-                  Logic.and (Logic.not (Lists.null currentSegs)) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead currentSegs)) "test")
+                  Logic.and (Logic.not (Lists.null currentSegs)) (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead currentSegs)) "test")
           baseUpPrefix = Logic.ifElse (Equality.equal currentDepth 1) "./" (Strings.cat (Lists.replicate (Math.sub currentDepth 1) "../"))
           lines =
                   Lists.map (\entry ->
@@ -597,7 +597,7 @@ importsToText kind currentNs names =
                         locals = Pairs.second entry
                         targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
                         targetIsTest =
-                                Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead targetSegs)) "test")
+                                Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "test")
                         targetPath = Strings.intercalate "/" targetSegs
                         upPrefix =
                                 Logic.ifElse (Logic.and currentIsTest (Logic.not targetIsTest)) (Strings.cat2 baseUpPrefix "../../../main/typescript/hydra/") baseUpPrefix
@@ -619,10 +619,10 @@ importsToText kind currentNs names =
       in (Strings.cat lines)
 lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
 lazyFlagsForPrimitive g name =
-    Maybes.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
+    Optionals.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
 mkDocComment :: Maybe String -> Maybe Syntax.DocumentationComment
 mkDocComment mdesc =
-    Maybes.cases mdesc Nothing (\d -> Logic.ifElse (Equality.equal d "") Nothing (Just (Syntax.DocumentationComment {
+    Optionals.cases mdesc Nothing (\d -> Logic.ifElse (Equality.equal d "") Nothing (Just (Syntax.DocumentationComment {
       Syntax.documentationCommentDescription = d,
       Syntax.documentationCommentTags = []})))
 moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map String String)
@@ -636,7 +636,7 @@ moduleToTypeScript mod defs cx g =
           typeImportsFromTypes =
                   Lists.foldl (\acc -> \td -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Packaging.typeDefinitionBody td)))) Sets.empty typeDefs
           typeImportsFromTerms =
-                  Lists.foldl (\acc -> \td -> Maybes.cases (Packaging.termDefinitionSignature td) acc (\sig -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig))))) Sets.empty termDefs
+                  Lists.foldl (\acc -> \td -> Optionals.cases (Packaging.termDefinitionSignature td) acc (\sig -> Sets.union acc (collectImports currentNs (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme sig))))) Sets.empty termDefs
           typeImportsFromInner =
                   Lists.foldl (\acc -> \td -> Sets.union acc (collectInnerTypeImports currentNs (Packaging.termDefinitionBody td))) Sets.empty termDefs
           typeImports = Sets.union (Sets.union typeImportsFromTypes typeImportsFromTerms) typeImportsFromInner
@@ -648,15 +648,15 @@ moduleToTypeScript mod defs cx g =
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems ->
         let termItems = Lists.map (encodeTermDefinition cx g currentNs) termDefs
             allItems = Lists.concat2 typeItems termItems
-            mModuleDoc = Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
-            moduleDocText = Maybes.cases mModuleDoc "" (\d -> Strings.cat2 (Serde.toTypeScriptComments d []) "\n\n")
+            mModuleDoc = Optionals.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
+            moduleDocText = Optionals.cases mModuleDoc "" (\d -> Strings.cat2 (Serde.toTypeScriptComments d []) "\n\n")
             header = Strings.cat2 "// Note: this is an automatically generated file. Do not edit.\n\n" moduleDocText
             renderItem =
                     \docAndItem ->
                       let mdoc = Pairs.first docAndItem
                           item = Pairs.second docAndItem
                           itemText = printModuleItem item
-                      in (Maybes.cases mdoc itemText (\d -> Strings.cat [
+                      in (Optionals.cases mdoc itemText (\d -> Strings.cat [
                         Serde.toTypeScriptComments d [],
                         "\n",
                         itemText]))
@@ -719,7 +719,7 @@ printPropertySignature ps =
                     (Logic.ifElse (Syntax.propertySignatureOptional ps) "?" ""),
                     ": ",
                     (printTypeExpression (Syntax.propertySignatureType ps))]
-      in (Maybes.cases mcomments line (\dc -> Strings.cat [
+      in (Optionals.cases mcomments line (\dc -> Strings.cat [
         Serde.toTypeScriptComments (Syntax.documentationCommentDescription dc) (Syntax.documentationCommentTags dc),
         "\n",
         line]))
@@ -775,7 +775,7 @@ printTypeParameter tp =
 
       let name = Syntax.unIdentifier (Syntax.typeParameterName tp)
           constraint = Syntax.typeParameterConstraint tp
-      in (Maybes.cases constraint name (\c -> Strings.cat [
+      in (Optionals.cases constraint name (\c -> Strings.cat [
         name,
         " extends ",
         (printTypeExpression c)]))
@@ -799,7 +799,7 @@ sortBindingsTopologically bindings =
                         deps = Lists.filter (\n -> Maps.member n byName) (Sets.toList freeVars)
                     in (bname, deps)) bindings
           sccs = Sorting.topologicalSortComponents adjacency
-      in (Maybes.cat (Lists.map (\n -> Maps.lookup n byName) (Lists.concat sccs)))
+      in (Optionals.cat (Lists.map (\n -> Maps.lookup n byName) (Lists.concat sccs)))
 sortTermDefsTopologically :: t0 -> [Packaging.TermDefinition] -> [Packaging.TermDefinition]
 sortTermDefsTopologically currentNs tdefs =
 
@@ -812,7 +812,7 @@ sortTermDefsTopologically currentNs tdefs =
                         deps = Lists.filter (\n -> Maps.member n byName) (Sets.toList freeVars)
                     in (tname, deps)) tdefs
           sccs = Sorting.topologicalSortComponents adjacency
-      in (Maybes.cat (Lists.map (\n -> Maps.lookup n byName) (Lists.concat sccs)))
+      in (Optionals.cat (Lists.map (\n -> Maps.lookup n byName) (Lists.concat sccs)))
 stripForalls :: Core.Type -> Core.Type
 stripForalls t =
 

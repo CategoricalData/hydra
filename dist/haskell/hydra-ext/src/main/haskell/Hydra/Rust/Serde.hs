@@ -3,14 +3,37 @@
 
 module Hydra.Rust.Serde where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Rust.Operators as Operators
 import qualified Hydra.Rust.Syntax as Syntax
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Serialize an array expression
@@ -47,10 +70,10 @@ attributeToExpr attr =
           prefix = Logic.ifElse inner "#![" "#["
           pathStr = Strings.intercalate "::" path
           tokensPart =
-                  Maybes.maybe "" (\t -> Strings.cat [
+                  Optionals.cases tokens "" (\t -> Strings.cat [
                     "(",
                     t,
-                    ")"]) tokens
+                    ")"])
       in (Serialization.cst (Strings.cat [
         prefix,
         pathStr,
@@ -96,8 +119,8 @@ blockToExpr b =
       let stmts = Syntax.blockStatements b
           expr = Syntax.blockExpression b
           stmtExprs = Lists.map statementToExpr stmts
-          exprPart = Maybes.maybe [] (\e -> [
-                expressionToExpr e]) expr
+          exprPart = Optionals.cases expr [] (\e -> [
+                expressionToExpr e])
           allParts = Lists.concat2 stmtExprs exprPart
       in (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle allParts)
 -- | Serialize a function call expression
@@ -134,10 +157,10 @@ closureExprToExpr c =
                     (Strings.intercalate ", " (Lists.map closureParamToStr params)),
                     "|"]
           retPart =
-                  Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                  Optionals.cases retType Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
-                    (typeToExpr t)])) retType
-      in (Serialization.spaceSep (Maybes.cat [
+                    (typeToExpr t)]))
+      in (Serialization.spaceSep (Optionals.cat [
         moveKw,
         (Just (Serialization.cst paramsStr)),
         retPart,
@@ -149,10 +172,10 @@ closureParamToStr cp =
       let pat = Syntax.closureParamPattern cp
           typ = Syntax.closureParamType cp
           patStr = Serialization.printExpr (patternToExpr pat)
-      in (Maybes.maybe patStr (\t -> Strings.cat [
+      in (Optionals.cases typ patStr (\t -> Strings.cat [
         patStr,
         ": ",
-        (Serialization.printExpr (typeToExpr t))]) typ)
+        (Serialization.printExpr (typeToExpr t))]))
 -- | Serialize a compound assignment expression
 compoundAssignExprToExpr :: Syntax.CompoundAssignExpr -> Ast.Expr
 compoundAssignExprToExpr c =
@@ -211,21 +234,21 @@ enumDefToExpr e =
           derives = Syntax.enumDefDerives e
           docC = Syntax.enumDefDoc e
           derivesAttr = derivesToExpr derives
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     Just (Serialization.cst "enum"),
                     (Just (Serialization.cst name)),
                     (genericParamsToExpr generics)])
-          wherePart = Maybes.maybe Nothing (\w -> Just (whereClauseToExpr w)) whereC
+          wherePart = Optionals.cases whereC Nothing (\w -> Just (whereClauseToExpr w))
           body = Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map enumVariantToExpr variants)
       in (Serialization.newlineSep (Lists.concat [
         docPart,
-        (Maybes.maybe [] (\d -> [
-          d]) derivesAttr),
+        (Optionals.cases derivesAttr [] (\d -> [
+          d])),
         [
-          Serialization.spaceSep (Maybes.cat [
+          Serialization.spaceSep (Optionals.cat [
             Just header,
             wherePart,
             (Just body)])]]))
@@ -243,8 +266,8 @@ enumVariantToExpr v =
       let name = Syntax.enumVariantName v
           body = Syntax.enumVariantBody v
           docC = Syntax.enumVariantDoc v
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
       in (Serialization.newlineSep (Lists.concat [
         docPart,
         [
@@ -286,12 +309,12 @@ expressionToExpr expr =
       Syntax.ExpressionArray v0 -> arrayExprToExpr v0
       Syntax.ExpressionIndex v0 -> indexExprToExpr v0
       Syntax.ExpressionRange v0 -> rangeExprToExpr v0
-      Syntax.ExpressionReturn v0 -> Maybes.maybe (Serialization.cst "return") (\e -> Serialization.spaceSep [
+      Syntax.ExpressionReturn v0 -> Optionals.cases v0 (Serialization.cst "return") (\e -> Serialization.spaceSep [
         Serialization.cst "return",
-        (expressionToExpr e)]) v0
-      Syntax.ExpressionBreak v0 -> Maybes.maybe (Serialization.cst "break") (\e -> Serialization.spaceSep [
+        (expressionToExpr e)])
+      Syntax.ExpressionBreak v0 -> Optionals.cases v0 (Serialization.cst "break") (\e -> Serialization.spaceSep [
         Serialization.cst "break",
-        (expressionToExpr e)]) v0
+        (expressionToExpr e)])
       Syntax.ExpressionContinue -> Serialization.cst "continue"
       Syntax.ExpressionTry v0 -> Serialization.cst (Strings.cat2 (Serialization.printExpr (expressionToExpr v0)) "?")
       Syntax.ExpressionCast v0 -> castExprToExpr v0
@@ -317,18 +340,18 @@ fieldPatternToExpr fp =
 
       let name = Syntax.fieldPatternName fp
           pat = Syntax.fieldPatternPattern fp
-      in (Maybes.maybe (Serialization.cst name) (\p -> Serialization.spaceSep [
+      in (Optionals.cases pat (Serialization.cst name) (\p -> Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
-        (patternToExpr p)]) pat)
+        (patternToExpr p)]))
 -- | Serialize a field-value pair
 fieldValueToExpr :: Syntax.FieldValue -> Ast.Expr
 fieldValueToExpr fv =
 
       let name = Syntax.fieldValueName fv
           val = Syntax.fieldValueValue fv
-      in (Maybes.maybe (Serialization.cst name) (\v -> Serialization.spaceSep [
+      in (Optionals.cases val (Serialization.cst name) (\v -> Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
-        (expressionToExpr v)]) val)
+        (expressionToExpr v)]))
 -- | Serialize a float literal
 floatLiteralToExpr :: Syntax.FloatLiteral -> Ast.Expr
 floatLiteralToExpr fl =
@@ -336,7 +359,7 @@ floatLiteralToExpr fl =
       let val = Syntax.floatLiteralValue fl
           suf = Syntax.floatLiteralSuffix fl
           valStr = Literals.showFloat64 val
-          sufStr = Maybes.maybe "" (\s -> s) suf
+          sufStr = Optionals.cases suf "" (\s -> s)
       in (Serialization.cst (Strings.cat2 valStr sufStr))
 -- | Serialize a function definition
 fnDefToExpr :: Syntax.FnDef -> Ast.Expr
@@ -352,8 +375,8 @@ fnDefToExpr f =
           isConst = Syntax.fnDefConst f
           isUnsafe = Syntax.fnDefUnsafe f
           docC = Syntax.fnDefDoc f
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
           asyncKw = Logic.ifElse isAsync (Just (Serialization.cst "async")) Nothing
           constKw = Logic.ifElse isConst (Just (Serialization.cst "const")) Nothing
           unsafeKw = Logic.ifElse isUnsafe (Just (Serialization.cst "unsafe")) Nothing
@@ -362,12 +385,12 @@ fnDefToExpr f =
           genericsExpr = genericParamsToExpr generics
           paramsExpr = Serialization.parenListAdaptive (Lists.map fnParamToExpr params)
           retTypeExpr =
-                  Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                  Optionals.cases retType Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
-                    (typeToExpr t)])) retType
-          whereExpr = Maybes.maybe Nothing (\w -> Just (whereClauseToExpr w)) whereC
+                    (typeToExpr t)]))
+          whereExpr = Optionals.cases whereC Nothing (\w -> Just (whereClauseToExpr w))
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     asyncKw,
                     constKw,
                     unsafeKw,
@@ -400,8 +423,8 @@ forExprToExpr f =
           pat = Syntax.forExprPattern f
           iter = Syntax.forExprIter f
           body = Syntax.forExprBody f
-          labelPart = Maybes.maybe Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":")))) label
-      in (Serialization.spaceSep (Maybes.cat [
+          labelPart = Optionals.cases label Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":"))))
+      in (Serialization.spaceSep (Optionals.cat [
         labelPart,
         (Just (Serialization.cst "for")),
         (Just (patternToExpr pat)),
@@ -435,10 +458,10 @@ genericArgumentsToExpr args =
             output = Syntax.parenthesizedArgsOutput v0
             inputPart = Serialization.parenListAdaptive (Lists.map typeToExpr inputs)
             outputPart =
-                    Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                    Optionals.cases output Nothing (\t -> Just (Serialization.spaceSep [
                       Serialization.cst "->",
-                      (typeToExpr t)])) output
-        in (Just (Serialization.spaceSep (Maybes.cat [
+                      (typeToExpr t)]))
+        in (Just (Serialization.spaceSep (Optionals.cat [
           Just inputPart,
           outputPart])))
 -- | Serialize a generic parameter
@@ -463,10 +486,10 @@ identifierPatternToExpr ip =
           atPat = Syntax.identifierPatternAtPattern ip
           mutKw = Logic.ifElse mut (Just (Serialization.cst "mut")) Nothing
           atPart =
-                  Maybes.maybe Nothing (\p -> Just (Serialization.spaceSep [
+                  Optionals.cases atPat Nothing (\p -> Just (Serialization.spaceSep [
                     Serialization.cst "@",
-                    (patternToExpr p)])) atPat
-      in (Serialization.spaceSep (Maybes.cat [
+                    (patternToExpr p)]))
+      in (Serialization.spaceSep (Optionals.cat [
         mutKw,
         (Just (Serialization.cst name)),
         atPart]))
@@ -489,10 +512,10 @@ ifExprToExpr i =
                         (Serialization.cst "="),
                         (expressionToExpr expr)])
           elsePart =
-                  Maybes.maybe Nothing (\e -> Just (Serialization.spaceSep [
+                  Optionals.cases elseB Nothing (\e -> Just (Serialization.spaceSep [
                     Serialization.cst "else",
-                    (expressionToExpr e)])) elseB
-      in (Serialization.spaceSep (Maybes.cat [
+                    (expressionToExpr e)]))
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "if"),
         (Just condExpr),
         (Just (blockToExpr thenB)),
@@ -508,12 +531,12 @@ implBlockToExpr i =
           items = Syntax.implBlockItems i
           genericsExpr = genericParamsToExpr generics
           traitPart =
-                  Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                  Optionals.cases trait Nothing (\t -> Just (Serialization.spaceSep [
                     typePathToExpr t,
-                    (Serialization.cst "for")])) trait
-          wherePart = Maybes.maybe Nothing (\w -> Just (whereClauseToExpr w)) whereC
+                    (Serialization.cst "for")]))
+          wherePart = Optionals.cases whereC Nothing (\w -> Just (whereClauseToExpr w))
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     Just (Serialization.cst "impl"),
                     genericsExpr,
                     traitPart,
@@ -542,18 +565,18 @@ implMethodToExpr m =
           body = Syntax.implMethodBody m
           pub = Syntax.implMethodPublic m
           docC = Syntax.implMethodDoc m
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
           pubKw = Logic.ifElse pub (Just (Serialization.cst "pub")) Nothing
           genericsExpr = genericParamsToExpr generics
           paramsExpr = Serialization.parenListAdaptive (Lists.map methodParamToExpr params)
           retTypeExpr =
-                  Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                  Optionals.cases retType Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
-                    (typeToExpr t)])) retType
-          whereExpr = Maybes.maybe Nothing (\w -> Just (whereClauseToExpr w)) whereC
+                    (typeToExpr t)]))
+          whereExpr = Optionals.cases whereC Nothing (\w -> Just (whereClauseToExpr w))
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     pubKw,
                     (Just (Serialization.cst "fn")),
                     (Just (Serialization.cst name)),
@@ -585,7 +608,7 @@ integerLiteralToExpr il =
       let val = Syntax.integerLiteralValue il
           suf = Syntax.integerLiteralSuffix il
           valStr = Literals.showBigint val
-          sufStr = Maybes.maybe "" (\s -> s) suf
+          sufStr = Optionals.cases suf "" (\s -> s)
       in (Serialization.cst (Strings.cat2 valStr sufStr))
 -- | Serialize a Rust item to an AST expression
 itemToExpr :: Syntax.Item -> Ast.Expr
@@ -609,14 +632,14 @@ itemWithCommentsToExpr iwc =
       let doc = Syntax.itemWithCommentsDoc iwc
           vis = Syntax.itemWithCommentsVisibility iwc
           item = Syntax.itemWithCommentsItem iwc
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) doc
+          docPart = Optionals.cases doc [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
           visPart = visibilityToExpr vis
           itemPart = itemToExpr item
       in (Serialization.newlineSep (Lists.concat [
         docPart,
         [
-          Serialization.spaceSep (Maybes.cat [
+          Serialization.spaceSep (Optionals.cat [
             visPart,
             (Just itemPart)])]]))
 -- | Serialize a let statement
@@ -629,14 +652,14 @@ letStatementToExpr l =
           init = Syntax.letStatementInit l
           mutKw = Logic.ifElse mut (Just (Serialization.cst "mut")) Nothing
           typPart =
-                  Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                  Optionals.cases typ Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst ":",
-                    (typeToExpr t)])) typ
+                    (typeToExpr t)]))
           initPart =
-                  Maybes.maybe Nothing (\e -> Just (Serialization.spaceSep [
+                  Optionals.cases init Nothing (\e -> Just (Serialization.spaceSep [
                     Serialization.cst "=",
-                    (expressionToExpr e)])) init
-      in (Serialization.spaceSep (Maybes.cat [
+                    (expressionToExpr e)]))
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "let"),
         mutKw,
         (Just (patternToExpr pat)),
@@ -670,8 +693,8 @@ loopExprToExpr l =
 
       let label = Syntax.loopExprLabel l
           body = Syntax.loopExprBody l
-          labelPart = Maybes.maybe Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":")))) label
-      in (Serialization.spaceSep (Maybes.cat [
+          labelPart = Optionals.cases label Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":"))))
+      in (Serialization.spaceSep (Optionals.cat [
         labelPart,
         (Just (Serialization.cst "loop")),
         (Just (blockToExpr body))]))
@@ -707,10 +730,10 @@ matchArmToExpr arm =
           guard = Syntax.matchArmGuard arm
           body = Syntax.matchArmBody arm
           guardPart =
-                  Maybes.maybe Nothing (\g -> Just (Serialization.spaceSep [
+                  Optionals.cases guard Nothing (\g -> Just (Serialization.spaceSep [
                     Serialization.cst "if",
-                    (expressionToExpr g)])) guard
-      in (Serialization.spaceSep (Maybes.cat [
+                    (expressionToExpr g)]))
+      in (Serialization.spaceSep (Optionals.cat [
         Just (patternToExpr pat),
         guardPart,
         (Just (Serialization.cst "=>")),
@@ -762,20 +785,20 @@ modDefToExpr m =
 
       let name = Syntax.modDefName m
           body = Syntax.modDefBody m
-      in (Maybes.maybe (Serialization.spaceSep [
+      in (Optionals.cases body (Serialization.spaceSep [
         Serialization.cst "mod",
         (Serialization.cst name),
         (Serialization.cst ";")]) (\items -> Serialization.spaceSep [
         Serialization.cst "mod",
         (Serialization.cst name),
-        (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map itemToExpr items))]) body)
+        (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map itemToExpr items))]))
 -- | Serialize a path segment
 pathSegmentToExpr :: Syntax.PathSegment -> Ast.Expr
 pathSegmentToExpr seg =
 
       let name = Syntax.pathSegmentName seg
           args = Syntax.pathSegmentArguments seg
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst name),
         (genericArgumentsToExpr args)]))
 -- | Serialize a pattern
@@ -802,8 +825,8 @@ rangeExprToExpr r =
       let from = Syntax.rangeExprFrom r
           to = Syntax.rangeExprTo r
           incl = Syntax.rangeExprInclusive r
-          fromStr = Maybes.maybe "" (\f -> Serialization.printExpr (expressionToExpr f)) from
-          toStr = Maybes.maybe "" (\t -> Serialization.printExpr (expressionToExpr t)) to
+          fromStr = Optionals.cases from "" (\f -> Serialization.printExpr (expressionToExpr f))
+          toStr = Optionals.cases to "" (\t -> Serialization.printExpr (expressionToExpr t))
           op = Logic.ifElse incl "..=" ".."
       in (Serialization.cst (Strings.cat [
         fromStr,
@@ -816,8 +839,8 @@ rangePatternToExpr rp =
       let from = Syntax.rangePatternFrom rp
           to = Syntax.rangePatternTo rp
           incl = Syntax.rangePatternInclusive rp
-          fromStr = Maybes.maybe "" (\p -> Serialization.printExpr (patternToExpr p)) from
-          toStr = Maybes.maybe "" (\p -> Serialization.printExpr (patternToExpr p)) to
+          fromStr = Optionals.cases from "" (\p -> Serialization.printExpr (patternToExpr p))
+          toStr = Optionals.cases to "" (\p -> Serialization.printExpr (patternToExpr p))
           op = Logic.ifElse incl "..=" ".."
       in (Serialization.cst (Strings.cat [
         fromStr,
@@ -846,7 +869,7 @@ referenceTypeToExpr rt =
       let lt = Syntax.referenceTypeLifetime rt
           mut = Syntax.referenceTypeMutable rt
           t = Syntax.referenceTypeType rt
-          ltPart = Maybes.maybe "" (\l -> Strings.cat2 "'" (Strings.cat2 (Syntax.lifetimeName l) " ")) lt
+          ltPart = Optionals.cases lt "" (\l -> Strings.cat2 "'" (Strings.cat2 (Syntax.lifetimeName l) " "))
           mutPart = Logic.ifElse mut "mut " ""
       in (Serialization.cst (Strings.cat [
         "&",
@@ -872,7 +895,7 @@ staticDefToExpr s =
           val = Syntax.staticDefValue s
           mut = Syntax.staticDefMutable s
           mutKw = Logic.ifElse mut (Just (Serialization.cst "mut")) Nothing
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "static"),
         mutKw,
         (Just (Serialization.cst (Strings.cat2 name ":"))),
@@ -900,20 +923,20 @@ structDefToExpr s =
           derives = Syntax.structDefDerives s
           docC = Syntax.structDefDoc s
           derivesAttr = derivesToExpr derives
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     Just (Serialization.cst "struct"),
                     (Just (Serialization.cst name)),
                     (genericParamsToExpr generics)])
-          wherePart = Maybes.maybe Nothing (\w -> Just (whereClauseToExpr w)) whereC
+          wherePart = Optionals.cases whereC Nothing (\w -> Just (whereClauseToExpr w))
       in (Serialization.newlineSep (Lists.concat [
         docPart,
-        (Maybes.maybe [] (\d -> [
-          d]) derivesAttr),
+        (Optionals.cases derivesAttr [] (\d -> [
+          d])),
         [
-          Serialization.spaceSep (Maybes.cat [
+          Serialization.spaceSep (Optionals.cat [
             Just header,
             wherePart,
             (Just (structBodyToExpr body))])]]))
@@ -926,10 +949,10 @@ structExprToExpr s =
           rest = Syntax.structExprRest s
           fieldExprs = Lists.map fieldValueToExpr fields
           restExpr =
-                  Maybes.maybe [] (\r -> [
+                  Optionals.cases rest [] (\r -> [
                     Serialization.spaceSep [
                       Serialization.cst "..",
-                      (expressionToExpr r)]]) rest
+                      (expressionToExpr r)]])
           allFields = Lists.concat2 fieldExprs restExpr
       in (Serialization.spaceSep [
         exprPathToExpr path,
@@ -943,12 +966,12 @@ structFieldToExpr field =
           pub = Syntax.structFieldPublic field
           docC = Syntax.structFieldDoc field
           pubKw = Logic.ifElse pub (Just (Serialization.cst "pub")) Nothing
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
       in (Serialization.newlineSep (Lists.concat [
         docPart,
         [
-          Serialization.spaceSep (Maybes.cat [
+          Serialization.spaceSep (Optionals.cat [
             pubKw,
             (Just (Serialization.cst (Strings.cat2 name ":"))),
             (Just (typeToExpr typ))])]]))
@@ -982,10 +1005,10 @@ traitConstToExpr c =
           typ = Syntax.traitConstType c
           def = Syntax.traitConstDefault c
           defPart =
-                  Maybes.maybe Nothing (\d -> Just (Serialization.spaceSep [
+                  Optionals.cases def Nothing (\d -> Just (Serialization.spaceSep [
                     Serialization.cst "=",
-                    (expressionToExpr d)])) def
-      in (Serialization.spaceSep (Maybes.cat [
+                    (expressionToExpr d)]))
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "const"),
         (Just (Serialization.cst (Strings.cat2 name ":"))),
         (Just (typeToExpr typ)),
@@ -1002,17 +1025,17 @@ traitDefToExpr t =
           items = Syntax.traitDefItems t
           isUnsafe = Syntax.traitDefUnsafe t
           docC = Syntax.traitDefDoc t
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
           unsafeKw = Logic.ifElse isUnsafe (Just (Serialization.cst "unsafe")) Nothing
           genericsExpr = genericParamsToExpr generics
           superPart =
                   Logic.ifElse (Lists.null supers) Nothing (Just (Serialization.spaceSep [
                     Serialization.cst ":",
                     (Serialization.cst (Strings.intercalate " + " (Lists.map (\b -> Serialization.printExpr (typeParamBoundToExpr b)) supers)))]))
-          wherePart = Maybes.maybe Nothing (\w -> Just (whereClauseToExpr w)) whereC
+          wherePart = Optionals.cases whereC Nothing (\w -> Just (whereClauseToExpr w))
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     unsafeKw,
                     (Just (Serialization.cst "trait")),
                     (Just (Serialization.cst name)),
@@ -1045,21 +1068,21 @@ traitMethodToExpr m =
           genericsExpr = genericParamsToExpr generics
           paramsExpr = Serialization.parenListAdaptive (Lists.map methodParamToExpr params)
           retTypeExpr =
-                  Maybes.maybe Nothing (\t -> Just (Serialization.spaceSep [
+                  Optionals.cases retType Nothing (\t -> Just (Serialization.spaceSep [
                     Serialization.cst "->",
-                    (typeToExpr t)])) retType
+                    (typeToExpr t)]))
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     Just (Serialization.cst "fn"),
                     (Just (Serialization.cst name)),
                     genericsExpr,
                     (Just paramsExpr),
                     retTypeExpr])
-      in (Maybes.maybe (Serialization.spaceSep [
+      in (Optionals.cases defBody (Serialization.spaceSep [
         header,
         (Serialization.cst ";")]) (\body -> Serialization.spaceSep [
         header,
-        (blockToExpr body)]) defBody)
+        (blockToExpr body)]))
 -- | Serialize a trait associated type
 traitTypeToExpr :: Syntax.TraitType -> Ast.Expr
 traitTypeToExpr t =
@@ -1072,10 +1095,10 @@ traitTypeToExpr t =
                     Serialization.cst ":",
                     (Serialization.cst (Strings.intercalate " + " (Lists.map (\b -> Serialization.printExpr (typeParamBoundToExpr b)) bounds)))]))
           defPart =
-                  Maybes.maybe Nothing (\d -> Just (Serialization.spaceSep [
+                  Optionals.cases def Nothing (\d -> Just (Serialization.spaceSep [
                     Serialization.cst "=",
-                    (typeToExpr d)])) def
-      in (Serialization.spaceSep (Maybes.cat [
+                    (typeToExpr d)]))
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "type"),
         (Just (Serialization.cst name)),
         boundsPart,
@@ -1108,12 +1131,12 @@ typeAliasToExpr ta =
           generics = Syntax.typeAliasGenerics ta
           typ = Syntax.typeAliasType ta
           docC = Syntax.typeAliasDoc ta
-          docPart = Maybes.maybe [] (\d -> [
-                Serialization.cst (toRustDocComment d)]) docC
+          docPart = Optionals.cases docC [] (\d -> [
+                Serialization.cst (toRustDocComment d)])
       in (Serialization.newlineSep (Lists.concat [
         docPart,
         [
-          Serialization.spaceSep (Maybes.cat [
+          Serialization.spaceSep (Optionals.cat [
             Just (Serialization.cst "type"),
             (Just (Serialization.cst name)),
             (genericParamsToExpr generics),
@@ -1206,7 +1229,7 @@ useDeclarationToExpr use =
       let pub = Syntax.useDeclarationPublic use
           tree = Syntax.useDeclarationTree use
           pubKw = Logic.ifElse pub (Just (Serialization.cst "pub")) Nothing
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         pubKw,
         (Just (Serialization.cst "use")),
         (Just (useTreeToExpr tree)),
@@ -1267,7 +1290,7 @@ whileExprToExpr w =
       let label = Syntax.whileExprLabel w
           cond = Syntax.whileExprCondition w
           body = Syntax.whileExprBody w
-          labelPart = Maybes.maybe Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":")))) label
+          labelPart = Optionals.cases label Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":"))))
           condExpr =
                   case cond of
                     Syntax.IfConditionBool v0 -> expressionToExpr v0
@@ -1279,7 +1302,7 @@ whileExprToExpr w =
                         (patternToExpr pat),
                         (Serialization.cst "="),
                         (expressionToExpr expr)])
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         labelPart,
         (Just (Serialization.cst "while")),
         (Just condExpr),

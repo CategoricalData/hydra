@@ -3,10 +3,31 @@
 
 module Hydra.Graphql.Serde where
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Graphql.Syntax as Syntax
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Convert a GraphQL definition to an expression
@@ -35,7 +56,7 @@ enumTypeDefinitionToExpr def =
       let desc = Syntax.enumTypeDefinitionDescription def
           name = Syntax.enumTypeDefinitionName def
           values = Syntax.enumTypeDefinitionEnumValuesDefinition def
-          valuesExpr = Maybes.maybe [] (\vs -> Lists.map enumValueDefinitionToExpr (Syntax.unEnumValuesDefinition vs)) values
+          valuesExpr = Optionals.cases values [] (\vs -> Lists.map enumValueDefinitionToExpr (Syntax.unEnumValuesDefinition vs))
       in (withDescription desc (Serialization.spaceSep [
         Serialization.cst "enum",
         (nameToExpr name),
@@ -96,7 +117,7 @@ objectTypeDefinitionToExpr def =
       let desc = Syntax.objectTypeDefinitionDescription def
           name = Syntax.objectTypeDefinitionName def
           fields = Syntax.objectTypeDefinitionFieldsDefinition def
-          fieldsExpr = Maybes.maybe [] (\fs -> Lists.map fieldDefinitionToExpr (Syntax.unFieldsDefinition fs)) fields
+          fieldsExpr = Optionals.cases fields [] (\fs -> Lists.map fieldDefinitionToExpr (Syntax.unFieldsDefinition fs))
       in (withDescription desc (Serialization.spaceSep [
         Serialization.cst "type",
         (nameToExpr name),
@@ -134,6 +155,6 @@ typeToExpr typ =
 -- | Prepend an optional description to an expression
 withDescription :: Maybe Syntax.Description -> Ast.Expr -> Ast.Expr
 withDescription mdesc expr =
-    Serialization.newlineSep (Maybes.cat [
-      Maybes.map descriptionToExpr mdesc,
-      (Maybes.pure expr)])
+    Serialization.newlineSep (Optionals.cat [
+      Optionals.map descriptionToExpr mdesc,
+      (Optionals.pure expr)])

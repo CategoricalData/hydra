@@ -26,7 +26,7 @@ hosts.
 
 This recipe covers **structural** ingestion: producing typed host
 values from JSON and proving they match your schema's shape. A decoder
-roundtrip catches every record/union/wrap/maybe/list/literal mismatch
+roundtrip catches every record/union/wrap/optional/list/literal mismatch
 between your JSON and your schema.
 
 It does **not** cover **referential** validation — checking that a
@@ -227,7 +227,7 @@ construct on the left, you build the `Term` on the right.
 | `wrap Foo X` | `TermWrap(WrappedTerm(type_name=Name("…Foo"), body=<term for X>))` |
 | `record Foo {a: A, b: B}` | `TermRecord(Record(type_name=Name("…Foo"), fields=(Field(name=Name("a"), term=<A>), Field(name=Name("b"), term=<B>))))` |
 | `union Foo {x: X, y: Y}` | `TermInject(Injection(type_name=Name("…Foo"), field=Field(name=Name("x"), term=<X>)))` |
-| `optional X` | `TermMaybe(Just(<X>))` or `TermMaybe(Nothing())` |
+| `optional X` | `TermOptional(Given(<X>))` or `TermOptional(None_())` |
 | `list X` | `TermList((<X1>, <X2>, …))` — **tuple**, not list |
 | `set X` | `TermSet(frozenset({<X1>, <X2>, …}))` |
 | `map K V` | `TermMap(FrozenDict({<K1>: <V1>, …}))` |
@@ -243,14 +243,15 @@ A few traps from the first time through:
 - **Unions are `TermInject(Injection(…))`**, not `TermUnion` (no such
   constructor). The `Injection` carries the named variant *and* the
   union's `type_name`.
-- **Optionals are `TermMaybe(Just(...))` / `TermMaybe(Nothing())`**,
-  not `TermOptional`.
+- **Optionals are `TermOptional(Given(...))` / `TermOptional(None_())`**.
+  The present case is `Given`, the absent case `None_` (trailing underscore,
+  since `None` is a Python keyword).
 - **Integers and floats are doubly wrapped**: literal kind, then value
   variant. `LiteralInteger(IntegerValueInt32(n))`, not
   `LiteralInteger(n)`.
 - **`Record.fields` is a tuple of `Field`**, not a dict. Field order
   doesn't have to match declaration order for decoding, but every
-  declared field must appear (use `TermMaybe(Nothing())` for absent
+  declared field must appear (use `TermOptional(None_())` for absent
   optionals).
 - **`TermList` wraps a `Sequence[Term]`** in the type signature, but
   pass an immutable `tuple(...)`. The kernel's own constructors and
@@ -262,13 +263,13 @@ Small helpers go a long way. A useful starting set:
 
 ```python
 import hydra.core as C
-from hydra.dsl.python import FrozenDict, Just, Nothing
+from hydra.dsl.python import FrozenDict, Given, None_
 
 def t_str(s):     return C.TermLiteral(C.LiteralString(s))
 def t_bool(b):    return C.TermLiteral(C.LiteralBoolean(b))
 def t_i32(n):     return C.TermLiteral(C.LiteralInteger(C.IntegerValueInt32(n)))
 def t_f64(x):     return C.TermLiteral(C.LiteralFloat(C.FloatValueFloat64(x)))
-def t_maybe(v):   return C.TermMaybe(Just(v) if v is not None else Nothing())
+def t_optional(v): return C.TermOptional(Given(v) if v is not None else None_())
 def t_list(xs):   return C.TermList(tuple(xs))
 
 def t_wrap(type_name, body):
@@ -380,7 +381,8 @@ Useful pieces to study, if still present at those paths:
   `FrozenDict`.
 - **`AttributeError: module 'hydra.core' has no attribute 'TermUnion'`**.
   Union variants are `TermInject(Injection(...))`. There is no
-  `TermUnion`. Same trap: `TermMaybe`, not `TermOptional`.
+  `TermUnion`. Related: optionals are `TermOptional`, not `TermMaybe`
+  (renamed in #401).
 - **`ImportError: No module named hydra.decode.…`** at runtime.
   All three roots need to be on `PYTHONPATH` (see Step 2).
 

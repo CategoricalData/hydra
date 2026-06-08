@@ -945,7 +945,7 @@
                     "typeName": "hydra.typed.TypedTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"map": {"keys": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}},
+                    "argument": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "x"}}}},
         "name": "hydra.dsl.rdf.syntax.langStrings",
@@ -956,7 +956,7 @@
               "name": "arg0",
               "type": {
                 "application": {
-                  "argument": {"map": {"keys": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}},
+                  "argument": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1010,7 +1010,7 @@
           "result": {
             "type": {
               "application": {
-                "argument": {"map": {"keys": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}},
+                "argument": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -1168,7 +1168,7 @@
                                       "value": {
                                         "literal": {
                                           "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                                "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                                "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                             "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "languageTag"}},
                     "domain": {
@@ -1240,7 +1240,7 @@
                             "value": {
                               "literal": {
                                 "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                      "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                      "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -1440,7 +1440,7 @@
                           "value": {
                             "literal": {
                               "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                    "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                    "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                 "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
@@ -1860,7 +1860,7 @@
                                   "value": {
                                     "literal": {
                                       "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                            "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                            "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                         "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -1888,7 +1888,7 @@
                             "value": {
                               "literal": {
                                 "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                      "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
+                      "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}},
                   "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
@@ -2852,7 +2852,7 @@
                                     "typeName": "hydra.core.Term"}},
                                 "typeName": "hydra.typed.TypedTerm"}},
                             "domain": {
-                              "application": {"argument": {"maybe": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
+                              "application": {"argument": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                             "parameter": "graph"}},
                         "domain": {"application": {"argument": {"variable": "hydra.rdf.syntax.Node"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                         "parameter": "object"}},
@@ -2881,7 +2881,7 @@
               "isLazy": false,
               "name": "arg3",
               "type": {
-                "application": {"argument": {"maybe": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Quad"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
@@ -3097,7 +3097,7 @@
               "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Quad"}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {
-              "application": {"argument": {"maybe": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
+              "application": {"argument": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},
     {
       "term": {
@@ -3724,7 +3724,7 @@
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.typed.TypedTerm"}},
                     "domain": {
-                      "application": {"argument": {"maybe": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
+                      "application": {"argument": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.rdf.syntax.Quad"}, "function": {"variable": "hydra.typed.TypedTerm"}}},
                 "parameter": "original"}}}},
@@ -3739,7 +3739,7 @@
               "isLazy": false,
               "name": "arg1",
               "type": {
-                "application": {"argument": {"maybe": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
+                "application": {"argument": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}, "function": {"variable": "hydra.typed.TypedTerm"}}}}],
           "result": {
             "type": {"application": {"argument": {"variable": "hydra.rdf.syntax.Quad"}, "function": {"variable": "hydra.typed.TypedTerm"}}}},
           "typeParameters": []}}},

@@ -122,7 +122,7 @@ injection tname fld = Core.termInject $ Core.injection (Core.nameLift tname) fld
 
 -- | Create a Just term
 just :: TypedTerm Term -> TypedTerm Term
-just (TypedTerm t) = TypedTerm $ TermMaybe $ Just t
+just (TypedTerm t) = TypedTerm $ TermOptional $ Just t
 
 left :: TypedTerm Term -> TypedTerm Term
 left (TypedTerm t) = Core.termEither $ TypedTerm $ TermEither $ Left t
@@ -147,7 +147,7 @@ map terms = Core.termMap terms
 
 -- | Create a Nothing term
 nothing :: TypedTerm Term
-nothing = TypedTerm $ TermMaybe Nothing
+nothing = TypedTerm $ TermOptional Nothing
 
 pair :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
 pair (TypedTerm first) (TypedTerm second) = Core.termPair $ TypedTerm $ TermPair (first, second)

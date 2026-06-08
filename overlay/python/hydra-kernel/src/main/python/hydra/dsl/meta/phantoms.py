@@ -16,7 +16,7 @@ from hydra.util import CaseConvention, QualifiedName
 from hydra.core import Binding, Field, Name, Term, Type
 from hydra.packaging import Module, ModuleName
 from hydra.typed import TypedBinding, TypedTerm
-from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
+from hydra.dsl.python import FrozenDict, Optional, Given, None_
 
 
 def _tbinding_matmul(self, other):
@@ -125,7 +125,7 @@ def un_tterm(t: TypedTerm[A]) -> Term:
 # (>>:) :: Name -> TypedTerm a -> Field - use field_name_op(fname, term)
 
 
-def annot(key: Name, mvalue: Maybe[Term], term: TypedTerm[A]) -> TypedTerm[A]:
+def annot(key: Name, mvalue: Optional[Term], term: TypedTerm[A]) -> TypedTerm[A]:
     """Add an annotation to a term."""
     return TypedTerm[A](annotations.annotate_term(key, mvalue, un_tterm(term)))
 
@@ -147,20 +147,20 @@ def binary_function(f) -> TypedTerm[A]:
             return TypedTerm[A](terms.string(f"unexpected term as binary function: {term}"))
 
 
-def cases(name, arg: TypedTerm[A], dflt: Maybe[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[B]:
+def cases(name, arg: TypedTerm[A], dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[B]:
     """Apply a named case match to an argument.
 
-    Accepts a str or Name. Without a default, pass `dflt=None` (treated as Nothing()).
-    With a default, pass `dflt=Just(default_tterm)` or use `cases_with_default(...)`.
+    Accepts a str or Name. Without a default, pass `dflt=None` (treated as None_()).
+    With a default, pass `dflt=Given(default_tterm)` or use `cases_with_default(...)`.
     """
     if dflt is None:
-        dflt_term = Nothing()
+        dflt_term = None_()
     else:
         match dflt:
-            case Just(d):
-                dflt_term = Just(un_tterm(d))
-            case Nothing():
-                dflt_term = Nothing()
+            case Given(d):
+                dflt_term = Given(un_tterm(d))
+            case None_():
+                dflt_term = None_()
 
     return TypedTerm[B](terms.apply(terms.match(_name(name), dflt_term, fields), un_tterm(arg)))
 
@@ -168,11 +168,11 @@ def cases(name, arg: TypedTerm[A], dflt: Maybe[TypedTerm[B]] = None, fields: Seq
 def cases_with_default(name, arg: TypedTerm[A], default: TypedTerm[B], *fields: Field) -> TypedTerm[B]:
     """Apply a named case match with a default branch.
 
-    Java-style alternative to `cases(name, arg, Just(default), [f1, f2, ...])`.
+    Java-style alternative to `cases(name, arg, Given(default), [f1, f2, ...])`.
     Accepts variadic field args for ergonomics.
     """
     return TypedTerm[B](terms.apply(
-        terms.match(_name(name), Just(un_tterm(default)), list(fields)),
+        terms.match(_name(name), Given(un_tterm(default)), list(fields)),
         un_tterm(arg)
     ))
 
@@ -198,7 +198,7 @@ def definition_in_namespace(ns: ModuleName, lname: str, term: TypedTerm[A] | Non
     With 3 arguments: returns a TypedBinding (direct definition).
     With 2 arguments: returns a DefineBuilder for fluent chaining.
     """
-    qname = QualifiedName(Just(ns), lname)
+    qname = QualifiedName(Given(ns), lname)
     name = unqualify_name(qname)
     if term is not None:
         return TypedBinding(name, term)
@@ -226,7 +226,7 @@ def to_binding(tb: TypedBinding[A]) -> Binding:
 
     This mirrors Haskell's toBinding and Java's Phantoms.toBinding().
     """
-    return Binding(tb.name, tb.term.value, Nothing())
+    return Binding(tb.name, tb.term.value, None_())
 
 
 def to_definition(tb: TypedBinding[A]):
@@ -235,7 +235,7 @@ def to_definition(tb: TypedBinding[A]):
     Mirrors Haskell's Hydra.Dsl.Meta.Phantoms.toDefinition.
     """
     from hydra.packaging import DefinitionTerm, TermDefinition
-    return DefinitionTerm(TermDefinition(tb.name, Nothing(), Nothing(), tb.term.value))
+    return DefinitionTerm(TermDefinition(tb.name, None_(), None_(), tb.term.value))
 
 
 def to_term_definition(tb: TypedBinding[A]):
@@ -287,7 +287,7 @@ def doc(s: str, term: TypedTerm[A] | None = None) -> "TypedTerm[A] | ExprBuilder
     With 1 argument: returns an ExprBuilder for fluent chaining.
     """
     if term is not None:
-        return TypedTerm[A](annotations.set_term_description(Just(s), un_tterm(term)))
+        return TypedTerm[A](annotations.set_term_description(Given(s), un_tterm(term)))
     return ExprBuilder([("doc", s, None)])
 
 
@@ -298,7 +298,7 @@ def doc_wrapped(length: int, s: str, term: TypedTerm[A]) -> TypedTerm[A]:
 
 def el(binding: TypedBinding[A]) -> terms.Binding:
     """Convert a typed element to an untyped element."""
-    return terms.Binding(binding.name, un_tterm(binding.term), Nothing())
+    return terms.Binding(binding.name, un_tterm(binding.term), None_())
 
 
 def field(fname, val: TypedTerm[A]) -> Field:
@@ -325,7 +325,7 @@ def first_class_type(typ: TypedTerm[Type]) -> TypedTerm[Type]:
     """Mark a type as first-class."""
     return annot(
         hydra.constants.key_first_class_type,
-        Just(terms.boolean(True)),
+        Given(terms.boolean(True)),
         typ
     )
 
@@ -350,13 +350,13 @@ def inject_lambda(name, fname) -> TypedTerm[A]:
     return lam("injected_", inject(name, fname, var("injected_")))
 
 
-def just(term: TypedTerm[A]) -> TypedTerm[Maybe[A]]:
-    """Create a 'Just' optional value."""
-    return TypedTerm[Maybe[A]](terms.just(un_tterm(term)))
+def just(term: TypedTerm[A]) -> TypedTerm[Optional[A]]:
+    """Create a 'Given' optional value."""
+    return TypedTerm[Optional[A]](terms.just(un_tterm(term)))
 
 
 def just_() -> TypedTerm[A]:
-    """Function that wraps a value in 'Just'."""
+    """Function that wraps a value in 'Given'."""
     return TypedTerm[A](terms.lambda_("just_", terms.just(terms.var("just_"))))
 
 
@@ -400,7 +400,7 @@ def _build_term(intros: list[tuple[str, str, TypedTerm | None]], body: TypedTerm
     result = body
     for kind, name, value in reversed(intros):
         if kind == "doc":
-            result = TypedTerm[B](annotations.set_term_description(Just(name), un_tterm(result)))
+            result = TypedTerm[B](annotations.set_term_description(Given(name), un_tterm(result)))
         elif kind == "lambda":
             result = TypedTerm[B](terms.lambda_(name, un_tterm(result)))
         else:
@@ -599,16 +599,16 @@ def map_(m: Mapping[TypedTerm[A], TypedTerm[B]]) -> TypedTerm[dict[A, B]]:
     )
 
 
-def match(name, dflt: Maybe[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[A]:
+def match(name, dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[A]:
     """Create a pattern match on a union term. Accepts str or Name."""
     if dflt is None:
-        dflt_term = Nothing()
+        dflt_term = None_()
     else:
         match dflt:
-            case Just(d):
-                dflt_term = Just(un_tterm(d))
-            case Nothing():
-                dflt_term = Nothing()
+            case Given(d):
+                dflt_term = Given(un_tterm(d))
+            case None_():
+                dflt_term = None_()
 
     return TypedTerm[A](terms.match(_name(name), dflt_term, fields))
 
@@ -618,27 +618,27 @@ def module_name(mod: Module) -> ModuleName:
     return mod.name
 
 
-def nothing() -> TypedTerm[Maybe[A]]:
-    """Create a 'Nothing' optional value."""
-    return TypedTerm[Maybe[A]](terms.nothing())
+def nothing() -> TypedTerm[Optional[A]]:
+    """Create a 'None_' optional value."""
+    return TypedTerm[Optional[A]](terms.nothing())
 
 
-def opt(mc: Maybe[TypedTerm[A]]) -> TypedTerm[Maybe[A]]:
-    """Create an optional value from a Maybe."""
+def opt(mc: Optional[TypedTerm[A]]) -> TypedTerm[Optional[A]]:
+    """Create an optional value from an optional."""
     match mc:
-        case Just(c):
-            return TypedTerm[Maybe[A]](terms.optional(Just(un_tterm(c))))
-        case Nothing():
-            return TypedTerm[Maybe[A]](terms.optional(Nothing()))
+        case Given(c):
+            return TypedTerm[Optional[A]](terms.optional(Given(un_tterm(c))))
+        case None_():
+            return TypedTerm[Optional[A]](terms.optional(None_()))
 
 
-def opt_cases(arg: TypedTerm[Maybe[A]], if_nothing: TypedTerm[B], if_just: TypedTerm[A]) -> TypedTerm[B]:
+def opt_cases(arg: TypedTerm[Optional[A]], if_nothing: TypedTerm[B], if_just: TypedTerm[A]) -> TypedTerm[B]:
     """Pattern match on an optional value."""
     return primitive3(
-        Name("hydra.lib.maybes.maybe"),
+        Name("hydra.lib.optionals.cases"),
+        arg,
         if_nothing,
-        if_just,
-        arg
+        if_just
     )
 
 
@@ -734,8 +734,8 @@ def unary_function(f) -> TypedTerm[A]:
     match term:
         case terms.TermApplication(terms.Application(lhs, _)):
             return TypedTerm[A](lhs)
-        case terms.TermMaybe(Just(_)):
-            return TypedTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
+        case terms.TermOptional(Given(_)):
+            return TypedTerm[A](terms.primitive(Name("hydra.lib.optionals.pure")))
         case terms.TermInject(terms.Injection(tname, Field(fname, _))):
             return lam("x", inject(tname, fname, var("x")))
         case terms.TermWrap(terms.WrappedTerm(tname, _)):
@@ -757,9 +757,9 @@ def inject_unit(name, fname) -> TypedTerm[A]:
 def unqualify_name(qname: QualifiedName) -> Name:
     """Convert a QualifiedName to a Name."""
     match qname.module_name:
-        case Just(ns):
+        case Given(ns):
             return Name(f"{ns.value}.{qname.local}")
-        case Nothing():
+        case None_():
             return Name(qname.local)
 
 

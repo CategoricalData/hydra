@@ -102,9 +102,9 @@ edgeProjectionPattern :: TypeDefinition
 edgeProjectionPattern = define "EdgeProjectionPattern" $
   T.record [
     "direction">: pg "Direction",
-    "label">: T.maybe $ pg "EdgeLabel",
+    "label">: T.optional $ pg "EdgeLabel",
     "properties">: T.list $ q "PropertyPattern",
-    "vertex">: T.maybe $ q "VertexPattern"]
+    "vertex">: T.optional $ q "VertexPattern"]
 
 expression :: TypeDefinition
 expression = define "Expression" $
@@ -127,7 +127,7 @@ matchQuery = define "MatchQuery" $
   T.record [
     "optional">: T.boolean,
     "pattern">: T.list $ q "Projection",
-    "where">: T.maybe $ q "Expression"]
+    "where">: T.optional $ q "Expression"]
 
 pg :: String -> Type
 pg = typeref $ PgModel.ns
@@ -136,7 +136,7 @@ projection :: TypeDefinition
 projection = define "Projection" $
   T.record [
     "value">: q "Expression",
-    "as">: T.maybe $ q "Variable"]
+    "as">: T.optional $ q "Variable"]
 
 projections :: TypeDefinition
 projections = define "Projections" $
@@ -201,7 +201,7 @@ variable = define "Variable" $ T.wrap T.string
 vertexPattern :: TypeDefinition
 vertexPattern = define "VertexPattern" $
   T.record [
-    "variable">: T.maybe $ q "Variable",
-    "label">: T.maybe $ pg "VertexLabel",
+    "variable">: T.optional $ q "Variable",
+    "label">: T.optional $ pg "VertexLabel",
     "properties">: T.list $ q "PropertyPattern",
     "edges">: T.list $ q "EdgeProjectionPattern"]

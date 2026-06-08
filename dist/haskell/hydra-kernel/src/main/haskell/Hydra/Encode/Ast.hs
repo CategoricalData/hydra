@@ -6,7 +6,7 @@ import qualified Hydra.Ast as Ast
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.ast.Associativity
@@ -41,7 +41,7 @@ blockStyle x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "indent"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Ast.blockStyleIndent x))},
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Ast.blockStyleIndent x))},
         Core.Field {
           Core.fieldName = (Core.Name "newlineBeforeContent"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Ast.blockStyleNewlineBeforeContent x))},

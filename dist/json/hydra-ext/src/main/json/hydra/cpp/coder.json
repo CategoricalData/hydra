@@ -29,7 +29,7 @@
                                 {"name": "body", "term": {"variable": "mbody"}}],
                               "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
                         "typeName": "hydra.cpp.syntax.Declaration"}},
-                    "domain": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}},
+                    "domain": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}},
                     "parameter": "mbody"}},
                 "domain": {"list": {"variable": "hydra.cpp.syntax.BaseSpecifier"}},
                 "parameter": "baseSpecs"}},
@@ -40,7 +40,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
             {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}},
-            {"isLazy": false, "name": "arg2", "type": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
+            {"isLazy": false, "name": "arg2", "type": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
           "result": {"type": {"variable": "hydra.cpp.syntax.Declaration"}},
           "typeParameters": []}}},
     {
@@ -72,7 +72,7 @@
                             {"name": "body", "term": {"variable": "mbody"}}],
                           "typeName": "hydra.cpp.syntax.ClassDeclaration"}}},
                     "typeName": "hydra.cpp.syntax.Declaration"}},
-                "domain": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}},
+                "domain": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}},
                 "parameter": "mbody"}},
             "domain": {"literal": {"string": {}}},
             "parameter": "name"}},
@@ -80,7 +80,7 @@
         "signature": {
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"maybe": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
+            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}}],
           "result": {"type": {"variable": "hydra.cpp.syntax.Declaration"}},
           "typeParameters": []}}},
     {
@@ -89,7 +89,7 @@
           "lambda": {
             "body": {
               "application": {
-                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}},
+                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}},
                 "function": {"application": {"argument": {"variable": "name"}, "function": {"variable": "hydra.cpp.coder.cppEnumDeclaration"}}}}},
             "domain": {"literal": {"string": {}}},
             "parameter": "name"}},
@@ -379,7 +379,7 @@
                       {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                       {
                         "name": "defaultValue",
-                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                     "typeName": "hydra.cpp.syntax.Parameter"}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "typ"}},
@@ -406,7 +406,7 @@
                       {"name": "unnamed", "term": {"literal": {"boolean": true}}},
                       {
                         "name": "defaultValue",
-                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                     "typeName": "hydra.cpp.syntax.Parameter"}},
                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                 "parameter": "typ"}},
@@ -898,7 +898,7 @@
                 "argument": {
                   "record": {
                     "fields": [
-                      {"name": "moduleName", "term": {"maybe": {"variable": "ns"}}},
+                      {"name": "moduleName", "term": {"optional": {"variable": "ns"}}},
                       {"name": "local", "term": {"literal": {"string": "Fwd"}}}],
                     "typeName": "hydra.util.QualifiedName"}},
                 "function": {"variable": "hydra.names.unqualifyName"}}},
@@ -1467,7 +1467,7 @@
                                                             "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                 "domain": {"variable": "hydra.core.Type"},
                                                 "parameter": "et"}},
-                                            "name": "maybe"},
+                                            "name": "optional"},
                                           {
                                             "handler": {
                                               "lambda": {
@@ -1819,7 +1819,7 @@
                                                                                 {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                                                                                 {
                                                                                   "name": "defaultValue",
-                                                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                                                                                  "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                                                                               "typeName": "hydra.cpp.syntax.Parameter"}}]}}],
                                                                   "typeName": "hydra.cpp.syntax.FunctionType"}}},
                                                             "typeName": "hydra.cpp.syntax.TypeExpression"}}}},
@@ -2147,7 +2147,7 @@
                                                   "lambda": {
                                                     "body": {
                                                       "application": {
-                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"unit": {}}}},
+                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"unit": {}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "rt"},
@@ -2166,7 +2166,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.cpp.coder.encodeRecordType"}, "type": {"variable": "t0"}}},
                                                                                 "type": {"variable": "t1"}}},
-                                                                            "type": {"maybe": {"unit": {}}}}}}}}}}}}}}},
+                                                                            "type": {"optional": {"unit": {}}}}}}}}}}}}}}},
                                                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                     "parameter": "rt"}},
                                                 "name": "record"},
@@ -2175,7 +2175,7 @@
                                                   "lambda": {
                                                     "body": {
                                                       "application": {
-                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"unit": {}}}},
+                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"unit": {}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "rt"},
@@ -2194,7 +2194,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.cpp.coder.encodeUnionType"}, "type": {"variable": "t0"}}},
                                                                                 "type": {"variable": "t1"}}},
-                                                                            "type": {"maybe": {"unit": {}}}}}}}}}}}}}}},
+                                                                            "type": {"optional": {"unit": {}}}}}}}}}}}}}}},
                                                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                     "parameter": "rt"}},
                                                 "name": "union"},
@@ -2203,7 +2203,7 @@
                                                   "lambda": {
                                                     "body": {
                                                       "application": {
-                                                        "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"unit": {}}}},
+                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"unit": {}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "wt"},
@@ -2222,7 +2222,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.cpp.coder.encodeWrappedType"}, "type": {"variable": "t0"}}},
                                                                                 "type": {"variable": "t1"}}},
-                                                                            "type": {"maybe": {"unit": {}}}}}}}}}}}}}}},
+                                                                            "type": {"optional": {"unit": {}}}}}}}}}}}}}}},
                                                     "domain": {"variable": "hydra.core.Type"},
                                                     "parameter": "wt"}},
                                                 "name": "wrap"}],
@@ -2316,13 +2316,13 @@
                                                                 "right": {
                                                                   "record": {
                                                                     "fields": [
-                                                                      {"name": "type", "term": {"maybe": {"variable": "cppType"}}},
+                                                                      {"name": "type", "term": {"optional": {"variable": "cppType"}}},
                                                                       {
                                                                         "name": "name",
                                                                         "term": {"application": {"argument": {"variable": "fname"}, "function": {"variable": "hydra.cpp.coder.encodeFieldName"}}}},
                                                                       {
                                                                         "name": "initializer",
-                                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}},
+                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}},
                                                                       {"name": "isAuto", "term": {"literal": {"boolean": false}}}],
                                                                     "typeName": "hydra.cpp.syntax.VariableDeclaration"}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -2409,7 +2409,7 @@
                                                                         {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "maybe": {
+                                                                              "optional": {
                                                                                 "wrap": {
                                                                                   "body": {
                                                                                     "application": {
@@ -2482,7 +2482,7 @@
                                                                                                                                                     "term": {"inject": {"field": {"name": "int", "term": {"unit": {}}}, "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                                                                                                                   "typeName": "hydra.cpp.syntax.TypeExpression"}},
                                                                                                                                               "function": {
-                                                                                                                                                "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}}}}}},
+                                                                                                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}}}}}},
                                                                                                                                     {
                                                                                                                                       "name": "name",
                                                                                                                                       "term": {
@@ -2492,7 +2492,7 @@
                                                                                                                                     {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                                                                                                                                     {
                                                                                                                                       "name": "defaultValue",
-                                                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                                                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                                                                                                                                   "typeName": "hydra.cpp.syntax.Parameter"}},
                                                                                                                               "domain": {"variable": "hydra.cpp.syntax.VariableDeclaration"},
                                                                                                                               "parameter": "p"}},
@@ -2820,7 +2820,7 @@
                                                             {
                                                               "application": {
                                                                 "argument": {
-                                                                  "maybe": {
+                                                                  "optional": {
                                                                     "wrap": {
                                                                       "body": {
                                                                         "application": {
@@ -2842,7 +2842,7 @@
                                                                                                   "fields": [
                                                                                                     {
                                                                                                       "name": "type",
-                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
+                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
                                                                                                     {
                                                                                                       "name": "name",
                                                                                                       "term": {
@@ -2852,7 +2852,7 @@
                                                                                                           "function": {"variable": "hydra.cpp.coder.encodeEnumValue"}}}},
                                                                                                     {
                                                                                                       "name": "initializer",
-                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}},
+                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}},
                                                                                                     {"name": "isAuto", "term": {"literal": {"boolean": false}}}],
                                                                                                   "typeName": "hydra.cpp.syntax.VariableDeclaration"}}},
                                                                                             "typeName": "hydra.cpp.syntax.MemberDeclaration"}}},
@@ -3133,7 +3133,7 @@
                               "term": {
                                 "application": {
                                   "argument": {
-                                    "maybe": {
+                                    "optional": {
                                       "wrap": {
                                         "body": {
                                           "application": {
@@ -3235,7 +3235,7 @@
                                                                                               {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                                                                                               {
                                                                                                 "name": "defaultValue",
-                                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                                                                                             "typeName": "hydra.cpp.syntax.Parameter"}}]}},
                                                                                   {
                                                                                     "name": "suffixSpecifiers",
@@ -3325,7 +3325,7 @@
                               "term": {
                                 "application": {
                                   "argument": {
-                                    "maybe": {
+                                    "optional": {
                                       "wrap": {
                                         "body": {
                                           "application": {
@@ -3544,7 +3544,7 @@
                     "body": {
                       "application": {
                         "argument": {
-                          "maybe": {
+                          "optional": {
                             "wrap": {
                               "body": {
                                 "list": [
@@ -3682,7 +3682,7 @@
                                                                               {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                                                                               {
                                                                                 "name": "defaultValue",
-                                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                                                                             "typeName": "hydra.cpp.syntax.Parameter"}}]}},
                                                                   {
                                                                     "name": "suffixSpecifiers",
@@ -3807,11 +3807,11 @@
                                                                                             "term": {
                                                                                               "record": {
                                                                                                 "fields": [
-                                                                                                  {"name": "type", "term": {"maybe": {"variable": "cppType"}}},
+                                                                                                  {"name": "type", "term": {"optional": {"variable": "cppType"}}},
                                                                                                   {"name": "name", "term": {"literal": {"string": "value"}}},
                                                                                                   {
                                                                                                     "name": "initializer",
-                                                                                                    "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}},
+                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}},
                                                                                                   {"name": "isAuto", "term": {"literal": {"boolean": false}}}],
                                                                                                 "typeName": "hydra.cpp.syntax.VariableDeclaration"}}},
                                                                                           "typeName": "hydra.cpp.syntax.MemberDeclaration"}}},
@@ -3883,7 +3883,7 @@
                                                                                           {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                                                                                           {
                                                                                             "name": "defaultValue",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                                                                                         "typeName": "hydra.cpp.syntax.Parameter"}}]},
                                                                                 "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
                                                                                 "parameter": "paramType"}},
@@ -3951,7 +3951,7 @@
                                                                                         "right": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "maybe": {
+                                                                                              "optional": {
                                                                                                 "wrap": {
                                                                                                   "body": {
                                                                                                     "application": {
@@ -4151,7 +4151,7 @@
                                                       {"name": "unnamed", "term": {"literal": {"boolean": false}}},
                                                       {
                                                         "name": "defaultValue",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.Expression"}}}}],
                                                     "typeName": "hydra.cpp.syntax.Parameter"}}]}},
                                           {
                                             "name": "suffixSpecifiers",
@@ -4386,7 +4386,7 @@
                                                                                   {
                                                                                     "name": "elseBranch",
                                                                                     "term": {
-                                                                                      "maybe": {
+                                                                                      "optional": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "hydra.cpp.coder.createTypeIdNameCall"},
                                                                                           "function": {
@@ -4431,7 +4431,7 @@
                           "lambda": {
                             "body": {
                               "application": {
-                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}},
+                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.cpp.syntax.ClassBody"}}},
                                 "function": {
                                   "application": {
                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}},
@@ -4778,7 +4778,7 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"maybe": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}}},
+                                    "argument": {"optional": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -4789,9 +4789,11 @@
                                                 "argument": {"unwrap": "hydra.packaging.ModuleName"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                     "type": {"literal": {"string": {}}}}}}}}},
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"maybe": {"literal": {"string": {}}}}}}}}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"optional": {"literal": {"string": {}}}}}}}}}},
                                 "function": {"variable": "hydra.lib.logic.not"}}},
                             "domain": {"variable": "hydra.core.Name"},
                             "parameter": "n"}},
@@ -4856,7 +4858,7 @@
                             "name": "map"},
                           {
                             "handler": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
-                            "name": "maybe"},
+                            "name": "optional"},
                           {
                             "handler": {"lambda": {"body": {"literal": {"boolean": true}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
                             "name": "set"}],

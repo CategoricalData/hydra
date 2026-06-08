@@ -1,21 +1,40 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | WebAssembly serializer: converts WAT AST to concrete WAT text format
 
 module Hydra.Wasm.Serde where
-
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
+import qualified Hydra.Core as Core
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
 import qualified Hydra.Wasm.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Serialize a block or loop instruction to WAT
 blockInstructionToExpr :: String -> Syntax.BlockInstruction -> Ast.Expr
 blockInstructionToExpr keyword b =
@@ -23,11 +42,11 @@ blockInstructionToExpr keyword b =
       let label = Syntax.blockInstructionLabel b
           bt = Syntax.blockInstructionBlockType b
           body = Syntax.blockInstructionBody b
-          labelStr = Maybes.maybe "" (\l -> Strings.cat2 " $" l) label
+          labelStr = Optionals.cases label "" (\l -> Strings.cat2 " $" l)
           btPart = blockTypeToExpr bt
           bodyParts = Lists.map instructionToExpr body
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     Just (Serialization.cst (Strings.cat [
                       "(",
                       keyword,
@@ -39,7 +58,6 @@ blockInstructionToExpr keyword b =
         (Lists.map (\p -> Serialization.cst (Strings.cat2 "  " (Serialization.printExpr p))) bodyParts),
         [
           Serialization.cst ")"]]))
-
 -- | Serialize a block type to WAT
 blockTypeToExpr :: Syntax.BlockType -> Maybe Ast.Expr
 blockTypeToExpr bt =
@@ -50,7 +68,6 @@ blockTypeToExpr bt =
         (valTypeToStr v0),
         ")"]))
       Syntax.BlockTypeTypeUse v0 -> Just (typeUseToExpr v0)
-
 -- | Serialize a constant value instruction to WAT
 constValueToExpr :: Syntax.ConstValue -> Ast.Expr
 constValueToExpr c =
@@ -59,7 +76,6 @@ constValueToExpr c =
       Syntax.ConstValueI64 v0 -> Serialization.cst (Strings.cat2 "i64.const " (Literals.showInt64 v0))
       Syntax.ConstValueF32 v0 -> Serialization.cst (Strings.cat2 "f32.const " (Literals.showFloat32 v0))
       Syntax.ConstValueF64 v0 -> Serialization.cst (Strings.cat2 "f64.const " (Literals.showFloat64 v0))
-
 -- | Serialize a data segment to WAT
 dataSegmentToExpr :: Syntax.DataSegment -> Ast.Expr
 dataSegmentToExpr d =
@@ -67,7 +83,7 @@ dataSegmentToExpr d =
       let name = Syntax.dataSegmentName d
           mode = Syntax.dataSegmentMode d
           bytes = Syntax.dataSegmentBytes d
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in case mode of
         Syntax.DataModeActive v0 -> Serialization.spaceSep [
           Serialization.cst (Strings.cat2 "(data" nameStr),
@@ -85,7 +101,6 @@ dataSegmentToExpr d =
             "\"",
             bytes,
             "\")"]))]
-
 -- | Serialize an export declaration to WAT
 exportDefToExpr :: Syntax.ExportDef -> Ast.Expr
 exportDefToExpr e =
@@ -100,7 +115,6 @@ exportDefToExpr e =
           "\""])),
         (exportDescToExpr desc),
         (Serialization.cst ")")])
-
 -- | Serialize an export descriptor to WAT
 exportDescToExpr :: Syntax.ExportDesc -> Ast.Expr
 exportDescToExpr desc =
@@ -121,21 +135,19 @@ exportDescToExpr desc =
         "(global $",
         v0,
         ")"])
-
 -- | Serialize a local variable declaration to WAT
 funcLocalToExpr :: Syntax.FuncLocal -> Ast.Expr
 funcLocalToExpr l =
 
       let name = Syntax.funcLocalName l
           typ = Syntax.funcLocalType l
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in (Serialization.cst (Strings.cat [
         "(local",
         nameStr,
         " ",
         (valTypeToStr typ),
         ")"]))
-
 -- | Serialize a function definition to WAT
 funcToExpr :: Syntax.Func -> Ast.Expr
 funcToExpr f =
@@ -144,7 +156,7 @@ funcToExpr f =
           typeUse = Syntax.funcTypeUse f
           locals = Syntax.funcLocals f
           body = Syntax.funcBody f
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
           headerStr = Strings.cat2 "(func" nameStr
           typeUsePart = typeUseToExpr typeUse
           localParts = Lists.map funcLocalToExpr locals
@@ -161,7 +173,6 @@ funcToExpr f =
         (Lists.map (\p -> Serialization.cst (Strings.cat2 "  " (Serialization.printExpr p))) innerParts),
         [
           Serialization.cst ")"]])))
-
 -- | Serialize a function type to WAT
 funcTypeToExpr :: Syntax.FuncType -> Ast.Expr
 funcTypeToExpr ft =
@@ -178,12 +189,11 @@ funcTypeToExpr ft =
                     "(result ",
                     (valTypeToStr r),
                     ")"])) results
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "(func"),
         (Logic.ifElse (Lists.null paramParts) Nothing (Just (Serialization.spaceSep paramParts))),
         (Logic.ifElse (Lists.null resultParts) Nothing (Just (Serialization.spaceSep resultParts))),
         (Just (Serialization.cst ")"))]))
-
 -- | Serialize a global definition to WAT
 globalDefToExpr :: Syntax.GlobalDef -> Ast.Expr
 globalDefToExpr g =
@@ -191,13 +201,12 @@ globalDefToExpr g =
       let name = Syntax.globalDefName g
           gt = Syntax.globalDefType g
           init = Syntax.globalDefInit g
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "(global" nameStr),
         (globalTypeToExpr gt),
         (Serialization.spaceSep (Lists.map instructionToExpr init)),
         (Serialization.cst ")")])
-
 -- | Serialize a global type to WAT
 globalTypeToExpr :: Syntax.GlobalType -> Ast.Expr
 globalTypeToExpr gt =
@@ -208,7 +217,6 @@ globalTypeToExpr gt =
         "(mut ",
         (valTypeToStr vt),
         ")"])) (Serialization.cst (valTypeToStr vt)))
-
 -- | Serialize an if instruction to WAT
 ifInstructionToExpr :: Syntax.IfInstruction -> Ast.Expr
 ifInstructionToExpr i =
@@ -217,12 +225,12 @@ ifInstructionToExpr i =
           bt = Syntax.ifInstructionBlockType i
           thenBranch = Syntax.ifInstructionThen i
           elseBranch = Syntax.ifInstructionElse i
-          labelStr = Maybes.maybe "" (\l -> Strings.cat2 " $" l) label
+          labelStr = Optionals.cases label "" (\l -> Strings.cat2 " $" l)
           btPart = blockTypeToExpr bt
           thenParts = Lists.map instructionToExpr thenBranch
           elseParts = Lists.map instructionToExpr elseBranch
           header =
-                  Serialization.spaceSep (Maybes.cat [
+                  Serialization.spaceSep (Optionals.cat [
                     Just (Serialization.cst (Strings.cat [
                       "(if",
                       labelStr])),
@@ -249,7 +257,6 @@ ifInstructionToExpr i =
         thenBlock,
         elseBlock,
         (Serialization.cst ")")]))
-
 -- | Serialize an import declaration to WAT
 importDefToExpr :: Syntax.ImportDef -> Ast.Expr
 importDefToExpr i =
@@ -269,7 +276,6 @@ importDefToExpr i =
           "\""])),
         (importDescToExpr desc),
         (Serialization.cst ")")])
-
 -- | Serialize an import descriptor to WAT
 importDescToExpr :: Syntax.ImportDesc -> Ast.Expr
 importDescToExpr desc =
@@ -277,7 +283,7 @@ importDescToExpr desc =
       Syntax.ImportDescFunc v0 ->
         let name = Syntax.importFuncName v0
             tu = Syntax.importFuncTypeUse v0
-            nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+            nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
         in (Serialization.spaceSep [
           Serialization.cst (Strings.cat2 "(func" nameStr),
           (typeUseToExpr tu),
@@ -285,7 +291,7 @@ importDescToExpr desc =
       Syntax.ImportDescMemory v0 ->
         let name = Syntax.importMemoryName v0
             lim = Syntax.importMemoryLimits v0
-            nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+            nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
         in (Serialization.spaceSep [
           Serialization.cst (Strings.cat2 "(memory" nameStr),
           (limitsToExpr lim),
@@ -294,7 +300,7 @@ importDescToExpr desc =
         let name = Syntax.importTableName v0
             rt = Syntax.importTableRefType v0
             lim = Syntax.importTableLimits v0
-            nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+            nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
         in (Serialization.spaceSep [
           Serialization.cst (Strings.cat2 "(table" nameStr),
           (limitsToExpr lim),
@@ -303,12 +309,11 @@ importDescToExpr desc =
       Syntax.ImportDescGlobal v0 ->
         let name = Syntax.importGlobalName v0
             gt = Syntax.importGlobalType v0
-            nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+            nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
         in (Serialization.spaceSep [
           Serialization.cst (Strings.cat2 "(global" nameStr),
           (globalTypeToExpr gt),
           (Serialization.cst ")")])
-
 -- | Serialize an instruction to WAT
 instructionToExpr :: Syntax.Instruction -> Ast.Expr
 instructionToExpr instr =
@@ -411,29 +416,26 @@ instructionToExpr instr =
         (refTypeToStr v0)])
       Syntax.InstructionRefIsNull -> Serialization.cst "ref.is_null"
       Syntax.InstructionRaw v0 -> Serialization.cst v0
-
 -- | Serialize limits to WAT
 limitsToExpr :: Syntax.Limits -> Ast.Expr
 limitsToExpr l =
 
       let mn = Syntax.limitsMin l
           mx = Syntax.limitsMax l
-      in (Serialization.spaceSep (Maybes.cat [
+      in (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst (Literals.showInt32 mn)),
-        (Maybes.map (\m -> Serialization.cst (Literals.showInt32 m)) mx)]))
-
+        (Optionals.map (\m -> Serialization.cst (Literals.showInt32 m)) mx)]))
 -- | Serialize a memory definition to WAT
 memoryDefToExpr :: Syntax.MemoryDef -> Ast.Expr
 memoryDefToExpr m =
 
       let name = Syntax.memoryDefName m
           lim = Syntax.memoryDefLimits m
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "(memory" nameStr),
         (limitsToExpr lim),
         (Serialization.cst ")")])
-
 -- | Serialize a module field to a WAT expression
 moduleFieldToExpr :: Syntax.ModuleField -> Ast.Expr
 moduleFieldToExpr field =
@@ -451,14 +453,13 @@ moduleFieldToExpr field =
         "(start $",
         v0,
         ")"])
-
 -- | Serialize a WebAssembly module to a WAT expression
 moduleToExpr :: Syntax.Module -> Ast.Expr
 moduleToExpr mod =
 
       let name = Syntax.moduleName mod
           fields = Syntax.moduleFields mod
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
           fieldExprs = Lists.map moduleFieldToExpr fields
       in (Serialization.newlineSep (Lists.concat [
         [
@@ -466,28 +467,25 @@ moduleToExpr mod =
         (Lists.map (\fe -> Serialization.cst (Strings.cat2 "  " (Serialization.printExpr fe))) fieldExprs),
         [
           Serialization.cst ")"]]))
-
 -- | Serialize a function parameter to WAT
 paramToExpr :: Syntax.Param -> Ast.Expr
 paramToExpr p =
 
       let name = Syntax.paramName p
           typ = Syntax.paramType p
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in (Serialization.cst (Strings.cat [
         "(param",
         nameStr,
         " ",
         (valTypeToStr typ),
         ")"]))
-
 -- | Convert a reference type to its WAT string
 refTypeToStr :: Syntax.RefType -> String
 refTypeToStr rt =
     case rt of
       Syntax.RefTypeFuncref -> "funcref"
       Syntax.RefTypeExternref -> "externref"
-
 -- | Serialize a table definition to WAT
 tableDefToExpr :: Syntax.TableDef -> Ast.Expr
 tableDefToExpr t =
@@ -495,32 +493,29 @@ tableDefToExpr t =
       let name = Syntax.tableDefName t
           rt = Syntax.tableDefRefType t
           lim = Syntax.tableDefLimits t
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "(table" nameStr),
         (limitsToExpr lim),
         (Serialization.cst (refTypeToStr rt)),
         (Serialization.cst ")")])
-
 -- | Convert a string to a WAT comment
 toWatComment :: String -> String
 toWatComment s =
     Strings.cat [
       ";; ",
       s]
-
 -- | Serialize a type definition to WAT
 typeDefToExpr :: Syntax.TypeDef -> Ast.Expr
 typeDefToExpr td =
 
       let name = Syntax.typeDefName td
           ft = Syntax.typeDefType td
-          nameStr = Maybes.maybe "" (\n -> Strings.cat2 " $" n) name
+          nameStr = Optionals.cases name "" (\n -> Strings.cat2 " $" n)
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "(type" nameStr),
         (funcTypeToExpr ft),
         (Serialization.cst ")")])
-
 -- | Serialize a type use clause to WAT
 typeUseToExpr :: Syntax.TypeUse -> Ast.Expr
 typeUseToExpr tu =
@@ -529,7 +524,7 @@ typeUseToExpr tu =
           params = Syntax.typeUseParams tu
           results = Syntax.typeUseResults tu
           idxPart =
-                  Maybes.map (\i -> Serialization.cst (Strings.cat [
+                  Optionals.map (\i -> Serialization.cst (Strings.cat [
                     "(type $",
                     i,
                     ")"])) idx
@@ -539,12 +534,11 @@ typeUseToExpr tu =
                     "(result ",
                     (valTypeToStr r),
                     ")"])) results
-      in (Serialization.spaceSep (Maybes.cat (Lists.concat [
+      in (Serialization.spaceSep (Optionals.cat (Lists.concat [
         [
           idxPart],
         (Lists.map (\p -> Just p) paramParts),
         (Lists.map (\r -> Just r) resultParts)])))
-
 -- | Convert a value type to its WAT string representation
 valTypeToStr :: Syntax.ValType -> String
 valTypeToStr vt =

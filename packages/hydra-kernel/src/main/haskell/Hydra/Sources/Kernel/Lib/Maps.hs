@@ -6,7 +6,7 @@ import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
@@ -249,15 +249,15 @@ unionSig = sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]
 
 -- Default implementations.
 
--- alter f k m = maybe (delete k m) (\v' -> insert k v' m) (f (lookup k m))
+-- alter f k m = cases (f (lookup k m)) (delete k m) (\v' -> insert k v' m)
 alter_ :: TypedTermDefinition ((Maybe v -> Maybe v) -> k -> M.Map k v -> M.Map k v)
 alter_ = define "alter" $
-  doc "alter, defined in terms of lookup/insert/delete via maybe." $
+  doc "alter, defined in terms of lookup/insert/delete via optionals.cases." $
   "f" ~> "k" ~> "m" ~>
-    Maybes.maybe
+    Optionals.cases
+      (var "f" @@ Maps.lookup (var "k") (var "m"))
       (Maps.delete (var "k") (var "m"))
       ("vNew" ~> Maps.insert (var "k") (var "vNew") (var "m"))
-      (var "f" @@ Maps.lookup (var "k") (var "m"))
 
 -- bimap fk fv m = fromList (map (\p -> (fk (first p), fv (second p))) (toList m))
 bimap_ :: TypedTermDefinition ((k1 -> k2) -> (v1 -> v2) -> M.Map k1 v1 -> M.Map k2 v2)
@@ -286,12 +286,12 @@ filterWithKey_ = define "filterWithKey" $
       ("pr" ~> var "p" @@ Pairs.first (var "pr") @@ Pairs.second (var "pr"))
       (Maps.toList (var "m"))
 
--- findWithDefault def k m = fromMaybe def (lookup k m)
+-- findWithDefault def k m = fromOptional def (lookup k m)
 findWithDefault_ :: TypedTermDefinition (v -> k -> M.Map k v -> v)
 findWithDefault_ = define "findWithDefault" $
-  doc "findWithDefault, defined in terms of lookup + fromMaybe." $
+  doc "findWithDefault, defined in terms of lookup + fromOptional." $
   "def" ~> "k" ~> "m" ~>
-    Maybes.fromMaybe (var "def") (Maps.lookup (var "k") (var "m"))
+    Optionals.fromOptional (var "def") (Maps.lookup (var "k") (var "m"))
 
 -- map f m = fromList (map (\p -> (first p, f (second p))) (toList m))
 map_ :: TypedTermDefinition ((v1 -> v2) -> M.Map k v1 -> M.Map k v2)

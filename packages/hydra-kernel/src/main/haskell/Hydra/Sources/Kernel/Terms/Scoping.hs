@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -116,8 +116,8 @@ extendGraphForLet = define "extendGraphForLet" $
       (Graph.graphBoundTerms $ var "g"))
     -- Add typed binding type schemes; untyped bindings are not added, so outer types are shadowed by union precedence
     (Maps.union
-      (Maps.fromList $ Maybes.cat $ Lists.map
-        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
+      (Maps.fromList $ Optionals.cat $ Lists.map
+        ("b" ~> Optionals.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
           (Core.bindingTypeScheme $ var "b"))
         (var "bindings"))
       (Graph.graphBoundTypes $ var "g"))
@@ -170,8 +170,8 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
   -- Merge new binding terms/types into existing graph
   "newTerms" <~ Maps.fromList (Lists.map ("b" ~>
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
-  "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
-    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+  "newTypes" <~ Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+    Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
       (Core.bindingTypeScheme (var "b"))) (var "bindings"))) $
   Graph.graph
     (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
@@ -243,7 +243,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
   "ts" ~>
   "variables" <~ Core.typeSchemeVariables (var "ts") $
   "body" <~ Core.typeSchemeBody (var "ts") $
-  "constraintsMap" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+  "constraintsMap" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "ts") $
   -- Build TypeParameters, looking up each variable's class constraints in the constraints map.
   "typeParams" <~ Lists.map
     ("v" ~> Typing.typeParameter (var "v") $ optCases

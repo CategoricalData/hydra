@@ -50,42 +50,42 @@
 
 ;; Read functions (return Maybe)
 (def hydra_lib_literals_read_bigint
-  (fn [s] (try (list :just (bigint (BigInteger. s)))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (bigint (BigInteger. s)))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_float
-  (fn [s] (try (list :just (Double/parseDouble s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Double/parseDouble s))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_float32
-  (fn [s] (try (list :just (Float/parseFloat s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Float/parseFloat s))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_int
-  (fn [s] (try (list :just (Long/parseLong s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Long/parseLong s))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_int64
-  (fn [s] (try (list :just (Long/parseLong s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Long/parseLong s))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_uint
   (fn [s] (try (let [n (Long/parseLong s)]
-                 (if (>= n 0) (list :just n) (list :nothing)))
-               (catch Exception _ (list :nothing)))))
+                 (if (>= n 0) (list :given n) (list :none)))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_uint32
   (fn [s] (try (let [n (Long/parseLong s)]
-                 (if (>= n 0) (list :just n) (list :nothing)))
-               (catch Exception _ (list :nothing)))))
+                 (if (>= n 0) (list :given n) (list :none)))
+               (catch Exception _ (list :none)))))
 
 (def hydra_lib_literals_read_uint64
   (fn [s] (try (let [n (BigInteger. ^String s)]
                  (if (and (>= (.signum n) 0)
                           (<= (.compareTo n (BigInteger. "18446744073709551615")) 0))
-                   (list :just (.longValue n))
-                   (list :nothing)))
-               (catch Exception _ (list :nothing)))))
+                   (list :given (.longValue n))
+                   (list :none)))
+               (catch Exception _ (list :none)))))
 
 ;; Haskell-compatible float formatting
 (defn- haskell-show-float [x]
@@ -180,14 +180,14 @@
 (def hydra_lib_literals_read_boolean
   (fn [s]
     (cond
-      (= s "true") (list :just true)
-      (= s "false") (list :just false)
-      :else (list :nothing))))
+      (= s "true") (list :given true)
+      (= s "false") (list :given false)
+      :else (list :none))))
 
 ;; read_decimal :: String -> Maybe Decimal
 (def hydra_lib_literals_read_decimal
-  (fn [s] (try (list :just (bigdec s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (bigdec s))
+               (catch Exception _ (list :none)))))
 
 ;; show_decimal :: Decimal -> String
 ;; Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
@@ -212,23 +212,23 @@
 
 ;; read_float64 :: String -> Maybe Float64
 (def hydra_lib_literals_read_float64
-  (fn [s] (try (list :just (Double/parseDouble s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Double/parseDouble s))
+               (catch Exception _ (list :none)))))
 
 ;; read_int8 :: String -> Maybe Int8
 (def hydra_lib_literals_read_int8
-  (fn [s] (try (list :just (Byte/parseByte s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Byte/parseByte s))
+               (catch Exception _ (list :none)))))
 
 ;; read_int16 :: String -> Maybe Int16
 (def hydra_lib_literals_read_int16
-  (fn [s] (try (list :just (Short/parseShort s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Short/parseShort s))
+               (catch Exception _ (list :none)))))
 
 ;; read_int32 :: String -> Maybe Int32
 (def hydra_lib_literals_read_int32
-  (fn [s] (try (list :just (Integer/parseInt s))
-               (catch Exception _ (list :nothing)))))
+  (fn [s] (try (list :given (Integer/parseInt s))
+               (catch Exception _ (list :none)))))
 
 ;; read_string :: String -> Maybe String
 ;; Haskell semantics: reads a quoted string literal, returns Nothing for unquoted
@@ -241,7 +241,7 @@
               len (count inner)]
           (loop [i 0]
             (if (>= i len)
-              (list :just (.toString sb))
+              (list :given (.toString sb))
               (if (and (= (.charAt inner i) \\) (< (inc i) len))
                 (let [c (.charAt inner (inc i))]
                   (case c
@@ -252,19 +252,19 @@
                     \r (do (.append sb \return) (recur (+ i 2)))
                     (do (.append sb \\) (.append sb c) (recur (+ i 2)))))
                 (do (.append sb (.charAt inner i)) (recur (inc i))))))))
-      (list :nothing))))
+      (list :none))))
 
 ;; read_uint8 :: String -> Maybe Uint8
 (def hydra_lib_literals_read_uint8
   (fn [s] (try (let [n (Integer/parseInt s)]
-                 (if (and (>= n 0) (<= n 255)) (list :just n) (list :nothing)))
-               (catch Exception _ (list :nothing)))))
+                 (if (and (>= n 0) (<= n 255)) (list :given n) (list :none)))
+               (catch Exception _ (list :none)))))
 
 ;; read_uint16 :: String -> Maybe Uint16
 (def hydra_lib_literals_read_uint16
   (fn [s] (try (let [n (Integer/parseInt s)]
-                 (if (and (>= n 0) (<= n 65535)) (list :just n) (list :nothing)))
-               (catch Exception _ (list :nothing)))))
+                 (if (and (>= n 0) (<= n 65535)) (list :given n) (list :none)))
+               (catch Exception _ (list :none)))))
 
 ;; show_boolean :: Bool -> String
 (def hydra_lib_literals_show_boolean (fn [x] (if x "true" "false")))

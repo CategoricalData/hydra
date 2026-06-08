@@ -14,13 +14,13 @@
     (list :function (make-hydra_core_function_type (list :unit) (make-arity-type (1- n))))))
 
 (defun make-prim-type-scheme (arity)
-  (make-hydra_core_type_scheme nil (make-arity-type arity) (list :nothing)))
+  (make-hydra_core_type_scheme nil (make-arity-type arity) (list :none)))
 
 (defun make-prim-def-from-arity (name arity)
   "Build a PrimitiveDefinition (#156 shape) from name + arity (for annotation primitives)."
   (let* ((ts (make-prim-type-scheme arity))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition name (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition name (list :none) sig t t (list :none))))
 
 (defun collect-type-vars-ordered (typ)
   "Collect type variable names from a Hydra type in order of first appearance."
@@ -41,7 +41,7 @@
                           (visit (hydra_core_function_type-codomain ft))))
                        ((eq tag :list) (visit (cadr t_)))
                        ((eq tag :set) (visit (cadr t_)))
-                       ((eq tag :maybe) (visit (cadr t_)))
+                       ((eq tag :optional) (visit (cadr t_)))
                        ((eq tag :map)
                         (let ((mt (cadr t_)))
                           (visit (hydra_core_map_type-keys mt))
@@ -81,17 +81,17 @@
                                      (make-hydra_core_type_variable_constraints
                                       (wrap-constraints (cdr entry)))))
                              constraints))))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:just m) or (:nothing).
+         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
          (maybe-constraints (if constraint-map
-                                (list :just constraint-map)
-                                (list :nothing))))
+                                (list :given constraint-map)
+                                (list :none))))
     (make-hydra_core_type_scheme vars fun-type maybe-constraints)))
 
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname (list :nothing) sig t t (list :nothing))))
+    (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
 ;; ============================================================================
 ;; Error helpers
@@ -231,20 +231,20 @@
           (list :right (list :map (funcall hydra_lib_maps_from_list (nreverse result))))))))))
 
 (defun tc-optional (el-coder)
-  (make-hydra_graph_term_coder (list :maybe (hydra_graph_term_coder-type el-coder))
+  (make-hydra_graph_term_coder (list :optional (hydra_graph_term_coder-type el-coder))
     (lambda (cx) (lambda (g) (lambda (t_)
-      (funcall (funcall (funcall hydra_extract_core_maybe_term
+      (funcall (funcall (funcall hydra_extract_core_optional_term
                                  (lambda (term) (funcall (funcall (funcall (hydra_graph_term_coder-encode el-coder) cx) g) term)))
                         g) t_))))
     (lambda (cx) (lambda (mv)
       (cond
-       ((null mv) (list :right (list :maybe nil)))
-       ((and (consp mv) (eq (car mv) :nothing)) (list :right (list :maybe nil)))
-       ((and (consp mv) (eq (car mv) :just))
+       ((null mv) (list :right (list :optional nil)))
+       ((and (consp mv) (eq (car mv) :none)) (list :right (list :optional nil)))
+       ((and (consp mv) (eq (car mv) :given))
         (let ((r (funcall (funcall (hydra_graph_term_coder-decode el-coder) cx) (cadr mv))))
-          (if (eq (car r) :left) r (list :right (list :maybe (cadr r))))))
+          (if (eq (car r) :left) r (list :right (list :optional (cadr r))))))
        (t (let ((r (funcall (funcall (hydra_graph_term_coder-decode el-coder) cx) mv)))
-            (if (eq (car r) :left) r (list :right (list :maybe (cadr r)))))))))))
+            (if (eq (car r) :left) r (list :right (list :optional (cadr r)))))))))))
 
 (defun tc-either (left-coder right-coder)
   (make-hydra_graph_term_coder (list :either (make-hydra_core_either_type (hydra_graph_term_coder-type left-coder) (hydra_graph_term_coder-type right-coder)))

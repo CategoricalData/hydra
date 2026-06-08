@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -126,11 +126,11 @@ hexByte :: TypedTermDefinition (Int -> String)
 hexByte = jsonSerdeDefinition "hexByte" $
   doc "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters." $
   "c" ~>
-  "nibble" <~ ("i" ~> Maybes.fromMaybe (string "?") (Maybes.map
+  "nibble" <~ ("i" ~> Optionals.fromOptional (string "?") (Optionals.map
     ("ch" ~> Strings.fromList (Lists.pure $ var "ch"))
     (Strings.maybeCharAt (var "i") hexDigits))) $
-  "hi" <~ (var "nibble" @@ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "c") (int32 16))) $
-  "lo" <~ (var "nibble" @@ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 16))) $
+  "hi" <~ (var "nibble" @@ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "c") (int32 16))) $
+  "lo" <~ (var "nibble" @@ Optionals.fromOptional (int32 0) (Math.maybeMod (var "c") (int32 16))) $
   var "hi" ++ var "lo"
 
 hexDigits :: TypedTerm String

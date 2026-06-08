@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -125,8 +125,8 @@ buildJavaTestModule = define "buildJavaTestModule" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
     "ns_">: Packaging.moduleName (var "testModule"),
     "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
-    "packageName">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
-    "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
+    "packageName">: Strings.intercalate (string ".") (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
+    "className_">: Strings.cat2 (Formatting.capitalize @@ (Optionals.fromOptional (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
     "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
     "standardImports">: list [
       string "import org.junit.jupiter.api.Test;",
@@ -252,8 +252,8 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
         "testModuleContent">: buildJavaTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleName (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
-        "dirParts">: Lists.drop (int32 1) (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
-        "className_">: Strings.cat2 (Formatting.capitalize @@ (Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
+        "dirParts">: Lists.drop (int32 1) (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
+        "className_">: Strings.cat2 (Formatting.capitalize @@ (Optionals.fromOptional (string "") (Lists.maybeLast (var "parts")))) (string "Test"),
         "fileName">: Strings.cat2 (var "className_") (string ".java"),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))

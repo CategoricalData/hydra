@@ -155,7 +155,7 @@ termVariant x =
       Core.TermList _ -> Variants.TermVariantList
       Core.TermLiteral _ -> Variants.TermVariantLiteral
       Core.TermMap _ -> Variants.TermVariantMap
-      Core.TermMaybe _ -> Variants.TermVariantMaybe
+      Core.TermOptional _ -> Variants.TermVariantOptional
       Core.TermPair _ -> Variants.TermVariantPair
       Core.TermProject _ -> Variants.TermVariantProject
       Core.TermRecord _ -> Variants.TermVariantRecord
@@ -180,7 +180,7 @@ termVariants =
       Variants.TermVariantList,
       Variants.TermVariantLiteral,
       Variants.TermVariantMap,
-      Variants.TermVariantMaybe,
+      Variants.TermVariantOptional,
       Variants.TermVariantPair,
       Variants.TermVariantProject,
       Variants.TermVariantRecord,
@@ -204,7 +204,7 @@ typeVariant x =
       Core.TypeList _ -> Variants.TypeVariantList
       Core.TypeLiteral _ -> Variants.TypeVariantLiteral
       Core.TypeMap _ -> Variants.TypeVariantMap
-      Core.TypeMaybe _ -> Variants.TypeVariantMaybe
+      Core.TypeOptional _ -> Variants.TypeVariantOptional
       Core.TypePair _ -> Variants.TypeVariantPair
       Core.TypeRecord _ -> Variants.TypeVariantRecord
       Core.TypeSet _ -> Variants.TypeVariantSet
@@ -226,7 +226,7 @@ typeVariants =
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
       Variants.TypeVariantWrap,
-      Variants.TypeVariantMaybe,
+      Variants.TypeVariantOptional,
       Variants.TypeVariantPair,
       Variants.TypeVariantRecord,
       Variants.TypeVariantSet,

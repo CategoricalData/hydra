@@ -26,7 +26,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local bindings"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.Alternative"}},
     {
@@ -136,7 +136,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.PositionalConstructor"}},
     {
@@ -164,7 +164,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.RecordConstructor"}},
     {
@@ -210,7 +210,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.DataDeclaration"}},
     {
@@ -696,7 +696,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.Field"}},
     {
@@ -746,13 +746,13 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional alias for the module"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
                   {
                     "name": "spec",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional import specification"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.Import"}},
     {
@@ -800,7 +800,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional import modifier"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportModifier"}}}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.ImportModifier"}}}}},
                   {
                     "name": "name",
                     "type": {
@@ -812,7 +812,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional subspecification"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportExportSubspec"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.ImportExportSubspec"}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.NamedImportExport"}},
     {
@@ -931,7 +931,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module head"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ModuleHead"}}}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.ModuleHead"}}}}},
                   {
                     "name": "imports",
                     "type": {
@@ -959,7 +959,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module-level comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}},
                   {
                     "name": "name",
                     "type": {
@@ -1424,7 +1424,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.TypeSynonymDeclaration"}},
     {
@@ -1474,7 +1474,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.TypedBinding"}},
     {
@@ -1519,13 +1519,13 @@
                       "annotated": {
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local bindings (where clause)"}}}]},
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}},
+                        "body": {"optional": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}},
                   {
                     "name": "comments",
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional comments"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.haskell.syntax.SimpleValueBinding"}},
     {

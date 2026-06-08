@@ -206,7 +206,7 @@
     (hydra-load-native-lib (string-append *script-dir* "lib/" f)))
   '("equality.scm" "maps.scm" "sets.scm" "lists.scm" "strings.scm"
     "logic.scm" "math.scm" "chars.scm" "eithers.scm" "literals.scm"
-    "maybes.scm" "pairs.scm" "regex.scm"))
+    "optionals.scm" "pairs.scm" "regex.scm"))
 
 ;; Load core modules via loader
 (hydra-load-gen-main *gen-main-base*)

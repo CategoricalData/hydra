@@ -9,7 +9,7 @@ import hydra.testing.*;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -145,7 +145,7 @@ public class TestSuiteRunner {
     }
 
     private static void addConstantBinding(List<Binding> bindings, String name, Term value) {
-        bindings.add(new Binding(new Name(name), value, Maybe.nothing()));
+        bindings.add(new Binding(new Name(name), value, Optional.none()));
     }
 
     /**
@@ -177,14 +177,14 @@ public class TestSuiteRunner {
         addConstantBinding(bindings, "hydra.annotations.getAnnotationMap",
             lambda("t",
                 apply(
-                    match("hydra.core.Term", Maybe.just(apply(primitive("hydra.lib.maps.empty"), var("t"))),
+                    match("hydra.core.Term", Optional.given(apply(primitive("hydra.lib.maps.empty"), var("t"))),
                         field("map", lambda("m",
                             apply(primitive("hydra.lib.maps.fromList"),
                                 apply(apply(primitive("hydra.lib.lists.foldl"),
                                     lambda("acc", "pair",
                                         apply(
                                             match("hydra.core.Term",
-                                                Maybe.just(var("acc")),
+                                                Optional.given(var("acc")),
                                                 field("variable", lambda("n",
                                                     apply(apply(primitive("hydra.lib.lists.cons"),
                                                         pair(
@@ -214,7 +214,7 @@ public class TestSuiteRunner {
         addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
             lambda("t",
                 apply(
-                    match("hydra.core.Term", Maybe.just(var("t")),
+                    match("hydra.core.Term", Optional.given(var("t")),
                         field("annotated", lambda("at",
                             apply(var("hydra.rewriting.deannotateTerm"),
                                 apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
@@ -227,7 +227,7 @@ public class TestSuiteRunner {
                     lambda("rest", "t",
                         apply(
                             match("hydra.core.Term",
-                                Maybe.just(var("rest")),
+                                Optional.given(var("rest")),
                                 field("annotated", lambda("at",
                                     apply(apply(var("toPairs"),
                                         apply(apply(primitive("hydra.lib.lists.cons"),
@@ -245,12 +245,12 @@ public class TestSuiteRunner {
             lambda("key",
                 lambda("val",
                     lambda("m",
-                        apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                        apply(apply(apply(primitive("hydra.lib.optionals.cases"),
+                            var("val")),
                             apply(apply(primitive("hydra.lib.maps.delete"), var("key")), var("m"))),
                             lambda("v",
                                 apply(apply(apply(primitive("hydra.lib.maps.insert"),
-                                    var("key")), var("v")), var("m")))),
-                            var("val"))))));
+                                    var("key")), var("v")), var("m"))))))));
 
         // After #386: wrap the resulting map via wrapAnnotationMap before storing in AnnotatedTerm.annotation.
         addConstantBinding(bindings, "hydra.annotations.setTermAnnotation",
@@ -274,7 +274,7 @@ public class TestSuiteRunner {
             lambda("d",
                 apply(apply(var("hydra.annotations.setTermAnnotation"),
                     var("hydra.constants.keyDescription")),
-                    apply(apply(primitive("hydra.lib.maybes.map"),
+                    apply(apply(primitive("hydra.lib.optionals.map"),
                         lambda("s",
                             inject("hydra.core.Term", "literal",
                                 inject("hydra.core.Literal", "string", var("s"))))),
@@ -284,22 +284,22 @@ public class TestSuiteRunner {
             lambda("cx",
                 lambda("g",
                     lambda("anns",
-                        apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                        apply(apply(apply(primitive("hydra.lib.optionals.cases"),
+                            apply(apply(primitive("hydra.lib.maps.lookup"),
+                                var("hydra.constants.keyDescription")),
+                                var("anns"))),
                             right(nothing())),
                             lambda("descTerm",
                                 apply(
-                                    match("hydra.core.Term", Maybe.just(
+                                    match("hydra.core.Term", Optional.given(
                                         left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
                                         field("literal", lambda("lit",
                                             apply(
-                                                match("hydra.core.Literal", Maybe.just(
+                                                match("hydra.core.Literal", Optional.given(
                                                     left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
-                                    var("descTerm")))),
-                            apply(apply(primitive("hydra.lib.maps.lookup"),
-                                var("hydra.constants.keyDescription")),
-                                var("anns")))))));
+                                    var("descTerm"))))))));
 
         addConstantBinding(bindings, "hydra.annotations.getTermDescription",
             lambda("cx",
@@ -308,7 +308,7 @@ public class TestSuiteRunner {
                         let_("peel",
                             lambda("t",
                                 apply(
-                                    match("hydra.core.Term", Maybe.just(var("t")),
+                                    match("hydra.core.Term", Optional.given(var("t")),
                                         field("typeLambda", lambda("tl",
                                             apply(var("peel"),
                                                 apply(project("hydra.core.TypeLambda", "body"), var("tl"))))),
@@ -392,7 +392,7 @@ public class TestSuiteRunner {
                 new FieldType(new Name("list"), new Type.Variable(typeName)),
                 new FieldType(new Name("literal"), new Type.Variable(new Name("literalType"))),
                 new FieldType(new Name("map"), new Type.Variable(new Name("mapType"))),
-                new FieldType(new Name("maybe"), new Type.Variable(typeName)),
+                new FieldType(new Name("optional"), new Type.Variable(typeName)),
                 new FieldType(new Name("pair"), new Type.Variable(new Name("pairType"))),
                 new FieldType(new Name("record"), new Type.Variable(new Name("rowType"))),
                 new FieldType(new Name("set"), new Type.Variable(typeName)),

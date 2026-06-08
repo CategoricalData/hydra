@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -79,9 +79,9 @@ addNamespacesToNamespaces :: TypedTermDefinition (ModuleNames H.ModuleName -> S.
 addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   doc "Add namespaces from a set of names to existing namespaces" $
   lambda "ns0" $ lambda "names" $ lets [
-    "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.moduleNameOf (Sets.toList (var "names")))),
+    "newNamespaces">: Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
-      wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _ModuleName @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace"))))),
+      wrap H._ModuleName (Formatting.capitalize @@ (Optionals.fromOptional (unwrap _ModuleName @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace"))))),
     "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
     record _ModuleNames [
       _ModuleNames_focus>>: project _ModuleNames _ModuleNames_focus @@ var "ns0",
@@ -108,7 +108,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") nothing
-        (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+        (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
         (Core.bindingTerm $ var "b")))
         (var "testBindings")]] $
     Eithers.bind
@@ -207,7 +207,7 @@ findHaskellImports = define "findHaskellImports" $
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
-          (Maybes.fromMaybe (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _ModuleName @@ var "ns_"))))
+          (Optionals.fromOptional (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _ModuleName @@ var "ns_"))))
           (string "")))
       (var "mapping_")] $
     Lists.map

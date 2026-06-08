@@ -23,7 +23,7 @@ import hydra.core.WrappedTerm;
 import hydra.util.Comparison;
 import hydra.util.ConsList;
 import hydra.util.Either;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 import hydra.util.Pair;
 import hydra.util.PersistentMap;
 import hydra.util.PersistentSet;
@@ -415,7 +415,7 @@ public interface Terms {
      * @return the lambda term
      */
     static Term lambda(String param, Term body) {
-        return new Term.Lambda(new Lambda(name(param), Maybe.nothing(), body));
+        return new Term.Lambda(new Lambda(name(param), Optional.none(), body));
     }
 
     /**
@@ -478,7 +478,7 @@ public interface Terms {
      * @return the lambda term
      */
     static Term lambdaTyped(String param, Type dom, Term body) {
-        return new Term.Lambda(new Lambda(name(param), Maybe.just(dom), body));
+        return new Term.Lambda(new Lambda(name(param), Optional.given(dom), body));
     }
 
     /**
@@ -614,7 +614,7 @@ public interface Terms {
      * @param fields the case fields
      * @return the match term
      */
-    static Term match(Name typeName, Maybe<Term> defaultCase, Field... fields) {
+    static Term match(Name typeName, Optional<Term> defaultCase, Field... fields) {
         return new Term.Cases(new CaseStatement(typeName, defaultCase, fieldsToAlternatives(Arrays.asList(fields))));
     }
 
@@ -637,7 +637,7 @@ public interface Terms {
      * @param fields the case fields
      * @return the match term
      */
-    static Term match(Name typeName, Maybe<Term> defaultCase, List<Field> fields) {
+    static Term match(Name typeName, Optional<Term> defaultCase, List<Field> fields) {
         return new Term.Cases(new CaseStatement(typeName, defaultCase, fieldsToAlternatives(fields)));
     }
 
@@ -648,7 +648,7 @@ public interface Terms {
      * @param fields the case fields
      * @return the match term
      */
-    static Term match(String typeName, Maybe<Term> defaultCase, Field... fields) {
+    static Term match(String typeName, Optional<Term> defaultCase, Field... fields) {
         return match(name(typeName), defaultCase, fields);
     }
 
@@ -663,7 +663,7 @@ public interface Terms {
      * @return the let term
      */
     static Term let_(String varName, Term defined, Term body) {
-        Binding binding = new Binding(name(varName), defined, Maybe.nothing());
+        Binding binding = new Binding(name(varName), defined, Optional.none());
         return new Term.Let(new Let(ConsList.singleton(binding), body));
     }
 
@@ -677,7 +677,7 @@ public interface Terms {
     static Term lets(List<Field> bindings, Term body) {
         ConsList<Binding> reversed = ConsList.empty();
         for (Field f : bindings) {
-            reversed = ConsList.cons(new Binding(f.name, f.term, Maybe.nothing()), reversed);
+            reversed = ConsList.cons(new Binding(f.name, f.term, Optional.none()), reversed);
         }
         return new Term.Let(new Let(reversed.reverse(), body));
     }
@@ -786,8 +786,8 @@ public interface Terms {
      * @param maybeTerm the optional term
      * @return the optional term
      */
-    static Term optional(Maybe<Term> maybeTerm) {
-        return new Term.Maybe(maybeTerm);
+    static Term optional(Optional<Term> maybeTerm) {
+        return new Term.Optional(maybeTerm);
     }
 
     /**
@@ -795,7 +795,7 @@ public interface Terms {
      * @return the nothing term
      */
     static Term nothing() {
-        return optional(Maybe.nothing());
+        return optional(Optional.none());
     }
 
     /**
@@ -805,7 +805,7 @@ public interface Terms {
      * @return the just term
      */
     static Term just(Term elem) {
-        return optional(Maybe.just(elem));
+        return optional(Optional.given(elem));
     }
 
     /**

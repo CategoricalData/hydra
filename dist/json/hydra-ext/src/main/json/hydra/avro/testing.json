@@ -437,7 +437,7 @@
                     "type": {
                       "annotated": {
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expected Avro namespace, if any"}}}]},
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
+                        "body": {"optional": {"literal": {"string": {}}}}}}}]}}},
           "variables": []},
         "name": "hydra.avro.testing.NameMappingTestCase"}},
     {

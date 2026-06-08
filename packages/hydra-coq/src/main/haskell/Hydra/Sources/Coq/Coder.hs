@@ -16,7 +16,7 @@ import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
@@ -224,13 +224,10 @@ encodeLambdaTerm = define "encodeLambdaTerm" $
   doc "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name" $
   lambdas ["env", "lam"] $ lets [
     "paramName">: sanitizeVar @@ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")),
-    "binder">: Maybes.maybe
-      (inject C._Binder C._Binder_name (coqName @@ var "paramName"))
-      (lambda "domTy" $ inject C._Binder C._Binder_type $
+    "binder">: Optionals.cases (Core.lambdaDomain $ var "lam") (inject C._Binder C._Binder_name (coqName @@ var "paramName")) (lambda "domTy" $ inject C._Binder C._Binder_type $
         record C._TypeBinders [
           C._TypeBinders_names>>: list [coqName @@ var "paramName"],
-          C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])
-      (Core.lambdaDomain $ var "lam")] $
+          C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
     inject C._Term C._Term_forallOrFun $
       inject C._ForallOrFun C._ForallOrFun_fun $
         record C._Fun [
@@ -404,10 +401,7 @@ encodeTerm = define "encodeTerm" $
           var "acc"])
         (coqTermQualid @@ string "nil")
         (Maps.toList $ var "mt"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe
-      (coqTermQualid @@ string "None")
-      (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"])
-      (var "mt"),
+    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
     _Term_pair>>: "p" ~>
       coqTermApp @@ (coqTermQualid @@ string "pair") @@ list [
         encodeTerm @@ var "env" @@ Pairs.first (var "p"),
@@ -448,7 +442,7 @@ encodeTerm = define "encodeTerm" $
       -- argument from the enclosing TypeApplication, but only when the type
       -- is ground. Non-empty bodies are left untouched.
       Logic.ifElse (Logic.not $ var "isGround") (var "encoded") $
-      -- `_Term_maybe Nothing` and `_Term_either (inl|inr)` need type
+      -- `_Term_optional Nothing` and `_Term_either (inl|inr)` need type
       -- annotations: Coq cannot infer the "other" type parameter of `option`
       -- / `sum` from context when these appear as record fields or function
       -- arguments. Empty lists/maps/sets are NOT annotated here because the
@@ -457,12 +451,9 @@ encodeTerm = define "encodeTerm" $
       -- `list (Name * Term)`), so a blind cast would produce the wrong type.
       cases _Term (var "body")
         (Just (var "encoded")) [
-        _Term_maybe>>: "mt" ~> Maybes.maybe
-          (coqTermCast @@ (coqTermQualid @@ string "None")
+        _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermCast @@ (coqTermQualid @@ string "None")
             @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "option")
-              @@ list [encodeType @@ var "env" @@ var "tyArg"])))
-          (constant $ var "encoded")
-          (var "mt"),
+              @@ list [encodeType @@ var "env" @@ var "tyArg"]))) (constant $ var "encoded"),
         -- Empty list: annotate with `list <tyArg>` when the element type is
         -- compound (either, pair, map). This handles `lefts nil` / `rights nil`
         -- (tyArg = sum) and similar. Simple tyArgs like `Name` are skipped
@@ -570,7 +561,7 @@ encodeType = define "encodeType" $
         coqTermApp @@ (coqTermQualid @@ string "prod") @@ list [
           encodeType @@ var "env" @@ (Core.mapTypeKeys $ var "mt"),
           encodeType @@ var "env" @@ (Core.mapTypeValues $ var "mt")]],
-    _Type_maybe>>: "t" ~>
+    _Type_optional>>: "t" ~>
       coqTermApp @@ (coqTermQualid @@ string "option") @@ list [encodeType @@ var "env" @@ var "t"],
     _Type_pair>>: "pt" ~>
       coqTermApp @@ (coqTermQualid @@ string "prod") @@ list [
@@ -587,7 +578,7 @@ encodeType = define "encodeType" $
       -- primitives like `Type`, locally-bound type-param names like `t0`);
       -- only `hydra.<ns>.<x>` / `Build_hydra.<ns>.<x>` references need to
       -- flow through the full qualified-name resolver.
-      "headSeg">: Maybes.fromMaybe (var "raw") (Lists.maybeHead (Strings.splitOn (string ".") (var "raw")))] $
+      "headSeg">: Optionals.fromOptional (var "raw") (Lists.maybeHead (Strings.splitOn (string ".") (var "raw")))] $
       Logic.ifElse (Logic.or
           (Equality.equal (var "headSeg") (string "hydra"))
           (Equality.equal (var "headSeg") (string "Build_hydra")))
@@ -692,26 +683,22 @@ encodeUnionElim = define "encodeUnionElim" $
               C._Pattern10_Qualid_qualid>>: coqQualid @@ string "_",
               C._Pattern10_Qualid_patterns>>: list ([] :: [TypedTerm C.Pattern1])]]],
       C._Equation_term>>: var "body"],
-    "defaultEqs">: Maybes.maybe
+    "defaultEqs">: Optionals.cases
+      (var "csDefault")
       -- No explicit default: if the match is non-exhaustive, synthesize one as
       -- `| _ => hydra_unreachable` (replacing the old addPartialMatchCatchAll pass).
       -- If the match is exhaustive (or we lack the count), emit no default.
       (Logic.ifElse
-        (Maybes.maybe (boolean False)
-          (lambda "n" $ Logic.not $ Equality.gte (var "caseCount") (var "n"))
-          (var "expectedCount"))
+        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Equality.gte (var "caseCount") (var "n")))
         (list [var "wildcardEq" @@ (coqTermQualid @@ string "hydra_unreachable")])
         (list ([] :: [TypedTerm C.Equation])))
       -- Kernel provided an explicit default: if the non-default cases already cover
       -- every constructor, drop it (replacing the old removeRedundantDefaults pass);
       -- otherwise keep it.
       (lambda "defT" $ Logic.ifElse
-        (Maybes.maybe (boolean False)
-          (lambda "n" $ Equality.gte (var "caseCount") (var "n"))
-          (var "expectedCount"))
+        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Equality.gte (var "caseCount") (var "n")))
         (list ([] :: [TypedTerm C.Equation]))
-        (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")]))
-      (var "csDefault"),
+        (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")])),
     "allEqs">: Lists.concat2 (var "baseEqs") (var "defaultEqs")] $
     inject C._Term C._Term_forallOrFun $
       inject C._ForallOrFun C._ForallOrFun_fun $
@@ -769,26 +756,21 @@ extractLambdaBinders = define "extractLambdaBinders" $
     _Term_lambda>>: "lam" ~> lets [
       "param">: Core.lambdaParameter $ var "lam",
       "mDomain">: Core.lambdaDomain $ var "lam",
-      "binder">: Maybes.maybe
-        (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param")))
-        (lambda "domTy" $ inject C._Binder C._Binder_type $
+      "binder">: Optionals.cases (var "mDomain") (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param"))) (lambda "domTy" $ inject C._Binder C._Binder_type $
           record C._TypeBinders [
             C._TypeBinders_names>>: list [coqName @@ (unwrap _Name @@ var "param")],
-            C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])
-        (var "mDomain")] $
+            C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
       Lists.cons (var "binder") (extractLambdaBinders @@ var "env" @@ (Core.lambdaBody $ var "lam"))]
 
 -- | Test whether a domain type is the unit type (possibly wrapped in annotations).
 isUnitDomain :: TypedTermDefinition (Maybe Type -> Bool)
 isUnitDomain = define "isUnitDomain" $
   doc "True if the Maybe Type is the unit type, looking through annotations" $
-  lambda "mty" $ Maybes.maybe (boolean False)
-    (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
+  lambda "mty" $ Optionals.cases (var "mty") (boolean False) (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
       _Type_unit>>: constant true,
       _Type_record>>: "fs" ~> Lists.null (var "fs"),
       _Type_annotated>>: "at" ~>
         isUnitDomain @@ just (Core.annotatedTypeBody $ var "at")])
-    (var "mty")
 
 -- | Test whether a Hydra term is a lambda that ignores its (unit-typed) parameter.
 isUnitLambda :: TypedTermDefinition (Term -> Bool)
@@ -805,10 +787,10 @@ isUnitLambda = define "isUnitLambda" $
         (isUnitDomain @@ (Core.lambdaDomain $ var "lam"))
         (var "unused")]
 
--- | Local helper: listAny via Lists.find + Maybes.isJust, since the DSL list
+-- | Local helper: listAny via Lists.find + Optionals.isGiven, since the DSL list
 -- library does not expose an `any` primitive directly.
 listAny :: TypedTerm (a -> Bool) -> TypedTerm [a] -> TypedTerm Bool
-listAny pred xs = Maybes.isJust (Lists.find pred xs)
+listAny pred xs = Optionals.isGiven (Lists.find pred xs)
 
 -- | Given a possibly-qualified name (e.g. "hydra.core.Term"), return its local
 -- part sanitized to avoid Coq reserved words. Used as the lookup key for the
@@ -818,7 +800,7 @@ localTypeName = define "localTypeName" $
   doc "Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "localPart">: Maybes.fromMaybe (var "s") (Lists.maybeLast $ var "parts")] $
+    "localPart">: Optionals.fromOptional (var "s") (Lists.maybeLast $ var "parts")] $
     sanitizeVar @@ var "localPart"
 
 -- | Combine a universe of type and term definitions into a single Coq Document.
@@ -882,7 +864,7 @@ resolveQualifiedName = define "resolveQualifiedName" $
   doc "Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source" $
   lambdas ["env", "s"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "head1">: Maybes.fromMaybe (var "s") (Lists.maybeHead (var "parts")),
+    "head1">: Optionals.fromOptional (var "s") (Lists.maybeHead (var "parts")),
     "currentNs">: project CE._CoqEnvironment CE._CoqEnvironment_currentNamespace @@ var "env",
     "ambig">: project CE._CoqEnvironment CE._CoqEnvironment_ambiguousNames @@ var "env"] $
     -- Coq.<name> : synthetic marker (from `typeToTerm`) for a Coq-builtin
@@ -890,22 +872,22 @@ resolveQualifiedName = define "resolveQualifiedName" $
     -- raw, bypassing sanitizeVar — otherwise `Coq.list` would collide with a
     -- user-level lambda parameter named `list` and get escaped to `list_`.
     Logic.ifElse (Equality.equal (var "head1") (string "Coq"))
-      (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))) $
+      (Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))) $
     -- Build_hydra.<ns>.<x> : strip to Build_<sanitized local>.
     Logic.ifElse (Equality.equal (var "head1") (string "Build_hydra"))
-      (Strings.cat2 (string "Build_") (sanitizeStripped @@ (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))))) $
+      (Strings.cat2 (string "Build_") (sanitizeStripped @@ (Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))))) $
     Logic.ifElse (Equality.equal (var "head1") (string "hydra"))
       (lets [
         "rest">: Lists.drop (int32 1) (var "parts"),
-        "head2">: Maybes.fromMaybe (string "") (Lists.maybeHead (var "rest"))] $
+        "head2">: Optionals.fromOptional (string "") (Lists.maybeHead (var "rest"))] $
         -- hydra.lib.<mod>.<func> : keep module.function, with keyword rewrites.
         Logic.ifElse (Equality.equal (var "head2") (string "lib"))
           (renameLibKeyword @@ (Strings.intercalate (string ".") (Lists.drop (int32 1) (var "rest")))) $
           -- hydra.<ns>...<x> : compute local name + source namespace.
           lets [
-            "localRaw">: Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts")),
+            "localRaw">: Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts")),
             "localN">: sanitizeStripped @@ var "localRaw",
-            "sourceNs">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
+            "sourceNs">: Strings.intercalate (string ".") (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
             "isCurrent">: Equality.equal (var "sourceNs") (var "currentNs"),
             -- Ambiguity check is against the raw (unsanitised) local name,
             -- since the ambiguous-names set in the environment is populated
@@ -984,9 +966,7 @@ termReferencesVar = define "termReferencesVar" $
       (listAny
         (lambda "f" $ termReferencesVar @@ var "name" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Maybes.maybe (boolean False)
-        (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")
-        (Core.caseStatementDefault $ var "cs")),
+      (Optionals.cases (Core.caseStatementDefault $ var "cs") (boolean False) (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")),
     _Term_let>>: "lt" ~> Logic.or
       (listAny
         (lambda "b" $ termReferencesVar @@ var "name" @@ (Core.bindingTerm $ var "b"))
@@ -994,9 +974,7 @@ termReferencesVar = define "termReferencesVar" $
       (termReferencesVar @@ var "name" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~>
       listAny (lambda "el" $ termReferencesVar @@ var "name" @@ var "el") (var "xs"),
-    _Term_maybe>>: "mt" ~> Maybes.maybe (boolean False)
-      (lambda "el" $ termReferencesVar @@ var "name" @@ var "el")
-      (var "mt"),
+    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (boolean False) (lambda "el" $ termReferencesVar @@ var "name" @@ var "el"),
     _Term_pair>>: "p" ~> Logic.or
       (termReferencesVar @@ var "name" @@ Pairs.first (var "p"))
       (termReferencesVar @@ var "name" @@ Pairs.second (var "p")),
@@ -1024,8 +1002,8 @@ unionConstructorName = define "unionConstructorName" $
   doc "Combine a type name and field name into a constructor identifier, preserving the namespace prefix" $
   lambdas ["typeName", "fieldName"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "typeName"),
-    "localPart">: Maybes.fromMaybe (var "typeName") (Lists.maybeLast $ var "parts"),
-    "prefixParts">: Maybes.fromMaybe (list ([] :: [TypedTerm String])) (Lists.maybeInit $ var "parts"),
+    "localPart">: Optionals.fromOptional (var "typeName") (Lists.maybeLast $ var "parts"),
+    "prefixParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit $ var "parts"),
     "prefix">: Logic.ifElse (Lists.null $ var "prefixParts")
       (string "")
       (Strings.cat2 (Strings.intercalate (string ".") (var "prefixParts")) (string ".")),

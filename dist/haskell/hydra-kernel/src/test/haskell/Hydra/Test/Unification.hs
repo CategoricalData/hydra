@@ -120,7 +120,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in optional type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))))),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeOptional (Core.TypeVariable (Core.Name "a"))))),
                 Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -206,7 +206,7 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                  Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypePair (Core.PairType {
+                  Core.functionTypeCodomain = (Core.TypeOptional (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeVariable (Core.Name "b"))})))})))),
                 Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
@@ -217,7 +217,7 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                  Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypePair (Core.PairType {
+                  Core.functionTypeCodomain = (Core.TypeOptional (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeVariable (Core.Name "a"))})))})))),
                 Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
@@ -518,7 +518,7 @@ allTests =
                   Core.TypeScheme {
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
-                    Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))) (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
+                    Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeOptional (Core.TypeVariable (Core.Name "a"))) (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
@@ -848,7 +848,7 @@ allTests =
                     " ~ ",
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
-                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))) (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
+                  "]"]) (Unification.joinTypes Lexical.emptyInferenceContext (Core.TypeOptional (Core.TypeVariable (Core.Name "a"))) (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
                 Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [

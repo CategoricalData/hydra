@@ -6,7 +6,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+import hydra.util.Optional;
 
 import java.util.List;
 import java.util.function.Function;
@@ -41,13 +41,13 @@ public class MaybePred extends PrimitiveFunction {
     /**
      * Returns the predecessor of the value.
      * @param num the value
-     * @return a Maybe containing the predecessor, or empty if the value is Integer.MIN_VALUE
+     * @return a Optional containing the predecessor, or empty if the value is Integer.MIN_VALUE
      */
-    public static Maybe<Integer> apply(Integer num) {
+    public static Optional<Integer> apply(Integer num) {
         if (num == Integer.MIN_VALUE) {
-            return Maybe.nothing();
+            return Optional.none();
         } else {
-            return Maybe.just(num - 1);
+            return Optional.given(num - 1);
         }
     }
 }

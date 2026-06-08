@@ -354,12 +354,12 @@ termLevelForwardCases = map T.AvroTestCaseTermLevelForward [
     T.termLevelForwardTestCaseDescription = "JSON null -> Hydra optional nothing",
     T.termLevelForwardTestCaseSchema = avroUnion [avroPrim Avro.PrimitiveNull, avroPrim Avro.PrimitiveString],
     T.termLevelForwardTestCaseJson = Json.ValueNull,
-    T.termLevelForwardTestCaseTerm = Core.TermMaybe Nothing},
+    T.termLevelForwardTestCaseTerm = Core.TermOptional Nothing},
   T.TermLevelForwardTestCase {
     T.termLevelForwardTestCaseDescription = "JSON string -> Hydra optional just",
     T.termLevelForwardTestCaseSchema = avroUnion [avroPrim Avro.PrimitiveNull, avroPrim Avro.PrimitiveString],
     T.termLevelForwardTestCaseJson = Json.ValueString "foo",
-    T.termLevelForwardTestCaseTerm = Core.TermMaybe (Just (Terms.string "foo"))},
+    T.termLevelForwardTestCaseTerm = Core.TermOptional (Just (Terms.string "foo"))},
   T.TermLevelForwardTestCase {
     T.termLevelForwardTestCaseDescription = "JSON string -> Hydra enum term",
     T.termLevelForwardTestCaseSchema = avroEnum "Color" ["red", "green", "blue"],
@@ -417,12 +417,12 @@ termLevelReverseCases = map T.AvroTestCaseTermLevelReverse [
   T.TermLevelReverseTestCase {
     T.termLevelReverseTestCaseDescription = "Hydra optional nothing -> JSON null",
     T.termLevelReverseTestCaseSchema = avroUnion [avroPrim Avro.PrimitiveNull, avroPrim Avro.PrimitiveString],
-    T.termLevelReverseTestCaseTerm = Core.TermMaybe Nothing,
+    T.termLevelReverseTestCaseTerm = Core.TermOptional Nothing,
     T.termLevelReverseTestCaseJson = Json.ValueNull},
   T.TermLevelReverseTestCase {
     T.termLevelReverseTestCaseDescription = "Hydra optional just -> JSON string",
     T.termLevelReverseTestCaseSchema = avroUnion [avroPrim Avro.PrimitiveNull, avroPrim Avro.PrimitiveString],
-    T.termLevelReverseTestCaseTerm = Core.TermMaybe (Just (Terms.string "foo")),
+    T.termLevelReverseTestCaseTerm = Core.TermOptional (Just (Terms.string "foo")),
     T.termLevelReverseTestCaseJson = Json.ValueString "foo"},
   T.TermLevelReverseTestCase {
     T.termLevelReverseTestCaseDescription = "Hydra enum term -> JSON string",
@@ -661,13 +661,13 @@ termLevelRoundTripTermCases = map T.AvroTestCaseTermLevelRoundTripTerm [
   T.TermLevelRoundTripTermTestCase {
     T.termLevelRoundTripTermTestCaseDescription = "optional nothing round-trips",
     T.termLevelRoundTripTermTestCaseType = Types.optional Types.string,
-    T.termLevelRoundTripTermTestCaseTerm = Core.TermMaybe Nothing,
-    T.termLevelRoundTripTermTestCaseExpectedTerm = Core.TermMaybe Nothing},
+    T.termLevelRoundTripTermTestCaseTerm = Core.TermOptional Nothing,
+    T.termLevelRoundTripTermTestCaseExpectedTerm = Core.TermOptional Nothing},
   T.TermLevelRoundTripTermTestCase {
     T.termLevelRoundTripTermTestCaseDescription = "optional just round-trips",
     T.termLevelRoundTripTermTestCaseType = Types.optional Types.string,
-    T.termLevelRoundTripTermTestCaseTerm = Core.TermMaybe (Just (Terms.string "foo")),
-    T.termLevelRoundTripTermTestCaseExpectedTerm = Core.TermMaybe (Just (Terms.string "foo"))},
+    T.termLevelRoundTripTermTestCaseTerm = Core.TermOptional (Just (Terms.string "foo")),
+    T.termLevelRoundTripTermTestCaseExpectedTerm = Core.TermOptional (Just (Terms.string "foo"))},
 
   -- Map round-trip via reverse adapter
   T.TermLevelRoundTripTermTestCase {
@@ -723,8 +723,8 @@ unionCases = map T.AvroTestCaseUnion [
     T.unionTestCaseHydraType = Types.optional Types.int32,
     T.unionTestCaseAvroSchema = avroUnion [avroPrim Avro.PrimitiveNull, avroPrim Avro.PrimitiveInt],
     T.unionTestCaseTermPairs = [
-      (Core.TermMaybe (Just (Terms.int32 7)), Json.ValueNumber 7.0),
-      (Core.TermMaybe Nothing, Json.ValueNull)]}
+      (Core.TermOptional (Just (Terms.int32 7)), Json.ValueNumber 7.0),
+      (Core.TermOptional Nothing, Json.ValueNull)]}
   ]
 
 
@@ -1479,7 +1479,7 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
               ("metadata", Core.TermMap (M.fromList [
                 (Terms.string "source", Terms.string "api"),
                 (Terms.string "version", Terms.string "1.0")])),
-              ("replyTo", Core.TermMaybe (Just (Terms.string "reply-queue")))]
+              ("replyTo", Core.TermOptional (Just (Terms.string "reply-queue")))]
         case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do

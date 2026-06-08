@@ -76,7 +76,7 @@
                       "literal": {
                         "string": "A convenience type which provides at most one string value per language, and optionally a value without a language"}}}]},
               "body": {
-                "wrap": {"map": {"keys": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}}}}},
+                "wrap": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}}}}},
           "variables": []},
         "name": "hydra.rdf.syntax.LangStrings"}},
     {
@@ -128,7 +128,7 @@
                               "value": {
                                 "literal": {
                                   "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}}]},
-                        "body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}}]}}},
+                        "body": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}}]}}},
           "variables": []},
         "name": "hydra.rdf.syntax.Literal"}},
     {
@@ -192,7 +192,7 @@
                   {"name": "subject", "type": {"variable": "hydra.rdf.syntax.Resource"}},
                   {"name": "predicate", "type": {"variable": "hydra.rdf.syntax.Iri"}},
                   {"name": "object", "type": {"variable": "hydra.rdf.syntax.Node"}},
-                  {"name": "graph", "type": {"maybe": {"variable": "hydra.rdf.syntax.Iri"}}}]}}},
+                  {"name": "graph", "type": {"optional": {"variable": "hydra.rdf.syntax.Iri"}}}]}}},
           "variables": []},
         "name": "hydra.rdf.syntax.Quad"}},
     {

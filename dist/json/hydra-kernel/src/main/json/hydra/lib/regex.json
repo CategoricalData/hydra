@@ -16,7 +16,7 @@
           "parameters": [
             {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
             {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
-          "result": {"type": {"maybe": {"literal": {"string": {}}}}},
+          "result": {"type": {"optional": {"literal": {"string": {}}}}},
           "typeParameters": []}}},
     {
       "primitive": {

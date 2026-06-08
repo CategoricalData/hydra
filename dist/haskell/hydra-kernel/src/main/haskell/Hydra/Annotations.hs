@@ -21,7 +21,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Packaging as Packaging
@@ -49,7 +49,7 @@ aggregateAnnotations :: Ord t2 => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Ma
 aggregateAnnotations getValue getX getAnns t =
 
       let toPairs =
-              \rest -> \t2 -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t2)
+              \rest -> \t2 -> Optionals.cases (getValue t2) rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy))
       in (Maps.fromList (Lists.concat (toPairs [] t)))
 -- | Extract comments/description from a Binding
 commentsFromBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe String)
@@ -74,14 +74,14 @@ getAnnotationMap t =
                   \p ->
                     let k = Pairs.first p
                         v = Pairs.second p
-                    in (Maybes.map (\n -> (n, v)) (extractName k))
+                    in (Optionals.map (\n -> (n, v)) (extractName k))
       in case t of
-        Core.TermMap v0 -> Maps.fromList (Maybes.cat (Lists.map fromEntry (Maps.toList v0)))
+        Core.TermMap v0 -> Maps.fromList (Optionals.cat (Lists.map fromEntry (Maps.toList v0)))
         _ -> Maps.empty
 -- | Get description from annotations map (Either version)
 getDescription :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe String)
 getDescription cx graph anns =
-    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (ExtractCore.string graph term)) (Maps.lookup (Core.Name "description") anns)
+    Optionals.cases (Maps.lookup (Core.Name "description") anns) (Right Nothing) (\term -> Eithers.map Optionals.pure (ExtractCore.string graph term))
 -- | Get a term annotation
 getTermAnnotation :: Core.Name -> Core.Term -> Maybe Core.Term
 getTermAnnotation key term = Maps.lookup key (termAnnotationInternal term)
@@ -98,7 +98,7 @@ getTermDescription cx graph term =
 -- | Get type from annotations
 getType :: Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.DecodingError (Maybe Core.Type)
 getType graph anns =
-    Maybes.maybe (Right Nothing) (\dat -> Eithers.map Maybes.pure (DecodeCore.type_ graph dat)) (Maps.lookup Constants.keyType anns)
+    Optionals.cases (Maps.lookup Constants.keyType anns) (Right Nothing) (\dat -> Eithers.map Optionals.pure (DecodeCore.type_ graph dat))
 -- | Get a type annotation
 getTypeAnnotation :: Core.Name -> Core.Type -> Maybe Core.Term
 getTypeAnnotation key typ = Maps.lookup key (typeAnnotationInternal typ)
@@ -107,13 +107,13 @@ getTypeClasses :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error (M.Map C
 getTypeClasses cx graph term =
 
       let decodeName = \term2 -> Eithers.bimap (\de -> Errors.ErrorDecoding de) (\x -> x) (DecodeCore.name graph term2)
-      in (Maybes.maybe (Right Maps.empty) (\term2 -> ExtractCore.map decodeName (ExtractCore.setOf decodeName graph) graph term2) (getTermAnnotation Constants.keyClasses term))
+      in (Optionals.cases (getTermAnnotation Constants.keyClasses term) (Right Maps.empty) (\term2 -> ExtractCore.map decodeName (ExtractCore.setOf decodeName graph) graph term2))
 -- | Get type description (Either version)
 getTypeDescription :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Maybe String)
 getTypeDescription cx graph typ = getDescription cx graph (typeAnnotationInternal typ)
 -- | Check if annotations contain description
 hasDescription :: M.Map Core.Name t0 -> Bool
-hasDescription anns = Maybes.isJust (Maps.lookup Constants.keyDescription anns)
+hasDescription anns = Optionals.isGiven (Maps.lookup Constants.keyDescription anns)
 -- | Check if type has description
 hasTypeDescription :: Core.Type -> Bool
 hasTypeDescription typ = hasDescription (typeAnnotationInternal typ)
@@ -122,11 +122,11 @@ isNativeType :: Core.Binding -> Bool
 isNativeType el =
 
       let isFlaggedAsFirstClassType =
-              Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.keyFirstClassType (Core.bindingTerm el)))
-      in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
+              Optionals.fromOptional False (Optionals.map (\_ -> True) (getTermAnnotation Constants.keyFirstClassType (Core.bindingTerm el)))
+      in (Optionals.cases (Core.bindingTypeScheme el) False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingTypeScheme el))
+        Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)))
 -- | Normalize term annotations
 normalizeTermAnnotations :: Core.Term -> Core.Term
 normalizeTermAnnotations term =
@@ -151,7 +151,7 @@ setAnnotation key val m = Maps.alter (\_ -> val) key m
 -- | Set description in annotations
 setDescription :: Maybe String -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term
 setDescription d =
-    setAnnotation Constants.keyDescription (Maybes.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d)
+    setAnnotation Constants.keyDescription (Optionals.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d)
 -- | Set term annotation
 setTermAnnotation :: Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term
 setTermAnnotation key val term =
@@ -164,10 +164,10 @@ setTermAnnotation key val term =
 -- | Set term description
 setTermDescription :: Maybe String -> Core.Term -> Core.Term
 setTermDescription d =
-    setTermAnnotation Constants.keyDescription (Maybes.map (\s -> Core.TermLiteral (Core.LiteralString s)) d)
+    setTermAnnotation Constants.keyDescription (Optionals.map (\s -> Core.TermLiteral (Core.LiteralString s)) d)
 -- | Set type in annotations
 setType :: Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term
-setType mt = setAnnotation Constants.keyType (Maybes.map EncodeCore.type_ mt)
+setType mt = setAnnotation Constants.keyType (Optionals.map EncodeCore.type_ mt)
 -- | Set type annotation
 setTypeAnnotation :: Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type
 setTypeAnnotation key val typ =
@@ -191,7 +191,7 @@ setTypeClasses m term =
 -- | Set type description
 setTypeDescription :: Maybe String -> Core.Type -> Core.Type
 setTypeDescription d =
-    setTypeAnnotation Constants.keyDescription (Maybes.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d)
+    setTypeAnnotation Constants.keyDescription (Optionals.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d)
 -- | Get internal term annotations
 termAnnotationInternal :: Core.Term -> M.Map Core.Name Core.Term
 termAnnotationInternal term =

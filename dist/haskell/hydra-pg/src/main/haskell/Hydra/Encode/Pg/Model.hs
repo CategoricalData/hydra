@@ -3,6 +3,7 @@
 
 module Hydra.Encode.Pg.Model where
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Pg.Model as Model

@@ -46,7 +46,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
       expectMono 1 [tag_disabledForMinimalInference]
         (lambda "mapping" $ lambda "s" $ lets [
           "list">: primitive _strings_toList @@ var "s",
-          "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _maybes_cat @@ list [primitive _lists_maybeHead @@ var "list"]))] $
+          "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _optionals_cat @@ list [primitive _lists_maybeHead @@ var "list"]))] $
           primitive _logic_ifElse
             @@ (primitive _strings_null @@ var "s")
             @@ (var "s")

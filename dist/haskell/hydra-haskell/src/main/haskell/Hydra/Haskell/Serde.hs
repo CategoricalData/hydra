@@ -22,7 +22,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -115,8 +115,8 @@ constructorToExpr cons =
                           fields = Syntax.recordConstructorFields v0
                       in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
                         Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldToExpr fields)]))
-      in (Maybes.maybe body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
-        body])) mc)
+      in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+        body])))
 -- | Convert a data/newtype keyword to an AST expression
 dataKeywordToExpr :: Syntax.DataKeyword -> Ast.Expr
 dataKeywordToExpr kw =
@@ -179,8 +179,8 @@ declarationToExpr decl =
                         (Serialization.cst "::"),
                         (typeToExpr htype)]) [
                         valueBindingToExpr vb]))
-      in (Maybes.maybe body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
-        body])) mc)
+      in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+        body])))
 -- | Convert a Haskell expression to an AST expression
 expressionToExpr :: Syntax.Expression -> Ast.Expr
 expressionToExpr expr =
@@ -212,8 +212,8 @@ fieldToExpr field =
           mc = Syntax.fieldComments field
           body = Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.cons (Serialization.cst "::") [
                 typeToExpr typ]))
-      in (Maybes.maybe body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
-        body])) mc)
+      in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+        body])))
 -- | Convert an if-then-else expression to an AST expression
 ifExpressionToExpr :: Syntax.IfExpression -> Ast.Expr
 ifExpressionToExpr ifExpr =
@@ -250,12 +250,12 @@ importToExpr import_ =
                     Syntax.ImportSpecHiding v0 -> Serialization.spaceSep (Lists.cons (Serialization.cst "hiding ") [
                       Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map namedImportExportToExpr v0))])
           parts =
-                  Maybes.cat [
+                  Optionals.cat [
                     Just (Serialization.cst "import"),
                     (Logic.ifElse qual (Just (Serialization.cst "qualified")) Nothing),
                     (Just (Serialization.cst name)),
-                    (Maybes.map (\m -> Serialization.cst (Strings.cat2 "as " (Syntax.unModuleName m))) mod),
-                    (Maybes.map hidingSec mspec)]
+                    (Optionals.map (\m -> Serialization.cst (Strings.cat2 "as " (Syntax.unModuleName m))) mod),
+                    (Optionals.map hidingSec mspec)]
       in (Serialization.spaceSep parts)
 -- | Convert a lambda expression to an AST expression
 lambdaExpressionToExpr :: Syntax.LambdaExpression -> Ast.Expr
@@ -278,7 +278,7 @@ literalToExpr lit =
           showFloat =
                   \showFn -> \v ->
                     let raw = showFn v
-                    in (Logic.ifElse (Equality.equal raw "NaN") "(0/0)" (Logic.ifElse (Equality.equal raw "Infinity") "(1/0)" (Logic.ifElse (Equality.equal raw "-Infinity") "(-(1/0))" (parensIfNeg (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 raw)) 45) raw))))
+                    in (Logic.ifElse (Equality.equal raw "NaN") "(0/0)" (Logic.ifElse (Equality.equal raw "Infinity") "(1/0)" (Logic.ifElse (Equality.equal raw "-Infinity") "(-(1/0))" (parensIfNeg (Equality.equal (Optionals.fromOptional 0 (Strings.maybeCharAt 0 raw)) 45) raw))))
       in (Serialization.cst (case lit of
         Syntax.LiteralChar v0 -> Literals.showString (Literals.showUint16 v0)
         Syntax.LiteralDouble v0 -> showFloat (\v -> Literals.showFloat64 v) v0
@@ -302,8 +302,8 @@ moduleHeadToExpr moduleHead =
           head =
                   Serialization.spaceSep (Lists.cons (Serialization.cst "module") (Lists.cons (Serialization.cst mname) [
                     Serialization.cst "where"]))
-      in (Maybes.maybe head (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) (Lists.cons (Serialization.cst "") [
-        head]))) mc)
+      in (Optionals.cases mc head (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) (Lists.cons (Serialization.cst "") [
+        head]))))
 -- | Convert a Haskell module to an AST expression
 moduleToExpr :: Syntax.Module -> Ast.Expr
 moduleToExpr module_ =
@@ -313,8 +313,8 @@ moduleToExpr module_ =
           decls = Syntax.moduleDeclarations module_
           warning = [
                 Serialization.cst (toSimpleComments Constants.warningAutoGeneratedFile)]
-          headerLine = Maybes.maybe [] (\h -> [
-                moduleHeadToExpr h]) mh
+          headerLine = Optionals.cases mh [] (\h -> [
+                moduleHeadToExpr h])
           declLines = Lists.map declarationToExpr decls
           importLines = Logic.ifElse (Lists.null imports) [] [
                 Serialization.newlineSep (Lists.map importToExpr imports)]
@@ -429,10 +429,10 @@ valueBindingToExpr vb =
                         lhsExpr,
                         (Serialization.cst "=")],
                       (Serialization.tabIndent rhsExpr)])
-        in (Maybes.maybe body (\localBindings ->
+        in (Optionals.cases local body (\localBindings ->
           let bindings = Syntax.unLocalBindings localBindings
           in (Serialization.indentBlock (Lists.cons body [
-            Serialization.indentBlock (Lists.cons (Serialization.cst "where") (Lists.map localBindingToExpr bindings))]))) local)
+            Serialization.indentBlock (Lists.cons (Serialization.cst "where") (Lists.map localBindingToExpr bindings))]))))
 -- | Convert a type variable to an AST expression
 variableToExpr :: Syntax.Variable -> Ast.Expr
 variableToExpr variable = nameToExpr (Syntax.unVariable variable)

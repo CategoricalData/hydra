@@ -31,7 +31,7 @@ import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
@@ -133,9 +133,9 @@ constructModule namespaces mod defs cx g =
                                             Syntax.namedImportExportName = (Utils.simpleName n),
                                             Syntax.namedImportExportSubspec = Nothing}) hidden)))
                               in Syntax.Import {
-                                Syntax.importQualified = (Maybes.isJust malias),
+                                Syntax.importQualified = (Optionals.isGiven malias),
                                 Syntax.importModule = (Syntax.ModuleName name),
-                                Syntax.importAs = (Maybes.map (\x -> Syntax.ModuleName x) malias),
+                                Syntax.importAs = (Optionals.map (\x -> Syntax.ModuleName x) malias),
                                 Syntax.importSpec = spec}
                     in (Lists.map toImport (Lists.concat [
                       [
@@ -160,7 +160,7 @@ constructModule namespaces mod defs cx g =
                         (("Hydra.Haskell.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
-            mc = Maybes.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
+            mc = Optionals.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
         in (Right (Syntax.Module {
           Syntax.moduleHead = (Just (Syntax.ModuleHead {
             Syntax.moduleHeadComments = mc,
@@ -196,7 +196,7 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
                         v1 = Logic.ifElse (Variables.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0
                         hname =
                                 Utils.unionFieldReference (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes g)))) namespaces dn fn
-                    in (Eithers.bind (Maybes.cases (Maps.lookup fn fieldMap) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                    in (Eithers.bind (Optionals.cases (Maps.lookup fn fieldMap) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                       Errors.noMatchingFieldErrorFieldName = fn})))) (\fieldType ->
                       let ft = Core.fieldTypeType fieldType
                           noArgs = []
@@ -213,7 +213,7 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
       in (Eithers.bind (Resolution.requireUnionType cx g dn) (\rt ->
         let toFieldMapEntry = \f -> (Core.fieldTypeName f, f)
             fieldMap = Maps.fromList (Lists.map toFieldMapEntry rt)
-        in (Eithers.bind (Eithers.mapList (toAlt fieldMap) fields) (\ecases -> Eithers.bind (Maybes.cases def (Right []) (\d -> Eithers.bind (Eithers.map (\x -> Syntax.CaseRhs x) (encodeTerm depth namespaces d cx g)) (\cs ->
+        in (Eithers.bind (Eithers.mapList (toAlt fieldMap) fields) (\ecases -> Eithers.bind (Optionals.cases def (Right []) (\d -> Eithers.bind (Eithers.map (\x -> Syntax.CaseRhs x) (encodeTerm depth namespaces d cx g)) (\cs ->
           let lhs = Syntax.PatternName (Utils.rawName Constants.ignoredVariable)
               alt =
                       Syntax.Alternative {
@@ -324,7 +324,7 @@ encodeTerm depth namespaces term cx g =
         Core.TermList v0 -> Eithers.bind (Eithers.mapList encode v0) (\helems -> Right (Syntax.ExpressionList helems))
         Core.TermLiteral v0 -> encodeLiteral v0 cx
         Core.TermMap v0 -> Logic.ifElse (Maps.null v0) (Right (Utils.hsvar "M.empty")) (nonemptyMap v0)
-        Core.TermMaybe v0 -> Maybes.cases v0 (Right (Utils.hsvar "Nothing")) (\t -> Eithers.bind (encode t) (\ht -> Right (Utils.hsapp (Utils.hsvar "Just") ht)))
+        Core.TermOptional v0 -> Optionals.cases v0 (Right (Utils.hsvar "Nothing")) (\t -> Eithers.bind (encode t) (\ht -> Right (Utils.hsapp (Utils.hsvar "Just") ht)))
         Core.TermPair v0 -> Eithers.bind (encode (Pairs.first v0)) (\f -> Eithers.bind (encode (Pairs.second v0)) (\s -> Right (Syntax.ExpressionTuple [
           f,
           s])))
@@ -430,7 +430,7 @@ encodeType namespaces typ cx g =
             Syntax.TypeVariable (Utils.rawName "M.Map"),
             hkt,
             hvt]))))
-        Core.TypeMaybe v0 -> Eithers.bind (encode v0) (\hot -> Right (Utils.toTypeApplication [
+        Core.TypeOptional v0 -> Eithers.bind (encode v0) (\hot -> Right (Utils.toTypeApplication [
           Syntax.TypeVariable (Utils.rawName "Maybe"),
           hot]))
         Core.TypePair v0 -> Eithers.bind (encode (Core.pairTypeFirst v0)) (\f -> Eithers.bind (encode (Core.pairTypeSecond v0)) (\s -> Right (Syntax.TypeTuple [
@@ -476,14 +476,14 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
       in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Right htyp) (
         let encoded = Lists.map encodeAssertion assertPairs
             hassert =
-                    Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Maybes.fromMaybe (Syntax.ConstraintTuple encoded) (Lists.maybeHead encoded)) (Syntax.ConstraintTuple encoded)
+                    Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Optionals.fromOptional (Syntax.ConstraintTuple encoded) (Lists.maybeHead encoded)) (Syntax.ConstraintTuple encoded)
         in (Right (Syntax.TypeCtx (Syntax.ConstrainedType {
           Syntax.constrainedTypeCtx = hassert,
           Syntax.constrainedTypeType = htyp}))))))
 -- | Encode an unwrap term as a Haskell expression
 encodeUnwrap :: Util.ModuleNames Syntax.ModuleName -> Core.Name -> Either t0 Syntax.Expression
 encodeUnwrap namespaces name =
-    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromMaybe (Packaging.ModuleName "") (Names.moduleNameOf name)) (Utils.newtypeAccessorName name))))
+    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Optionals.fromOptional (Packaging.ModuleName "") (Names.moduleNameOf name)) (Utils.newtypeAccessorName name))))
 -- | Extend metadata by analyzing a term for standard import usage (bottom-up step function)
 extendMetaForTerm :: Environment.HaskellModuleMetadata -> Core.Term -> Environment.HaskellModuleMetadata
 extendMetaForTerm meta term =
@@ -517,7 +517,7 @@ findOrdVariables typ =
                   in (tryType names kt)
                 Core.TypeSet v0 -> tryType names v0
                 _ -> names
-          isTypeVariable = \v -> Maybes.isNothing (Names.moduleNameOf v)
+          isTypeVariable = \v -> Optionals.isNone (Names.moduleNameOf v)
           tryType =
                   \names -> \t -> case (Strip.deannotateType t) of
                     Core.TypeVariable v0 -> Logic.ifElse (isTypeVariable v0) (Sets.insert v0 names) names
@@ -532,7 +532,7 @@ gatherMetadata defs =
                 Packaging.DefinitionTerm v0 ->
                   let term = Packaging.termDefinitionBody v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)) (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)))
+                  in (Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0)) metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeBody ts)))
                 Packaging.DefinitionType v0 ->
                   let typ = Core.typeSchemeBody (Packaging.typeDefinitionBody v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
@@ -618,7 +618,7 @@ toDataDeclaration namespaces def cx g =
 
       let name = Packaging.termDefinitionName def
           term = Packaging.termDefinitionBody def
-          typ = Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature def)
+          typ = Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature def)
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
                   \vb -> case vb of
@@ -654,16 +654,16 @@ toDataDeclaration namespaces def cx g =
                           terms = Lists.map Core.bindingTerm lbindings
                       in (Eithers.bind (Eithers.mapList (\t -> encodeTerm 0 namespaces t cx g) terms) (\hterms ->
                         let hbindings = Lists.zipWith toTermDefinition hnames hterms
-                            prevBindings = Maybes.maybe [] (\lb -> Syntax.unLocalBindings lb) bindings
+                            prevBindings = Optionals.cases bindings [] (\lb -> Syntax.unLocalBindings lb)
                             allBindings = Lists.concat2 prevBindings hbindings
                         in (toDecl comments hname_ env (Just (Syntax.LocalBindings allBindings)))))
                     _ -> Eithers.bind (encodeTerm 0 namespaces term_ cx g) (\hterm ->
                       let vb = Utils.simpleValueBinding hname_ hterm bindings
-                          schemeConstraints = Maybes.maybe Nothing (\ts -> Core.typeSchemeConstraints ts) typ
+                          schemeConstraints = Optionals.cases typ Nothing (\ts -> Core.typeSchemeConstraints ts)
                           schemeClasses = typeSchemeConstraintsToClassMap schemeConstraints
                       in (Eithers.bind (Annotations.getTypeClasses cx g (Strip.removeTypesFromTerm term)) (\explicitClasses ->
                         let combinedClasses = Maps.union schemeClasses explicitClasses
-                            schemeType = Maybes.maybe Core.TypeUnit (\ts -> Core.typeSchemeBody ts) typ
+                            schemeType = Optionals.cases typ Core.TypeUnit (\ts -> Core.typeSchemeBody ts)
                         in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses schemeType cx g) (\htype ->
                           let decl =
                                   Syntax.DeclarationTypedBinding (Syntax.TypedBinding {
@@ -681,7 +681,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
       let lname = Names.localNameOf elementName
           hname = Utils.simpleName lname
           declHead =
-                  \name -> \vars_ -> Maybes.fromMaybe (Syntax.DeclarationHeadSimple name) (Maybes.map (\p ->
+                  \name -> \vars_ -> Optionals.fromOptional (Syntax.DeclarationHeadSimple name) (Optionals.map (\p ->
                     let h = Pairs.first p
                         rest = Pairs.second p
                         hvar = Syntax.Variable (Utils.simpleName (Core.unName h))
@@ -810,23 +810,23 @@ typeDecl namespaces name typ cx g =
                                   _ -> Nothing
                         decodeName =
                                 \term2 -> case (Strip.deannotateTerm term2) of
-                                  Core.TermWrap v0 -> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v0) (Core.Name "hydra.core.Name")) (Maybes.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v0))) Nothing
+                                  Core.TermWrap v0 -> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v0) (Core.Name "hydra.core.Name")) (Optionals.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v0))) Nothing
                                   _ -> Nothing
                         forType =
                                 \field ->
                                   let fname = Core.fieldName field
                                       fterm = Core.fieldTerm field
-                                  in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Maybes.bind (decodeName fterm) forVariableType) Nothing))
+                                  in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (decodeName fterm) forVariableType) Nothing))
                         forVariableType =
                                 \vname ->
                                   let qname = Names.qualifyName vname
                                       mns = Util.qualifiedNameModuleName qname
                                       local = Util.qualifiedNameLocal qname
-                                  in (Maybes.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
+                                  in (Optionals.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
                                     "_",
                                     local,
                                     "_type_"]))) mns)
-                    in (Maybes.fromMaybe (recurse term) (Maybes.bind variantResult forType))
+                    in (Optionals.fromOptional (recurse term) (Optionals.bind variantResult forType))
           finalTerm = Rewriting.rewriteTerm rewrite rawTerm
       in (Eithers.bind (encodeTerm 0 namespaces finalTerm cx g) (\expr ->
         let rhs = Syntax.RightHandSide expr
@@ -846,7 +846,7 @@ typeSchemeConstraintsToClassMap maybeConstraints =
       let constraintToName =
               \tcc -> case tcc of
                 Core.TypeClassConstraintSimple v0 -> Just v0
-      in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map constraintToName (Core.typeVariableConstraintsClasses meta)))) constraints) maybeConstraints)
+      in (Optionals.cases maybeConstraints Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Optionals.cat (Lists.map constraintToName (Core.typeVariableConstraintsClasses meta)))) constraints))
 -- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True

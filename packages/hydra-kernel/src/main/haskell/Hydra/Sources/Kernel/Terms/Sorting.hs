@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
@@ -97,7 +97,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
     ("mp" ~> "p" ~>
       "k" <~ Pairs.first (var "p") $
       "vs" <~ Pairs.second (var "p") $
-      "existing" <~ Maybes.maybe (list ([] :: [TypedTerm a])) (reify Equality.identity) (Maps.lookup (var "k") (var "mp")) $
+      "existing" <~ Optionals.cases (Maps.lookup (var "k") (var "mp")) (list ([] :: [TypedTerm a])) (reify Equality.identity) $
       Maps.insert (var "k") (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
     Maps.empty
     (var "pairs")
@@ -129,7 +129,7 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
       "v" <~ Pairs.first (var "vkNeighbors") $
       "kNeighbors" <~ Pairs.second (var "vkNeighbors") $
       "neighbors" <~ Pairs.second (var "kNeighbors") $
-      pair (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
+      pair (var "v") (Optionals.mapOptional ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
     (var "indexedEdges")) $
   "vertexToKey" <~ ("v" ~> Maps.lookup (var "v") (var "vertexMap")) $
   pair (var "graph") (var "vertexToKey")
@@ -140,10 +140,10 @@ createOrderingIsomorphism = define "createOrderingIsomorphism" $
   "sourceOrd" ~> "targetOrd" ~>
   "sourceToTargetMapping" <~ ("els" ~>
     "mp" <~ Maps.fromList (Lists.zip (var "sourceOrd") (var "els")) $
-    Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "targetOrd")) $
+    Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "targetOrd")) $
   "targetToSourceMapping" <~ ("els" ~>
     "mp" <~ Maps.fromList (Lists.zip (var "targetOrd") (var "els")) $
-    Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
+    Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
   Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
 findReachableNodes :: TypedTermDefinition ((a -> S.Set a) -> a -> S.Set a)
@@ -172,9 +172,7 @@ popStackUntil = define "popStackUntil" $
   "go" <~ ("acc" ~> "st" ~>
     -- Empty stack: return whatever we've collected (unreachable when Tarjan's
     -- state invariants hold, since v is always on the stack when this is called).
-    Maybes.maybe
-      (pair (Lists.reverse (var "acc")) (var "st"))
-      ("uc" ~>
+    Optionals.cases (Lists.uncons $ Topology.tarjanStateStack (var "st")) (pair (Lists.reverse (var "acc")) (var "st")) ("uc" ~>
         "x" <~ Pairs.first (var "uc") $
         "xs" <~ Pairs.second (var "uc") $
         "newSt" <~ Topology.tarjanStateWithStack (var "st") (var "xs") $
@@ -182,8 +180,7 @@ popStackUntil = define "popStackUntil" $
         "acc'" <~ Lists.cons (var "x") (var "acc") $
         Logic.ifElse (Equality.equal (var "x") (var "v"))
           (pair (Lists.reverse (var "acc'")) (var "newSt2"))
-          (var "go" @@ var "acc'" @@ var "newSt2"))
-      (Lists.uncons $ Topology.tarjanStateStack (var "st"))) $
+          (var "go" @@ var "acc'" @@ var "newSt2"))) $
   var "go" @@ list ([] :: [TypedTerm Topo.Vertex]) @@ var "st0"
 
 propagateTags :: TypedTermDefinition ([(a, [a])] -> [(a, [t])] -> [(a, S.Set t)])
@@ -204,10 +201,10 @@ propagateTags = define "propagateTags" $
   -- For each node, find all reachable nodes and collect their tags
   "getTagsForNode" <~ ("node" ~>
     "reachable" <~ findReachableNodes
-      @@ ("n" ~> Sets.fromList $ Maybes.maybe (list ([] :: [TypedTerm a])) (reify Equality.identity) (Maps.lookup (var "n") (var "adjMap")))
+      @@ ("n" ~> Sets.fromList $ Optionals.cases (Maps.lookup (var "n") (var "adjMap")) (list ([] :: [TypedTerm a])) (reify Equality.identity))
       @@ var "node" $
     Sets.unions $ Lists.map
-      ("n" ~> Maybes.maybe Sets.empty (reify Equality.identity) (Maps.lookup (var "n") (var "tagMap")))
+      ("n" ~> Optionals.cases (Maps.lookup (var "n") (var "tagMap")) Sets.empty (reify Equality.identity))
       (Sets.toList $ var "reachable")) $
   Lists.map ("n" ~> pair (var "n") (var "getTagsForNode" @@ var "n")) (var "allNodes")
 
@@ -284,7 +281,7 @@ topologicalSortComponents = define "topologicalSortComponents" $
   "g" <~ Pairs.first (var "graphResult") $
   -- vertexToKey returns Maybe key; filter out Nothing (unreachable for
   -- vertices produced by stronglyConnectedComponents of the same graph).
-  Lists.map ("comp" ~> Maybes.mapMaybe (Pairs.second $ var "graphResult") (var "comp")) $
+  Lists.map ("comp" ~> Optionals.mapOptional (Pairs.second $ var "graphResult") (var "comp")) $
     stronglyConnectedComponents @@ var "g"
 
 topologicalSortNodes :: TypedTermDefinition ((x -> a) -> (x -> [a]) -> [x] -> [[x]])
@@ -296,4 +293,4 @@ topologicalSortNodes = define "topologicalSortNodes" $
   "nodesByKey" <~ Maps.fromList (Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "n")) (var "nodes")) $
   "pairs" <~ Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "getAdj" @@ var "n")) (var "nodes") $
   "comps" <~ topologicalSortComponents @@ var "pairs" $
-  Lists.map ("c" ~> Maybes.cat $ Lists.map ("k" ~> Maps.lookup (var "k") (var "nodesByKey")) (var "c")) (var "comps")
+  Lists.map ("c" ~> Optionals.cat $ Lists.map ("k" ~> Maps.lookup (var "k") (var "nodesByKey")) (var "c")) (var "comps")

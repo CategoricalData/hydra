@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
@@ -147,29 +147,20 @@ opt = define "opt" $
 optArray :: TypedTermDefinition (String -> M.Map String Value -> Either String (Maybe [Value]))
 optArray = define "optArray" $
   doc "Look up an optional array field in a JSON object" $
-  lambdas ["fname", "m"] $ Maybes.maybe
-    (right nothing)
-    (lambda "a" $ Eithers.map (lambda "x" (just $ var "x")) $ expectArray @@ var "a")
-    (opt @@ var "fname" @@ var "m")
+  lambdas ["fname", "m"] $ Optionals.cases (opt @@ var "fname" @@ var "m") (right nothing) (lambda "a" $ Eithers.map (lambda "x" (just $ var "x")) $ expectArray @@ var "a")
 
 optString :: TypedTermDefinition (String -> M.Map String Value -> Either String (Maybe String))
 optString = define "optString" $
   doc "Look up an optional string field in a JSON object" $
-  lambdas ["fname", "m"] $ Maybes.maybe
-    (right nothing)
-    (lambda "s" $ Eithers.map (lambda "x" (just $ var "x")) $ expectString @@ var "s")
-    (opt @@ var "fname" @@ var "m")
+  lambdas ["fname", "m"] $ Optionals.cases (opt @@ var "fname" @@ var "m") (right nothing) (lambda "s" $ Eithers.map (lambda "x" (just $ var "x")) $ expectString @@ var "s")
 
 require :: TypedTermDefinition (String -> M.Map String Value -> Either String Value)
 require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
-  lambdas ["fname", "m"] $ Maybes.maybe
-    (left $ Strings.cat $ list [
+  lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m")) (left $ Strings.cat $ list [
       string "required attribute ",
       showValue @@ var "fname",
-      string " not found"])
-    (lambda "value" $ right $ var "value")
-    (Maps.lookup (var "fname") (var "m"))
+      string " not found"]) (lambda "value" $ right $ var "value")
 
 requireArray :: TypedTermDefinition (String -> M.Map String Value -> Either String [Value])
 requireArray = define "requireArray" $

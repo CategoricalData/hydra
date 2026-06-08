@@ -10,7 +10,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
@@ -118,7 +118,9 @@ subtermStep cx raw =
                               _ -> Left (Errors.DecodingError "expected int32 value")
                             _ -> Left (Errors.DecodingError "expected int32 literal")
                           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
-                      (Core.Name "maybeTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepMaybeTerm) (ExtractCore.decodeUnit cx input))),
+                      (
+                        Core.Name "optionalTerm",
+                        (\input -> Eithers.map (\t -> Paths.SubtermStepOptionalTerm) (ExtractCore.decodeUnit cx input))),
                       (
                         Core.Name "productTerm",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepProductTerm t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
@@ -149,10 +151,10 @@ subtermStep cx raw =
                         Core.Name "injectionTerm",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepInjectionTerm) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "wrappedTerm", (\input -> Eithers.map (\t -> Paths.SubtermStepWrappedTerm) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.paths.SubtypeEdge
 subtypeEdge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeEdge
@@ -232,16 +234,16 @@ subtypeStep cx raw =
                       (Core.Name "mapKeys", (\input -> Eithers.map (\t -> Paths.SubtypeStepMapKeys) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "mapValues", (\input -> Eithers.map (\t -> Paths.SubtypeStepMapValues) (ExtractCore.decodeUnit cx input))),
                       (
-                        Core.Name "maybeElement",
-                        (\input -> Eithers.map (\t -> Paths.SubtypeStepMaybeElement) (ExtractCore.decodeUnit cx input))),
+                        Core.Name "optionalElement",
+                        (\input -> Eithers.map (\t -> Paths.SubtypeStepOptionalElement) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "pairFirst", (\input -> Eithers.map (\t -> Paths.SubtypeStepPairFirst) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "pairSecond", (\input -> Eithers.map (\t -> Paths.SubtypeStepPairSecond) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "recordField", (\input -> Eithers.map (\t -> Paths.SubtypeStepRecordField t) (DecodeCore.name cx input))),
                       (Core.Name "setElement", (\input -> Eithers.map (\t -> Paths.SubtypeStepSetElement) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "unionField", (\input -> Eithers.map (\t -> Paths.SubtypeStepUnionField t) (DecodeCore.name cx input))),
                       (Core.Name "wrappedType", (\input -> Eithers.map (\t -> Paths.SubtypeStepWrappedType) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+          " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

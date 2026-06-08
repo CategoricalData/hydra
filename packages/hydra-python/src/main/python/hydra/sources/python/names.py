@@ -4,14 +4,14 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Names.hs.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Just
+from hydra.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.logic as Logic
 import hydra.dsl.meta.lib.maps as Maps
-import hydra.dsl.meta.lib.maybes as Maybes
+import hydra.dsl.meta.lib.optionals as Optionals
 import hydra.dsl.meta.lib.pairs as Pairs
 import hydra.dsl.meta.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
@@ -66,11 +66,11 @@ DEPENDENCIES = [
 
 _PLACEHOLDER = Module(
     NS,
-    Just(EntityMetadata(
-        Just("Python naming utilities: encoding Hydra names as Python names"),
+    Given(EntityMetadata(
+        Given("Python naming utilities: encoding Hydra names as Python names"),
         (),
         (),
-        Nothing())),
+        None_())),
     DEPENDENCIES,
     (),
 )
@@ -161,8 +161,7 @@ def _encode_name():
         ],
         Logic.if_else(
             var("isQualified"),
-            Maybes.maybe(
-                # Not a bound type variable
+            Optionals.cases(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
                 Logic.if_else(
                     Equality.equal(
                         var("mns"),
@@ -178,9 +177,7 @@ def _encode_name():
                         ),
                     ),
                     # Different or no namespace
-                    Maybes.maybe(
-                        wrap(_PY_NAME, var("pyLocal")),
-                        lam(
+                    Optionals.cases(var("mns"), wrap(_PY_NAME, var("pyLocal")), lam(
                             "nsVal",
                             wrap(
                                 _PY_NAME,
@@ -192,14 +189,9 @@ def _encode_name():
                                     ),
                                 ),
                             ),
-                        ),
-                        var("mns"),
-                    ),
-                ),
-                # Bound type variable
-                lam("n", var("n")),
-                Maps.lookup(var("name"), var("boundVars")),
-            ),
+                        ),),
+                ), # Bound type variable
+                lam("n", var("n")),),
             # Not qualified
             wrap(_PY_NAME, var("pyLocal")),
         ),
@@ -256,8 +248,7 @@ def _encode_name_qualified():
                 ),
             ),
         ],
-        Maybes.maybe(
-            # Not a bound type variable
+        Optionals.cases(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
             Logic.if_else(
                 Equality.equal(
                     var("mns"),
@@ -273,9 +264,7 @@ def _encode_name_qualified():
                     ),
                 ),
                 # Different namespace - snake-cased namespace + sanitized local
-                Maybes.maybe(
-                    wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))),
-                    lam(
+                Optionals.cases(var("mns"), wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))), lam(
                         "nsVal",
                         wrap(
                             _PY_NAME,
@@ -287,14 +276,9 @@ def _encode_name_qualified():
                                 ),
                             ),
                         ),
-                    ),
-                    var("mns"),
-                ),
-            ),
-            # Bound type variable
-            lam("n", var("n")),
-            Maps.lookup(var("name"), var("boundVars")),
-        ),
+                    ),),
+            ), # Bound type variable
+            lam("n", var("n")),),
     )
     return _def(
         "encodeNameQualified",
@@ -436,14 +420,10 @@ def _variable_reference():
                 names_module_name_of(var("name")),
             ),
             field("sameNamespace",
-                Maybes.maybe(
-                    false(),
-                    lam(
+                Optionals.cases(var("mns"), false(), lam(
                         "ns",
                         Equality.equal(var("ns"), var("focusNs")),
-                    ),
-                    var("mns"),
-                ),
+                    ),),
             ),
         ],
         Logic.if_else(

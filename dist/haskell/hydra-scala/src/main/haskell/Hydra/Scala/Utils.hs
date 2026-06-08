@@ -16,7 +16,7 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Logic as Logic
 import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Maybes as Maybes
+import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -49,7 +49,7 @@ nameOfType cx t =
 -- | Qualify a union field name, optionally prefixing with the Scala type name
 qualifyUnionFieldName :: String -> Maybe Core.Name -> Core.Name -> String
 qualifyUnionFieldName dlft sname fname =
-    Strings.cat2 (Maybes.maybe dlft (\n -> Strings.cat2 (scalaTypeName True n) ".") sname) (scalaEscapeName (Core.unName fname))
+    Strings.cat2 (Optionals.cases sname dlft (\n -> Strings.cat2 (scalaTypeName True n) ".")) (scalaEscapeName (Core.unName fname))
 -- | Apply a Scala data expression to a list of arguments
 sapply :: Syntax.Data -> [Syntax.Data] -> Syntax.Data
 sapply fun args =
@@ -89,7 +89,7 @@ scalaEscapeName s =
           sanitized2 = Logic.ifElse (Equality.equal sanitized "_") "_x" sanitized
           sanitized3 = Logic.ifElse (Equality.equal sanitized2 "toString") "toString_" sanitized2
           needsBackticks =
-                  Logic.or (Sets.member sanitized3 scalaReservedWords) (Logic.and (Equality.gt (Strings.length sanitized3) 0) (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt (Math.sub (Strings.length sanitized3) 1) sanitized3)) 95))
+                  Logic.or (Sets.member sanitized3 scalaReservedWords) (Logic.and (Equality.gt (Strings.length sanitized3) 0) (Equality.equal (Optionals.fromOptional 0 (Strings.maybeCharAt (Math.sub (Strings.length sanitized3) 1) sanitized3)) 95))
       in (Logic.ifElse needsBackticks (Strings.cat [
         "`",
         sanitized3,
@@ -121,7 +121,7 @@ sprim :: Core.Name -> Syntax.Data
 sprim name =
 
       let qname = Names.qualifyName name
-          prefix = Packaging.unModuleName (Maybes.fromMaybe (Packaging.ModuleName "") (Util.qualifiedNameModuleName qname))
+          prefix = Packaging.unModuleName (Optionals.fromOptional (Packaging.ModuleName "") (Util.qualifiedNameModuleName qname))
           local = scalaEscapeName (Util.qualifiedNameLocal qname)
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 -- | Apply a Scala type to a list of type arguments
