@@ -265,7 +265,7 @@ toJson = define "toJson" $
             (Lists.zip (var "fieldTypes") (var "fields"))) $
           -- Filter out Nothing entries (omitted optional fields) and build object
           Eithers.map ("pairs" ~>
-            Json.valueObject $ Maps.fromList $ Optionals.cat $ var "pairs")
+            Json.valueObject $ Optionals.cat $ var "pairs")
             (var "encodedPairs")],
 
     -- Unions (single-key object)
@@ -286,13 +286,13 @@ toJson = define "toJson" $
             ("ftype" ~>
               "encodedUnion" <~ (toJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "fterm") $
               Eithers.map
-                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (var "fname") (var "v")])
+                ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
                 (var "encodedUnion"))
             (var "ftypeResult")],
 
     -- Unit (empty object)
     _Type_unit>>: constant $
-      right $ Json.valueObject $ Maps.empty,
+      right $ Json.valueObject $ list ([] :: [TypedTerm (String, Value)]),
 
     -- Wrapped types (look up inner type and recurse)
     _Type_wrap>>: "wn" ~>
@@ -316,7 +316,7 @@ toJson = define "toJson" $
             Eithers.either_
               ("err" ~> left $ var "err")
               ("ek" ~> Eithers.map
-                ("ev" ~> Json.valueObject $ Maps.fromList $ list [
+                ("ev" ~> Json.valueObject $ list [
                   pair (string "key") (var "ek"),
                   pair (string "value") (var "ev")])
                 (var "encodedV"))
@@ -338,7 +338,7 @@ toJson = define "toJson" $
           Eithers.either_
             ("err" ~> left $ var "err")
             ("ef" ~> Eithers.map
-              ("es" ~> Json.valueObject $ Maps.fromList $ list [
+              ("es" ~> Json.valueObject $ list [
                 pair (string "first") (var "ef"),
                 pair (string "second") (var "es")])
               (var "encodedSecond"))
@@ -355,12 +355,12 @@ toJson = define "toJson" $
             ("l" ~>
               "encodedL" <~ (toJson @@ var "types" @@ var "tname" @@ var "leftType" @@ var "l") $
               Eithers.map
-                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "left") (var "v")])
+                ("v" ~> Json.valueObject $ list [pair (string "left") (var "v")])
                 (var "encodedL"))
             ("r" ~>
               "encodedR" <~ (toJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "r") $
               Eithers.map
-                ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "right") (var "v")])
+                ("v" ~> Json.valueObject $ list [pair (string "right") (var "v")])
                 (var "encodedR"))
             (var "e")],
 
@@ -418,7 +418,7 @@ toJsonUntyped = define "toJsonUntyped" $
         Eithers.map ("v" ~> pair (var "fname") (var "v")) (var "encodedField")) $
       "fields" <~ (Core.recordFields $ var "r") $
       "encodedFields" <~ (Eithers.mapList (var "encodeField") (var "fields")) $
-      Eithers.map ("fs" ~> Json.valueObject $ Maps.fromList $ var "fs") (var "encodedFields"),
+      Eithers.map ("fs" ~> Json.valueObject $ var "fs") (var "encodedFields"),
 
     -- Unions (single-key object)
     _Term_inject>>: "inj" ~>
@@ -427,11 +427,11 @@ toJsonUntyped = define "toJsonUntyped" $
       "fterm" <~ (Core.fieldTerm $ var "field") $
       "encodedUnion" <~ (toJsonUntyped @@ var "fterm") $
       Eithers.map
-        ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (var "fname") (var "v")])
+        ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
         (var "encodedUnion"),
 
     -- Unit
-    _Term_unit>>: constant $ right $ Json.valueObject $ Maps.empty,
+    _Term_unit>>: constant $ right $ Json.valueObject $ list ([] :: [TypedTerm (String, Value)]),
 
     -- Wrapped terms (transparent)
     _Term_wrap>>: "wt" ~> toJsonUntyped @@ (Core.wrappedTermBody $ var "wt"),
@@ -446,7 +446,7 @@ toJsonUntyped = define "toJsonUntyped" $
         Eithers.either_
           ("err" ~> left $ var "err")
           ("ek" ~> Eithers.map
-            ("ev" ~> Json.valueObject $ Maps.fromList $ list [
+            ("ev" ~> Json.valueObject $ list [
               pair (string "key") (var "ek"),
               pair (string "value") (var "ev")])
             (var "encodedV"))
@@ -463,7 +463,7 @@ toJsonUntyped = define "toJsonUntyped" $
       Eithers.either_
         ("err" ~> left $ var "err")
         ("ef" ~> Eithers.map
-          ("es" ~> Json.valueObject $ Maps.fromList $ list [
+          ("es" ~> Json.valueObject $ list [
             pair (string "first") (var "ef"),
             pair (string "second") (var "es")])
           (var "encodedSecond"))
@@ -475,12 +475,12 @@ toJsonUntyped = define "toJsonUntyped" $
         ("l" ~>
           "encodedL" <~ (toJsonUntyped @@ var "l") $
           Eithers.map
-            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "left") (var "v")])
+            ("v" ~> Json.valueObject $ list [pair (string "left") (var "v")])
             (var "encodedL"))
         ("r" ~>
           "encodedR" <~ (toJsonUntyped @@ var "r") $
           Eithers.map
-            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "right") (var "v")])
+            ("v" ~> Json.valueObject $ list [pair (string "right") (var "v")])
             (var "encodedR"))
         (var "e")]
 

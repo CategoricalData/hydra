@@ -147,7 +147,7 @@ edgeMapToJson = define "edgeMapToJson" $
   "out" ~> "m" ~>
     Logic.ifElse (Maps.null $ var "m")
       nothing
-      (just $ Json.valueObject $ Maps.fromList $ Lists.map
+      (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
           (unwrap G._EdgeLabel @@ (Pairs.first $ var "p"))
           (Json.valueArray $ Lists.map (adjacentEdgeToJson @@ var "out") (Pairs.second $ var "p")))
@@ -160,7 +160,7 @@ edgePropertyMapToJson = define "edgePropertyMapToJson" $
   "m" ~>
     Logic.ifElse (Maps.null $ var "m")
       nothing
-      (just $ Json.valueObject $ Maps.fromList $ Lists.map
+      (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
           (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
           (valueToJson @@ (Pairs.second $ var "p")))
@@ -199,7 +199,7 @@ toJsonObject :: TypedTermDefinition ([(String, Maybe JM.Value)] -> JM.Value)
 toJsonObject = define "toJsonObject" $
   doc "Create a JSON object from a list of key-value pairs, filtering out Nothing values" $
   "pairs" ~>
-    Json.valueObject $ Maps.fromList $ Optionals.cat $ Lists.map
+    Json.valueObject $ Optionals.cat $ Lists.map
       ("p" ~> Optionals.map
         ("v" ~> pair (Pairs.first $ var "p") (var "v"))
         (Pairs.second $ var "p"))
@@ -269,7 +269,7 @@ vertexPropertyMapToJson = define "vertexPropertyMapToJson" $
   "m" ~>
     Logic.ifElse (Maps.null $ var "m")
       nothing
-      (just $ Json.valueObject $ Maps.fromList $ Lists.map
+      (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
           (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
           (Json.valueArray $ Lists.map vertexPropertyValueToJson (Pairs.second $ var "p")))

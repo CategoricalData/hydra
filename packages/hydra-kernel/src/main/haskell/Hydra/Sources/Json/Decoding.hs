@@ -138,9 +138,9 @@ decodeNumber  = define "Number" $
 
 decodeObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 decodeObject  = define "Object" $
-  doc "Decode a JSON object value" $
+  doc "Decode a JSON object value to a name-keyed map. Field order is not preserved; decoding looks fields up by name." $
   match _Value (Just $ left (string "expected an object")) [
-    _Value_object>>: lambda "o" $ right $ var "o"]
+    _Value_object>>: lambda "o" $ right $ Maps.fromList $ var "o"]
 
 decodeOptionalField :: TypedTermDefinition ((Value -> Either String a) -> String -> (M.Map String Value) -> Either String (Maybe a))
 decodeOptionalField  = define "OptionalField" $

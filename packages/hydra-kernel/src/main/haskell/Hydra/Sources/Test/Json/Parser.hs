@@ -103,38 +103,38 @@ nestedGroup = subgroup "nested structures" [
         Json.valueArray $ Phantoms.list [Json.valueNumber $ Phantoms.decimal 3.0, Json.valueNumber $ Phantoms.decimal 4.0]]),
 
     -- Object with array
-    parserCase "object with array" "{\"items\": [1, 2]}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "items", Json.valueArray $ Phantoms.list [
+    parserCase "object with array" "{\"items\": [1, 2]}" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
             Json.valueNumber $ Phantoms.decimal 1.0,
             Json.valueNumber $ Phantoms.decimal 2.0])]),
 
     -- Array of objects
     parserCase "array of objects" "[{\"id\": 1}, {\"id\": 2}]" (Json.valueArray $ Phantoms.list [
-        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 1.0),
-        Json.valueObject $ Phantoms.map $ M.singleton (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 2.0)]),
+        Json.valueObject $ Phantoms.list [Phantoms.pair (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 1.0)],
+        Json.valueObject $ Phantoms.list [Phantoms.pair (Phantoms.string "id") (Json.valueNumber $ Phantoms.decimal 2.0)]]),
 
     -- Nested object
-    parserCase "nested object" "{\"user\": {\"name\": \"Bob\"}}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "user", Json.valueObject $ Phantoms.map $ M.fromList [
-            (Phantoms.string "name", Json.valueString $ Phantoms.string "Bob")])])]
+    parserCase "nested object" "{\"user\": {\"name\": \"Bob\"}}" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "user") (Json.valueObject $ Phantoms.list [
+            Phantoms.pair (Phantoms.string "name") (Json.valueString $ Phantoms.string "Bob")])])]
 
 objectsGroup :: TypedTerm TestGroup
 objectsGroup = subgroup "objects" [
     -- Empty and single key
-    parserCase "empty object" "{}" (Json.valueObject $ Phantoms.map M.empty),
-    parserCase "single key-value" "{\"name\": \"Alice\"}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "name", Json.valueString $ Phantoms.string "Alice")]),
+    parserCase "empty object" "{}" (Json.valueObject $ Phantoms.list ([] :: [TypedTerm (String, Value)])),
+    parserCase "single key-value" "{\"name\": \"Alice\"}" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "name") (Json.valueString $ Phantoms.string "Alice")]),
 
-    -- Multiple keys
-    parserCase "multiple keys" "{\"a\": 1, \"b\": 2}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "a", Json.valueNumber $ Phantoms.decimal 1.0),
-        (Phantoms.string "b", Json.valueNumber $ Phantoms.decimal 2.0)]),
+    -- Multiple keys (order follows the input, which the parser now preserves)
+    parserCase "multiple keys" "{\"a\": 1, \"b\": 2}" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "a") (Json.valueNumber $ Phantoms.decimal 1.0),
+        Phantoms.pair (Phantoms.string "b") (Json.valueNumber $ Phantoms.decimal 2.0)]),
 
-    -- Mixed value types
-    parserCase "mixed value types" "{\"active\": true, \"count\": 42, \"name\": \"test\"}" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "count", Json.valueNumber $ Phantoms.decimal 42.0),
-        (Phantoms.string "name", Json.valueString $ Phantoms.string "test"),
-        (Phantoms.string "active", Json.valueBoolean $ Phantoms.boolean True)])]
+    -- Mixed value types (order follows the input, which the parser now preserves)
+    parserCase "mixed value types" "{\"active\": true, \"count\": 42, \"name\": \"test\"}" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "active") (Json.valueBoolean $ Phantoms.boolean True),
+        Phantoms.pair (Phantoms.string "count") (Json.valueNumber $ Phantoms.decimal 42.0),
+        Phantoms.pair (Phantoms.string "name") (Json.valueString $ Phantoms.string "test")])]
 
 -- Helper for creating successful JSON parser test cases as UniversalTestCase
 parserCase :: String -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
@@ -207,8 +207,8 @@ whitespaceGroup = subgroup "whitespace handling" [
         Json.valueNumber $ Phantoms.decimal 3.0]),
 
     -- Whitespace in objects
-    parserCase "object with whitespace" "{ \"a\" : 1 }" (Json.valueObject $ Phantoms.map $ M.fromList [
-        (Phantoms.string "a", Json.valueNumber $ Phantoms.decimal 1.0)]),
+    parserCase "object with whitespace" "{ \"a\" : 1 }" (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "a") (Json.valueNumber $ Phantoms.decimal 1.0)]),
 
     -- Newlines
     parserCase "multiline array" "[\n  1,\n  2\n]" (Json.valueArray $ Phantoms.list [

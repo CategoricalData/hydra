@@ -186,10 +186,10 @@ arrayRestrictionToExpr = define "arrayRestrictionToExpr" $
 
 fromObject :: TypedTermDefinition (J.Value -> M.Map String J.Value)
 fromObject = define "fromObject" $
-  doc "Extract the map from a JSON object value" $
+  doc "Extract a name-keyed map from a JSON object value (field order is dropped)" $
   lambda "v" $
     cases J._Value (var "v") Nothing [
-      J._Value_object>>: lambda "mp" $ var "mp"]
+      J._Value_object>>: lambda "mp" $ Maps.fromList (var "mp")]
 
 integerToExpr :: TypedTermDefinition (Int -> J.Value)
 integerToExpr = define "integerToExpr" $
@@ -219,15 +219,15 @@ jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
       pair key_id (Optionals.map (lambda "i" $ Json.valueString (var "i")) (var "mid")),
       pair key_schema (Optionals.pure (Json.valueString (string "http://json-schema.org/2020-12/schema"))),
       pair key_definitions (Optionals.map
-        (lambda "mp" $ Json.valueObject (Maps.fromList
+        (lambda "mp" $ Json.valueObject
           (Lists.map
             (lambda "p" $ lets [
               "k">: Pairs.first (var "p"),
               "schema">: Pairs.second (var "p")] $
               pair (unwrap JS._Keyword @@ var "k") (schemaToExpr @@ var "schema"))
-            (Maps.toList (var "mp")))))
+            (Maps.toList (var "mp"))))
         (var "mdefs"))])] $
-    Json.valueObject (Maps.union (var "schemaMap") (var "restMap"))
+    Json.valueObject (Maps.toList (Maps.union (var "schemaMap") (var "restMap")))
 
 jsonSchemaDocumentToString :: TypedTermDefinition (JS.Document -> String)
 jsonSchemaDocumentToString = define "jsonSchemaDocumentToString" $
@@ -429,7 +429,7 @@ objectRestrictionToExpr = define "objectRestrictionToExpr" $
     cases JS._ObjectRestriction (var "r") Nothing [
       JS._ObjectRestriction_properties>>: lambda "props" $
         pair key_properties
-          (Json.valueObject (Maps.fromList (Lists.map propertyToExpr (Maps.toList (var "props"))))),
+          (Json.valueObject (Lists.map propertyToExpr (Maps.toList (var "props")))),
       JS._ObjectRestriction_additionalProperties>>: lambda "ai" $
         pair key_additionalProperties (additionalItemsToExpr @@ var "ai"),
       JS._ObjectRestriction_required>>: lambda "keys" $
@@ -440,10 +440,10 @@ objectRestrictionToExpr = define "objectRestrictionToExpr" $
         pair key_maxProperties (integerToExpr @@ var "n"),
       JS._ObjectRestriction_dependencies>>: lambda "deps" $
         pair key_dependencies
-          (Json.valueObject (Maps.fromList (Lists.map keywordSchemaOrArrayToExpr (Maps.toList (var "deps"))))),
+          (Json.valueObject (Lists.map keywordSchemaOrArrayToExpr (Maps.toList (var "deps")))),
       JS._ObjectRestriction_patternProperties>>: lambda "props" $
         pair key_patternProperties
-          (Json.valueObject (Maps.fromList (Lists.map patternPropertyToExpr (Maps.toList (var "props")))))]
+          (Json.valueObject (Lists.map patternPropertyToExpr (Maps.toList (var "props"))))]
 
 patternPropertyToExpr :: TypedTermDefinition ((JS.RegularExpression, JS.Schema) -> (String, J.Value))
 patternPropertyToExpr = define "patternPropertyToExpr" $
@@ -504,7 +504,7 @@ schemaToExpr :: TypedTermDefinition (JS.Schema -> J.Value)
 schemaToExpr = define "schemaToExpr" $
   doc "Encode a schema as a JSON object value" $
   lambda "s" $
-    Json.valueObject (Maps.fromList (Lists.concat (Lists.map restrictionToExpr (unwrap JS._Schema @@ var "s"))))
+    Json.valueObject (Lists.concat (Lists.map restrictionToExpr (unwrap JS._Schema @@ var "s")))
 
 stringRestrictionToExpr :: TypedTermDefinition (JS.StringRestriction -> (String, J.Value))
 stringRestrictionToExpr = define "stringRestrictionToExpr" $
@@ -546,7 +546,7 @@ toObject :: TypedTermDefinition ([(String, Maybe J.Value)] -> J.Value)
 toObject = define "toObject" $
   doc "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values" $
   lambda "pairs" $
-    Json.valueObject (Maps.fromList
+    Json.valueObject
       (Optionals.cat (Lists.map
         (lambda "p" $ lets [
           "k">: Pairs.first (var "p"),
@@ -554,4 +554,4 @@ toObject = define "toObject" $
           Optionals.map
             (lambda "v" $ pair (var "k") (var "v"))
             (var "mv"))
-        (var "pairs"))))
+        (var "pairs")))

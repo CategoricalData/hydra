@@ -211,6 +211,6 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
         (var "plain")
         (var "shown")),
     J._Value_object>>: "obj" ~>
-      Serialization.bracesListAdaptive @@ (Lists.map (keyValueToExpr) (Maps.toList $ var "obj")),
+      Serialization.bracesListAdaptive @@ (Lists.map (keyValueToExpr) (var "obj")),
     J._Value_string>>: "s" ~>
       Serialization.cst @@ (jsonString @@ var "s")]
