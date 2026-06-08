@@ -1,8 +1,8 @@
 (ns hydra.lib.optionals)
 
-;; Maybe representation: nil, (:given val), or (:none) for native maybes.
-;; IMPORTANT: Do NOT treat (:optional ...) as a native maybe — that's
-;; the Hydra Term.Maybe term constructor, not a maybe value.
+;; Optional representation: nil, (:given val), or (:none) for native optionals.
+;; IMPORTANT: Do NOT treat (:optional ...) as a native optional — that's
+;; the Hydra Term.Optional term constructor, not an optional value.
 
 (defn maybe-nothing? [m]
   (or (nil? m)
