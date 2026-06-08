@@ -104,7 +104,7 @@
       (sort-entries-by-key (vhash-unique-entries vh)))
 
     ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
-    ;; Handle multiple Maybe representations.
+    ;; Handle multiple optional representations.
     (define (alter-is-nothing? m)
       (or (null? m)
           (and (pair? m) (eq? (car m) 'none))

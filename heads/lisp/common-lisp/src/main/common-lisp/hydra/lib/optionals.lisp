@@ -1,9 +1,9 @@
 (in-package :cl-user)
 
-;; Maybe representation: (list :given val) or (list :none)
+;; Optional representation: (list :given val) or (list :none)
 
-;; Do NOT treat (:optional ...) as native maybe — that is Hydra's term-level
-;; representation and collides with nested optionals like maybe<maybe<string>>.
+;; Do NOT treat (:optional ...) as a native optional — that is Hydra's term-level
+;; representation and collides with nested optionals like optional<optional<string>>.
 (defun maybe-nothing-p (m)
   (or (null m)
       (and (consp m) (eq (first m) :none))))

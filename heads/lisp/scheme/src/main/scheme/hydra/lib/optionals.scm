@@ -16,8 +16,8 @@
           maybe-value)
   (begin
 
-    ;; Maybe representation: (list 'given val) or (list 'none)
-    ;; Also handles: bare value for Just, '() for Nothing, (maybe val)/(maybe '())
+    ;; Optional representation: (list 'given val) or (list 'none)
+    ;; Also handles: bare value for given, '() for none, (optional val)/(optional '())
 
     (define (maybe-nothing? m)
       (or (null? m)
