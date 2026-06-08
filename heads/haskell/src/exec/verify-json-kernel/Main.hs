@@ -37,7 +37,7 @@ flushPut s = putStrLn s >> hFlush stdout
 -- | Convert Aeson JSON value to Hydra JSON value
 aesonToHydra :: A.Value -> Json.Value
 aesonToHydra v = case v of
-  A.Object km -> Json.ValueObject $ M.fromList (mapPair <$> AKM.toList km)
+  A.Object km -> Json.ValueObject (mapPair <$> AKM.toList km)
     where
       mapPair (k, v') = (AK.toString k, aesonToHydra v')
   A.Array a -> Json.ValueArray (aesonToHydra <$> V.toList a)

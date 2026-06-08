@@ -22,7 +22,7 @@ def from_hydra_json(v: Value) -> JsonValue:
         case ValueArray(value):
             return [from_hydra_json(v) for v in value]
         case ValueObject(value):
-            return {k: from_hydra_json(v) for k, v in value.items()}
+            return {k: from_hydra_json(v) for k, v in value}
         case ValueBoolean(value):
             return value
         case ValueNull():
@@ -35,12 +35,12 @@ def from_hydra_json(v: Value) -> JsonValue:
 
 def test_json():
     v0 = ValueObject(
-        {
-            "a": ValueArray([ValueNumber(Decimal(5)), ValueNumber(Decimal(6))]),
-            "c": ValueString("hello"),
-            "d": ValueBoolean(True),
-            "e": ValueNull(),
-        }
+        (
+            ("a", ValueArray([ValueNumber(Decimal(5)), ValueNumber(Decimal(6))])),
+            ("c", ValueString("hello")),
+            ("d", ValueBoolean(True)),
+            ("e", ValueNull()),
+        )
     )
     assert from_hydra_json(v0) == {"a": [5, 6], "c": "hello", "d": True, "e": None}
 

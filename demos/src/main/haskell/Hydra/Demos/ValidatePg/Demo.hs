@@ -120,7 +120,7 @@ loadJsonFile fp = do
 
 aesonToHydra :: A.Value -> Json.Value
 aesonToHydra v = case v of
-  A.Object km -> Json.ValueObject $ M.fromList [(AK.toString k, aesonToHydra v') | (k, v') <- AKM.toList km]
+  A.Object km -> Json.ValueObject [(AK.toString k, aesonToHydra v') | (k, v') <- AKM.toList km]
   A.Array a   -> Json.ValueArray [aesonToHydra x | x <- V.toList a]
   A.String t  -> Json.ValueString (T.unpack t)
   A.Number s  -> Json.ValueNumber s
@@ -261,7 +261,7 @@ decodeList :: Json.Value -> (Json.Value -> a) -> [a]
 decodeList json decode = fmap decode (expectArray json)
 
 expectObject :: Json.Value -> M.Map String Json.Value
-expectObject (Json.ValueObject m) = m
+expectObject (Json.ValueObject m) = M.fromList m
 expectObject _ = error "Expected JSON object"
 
 expectArray :: Json.Value -> [Json.Value]

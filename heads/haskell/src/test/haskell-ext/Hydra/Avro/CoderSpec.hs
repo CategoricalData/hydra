@@ -368,7 +368,7 @@ termLevelForwardCases = map T.AvroTestCaseTermLevelForward [
   T.TermLevelForwardTestCase {
     T.termLevelForwardTestCaseDescription = "JSON object -> Hydra record term",
     T.termLevelForwardTestCaseSchema = avroRecord "Point" [simpleField "x" (avroPrim Avro.PrimitiveInt), simpleField "y" (avroPrim Avro.PrimitiveInt)],
-    T.termLevelForwardTestCaseJson = Json.ValueObject (M.fromList [("x", Json.ValueNumber 1.0), ("y", Json.ValueNumber 2.0)]),
+    T.termLevelForwardTestCaseJson = Json.ValueObject [("x", Json.ValueNumber 1.0), ("y", Json.ValueNumber 2.0)],
     T.termLevelForwardTestCaseTerm = hydraRecord "Point" [("x", Terms.int32 1), ("y", Terms.int32 2)]},
 
   -- Nested: array of arrays
@@ -386,7 +386,7 @@ termLevelForwardCases = map T.AvroTestCaseTermLevelForward [
   T.TermLevelForwardTestCase {
     T.termLevelForwardTestCaseDescription = "JSON object -> Hydra map term",
     T.termLevelForwardTestCaseSchema = avroMap (avroPrim Avro.PrimitiveInt),
-    T.termLevelForwardTestCaseJson = Json.ValueObject (M.fromList [("a", Json.ValueNumber 1.0), ("b", Json.ValueNumber 2.0)]),
+    T.termLevelForwardTestCaseJson = Json.ValueObject [("a", Json.ValueNumber 1.0), ("b", Json.ValueNumber 2.0)],
     T.termLevelForwardTestCaseTerm = Core.TermMap (M.fromList [
       (Terms.string "a", Terms.int32 1),
       (Terms.string "b", Terms.int32 2)])}
@@ -433,7 +433,7 @@ termLevelReverseCases = map T.AvroTestCaseTermLevelReverse [
     T.termLevelReverseTestCaseDescription = "Hydra record -> JSON object",
     T.termLevelReverseTestCaseSchema = avroRecord "Point" [simpleField "x" (avroPrim Avro.PrimitiveInt), simpleField "y" (avroPrim Avro.PrimitiveInt)],
     T.termLevelReverseTestCaseTerm = hydraRecord "Point" [("x", Terms.int32 1), ("y", Terms.int32 2)],
-    T.termLevelReverseTestCaseJson = Json.ValueObject (M.fromList [("x", Json.ValueNumber 1.0), ("y", Json.ValueNumber 2.0)])},
+    T.termLevelReverseTestCaseJson = Json.ValueObject [("x", Json.ValueNumber 1.0), ("y", Json.ValueNumber 2.0)]},
 
   -- Map reverse
   T.TermLevelReverseTestCase {
@@ -442,7 +442,7 @@ termLevelReverseCases = map T.AvroTestCaseTermLevelReverse [
     T.termLevelReverseTestCaseTerm = Core.TermMap (M.fromList [
       (Terms.string "a", Terms.int32 1),
       (Terms.string "b", Terms.int32 2)]),
-    T.termLevelReverseTestCaseJson = Json.ValueObject (M.fromList [("a", Json.ValueNumber 1.0), ("b", Json.ValueNumber 2.0)])},
+    T.termLevelReverseTestCaseJson = Json.ValueObject [("a", Json.ValueNumber 1.0), ("b", Json.ValueNumber 2.0)]},
 
   -- List reverse
   T.TermLevelReverseTestCase {
@@ -497,15 +497,15 @@ termLevelRoundTripJsonCases = map T.AvroTestCaseTermLevelRoundTripJson [
   T.TermLevelRoundTripJsonTestCase {
     T.termLevelRoundTripJsonTestCaseDescription = "record round-trip",
     T.termLevelRoundTripJsonTestCaseSchema = avroRecord "Point" [simpleField "x" (avroPrim Avro.PrimitiveInt), simpleField "y" (avroPrim Avro.PrimitiveInt)],
-    T.termLevelRoundTripJsonTestCaseJson = Json.ValueObject (M.fromList [("x", Json.ValueNumber 5.0), ("y", Json.ValueNumber 10.0)]),
-    T.termLevelRoundTripJsonTestCaseExpectedJson = Json.ValueObject (M.fromList [("x", Json.ValueNumber 5.0), ("y", Json.ValueNumber 10.0)])},
+    T.termLevelRoundTripJsonTestCaseJson = Json.ValueObject [("x", Json.ValueNumber 5.0), ("y", Json.ValueNumber 10.0)],
+    T.termLevelRoundTripJsonTestCaseExpectedJson = Json.ValueObject [("x", Json.ValueNumber 5.0), ("y", Json.ValueNumber 10.0)]},
 
   -- Map round-trip
   T.TermLevelRoundTripJsonTestCase {
     T.termLevelRoundTripJsonTestCaseDescription = "map round-trip",
     T.termLevelRoundTripJsonTestCaseSchema = avroMap (avroPrim Avro.PrimitiveString),
-    T.termLevelRoundTripJsonTestCaseJson = Json.ValueObject (M.fromList [("k1", Json.ValueString "v1"), ("k2", Json.ValueString "v2")]),
-    T.termLevelRoundTripJsonTestCaseExpectedJson = Json.ValueObject (M.fromList [("k1", Json.ValueString "v1"), ("k2", Json.ValueString "v2")])}
+    T.termLevelRoundTripJsonTestCaseJson = Json.ValueObject [("k1", Json.ValueString "v1"), ("k2", Json.ValueString "v2")],
+    T.termLevelRoundTripJsonTestCaseExpectedJson = Json.ValueObject [("k1", Json.ValueString "v1"), ("k2", Json.ValueString "v2")]}
   ]
 
 
@@ -713,9 +713,9 @@ unionCases = map T.AvroTestCaseUnion [
       simpleField "b" (avroUnion [avroPrim Avro.PrimitiveNull, avroPrim Avro.PrimitiveString])],
     T.unionTestCaseTermPairs = [
       (hydraUnionTerm "TaggedUnion" "a" (Terms.int32 42),
-        Json.ValueObject (M.fromList [("a", Json.ValueNumber 42.0), ("b", Json.ValueNull)])),
+        Json.ValueObject [("a", Json.ValueNumber 42.0), ("b", Json.ValueNull)]),
       (hydraUnionTerm "TaggedUnion" "b" (Terms.string "hello"),
-        Json.ValueObject (M.fromList [("a", Json.ValueNull), ("b", Json.ValueString "hello")]))]},
+        Json.ValueObject [("a", Json.ValueNull), ("b", Json.ValueString "hello")])]},
 
   -- Optional is just union[null, T]
   T.UnionTestCase {
@@ -777,25 +777,25 @@ schemaSerializationCases = map T.AvroTestCaseSchemaSerialization [
   T.SchemaSerializationTestCase {
     T.schemaSerializationTestCaseDescription = "array schema -> JSON object",
     T.schemaSerializationTestCaseSchema = avroArray (avroPrim Avro.PrimitiveString),
-    T.schemaSerializationTestCaseJson = Json.ValueObject (M.fromList [
+    T.schemaSerializationTestCaseJson = Json.ValueObject [
       ("type", Json.ValueString "array"),
-      ("items", Json.ValueString "string")])},
+      ("items", Json.ValueString "string")]},
   T.SchemaSerializationTestCase {
     T.schemaSerializationTestCaseDescription = "enum schema -> JSON object",
     T.schemaSerializationTestCaseSchema = avroEnum "Color" ["red", "green", "blue"],
-    T.schemaSerializationTestCaseJson = Json.ValueObject (M.fromList [
+    T.schemaSerializationTestCaseJson = Json.ValueObject [
       ("type", Json.ValueString "enum"),
       ("name", Json.ValueString "Color"),
-      ("symbols", Json.ValueArray [Json.ValueString "red", Json.ValueString "green", Json.ValueString "blue"])])},
+      ("symbols", Json.ValueArray [Json.ValueString "red", Json.ValueString "green", Json.ValueString "blue"])]},
   T.SchemaSerializationTestCase {
     T.schemaSerializationTestCaseDescription = "record schema -> JSON object",
     T.schemaSerializationTestCaseSchema = avroRecord "Point" [simpleField "x" (avroPrim Avro.PrimitiveInt), simpleField "y" (avroPrim Avro.PrimitiveInt)],
-    T.schemaSerializationTestCaseJson = Json.ValueObject (M.fromList [
+    T.schemaSerializationTestCaseJson = Json.ValueObject [
       ("type", Json.ValueString "record"),
       ("name", Json.ValueString "Point"),
       ("fields", Json.ValueArray [
-        Json.ValueObject (M.fromList [("name", Json.ValueString "x"), ("type", Json.ValueString "int")]),
-        Json.ValueObject (M.fromList [("name", Json.ValueString "y"), ("type", Json.ValueString "int")])])])},
+        Json.ValueObject [("name", Json.ValueString "x"), ("type", Json.ValueString "int")],
+        Json.ValueObject [("name", Json.ValueString "y"), ("type", Json.ValueString "int")]])]},
 
   -- Union schema
   T.SchemaSerializationTestCase {
@@ -807,9 +807,9 @@ schemaSerializationCases = map T.AvroTestCaseSchemaSerialization [
   T.SchemaSerializationTestCase {
     T.schemaSerializationTestCaseDescription = "map schema -> JSON object",
     T.schemaSerializationTestCaseSchema = avroMap (avroPrim Avro.PrimitiveInt),
-    T.schemaSerializationTestCaseJson = Json.ValueObject (M.fromList [
+    T.schemaSerializationTestCaseJson = Json.ValueObject [
       ("type", Json.ValueString "map"),
-      ("values", Json.ValueString "int")])}
+      ("values", Json.ValueString "int")]}
   ]
 
 
@@ -998,7 +998,8 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
             let json = SchemaJson.encodeSchema avroSchema
             -- Verify it's a valid record schema JSON
             case json of
-              Json.ValueObject m -> do
+              Json.ValueObject mList -> do
+                let m = M.fromList mList
                 M.lookup "type" m `H.shouldBe` Just (Json.ValueString "record")
                 case M.lookup "fields" m of
                   Just (Json.ValueArray fs) -> length fs `H.shouldBe` 3
@@ -1508,9 +1509,11 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
                     -- The round-tripped JSON should be structurally equivalent
                     case (dataJson, jsonResult) of
                       (Json.ValueObject orig, Json.ValueObject result) -> do
+                        let origM = M.fromList orig
+                            resultM = M.fromList result
                         -- Key fields should be preserved
-                        M.lookup "recordId" result `H.shouldBe` M.lookup "recordId" orig
-                        M.lookup "performanceProfile" result `H.shouldBe` M.lookup "performanceProfile" orig
+                        M.lookup "recordId" resultM `H.shouldBe` M.lookup "recordId" origM
+                        M.lookup "performanceProfile" resultM `H.shouldBe` M.lookup "performanceProfile" origM
                       _ -> H.expectationFailure "expected JSON objects"
 
   -- Full round-trip through Review.avsc with real data
@@ -1531,7 +1534,9 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
                   Right jsonResult -> do
                     case (dataJson, jsonResult) of
                       (Json.ValueObject orig, Json.ValueObject result) -> do
-                        M.lookup "timestamp" result `H.shouldBe` M.lookup "timestamp" orig
+                        let origM = M.fromList orig
+                            resultM = M.fromList result
+                        M.lookup "timestamp" resultM `H.shouldBe` M.lookup "timestamp" origM
                       _ -> H.expectationFailure "expected JSON objects"
 
   -- Multiple named type references with second-occurrence reference
@@ -1615,7 +1620,8 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             case json of
-              Json.ValueObject m -> do
+              Json.ValueObject mList -> do
+                let m = M.fromList mList
                 M.lookup "typeName" m `H.shouldBe` Just (Json.ValueString "MyRecord")
                 M.lookup "field" m `H.shouldBe` Just (Json.ValueString "myField")
               _ -> H.expectationFailure "expected JSON object"
@@ -1742,7 +1748,7 @@ edgeCaseSpec = H.describe "Edge cases" $ do
         case Util.coderEncode (Util.adapterCoder adapter) emptyContext term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
-            json `H.shouldBe` Json.ValueObject M.empty
+            json `H.shouldBe` Json.ValueObject []
             case Util.coderDecode (Util.adapterCoder adapter) emptyContext json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
