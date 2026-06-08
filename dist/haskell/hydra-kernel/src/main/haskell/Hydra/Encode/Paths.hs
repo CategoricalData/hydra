@@ -115,10 +115,10 @@ subtermStep x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "mapValue"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Paths.SubtermStepMaybeTerm -> Core.TermInject (Core.Injection {
+      Paths.SubtermStepOptionalTerm -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybeTerm"),
+          Core.fieldName = (Core.Name "optionalTerm"),
           Core.fieldTerm = Core.TermUnit}})
       Paths.SubtermStepProductTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
@@ -267,10 +267,10 @@ subtypeStep x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "mapValues"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepMaybeElement -> Core.TermInject (Core.Injection {
+      Paths.SubtypeStepOptionalElement -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "maybeElement"),
+          Core.fieldName = (Core.Name "optionalElement"),
           Core.fieldTerm = Core.TermUnit}})
       Paths.SubtypeStepPairFirst -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),

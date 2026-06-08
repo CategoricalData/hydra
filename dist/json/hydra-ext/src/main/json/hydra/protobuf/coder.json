@@ -5300,7 +5300,7 @@
                                                     "handler": {"lambda": {"body": {"literal": {"string": "map"}}, "domain": {"variable": "hydra.core.MapType"}, "parameter": "_"}},
                                                     "name": "map"},
                                                   {
-                                                    "handler": {"lambda": {"body": {"literal": {"string": "maybe"}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
+                                                    "handler": {"lambda": {"body": {"literal": {"string": "optional"}}, "domain": {"variable": "hydra.core.Type"}, "parameter": "_"}},
                                                     "name": "optional"}],
                                                 "default": {"literal": {"string": "value"}},
                                                 "typeName": "hydra.core.Type"}}}}}},

@@ -229,9 +229,9 @@ map showK showV m =
         "{",
         (Strings.intercalate ", " pairStrs),
         "}"])
--- | Show a Maybe value using a given function to show the element
-maybe :: (t0 -> String) -> Maybe t0 -> String
-maybe f mx = Optionals.cases mx "nothing" (\x -> Strings.cat2 "just(" (Strings.cat2 (f x) ")"))
+-- | Show an optional value using a given function to show the element
+optional :: (t0 -> String) -> Maybe t0 -> String
+optional f mx = Optionals.cases mx "none" (\x -> Strings.cat2 "given(" (Strings.cat2 (f x) ")"))
 -- | Show a pair using given functions to show each element
 pair :: (t0 -> String) -> (t1 -> String) -> (t0, t1) -> String
 pair showA showB p =
@@ -312,8 +312,8 @@ term t =
             "{",
             (Strings.intercalate ", " (Lists.map entry (Maps.toList v0))),
             "}"])
-        Core.TermOptional v0 -> Optionals.cases v0 "nothing" (\t2 -> Strings.cat [
-          "just(",
+        Core.TermOptional v0 -> Optionals.cases v0 "none" (\t2 -> Strings.cat [
+          "given(",
           (term t2),
           ")"])
         Core.TermPair v0 -> Strings.cat [
@@ -441,7 +441,7 @@ type_ typ =
             (type_ valTyp),
             ">"])
         Core.TypeOptional v0 -> Strings.cat [
-          "maybe<",
+          "optional<",
           (type_ v0),
           ">"]
         Core.TypePair v0 ->

@@ -1654,7 +1654,7 @@
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                 "domain": {"variable": "hydra.core.Term"},
                                                                                                 "parameter": "t"}},
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.maybeTerm"}, "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.optionalTerm"}, "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                                                 "domain": {"variable": "hydra.core.Term"},
                                                                                 "parameter": "__term"}},
                                                                             "function": {
@@ -1716,7 +1716,7 @@
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                         "parameter": "t"}},
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.maybeTerm"}, "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.optionalTerm"}, "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                         "parameter": "__term"}},
                                                                     "function": {
@@ -2196,7 +2196,7 @@
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                         "parameter": "t"}},
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.maybeTerm"}, "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.extract.core.optionalTerm"}, "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                         "domain": {"variable": "hydra.core.Term"},
                                                         "parameter": "__term"}},
                                                     "function": {

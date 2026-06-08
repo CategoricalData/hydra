@@ -355,26 +355,26 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "find existing key",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Maps.lookup 2 (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Maps.lookup 2 (M.fromList [
                   (1, "a"),
                   (2, "b")]))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Just "b"))})),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Just "b"))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "key not found",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Maps.lookup 3 (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Maps.lookup 3 (M.fromList [
                   (1, "a"),
                   (2, "b")]))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) Nothing)})),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lookup in empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Maps.lookup 1 M.empty)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Maps.lookup 1 M.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

@@ -48,22 +48,22 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "both just",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.apply (Just (\x -> Math.add 3 x)) (Just 5))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Just 8))})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.apply (Just (\x -> Math.add 3 x)) (Just 5))),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Just 8))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nothing function",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.apply Nothing (Just 5))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.apply Nothing (Just 5))),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nothing value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.apply (Just (\x -> Math.add 3 x)) Nothing)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.apply (Just (\x -> Math.add 3 x)) Nothing)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -74,15 +74,15 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "just to just",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.bind (Just 5) (\x -> Just (Math.mul x 2)))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Just 10))})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.bind (Just 5) (\x -> Just (Math.mul x 2)))),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Just 10))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nothing to nothing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.bind Nothing (\x -> Just (Math.mul x 2)))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.bind Nothing (\x -> Just (Math.mul x 2)))),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -156,22 +156,22 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "both succeed",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 5)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Just 12))})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 5)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Just 12))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "first fails",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 10)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 10)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "second fails",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 3)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.compose (\x -> Logic.ifElse (Equality.lte x 5) (Just (Math.add x 1)) Nothing) (\y -> Logic.ifElse (Equality.gte y 5) (Just (Math.mul y 2)) Nothing) 3)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -239,15 +239,15 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "maps just value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.map (\x -> Math.mul x 2) (Just 5))),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Just 10))})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.map (\x -> Math.mul x 2) (Just 5))),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Just 10))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nothing unchanged",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.map (\x -> Math.mul x 2) Nothing)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) Nothing)})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.map (\x -> Math.mul x 2) Nothing)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) Nothing)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -294,15 +294,15 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "wraps integer",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Optionals.pure 42)),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\n -> Literals.showInt32 n) mx) (Just 42))})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Optionals.pure 42)),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) (Just 42))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "wraps string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Optionals.pure "hello")),
-                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.maybe (\s -> Literals.showString s) mx) (Just "hello"))})),
+                Testing.universalTestCaseActual = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Optionals.pure "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\mx -> ShowCore.optional (\s -> Literals.showString s) mx) (Just "hello"))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

@@ -3128,7 +3128,8 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "list": [
-                                                                                    {"application": {"argument": {"literal": {"string": "just"}}, "function": {"variable": "hydra.lisp.coder.lispKeyword"}}},
+                                                                                    {
+                                                                                      "application": {"argument": {"literal": {"string": "given"}}, "function": {"variable": "hydra.lisp.coder.lispKeyword"}}},
                                                                                     {"variable": "sval"}]},
                                                                                 "function": {
                                                                                   "application": {
@@ -3177,8 +3178,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "list": [
-                                                                            {
-                                                                              "application": {"argument": {"literal": {"string": "nothing"}}, "function": {"variable": "hydra.lisp.coder.lispKeyword"}}}]},
+                                                                            {"application": {"argument": {"literal": {"string": "none"}}, "function": {"variable": "hydra.lisp.coder.lispKeyword"}}}]},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"application": {"argument": {"literal": {"string": "list"}}, "function": {"variable": "hydra.lisp.coder.lispVar"}}},

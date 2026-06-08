@@ -1136,7 +1136,7 @@ module_ =
                                           (Core.TermPair (
                                             Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "maybeTerm"))}),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "optionalTerm"))}),
                                             (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "input"),
                                               Core.lambdaDomain = Nothing,
@@ -1149,7 +1149,7 @@ module_ =
                                                     Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
                                                       Core.injectionField = Core.Field {
-                                                        Core.fieldName = (Core.Name "maybeTerm"),
+                                                        Core.fieldName = (Core.Name "optionalTerm"),
                                                         Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
                                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2527,7 +2527,7 @@ module_ =
                                           (Core.TermPair (
                                             Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "maybeElement"))}),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "optionalElement"))}),
                                             (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "input"),
                                               Core.lambdaDomain = Nothing,
@@ -2540,7 +2540,7 @@ module_ =
                                                     Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
                                                       Core.injectionField = Core.Field {
-                                                        Core.fieldName = (Core.Name "maybeElement"),
+                                                        Core.fieldName = (Core.Name "optionalElement"),
                                                         Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
                                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermApplication (Core.Application {

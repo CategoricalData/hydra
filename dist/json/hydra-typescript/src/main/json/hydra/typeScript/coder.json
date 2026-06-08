@@ -2346,7 +2346,7 @@
                                                                       "pair": {
                                                                         "first": {"literal": {"string": "tag"}},
                                                                         "second": {
-                                                                          "application": {"argument": {"literal": {"string": "just"}}, "function": {"variable": "hydra.typeScript.coder.tsExprStr"}}}}},
+                                                                          "application": {"argument": {"literal": {"string": "given"}}, "function": {"variable": "hydra.typeScript.coder.tsExprStr"}}}}},
                                                                     "type": {"literal": {"string": {}}}}},
                                                                 "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
                                                             {
@@ -2388,7 +2388,7 @@
                                                                       "pair": {
                                                                         "first": {"literal": {"string": "tag"}},
                                                                         "second": {
-                                                                          "application": {"argument": {"literal": {"string": "nothing"}}, "function": {"variable": "hydra.typeScript.coder.tsExprStr"}}}}},
+                                                                          "application": {"argument": {"literal": {"string": "none"}}, "function": {"variable": "hydra.typeScript.coder.tsExprStr"}}}}},
                                                                     "type": {"literal": {"string": {}}}}},
                                                                 "type": {"variable": "hydra.typeScript.syntax.Expression"}}}]},
                                                         "function": {"variable": "hydra.typeScript.coder.tsObject"}}},
@@ -4830,7 +4830,7 @@
                                                                                                     "term": {
                                                                                                       "record": {
                                                                                                         "fields": [
-                                                                                                          {"name": "value", "term": {"literal": {"string": "just"}}},
+                                                                                                          {"name": "value", "term": {"literal": {"string": "given"}}},
                                                                                                           {"name": "singleQuote", "term": {"literal": {"boolean": false}}}],
                                                                                                         "typeName": "hydra.typeScript.syntax.StringLiteral"}}},
                                                                                                   "typeName": "hydra.typeScript.syntax.Literal"}}},
@@ -4868,7 +4868,7 @@
                                                                                                     "term": {
                                                                                                       "record": {
                                                                                                         "fields": [
-                                                                                                          {"name": "value", "term": {"literal": {"string": "nothing"}}},
+                                                                                                          {"name": "value", "term": {"literal": {"string": "none"}}},
                                                                                                           {"name": "singleQuote", "term": {"literal": {"boolean": false}}}],
                                                                                                         "typeName": "hydra.typeScript.syntax.StringLiteral"}}},
                                                                                                   "typeName": "hydra.typeScript.syntax.Literal"}}},
