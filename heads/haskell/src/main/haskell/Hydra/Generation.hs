@@ -1338,12 +1338,14 @@ writeManifestJson :: FilePath
 writeManifestJson basePath kernelModules kernelTypesModules mainModules testModules = do
     dslMods <- generateDslModules mainModules kernelTypesModules
     let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
-    let jsonVal = Json.ValueObject $ M.fromList [
-            ("manifestFormatVersion", Json.ValueNumber 1),
-            ("dslModules", namespacesJson nonEmptyDsls),
+    -- Keep fields alphabetized so the emitted manifest.json byte order is unchanged
+    -- by the switch to order-preserving JSON objects (see docs/json-format.md).
+    let jsonVal = Json.ValueObject [
             ("defaultLibModules", namespacesJson DefaultAll.defaultLibModules),
+            ("dslModules", namespacesJson nonEmptyDsls),
             ("kernelModules", namespacesJson kernelModules),
             ("mainModules", namespacesJson mainModules),
+            ("manifestFormatVersion", Json.ValueNumber 1),
             ("testModules", namespacesJson testModules)]
         jsonStr = JsonWriter.printJson jsonVal
         filePath = basePath FP.</> "manifest.json"
@@ -1391,12 +1393,14 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
           dslForPkg    = M.findWithDefault [] pkg dslByPkg
           testForPkg   = M.findWithDefault [] pkg testByPkg
           defaultForPkg   = M.findWithDefault [] pkg defaultLibSet
-          jsonVal = Json.ValueObject $ M.fromList [
+          -- Keep fields alphabetized so the emitted manifest.json byte order is unchanged
+          -- by the switch to order-preserving JSON objects (see docs/json-format.md).
+          jsonVal = Json.ValueObject [
+              ("defaultLibModules", namespacesJson defaultForPkg),
+              ("dslModules",     namespacesJson dslForPkg),
+              ("mainModules",    namespacesJson mainForPkg),
               ("manifestFormatVersion", Json.ValueNumber 1),
               ("package",        Json.ValueString pkg),
-              ("dslModules",     namespacesJson dslForPkg),
-              ("defaultLibModules", namespacesJson defaultForPkg),
-              ("mainModules",    namespacesJson mainForPkg),
               ("testModules",    namespacesJson testForPkg)]
           jsonStr = JsonWriter.printJson jsonVal
           pkgDir  = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
@@ -1417,7 +1421,7 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
 -- | Convert an Aeson JSON value to a Hydra JSON value.
 aesonToHydra :: A.Value -> Json.Value
 aesonToHydra v = case v of
-  A.Object km -> Json.ValueObject $ M.fromList (mapPair <$> AKM.toList km)
+  A.Object km -> Json.ValueObject (mapPair <$> AKM.toList km)
     where
       mapPair (k, v') = (AK.toString k, aesonToHydra v')
   A.Array a -> Json.ValueArray (aesonToHydra <$> V.toList a)
@@ -1449,7 +1453,7 @@ readManifestField basePath fieldName = do
     case parseResult of
       Left err -> fail $ "Failed to parse manifest.json: " ++ err
       Right jsonVal -> case jsonVal of
-        Json.ValueObject obj -> case M.lookup fieldName obj of
+        Json.ValueObject obj -> case lookup fieldName obj of
           Nothing -> fail $ "manifest.json missing field: " ++ fieldName
           Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
           Just _ -> fail $ "manifest.json field " ++ fieldName ++ " is not an array"
@@ -1472,7 +1476,7 @@ readManifestFieldOrEmpty basePath fieldName = do
         case parseResult of
           Left _ -> return []
           Right jsonVal -> case jsonVal of
-            Json.ValueObject obj -> case M.lookup fieldName obj of
+            Json.ValueObject obj -> case lookup fieldName obj of
               Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
               _                          -> return []
             _ -> return []
@@ -1488,9 +1492,9 @@ readManifestFieldWithFallback basePath primaryField fallbackField = do
     case parseResult of
       Left err -> fail $ "Failed to parse manifest.json: " ++ err
       Right jsonVal -> case jsonVal of
-        Json.ValueObject obj -> case M.lookup primaryField obj of
+        Json.ValueObject obj -> case lookup primaryField obj of
           Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
-          _ -> case M.lookup fallbackField obj of
+          _ -> case lookup fallbackField obj of
             Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
             Nothing -> fail $ "manifest.json missing fields: " ++ primaryField ++ " and " ++ fallbackField
             Just _ -> fail $ "manifest.json field " ++ fallbackField ++ " is not an array"

@@ -360,7 +360,7 @@ def _group_to_json_value(
     if subgroups:
         fields["subgroups"] = json.ValueArray(tuple(subgroups))
 
-    return json.ValueObject(FrozenDict(fields))
+    return json.ValueObject(tuple(fields.items()))
 
 
 def _write_benchmark_json(output_path: str, runner: TestRunner) -> None:
@@ -394,13 +394,13 @@ def _write_benchmark_json(output_path: str, runner: TestRunner) -> None:
     # Build group JSON values for children of root
     group_values = []
     if init_time_ms > 0:
-        group_values.append(json.ValueObject(FrozenDict({
-            "path": json.ValueString("common/_initialization"),
-            "passed": json.ValueNumber(Decimal(0)),
-            "failed": json.ValueNumber(Decimal(0)),
-            "skipped": json.ValueNumber(Decimal(0)),
-            "totalTimeMs": json.ValueNumber(Decimal(str(round(init_time_ms, 1)))),
-        })))
+        group_values.append(json.ValueObject((
+            ("path", json.ValueString("common/_initialization")),
+            ("passed", json.ValueNumber(Decimal(0))),
+            ("failed", json.ValueNumber(Decimal(0))),
+            ("skipped", json.ValueNumber(Decimal(0))),
+            ("totalTimeMs", json.ValueNumber(Decimal(str(round(init_time_ms, 1))))),
+        )))
     for subgroup_item in root_group.subgroups:
         if isinstance(subgroup_item, str):
             sg = getattr(test_suite, subgroup_item)
@@ -410,22 +410,22 @@ def _write_benchmark_json(output_path: str, runner: TestRunner) -> None:
             sg = subgroup_item
         group_values.append(_group_to_json_value(sg, root_path, runner, _benchmark_results))
 
-    json_value = json.ValueObject(FrozenDict({
-        "metadata": json.ValueObject(FrozenDict({
-            "timestamp": json.ValueString(timestamp),
-            "language": json.ValueString("python"),
-            "branch": json.ValueString(branch),
-            "commit": json.ValueString(commit),
-            "commitMessage": json.ValueString(commit_msg),
-        })),
-        "groups": json.ValueArray(tuple(group_values)),
-        "summary": json.ValueObject(FrozenDict({
-            "totalPassed": json.ValueNumber(Decimal(total_runnable)),
-            "totalFailed": json.ValueNumber(Decimal(0)),
-            "totalSkipped": json.ValueNumber(Decimal(total_skipped)),
-            "totalTimeMs": json.ValueNumber(Decimal(str(round(root_time, 1)))),
-        })),
-    }))
+    json_value = json.ValueObject((
+        ("metadata", json.ValueObject((
+            ("timestamp", json.ValueString(timestamp)),
+            ("language", json.ValueString("python")),
+            ("branch", json.ValueString(branch)),
+            ("commit", json.ValueString(commit)),
+            ("commitMessage", json.ValueString(commit_msg)),
+        ))),
+        ("groups", json.ValueArray(tuple(group_values))),
+        ("summary", json.ValueObject((
+            ("totalPassed", json.ValueNumber(Decimal(total_runnable))),
+            ("totalFailed", json.ValueNumber(Decimal(0))),
+            ("totalSkipped", json.ValueNumber(Decimal(total_skipped))),
+            ("totalTimeMs", json.ValueNumber(Decimal(str(round(root_time, 1))))),
+        ))),
+    ))
 
     json_str = json_writer.print_json(json_value)
     with open(output_path, "w") as f:

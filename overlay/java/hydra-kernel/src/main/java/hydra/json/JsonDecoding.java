@@ -3,11 +3,13 @@ package hydra.json;
 import hydra.core.Name;
 import hydra.json.model.Value;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
 import hydra.util.Optional;
+import hydra.util.Pair;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -180,7 +182,11 @@ public abstract class JsonDecoding {
 
             @Override
             public Map<String, Value> visit(Value.Object_ instance) {
-                return instance.value;
+                Map<String, Value> map = new LinkedHashMap<>();
+                for (Pair<String, Value> p : instance.value) {
+                    map.put(p.first, p.second);
+                }
+                return map;
             }
         });
     }
@@ -547,7 +553,10 @@ public abstract class JsonDecoding {
 
             @Override
             public A visit(Value.Object_ instance) {
-                Map<String, Value> map = instance.value;
+                Map<String, Value> map = new LinkedHashMap<>();
+                for (Pair<String, Value> p : instance.value) {
+                    map.put(p.first, p.second);
+                }
                 if (map.size() != 1) {
                     throw new JsonDecodingException("expected union, found object with " + map.size() + " fields");
                 }

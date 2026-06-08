@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import hydra.util.ConsList;
-import hydra.util.PersistentMap;
+import hydra.util.Pair;
 
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.
@@ -89,10 +89,10 @@ public class JsonIoCoder extends Coder<Value, Object> {
             @Override
             public Either<String, Object> visit(Value.Object_ instance) {
                 JsonObject obj = new JsonObject();
-                for (Map.Entry<String, Value> entry : instance.value.entrySet()) {
-                    Either<String, Object> r = encode(entry.getValue());
+                for (Pair<String, Value> p : instance.value) {
+                    Either<String, Object> r = encode(p.second);
                     if (r.isLeft()) return Either.left(((Either.Left<String, Object>) r).value);
-                    obj.put(entry.getKey(), ((Either.Right<String, Object>) r).value);
+                    obj.put(p.first, ((Either.Right<String, Object>) r).value);
                 }
                 return Either.right(obj);
             }
@@ -133,7 +133,11 @@ public class JsonIoCoder extends Coder<Value, Object> {
                 map.put(((Either.Right<String, String>) keyResult).value,
                         ((Either.Right<String, Value>) valResult).value);
             }
-            return Either.right(new Value.Object_(PersistentMap.fromMap(map)));
+            List<Pair<String, Value>> pairs = new ArrayList<>();
+            for (Map.Entry<String, Value> entry : map.entrySet()) {
+                pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
+            }
+            return Either.right(new Value.Object_(ConsList.fromList(pairs)));
         } else if (value instanceof String) {
             return Either.right(new Value.String_((String) value));
         } else if (value instanceof Boolean) {

@@ -55,7 +55,7 @@ aesonToJsonModel v = case v of
   A.Number n -> JsonModel.ValueNumber n
   A.String t -> JsonModel.ValueString (T.unpack t)
   A.Array xs -> JsonModel.ValueArray (fmap aesonToJsonModel (V.toList xs))
-  A.Object o -> JsonModel.ValueObject (M.fromList [(T.unpack (AK.toText k), aesonToJsonModel x) | (k, x) <- AKM.toList o])
+  A.Object o -> JsonModel.ValueObject [(T.unpack (AK.toText k), aesonToJsonModel x) | (k, x) <- AKM.toList o]
 
 loadModuleFromJson :: FilePath -> [Module] -> ModuleName -> IO Module
 loadModuleFromJson distJsonRoot universe ns = do

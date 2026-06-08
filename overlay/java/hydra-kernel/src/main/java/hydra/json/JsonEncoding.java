@@ -4,6 +4,7 @@ import hydra.core.Name;
 import hydra.json.model.Value;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import hydra.util.ConsList;
 import hydra.util.Optional;
+import hydra.util.Pair;
 import hydra.util.PersistentMap;
 
 import java.util.Set;
@@ -103,7 +105,7 @@ public abstract class JsonEncoding {
    * @return the empty JSON object
    */
   protected static Value unit() {
-    return new Value.Object_(PersistentMap.empty());
+    return new Value.Object_(ConsList.empty());
   }
 
   /**
@@ -405,7 +407,11 @@ public abstract class JsonEncoding {
      * @return the JSON object value
      */
     public Value build() {
-      return new Value.Object_(PersistentMap.fromMap(map));
+      List<Pair<String, Value>> pairs = new ArrayList<>();
+      for (Map.Entry<String, Value> entry : map.entrySet()) {
+        pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
+      }
+      return new Value.Object_(ConsList.fromList(pairs));
     }
   }
 }
