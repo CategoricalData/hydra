@@ -15,7 +15,6 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Math as Math
 import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Pairs as Pairs
@@ -87,5 +86,5 @@ valueToExpr value =
             isWhole = Equality.equal v0 (Literals.bigintToDecimal rounded)
             plain = Literals.showBigint rounded
         in (Serialization.cst (Logic.ifElse (Logic.and isWhole (Equality.lte (Strings.length plain) (Strings.length shown))) plain shown))
-      Model.ValueObject v0 -> Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v0))
+      Model.ValueObject v0 -> Serialization.bracesListAdaptive (Lists.map keyValueToExpr v0)
       Model.ValueString v0 -> Serialization.cst (jsonString v0)

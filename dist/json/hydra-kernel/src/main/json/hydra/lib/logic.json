@@ -1,121 +1,6 @@
 {
-  "definitions": [
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical AND, defined in terms of ifElse."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"literal": {"boolean": false}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "b"},
-                            "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
-                    "parameter": "b"}},
-                "parameter": "a"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "and(p, q) returns true iff both p and q are true.",
-            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
-            "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
-          "description": "Compute the logical AND of two boolean values.",
-          "seeAlso": []},
-        "name": "hydra.lib.logic.and",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "ifElse(p, t, f) returns t if p is true, or f if p is false.",
-            "The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.",
-            "Total. Corresponds to Haskell's if/then/else."],
-          "description": "Compute a conditional expression.",
-          "seeAlso": []},
-        "name": "hydra.lib.logic.ifElse",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": true, "name": "arg1", "type": {"variable": "x"}},
-            {"isLazy": true, "name": "arg2", "type": {"variable": "x"}}],
-          "result": {"type": {"variable": "x"}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical NOT, defined in terms of ifElse."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"literal": {"boolean": true}},
-                    "function": {
-                      "application": {
-                        "argument": {"literal": {"boolean": false}},
-                        "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
-                "parameter": "a"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": ["not(p) returns false if p is true, or true if p is false.", "Total. Corresponds to Haskell's not :: Bool -> Bool."],
-          "description": "Compute the logical NOT of a boolean value.",
-          "seeAlso": []},
-        "name": "hydra.lib.logic.not",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": []}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical OR, defined in terms of ifElse."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "b"},
-                        "function": {
-                          "application": {
-                            "argument": {"literal": {"boolean": true}},
-                            "function": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
-                    "parameter": "b"}},
-                "parameter": "a"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "or(p, q) returns true iff at least one of p and q is true.",
-            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
-            "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
-          "description": "Compute the logical OR of two boolean values.",
-          "seeAlso": []},
-        "name": "hydra.lib.logic.or",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"literal": {"boolean": {}}}},
-            {"isLazy": false, "name": "arg1", "type": {"literal": {"boolean": {}}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": []}}}],
+  "name": "hydra.lib.logic",
+  "metadata": {"description": "Primitives in the hydra.lib.logic module.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -139,5 +24,120 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.logic module.", "seeAlso": []},
-  "name": "hydra.lib.logic"}
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.logic.and",
+        "metadata": {
+          "description": "Compute the logical AND of two boolean values.",
+          "comments": [
+            "and(p, q) returns true iff both p and q are true.",
+            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
+            "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "a",
+                "body": {
+                  "lambda": {
+                    "parameter": "b",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
+                            "argument": {"variable": "b"}}},
+                        "argument": {"literal": {"boolean": false}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical AND, defined in terms of ifElse."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.logic.ifElse",
+        "metadata": {
+          "description": "Compute a conditional expression.",
+          "comments": [
+            "ifElse(p, t, f) returns t if p is true, or f if p is false.",
+            "The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.",
+            "Total. Corresponds to Haskell's if/then/else."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": true},
+            {"name": "arg2", "type": {"variable": "x"}, "isLazy": true}],
+          "result": {"type": {"variable": "x"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.logic.not",
+        "metadata": {
+          "description": "Compute the logical NOT of a boolean value.",
+          "comments": ["not(p) returns false if p is true, or true if p is false.", "Total. Corresponds to Haskell's not :: Bool -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "a",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
+                        "argument": {"literal": {"boolean": false}}}},
+                    "argument": {"literal": {"boolean": true}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical NOT, defined in terms of ifElse."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.logic.or",
+        "metadata": {
+          "description": "Compute the logical OR of two boolean values.",
+          "comments": [
+            "or(p, q) returns true iff at least one of p and q is true.",
+            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
+            "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "a",
+                "body": {
+                  "lambda": {
+                    "parameter": "b",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
+                            "argument": {"literal": {"boolean": true}}}},
+                        "argument": {"variable": "b"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical OR, defined in terms of ifElse."}}}]}}}}}]}

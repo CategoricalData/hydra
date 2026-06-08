@@ -1,107 +1,107 @@
 {
+  "name": "hydra.parsing",
+  "metadata": {"description": "Parser combinator types for text parsing", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.parsing.ParseError",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}},
                   {
                     "name": "remainder",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"string": {}}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]},
-                        "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.parsing.ParseError"}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.parsing.ParseResult",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of a parse operation"}}}]},
               "body": {
                 "forall": {
+                  "parameter": "a",
                   "body": {
                     "union": [
                       {
                         "name": "success",
                         "type": {
                           "annotated": {
+                            "body": {"application": {"function": {"variable": "hydra.parsing.ParseSuccess"}, "argument": {"variable": "a"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A successful parse, with a value and the remaining unparsed input"}}}]},
-                            "body": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.parsing.ParseSuccess"}}}}}},
+                                  "value": {"literal": {"string": "A successful parse, with a value and the remaining unparsed input"}}}]}}}},
                       {
                         "name": "failure",
                         "type": {
                           "annotated": {
+                            "body": {"variable": "hydra.parsing.ParseError"},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "A failed parse, with an error message and the remaining input"}}}]},
-                            "body": {"variable": "hydra.parsing.ParseError"}}}}]},
-                  "parameter": "a"}}}},
-          "variables": []},
-        "name": "hydra.parsing.ParseResult"}},
+                                  "value": {"literal": {"string": "A failed parse, with an error message and the remaining input"}}}]}}}}]}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of a parse operation"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.parsing.ParseSuccess",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]},
               "body": {
                 "forall": {
+                  "parameter": "a",
                   "body": {
                     "record": [
                       {
                         "name": "value",
                         "type": {
                           "annotated": {
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The parsed value"}}}]},
-                            "body": {"variable": "a"}}}},
+                            "body": {"variable": "a"},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The parsed value"}}}]}}}},
                       {
                         "name": "remainder",
                         "type": {
                           "annotated": {
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]},
-                            "body": {"literal": {"string": {}}}}}}]},
-                  "parameter": "a"}}}},
-          "variables": []},
-        "name": "hydra.parsing.ParseSuccess"}},
+                            "body": {"literal": {"string": {}}},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}]}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.parsing.Parser",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "a",
+                  "body": {
+                    "wrap": {
+                      "function": {
+                        "domain": {"literal": {"string": {}}},
+                        "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A parser which consumes characters from a string and produces a value"}}}]},
-              "body": {
-                "forall": {
-                  "body": {
-                    "wrap": {
-                      "function": {
-                        "codomain": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.parsing.ParseResult"}}},
-                        "domain": {"literal": {"string": {}}}}}},
-                  "parameter": "a"}}}},
-          "variables": []},
-        "name": "hydra.parsing.Parser"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {"comments": [], "description": "Parser combinator types for text parsing", "seeAlso": []},
-  "name": "hydra.parsing"}
+                    "value": {"literal": {"string": "A parser which consumes characters from a string and produces a value"}}}]}}}}}}]}

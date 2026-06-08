@@ -1,412 +1,6 @@
 {
-  "definitions": [
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
-          "description": "Remove an element from a set.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.delete",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "s1"}, "function": {"variable": "hydra.lib.sets.toList"}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "hydra.lib.sets.empty"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "acc"},
-                                                "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.insert"}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "acc"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "s2"},
-                                                        "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.member"}}}}},
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
-                                        "parameter": "el"}},
-                                    "parameter": "acc"}},
-                                "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
-                    "parameter": "s2"}},
-                "parameter": "s1"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "difference(s1, s2) returns the set of elements that are in s1 but not in s2.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
-          "description": "Compute the difference of two sets: elements in the first that are not in the second.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.difference",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "empty is the set with no elements.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
-          "description": "The empty set.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.empty",
-        "signature": {
-          "parameters": [],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
-          "description": "Construct a set from a list of elements (duplicates removed).",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.fromList",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "insert(x, s) returns s with x added; if x is already in s, s is returned unchanged.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
-          "description": "Add an element to a set.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.insert",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "s1"}, "function": {"variable": "hydra.lib.sets.toList"}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "hydra.lib.sets.empty"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "acc"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "acc"},
-                                                    "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.insert"}}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "s2"},
-                                                        "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.member"}}}}},
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"}}}}}}},
-                                        "parameter": "el"}},
-                                    "parameter": "acc"}},
-                                "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
-                    "parameter": "s2"}},
-                "parameter": "s1"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "intersection(s1, s2) returns the set of elements present in both s1 and s2.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
-          "description": "Compute the intersection of two sets: elements present in both.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.intersection",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map a function over a set, defined in terms of toList, lists.map and fromList."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.lib.sets.toList"}}},
-                            "function": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.lists.map"}}}}},
-                        "function": {"variable": "hydra.lib.sets.fromList"}}},
-                    "parameter": "s"}},
-                "parameter": "f"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering.",
-            "Requires 'ordering' constraints on both the input and output element types.",
-            "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
-          "description": "Map a function over a set.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.map",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "y"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}, {"constraints": [{"simple": "ordering"}], "name": "y"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "member(x, s) returns true iff x is an element of s.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
-          "description": "Test whether an element is in a set.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.member",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "x"}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "null(s) returns true iff s has no elements.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
-          "description": "Test whether a set is empty.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.null",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "singleton(x) returns the set containing exactly the element x.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
-          "description": "Construct a set containing a single element.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.singleton",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "size(s) returns the number of elements in s as an int32.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
-          "description": "Return the number of elements in a set.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.size",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "toList(s) returns the elements of s as a list, in ascending order under the element type's ordering.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
-          "description": "Convert a set to a list (in ascending order).",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.toList",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"list": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"application": {"argument": {"variable": "s1"}, "function": {"variable": "hydra.lib.sets.toList"}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "s2"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "acc"},
-                                            "function": {"application": {"argument": {"variable": "el"}, "function": {"variable": "hydra.lib.sets.insert"}}}}},
-                                        "parameter": "el"}},
-                                    "parameter": "acc"}},
-                                "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
-                    "parameter": "s2"}},
-                "parameter": "s1"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both).",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
-          "description": "Compute the union of two sets: elements in either.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.union",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"set": {"variable": "x"}}},
-            {"isLazy": false, "name": "arg1", "type": {"set": {"variable": "x"}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Union of a list of sets, defined in terms of foldl and union."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "ss"},
-                    "function": {
-                      "application": {
-                        "argument": {"variable": "hydra.lib.sets.empty"},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "s"},
-                                        "function": {"application": {"argument": {"variable": "acc"}, "function": {"variable": "hydra.lib.sets.union"}}}}},
-                                    "parameter": "s"}},
-                                "parameter": "acc"}},
-                            "function": {"variable": "hydra.lib.lists.foldl"}}}}}}},
-                "parameter": "ss"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
-          "description": "Compute the union of a list of sets.",
-          "seeAlso": []},
-        "name": "hydra.lib.sets.unions",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"set": {"variable": "x"}}}}],
-          "result": {"type": {"set": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [{"simple": "ordering"}], "name": "x"}]}}}],
+  "name": "hydra.lib.sets",
+  "metadata": {"description": "Primitives in the hydra.lib.sets module.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -430,5 +24,411 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.sets module.", "seeAlso": []},
-  "name": "hydra.lib.sets"}
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.delete",
+        "metadata": {
+          "description": "Remove an element from a set.",
+          "comments": [
+            "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.difference",
+        "metadata": {
+          "description": "Compute the difference of two sets: elements in the first that are not in the second.",
+          "comments": [
+            "difference(s1, s2) returns the set of elements that are in s1 but not in s2.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s1",
+                "body": {
+                  "lambda": {
+                    "parameter": "s2",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.lists.foldl"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "el",
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.member"}, "argument": {"variable": "el"}}},
+                                                        "argument": {"variable": "s2"}}}}},
+                                                "argument": {"variable": "acc"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
+                                                "argument": {"variable": "acc"}}}}}}}}}}},
+                            "argument": {"variable": "hydra.lib.sets.empty"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.empty",
+        "metadata": {
+          "description": "The empty set.",
+          "comments": [
+            "empty is the set with no elements.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.fromList",
+        "metadata": {
+          "description": "Construct a set from a list of elements (duplicates removed).",
+          "comments": [
+            "fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.insert",
+        "metadata": {
+          "description": "Add an element to a set.",
+          "comments": [
+            "insert(x, s) returns s with x added; if x is already in s, s is returned unchanged.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.intersection",
+        "metadata": {
+          "description": "Compute the intersection of two sets: elements present in both.",
+          "comments": [
+            "intersection(s1, s2) returns the set of elements present in both s1 and s2.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s1",
+                "body": {
+                  "lambda": {
+                    "parameter": "s2",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.lists.foldl"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "el",
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.member"}, "argument": {"variable": "el"}}},
+                                                        "argument": {"variable": "s2"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
+                                                    "argument": {"variable": "acc"}}}}},
+                                            "argument": {"variable": "acc"}}}}}}}}},
+                            "argument": {"variable": "hydra.lib.sets.empty"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.map",
+        "metadata": {
+          "description": "Map a function over a set.",
+          "comments": [
+            "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering.",
+            "Requires 'ordering' constraints on both the input and output element types.",
+            "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "f",
+                "body": {
+                  "lambda": {
+                    "parameter": "s",
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.sets.fromList"},
+                        "argument": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a function over a set, defined in terms of toList, lists.map and fromList."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.member",
+        "metadata": {
+          "description": "Test whether an element is in a set.",
+          "comments": [
+            "member(x, s) returns true iff x is an element of s.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.null",
+        "metadata": {
+          "description": "Test whether a set is empty.",
+          "comments": [
+            "null(s) returns true iff s has no elements.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.singleton",
+        "metadata": {
+          "description": "Construct a set containing a single element.",
+          "comments": [
+            "singleton(x) returns the set containing exactly the element x.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.size",
+        "metadata": {
+          "description": "Return the number of elements in a set.",
+          "comments": [
+            "size(s) returns the number of elements in s as an int32.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.toList",
+        "metadata": {
+          "description": "Convert a set to a list (in ascending order).",
+          "comments": [
+            "toList(s) returns the elements of s as a list, in ascending order under the element type's ordering.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.union",
+        "metadata": {
+          "description": "Compute the union of two sets: elements in either.",
+          "comments": [
+            "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both).",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s1",
+                "body": {
+                  "lambda": {
+                    "parameter": "s2",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.lists.foldl"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "el",
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
+                                            "argument": {"variable": "acc"}}}}}}}}},
+                            "argument": {"variable": "s2"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.sets.unions",
+        "metadata": {
+          "description": "Compute the union of a list of sets.",
+          "comments": [
+            "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "arg0", "type": {"list": {"set": {"variable": "x"}}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ss",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.lists.foldl"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "s",
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.union"}, "argument": {"variable": "acc"}}},
+                                        "argument": {"variable": "s"}}}}}}}}},
+                        "argument": {"variable": "hydra.lib.sets.empty"}}},
+                    "argument": {"variable": "ss"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Union of a list of sets, defined in terms of foldl and union."}}}]}}}}}]}

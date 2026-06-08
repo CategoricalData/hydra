@@ -1,12 +1,18 @@
 {
+  "name": "hydra.variants",
+  "metadata": {
+    "description": "Variant types which describe the structure of Hydra core types and terms.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.variants.LiteralVariant",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a literal constructor"}}}]},
               "body": {
                 "union": [
                   {"name": "binary", "type": {"unit": {}}},
@@ -14,19 +20,16 @@
                   {"name": "decimal", "type": {"unit": {}}},
                   {"name": "float", "type": {"unit": {}}},
                   {"name": "integer", "type": {"unit": {}}},
-                  {"name": "string", "type": {"unit": {}}}]}}},
-          "variables": []},
-        "name": "hydra.variants.LiteralVariant"}},
+                  {"name": "string", "type": {"unit": {}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a literal constructor"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.variants.TermVariant",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The identifier of a term expression constructor"}}}]},
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},
@@ -49,16 +52,19 @@
                   {"name": "unit", "type": {"unit": {}}},
                   {"name": "unwrap", "type": {"unit": {}}},
                   {"name": "variable", "type": {"unit": {}}},
-                  {"name": "wrap", "type": {"unit": {}}}]}}},
-          "variables": []},
-        "name": "hydra.variants.TermVariant"}},
+                  {"name": "wrap", "type": {"unit": {}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The identifier of a term expression constructor"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.variants.TypeVariant",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a type constructor"}}}]},
               "body": {
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},
@@ -77,12 +83,6 @@
                   {"name": "unit", "type": {"unit": {}}},
                   {"name": "variable", "type": {"unit": {}}},
                   {"name": "void", "type": {"unit": {}}},
-                  {"name": "wrap", "type": {"unit": {}}}]}}},
-          "variables": []},
-        "name": "hydra.variants.TypeVariant"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {
-    "comments": [],
-    "description": "Variant types which describe the structure of Hydra core types and terms.",
-    "seeAlso": []},
-  "name": "hydra.variants"}
+                  {"name": "wrap", "type": {"unit": {}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a type constructor"}}}]}}}}}}]}

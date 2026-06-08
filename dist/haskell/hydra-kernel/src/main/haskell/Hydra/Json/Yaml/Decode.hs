@@ -58,7 +58,7 @@ yamlToJson node =
                     let valResult = yamlToJson valNode
                     in (Eithers.map (\v -> (key, v)) valResult)) keyResult)
             entries = Eithers.mapList convertEntry (Maps.toList v0)
-        in (Eithers.map (\es -> JsonModel.ValueObject (Maps.fromList es)) entries)
+        in (Eithers.map (\es -> JsonModel.ValueObject es) entries)
       YamlModel.NodeScalar v0 -> case v0 of
         YamlModel.ScalarBool v1 -> Right (JsonModel.ValueBoolean v1)
         YamlModel.ScalarDecimal v1 -> Right (JsonModel.ValueNumber v1)

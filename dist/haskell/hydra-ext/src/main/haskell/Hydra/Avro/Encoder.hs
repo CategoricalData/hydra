@@ -131,7 +131,7 @@ encodeTypeInner cx mName typ env =
                                       Graph.graphPrimitives = Maps.empty,
                                       Graph.graphSchemaTypes = Maps.empty,
                                       Graph.graphTypeVariables = Sets.empty}) k) (\kStr -> Eithers.map (\vJson -> (kStr, vJson)) (Coders.coderEncode (Coders.adapterCoder valAd) cx1 v)))
-                          in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList pairs)) (Eithers.mapList encodeEntry (Maps.toList v3)))),
+                          in (Eithers.map (\pairs -> Model.ValueObject (pairs)) (Eithers.mapList encodeEntry (Maps.toList v3)))),
                       Coders.coderDecode = (\cx1 -> \j -> case j of
                         Model.ValueObject v3 ->
                           let decodeEntry =
@@ -139,7 +139,7 @@ encodeTypeInner cx mName typ env =
                                     let k = Pairs.first entry
                                         v = Pairs.second entry
                                     in (Eithers.map (\vTerm -> (Core.TermLiteral (Core.LiteralString k), vTerm)) (Coders.coderDecode (Coders.adapterCoder valAd) cx1 v))
-                          in (Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList decodeEntry (Maps.toList v3))))}},
+                          in (Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList decodeEntry v3)))}},
                   env1)))
               _ -> err cx "Avro maps require string keys"
             _ -> err cx "Avro maps require string keys"
@@ -450,7 +450,7 @@ recordTermCoder cx typeName fieldAdapters =
                                     ad = Pairs.second nameAd
                                     fTerm = Optionals.fromOptional Core.TermUnit (Maps.lookup fname fieldMap)
                                 in (Eithers.map (\jv -> (localName fname, jv)) (Coders.coderEncode (Coders.adapterCoder ad) cx1 fTerm))
-                  in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList pairs)) (Eithers.mapList encodeField fieldAdapters))
+                  in (Eithers.map (\pairs -> Model.ValueObject (pairs)) (Eithers.mapList encodeField fieldAdapters))
                 _ -> err cx "expected record term"
           decode =
                   \cx1 -> \json -> case json of
@@ -459,7 +459,7 @@ recordTermCoder cx typeName fieldAdapters =
                               \nameAd ->
                                 let fname = Pairs.first nameAd
                                     ad = Pairs.second nameAd
-                                    jv = Optionals.fromOptional Model.ValueNull (Maps.lookup (localName fname) v0)
+                                    jv = Optionals.fromOptional Model.ValueNull (Maps.lookup (localName fname) (Maps.fromList v0))
                                 in (Eithers.map (\t -> Core.Field {
                                   Core.fieldName = fname,
                                   Core.fieldTerm = t}) (Coders.coderDecode (Coders.adapterCoder ad) cx1 jv))
@@ -479,7 +479,7 @@ termToJsonValue term =
         Core.LiteralFloat v1 -> Model.ValueNumber (floatValueToDouble v1)
         Core.LiteralBinary v1 -> Model.ValueString (Literals.binaryToString v1)
       Core.TermList v0 -> Model.ValueArray (Lists.map termToJsonValue v0)
-      Core.TermMap v0 -> Model.ValueObject (Maps.fromList (Lists.map (\entry ->
+      Core.TermMap v0 -> Model.ValueObject ((Lists.map (\entry ->
         let k = Pairs.first entry
             v = Pairs.second entry
         in (
@@ -544,7 +544,7 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                                         let fname = Pairs.first nameAd
                                             ad = Pairs.second nameAd
                                         in (Logic.ifElse (Equality.equal (Core.unName fname) (Core.unName activeName)) (Eithers.map (\jv -> (localName fname, jv)) (Coders.coderEncode (Coders.adapterCoder ad) cx1 activeValue)) (Right (localName fname, Model.ValueNull)))
-                          in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList pairs)) (Eithers.mapList encodePair fieldAdapters))
+                          in (Eithers.map (\pairs -> Model.ValueObject (pairs)) (Eithers.mapList encodePair fieldAdapters))
                         _ -> err cx1 "expected union term"),
                       Coders.coderDecode = (\cx1 -> \j -> case j of
                         Model.ValueObject v0 ->
@@ -554,7 +554,7 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                                         rest_ = Pairs.second p
                                         fname = Pairs.first head_
                                         ad = Pairs.second head_
-                                        mjv = Maps.lookup (localName fname) v0
+                                        mjv = Maps.lookup (localName fname) (Maps.fromList v0)
                                     in (Optionals.cases mjv (findActive rest_) (\jv -> case jv of
                                       Model.ValueNull -> findActive rest_
                                       _ -> Eithers.map (\t -> Core.TermInject (Core.Injection {

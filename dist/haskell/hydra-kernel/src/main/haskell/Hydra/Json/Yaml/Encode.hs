@@ -41,7 +41,7 @@ jsonToYaml value =
       JsonModel.ValueBoolean v0 -> YamlModel.NodeScalar (YamlModel.ScalarBool v0)
       JsonModel.ValueNull -> YamlModel.NodeScalar YamlModel.ScalarNull
       JsonModel.ValueNumber v0 -> YamlModel.NodeScalar (YamlModel.ScalarDecimal v0)
-      JsonModel.ValueObject v0 -> YamlModel.NodeMapping (Maps.fromList (Lists.map (\kv -> (YamlModel.NodeScalar (YamlModel.ScalarStr (Pairs.first kv)), (jsonToYaml (Pairs.second kv)))) (Maps.toList v0)))
+      JsonModel.ValueObject v0 -> YamlModel.NodeMapping (Maps.fromList (Lists.map (\kv -> (YamlModel.NodeScalar (YamlModel.ScalarStr (Pairs.first kv)), (jsonToYaml (Pairs.second kv)))) v0))
       JsonModel.ValueString v0 -> YamlModel.NodeScalar (YamlModel.ScalarStr v0)
 -- | Encode a Hydra term to a YAML node via JSON encoding.
 toYaml :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String YamlModel.Node

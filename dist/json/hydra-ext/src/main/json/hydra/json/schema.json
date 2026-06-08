@@ -1,8 +1,16 @@
 {
+  "name": "hydra.json.schema",
+  "metadata": {
+    "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.json.schema.Document",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "id", "type": {"optional": {"literal": {"string": {}}}}},
@@ -10,18 +18,18 @@
                 "name": "definitions",
                 "type": {
                   "optional": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
-              {"name": "root", "type": {"variable": "hydra.json.schema.Schema"}}]},
-          "variables": []},
-        "name": "hydra.json.schema.Document"}},
+              {"name": "root", "type": {"variable": "hydra.json.schema.Schema"}}]}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.json.schema.Keyword"}},
+      "type": {"name": "hydra.json.schema.Keyword", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"list": {"variable": "hydra.json.schema.Restriction"}}}, "variables": []},
-        "name": "hydra.json.schema.Schema"}},
+        "name": "hydra.json.schema.Schema",
+        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.json.schema.Restriction"}}}}}},
     {
       "type": {
+        "name": "hydra.json.schema.Restriction",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "type", "type": {"variable": "hydra.json.schema.Type"}},
@@ -32,21 +40,21 @@
               {"name": "multiple", "type": {"variable": "hydra.json.schema.MultipleRestriction"}},
               {"name": "reference", "type": {"variable": "hydra.json.schema.SchemaReference"}},
               {"name": "title", "type": {"literal": {"string": {}}}},
-              {"name": "description", "type": {"literal": {"string": {}}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.Restriction"}},
+              {"name": "description", "type": {"literal": {"string": {}}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.Type",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.json.schema.TypeName"}},
-              {"name": "multiple", "type": {"list": {"variable": "hydra.json.schema.TypeName"}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.Type"}},
+              {"name": "multiple", "type": {"list": {"variable": "hydra.json.schema.TypeName"}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.TypeName",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "string", "type": {"unit": {}}},
@@ -55,75 +63,75 @@
               {"name": "boolean", "type": {"unit": {}}},
               {"name": "null", "type": {"unit": {}}},
               {"name": "array", "type": {"unit": {}}},
-              {"name": "object", "type": {"unit": {}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.TypeName"}},
+              {"name": "object", "type": {"unit": {}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.StringRestriction",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "minLength", "type": {"literal": {"integer": {"int32": {}}}}},
               {"name": "maxLength", "type": {"literal": {"integer": {"int32": {}}}}},
-              {"name": "pattern", "type": {"variable": "hydra.json.schema.RegularExpression"}}]},
-          "variables": []},
-        "name": "hydra.json.schema.StringRestriction"}},
+              {"name": "pattern", "type": {"variable": "hydra.json.schema.RegularExpression"}}]}}}},
     {
       "type": {
-        "body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []},
-        "name": "hydra.json.schema.RegularExpression"}},
+        "name": "hydra.json.schema.RegularExpression",
+        "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
     {
       "type": {
+        "name": "hydra.json.schema.NumericRestriction",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "minimum", "type": {"variable": "hydra.json.schema.Limit"}},
               {"name": "maximum", "type": {"variable": "hydra.json.schema.Limit"}},
-              {"name": "multipleOf", "type": {"literal": {"integer": {"int32": {}}}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.NumericRestriction"}},
+              {"name": "multipleOf", "type": {"literal": {"integer": {"int32": {}}}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.Limit",
         "body": {
+          "variables": [],
           "body": {
             "record": [
               {"name": "value", "type": {"literal": {"integer": {"int32": {}}}}},
-              {"name": "exclusive", "type": {"literal": {"boolean": {}}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.Limit"}},
+              {"name": "exclusive", "type": {"literal": {"boolean": {}}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.ArrayRestriction",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "items", "type": {"variable": "hydra.json.schema.Items"}},
               {"name": "additionalItems", "type": {"variable": "hydra.json.schema.AdditionalItems"}},
               {"name": "minItems", "type": {"literal": {"integer": {"int32": {}}}}},
               {"name": "maxItems", "type": {"literal": {"integer": {"int32": {}}}}},
-              {"name": "uniqueItems", "type": {"literal": {"boolean": {}}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.ArrayRestriction"}},
+              {"name": "uniqueItems", "type": {"literal": {"boolean": {}}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.Items",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "sameItems", "type": {"variable": "hydra.json.schema.Schema"}},
-              {"name": "varItems", "type": {"list": {"variable": "hydra.json.schema.Schema"}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.Items"}},
+              {"name": "varItems", "type": {"list": {"variable": "hydra.json.schema.Schema"}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.AdditionalItems",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "any", "type": {"literal": {"boolean": {}}}},
-              {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}}]},
-          "variables": []},
-        "name": "hydra.json.schema.AdditionalItems"}},
+              {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.ObjectRestriction",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {
@@ -139,35 +147,27 @@
               {
                 "name": "patternProperties",
                 "type": {
-                  "map": {"keys": {"variable": "hydra.json.schema.RegularExpression"}, "values": {"variable": "hydra.json.schema.Schema"}}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.ObjectRestriction"}},
+                  "map": {"keys": {"variable": "hydra.json.schema.RegularExpression"}, "values": {"variable": "hydra.json.schema.Schema"}}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.SchemaOrArray",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}},
-              {"name": "array", "type": {"list": {"variable": "hydra.json.schema.Keyword"}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.SchemaOrArray"}},
+              {"name": "array", "type": {"list": {"variable": "hydra.json.schema.Keyword"}}}]}}}},
     {
       "type": {
+        "name": "hydra.json.schema.MultipleRestriction",
         "body": {
+          "variables": [],
           "body": {
             "union": [
               {"name": "allOf", "type": {"list": {"variable": "hydra.json.schema.Schema"}}},
               {"name": "anyOf", "type": {"list": {"variable": "hydra.json.schema.Schema"}}},
               {"name": "oneOf", "type": {"list": {"variable": "hydra.json.schema.Schema"}}},
               {"name": "not", "type": {"variable": "hydra.json.schema.Schema"}},
-              {"name": "enum", "type": {"list": {"variable": "hydra.json.model.Value"}}}]},
-          "variables": []},
-        "name": "hydra.json.schema.MultipleRestriction"}},
+              {"name": "enum", "type": {"list": {"variable": "hydra.json.model.Value"}}}]}}}},
     {
-      "type": {"body": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}, "name": "hydra.json.schema.SchemaReference"}}],
-  "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
-  "metadata": {
-    "comments": [],
-    "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
-    "seeAlso": []},
-  "name": "hydra.json.schema"}
+      "type": {"name": "hydra.json.schema.SchemaReference", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}}]}

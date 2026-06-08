@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.json.model.Value
@@ -37,7 +37,7 @@ value x =
         Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (Core.TermMap (Maps.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) value v0))}})
+          Core.fieldTerm = (Core.TermList (Lists.map (\p -> Core.TermPair (Pairs.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) value p)) v0))}})
       Model.ValueString v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
         Core.injectionField = Core.Field {

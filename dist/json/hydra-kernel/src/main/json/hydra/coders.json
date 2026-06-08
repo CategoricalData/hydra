@@ -1,604 +1,6 @@
 {
-  "definitions": [
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}]},
-              "body": {
-                "forall": {
-                  "body": {
-                    "forall": {
-                      "body": {
-                        "forall": {
-                          "body": {
-                            "forall": {
-                              "body": {
-                                "record": [
-                                  {
-                                    "name": "isLossy",
-                                    "type": {
-                                      "annotated": {
-                                        "annotation": {
-                                          "map": [
-                                            {
-                                              "key": {"variable": "description"},
-                                              "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]},
-                                        "body": {"literal": {"boolean": {}}}}}},
-                                  {
-                                    "name": "source",
-                                    "type": {
-                                      "annotated": {
-                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]},
-                                        "body": {"variable": "t1"}}}},
-                                  {
-                                    "name": "target",
-                                    "type": {
-                                      "annotated": {
-                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]},
-                                        "body": {"variable": "t2"}}}},
-                                  {
-                                    "name": "coder",
-                                    "type": {
-                                      "annotated": {
-                                        "annotation": {
-                                          "map": [
-                                            {
-                                              "key": {"variable": "description"},
-                                              "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]},
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "v2"},
-                                            "function": {"application": {"argument": {"variable": "v1"}, "function": {"variable": "hydra.coders.Coder"}}}}}}}}]},
-                              "parameter": "v2"}},
-                          "parameter": "v1"}},
-                      "parameter": "t2"}},
-                  "parameter": "t1"}}}},
-          "variables": []},
-        "name": "hydra.coders.Adapter"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An evaluation context together with a source language and a target language"}}}]},
-              "body": {
-                "record": [
-                  {
-                    "name": "graph",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]},
-                        "body": {"variable": "hydra.graph.Graph"}}}},
-                  {
-                    "name": "language",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]},
-                        "body": {"variable": "hydra.coders.Language"}}}},
-                  {
-                    "name": "adapters",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]},
-                        "body": {
-                          "map": {
-                            "keys": {"variable": "hydra.core.Name"},
-                            "values": {
-                              "application": {
-                                "argument": {"variable": "hydra.core.Term"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.core.Term"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.core.Type"},
-                                        "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.AdapterContext"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}]},
-              "body": {
-                "forall": {
-                  "body": {
-                    "forall": {
-                      "body": {
-                        "forall": {
-                          "body": {
-                            "forall": {
-                              "body": {
-                                "record": [
-                                  {
-                                    "name": "encode",
-                                    "type": {
-                                      "annotated": {
-                                        "annotation": {
-                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]},
-                                        "body": {
-                                          "function": {
-                                            "codomain": {
-                                              "application": {
-                                                "argument": {"variable": "v2"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "v1"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "t2"},
-                                                        "function": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                                            "domain": {"variable": "t1"}}}}}},
-                                  {
-                                    "name": "decode",
-                                    "type": {
-                                      "annotated": {
-                                        "annotation": {
-                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]},
-                                        "body": {
-                                          "function": {
-                                            "codomain": {
-                                              "application": {
-                                                "argument": {"variable": "v1"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "v2"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "t1"},
-                                                        "function": {"application": {"argument": {"variable": "t2"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                                            "domain": {"variable": "t2"}}}}}}]},
-                              "parameter": "v2"}},
-                          "parameter": "v1"}},
-                      "parameter": "t2"}},
-                  "parameter": "t1"}}}},
-          "variables": []},
-        "name": "hydra.coders.Bicoder"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Per-target case conventions for name forms that vary across emission targets"}}}]},
-              "body": {
-                "record": [
-                  {
-                    "name": "constant",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for compile-time constant names"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "directory",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Convention for each directory level in the emitted source tree"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "enumValue",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for enum-variant value names"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "field",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for record field names"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "file",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for the source-file basename"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "module",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Convention for a single segment of a module name"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "term",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Convention for top-level term definitions (functions, module-level values)"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "termVariable",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Convention for locally-bound term names (lambda parameters, let-bindings)"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "type",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for type names"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}},
-                  {
-                    "name": "typeVariable",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for type-level variable names"}}}]},
-                        "body": {"variable": "hydra.util.CaseConvention"}}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.CaseConventions"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An encoder and decoder; a bidirectional transformation between two types"}}}]},
-              "body": {
-                "forall": {
-                  "body": {
-                    "forall": {
-                      "body": {
-                        "record": [
-                          {
-                            "name": "encode",
-                            "type": {
-                              "annotated": {
-                                "annotation": {
-                                  "map": [
-                                    {
-                                      "key": {"variable": "description"},
-                                      "value": {
-                                        "literal": {
-                                          "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
-                                "body": {
-                                  "function": {
-                                    "codomain": {
-                                      "function": {
-                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}},
-                                        "domain": {"variable": "v1"}}},
-                                    "domain": {"variable": "hydra.typing.InferenceContext"}}}}}},
-                          {
-                            "name": "decode",
-                            "type": {
-                              "annotated": {
-                                "annotation": {
-                                  "map": [
-                                    {
-                                      "key": {"variable": "description"},
-                                      "value": {
-                                        "literal": {
-                                          "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]},
-                                "body": {
-                                  "function": {
-                                    "codomain": {
-                                      "function": {
-                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}},
-                                        "domain": {"variable": "v2"}}},
-                                    "domain": {"variable": "hydra.typing.InferenceContext"}}}}}}]},
-                      "parameter": "v2"}},
-                  "parameter": "v1"}}}},
-          "variables": []},
-        "name": "hydra.coders.Coder"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}]},
-              "body": {"union": [{"name": "encode", "type": {"unit": {}}}, {"name": "decode", "type": {"unit": {}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.CoderDirection"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension"}}}]},
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]},
-                        "body": {"variable": "hydra.coders.LanguageName"}}}},
-                  {
-                    "name": "constraints",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Constraints which characterize the language's type and term grammars"}}}]},
-                        "body": {"variable": "hydra.coders.LanguageConstraints"}}}},
-                  {
-                    "name": "supportedFeatures",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Target-language or target-runtime capabilities the emitter may assume are available"}}}]},
-                        "body": {"set": {"variable": "hydra.coders.LanguageFeature"}}}}},
-                  {
-                    "name": "caseConventions",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Per-target case conventions for the various kinds of identifiers emitted by the coder"}}}]},
-                        "body": {"variable": "hydra.coders.CaseConventions"}}}},
-                  {
-                    "name": "defaultFileExtension",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {"string": "Conventional file extension for emitted source files, without the leading dot (e.g. \"scala\", \"py\")"}}}]},
-                        "body": {"variable": "hydra.util.FileExtension"}}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.Language"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A set of constraints on valid type and term expressions, characterizing a language"}}}]},
-              "body": {
-                "record": [
-                  {
-                    "name": "literalVariants",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]},
-                        "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                  {
-                    "name": "floatTypes",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]},
-                        "body": {"set": {"variable": "hydra.core.FloatType"}}}}},
-                  {
-                    "name": "integerTypes",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]},
-                        "body": {"set": {"variable": "hydra.core.IntegerType"}}}}},
-                  {
-                    "name": "termVariants",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]},
-                        "body": {"set": {"variable": "hydra.variants.TermVariant"}}}}},
-                  {
-                    "name": "typeVariants",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]},
-                        "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}}},
-                  {
-                    "name": "types",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]},
-                        "body": {"function": {"codomain": {"literal": {"boolean": {}}}, "domain": {"variable": "hydra.core.Type"}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.LanguageConstraints"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability."}}}]},
-              "body": {
-                "union": [
-                  {
-                    "name": "partialApplication",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms."}}}]},
-                        "body": {"unit": {}}}}},
-                  {
-                    "name": "nestedCaseStatements",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers."}}}]},
-                        "body": {"unit": {}}}}},
-                  {
-                    "name": "nestedPolymorphicLetBindings",
-                    "type": {
-                      "annotated": {
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level."}}}]},
-                        "body": {"unit": {}}}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.LanguageFeature"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of a language"}}}]},
-              "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []},
-        "name": "hydra.coders.LanguageName"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}]},
-              "body": {
-                "forall": {
-                  "body": {
-                    "forall": {
-                      "body": {
-                        "application": {
-                          "argument": {"variable": "v"},
-                          "function": {
-                            "application": {
-                              "argument": {"variable": "v"},
-                              "function": {
-                                "application": {
-                                  "argument": {"variable": "t"},
-                                  "function": {"application": {"argument": {"variable": "t"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}},
-                      "parameter": "v"}},
-                  "parameter": "t"}}}},
-          "variables": []},
-        "name": "hydra.coders.SymmetricAdapter"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}]},
-              "body": {
-                "union": [
-                  {
-                    "name": "pre",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pre-order traversal"}}}]},
-                        "body": {"unit": {}}}}},
-                  {
-                    "name": "post",
-                    "type": {
-                      "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Post-order traversal"}}}]},
-                        "body": {"unit": {}}}}}]}}},
-          "variables": []},
-        "name": "hydra.coders.TraversalOrder"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}]},
-              "body": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"literal": {"string": {}}},
-                          "right": {
-                            "application": {
-                              "argument": {"variable": "hydra.core.Term"},
-                              "function": {
-                                "application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.SymmetricAdapter"}}}}}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "hydra.coders.AdapterContext"}}}}},
-          "variables": []},
-        "name": "hydra.coders.TypeAdapter"}}],
+  "name": "hydra.coders",
+  "metadata": {"description": "Abstractions for paired transformations between languages", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.errors"},
     {"module": "hydra.graph"},
@@ -606,5 +8,603 @@
     {"module": "hydra.core"},
     {"module": "hydra.typing"},
     {"module": "hydra.util"}],
-  "metadata": {"comments": [], "description": "Abstractions for paired transformations between languages", "seeAlso": []},
-  "name": "hydra.coders"}
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.coders.Adapter",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t1",
+                  "body": {
+                    "forall": {
+                      "parameter": "t2",
+                      "body": {
+                        "forall": {
+                          "parameter": "v1",
+                          "body": {
+                            "forall": {
+                              "parameter": "v2",
+                              "body": {
+                                "record": [
+                                  {
+                                    "name": "isLossy",
+                                    "type": {
+                                      "annotated": {
+                                        "body": {"literal": {"boolean": {}}},
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "Whether information may be lost in the course of this adaptation"}}}]}}}},
+                                  {
+                                    "name": "source",
+                                    "type": {
+                                      "annotated": {
+                                        "body": {"variable": "t1"},
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source type"}}}]}}}},
+                                  {
+                                    "name": "target",
+                                    "type": {
+                                      "annotated": {
+                                        "body": {"variable": "t2"},
+                                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]}}}},
+                                  {
+                                    "name": "coder",
+                                    "type": {
+                                      "annotated": {
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                                            "argument": {"variable": "v2"}}},
+                                        "annotation": {
+                                          "map": [
+                                            {
+                                              "key": {"variable": "description"},
+                                              "value": {"literal": {"string": "The coder for transforming instances of the source type to instances of the target type"}}}]}}}}]}}}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.AdapterContext",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "graph",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.graph.Graph"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The underlying graph of elements and primitives"}}}]}}}},
+                  {
+                    "name": "language",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.coders.Language"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The language being encoded or decoded"}}}]}}}},
+                  {
+                    "name": "adapters",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "map": {
+                            "keys": {"variable": "hydra.core.Name"},
+                            "values": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                        "argument": {"variable": "hydra.core.Type"}}},
+                                    "argument": {"variable": "hydra.core.Term"}}},
+                                "argument": {"variable": "hydra.core.Term"}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A map of type names to adapters for those types"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An evaluation context together with a source language and a target language"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.Bicoder",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t1",
+                  "body": {
+                    "forall": {
+                      "parameter": "t2",
+                      "body": {
+                        "forall": {
+                          "parameter": "v1",
+                          "body": {
+                            "forall": {
+                              "parameter": "v2",
+                              "body": {
+                                "record": [
+                                  {
+                                    "name": "encode",
+                                    "type": {
+                                      "annotated": {
+                                        "body": {
+                                          "function": {
+                                            "domain": {"variable": "t1"},
+                                            "codomain": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                                        "argument": {"variable": "t2"}}},
+                                                    "argument": {"variable": "v1"}}},
+                                                "argument": {"variable": "v2"}}}}},
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]}}}},
+                                  {
+                                    "name": "decode",
+                                    "type": {
+                                      "annotated": {
+                                        "body": {
+                                          "function": {
+                                            "domain": {"variable": "t2"},
+                                            "codomain": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
+                                                        "argument": {"variable": "t1"}}},
+                                                    "argument": {"variable": "v2"}}},
+                                                "argument": {"variable": "v1"}}}}},
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]}}}}]}}}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.CaseConventions",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "constant",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for compile-time constant names"}}}]}}}},
+                  {
+                    "name": "directory",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for each directory level in the emitted source tree"}}}]}}}},
+                  {
+                    "name": "enumValue",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for enum-variant value names"}}}]}}}},
+                  {
+                    "name": "field",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for record field names"}}}]}}}},
+                  {
+                    "name": "file",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for the source-file basename"}}}]}}}},
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for a single segment of a module name"}}}]}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for top-level term definitions (functions, module-level values)"}}}]}}}},
+                  {
+                    "name": "termVariable",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Convention for locally-bound term names (lambda parameters, let-bindings)"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for type names"}}}]}}}},
+                  {
+                    "name": "typeVariable",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.CaseConvention"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convention for type-level variable names"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Per-target case conventions for name forms that vary across emission targets"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.Coder",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "v1",
+                  "body": {
+                    "forall": {
+                      "parameter": "v2",
+                      "body": {
+                        "record": [
+                          {
+                            "name": "encode",
+                            "type": {
+                              "annotated": {
+                                "body": {
+                                  "function": {
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
+                                    "codomain": {
+                                      "function": {
+                                        "domain": {"variable": "v1"},
+                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}}}}}},
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}},
+                          {
+                            "name": "decode",
+                            "type": {
+                              "annotated": {
+                                "body": {
+                                  "function": {
+                                    "domain": {"variable": "hydra.typing.InferenceContext"},
+                                    "codomain": {
+                                      "function": {
+                                        "domain": {"variable": "v2"},
+                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}}}}}},
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}]}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An encoder and decoder; a bidirectional transformation between two types"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.CoderDirection",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "encode", "type": {"unit": {}}}, {"name": "decode", "type": {"unit": {}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.Language",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.coders.LanguageName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of the language"}}}]}}}},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.coders.LanguageConstraints"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Constraints which characterize the language's type and term grammars"}}}]}}}},
+                  {
+                    "name": "supportedFeatures",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.coders.LanguageFeature"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Target-language or target-runtime capabilities the emitter may assume are available"}}}]}}}},
+                  {
+                    "name": "caseConventions",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.coders.CaseConventions"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Per-target case conventions for the various kinds of identifiers emitted by the coder"}}}]}}}},
+                  {
+                    "name": "defaultFileExtension",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.util.FileExtension"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Conventional file extension for emitted source files, without the leading dot (e.g. \"scala\", \"py\")"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.LanguageConstraints",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "literalVariants",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported literal variants"}}}]}}}},
+                  {
+                    "name": "floatTypes",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.core.FloatType"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported float types"}}}]}}}},
+                  {
+                    "name": "integerTypes",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.core.IntegerType"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported integer types"}}}]}}}},
+                  {
+                    "name": "termVariants",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.variants.TermVariant"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported term variants"}}}]}}}},
+                  {
+                    "name": "typeVariants",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All supported type variants"}}}]}}}},
+                  {
+                    "name": "types",
+                    "type": {
+                      "annotated": {
+                        "body": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": {"boolean": {}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A logical set of types, as a predicate which tests a type for inclusion"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A set of constraints on valid type and term expressions, characterizing a language"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.LanguageFeature",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "partialApplication",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms."}}}]}}}},
+                  {
+                    "name": "nestedCaseStatements",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers."}}}]}}}},
+                  {
+                    "name": "nestedPolymorphicLetBindings",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.LanguageName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of a language"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.SymmetricAdapter",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t",
+                  "body": {
+                    "forall": {
+                      "parameter": "v",
+                      "body": {
+                        "application": {
+                          "function": {
+                            "application": {
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t"}}},
+                                  "argument": {"variable": "t"}}},
+                              "argument": {"variable": "v"}}},
+                          "argument": {"variable": "v"}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.TraversalOrder",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "pre",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pre-order traversal"}}}]}}}},
+                  {
+                    "name": "post",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Post-order traversal"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.coders.TypeAdapter",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "function": {
+                  "domain": {"variable": "hydra.coders.AdapterContext"},
+                  "codomain": {
+                    "function": {
+                      "domain": {"variable": "hydra.core.Type"},
+                      "codomain": {
+                        "either": {
+                          "left": {"literal": {"string": {}}},
+                          "right": {
+                            "application": {
+                              "function": {
+                                "application": {"function": {"variable": "hydra.coders.SymmetricAdapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                              "argument": {"variable": "hydra.core.Term"}}}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}]}}}}}}]}

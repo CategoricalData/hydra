@@ -1,442 +1,6 @@
 {
-  "definitions": [
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Applicative apply for optionals, defined in terms of bind and map."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {"variable": "mx"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"lambda": {"body": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}}, "parameter": "x"}},
-                                    "function": {"variable": "hydra.lib.optionals.map"}}}}},
-                            "parameter": "f"}},
-                        "function": {"application": {"argument": {"variable": "mf"}, "function": {"variable": "hydra.lib.optionals.bind"}}}}},
-                    "parameter": "mx"}},
-                "parameter": "mf"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.",
-            "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
-            "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
-          "description": "Applicative apply for optionals: combine an optional function and an optional argument.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.apply",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"optional": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}}},
-            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "x"}}}],
-          "result": {"type": {"optional": {"variable": "y"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of cases."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "f"},
-                        "function": {
-                          "application": {
-                            "argument": {"optional": null},
-                            "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                    "parameter": "f"}},
-                "parameter": "m"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
-            "The monadic bind for optionals; used to chain computations that may be absent.",
-            "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
-          "description": "Monadic bind for optionals.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.bind",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"optional": {"variable": "x"}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"function": {"codomain": {"optional": {"variable": "y"}}, "domain": {"variable": "x"}}}}],
-          "result": {"type": {"optional": {"variable": "y"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
-    {
-      "primitive": {
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
-            "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
-            "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
-          "description": "Case analysis on an optional, with cases-style argument order.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.cases",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"optional": {"variable": "x"}}},
-            {"isLazy": true, "name": "arg1", "type": {"variable": "y"}},
-            {"isLazy": false, "name": "arg2", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}}],
-          "result": {"type": {"variable": "y"}},
-          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Catenate a list of optionals, keeping only the present values."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "xs"},
-                    "function": {
-                      "application": {
-                        "argument": {"list": []},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "lambda": {
-                                "body": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "lambda": {
-                                            "body": {
-                                              "application": {
-                                                "argument": {"variable": "acc"},
-                                                "function": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.lists.cons"}}}}},
-                                            "parameter": "v"}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "acc"},
-                                            "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                                    "parameter": "acc"}},
-                                "parameter": "m"}},
-                            "function": {"variable": "hydra.lib.lists.foldr"}}}}}}},
-                "parameter": "xs"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "cat(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
-            "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
-          "description": "Concatenate optionals, keeping only the present values.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.cat",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"optional": {"variable": "x"}}}}],
-          "result": {"type": {"list": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Kleisli composition for optionals, defined in terms of bind."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "g"},
-                            "function": {
-                              "application": {
-                                "argument": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}},
-                                "function": {"variable": "hydra.lib.optionals.bind"}}}}},
-                        "parameter": "x"}},
-                    "parameter": "g"}},
-                "parameter": "f"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
-            "If either f or the second stage produces none, the result is none.",
-            "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
-          "description": "Kleisli composition for optionals.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.compose",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"function": {"codomain": {"optional": {"variable": "y"}}, "domain": {"variable": "x"}}}},
-            {
-              "isLazy": false,
-              "name": "arg1",
-              "type": {"function": {"codomain": {"optional": {"variable": "z"}}, "domain": {"variable": "y"}}}},
-            {"isLazy": false, "name": "arg2", "type": {"variable": "x"}}],
-          "result": {"type": {"optional": {"variable": "z"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}, {"constraints": [], "name": "z"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Return the contained value or a default, defined in terms of cases."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"lambda": {"body": {"variable": "x"}, "parameter": "x"}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "def"},
-                            "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                    "parameter": "m"}},
-                "parameter": "def"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
-            "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
-          "description": "Return the value contained in an optional, falling back to a default if absent.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.fromOptional",
-        "signature": {
-          "parameters": [
-            {"isLazy": true, "name": "arg0", "type": {"variable": "x"}},
-            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "x"}}}],
-          "result": {"type": {"variable": "x"}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Test for presence, defined in terms of cases."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"lambda": {"body": {"literal": {"boolean": true}}, "parameter": "_"}},
-                    "function": {
-                      "application": {
-                        "argument": {"literal": {"boolean": false}},
-                        "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                "parameter": "m"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "isGiven(m) returns true iff m is a given variant.",
-            "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
-          "description": "Test whether an optional is present (given).",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.isGiven",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"optional": {"variable": "x"}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test for absence, defined in terms of cases."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"lambda": {"body": {"literal": {"boolean": false}}, "parameter": "_"}},
-                    "function": {
-                      "application": {
-                        "argument": {"literal": {"boolean": true}},
-                        "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                "parameter": "m"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "isNone(m) returns true iff m is the none variant.",
-            "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
-          "description": "Test whether an optional is absent (none).",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.isNone",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"optional": {"variable": "x"}}}],
-          "result": {"type": {"literal": {"boolean": {}}}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map a function over an optional, defined in terms of cases."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "lambda": {
-                            "body": {"optional": {"application": {"argument": {"variable": "x"}, "function": {"variable": "f"}}}},
-                            "parameter": "x"}},
-                        "function": {
-                          "application": {
-                            "argument": {"optional": null},
-                            "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                    "parameter": "m"}},
-                "parameter": "f"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
-            "The functor instance for optionals.",
-            "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
-          "description": "Map a function over an optional.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.map",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"function": {"codomain": {"variable": "y"}, "domain": {"variable": "x"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"optional": {"variable": "x"}}}],
-          "result": {"type": {"optional": {"variable": "y"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {
-                    "literal": {"string": "Map a partial function and keep only the present results, defined in terms of lists.map and cat."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "xs"},
-                            "function": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.lists.map"}}}}},
-                        "function": {"variable": "hydra.lib.optionals.cat"}}},
-                    "parameter": "xs"}},
-                "parameter": "f"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.",
-            "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
-          "description": "Map a partial function over a list, keeping only the present results.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.mapOptional",
-        "signature": {
-          "parameters": [
-            {
-              "isLazy": false,
-              "name": "arg0",
-              "type": {"function": {"codomain": {"optional": {"variable": "y"}}, "domain": {"variable": "x"}}}},
-            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "x"}}}],
-          "result": {"type": {"list": {"variable": "y"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}, {"constraints": [], "name": "y"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a value in given."}}}]},
-            "body": {"lambda": {"body": {"optional": {"variable": "x"}}, "parameter": "x"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "pure(x) = given(x). The applicative pure for optionals.",
-            "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
-          "description": "Wrap a value in given.",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.pure",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "x"}}],
-          "result": {"type": {"optional": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}},
-    {
-      "primitive": {
-        "defaultImplementation": {
-          "annotated": {
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert an optional to a list, defined in terms of cases."}}}]},
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"lambda": {"body": {"list": [{"variable": "x"}]}, "parameter": "x"}},
-                    "function": {
-                      "application": {
-                        "argument": {"list": []},
-                        "function": {"application": {"argument": {"variable": "m"}, "function": {"variable": "hydra.lib.optionals.cases"}}}}}}},
-                "parameter": "m"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "metadata": {
-          "comments": [
-            "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
-            "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
-          "description": "Convert an optional to a list: given x maps to [x], none to [].",
-          "seeAlso": []},
-        "name": "hydra.lib.optionals.toList",
-        "signature": {
-          "parameters": [{"isLazy": false, "name": "arg0", "type": {"optional": {"variable": "x"}}}],
-          "result": {"type": {"list": {"variable": "x"}}},
-          "typeParameters": [{"constraints": [], "name": "x"}]}}}],
+  "name": "hydra.lib.optionals",
+  "metadata": {"description": "Primitives in the hydra.lib.optionals module.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -460,5 +24,441 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "Primitives in the hydra.lib.optionals module.", "seeAlso": []},
-  "name": "hydra.lib.optionals"}
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.apply",
+        "metadata": {
+          "description": "Applicative apply for optionals: combine an optional function and an optional argument.",
+          "comments": [
+            "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.",
+            "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
+            "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"optional": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "mf",
+                "body": {
+                  "lambda": {
+                    "parameter": "mx",
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.bind"}, "argument": {"variable": "mf"}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "f",
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.optionals.map"},
+                                    "argument": {"lambda": {"parameter": "x", "body": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}},
+                                "argument": {"variable": "mx"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Applicative apply for optionals, defined in terms of bind and map."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.bind",
+        "metadata": {
+          "description": "Monadic bind for optionals.",
+          "comments": [
+            "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
+            "The monadic bind for optionals; used to chain computations that may be absent.",
+            "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
+              "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "body": {
+                  "lambda": {
+                    "parameter": "f",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                            "argument": {"optional": null}}},
+                        "argument": {"variable": "f"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of cases."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.cases",
+        "metadata": {
+          "description": "Case analysis on an optional, with cases-style argument order.",
+          "comments": [
+            "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
+            "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
+            "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "y"}, "isLazy": true},
+            {"name": "arg2", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false}],
+          "result": {"type": {"variable": "y"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.cat",
+        "metadata": {
+          "description": "Concatenate optionals, keeping only the present values.",
+          "comments": [
+            "cat(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
+            "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"optional": {"variable": "x"}}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "xs",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "m",
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                                            "argument": {"variable": "acc"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "v",
+                                            "body": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "v"}}},
+                                                "argument": {"variable": "acc"}}}}}}}}}}}}},
+                        "argument": {"list": []}}},
+                    "argument": {"variable": "xs"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Catenate a list of optionals, keeping only the present values."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.compose",
+        "metadata": {
+          "description": "Kleisli composition for optionals.",
+          "comments": [
+            "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
+            "If either f or the second stage produces none, the result is none.",
+            "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"optional": {"variable": "z"}}}},
+              "isLazy": false},
+            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "z"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "f",
+                "body": {
+                  "lambda": {
+                    "parameter": "g",
+                    "body": {
+                      "lambda": {
+                        "parameter": "x",
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.optionals.bind"},
+                                "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                            "argument": {"variable": "g"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Kleisli composition for optionals, defined in terms of bind."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.fromOptional",
+        "metadata": {
+          "description": "Return the value contained in an optional, falling back to a default if absent.",
+          "comments": [
+            "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
+            "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": true},
+            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "def",
+                "body": {
+                  "lambda": {
+                    "parameter": "m",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                            "argument": {"variable": "def"}}},
+                        "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Return the contained value or a default, defined in terms of cases."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.isGiven",
+        "metadata": {
+          "description": "Test whether an optional is present (given).",
+          "comments": [
+            "isGiven(m) returns true iff m is a given variant.",
+            "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"literal": {"boolean": false}}}},
+                    "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": true}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Test for presence, defined in terms of cases."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.isNone",
+        "metadata": {
+          "description": "Test whether an optional is absent (none).",
+          "comments": [
+            "isNone(m) returns true iff m is the none variant.",
+            "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"boolean": {}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"literal": {"boolean": true}}}},
+                    "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": false}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test for absence, defined in terms of cases."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.map",
+        "metadata": {
+          "description": "Map a function over an optional.",
+          "comments": [
+            "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
+            "The functor instance for optionals.",
+            "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "f",
+                "body": {
+                  "lambda": {
+                    "parameter": "m",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                            "argument": {"optional": null}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "x",
+                            "body": {"optional": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Map a function over an optional, defined in terms of cases."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.mapOptional",
+        "metadata": {
+          "description": "Map a partial function over a list, keeping only the present results.",
+          "comments": [
+            "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.",
+            "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "f",
+                "body": {
+                  "lambda": {
+                    "parameter": "xs",
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.optionals.cat"},
+                        "argument": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
+                            "argument": {"variable": "xs"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Map a partial function and keep only the present results, defined in terms of lists.map and cat."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.pure",
+        "metadata": {
+          "description": "Wrap a value in given.",
+          "comments": [
+            "pure(x) = given(x). The applicative pure for optionals.",
+            "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {"lambda": {"parameter": "x", "body": {"optional": {"variable": "x"}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a value in given."}}}]}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.toList",
+        "metadata": {
+          "description": "Convert an optional to a list: given x maps to [x], none to [].",
+          "comments": [
+            "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
+            "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"list": []}}},
+                    "argument": {"lambda": {"parameter": "x", "body": {"list": [{"variable": "x"}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an optional to a list, defined in terms of cases."}}}]}}}}}]}

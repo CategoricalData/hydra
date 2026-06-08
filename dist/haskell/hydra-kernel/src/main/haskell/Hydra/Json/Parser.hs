@@ -15,7 +15,6 @@ import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
 import qualified Hydra.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -89,7 +88,7 @@ jsonNumber =
 -- | Parse a JSON object
 jsonObject :: Parsing.Parser Model.Value
 jsonObject =
-    Parsers.map (\arg_ -> (\x -> Model.ValueObject x) (Maps.fromList arg_)) (Parsers.between (token (Parsers.char 123)) (token (Parsers.char 125)) (Parsers.sepBy jsonKeyValue (token (Parsers.char 44))))
+    Parsers.map (\x -> Model.ValueObject x) (Parsers.between (token (Parsers.char 123)) (token (Parsers.char 125)) (Parsers.sepBy jsonKeyValue (token (Parsers.char 44))))
 -- | Parse a JSON string value
 jsonString :: Parsing.Parser Model.Value
 jsonString =

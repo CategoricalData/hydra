@@ -47,11 +47,11 @@ decodeBoolean x =
 decodeField :: (t0 -> Either String t1) -> String -> M.Map String t0 -> Either String t1
 decodeField decodeValue name m =
     Eithers.bind (decodeOptionalField decodeValue name m) (\mf -> Optionals.cases mf (Left (Strings.cat2 "missing field: " name)) (\f -> Right f))
--- | Decode a JSON object value
+-- | Decode a JSON object value to a name-keyed map. Field order is not preserved; decoding looks fields up by name.
 decodeObject :: Model.Value -> Either String (M.Map String Model.Value)
 decodeObject x =
     case x of
-      Model.ValueObject v0 -> Right v0
+      Model.ValueObject v0 -> Right (Maps.fromList v0)
       _ -> Left "expected an object"
 -- | Decode an optional field from a JSON object
 decodeOptionalField :: Ord t3 => ((t0 -> Either t1 t2) -> t3 -> M.Map t3 t0 -> Either t1 (Maybe t2))

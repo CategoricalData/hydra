@@ -1,149 +1,149 @@
 {
+  "name": "hydra.testing",
+  "metadata": {"description": "A model for unit testing", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.testing.Tag",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tag for test cases"}}}]},
-              "body": {"wrap": {"literal": {"string": {}}}}}},
-          "variables": []},
-        "name": "hydra.testing.Tag"}},
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tag for test cases"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.testing.TestCase",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case with an actual and expected string for comparison"}}}]},
               "body": {
                 "union": [
                   {
                     "name": "universal",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.testing.UniversalTestCase"},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A universal test case (string comparison)"}}}]},
-                        "body": {"variable": "hydra.testing.UniversalTestCase"}}}}]}}},
-          "variables": []},
-        "name": "hydra.testing.TestCase"}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A universal test case (string comparison)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A test case with an actual and expected string for comparison"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.testing.TestCaseWithMetadata",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case together with metadata"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A short name for the test case"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A short name for the test case"}}}]}}}},
                   {
                     "name": "case",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The test case itself"}}}]},
-                        "body": {"variable": "hydra.testing.TestCase"}}}},
+                        "body": {"variable": "hydra.testing.TestCase"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The test case itself"}}}]}}}},
                   {
                     "name": "description",
                     "type": {
                       "annotated": {
+                        "body": {"optional": {"literal": {"string": {}}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "An optional longer description of the test case"}}}]},
-                        "body": {"optional": {"literal": {"string": {}}}}}}},
+                              "value": {"literal": {"string": "An optional longer description of the test case"}}}]}}}},
                   {
                     "name": "tags",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more tags for the test case"}}}]},
-                        "body": {"list": {"variable": "hydra.testing.Tag"}}}}}]}}},
-          "variables": []},
-        "name": "hydra.testing.TestCaseWithMetadata"}},
+                        "body": {"list": {"variable": "hydra.testing.Tag"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more tags for the test case"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case together with metadata"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.testing.TestGroup",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A collection of test cases with a name and optional description"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A short name for the test group"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A short name for the test group"}}}]}}}},
                   {
                     "name": "description",
                     "type": {
                       "annotated": {
+                        "body": {"optional": {"literal": {"string": {}}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "An optional longer description of the test group"}}}]},
-                        "body": {"optional": {"literal": {"string": {}}}}}}},
+                              "value": {"literal": {"string": "An optional longer description of the test group"}}}]}}}},
                   {
                     "name": "subgroups",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more subgroups"}}}]},
-                        "body": {"list": {"variable": "hydra.testing.TestGroup"}}}}},
+                        "body": {"list": {"variable": "hydra.testing.TestGroup"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more subgroups"}}}]}}}},
                   {
                     "name": "cases",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more test cases"}}}]},
-                        "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}]}}},
-          "variables": []},
-        "name": "hydra.testing.TestGroup"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                        "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more test cases"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A universal test case: the actual and expected values are thunks producing strings."}}}]},
+                    "value": {"literal": {"string": "A collection of test cases with a name and optional description"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.testing.UniversalTestCase",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "actual",
                     "type": {
                       "annotated": {
+                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"literal": {"string": {}}}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}]},
-                        "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}},
+                                  "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}]}}}},
                   {
                     "name": "expected",
                     "type": {
                       "annotated": {
+                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"literal": {"string": {}}}}},
                         "annotation": {
                           "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A thunk producing the expected result string."}}}]},
-                        "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.testing.UniversalTestCase"}}],
-  "dependencies": [{"module": "hydra.core"}],
-  "metadata": {"comments": [], "description": "A model for unit testing", "seeAlso": []},
-  "name": "hydra.testing"}
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A thunk producing the expected result string."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A universal test case: the actual and expected values are thunks producing strings."}}}]}}}}}}]}

@@ -1,30 +1,9 @@
 {
-  "definitions": [
-    {
-      "term": {
-        "body": {"variable": "hydra.lexical.emptyInferenceContext"},
-        "name": "hydra.test.testEnv.testContext",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "typeLambda": {
-            "body": {
-              "typeLambda": {
-                "body": {
-                  "lambda": {
-                    "body": {"lambda": {"body": {"variable": "hydra.lexical.emptyGraph"}, "domain": {"variable": "t1"}, "parameter": "tms"}},
-                    "domain": {"variable": "t0"},
-                    "parameter": "tys"}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
-        "name": "hydra.test.testEnv.testGraph",
-        "signature": {
-          "parameters": [
-            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
-            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}}],
-          "result": {"type": {"variable": "hydra.graph.Graph"}},
-          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]}}}],
+  "name": "hydra.test.testEnv",
+  "metadata": {
+    "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+    "comments": [],
+    "seeAlso": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
@@ -49,8 +28,29 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
-  "metadata": {
-    "comments": [],
-    "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
-    "seeAlso": []},
-  "name": "hydra.test.testEnv"}
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.testEnv.testContext",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}},
+        "body": {"variable": "hydra.lexical.emptyInferenceContext"}}},
+    {
+      "term": {
+        "name": "hydra.test.testEnv.testGraph",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "t1"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.graph.Graph"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "typeLambda": {
+                "parameter": "t1",
+                "body": {
+                  "lambda": {
+                    "parameter": "tys",
+                    "domain": {"variable": "t0"},
+                    "body": {"lambda": {"parameter": "tms", "domain": {"variable": "t1"}, "body": {"variable": "hydra.lexical.emptyGraph"}}}}}}}}}}}]}

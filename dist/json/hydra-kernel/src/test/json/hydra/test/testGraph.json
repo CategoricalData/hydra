@@ -1,9 +1,47 @@
 {
+  "name": "hydra.test.testGraph",
+  "metadata": {"description": "A module defining the graph used in the test suite.", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.test.testTerms"},
+    {"module": "hydra.test.testTypes"},
+    {"module": "hydra.test.testEnv"},
+    {"module": "hydra.lexical"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "definitions": [
     {
       "term": {
+        "name": "hydra.test.testGraph.testTerms",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
         "body": {
           "application": {
+            "function": {
+              "typeApplication": {
+                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                "type": {"variable": "hydra.core.Term"}}},
             "argument": {
               "list": [
                 {
@@ -12,23 +50,23 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "first": {"wrap": {"body": {"literal": {"string": "testDataArthur"}}, "typeName": "hydra.core.Name"}},
+                            "first": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "testDataArthur"}}}},
                             "second": {"variable": "hydra.test.testTerms.testDataArthur"}}},
                         "type": {"variable": "hydra.core.Name"}}},
-                    "type": {"variable": "hydra.core.Term"}}}]},
+                    "type": {"variable": "hydra.core.Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.testGraph.testTypes",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}},
+        "body": {
+          "application": {
             "function": {
               "typeApplication": {
                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                "type": {"variable": "hydra.core.Term"}}}}},
-        "name": "hydra.test.testGraph.testTerms",
-        "signature": {
-          "parameters": [],
-          "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}},
-          "typeParameters": []}}},
-    {
-      "term": {
-        "body": {
-          "application": {
+                "type": {"variable": "hydra.core.Type"}}},
             "argument": {
               "list": [
                 {
@@ -250,74 +288,36 @@
                             "first": {"variable": "hydra.test.testTypes.testTypeUnitName"},
                             "second": {"variable": "hydra.test.testTypes.testTypeUnit"}}},
                         "type": {"variable": "hydra.core.Name"}}},
-                    "type": {"variable": "hydra.core.Type"}}}]},
-            "function": {
-              "typeApplication": {
-                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                "type": {"variable": "hydra.core.Type"}}}}},
-        "name": "hydra.test.testGraph.testTypes",
-        "signature": {
-          "parameters": [],
-          "result": {"type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}},
-          "typeParameters": []}}},
+                    "type": {"variable": "hydra.core.Type"}}}]}}}}},
     {
       "term": {
-        "body": {"wrap": {"body": {"literal": {"string": "testGraph"}}, "typeName": "hydra.packaging.ModuleName"}},
         "name": "hydra.test.testGraph.testModuleName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.packaging.ModuleName"}}, "typeParameters": []}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.packaging.ModuleName"}}},
+        "body": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "testGraph"}}}}}},
     {
       "term": {
-        "body": {"wrap": {"body": {"literal": {"string": "testSchemaGraph"}}, "typeName": "hydra.packaging.ModuleName"}},
         "name": "hydra.test.testGraph.testSchemaModuleName",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.packaging.ModuleName"}}, "typeParameters": []}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.packaging.ModuleName"}}},
+        "body": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "testSchemaGraph"}}}}}},
     {
       "term": {
+        "name": "hydra.test.testGraph.testGraph",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.graph.Graph"}}},
         "body": {
           "application": {
-            "argument": {"variable": "hydra.test.testGraph.testTerms"},
             "function": {
               "application": {
-                "argument": {"variable": "hydra.test.testGraph.testTypes"},
                 "function": {
                   "typeApplication": {
                     "body": {
                       "typeApplication": {
                         "body": {"variable": "hydra.test.testEnv.testGraph"},
                         "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}},
-                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}}}},
-        "name": "hydra.test.testGraph.testGraph",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.graph.Graph"}}, "typeParameters": []}}},
+                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}},
+                "argument": {"variable": "hydra.test.testGraph.testTypes"}}},
+            "argument": {"variable": "hydra.test.testGraph.testTerms"}}}}},
     {
       "term": {
-        "body": {"variable": "hydra.test.testEnv.testContext"},
         "name": "hydra.test.testGraph.testContext",
-        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}, "typeParameters": []}}}],
-  "dependencies": [
-    {"module": "hydra.test.testTerms"},
-    {"module": "hydra.test.testTypes"},
-    {"module": "hydra.test.testEnv"},
-    {"module": "hydra.lexical"},
-    {"module": "hydra.paths"},
-    {"module": "hydra.ast"},
-    {"module": "hydra.coders"},
-    {"module": "hydra.core"},
-    {"module": "hydra.error.checking"},
-    {"module": "hydra.error.core"},
-    {"module": "hydra.error.packaging"},
-    {"module": "hydra.errors"},
-    {"module": "hydra.graph"},
-    {"module": "hydra.json.model"},
-    {"module": "hydra.packaging"},
-    {"module": "hydra.parsing"},
-    {"module": "hydra.query"},
-    {"module": "hydra.relational"},
-    {"module": "hydra.tabular"},
-    {"module": "hydra.testing"},
-    {"module": "hydra.topology"},
-    {"module": "hydra.typed"},
-    {"module": "hydra.typing"},
-    {"module": "hydra.util"},
-    {"module": "hydra.validation"},
-    {"module": "hydra.variants"}],
-  "metadata": {"comments": [], "description": "A module defining the graph used in the test suite.", "seeAlso": []},
-  "name": "hydra.test.testGraph"}
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.InferenceContext"}}},
+        "body": {"variable": "hydra.test.testEnv.testContext"}}}]}

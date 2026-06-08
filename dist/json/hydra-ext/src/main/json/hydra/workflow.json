@@ -1,117 +1,117 @@
 {
+  "name": "hydra.workflow",
+  "metadata": {"description": "A model for Hydra transformation workflows", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.graph"}, {"module": "hydra.packaging"}, {"module": "hydra.core"}],
   "definitions": [
     {
       "type": {
+        "name": "hydra.workflow.HydraSchemaSpec",
         "body": {
+          "variables": [],
           "body": {
             "annotated": {
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}]},
               "body": {
                 "record": [
                   {
                     "name": "modules",
                     "type": {
                       "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.Module"}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules to include in the schema graph"}}}]},
-                        "body": {"list": {"variable": "hydra.packaging.Module"}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules to include in the schema graph"}}}]}}}},
                   {
                     "name": "typeName",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
-                                "literal": {"string": "The name of the top-level type; all data which passes through the workflow will be instances of this type"}}}]},
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []},
-        "name": "hydra.workflow.HydraSchemaSpec"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                                "literal": {"string": "The name of the top-level type; all data which passes through the workflow will be instances of this type"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The specification of a schema at the source end of a workflow"}}}]},
+                    "value": {"literal": {"string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.workflow.SchemaSpec",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "union": [
                   {
                     "name": "hydra",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A native Hydra schema"}}}]},
-                        "body": {"variable": "hydra.workflow.HydraSchemaSpec"}}}},
+                        "body": {"variable": "hydra.workflow.HydraSchemaSpec"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A native Hydra schema"}}}]}}}},
                   {
                     "name": "file",
                     "type": {
                       "annotated": {
+                        "body": {"literal": {"string": {}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A schema provided as a file, available at the given file path"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                              "value": {"literal": {"string": "A schema provided as a file, available at the given file path"}}}]}}}},
                   {
                     "name": "provided",
                     "type": {
                       "annotated": {
+                        "body": {"unit": {}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A schema which will be provided within the workflow"}}}]},
-                        "body": {"unit": {}}}}}]}}},
-          "variables": []},
-        "name": "hydra.workflow.SchemaSpec"}},
-    {
-      "type": {
-        "body": {
-          "body": {
-            "annotated": {
+                              "value": {"literal": {"string": "A schema which will be provided within the workflow"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}]},
+                    "value": {"literal": {"string": "The specification of a schema at the source end of a workflow"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.workflow.TransformWorkflow",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
               "body": {
                 "record": [
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}},
                   {
                     "name": "schemaSpec",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The schema specification"}}}]},
-                        "body": {"variable": "hydra.workflow.SchemaSpec"}}}},
+                        "body": {"variable": "hydra.workflow.SchemaSpec"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The schema specification"}}}]}}}},
                   {
                     "name": "srcDir",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]},
-                        "body": {"literal": {"string": {}}}}}},
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}},
                   {
                     "name": "destDir",
                     "type": {
                       "annotated": {
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]},
-                        "body": {"literal": {"string": {}}}}}}]}}},
-          "variables": []},
-        "name": "hydra.workflow.TransformWorkflow"}}],
-  "dependencies": [{"module": "hydra.graph"}, {"module": "hydra.packaging"}, {"module": "hydra.core"}],
-  "metadata": {"comments": [], "description": "A model for Hydra transformation workflows", "seeAlso": []},
-  "name": "hydra.workflow"}
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}]}}}}}}]}
