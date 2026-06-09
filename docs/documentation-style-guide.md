@@ -222,7 +222,7 @@ wiki/                                # Separate Git repo (user-facing design doc
 ├── RDF.md                           # RDF / SHACL / OWL design
 ├── Testing.md                       # Common test suite design
 ├── Benchmarking.md                  # Inference benchmark design
-├── Release-process.md               # Release policy
+├── Release-policy.md                # Release policy (versioning + publish targets)
 └── ...
 ```
 
