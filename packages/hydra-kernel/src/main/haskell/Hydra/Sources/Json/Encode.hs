@@ -1,4 +1,9 @@
 
+-- | The encoder half of Hydra's JSON coder. Every choice in this module is in
+-- service of byte-stable round-trip with 'Hydra.Sources.Json.Decode'. The
+-- wire-format rules — tagged-union encoding, the four-rule optional scheme,
+-- IEEE float sentinels, the safe-integer threshold, etc. — are specified in
+-- @docs/json-format.md@; this module is their implementation.
 module Hydra.Sources.Json.Encode where
 
 -- Standard imports for term-level sources outside of the kernel

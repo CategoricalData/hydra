@@ -162,6 +162,11 @@ caseStatement = define "CaseStatement" $
       doc "A list of case alternatives, one per union variant being handled" $
       T.list caseAlternative]
 
+-- | 'EitherType' is a union-like disjunction: an instance must provide one
+-- field or the other, not both. It is a distinct kernel constructor (rather
+-- than a union) because it always has exactly two fields and the field names
+-- are implicit (@left@, @right@). Dual to 'PairType', which is a record-like
+-- conjunction with the same two-field-implicit-names shape.
 eitherType :: TypeDefinition
 eitherType = define "EitherType" $
   doc "A type which provides a choice between a 'left' type and a 'right' type" $
@@ -237,6 +242,11 @@ functionType = define "FunctionType" $
       doc "The codomain (output) type of the function"
       type_]
 
+-- | 'Injection' is the carrier type for the 'inject' variant of 'Term', named per
+-- the standard typed-lambda-calculus terminology: @inject@ is the introduction
+-- form for a sum type, dual to @project@/@Projection@ (the elimination form for a
+-- product). See the wiki Design page (\"Union introduction as @inject@\") for the
+-- long-form rationale.
 injection :: TypeDefinition
 injection = define "Injection" $
   doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
@@ -382,6 +392,11 @@ name = define "Name" $
   doc "A unique identifier in some context; a string-valued key" $
   T.wrap T.string
 
+-- | 'PairType' is a record-like conjunction: an instance must provide both
+-- fields. It is a distinct kernel constructor (rather than a record) because
+-- it always has exactly two fields and the field names are implicit
+-- (@first@, @second@). Dual to 'EitherType', which is a union-like disjunction
+-- with the same two-field-implicit-names shape.
 pairType :: TypeDefinition
 pairType = define "PairType" $
   doc "A type which pairs a 'first' type and a 'second' type" $
@@ -528,13 +543,15 @@ type_ = define "Type" $
       doc "A union type with field names" $
       T.list fieldType,
     "unit">:
-      doc "The unit type" $
+      doc ("The unit type — the nullary conjunction; one inhabitant."
+        ++ " Dual to `void`.") $
       T.unit,
     "variable">:
       doc "A type variable"
       name,
     "void">:
-      doc "The void (uninhabited, or bottom) type" $
+      doc ("The void (uninhabited, or bottom) type — the nullary disjunction;"
+        ++ " zero inhabitants. Dual to `unit`.") $
       T.unit,
     "wrap">:
       doc ("A wrapped type (newtype). There is no corresponding `unwrap` variant at the type"

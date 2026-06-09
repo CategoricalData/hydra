@@ -83,11 +83,15 @@ primitive = define "Primitive" $
       doc "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."
       Packaging.primitiveDefinition,
     "implementation">:
-      doc ("A concrete implementation of the primitive function."
-        ++ " The InferenceContext and Graph parameters are needed by higher-order primitives"
-        ++ " (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments"
-        ++ " via term reduction; the Graph provides variable and primitive bindings,"
-        ++ " while the InferenceContext supports subterm-path tracing for error reporting.") $
+      doc ("A concrete, host-specific implementation of the primitive function: a mapping from a list of"
+        ++ " argument terms to a result term, or an error."
+        ++ " Arguments are reduced and stripped of annotations by the interpreter before the implementation is"
+        ++ " invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive"
+        ++ " can return an unreduced applicative term and let the outer reducer fold it."
+        ++ " The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and"
+        ++ " reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal"
+        ++ " (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation`"
+        ++ " integration tracked in https://github.com/CategoricalData/hydra/issues/437.") $
       Typing.inferenceContext ~> graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
 
 termCoder :: TypeDefinition

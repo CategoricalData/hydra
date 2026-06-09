@@ -1,4 +1,6 @@
-
+-- | The decoder half of Hydra's JSON coder, paired with 'Hydra.Sources.Json.Encode'.
+-- Every choice in this module is in service of byte-stable round-trip with the
+-- encoder; the wire-format rules are specified in @docs/json-format.md@.
 module Hydra.Sources.Json.Decode where
 
 -- Standard imports for term-level sources outside of the kernel

@@ -100,7 +100,7 @@ Examples:
 
 - `Term.literal (string "hello")` → `{"literal": {"string": "hello"}}`
 - `Type.list (variable "T")` → `{"list": {"variable": "T"}}`
-- `Term.unit` → `{"unit": {}}` (nullary variants take an empty object payload; see [Empty objects](#empty-objects))
+- `Term.unit` → `{"unit": {}}` (nullary variants take an empty object payload; see [Empty values](#empty-values))
 
 The single-key shape is structurally dual to the record encoding for the
 opposite reason that records are objects: a record is a conjunction (it has

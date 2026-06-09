@@ -355,6 +355,17 @@ not reach for `InferenceContext`, `Graph`, or `ExtractCore.*` — the
 interpreter strips and reduces arguments before calling the primitive,
 so the default body sees ordinary terms of the declared type.
 
+> **Forward-looking note.** The `InferenceContext` and `Graph` parameters
+> on `Primitive.implementation` are slated for removal
+> ([#446](https://github.com/CategoricalData/hydra/issues/446)):
+> arguments are already stripped of annotations and reduced before the
+> implementation is invoked, so no primitive's compute logic genuinely
+> needs either parameter. The simplification is sequenced with the
+> `defaultImplementation` integration tracked in
+> [#437](https://github.com/CategoricalData/hydra/issues/437) and is
+> expected to land shortly after 0.16.0. Until then, the threaded shape
+> shown in this recipe is what the compiler and host adapters expect.
+
 Higher-order operations (`lists.foldl`, `eithers.bimap`, etc.) are
 typically expressible this way using `foldr`/`foldl`/`cases`/`cons`/etc.
 For example, `eithers.lefts` from the canonical Eithers registry:

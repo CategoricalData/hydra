@@ -78,7 +78,7 @@ express the same language in the host of their choice — Haskell today for
 diversification expected over time.
 
 A complete sync of the matrix walks these in five phases (see
-[Phases](#phases-of-bin-sync-sh) below).
+[Phases](#phases-of-binsyncsh) below).
 
 ## Layers and scripts
 

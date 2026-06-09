@@ -200,6 +200,13 @@ restoreTrace = define "restoreTrace" $
   "baseCx" ~> "newCx" ~>
   Typing.inferenceContextWithTrace (var "newCx") (Typing.inferenceContextTrace (var "baseCx"))
 
+-- | 'uniqueLabel' uses an apostrophe-suffix idiom (@l@ → @l'@ → @l''@), a
+-- holdover from Haskell/ML notation that doesn't translate cleanly to other
+-- hosts. Both of its current consumers — 'Hydra.Sources.Kernel.Terms.Show.Paths'
+-- for subterm-path labels and 'Hydra.Sources.Graphviz.Coder' for DOT node IDs —
+-- would be better served by a numeric-suffix function like 'chooseUniqueName';
+-- apostrophes in unquoted DOT IDs are a Graphviz syntax error. Slated for
+-- removal: see https://github.com/CategoricalData/hydra/issues/436.
 uniqueLabel :: TypedTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $

@@ -135,8 +135,12 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
           (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt")),
       _Term_typeLambda>>: "tl" ~>
         Sets.union
-          -- The type variable introduced by a type lambda is considered unbound unless it is also introduced in an
-          -- enclosing let binding, as all type lambda terms are in Hydra.
+          -- Type lambdas do bind type variables semantically, but this function only treats the surrounding let
+          -- binding's type scheme as the binder of record. By convention the let-scheme variables and the type
+          -- lambdas at the head of the bound term name exactly the same variables — and this function flags any
+          -- type variable in the term that isn't declared at the binding head. A type lambda whose parameter is
+          -- not also named by the enclosing let's type scheme will have that parameter reported as a free type
+          -- variable.
           (var "tryType" @@ var "vars" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl"))
           (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
   var "getAll" @@ Sets.empty @@ var "term0"

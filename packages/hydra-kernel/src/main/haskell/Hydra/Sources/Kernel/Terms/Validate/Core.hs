@@ -1,4 +1,19 @@
 
+-- | Validation rules for core terms and types.
+--
+-- The check functions in this module produce /findings/, not verdicts.
+-- Each returns @Maybe SomeError@ describing what was observed; whether a
+-- given finding stops a build is decided by a 'ValidationProfile' (defined
+-- in 'Hydra.Sources.Kernel.Types.Validation') and applied by 'checkTerm'.
+-- A check rule whose qualified name is in 'ValidationProfile.errorRules' is
+-- treated as a hard error; one in 'warningRules' is collected as a warning;
+-- one in neither is never evaluated.
+--
+-- This separation lets the same finding-producing check serve different
+-- callers — 'checkVoid' and 'checkShadowing', for example, are legitimately
+-- configurable: some users want @void@ rejected anywhere it appears, others
+-- want it allowed in inferred-result positions; some want shadowing as an
+-- error, others tolerate it.
 module Hydra.Sources.Kernel.Terms.Validate.Core where
 
 -- Standard imports for kernel terms modules

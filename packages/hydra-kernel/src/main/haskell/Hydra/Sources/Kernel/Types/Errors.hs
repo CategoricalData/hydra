@@ -56,6 +56,14 @@ emptyListError = define "EmptyListError" $
   doc "An empty list was encountered where a non-empty list was required" $
   T.unit
 
+-- | The taxonomy is organized by error /payload/, not by which pass produces it.
+-- Two errors share a variant when they carry the same data; they get distinct
+-- variants when their payloads differ. So 'duplicateBinding' and 'duplicateField'
+-- are separate cases (different payload data — a binding name + scope vs a field
+-- name + record type), even though both report a duplicate. Conversely, the
+-- broad cases like 'checking' / 'inference' / 'resolution' carry their own sub-
+-- unions whose variants exist for the same payload-identity reason; the surface
+-- looks phase-shaped but the criterion underneath is payload identity.
 error_ :: TypeDefinition
 error_ = define "Error" $
   doc "An error of any kind, with kernel errors particularly differentiated" $

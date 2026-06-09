@@ -104,8 +104,15 @@ alphaConvert = define "alphaConvert" $
   "vold" ~> "vnew" ~> "term" ~>
     Variables.replaceFreeTermVariable @@ var "vold" @@ (Core.termVariable $ var "vnew") @@ var "term"
 
--- Note: this is eager beta reduction, in that we always descend into subtypes,
---       and always reduce the right-hand side of an application prior to substitution
+-- This implementation is eager — every subtype is descended into, and the
+-- right-hand side of an application is reduced before substitution.
+--
+-- Today the only consumer of 'betaReduceType' is the dedicated type-reduction
+-- test set in 'Hydra.Sources.Test.Reduction', which exercises every rule
+-- end-to-end as a soundness witness; eager reduction is the simplest choice
+-- for that. Production Hydra applications may eventually want lazy or other
+-- evaluation strategies (e.g., computational graphs); the choice here is
+-- not a permanent design commitment.
 betaReduceType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
@@ -135,6 +142,14 @@ betaReduceType = define "betaReduceType" $
     var "findApp" @@ var "r") $
   Rewriting.rewriteTypeM @@ var "mapExpr" @@ var "typ"
 
+-- | 'contractTerm' applies the two limited beta-contraction rules described in
+-- the doc string below — that is, it contracts surface-visible applied-lambda
+-- redexes without committing to a full evaluation pass. Callers use it to
+-- clean up obvious redexes left behind by code generation, partial evaluation,
+-- or term rewriting, when they want a simpler shape for display, normalization,
+-- or further rewriting but do not want the cost or commitment of running the
+-- term to a normal form. Full beta reduction is a different operation,
+-- performed by the interpreter ('reduceTerm').
 contractTerm :: TypedTermDefinition (Term -> Term)
 contractTerm = define "contractTerm" $
   doc ("Apply the special rules:\n"

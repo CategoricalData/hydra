@@ -132,6 +132,52 @@ and primitive-metadata reification.
   bridge that flattened the multi-source-dir Haskell head into one self-contained
   `hydra` sdist. Superseded by the per-package assembler (see Improvements).
 
+### Documentation
+
+- Comprehensive documentation refresh for 0.16 ([#383](https://github.com/CategoricalData/hydra/issues/383))
+  spanning nine tracks across READMEs, `docs/`, the wiki, CLAUDE.md, and
+  in-source kernel comments.
+- New `docs/json-format.md` reference describing the canonical JSON wire format
+  (tagged-union duality, optional-field rules, IEEE 754 sentinels, integer
+  threshold).
+- New wiki pages: `Design` (rationale behind each major choice) and `Inference`
+  (HM type inference with class constraints).
+- Cross-checked every prose doc against current code; corrected drift in
+  primitive-checking sections of `docs/recipes/maintenance.md`, the `Primitive`
+  shape in `docs/implementation.md` and `docs/recipes/adding-primitives.md`,
+  and the build-system narrative.
+- Wove motivation ("the why") through the existing doc surface rather than
+  collecting it into separately-titled sidebars; landed an inference-overview
+  centerpiece on the wiki ([#377](https://github.com/CategoricalData/hydra/issues/377)).
+- Aligned doc vocabulary with the LambdaGraph paper and the literature review
+  for the design space Hydra inhabits.
+- Net-new READMEs for `packages/hydra-kernel`, `packages/hydra-ext`,
+  `packages/hydra-coq`, and `packages/hydra-wasm`; top-level `README.md`
+  now carries a canonical packages table.
+- Audited and refreshed the Claude surface: CLAUDE.md "Where to look up X"
+  table extended with rows for `docs/getting-started.md`, `docs/json-format.md`,
+  and the `Design` / `Inference` wiki pages; hard-rules block reordered by
+  violation frequency; `claude/pitfalls.md` superseded entries folded into
+  `docs/troubleshooting.md` / recipes.
+- Project-descriptor strings reviewed and aligned across 24 build / packaging
+  files (Hackage synopsis, Maven Central description, PyPI / conda-forge
+  classifiers, Hydra-format `package.json` files).
+- `docs/index.html` (the GitHub Pages landing page) refreshed with audience
+  hops into wiki Concepts / Design, `docs/getting-started.md`, and the GitHub
+  repo, plus the full published-artifact list across Hackage, Maven Central,
+  PyPI, and conda-forge.
+- In-source kernel-code rationale comments added at key Sources sites covering
+  injection / pair / either / unit-void duality, error taxonomy, variant
+  records, inference-context threading, validation profiles, reduction state,
+  lexical filters, name mangling, scoping, variable handling, defaults
+  integration, and Tarjan SCC choice rationale. JSON encode/decode modules
+  cross-reference `docs/json-format.md`.
+- Filed `Primitive.implementation` carrier-simplification follow-up
+  ([#446](https://github.com/CategoricalData/hydra/issues/446))
+  to drop the unused `InferenceContext` and `Graph` parameters once the
+  `Lib/Defaults/` integration ([#437](https://github.com/CategoricalData/hydra/issues/437))
+  lands.
+
 ---
 
 ## [0.15.0] - 2026-04-29

@@ -107,7 +107,10 @@ extendGraphForLet = define "extendGraphForLet" $
   doc "Extend a graph by descending into a let body" $
   "forBinding" ~> "g" ~> "letrec" ~>
   "bindings" <~ Core.letBindings (var "letrec") $
-  -- Pre-extend graph with sibling bindings so forBinding can resolve them
+  -- Pre-extend graph with sibling bindings so forBinding can resolve them.
+  -- This is what enables let-recursive definitions: each binding's RHS can
+  -- reference any sibling (including itself), so `let foo = ...bar..., bar = ...foo...`
+  -- type-checks. Without this pre-extension, the first forward reference would fail.
   "g2" <~ (extendGraphWithBindings @@ var "bindings" @@ var "g") $
   Graph.graph
     -- Add all binding terms

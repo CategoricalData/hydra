@@ -363,7 +363,11 @@ toShortNames = define "toShortNames" $
 
 topologicalSortBindingMap :: TypedTermDefinition (M.Map Name Term -> [[(Name, Term)]])
 topologicalSortBindingMap = define "topologicalSortBindingMap" $
-  doc "Topological sort of connected components, in terms of dependencies between variable/term binding pairs" $
+  doc ("Topological sort of connected components, in terms of dependencies between variable/term binding pairs."
+    <> " The SCC partitioning is what makes the result usable as an emission order in every target language:"
+    <> " non-recursive bindings emit in dependency order, while a mutually recursive cluster is delivered"
+    <> " together so the emitter can wrap it in whatever construct the host requires (mutual `let`s, joint"
+    <> " class files, forward declarations).") $
   "bindingMap" ~>
   "bindings" <~ Maps.toList (var "bindingMap") $
   "keys" <~ Sets.fromList (Lists.map (reify Pairs.first) (var "bindings")) $
@@ -385,7 +389,11 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
 
 topologicalSortBindings :: TypedTermDefinition ([Binding] -> Either [[Name]] [Name])
 topologicalSortBindings = define "topologicalSortBindings" $
-  doc "Topological sort of elements based on their dependencies" $
+  doc ("Topological sort of bindings based on their dependencies."
+    <> " Returns `Right` with a flat order when the dependency graph is acyclic;"
+    <> " returns `Left` with the cyclic SCCs when it is not. Use this variant when the consumer needs"
+    <> " a strict acyclic ordering and must reject cycles (e.g. import resolution);"
+    <> " use `topologicalSortBindingMap` when mutual recursion should be packaged into SCC groups instead.") $
   "els" ~>
   "adjlist" <~ ("e" ~> pair
     (Core.bindingName $ var "e")
@@ -394,7 +402,10 @@ topologicalSortBindings = define "topologicalSortBindings" $
 
 topologicalSortTypeDefinitions :: TypedTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
-  doc "Topologically sort type definitions by dependencies" $
+  doc ("Topologically sort type definitions by their structural dependencies, grouped into SCCs."
+    <> " The SCC grouping handles mutually recursive types (e.g. a pair of records that reference each"
+    <> " other's names) by delivering them together as one cluster, so the emitter can produce a coherent"
+    <> " set of declarations rather than failing with an undefined-name error mid-emission.") $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Packaging.typeDefinitionName (var "def"))
