@@ -1022,8 +1022,12 @@ We created `hydra.hoisting` to separate these concerns.
 >   `Name` values without the `_<ns>_<local>` prefix; the legacy
 >   `_<ns>_<local>` form lives as aliases in `Hydra.Sources.Libraries`).
 > - **Interpreter-friendly default impls**: `Hydra.Sources.Eval.Lib.*` →
->   `Hydra.Sources.Kernel.Lib.Defaults.*` (generated under
->   `Hydra.Lib.Defaults.*`, not `Hydra.Eval.Lib.*`).
+>   briefly lived at `Hydra.Sources.Kernel.Lib.Defaults.*` →
+>   merged into the canonical `Hydra.Sources.Kernel.Lib.<Sub>` registries
+>   as inline `toPrimitive` defaults (#437). There is no separate
+>   "interpreter-shape" defaults tree any more; either a primitive has a
+>   portable Hydra-term default at its public signature, or its registry
+>   entry is `primNoDef`.
 > - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Haskell.Lib.*`.
 > - **Primitive registration helper**: `prim2Eval` and related `*Eval`
 >   helpers no longer exist; the same primitive now registers with
