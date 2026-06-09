@@ -548,9 +548,9 @@ never referenced.
 ### Hand-written test adapters that import generated modules
 
 `heads/<lang>/src/test/...` files that import a generated module
-(e.g., `Hydra.Lib.Defaults.*`) cannot be built by `stack test` until
-the generated modules exist on disk. After renaming the module name of
-such a module, the build sequence is:
+(e.g., `Hydra.Lib.<Sub>` after a rename) cannot be built by `stack test`
+until the generated modules exist on disk. After renaming the module
+name of such a module, the build sequence is:
 
 1. `stack build` -- verifies the library and execs compile against
    the renamed source. The test target is *not* configured at this
@@ -560,7 +560,7 @@ such a module, the build sequence is:
    verification phase.
 
 Running `stack test` between steps 1 and 2 will fail at the test
-adapter with `Could not find module 'Hydra.Lib.Defaults.X'`. This is
+adapter with `Could not find module 'Hydra.Lib.<Sub>'`. This is
 expected; defer the test run until after sync.
 
 ## Related documentation
