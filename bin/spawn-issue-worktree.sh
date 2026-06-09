@@ -2,9 +2,14 @@
 # Spawn a worktree + tmux session + Claude for a specific GitHub issue.
 #
 # Usage:
-#   bin/spawn-issue-worktree.sh <issue-number> <slug> [<issue-title>]
+#   bin/spawn-issue-worktree.sh <issue-number> <slug> [<issue-title>] [--force-respawn]
 # Example:
 #   bin/spawn-issue-worktree.sh 425 clojure_json_decode "Clojure host's JSON decoder rejects kernel JSON"
+#
+# Refuses to spawn if worktrees/closed/ already contains a plan-doc for this
+# issue (a prior worker addressed it; the GitHub issue may need a status
+# comment / close action rather than a new worker). Override with
+# --force-respawn if the prior fix was genuinely incomplete.
 #
 # Creates:
 #   - branch:  bug_<NNN>_<slug>  (off origin/main)
@@ -37,6 +42,30 @@ WT="$WORKTREES_DIR/$BRANCH"
 if [ -e "$WT" ]; then
     echo "error: $WT already exists" >&2
     exit 1
+fi
+
+# Don't re-spawn a worker for an issue we've already closed. Closed worktrees
+# leave their plan-doc behind in worktrees/closed/ as `bug_<NNN>_*-plan.md`;
+# if any match, surface them and bail. Coordinator should review the archived
+# plan and the GitHub issue state before deciding to override with --force.
+CLOSED_DIR="$WORKTREES_DIR/closed"
+if [ -d "$CLOSED_DIR" ]; then
+    PRIOR=$(ls "$CLOSED_DIR" 2>/dev/null | grep "^bug_${NUM}_" || true)
+    if [ -n "$PRIOR" ]; then
+        echo "error: issue #${NUM} already has an archived plan-doc in worktrees/closed/:" >&2
+        echo "$PRIOR" | sed 's/^/  /' >&2
+        echo "" >&2
+        echo "If this issue is still open on GitHub, the prior worker likely landed a partial fix" >&2
+        echo "and the issue needs a status comment or close action, not a new worker." >&2
+        echo "Check with: gh issue view ${NUM}" >&2
+        echo "Read the archive: less '$CLOSED_DIR'/${PRIOR%$'\n'*}" >&2
+        echo "" >&2
+        echo "To override and re-spawn anyway, pass --force-respawn as the 4th argument." >&2
+        if [ "${4:-}" != "--force-respawn" ]; then
+            exit 1
+        fi
+        echo "(--force-respawn given; proceeding)" >&2
+    fi
 fi
 
 echo "Creating worktree $WT (branch $BRANCH off origin/main)..."
