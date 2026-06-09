@@ -15,180 +15,73 @@ they are documented here for completeness.
 
 ---
 
-## [0.16.0] - TBD
+## [0.16.0] - 2026-06-09
 
-Release candidate. Set the release date when 0.16.0 is tagged.
-Major themes: kernel-oriented validation rules, JSON Schema coder promotion,
-homogenization of writer conventions, a unified `Module.dependencies` field,
-primitive-metadata reification, finalized `hydra.packaging`, all-hosts
-self-hosting and per-package distributions, and a deep kernel-vocabulary cleanup
-(`maybe`→`optional`, order-preserving JSON).
+Major themes: primitive-metadata reification, self-hosting coder DSLs with all
+eight hosts passing the common test suite, finalized `hydra.packaging`, and a
+deep kernel-vocabulary cleanup.
 
 ### Highlights
 
-- **Kernel-oriented style checks** in `hydra.validate.*` ([#320](https://github.com/CategoricalData/hydra/issues/320), [#321](https://github.com/CategoricalData/hydra/issues/321), [#351](https://github.com/CategoricalData/hydra/issues/351), [#352](https://github.com/CategoricalData/hydra/issues/352)).
-- **JSON Schema coder promoted** to a fully functional DSL coder ([#350](https://github.com/CategoricalData/hydra/issues/350)).
-- **`PrimitiveDefinition` and per-namespace registry modules** ([#156](https://github.com/CategoricalData/hydra/issues/156)), with
-  host-independent specifications for every standard-library primitive ([#319](https://github.com/CategoricalData/hydra/issues/319)).
-- **Self-hosting coder sources** transposed into per-language DSLs ([#344](https://github.com/CategoricalData/hydra/issues/344)), and **all eight hosts
-  now pass the common test suite** — TypeScript completed as a head ([#126](https://github.com/CategoricalData/hydra/issues/126)), and the
-  Scala and four Lisp hosts brought to functional/self-hosting parity
-  ([#422](https://github.com/CategoricalData/hydra/issues/422), [#423](https://github.com/CategoricalData/hydra/issues/423), [#425](https://github.com/CategoricalData/hydra/issues/425), [#426](https://github.com/CategoricalData/hydra/issues/426), [#427](https://github.com/CategoricalData/hydra/issues/427)).
-- **Finalized `hydra.packaging`** ([#369](https://github.com/CategoricalData/hydra/issues/369)) and a unified `Module.dependencies` field ([#354](https://github.com/CategoricalData/hydra/issues/354)).
-- **`maybe` → `optional` vocabulary** unified across the kernel and all hosts ([#401](https://github.com/CategoricalData/hydra/issues/401));
-  **order-preserving JSON objects** ([#398](https://github.com/CategoricalData/hydra/issues/398), [#230](https://github.com/CategoricalData/hydra/issues/230)).
-- **Per-package distributions** for Hackage, mirroring Java/Python ([#418](https://github.com/CategoricalData/hydra/issues/418)); **persistent
-  immutable collections** adopted across hosts ([#359](https://github.com/CategoricalData/hydra/issues/359), [#360](https://github.com/CategoricalData/hydra/issues/360), [#361](https://github.com/CategoricalData/hydra/issues/361), [#362](https://github.com/CategoricalData/hydra/issues/362)).
-- **Homogenized writer conventions** across all target languages ([#339](https://github.com/CategoricalData/hydra/issues/339)).
+- **`PrimitiveDefinition` and per-namespace registry modules** with host-independent
+  specs for every standard-library primitive ([#156](https://github.com/CategoricalData/hydra/issues/156), [#319](https://github.com/CategoricalData/hydra/issues/319)).
+- **Self-hosting coder DSLs; all eight hosts pass the common test suite**, including
+  the completed TypeScript head ([#344](https://github.com/CategoricalData/hydra/issues/344), [#126](https://github.com/CategoricalData/hydra/issues/126)).
+- **Finalized `hydra.packaging`** and a unified `Module.dependencies` field ([#369](https://github.com/CategoricalData/hydra/issues/369), [#354](https://github.com/CategoricalData/hydra/issues/354)).
+- **Kernel-vocabulary cleanup**: `maybe`→`optional` across kernel and hosts, plus
+  order-preserving JSON objects ([#401](https://github.com/CategoricalData/hydra/issues/401), [#398](https://github.com/CategoricalData/hydra/issues/398)).
 
 ### New features
 
-- Kernel-oriented style checks in `hydra.validate.*` ([#321](https://github.com/CategoricalData/hydra/issues/321)):
-  alphabetical ordering of kernel definitions ([#351](https://github.com/CategoricalData/hydra/issues/351)),
-  `doc` annotations on every kernel definition ([#352](https://github.com/CategoricalData/hydra/issues/352)).
-- JSON Schema coder promotion ([#350](https://github.com/CategoricalData/hydra/issues/350)): full DSL-based coder; `forall` and type
-  application support; schema/language namespaces lifted.
-- `PrimitiveDefinition` reified in `hydra.packaging` and per-namespace
-  registry modules under `Hydra/Sources/Kernel/Lib/<Sub>.hs` ([#156](https://github.com/CategoricalData/hydra/issues/156)):
-  the 13 `hydra.lib.<sub>` modules are the canonical primitive registry,
-  declaring name, description, signature, isPure / isTotal flags, and an
-  optional `defaultImplementation` per primitive. Adds `TermSignature`
-  and `TypeClassConstraint`; `Primitive` restructured to
-  `{ definition, implementation }`; `TermDefinition.typeScheme` replaced
-  by `TermDefinition.signature`. Resolves [#156](https://github.com/CategoricalData/hydra/issues/156).
-- Schema flip: `AnnotatedTerm.annotation` and `AnnotatedType.annotation`
-  are now typed as `Term` and `Type` (respectively), rather than
-  `Map<Name, Term>` ([#386](https://github.com/CategoricalData/hydra/issues/386)). The canonical encoding for an annotation map
-  is `inject(Term){map: TermMap [(TermVariable key, value), …]}`. Two new
-  kernel helpers bridge the host-friendly Map view and the schema:
-  `wrapAnnotationMap :: Map<Name, Term> → Term` and
-  `getAnnotationMap :: Term → Map<Name, Term>`. The latter accepts both
-  `TermVariable` keys (the canonical shape) and transitional
-  `TermWrap`-of-Name keys so older fixtures load unchanged. Existing
-  host-level DSL helpers (`annots`, `annotated`) hide the schema change
-  from most call sites.
-- Host-independent specifications for every standard-library primitive ([#319](https://github.com/CategoricalData/hydra/issues/319)):
-  populated the `PrimitiveDefinition.comments` field for all 240 primitives
-  across 13 `hydra.lib.*` namespaces, citing authoritative external sources
-  (IEEE 754-2019 for floating-point operations; Unicode general categories
-  and simple case mapping for character predicates; Haskell `Data.List` /
-  `Data.Map.Strict` / `Data.Set` / `Data.Char` / `Data.Either` / `Data.Maybe`
-  for collection and either/maybe semantics) and explicitly flagging
-  host-defined behavior (regex syntax, special-value literal capitalization).
-  Threaded the `comments` argument through `toPrimitive` and
-  `toPrimitiveNoDefault` helpers and through each `Lib/<Sub>.hs` `primNoDef`.
-  Resolves [#319](https://github.com/CategoricalData/hydra/issues/319).
-- Reshaped the validation API ([#320](https://github.com/CategoricalData/hydra/issues/320)): configurable rules, an errors/warnings
-  split, and bounded result accumulation, underpinning the kernel-oriented
-  style checks.
-- Transposed the per-language coder sources into appropriate host-native DSLs
-  for self-hosting ([#344](https://github.com/CategoricalData/hydra/issues/344)); the Java and Python coders are now authored
-  host-native, with DSL synthesis extended to coder-package type modules
-  ([#358](https://github.com/CategoricalData/hydra/issues/358)).
-- Language-specific EDSL features ([#233](https://github.com/CategoricalData/hydra/issues/233)): per-language `caseConventions`,
-  `supportedFeatures`, and `defaultFileExtension` on the kernel `Language`,
-  letting coders read emission flags from the target language rather than
-  positional arguments.
-- Primitive-metadata-driven laziness in otherwise-eager coders ([#391](https://github.com/CategoricalData/hydra/issues/391)):
-  host registries stamp `isLazy` per argument and force thunks at call sites.
-- New `/test` skill and `bin/test.sh` for target-language test validation ([#387](https://github.com/CategoricalData/hydra/issues/387)),
-  closing the gap where `sync` ran only the Haskell `stack test`.
-- Automatic differentiation: a `grad` transform for Hydra ([#324](https://github.com/CategoricalData/hydra/issues/324)).
-- `hydra.show.error.pg` — string representations for `InvalidGraphError` ([#374](https://github.com/CategoricalData/hydra/issues/374)).
+- Reify `PrimitiveDefinition` in `hydra.packaging` with per-namespace `hydra.lib.<sub>` registries ([#156](https://github.com/CategoricalData/hydra/issues/156)).
+- Host-independent `comments` specifications for all standard-library primitives ([#319](https://github.com/CategoricalData/hydra/issues/319)).
+- Kernel-oriented style checks in `hydra.validate.*` ([#321](https://github.com/CategoricalData/hydra/issues/321), [#351](https://github.com/CategoricalData/hydra/issues/351), [#352](https://github.com/CategoricalData/hydra/issues/352)), on a reshaped validation API ([#320](https://github.com/CategoricalData/hydra/issues/320)).
+- Promote the JSON Schema coder to a full DSL coder ([#350](https://github.com/CategoricalData/hydra/issues/350)).
+- Transpose coder sources into host-native DSLs for self-hosting ([#344](https://github.com/CategoricalData/hydra/issues/344), [#358](https://github.com/CategoricalData/hydra/issues/358)).
+- `Term`-typed annotations replacing `Map<Name, Term>` ([#386](https://github.com/CategoricalData/hydra/issues/386)).
+- Language-specific EDSL features on the kernel `Language` ([#233](https://github.com/CategoricalData/hydra/issues/233)).
+- Primitive-metadata-driven laziness in eager coders ([#391](https://github.com/CategoricalData/hydra/issues/391)).
+- `/test` skill and `bin/test.sh` for target-language test validation ([#387](https://github.com/CategoricalData/hydra/issues/387)).
+- Automatic differentiation: a `grad` transform ([#324](https://github.com/CategoricalData/hydra/issues/324)).
+- `hydra.show.error.pg` for `InvalidGraphError` ([#374](https://github.com/CategoricalData/hydra/issues/374)).
 
 ### Improvements
 
-- Homogenized writer conventions across all target languages ([#339](https://github.com/CategoricalData/hydra/issues/339)):
-  `*ToExpr` writer renames, adaptive layout for 120-width compaction.
-- Disambiguated format-version field naming across JSON sidecar/metadata files ([#412](https://github.com/CategoricalData/hydra/issues/412)):
-  the digest's `version` / `formatVersion` pair became `digestFormatVersion` (the digest's own
-  schema) / `moduleFormatVersion` (the module-JSON wire format); both digest serializers now carry
-  both. Added `manifestFormatVersion` to generated `manifest.json` files and `packageFormatVersion`
-  to the hand-authored `packages/<pkg>/package.json` descriptors. All four reset to `1` for 0.16.0.
-  Corrected `docs/json-format.md`, which had told consumers to read a field that lives only in the
-  gitignored, non-shipped digest.
-- Merged `Module.termDependencies` and `Module.typeDependencies`
-  into a single `Module.dependencies` field ([#354](https://github.com/CategoricalData/hydra/issues/354)).
-- Finalized `hydra.packaging` and its dependencies for 0.16 ([#369](https://github.com/CategoricalData/hydra/issues/369)): replaced
-  `Binding` with `TypeDefinition` in type modules ([#396](https://github.com/CategoricalData/hydra/issues/396)), added a `comments` field to
-  `Module` and `Package` ([#402](https://github.com/CategoricalData/hydra/issues/402)), and renamed residual namespace-named symbols to
-  `moduleName` ([#404](https://github.com/CategoricalData/hydra/issues/404)).
-- Resolved the `maybe` / `optional` ambiguity ([#401](https://github.com/CategoricalData/hydra/issues/401)): renamed the `hydra.lib.maybes`
-  library to `optionals`, the host `Maybe` ADT to `Optional` (`Just`/`Nothing` →
-  `given`/`none`), and the `maybeTerm` extractor to `optionalTerm`, across the
-  kernel and every host.
-- Order-preserving JSON objects ([#398](https://github.com/CategoricalData/hydra/issues/398), [#230](https://github.com/CategoricalData/hydra/issues/230)): `Value.object` changed from a map to an
-  ordered list of `(string, Value)` pairs; `Value` equality is order-sensitive.
-- Renamed `Namespace` to `ModuleName` ([#316](https://github.com/CategoricalData/hydra/issues/316)); renamed the phantom DSL types
-  `TBinding`/`TTerm`/`TTermDefinition` to `TypedBinding`/`TypedTerm`/
-  `TypedTermDefinition` ([#397](https://github.com/CategoricalData/hydra/issues/397)).
-- Moved from a type-class enum to type-class names ([#275](https://github.com/CategoricalData/hydra/issues/275)).
-- Repackaged the "eval lib" modules as kernel lib modules ([#260](https://github.com/CategoricalData/hydra/issues/260)) and promoted
-  remaining unpromoted sources ([#355](https://github.com/CategoricalData/hydra/issues/355), [#356](https://github.com/CategoricalData/hydra/issues/356)).
-- Re-evaluated and reshaped `hydra.context` into `InferenceContext` ([#368](https://github.com/CategoricalData/hydra/issues/368)).
-- Cleaned up legacy syntax models across all heads ([#297](https://github.com/CategoricalData/hydra/issues/297)).
-- Adopted efficient persistent immutable collections across hosts ([#359](https://github.com/CategoricalData/hydra/issues/359)):
-  Common Lisp ([#360](https://github.com/CategoricalData/hydra/issues/360)), Emacs Lisp ([#361](https://github.com/CategoricalData/hydra/issues/361)), and Python ([#362](https://github.com/CategoricalData/hydra/issues/362)).
-- Migrated kernel definition names with underscores to camelCase ([#348](https://github.com/CategoricalData/hydra/issues/348)).
-- Reviewed and tidied qualified/unqualified imports in the Haskell DSL sources ([#308](https://github.com/CategoricalData/hydra/issues/308)).
-- Eliminated `Hydra.Module.Compat` shim ([#315](https://github.com/CategoricalData/hydra/issues/315)).
-- Build pipeline: transform DSL → JSON per-package ([#381](https://github.com/CategoricalData/hydra/issues/381)) with per-package
-  incremental test inference replacing the flat-universe path ([#395](https://github.com/CategoricalData/hydra/issues/395)); generator now
-  removes stale outputs in `dist/<lang>/<pkg>/` ([#357](https://github.com/CategoricalData/hydra/issues/357), [#393](https://github.com/CategoricalData/hydra/issues/393), [#405](https://github.com/CategoricalData/hydra/issues/405)); self-heal opt-in
-  package digests ([#378](https://github.com/CategoricalData/hydra/issues/378)); exclude generation digests from version control ([#379](https://github.com/CategoricalData/hydra/issues/379));
-  `sync.sh` reconciles generated-file drift rather than failing on it ([#392](https://github.com/CategoricalData/hydra/issues/392)); fail
-  loud on decoder strictness / shell failures ([#414](https://github.com/CategoricalData/hydra/issues/414)).
-- Host generation drivers now accept all valid (host, target) pairs instead of
-  rejecting several with `Unknown target` ([#421](https://github.com/CategoricalData/hydra/issues/421)).
-- Moved the Gradle build infrastructure into `heads/java/` ([#384](https://github.com/CategoricalData/hydra/issues/384)); removed the
-  top-level `pixi.toml` ([#385](https://github.com/CategoricalData/hydra/issues/385)).
-- Eliminated post-generation patches in generated tests ([#307](https://github.com/CategoricalData/hydra/issues/307)); fixed loader and
-  test-runner kludges ([#309](https://github.com/CategoricalData/hydra/issues/309)); re-enabled test-timing metrics across all heads ([#311](https://github.com/CategoricalData/hydra/issues/311)).
-- Performance / benchmarks work ([#277](https://github.com/CategoricalData/hydra/issues/277)); usability assessment ([#283](https://github.com/CategoricalData/hydra/issues/283)).
-- Split the monolithic `hydra` Hackage distribution into per-package
-  distributions ([#418](https://github.com/CategoricalData/hydra/issues/418)), mirroring the per-package layout already used for Java
-  (Maven Central) and Python (PyPI). The 0.16.0 Haskell publish set is
-  `hydra-kernel`, `hydra-haskell`, and a new `hydra` umbrella package whose
-  `Hydra` module re-exports the kernel surface (`Hydra.Kernel`) plus the Haskell
-  coder's `moduleToHaskell` / `moduleToHaskellModule`, preserving a single
-  convenient entry point and the existing Hackage landing page. Inter-package
-  dependencies are exact-version-pinned and published leaves-first; a
-  dependency-closure guard prevents publishing a package whose Hydra
-  dependencies are not themselves in the publish set. New tooling:
-  `heads/haskell/bin/{assemble-haskell-distribution,publish-hackage,verify-haskell-distribution}.sh`
-  and `bin/lib/generate-haskell-package-build.py`.
+- Finalize `hydra.packaging`: `Binding`→`TypeDefinition`, `Module`/`Package` `comments`, `moduleName` cleanup ([#369](https://github.com/CategoricalData/hydra/issues/369), [#396](https://github.com/CategoricalData/hydra/issues/396), [#402](https://github.com/CategoricalData/hydra/issues/402), [#404](https://github.com/CategoricalData/hydra/issues/404)).
+- Merge `Module.termDependencies`/`typeDependencies` into one `dependencies` field ([#354](https://github.com/CategoricalData/hydra/issues/354)).
+- Resolve the `maybe`/`optional` ambiguity across kernel and all hosts ([#401](https://github.com/CategoricalData/hydra/issues/401)).
+- Order-preserving JSON objects; order-sensitive `Value` equality ([#398](https://github.com/CategoricalData/hydra/issues/398)).
+- Rename `Namespace`→`ModuleName` ([#316](https://github.com/CategoricalData/hydra/issues/316)) and the phantom DSL types to `Typed*` ([#397](https://github.com/CategoricalData/hydra/issues/397)).
+- Move from a type-class enum to type-class names ([#275](https://github.com/CategoricalData/hydra/issues/275)).
+- Repackage "eval lib" modules as kernel lib modules; promote remaining sources ([#260](https://github.com/CategoricalData/hydra/issues/260), [#355](https://github.com/CategoricalData/hydra/issues/355), [#356](https://github.com/CategoricalData/hydra/issues/356)).
+- Reshape `hydra.context` into `InferenceContext` ([#368](https://github.com/CategoricalData/hydra/issues/368)).
+- Streamline the Haskell, Java, Python, and Scala syntax models, re-pinning Java to SE 21 and Python to the 3.14 PEG grammar ([#297](https://github.com/CategoricalData/hydra/issues/297)).
+- Adopt persistent immutable collections across hosts ([#359](https://github.com/CategoricalData/hydra/issues/359), [#360](https://github.com/CategoricalData/hydra/issues/360), [#361](https://github.com/CategoricalData/hydra/issues/361), [#362](https://github.com/CategoricalData/hydra/issues/362)).
+- Migrate underscored kernel definition names to camelCase ([#348](https://github.com/CategoricalData/hydra/issues/348)).
+- Tidy qualified/unqualified imports in the Haskell DSL sources ([#308](https://github.com/CategoricalData/hydra/issues/308)).
+- Eliminate the `Hydra.Module.Compat` shim ([#315](https://github.com/CategoricalData/hydra/issues/315)).
+- Homogenize writer conventions across target languages ([#339](https://github.com/CategoricalData/hydra/issues/339)).
+- Disambiguate format-version field naming across JSON metadata ([#412](https://github.com/CategoricalData/hydra/issues/412)).
+- Per-package DSL→JSON build with per-package incremental inference ([#381](https://github.com/CategoricalData/hydra/issues/381), [#395](https://github.com/CategoricalData/hydra/issues/395)).
+- Prune stale `dist/` outputs; self-heal digests; exclude digests from VCS; reconcile drift; fail loud ([#357](https://github.com/CategoricalData/hydra/issues/357), [#393](https://github.com/CategoricalData/hydra/issues/393), [#405](https://github.com/CategoricalData/hydra/issues/405), [#378](https://github.com/CategoricalData/hydra/issues/378), [#379](https://github.com/CategoricalData/hydra/issues/379), [#392](https://github.com/CategoricalData/hydra/issues/392), [#414](https://github.com/CategoricalData/hydra/issues/414)).
+- Accept all valid (host, target) pairs in the generation drivers ([#421](https://github.com/CategoricalData/hydra/issues/421)).
+- Move Gradle build infrastructure into `heads/java/`; remove top-level `pixi.toml` ([#384](https://github.com/CategoricalData/hydra/issues/384), [#385](https://github.com/CategoricalData/hydra/issues/385)).
+- Eliminate post-generation test patches; fix loader/runner kludges; re-enable test timing ([#307](https://github.com/CategoricalData/hydra/issues/307), [#309](https://github.com/CategoricalData/hydra/issues/309), [#311](https://github.com/CategoricalData/hydra/issues/311)).
+- Performance/benchmarks and usability assessments ([#277](https://github.com/CategoricalData/hydra/issues/277), [#283](https://github.com/CategoricalData/hydra/issues/283)).
+- Split the Hackage distribution into per-package distributions ([#418](https://github.com/CategoricalData/hydra/issues/418)).
 
 ### Bug fixes
 
-- Encode `uint32` JSON literals as numbers, not strings ([#431](https://github.com/CategoricalData/hydra/issues/431)):
-  `uint32`'s maximum (`2^32 - 1`) is well below JavaScript's `2^53 - 1` safe-integer
-  boundary, so the string encoding was unnecessary and asymmetric with `int32`.
-  The decoder accepts either a number or a string for `uint32` (forward compatibility);
-  the module format version is unchanged.
-- Satisfied or suppressed warnings in generated Java ([#349](https://github.com/CategoricalData/hydra/issues/349)).
-- Restored JSON parser test cases ([#336](https://github.com/CategoricalData/hydra/issues/336)):
-  fixed polymorphic case-statement handling in the eta-expander
-  (`Reduction.etaExpandTerm`) and the Java coder (`encodeElimination`),
-  added a structural fallback to Python's `hydra.lib.equality.compare`
-  for term values that lack a native `<` ordering.
-- `termAlternatives` / `typeAlternatives` no longer drop annotations during
-  adaptation ([#353](https://github.com/CategoricalData/hydra/issues/353)).
-- Scala host now decodes module JSON containing term definitions ([#342](https://github.com/CategoricalData/hydra/issues/342)).
-- Java coder: fixed exponential cost from eagerly evaluating `let`-bound `cases`
-  defaults on rewriting hot paths ([#372](https://github.com/CategoricalData/hydra/issues/372)); emit explicit type arguments on
-  `PersistentMap.ofEntries` and siblings for non-empty values ([#394](https://github.com/CategoricalData/hydra/issues/394)).
-- Python-host codegen: removed extra `pyStringToPyStrings` wrapping in
-  `stringToPyExpression` ([#367](https://github.com/CategoricalData/hydra/issues/367)).
-- Default `escape_literal_char` no longer mangles RDF triples ([#363](https://github.com/CategoricalData/hydra/issues/363)).
-- Sync robustness: stale java/python coder JSON no longer breaks sync after a
-  kernel rename ([#406](https://github.com/CategoricalData/hydra/issues/406)); the sync digest no longer omits native coder modules
-  ([#400](https://github.com/CategoricalData/hydra/issues/400)); removed the dead `needsThunking` helper from the legacy Java coder
-  DSL ([#411](https://github.com/CategoricalData/hydra/issues/411)); `heads/java/build.gradle` no longer references non-existent
-  source dirs ([#408](https://github.com/CategoricalData/hydra/issues/408)).
-- Cross-host self-hosting fixes folded into the all-hosts milestone above
-  (Scala emitter + TCO [#422](https://github.com/CategoricalData/hydra/issues/422), [#423](https://github.com/CategoricalData/hydra/issues/423); TypeScript inference/runner [#424](https://github.com/CategoricalData/hydra/issues/424), [#429](https://github.com/CategoricalData/hydra/issues/429), [#444](https://github.com/CategoricalData/hydra/issues/444);
-  Clojure/Common-Lisp/Scheme/Emacs-Lisp loaders + coders [#366](https://github.com/CategoricalData/hydra/issues/366), [#389](https://github.com/CategoricalData/hydra/issues/389), [#407](https://github.com/CategoricalData/hydra/issues/407), [#425](https://github.com/CategoricalData/hydra/issues/425),
-  [#426](https://github.com/CategoricalData/hydra/issues/426), [#427](https://github.com/CategoricalData/hydra/issues/427), [#432](https://github.com/CategoricalData/hydra/issues/432), [#438](https://github.com/CategoricalData/hydra/issues/438), [#439](https://github.com/CategoricalData/hydra/issues/439), [#443](https://github.com/CategoricalData/hydra/issues/443)).
+- Encode `uint32` JSON literals as numbers, not strings ([#431](https://github.com/CategoricalData/hydra/issues/431)).
+- Satisfy or suppress warnings in generated Java ([#349](https://github.com/CategoricalData/hydra/issues/349)).
+- Restore JSON parser test cases (polymorphic case handling, ordering fallback) ([#336](https://github.com/CategoricalData/hydra/issues/336)).
+- Keep annotations through `termAlternatives`/`typeAlternatives` adaptation ([#353](https://github.com/CategoricalData/hydra/issues/353)).
+- Scala host decodes module JSON containing term definitions ([#342](https://github.com/CategoricalData/hydra/issues/342)).
+- Java coder: fix exponential `let`-bound `cases` cost ([#372](https://github.com/CategoricalData/hydra/issues/372)) and explicit type args on `PersistentMap.ofEntries` ([#394](https://github.com/CategoricalData/hydra/issues/394)).
+- Python-host codegen: drop extra `pyStringToPyStrings` wrapping ([#367](https://github.com/CategoricalData/hydra/issues/367)).
+- `escape_literal_char` no longer mangles RDF triples ([#363](https://github.com/CategoricalData/hydra/issues/363)).
+- Sync robustness: stale coder JSON, omitted native modules, dead helper, bad source dirs ([#406](https://github.com/CategoricalData/hydra/issues/406), [#400](https://github.com/CategoricalData/hydra/issues/400), [#411](https://github.com/CategoricalData/hydra/issues/411), [#408](https://github.com/CategoricalData/hydra/issues/408)).
+- Cross-host self-hosting fixes (Scala, TypeScript, and the four Lisp dialects) ([#422](https://github.com/CategoricalData/hydra/issues/422), [#423](https://github.com/CategoricalData/hydra/issues/423), [#424](https://github.com/CategoricalData/hydra/issues/424), [#429](https://github.com/CategoricalData/hydra/issues/429), [#444](https://github.com/CategoricalData/hydra/issues/444), [#366](https://github.com/CategoricalData/hydra/issues/366), [#389](https://github.com/CategoricalData/hydra/issues/389), [#407](https://github.com/CategoricalData/hydra/issues/407), [#425](https://github.com/CategoricalData/hydra/issues/425), [#426](https://github.com/CategoricalData/hydra/issues/426), [#427](https://github.com/CategoricalData/hydra/issues/427), [#432](https://github.com/CategoricalData/hydra/issues/432), [#438](https://github.com/CategoricalData/hydra/issues/438), [#439](https://github.com/CategoricalData/hydra/issues/439), [#443](https://github.com/CategoricalData/hydra/issues/443)).
 
 ### Removed
 
@@ -1208,5 +1101,6 @@ We welcome contributions! Please see:
 
 ## Release process
 
-See the [Release process](https://github.com/CategoricalData/hydra/wiki/Release-process)
-wiki page for information on how Hydra releases are created.
+See the [Release policy](https://github.com/CategoricalData/hydra/wiki/Release-policy)
+wiki page and [docs/release-workflow.md](docs/release-workflow.md)
+for information on how Hydra releases are versioned, built, and published.
