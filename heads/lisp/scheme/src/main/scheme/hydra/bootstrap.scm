@@ -291,7 +291,8 @@
           (cond
             ((equal? target "haskell")
              '("haskell/syntax.scm" "haskell/operators.scm"
-               "haskell/language.scm" "haskell/utils.scm"
+               "haskell/language.scm" "haskell/environment.scm"
+               "haskell/utils.scm"
                "haskell/serde.scm" "haskell/coder.scm"))
             ((equal? target "java")
              '("java/syntax.scm" "java/language.scm" "java/names.scm"
