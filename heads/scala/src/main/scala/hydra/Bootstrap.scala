@@ -144,6 +144,10 @@ import _root_.java.io.File
     case "java" => Generation.writeJava(outMain + "/java", allMainMods, modsToGenerate)
     case "python" => Generation.writePython(outMain + "/python", allMainMods, modsToGenerate)
     case "scala" => Generation.writeScala(outMain + "/scala", allMainMods, modsToGenerate)
+    case "clojure" => Generation.writeLispDialect(outMain + "/clojure", "clojure", "clj", allMainMods, modsToGenerate)
+    case "scheme" => Generation.writeLispDialect(outMain + "/scheme", "scheme", "scm", allMainMods, modsToGenerate)
+    case "common-lisp" => Generation.writeLispDialect(outMain + "/common-lisp", "commonLisp", "lisp", allMainMods, modsToGenerate)
+    case "emacs-lisp" => Generation.writeLispDialect(outMain + "/emacs-lisp", "emacsLisp", "el", allMainMods, modsToGenerate)
     case other =>
       println(s"Unknown target: $other")
       System.exit(1)
@@ -198,6 +202,10 @@ import _root_.java.io.File
       case "java" => Generation.writeJava(outTest + "/java", allUniverse, testModsToEmit)
       case "python" => Generation.writePython(outTest + "/python", allUniverse, testModsToEmit)
       case "scala" => Generation.writeScala(outTest + "/scala", allUniverse, testModsToEmit)
+      case "clojure" => Generation.writeLispDialect(outTest + "/clojure", "clojure", "clj", allUniverse, testModsToEmit)
+      case "scheme" => Generation.writeLispDialect(outTest + "/scheme", "scheme", "scm", allUniverse, testModsToEmit)
+      case "common-lisp" => Generation.writeLispDialect(outTest + "/common-lisp", "commonLisp", "lisp", allUniverse, testModsToEmit)
+      case "emacs-lisp" => Generation.writeLispDialect(outTest + "/emacs-lisp", "emacsLisp", "el", allUniverse, testModsToEmit)
       case _ => 0
 
     stepTime = System.currentTimeMillis() - stepStart
