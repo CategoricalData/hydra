@@ -716,11 +716,11 @@ primitives. Not every primitive has one: fundamental operations like
 `logic.ifElse`, `pairs.first`, character predicates, and arithmetic cannot
 be expressed in terms of other primitives and use `primNoDef`.
 
-The `defaultImplementation` field replaces the pre-#156 `Hydra.Sources.Kernel.Lib.Defaults.*`
-modules, which encoded the same notion as interpreter-friendly Term-AST
-constructions. Those modules remain in the source tree but are now superseded
-by the primitive modules' `defaultImplementation` field; they will be removed
-in a follow-up.
+The `defaultImplementation` field replaces the pre-#156
+`Hydra.Sources.Kernel.Lib.Defaults.*` modules, which encoded the same
+notion as interpreter-friendly Term-AST constructions. Those modules
+were merged into the canonical `Lib/<Sub>.hs` registries' inline
+`toPrimitive ... name_` entries and then removed (#437).
 
 ### TermCoder system
 

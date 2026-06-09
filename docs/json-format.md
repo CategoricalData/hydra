@@ -479,7 +479,7 @@ scanning the filesystem. Each array is sorted lexicographically by module name.
 | `mainModules` | array of string | Module names making up the package's main source set. |
 | `testModules` | array of string | Module names in the package's test source set (empty for most packages). |
 | `dslModules` | array of string | Generated DSL-wrapper module names (empty when the package defines no DSL-wrapped types). |
-| `defaultLibModules` | array of string | Default-implementation library module names owned by the package. |
+| `defaultLibModules` | array of string | Historically: default-implementation library module names. Permanently empty after #437 (defaults are inline in their canonical `Lib/<Sub>.hs` registry now). Field retained for manifest-schema continuity until a follow-up drops it. |
 
 Example (`mainModules` abbreviated):
 
