@@ -52,6 +52,8 @@ project/target/
 # heads/scala has no build.sbt — these are orphan sbt scratch dirs
 heads/scala/target/
 heads/scala/project/
+# orphan sbt scratch dir at the repo root (no root build.sbt; canonical build is heads/scala)
+/project/
 
 # Run logs
 runs/
@@ -139,5 +141,7 @@ heads/typescript/node_modules/
 /*-plan.md
 # Cross-worktree Claude messages (see CLAUDE.md)
 claude-hydra-messages/
-# Claude session monitor helper scripts (local-only; log-tailing watchers)
-claude/.*-monitor.sh
+# Claude session helper scripts (local-only; CI monitors, log-tailers, ad-hoc
+# survey/ff/bootstrap watchers). These are dot-prefixed .sh under claude/;
+# the tracked claude/ content is the .md protocol docs, never dot-.sh scripts.
+claude/.*.sh
