@@ -103,7 +103,7 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
-  val kernelNsSet = kernelMods.map(_.name).toSet
+  val kernelNsSet = baselineMods.map(_.name).toSet
 
   // Step 3: Optionally load coder packages.
   var coderMods: Seq[hydra.packaging.Module] = Seq.empty
