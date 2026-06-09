@@ -48,6 +48,27 @@ bin/prepare-release.sh             # Verify + build upload-ready artifacts
 # After publication, update the wiki Releases page
 ```
 
+## Access prerequisites
+
+Publishing requires accounts, roles, and credentials on each external registry.
+These are **not** stored in the repo; confirm them *before* a release, since a
+missing or wrongly-scoped credential surfaces only at upload time (often as a
+`403`). Per-registry:
+
+| Registry | What you need | Where |
+|----------|---------------|-------|
+| **Hackage** | A Hackage account that is a **maintainer** of `hydra`, `hydra-kernel`, `hydra-haskell`; `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
+| **Maven Central** | A **Sonatype Central Portal** account with publish rights for the `net.fortytwo.hydra` namespace, plus a GPG signing key. Credentials in `~/.gradle/gradle.properties` (`sonatypeUsername`/`sonatypePassword` + `signing.*`). **JDK 17+** to run Gradle (see Java releases). | <https://central.sonatype.com/> |
+| **PyPI** | An account that is **Owner or Maintainer** of every published project (`hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`), and an API token scoped to **all** of them (account-wide is simplest). Token goes in `~/.pypirc` or is pasted at the `twine`/`uv` prompt. | <https://pypi.org/manage/projects/> (confirm you own the projects) |
+| **conda-forge** | Listed in the `recipe/` maintainers of [`hydra-python-feedstock`](https://github.com/conda-forge/hydra-python-feedstock); updates go via PR to that repo. | the feedstock repo |
+
+**Ownership note.** PyPI (and conda-forge) ownership is per-project and may rest
+with a maintainer other than the release engineer (e.g. @phreed has historically
+owned the PyPI projects and the conda-forge feedstock). The release engineer must
+be added as **Owner** (PyPI) / recipe maintainer (conda-forge) ahead of time — you
+cannot self-add, and a `403 Forbidden` *after* a token is accepted means the token's
+account lacks upload rights for that project, not a bad token.
+
 ## Version synchronization
 
 All implementations share a single version number.
@@ -197,7 +218,24 @@ Each release entry should include:
   Each significant issue should have a corresponding changelog entry.
 - **Always include the issue number** (`#NNN`) so entries are traceable.
 - **One line per item is usually enough.**
-  The Highlights section provides context; the subsections are a concise inventory.
+  Keep entries short and concise; the entry is a pointer, not an explanation.
+  The detail lives in the linked issue — let the `#NNN` link carry it rather than
+  re-describing the change in the changelog. The Highlights section provides
+  context; the subsections are a concise inventory.
+- **The Highlights section is 3–4 bullets — no more.**
+  Highlights call out only the most important changes; everything else belongs in
+  the subsections. If you find yourself adding a fifth highlight, it is a subsection
+  entry instead.
+- **Verify the linked issue actually describes the solution.**
+  Because each entry defers detail to its `#NNN` link, that only works if the issue
+  contains the detail. Filed issues often describe a *problem* or an early plan, and
+  the implemented solution can drift from it (renamed differently, broader/narrower
+  scope, a different mechanism than proposed). When writing the changelog, skim each
+  cited issue: if it does not adequately describe what actually shipped, **propose a
+  short clarifying comment on the issue** capturing the final resolution (and get it
+  approved before posting, per the no-unauthorized-GitHub-actions rule). The goal is
+  that a reader following the changelog link lands on an accurate account of the
+  change, not a stale problem statement.
 - **Don't repeat between sections.**
   If something is in Highlights, a brief line in New Features suffices — don't re-explain.
 - **Don't list bug fixes for new features.**
@@ -261,6 +299,21 @@ The following are Haskell-specific release steps:
     implementations and the `Hydra.Settings`/`Hydra.Kernel` entry points) into a
     self-contained tree and runs `stack sdist`. (This replaces the 0.15-era
     `assemble-hackage-sdist.sh`, which flattened everything into one tarball.)
+  * **Upload candidates first, then publish.** Hackage candidates are mutable and
+    overwritable (re-uploading the same version replaces the candidate), so use them
+    to verify rendering before the irreversible publish. A *published* version is
+    permanent — it can never be re-uploaded or overwritten (you would have to bump to
+    `<version>.1`). The recommended flow:
+    ```bash
+    heads/haskell/bin/publish-hackage.sh           # assemble only (no upload), catches glitches
+    heads/haskell/bin/publish-hackage.sh --upload  # upload CANDIDATES; review on Hackage
+    heads/haskell/bin/publish-hackage.sh --publish  # FINAL (irreversible)
+    ```
+  * **The sdist must bundle `CHANGELOG.md`** or Hackage shows "Change log: None
+    available". `assemble-haskell-distribution.sh` copies the repo `CHANGELOG.md` into
+    each package's sdist root and the generated `.cabal` lists it under
+    `extra-source-files` (added 0.16.0). If you see "None available" on a candidate,
+    the CHANGELOG was not bundled — fix the assembler/generator, not the tarball.
   * Upload **leaves first** — order matters, because the umbrella and dependents
     pin their siblings with `== <version>`; uploading a dependent before its
     dependency leaves it transiently unsatisfiable on Hackage. The publish
@@ -354,18 +407,42 @@ The following are Java-specific release steps:
     signing.password=<key passphrase>
     signing.secretKeyRingFile=/Users/<you>/.gnupg/secring.gpg
     ```
-  * Publish in dependency order so transitive POM resolution works on the consumer side.
-    Run from each `dist/java/<pkg>/` directory:
+  * **Use the orchestrator** `heads/java/bin/publish-maven.sh` (analogous to
+    `publish-hackage.sh`). It checks the JDK + credentials + dependency closure, refreshes
+    each package into `~/.m2` leaves-first, then runs `publishAggregationToCentralPortal` per
+    package. Default is a build-only dry run; `--upload` does the real Central upload:
     ```bash
-    cd dist/java/hydra-kernel && gradle publishAggregationToCentralPortal
-    cd dist/java/hydra-rdf    && gradle publishAggregationToCentralPortal
-    cd dist/java/hydra-pg     && gradle publishAggregationToCentralPortal
-    cd dist/java/hydra-java   && gradle publishAggregationToCentralPortal
+    export JAVA_HOME=$(/usr/libexec/java_home -v 19)   # JDK 17+ required (nmcp plugin)
+    heads/java/bin/publish-maven.sh                    # dry run: build all 4, no upload
+    heads/java/bin/publish-maven.sh --upload           # upload pending deployments
+    ```
+    Or manually, in dependency order, from each `dist/java/<pkg>/`:
+    ```bash
+    cd dist/java/hydra-kernel && gradle publishAggregationToCentralPortal   # then rdf, pg, java
     ```
     The task chain is: build the jar + Javadoc + sources jars, generate a signed POM,
     package everything into a Central Portal-shaped zip, and upload it via the publisher API.
     The generated `build.gradle` sets `publishingType = "USER_MANAGED"`,
-    so each upload lands in the Central Portal UI as a separate pending deployment for review.
+    so each upload lands in the Central Portal UI as a separate pending deployment for review
+    (the analog of a Hackage candidate — nothing is live until you click Publish).
+  * **Stale `~/.m2` trap (important).** Across a pre-release cycle the version string
+    (e.g. `0.16.0`) does not change, so a previously-built same-version jar can linger in
+    `~/.m2` and silently satisfy a downstream package's `api 'net.fortytwo.hydra:hydra-kernel:0.16.0'`
+    dependency — making `hydra-rdf`/`hydra-pg`/`hydra-java` compile against an **old** kernel and
+    fail with `cannot find symbol` for classes added/renamed mid-cycle (e.g. `hydra.typing.InferenceContext`,
+    `hydra.util.Optional`). `/sync` regenerates the *source* in `dist/java/` but does not touch
+    `~/.m2`. The fix is to `publishToMavenLocal` each package leaves-first (with
+    `--refresh-dependencies`) before building dependents — `publish-maven.sh` does this
+    automatically. If publishing manually, run `gradle publishToMavenLocal` on each package in
+    dependency order first.
+  * **Javadoc fail-on-error (#449).** The Java coder currently emits unqualified `@link` refs for
+    nested case-classes (`{@link hydra.ast.None}` instead of `hydra.ast.Associativity.None`),
+    which the strict `withJavadocJar` Javadoc task treats as fatal — failing the build. These are
+    cosmetic (the jars compile fine). To publish before #449 is fixed, pass `--allow-javadoc-errors`
+    to `publish-maven.sh`, which applies the transient init script
+    `heads/java/bin/javadoc-nonfatal.init.gradle` for that run only (the generated build.gradle stays
+    strict, so a plain `gradle build` keeps failing on #449 until it is fixed). Remove the flag and
+    the init script once #449 lands.
   * Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
     Find the four deployments, verify they have passed validation, then click "Publish" on each.
 
@@ -407,8 +484,11 @@ The published wheels are:
 | `hydra-kernel` | Core types, terms, DSL, eval, primitives + Python runtime support (`hydra.lib.*`, `hydra.dsl.*`, `hydra.sources.*`, `hydra.tools`). Self-contained. | (none) |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
-| `hydra-ext` | Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go extension models. | `hydra-kernel` |
+| `hydra-ext` _(not yet published)_ | Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go extension models. | `hydra-kernel` |
 | `hydra-python` | Python syntax, serde, and coder. | `hydra-kernel` |
+
+`hydra-ext` is **not** in the current publish set — it is outside the standard sync matrix and has
+not shipped to PyPI (see the publish steps below). The other four are the active set.
 
 Each wheel's `pyproject.toml` is regenerated from `packages/<pkg>/package.json` and the
 worktree's `VERSION` file by `bin/lib/generate-python-package-build.py`.
@@ -420,22 +500,29 @@ The following are Python-specific release steps:
 
 * Set up your Python environment as described in the
   [Hydra-Python README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/README.md).
-* Build each wheel from its `dist/python/<pkg>/` directory.
-  Any of these tools work; pick one:
+* **Use the orchestrator** `heads/python/bin/publish-pypi.sh` (analogous to the Haskell/Java
+  scripts). It checks dependency closure, builds wheel + sdist for each package into `wheels/`,
+  and (with `--upload`) `twine upload`s them. Default is build-only:
   ```bash
-  cd dist/python/hydra-kernel && python -m build --wheel --sdist --outdir ../../../wheels
-  cd dist/python/hydra-rdf    && python -m build --wheel --sdist --outdir ../../../wheels
-  cd dist/python/hydra-pg     && python -m build --wheel --sdist --outdir ../../../wheels
-  cd dist/python/hydra-ext    && python -m build --wheel --sdist --outdir ../../../wheels
-  cd dist/python/hydra-python && python -m build --wheel --sdist --outdir ../../../wheels
+  heads/python/bin/publish-pypi.sh            # build all wheels+sdists into wheels/ (no upload)
+  twine check wheels/*                        # validate metadata (recommended pre-flight)
+  heads/python/bin/publish-pypi.sh --upload   # build + twine upload
   ```
-  Producing both `.whl` and `.tar.gz` (sdist) per package is recommended for maximal
-  installer compatibility.
-* Publish to PyPI:
-  * Use [twine](https://pypi.org/project/twine/) or
-    [uv publish](https://docs.astral.sh/uv/guides/publish/) to upload from the wheels directory.
-    Order does not matter for upload; PyPI accepts each independently.
-  * `twine upload wheels/*.whl wheels/*.tar.gz` (or the `uv publish` equivalent).
+  The publish set is `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`. **`hydra-ext` is
+  excluded** — it is not in the standard sync matrix (so `dist/python/hydra-ext/` is not generated)
+  and was not in the 0.15 PyPI release. (The "published wheels" table above lists it
+  aspirationally; the actual publish set is these four.)
+  * **Builder portability.** The script prefers `uv build` (hermetic, needs no preinstalled
+    `build` module) and falls back to `python3 -m build`. Plain `python -m build` fails with
+    `No module named build.__main__` on an interpreter without the `build` package — prefer `uv`.
+  * **PyPI uploads are immutable.** Once `<pkg>-<version>` is uploaded it cannot be replaced
+    (you would bump to `<version>.post1`). There is no candidate stage as on Hackage, so the
+    `twine check` pass + a clean build are the pre-flight; verify before `--upload`.
+  * **`403 Forbidden` after the token is accepted** is a *permissions* problem, not a bad token:
+    the token's account is not Owner/Maintainer of that project, or the token is scoped to other
+    projects. See Access prerequisites. twine stops at the first failure, so check what (if
+    anything) landed before retrying. Order does not matter for upload; PyPI accepts each
+    independently.
 * Publish to conda-forge:
 
   conda-forge is maintained for Hydra by [@phreed](https://github.com/phreed) (with
@@ -448,43 +535,43 @@ The following are Python-specific release steps:
   0.15 is the first release that ships multi-output, so the recipe needs a structural
   update in addition to the usual version + hash bump.
 
-  **One-time structural update for 0.15** (handled in the same PR as the version bump):
+  **Recipe shape** (the multi-output structure below was a one-time conversion done for 0.15;
+  it is now in place and subsequent releases are routine version + sha256 bumps):
 
-  - Convert the `recipe/recipe.yaml` from the single-output shape used through 0.14
-    to a **multi-output recipe** producing one conda package per Python wheel:
-    `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-ext`, `hydra-python`.
-    The feedstock repo name (`hydra-python-feedstock`) does NOT change — conda-forge
-    convention is one feedstock-with-many-outputs per upstream project, named after
-    the most prominent output. The five `package:` outputs each declare their own
-    `requirements.run` so transitive deps resolve at install time.
-  - Source remains the GitHub release tarball
-    (`https://github.com/CategoricalData/hydra/archive/refs/tags/${{ version }}.tar.gz`),
-    NOT the PyPI sdists. Each output's build script `cd`s into the relevant subdirectory
-    of the unpacked tarball — for 0.15, that's `dist/python/<pkg>/` rather than the old
-    top-level `hydra-python/`.
-  - The downstream packages (`hydra-rdf`, `hydra-pg`, `hydra-ext`, `hydra-python`) declare
-    `run` requirements on `hydra-kernel` and (for `hydra-pg`) `hydra-rdf`.
-    Pin the inter-output dependencies tightly to the same version using
-    `${{ pin_subpackage('hydra-kernel', exact=True) }}` so the five outputs march in
-    lockstep.
+  - `recipe/recipe.yaml` is a **multi-output recipe**, one conda package per published Python
+    wheel. The active outputs are `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`;
+    `hydra-ext` is present but **commented out** ("not yet published to PyPI"), matching the
+    PyPI publish set. The feedstock repo name (`hydra-python-feedstock`) does NOT change —
+    conda-forge convention is one feedstock-with-many-outputs per upstream project, named after
+    the most prominent output. Each output declares its own `requirements.run`.
+  - Source is the **per-package PyPI sdist** — each output's `source.url` is
+    `https://pypi.org/packages/source/h/<pkg>/<pkg_underscored>-${{ version }}.tar.gz`
+    with that sdist's `sha256`. (conda-forge is therefore gated on the **PyPI publish**, not
+    on the GitHub tag: the recipe's `sha256`s are the hashes of the PyPI-served sdists, so they
+    can only be computed *after* PyPI upload.)
+  - The downstream outputs (`hydra-rdf`, `hydra-pg`, `hydra-python`) declare `run` requirements
+    on `hydra-kernel` and (for `hydra-pg`) `hydra-rdf`. Pin the inter-output dependencies tightly
+    to the same version using `${{ pin_subpackage('hydra-kernel', exact=True) }}` so the outputs
+    march in lockstep.
 
   **Per-release update workflow** (after the structural update is in place):
 
-  1. Wait until the GitHub release tag is pushed (the feedstock pulls the source tarball
-     from there, not from PyPI).
+  1. Wait until the packages are live on **PyPI** (the feedstock pulls per-package PyPI sdists;
+     the recipe `sha256`s are the hashes of those sdists).
   2. The conda-forge-webservices bot ([regro-cf-autotick-bot](https://github.com/regro-cf-autotick-bot))
-     usually opens a version-bump PR within an hour of the new tag appearing on GitHub.
+     usually opens a version-bump PR within an hour of the new version appearing on PyPI.
      Watch
      [conda-forge/hydra-python-feedstock/pulls](https://github.com/conda-forge/hydra-python-feedstock/pulls)
      and review the PR when it lands.
   3. If the auto-bot doesn't pick up the release (e.g. for the first multi-output release,
      or when the recipe schema changed), open the PR by hand:
      - Fork [conda-forge/hydra-python-feedstock](https://github.com/conda-forge/hydra-python-feedstock).
-     - In a feature branch, edit `recipe/recipe.yaml`:
-       update the `context.version` and the `source.sha256`.
-       Compute the SHA256 of the GitHub release tarball with:
+     - In a feature branch, edit `recipe/recipe.yaml`: bump `context.version`, and update the
+       per-output `source.sha256` (one per package) with the SHA256 of each PyPI sdist:
        ```bash
-       curl -sL https://github.com/CategoricalData/hydra/archive/refs/tags/0.15.0.tar.gz | shasum -a 256
+       for pkg in hydra_kernel hydra_rdf hydra_pg hydra_python; do
+         curl -sL "https://pypi.org/packages/source/h/${pkg//_/-}/${pkg}-0.16.0.tar.gz" | shasum -a 256
+       done
        ```
      - Open a PR against `main`.
        conda-forge's CI will rebuild every output for every supported platform
@@ -521,6 +608,8 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `copy-kernel-runtime.sh` | `heads/{java,python}/bin/` | Per-language helper invoked by `assemble-distribution.sh hydra-kernel` to overlay the hand-written kernel runtime from `overlay/<lang>/hydra-kernel/` into the kernel dist (#418). The overlay tree holds only runtime, so this is a dumb full-tree merge — no selective lists. (Multi-coder drivers, json-io stubs, and the per-language coder stay in `heads/<lang>/src`, not in the overlay.) |
 | `assemble-haskell-distribution.sh` | `heads/haskell/bin/` | Layer 2 per-package Haskell assembler (Haskell analog of `assemble-distribution.sh`). Takes `<pkg>` (`hydra-kernel`/`hydra-haskell`/`hydra`) and tarballs the already-complete `dist/haskell/<pkg>/` tree (made complete by `sync-haskell.sh`, which overlays the hand-written runtime from `overlay/haskell/`): generates `package.yaml` + `stack.yaml` and runs `stack sdist`. A uniform `dist/` consumer — no per-package special-casing. Replaces the 0.15 monolithic `assemble-hackage-sdist.sh`. |
 | `publish-hackage.sh` | `heads/haskell/bin/` | Assembles (and optionally uploads, `--upload`/`--publish`) the per-package Hackage distributions in leaves-first order. Asserts the publish set is dependency-closed before assembling. |
+| `publish-maven.sh` | `heads/java/bin/` | Builds (and optionally uploads, `--upload`) the per-package Maven Central distributions leaves-first. Guards JDK 17+ and credentials; refreshes `~/.m2` with freshly-built siblings to avoid the stale-same-version trap. `--allow-javadoc-errors` applies a transient init script for #449. |
+| `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. |
 | `verify-haskell-distribution.sh` | `heads/haskell/bin/` | Stages all per-package distributions into one multi-package stack project and `stack build`s them, proving the trio compiles as published (the dependents' `== <version>` pins resolve against the local staged siblings). |
 | `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `VERSION`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
 | `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `VERSION`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
