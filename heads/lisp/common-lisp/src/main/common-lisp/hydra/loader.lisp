@@ -608,6 +608,7 @@
                      "encoding.lisp" "decoding.lisp" "codegen.lisp"
                      "hoisting.lisp" "show/core.lisp" "show/error/core.lisp" "show/errors.lisp"
                      "show/error/packaging.lisp"
+                     "validation.lisp"
                      "validate/core.lisp" "validate/packaging.lisp"
                      "encode/core.lisp" "encode/error/core.lisp" "encode/error/checking.lisp" "encode/errors.lisp"
                      "encode/packaging.lisp"
