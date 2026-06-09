@@ -135,7 +135,6 @@ primitives exist, their signatures, and their default implementations.
 | Concern | Location |
 |---------|----------|
 | Universal primitive metadata (name, description, comments, type signature, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
-| Interpreter-friendly term-level reference impls (for higher-order primitives) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs` |
 | Primitive-name `Name` constants (`charsIsAlphaNum`, `logicAnd`, ...) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
 | Legacy `_<namespace>_<localName>` aliases (`_chars_isAlphaNum`, `_logic_and`, ...) used by host registrations | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
 | Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/<Sub>.hs` (#418) |
@@ -342,57 +341,48 @@ route a signature through `TypeScheme` (`termSignatureToTypeScheme` / `typeSchem
 to transform it: `TypeScheme` is the type-only view and that round-trip silently erases
 parameter names, descriptions, and `isLazy`.
 
-#### Default term-level implementations (`Defaults/<Sub>.hs`)
+#### Default term-level implementations
 
 The "default implementation" recorded on every `PrimitiveDefinition` is a
 pure Hydra-term reference — directly executable by any host with a term
-reducer, no native call required. Most primitives can express their default
-this way; see Step 2 above for an example using `toPrimitive`.
+reducer, no native call required. It lives inline in the canonical
+`Kernel/Lib/<Sub>.hs` registry, attached via `toPrimitive ... name_`
+(see Step 2 for an example).
 
-For primitives whose canonical default is *not* a pure
-`Term`-of-the-declared-type but instead a small interpreter routine —
-typically higher-order operations like `lists.foldl` / `eithers.bimap`
-that need to construct unevaluated `(Core.termApplication ...)` terms
-and recurse — the term-level reference is published as a separate
-"defaults" module under
-`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/<Sub>.hs`.
-These modules emit a sibling kernel module name
-`hydra.lib.defaults.<sub>` whose `TypedTermDefinition`s take the standard
-interpreter context: `InferenceContext -> Graph -> ... -> Either Error Term`.
+A default term must type-check at the primitive's public signature.
+Express it using only other primitives and term-level constructs; do
+not reach for `InferenceContext`, `Graph`, or `ExtractCore.*` — the
+interpreter strips and reduces arguments before calling the primitive,
+so the default body sees ordinary terms of the declared type.
 
-If your new primitive belongs to a module name that already has a
-`Defaults/<Sub>.hs`, add an interpreter-friendly companion there
-alongside the existing entries:
+Higher-order operations (`lists.foldl`, `eithers.bimap`, etc.) are
+typically expressible this way using `foldr`/`foldl`/`cases`/`cons`/etc.
+For example, `eithers.lefts` from the canonical Eithers registry:
 
 ```haskell
--- packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Defaults/Eithers.hs
-bimap_ :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Term -> Term -> Either Error Term)
-bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Either terms." $
-  "cx" ~> "g" ~>
-  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (ExtractCore.unexpected (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      right $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
-        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
-        (var "e")]
+-- lefts xs = foldr (\e acc -> either (\l -> cons l acc) (\_ -> acc) e) [] xs
+lefts_ :: TypedTermDefinition ([Either a b] -> [a])
+lefts_ = define "lefts" $
+  doc "Extract Left values, defined in terms of either + foldr." $
+  "xs" ~>
+    Lists.foldr
+      ("e" ~> "acc" ~>
+        Eithers.either_
+          ("l" ~> Lists.cons (var "l") (var "acc" :: TypedTerm [a]))
+          ("_" ~> (var "acc" :: TypedTerm [a]))
+          (var "e"))
+      (list ([] :: [TypedTerm a]))
+      (var "xs")
 ```
 
-Then add `toDefinition bimap_` to the `definitions` list at the top of
-the same module, keeping alphabetical order. The `define` helper is
-locally bound to `definitionInModuleName ns` where `ns = ModuleName
-"hydra.lib.defaults.eithers"`. No registry-table update is needed:
-the kernel sync picks up the new entry through the
-`Defaults/<Sub>.hs` module's own `module_` declaration.
-
-If the module name has no `Defaults/<Sub>.hs` yet, you usually don't need
-to create one — the in-line `defaultImplementation` body inside
-`Kernel/Lib/<Sub>.hs` (as shown in Step 2 with `toPrimitive`) is
-sufficient for almost all cases. The separate `Defaults/<Sub>.hs`
-module is reserved for the "needs the interpreter context to do its
-job" pattern.
+There is no separate "interpreter-shape" Defaults module any more
+(issue #437). Either a primitive has a portable default that fits its
+public signature — write it inline with `toPrimitive` — or it doesn't,
+and the registry entry uses `primNoDef`. `primNoDef` is the right
+choice for: fundamental eliminators (`optionals.cases`, `eithers.either`,
+`pairs.first`, `lists.foldl`, `logic.ifElse`), host-native operations
+(arithmetic, regex, literal parsing), and any primitive whose only
+sensible implementation would have to reference itself.
 
 Host-side registrations are unchanged regardless of which kind of
 default is used: each primitive is bound with `prim1` / `prim2` /
