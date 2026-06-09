@@ -83,8 +83,8 @@ The latest Hydra release is **0.16.0**. Published artifacts:
 
 All Hydra packages share a single version number;
 see the [CHANGELOG](CHANGELOG.md) for release history and the
-[release process](https://github.com/CategoricalData/hydra/wiki/Release-process)
-for how releases are built and published.
+[release policy](https://github.com/CategoricalData/hydra/wiki/Release-policy)
+for how releases are versioned and published.
 
 ## Status
 

@@ -279,7 +279,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) / [hydra-pg README](packages/hydra-pg/README.md) |
 | RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
 | Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |
-| Release process | [Release process wiki](https://github.com/CategoricalData/hydra/wiki/Release-process) |
+| Release policy + procedure | [Release policy wiki](https://github.com/CategoricalData/hydra/wiki/Release-policy) (policy); [docs/release-workflow.md](docs/release-workflow.md) (procedure) |
 | Demos | [docs/demos.md](docs/demos.md) |
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
 | Wiki index | [github.com/CategoricalData/hydra/wiki](https://github.com/CategoricalData/hydra/wiki) |

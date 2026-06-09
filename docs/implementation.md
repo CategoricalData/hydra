@@ -1708,7 +1708,8 @@ in the correct order; the individual scripts and executables are useful during d
 need to rerun a single phase.
 
 For how these fit into the release workflow,
-see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Release-process).
+see [docs/release-workflow.md](release-workflow.md) (procedure) and the
+[release policy](https://github.com/CategoricalData/hydra/wiki/Release-policy) (wiki).
 
 The sync system is organized in three layers under per-package dist trees
 (`dist/<lang>/<pkg>/src/main/<lang>/...`):
