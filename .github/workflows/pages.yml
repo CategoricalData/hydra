@@ -34,16 +34,22 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle', 'heads/java/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-
 
+      # hydra-ext is excluded from the Java build (and thus JavaDoc) pending the
+      # Java-coder limitation that keeps it out of the Maven Central publish set;
+      # restore :hydra-ext:javadoc here when hydra-ext is published to Maven Central.
+      # The init script makes Javadoc non-fatal: generated code carries cosmetic
+      # javadoc issues (unqualified @link refs #449, bad-HTML-entity warnings) that
+      # would otherwise fail the strict javadoc task. The generated build stays
+      # strict by default; this lenience applies to the Pages build only.
       - name: Generate JavaDocs
         working-directory: heads/java
-        run: ./gradlew :hydra-java:javadoc :hydra-ext:javadoc
+        run: ./gradlew :hydra-java:javadoc --init-script bin/javadoc-nonfatal.init.gradle
 
       - name: Assemble site
         run: |
-          mkdir -p _site/hydra-java/javadoc _site/hydra-ext/javadoc
+          mkdir -p _site/hydra-java/javadoc
           cp docs/index.html _site/
           cp -r packages/hydra-java/build/docs/javadoc/* _site/hydra-java/javadoc/
-          cp -r packages/hydra-ext/build/docs/javadoc/* _site/hydra-ext/javadoc/
 
       - uses: actions/upload-pages-artifact@v3
 
