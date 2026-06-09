@@ -1076,7 +1076,11 @@
                     "type": {
                       "annotated": {
                         "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unit type"}}}]}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The unit type — the nullary conjunction; one inhabitant. Dual to `void`."}}}]}}}},
                   {
                     "name": "variable",
                     "type": {
@@ -1089,7 +1093,11 @@
                       "annotated": {
                         "body": {"unit": {}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The void (uninhabited, or bottom) type"}}}]}}}},
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The void (uninhabited, or bottom) type — the nullary disjunction; zero inhabitants. Dual to `unit`."}}}]}}}},
                   {
                     "name": "wrap",
                     "type": {

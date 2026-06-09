@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Type inference following Algorithm W, extended for nominal terms and types
+-- | Type inference for Hydra: Hindley-Milner with elaboration to System F. Extends textbook Algorithm W with nominal types, explicit type abstraction and application, and class constraints. See the Inference wiki page for the full picture.
 
 module Hydra.Inference where
 import qualified Hydra.Annotations as Annotations
@@ -552,7 +552,7 @@ inferTypeOfLambda fcx cx lambda =
           Typing.inferenceResultSubst = isubst,
           Typing.inferenceResultClassConstraints = iconstraints,
           Typing.inferenceResultContext = fcx3}))))
--- | Normalize a let term before inferring its type (Either version)
+-- | Normalize a let term before inferring its type (Either version). The bindings are partitioned into strongly connected components and reorganized as nested lets, one let per SCC, in dependency order. This is the standard Hindley-Milner treatment of mutual recursion: each SCC is generalized once at its boundary (sound, because nothing inside the cluster sees a polymorphic instance of its siblings), and acyclic bindings generalize individually as usual.
 inferTypeOfLet :: Typing.InferenceContext -> Graph.Graph -> Core.Let -> Either Errors.Error Typing.InferenceResult
 inferTypeOfLet fcx0 cx let0 =
 

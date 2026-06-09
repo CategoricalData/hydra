@@ -101,9 +101,9 @@ module_ = Module {
       Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just $ "Type inference for Hydra: Hindley-Milner with elaboration to System F."
-              ++ " Extends textbook Algorithm W with nominal types, explicit type abstraction"
-              ++ " and application, and class constraints. See the Inference wiki page for the"
-              ++ " full picture.")}
+              L.++ " Extends textbook Algorithm W with nominal types, explicit type abstraction"
+              L.++ " and application, and class constraints. See the Inference wiki page for the"
+              L.++ " full picture.")}
   where
     definitions = [
       toDefinition atOrFail,

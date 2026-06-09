@@ -1411,7 +1411,9 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = Core.TypeUnit,
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
-                  (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "The unit type")))]))}))},
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The unit type \8212 the nullary conjunction; one inhabitant. Dual to `void`.")))]))}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "variable"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1425,7 +1427,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
-                    (Core.TermLiteral (Core.LiteralString "The void (uninhabited, or bottom) type")))]))}))},
+                    (Core.TermLiteral (Core.LiteralString "The void (uninhabited, or bottom) type \8212 the nullary disjunction; zero inhabitants. Dual to `unit`.")))]))}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "wrap"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2151,7 +2153,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
-                    (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function. The InferenceContext and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the InferenceContext supports subterm-path tracing for error reporting.")))]))}))}]),
+                    (Core.TermLiteral (Core.LiteralString "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437.")))]))}))}]),
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),

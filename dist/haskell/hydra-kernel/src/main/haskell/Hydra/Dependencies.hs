@@ -286,7 +286,7 @@ toShortNames original =
                                 \name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gt i 1) (Strings.cat2 local (Literals.showInt32 i)) local)))
                     in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1))
       in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
--- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs
+-- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs. The SCC partitioning is what makes the result usable as an emission order in every target language: non-recursive bindings emit in dependency order, while a mutually recursive cluster is delivered together so the emitter can wrap it in whatever construct the host requires (mutual `let`s, joint class files, forward declarations).
 topologicalSortBindingMap :: M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]]
 topologicalSortBindingMap bindingMap =
 
@@ -304,13 +304,13 @@ topologicalSortBindingMap bindingMap =
           toPair =
                   \name -> (name, (Optionals.fromOptional (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap)))
       in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
--- | Topological sort of elements based on their dependencies
+-- | Topological sort of bindings based on their dependencies. Returns `Right` with a flat order when the dependency graph is acyclic; returns `Left` with the cyclic SCCs when it is not. Use this variant when the consumer needs a strict acyclic ordering and must reject cycles (e.g. import resolution); use `topologicalSortBindingMap` when mutual recursion should be packaged into SCC groups instead.
 topologicalSortBindings :: [Core.Binding] -> Either [[Core.Name]] [Core.Name]
 topologicalSortBindings els =
 
       let adjlist = \e -> (Core.bindingName e, (Sets.toList (termDependencyNames False True True (Core.bindingTerm e))))
       in (Sorting.topologicalSort (Lists.map adjlist els))
--- | Topologically sort type definitions by dependencies
+-- | Topologically sort type definitions by their structural dependencies, grouped into SCCs. The SCC grouping handles mutually recursive types (e.g. a pair of records that reference each other's names) by delivering them together as one cluster, so the emitter can produce a coherent set of declarations rather than failing with an undefined-name error mid-emission.
 topologicalSortTypeDefinitions :: [Packaging.TypeDefinition] -> [[Packaging.TypeDefinition]]
 topologicalSortTypeDefinitions defs =
 
