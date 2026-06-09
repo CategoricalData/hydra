@@ -461,7 +461,7 @@ if [ $ERRORS -eq 0 ]; then
             echo "       cabal upload --documentation --publish $ARTIFACT_DIR/$pkg-${EXPECTED}-docs.tar.gz"
         done
     fi
-    echo "       (then Maven Central and conda-forge per Release-process.md)"
+    echo "       (then Maven Central and conda-forge per docs/release-workflow.md)"
 else
     echo "FAIL: $ERRORS check(s) failed. Please fix before releasing."
     exit 1
