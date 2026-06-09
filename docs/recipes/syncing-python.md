@@ -29,20 +29,19 @@ isn't built yet — i.e. `python` was not in `--hosts` of a prior sync; in that
 case the JSON remains whatever Phase 1 last wrote.
 
 When you make changes to:
-- **the kernel, default-impls (`Hydra.Sources.Kernel.Lib.Defaults.*`), or test suite**
-  (in Hydra-Haskell): regenerate `dist/json/hydra-kernel/`, then run
-  `bin/sync-python.sh` to refresh `dist/python/`.
+- **the kernel or test suite** (in Hydra-Haskell): regenerate
+  `dist/json/hydra-kernel/`, then run `bin/sync-python.sh` to refresh
+  `dist/python/`.
 - **the Python coder DSL sources**: run `bin/sync-python.sh`, which now
   invokes `bin/generate-hydra-python-from-python.sh` in Phase 5. You can
   also run the native generator directly with `--compare` to verify
   byte-identical output before the full sync.
 
-The synchronization process generates four categories of Python code:
+The synchronization process generates three categories of Python code:
 
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
 | Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/` | Core Hydra types and functions |
-| Default-impl modules | `Hydra.Sources.Kernel.Lib.Defaults.*` (per-module-name) | `dist/python/hydra-kernel/src/main/python/hydra/lib/defaults/` | Interpreter-friendly term-level reference implementations |
 | Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `dist/python/hydra-kernel/src/test/python/generation/` | Executable pytest tests |
 
