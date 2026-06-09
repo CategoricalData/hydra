@@ -2643,7 +2643,8 @@
                 {
                   "key": {"variable": "description"},
                   "value": {
-                    "literal": {"string": "Topological sort of connected components, in terms of dependencies between variable/term binding pairs"}}}]}}}}},
+                    "literal": {
+                      "string": "Topological sort of connected components, in terms of dependencies between variable/term binding pairs. The SCC partitioning is what makes the result usable as an emission order in every target language: non-recursive bindings emit in dependency order, while a mutually recursive cluster is delivered together so the emitter can wrap it in whatever construct the host requires (mutual `let`s, joint class files, forward declarations)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.dependencies.topologicalSortBindings",
@@ -2716,7 +2717,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Topological sort of elements based on their dependencies"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Topological sort of bindings based on their dependencies. Returns `Right` with a flat order when the dependency graph is acyclic; returns `Left` with the cyclic SCCs when it is not. Use this variant when the consumer needs a strict acyclic ordering and must reject cycles (e.g. import resolution); use `topologicalSortBindingMap` when mutual recursion should be packaged into SCC groups instead."}}}]}}}}},
     {
       "term": {
         "name": "hydra.dependencies.topologicalSortTypeDefinitions",
@@ -2877,7 +2880,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Topologically sort type definitions by dependencies"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Topologically sort type definitions by their structural dependencies, grouped into SCCs. The SCC grouping handles mutually recursive types (e.g. a pair of records that reference each other's names) by delivering them together as one cluster, so the emitter can produce a coherent set of declarations rather than failing with an undefined-name error mid-emission."}}}]}}}}},
     {
       "term": {
         "name": "hydra.dependencies.typeDependencyNames",

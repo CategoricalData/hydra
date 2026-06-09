@@ -453,11 +453,11 @@ data Type =
   TypeSet Type |
   -- | A union type with field names
   TypeUnion [FieldType] |
-  -- | The unit type
+  -- | The unit type — the nullary conjunction; one inhabitant. Dual to `void`.
   TypeUnit |
   -- | A type variable
   TypeVariable Name |
-  -- | The void (uninhabited, or bottom) type
+  -- | The void (uninhabited, or bottom) type — the nullary disjunction; zero inhabitants. Dual to `unit`.
   TypeVoid |
   -- | A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument.
   TypeWrap Type

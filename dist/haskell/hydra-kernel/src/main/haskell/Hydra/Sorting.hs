@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC.
+-- | Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC. Tarjan was chosen because it computes strongly connected components in O(V+E), in a single pass, and yields the components in reverse topological order — exactly the shape every consumer in the kernel (HM let-generalization, schema graph construction, target-language emission) needs.
 
 module Hydra.Sorting where
 import qualified Hydra.Ast as Ast
