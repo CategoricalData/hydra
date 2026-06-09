@@ -117,11 +117,11 @@ untypedTermDef nm tm = Packaging.definitionTerm
 ----------------------------------------
 -- Second toy universe: a "clean" module carrying a scheme with vacuous
 -- quantifiers (type variables that appear only in the domain, never in the
--- codomain), plus a "stale" target that applies the function. This shape is
--- actually produced by a prior inference run on the real kernel, e.g. the
--- stored scheme for `hydra.lib.defaults.eithers.either` after round-tripping
--- through JSON. `inferModules` and `inferModulesGiven` must agree on the
--- rendered inferred modules for any such universe.
+-- codomain), plus a "stale" target that applies the function. This shape
+-- has historically been produced by inference runs on the real kernel
+-- (e.g. defaults' eliminator schemes after round-tripping through JSON).
+-- `inferModules` and `inferModulesGiven` must agree on the rendered
+-- inferred modules for any such universe.
 --
 --   hydra.testInput.v.funky :: forall t0 t1. t0 -> t1 -> int32 -> int32
 --     (the body is irrelevant; only the scheme matters for seeding.)
