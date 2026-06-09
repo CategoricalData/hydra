@@ -95,6 +95,9 @@ patch "$REPO_ROOT/demos/bootstrapping/resources/java/build.gradle" \
 patch "$REPO_ROOT/packages/hydra-scala/build.sbt" \
     "s/version := \".*\"/version := \"$VERSION\"/"
 
+patch "$REPO_ROOT/demos/bootstrapping/resources/scala/build.sbt" \
+    "s/version := \".*\"/version := \"$VERSION\"/"
+
 # Python (pyproject.toml): version = "X.Y.Z"
 patch "$REPO_ROOT/heads/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
@@ -102,7 +105,17 @@ patch "$REPO_ROOT/heads/python/pyproject.toml" \
 patch "$REPO_ROOT/demos/bootstrapping/resources/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
-# README.md: version references
+# TypeScript (package.json): "version": "X.Y.Z"
+patch "$REPO_ROOT/heads/typescript/package.json" \
+    "s/\"version\": \"[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\"/\"version\": \"$VERSION\"/"
+
+patch "$REPO_ROOT/demos/bootstrapping/resources/typescript/package.json" \
+    "s/\"version\": \"[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\"/\"version\": \"$VERSION\"/"
+
+# README.md: version references.
+# NOTE: README's "latest Hydra release" line states the latest *published* version
+# and is intentionally NOT bumped here — bump it only when the artifacts are actually
+# published (publish-before-tag), so the README never claims an unpublished release.
 patch "$REPO_ROOT/README.md" \
     "s/The current release is \*\*[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\*\*/The current release is \*\*$VERSION\*\*/"
 patch "$REPO_ROOT/README.md" \
