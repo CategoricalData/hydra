@@ -21,10 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # JDK 17+ is required: the published dist/java/<pkg>/ builds use the nmcp
+      # plugin, which the init script + javadoc path pull in.
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '11'
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
 
       - uses: actions/cache@v4
         with:
@@ -34,22 +38,27 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle', 'heads/java/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-
 
-      # hydra-ext is excluded from the Java build (and thus JavaDoc) pending the
-      # Java-coder limitation that keeps it out of the Maven Central publish set;
-      # restore :hydra-ext:javadoc here when hydra-ext is published to Maven Central.
-      # The init script makes Javadoc non-fatal: generated code carries cosmetic
-      # javadoc issues (unqualified @link refs #449, bad-HTML-entity warnings) that
-      # would otherwise fail the strict javadoc task. The generated build stays
-      # strict by default; this lenience applies to the Pages build only.
+      # After the #418 per-package split, the compilable + javadoc-able Java lives
+      # in dist/java/<pkg>/, each depending on `net.fortytwo.hydra:hydra-kernel`.
+      # JavaDoc on hydra-java therefore needs the kernel resolvable: publish it to
+      # the local Maven repo first. The init script makes Javadoc non-fatal — the
+      # generated code carries cosmetic javadoc issues (unqualified @link refs #449,
+      # bad-HTML-entity warnings) that would otherwise fail the strict task; the
+      # generated build stays strict by default, this lenience is for Pages only.
+      # hydra-ext is excluded (not in the Java build / Maven publish set); restore
+      # it here when hydra-ext is published to Maven Central.
       - name: Generate JavaDocs
-        working-directory: heads/java
-        run: ./gradlew :hydra-java:javadoc --init-script bin/javadoc-nonfatal.init.gradle
+        env:
+          INIT: ${{ github.workspace }}/heads/java/bin/javadoc-nonfatal.init.gradle
+        run: |
+          ( cd dist/java/hydra-kernel && gradle publishToMavenLocal -x test --init-script "$INIT" )
+          ( cd dist/java/hydra-java   && gradle javadoc --refresh-dependencies --init-script "$INIT" )
 
       - name: Assemble site
         run: |
           mkdir -p _site/hydra-java/javadoc
           cp docs/index.html _site/
-          cp -r packages/hydra-java/build/docs/javadoc/* _site/hydra-java/javadoc/
+          cp -r dist/java/hydra-java/build/docs/javadoc/* _site/hydra-java/javadoc/
 
       - uses: actions/upload-pages-artifact@v3
 
