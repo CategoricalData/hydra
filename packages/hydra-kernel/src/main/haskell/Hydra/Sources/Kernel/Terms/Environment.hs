@@ -167,7 +167,11 @@ reorderDefs = define "reorderDefs" $
       Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameRest")]) $
     "termDefsWrapped" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td"))
       (Pairs.second (var "partitioned")) $
-    -- Topologically sort term definitions by free variable dependencies
+    -- Topologically sort term definitions by free-variable dependencies, grouped into SCCs so that
+    -- mutually recursive definitions land together in one cluster while acyclic definitions
+    -- linearize in dependency order. The graph builder needs this: a definition cannot be installed
+    -- before any definition it references, and mutual recursion has no flat ordering that satisfies
+    -- the use-before-define rule.
     "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
       ("d" ~> cases _Definition (var "d") Nothing [
         _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])

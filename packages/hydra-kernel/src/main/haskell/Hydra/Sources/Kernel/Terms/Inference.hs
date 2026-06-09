@@ -100,7 +100,10 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns] L.++ kernelTypesModuleNames),
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Type inference following Algorithm W, extended for nominal terms and types")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just $ "Type inference for Hydra: Hindley-Milner with elaboration to System F."
+              ++ " Extends textbook Algorithm W with nominal types, explicit type abstraction"
+              ++ " and application, and class constraints. See the Inference wiki page for the"
+              ++ " full picture.")}
   where
     definitions = [
       toDefinition atOrFail,
@@ -707,7 +710,12 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   right (Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst") (var "iconstraints") (var "fcx3"))
 inferTypeOfLet :: TypedTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
 inferTypeOfLet = define "inferTypeOfLet" $
-  doc "Normalize a let term before inferring its type (Either version)" $
+  doc ("Normalize a let term before inferring its type (Either version)."
+    <> " The bindings are partitioned into strongly connected components and reorganized as nested"
+    <> " lets, one let per SCC, in dependency order. This is the standard Hindley-Milner treatment of"
+    <> " mutual recursion: each SCC is generalized once at its boundary (sound, because nothing inside"
+    <> " the cluster sees a polymorphic instance of its siblings), and acyclic bindings generalize"
+    <> " individually as usual.") $
   "fcx0" ~> "cx" ~> "let0" ~>
   "fcx" <~ (var "fcx0") $
   "bindings0" <~ Core.letBindings (var "let0") $

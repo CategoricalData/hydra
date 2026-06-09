@@ -115,7 +115,17 @@ buildGraph = define "buildGraph" $
     ("kv" ~> Optionals.map ("t" ~> pair (Pairs.first $ var "kv") (var "t")) (Pairs.second $ var "kv"))
     (Maps.toList $ var "environment")) $
   "mergedTerms" <~ Maps.union (var "elementTerms") (var "letTerms") $
-  -- Construction-time shadowing: remove any binding whose name matches a primitive
+  -- Construction-time filter: any local binding (let-bound or element-bound)
+  -- whose name collides with a primitive is dropped from the bindings map.
+  -- The effective override order is therefore primitive > local binding for
+  -- colliding names, even though the runtime lookup path at reduction would
+  -- otherwise consult local bindings first. This is non-standard scoping —
+  -- most ML-family languages let a local binding shadow a library symbol of
+  -- the same name — and may be revisited. See
+  -- https://github.com/CategoricalData/hydra/issues/435 for the discussion of
+  -- whether to switch to standard "local binding wins" scoping and resolve the
+  -- default-impl vs native-impl decision separately at primitive-registration
+  -- time.
   "filteredTerms" <~ Maps.filterWithKey ("k" ~> "_v" ~>
     Logic.not (Maps.member (var "k") (var "primitives"))) (var "mergedTerms") $
   -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)

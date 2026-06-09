@@ -228,15 +228,6 @@ same pattern. When in doubt, prefer a full `bin/sync.sh` call over a
 scoped one — warm-cache sync is cheap and being too narrow is what made
 this bug class possible in the first place.
 
-### `bin/sync.sh` does not run target-language tests
-
-`bin/sync.sh` regenerates code (Phases 1–5: DSL → JSON → assemble → cross-host
-coders → native DSL → JSON) and runs only the Haskell-side `stack test`. It exits 0
-even if a *target* language's tests would fail. To validate target runtimes, use
-`bin/test.sh` (the `/test` skill), a per-head `test-distribution.sh`, or the bootstrap
-demo. When asked "does sync pass?", check whether the user means codegen-clean or
-tests-green, and which entrypoint.
-
 ### Verify "pre-existing" claims against the fork point
 
 When a change surfaces a test failure, do not call it pre-existing
@@ -262,31 +253,20 @@ If another session is mid-sync, prefer waiting unless the user explicitly
 authorizes parallel syncs. Don't kill the other process — it belongs to a
 different session (see CLAUDE.md "Hard rules").
 
-### Phase 5 Java self-host wedging at "typed-so-far" was #372 — FIXED (2026-06-01)
+### Phase 5 Java self-host wedging at "typed-so-far" — fixed in #372, but watch for regression
 
 [#372](https://github.com/CategoricalData/hydra/issues/372) is fixed: Phase 5's
 `[hydra-java] 8 write / 8 infer / 142 typed-so-far` step now completes in ~24s. If you see
 it pinned at ~100% CPU for *tens of minutes* again, the cause is a regression in the Java
-coder's laziness emission, not the old latent cost — investigate the coder, don't wait it out.
+coder's laziness emission (eager `let`-bound `cases` defaults defeating thunking), not the
+old latent cost — investigate the coder, don't wait it out.
 
-Root cause (for history): the Java coder emitted `let`-bound `cases` defaults *eagerly*
-(`hydra.core.Term dflt = (recurse).apply(term);`) instead of wrapping them in
-`hydra.util.Lazy<>`, so the recursive `recurse` descended every child unconditionally —
-O(2^d) in nesting depth on `substTypesInTerm`. The fix made the coder thunk a `let` binding
-when `isComplexBinding && !isTrivialTerm` (matching Python's `shouldThunkBinding`), replacing
-an older `needsThunking` heuristic that only fired on RHS textually containing
-let/typeApp/typeLambda. The earlier hypothesis ("skip already-typed bindings in
-`inferModulesGiven`") was **wrong** — the exponential was in eager evaluation, not redundant
-inference. The fix lives in both `Coder.hs` (committed `259eae45e0`) and `Coder.java`
-(this branch); the per-package digest key (below) explains why the `Coder.hs` fix sat
-un-propagated in `dist/json` for weeks.
-
-- **A change that touches no java/python *coder* source does not need Phase 5 to re-run.**
-  Phase 5's output is a pure function of the `hydra.{java,python}.*` coder sources; a kernel
-  or `hydra.lib.*` edit (e.g. #402's `hydra.lib.chars` comments) leaves that output identical
-  to the prior green sync, so the committed `coder.json` already *is* the validated Phase-5
-  result. Validate such a change with `bin/test.sh` (which compiles/runs generated target
-  code, not the slow self-host inference) rather than fighting a Phase-5 wedge.
+A change that touches no java/python *coder* source does not need Phase 5 to re-run. Phase 5's
+output is a pure function of the `hydra.{java,python}.*` coder sources; a kernel or
+`hydra.lib.*` edit leaves that output identical to the prior green sync, so the committed
+`coder.json` already *is* the validated Phase-5 result. Validate such a change with
+`bin/test.sh` (which compiles/runs generated target code, not the slow self-host inference)
+rather than fighting a Phase-5 wedge.
 
 ### Bootstrap "Could not find module" early in compile is usually transient
 
@@ -511,36 +491,6 @@ that a forgotten input digest now surfaces as a named error instead of a silent 
 
 Documented in the build-system cache model
 ([docs/build-system.md §Cache files are not tracked](../docs/build-system.md#cache-files-are-not-tracked)).
-
-### "Found untyped bindings (after case hoisting)" usually means stale JSON field shapes
-
-A non-baseline package whose `dist/json/.../*.json` files were generated
-before a kernel record-field rename can carry stale field names that match
-no current `TermDefinition` shape, leaving definitions without a signature.
-Phase 1 then fails at the `checkBindingsTyped` gate. Seen during the #368
-merge: `dist/json/hydra-java/...` JSON files still had `"typeScheme": {...}`
-while `TermDefinition` had renamed the field to `"signature"` (#156), so every
-Java/Python definition lost its type and downstream inference saw a wall of
-untyped bindings.
-
-Post-#414 the error is more pointed: `checkBindingsTyped` now names each
-offending binding qualified by its source module (`<module> :: <name>`),
-states the expected-at-this-stage invariant, and explicitly suggests "stale
-dist/json field shapes after a kernel record rename (regenerate the affected
-package's JSON)". Record decoders also name the expected type on a shape
-mismatch ("expected a record of type T"). So the message points at the module
-to regenerate instead of dumping bare local names — that was the #368 pain
-(the failure surfaced at the gate but never said *where from*, costing ~10
-debug iterations). Note the contract: missing signatures are legitimate for
-DSL-defined modules *before* inference; the gate only rejects them on the
-post-inference / no-infer and derived-module paths.
-
-Recovery: regenerate the affected packages' JSON. If the rename only affects
-Java/Python packages (which native generators own per #344), the targeted
-fix is `bin/update-json-main --include-java-python` after busting the input
-caches. For other packages, run `assemble-distribution.sh <pkg>` explicitly.
-Resist the urge to patch one untyped binding at a time — the field rename
-hit every record in the package.
 
 ### Post-merge bootstrap patches when cached binaries expect old field shapes
 
@@ -784,13 +734,6 @@ is "unknown" if either:
 
 Always check both layers when debugging.
 
-### Primitive `implementation()` must not throw (Java)
-
-Higher-order primitives (those that take function arguments and use
-`Reduction.reduceTerm` internally) need a working `implementation()` that
-constructs term-level results, not one that throws on missing arg shapes.
-See [docs/recipes/adding-primitives.md](../docs/recipes/adding-primitives.md).
-
 ### Primitive definition list alphabetical-order trap
 
 The kernel validator (`hydra.validate.packaging`) requires the
@@ -898,34 +841,6 @@ the same path during a single `update-json-main` run.
 
 ## Host-specific (Java, Python, Scala, Lisp, TypeScript)
 
-### `hydra-java:compileJava` OOM during incremental rebuild
-
-Symptom: `Exception: java.lang.OutOfMemoryError thrown from the
-UncaughtExceptionHandler in thread "Memory manager"` during
-`:hydra-java:compileJava`, triggered by editing any non-trivial Java source
-in the rollup. The Gradle build daemon's `-Xmx` setting (whether configured
-via `org.gradle.jvmargs` or `gradle.properties`) does **not** apply to the
-forked compiler worker, which inherits a 512m default that's insufficient
-for the rollup's ~2000+ classes during incremental analysis.
-
-Fix is in `packages/hydra-java/build.gradle`:
-
-```groovy
-compileJava {
-    options.fork = true
-    options.forkOptions.memoryMaximumSize = '6g'
-}
-```
-
-This was added in commit `b2c046e87` after a Testing.java edit triggered the
-OOM. Adds 6g transient memory pressure only during compile — no runtime cost.
-
-Note: `gradle.properties` (anywhere — `heads/java/gradle.properties` or the
-repo root) is gitignored and exists as a developer-local escape hatch for
-`org.gradle.jvmargs` and other per-developer Gradle config — useful for local
-experimentation, but JVM args set there only affect the build daemon, not
-forked compiler workers, so it would not have fixed this OOM on its own.
-
 ### Java rollup needs matching DSL exclude when target syntax is excluded
 
 When `packages/hydra-java/build.gradle`'s `compileJava` block excludes a
@@ -1030,12 +945,6 @@ for the general bootstrap pattern; the TS-specific wrinkle is just
 that the AST lives in `Syntax.hs`, not the kernel.
 
 ## Testing & benchmarks
-
-### Floating-point test portability
-
-Use `roundedPrimCase1` / `roundedPrimCase2` for transcendental math tests.
-Linux CI and macOS local diverge on the last bits of trig/log/exp results.
-See [docs/recipes/extending-tests.md](../docs/recipes/extending-tests.md).
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`
 

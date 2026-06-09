@@ -608,15 +608,21 @@ def "Primitive" $
   record [
     "definition">: doc "Host-independent metadata (name, signature, purity, totality)" $
       packaging "PrimitiveDefinition",
-    "implementation">: doc "Concrete implementation" $
-      typing "InferenceContext" ~> graph "Graph" ~> list (core "Term") ~>
-        Types.either_ (errors "Error") (core "Term")
+    "implementation">: doc "Concrete, host-specific implementation" $
+      list (core "Term") ~> Types.either_ (errors "Error") (core "Term")
   ]
 ```
 
-(The Either-based implementation replaces the former `Flow` monad, removed in #245.
-The host-independent `PrimitiveDefinition` was split out from the implementation
-in #156; the `InferenceContext` parameter replaced the legacy `Context` in #368.)
+The implementation is a mapping from already-reduced argument terms to a result term, or an error.
+The interpreter strips annotations and reduces each argument before invoking the primitive,
+so the implementation can pattern-match the argument terms directly;
+a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it.
+This shape mirrors `PrimitiveDefinition.defaultImplementation`,
+allowing a host to derive its primitive shell from the same Hydra term that serves as the canonical reference implementation.
+
+(The `Either`-based implementation replaces the former `Flow` monad, removed in #245.
+The host-independent `PrimitiveDefinition` was split out from the implementation in #156.
+The carrier type still threads `InferenceContext` and `Graph` parameters pending the cleanup tracked in #446, sequenced with the `defaultImplementation` integration in #437.)
 
 #### Level 2: PrimitiveDefinition declaration (the canonical registry)
 

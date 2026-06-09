@@ -254,9 +254,13 @@ Primary entry point — the doc most likely to answer the question by task:
 | Task | Start here |
 |------|------------|
 | Set up a contributor environment (fresh checkout) | [docs/contributor-setup.md](docs/contributor-setup.md) — toolchain prerequisites tiered by scope; `bin/check-env.sh` probes what is installed |
+| Use Hydra as a library (library user, not contributor) | [docs/getting-started.md](docs/getting-started.md) — dependency coordinates and minimal-program walk-throughs per host |
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
 | Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, gap to #347 |
+| Understand the JSON wire format | [docs/json-format.md](docs/json-format.md) — tagged-union duality, optional-field rules, IEEE sentinels, integer threshold |
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
+| Understand design rationale (the "why" for each major choice) | [Design wiki](https://github.com/CategoricalData/hydra/wiki/Design) |
+| Understand type inference (HM + class constraints) | [Inference wiki](https://github.com/CategoricalData/hydra/wiki/Inference) |
 | Write Haskell / Java / Python DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) |
 | Add a primitive | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |
 | Promote Haskell to DSL | [docs/recipes/promoting-code.md](docs/recipes/promoting-code.md) |
@@ -355,22 +359,30 @@ Key rules:
 ## Hard rules
 
 These are non-negotiable and tend to be violated under pressure.
+Ordered roughly by violation frequency — the first few are the ones every session is at risk of hitting.
 
 1. **Never proceed with failures.** If tests fail, investigate and fix before moving on.
    Don't skip, don't ask whether to investigate, don't propose workarounds.
    The answer is always: fix the errors first.
-2. **Never edit generated files** (anything under `dist/`) except for deliberate
+2. **Haskell must pass first.** Always ensure `stack test` passes in `heads/haskell`
+   before syncing downstream implementations. A downstream failure traced to a
+   Haskell-side bug burns hours of cross-host investigation that the Haskell test
+   would have caught in seconds.
+3. **Never edit generated files** (anything under `dist/`) except for deliberate
    bootstrap patches that the next regeneration will overwrite.
    A `sed_inplace` call in a sync script that rewrites a generated file is an edit —
    as prohibited as manually opening the file.
    If generated output is wrong, fix the generator.
    See [Checking for design violations](docs/recipes/maintenance.md#checking-for-design-violations).
-3. **No post-generation patches.** If a hand-written file needs to sit under `dist/`
+4. **No post-generation patches.** If a hand-written file needs to sit under `dist/`
    because a test imports it from there, put the canonical copy in `heads/`
    and copy it into `dist/` from a sync script.
-4. **Haskell must pass first.** Always ensure `stack test` passes in `heads/haskell`
-   before syncing downstream implementations.
-5. **Never kill processes you do not own.** Other Claude sessions (or the user)
+5. **Never file a GitHub issue (or PR, comment, label, close) without showing the
+   draft and getting explicit approval first.** Write the full draft, show it in the
+   reply, and wait. "Draft the issue" or "write it up" means *show me*, not *file it* —
+   filing is a separate, explicit go-ahead. This applies to any action touching shared
+   project state. See `feedback_no_unauthorized_github_actions.md`.
+6. **Never kill processes you do not own.** Other Claude sessions (or the user)
    may be running long builds, syncs, or tests in parallel.
    Never use broad `pgrep -f` patterns like `sync-all`, `sync-haskell`, `stack`, etc.
    to find and kill processes —
@@ -378,11 +390,6 @@ These are non-negotiable and tend to be violated under pressure.
    Scope by CWD or absolute path; prefer killing only background tasks you spawned
    in this session, tracked by their task ID.
    When in doubt, ask first.
-6. **Never file a GitHub issue (or PR, comment, label, close) without showing the
-   draft and getting explicit approval first.** Write the full draft, show it in the
-   reply, and wait. "Draft the issue" or "write it up" means *show me*, not *file it* —
-   filing is a separate, explicit go-ahead. This applies to any action touching shared
-   project state. See `feedback_no_unauthorized_github_actions.md`.
 
 ## Mental models
 

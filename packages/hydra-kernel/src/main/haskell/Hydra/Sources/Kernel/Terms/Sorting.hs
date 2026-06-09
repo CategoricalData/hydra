@@ -70,7 +70,11 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for sorting."
       <> " This module includes an implementation of Tarjan's algorithm,"
       <> " originally based on GraphSCC by Iavor S. Diatchki:"
-      <> " https://hackage.haskell.org/package/GraphSCC."))}
+      <> " https://hackage.haskell.org/package/GraphSCC."
+      <> " Tarjan was chosen because it computes strongly connected components in O(V+E),"
+      <> " in a single pass, and yields the components in reverse topological order — exactly the"
+      <> " shape every consumer in the kernel (HM let-generalization, schema graph construction,"
+      <> " target-language emission) needs."))}
   where
    definitions = [
      toDefinition adjacencyListToMap,
