@@ -217,15 +217,11 @@
   (let* ((bs-graph (bootstrap-graph))
          (cx (funcall 'make-hydra_typing_inference_context 0 nil))
          (do-infer (first flags))
-         (do-expand (second flags))
-         (do-hoist-case (third flags))
-         (do-hoist-poly (fourth flags))
          (t0 (get-internal-real-time))
          (result (handler-case
-                   (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
-                     (funcall (funcall
+                   (funcall (funcall (funcall (funcall (funcall (funcall (funcall
                        (symbol-value 'hydra_codegen_generate_source_files)
-                       coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
+                       coder) language) do-infer)
                      bs-graph) universe-mods) mods-to-generate) cx)
                    (undefined-function (e)
                      (format t "~%UNDEFINED FUNCTION: ~A~%" (cell-error-name e))
