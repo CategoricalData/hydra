@@ -38,4 +38,5 @@
             (cons 'skipped skip)
             (cons 'totalTimeMs (cdr (assq 'totalTimeMs benchmark)))
             (cons 'subgroups (cdr (assq 'subgroups benchmark))))
-      total-ms)))
+      total-ms))
+  (exit (if (> fail 0) 1 0)))
