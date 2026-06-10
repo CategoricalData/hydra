@@ -66,7 +66,7 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-VERSION="$(cat "$HYDRA_ROOT/VERSION")"
+VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
 # The 0.16.0 Java publish set, in LEAVES-FIRST topological order.
 PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-java)
