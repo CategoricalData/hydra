@@ -123,7 +123,9 @@ jobs:
         if: steps.ci-run.outputs.proceed == 'true'
         run: |
           set -euo pipefail
-          out=_site/hydra-java/javadoc
+          # Combined API for all published Java packages (kernel, rdf, pg, java),
+          # so the path is the neutral /javadoc/ rather than /hydra-java/javadoc/.
+          out=_site/javadoc
           mkdir -p "$out"
 
           # Collect every .java file under the four published packages.
