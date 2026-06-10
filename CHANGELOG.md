@@ -15,6 +15,17 @@ they are documented here for completeness.
 
 ---
 
+## [0.16.1] - unreleased
+
+### Bug fixes
+
+- JavaDoc Pages publish rewritten to build a combined site from the CI-generated
+  `dist/java/` artifact, fixing the failure mode where the `pages.yml` workflow
+  ran against a bare checkout with no `dist/java/` present
+  ([#450](https://github.com/CategoricalData/hydra/issues/450)).
+
+---
+
 ## [0.16.0] - 2026-06-09
 
 Major themes: primitive-metadata reification, self-hosting coder DSLs with all
