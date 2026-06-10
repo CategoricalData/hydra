@@ -321,39 +321,62 @@
         ((or (= x +inf.0) (= x -inf.0)) (if (> x 0) "Infinity" "-Infinity"))
         ((= x 0.0) (if (eqv? x -0.0) "-0.0" "0.0"))
         ((or (< (safe-abs x) 0.1) (>= (safe-abs x) 1.0e7))
-         ;; Scientific notation needed. Use number->string and convert if needed.
+         ;; Scientific notation needed. Renormalize number->string output to
+         ;; Haskell's "D.DDDeN" form via pure string manipulation (no FP
+         ;; arithmetic — avoids ulp-error in log/exp that would corrupt the
+         ;; mantissa).
          (let* ((s (number->string x))
-                (has-e (let loop ((i 0))
-                         (cond ((>= i (string-length s)) #f)
-                               ((char=? (string-ref s i) #\e) #t)
-                               (else (loop (+ i 1)))))))
-           (if has-e
-               s  ;; Already scientific notation with full precision
-               ;; Decimal like "0.05" — convert to scientific via string manipulation.
-               ;; Find the first significant digit and shift the decimal point.
-               (let* ((neg (char=? (string-ref s 0) #\-))
-                      (digits (if neg (substring s 1 (string-length s))
-                                  s))
-                      ;; Strip "0." prefix and count leading zeros
-                      (after-dot (substring digits 2 (string-length digits)))
-                      (leading-zeros (let loop ((i 0))
-                                       (if (and (< i (string-length after-dot))
-                                                (char=? (string-ref after-dot i) #\0))
-                                           (loop (+ i 1)) i)))
-                      (sig-digits (substring after-dot leading-zeros (string-length after-dot)))
-                      ;; Strip trailing zeros from significant digits
-                      (sig-trimmed (let loop ((i (- (string-length sig-digits) 1)))
-                                     (if (and (> i 0) (char=? (string-ref sig-digits i) #\0))
-                                         (loop (- i 1))
-                                         (substring sig-digits 0 (+ i 1)))))
-                      (mantissa (string-append (substring sig-trimmed 0 1)
-                                               "."
-                                               (if (> (string-length sig-trimmed) 1)
-                                                   (substring sig-trimmed 1 (string-length sig-trimmed))
-                                                   "0")))
-                      (exp (- 0 leading-zeros 1))
-                      (sign (if neg "-" "")))
-                 (string-append sign mantissa "e" (number->string exp))))))
+                (neg (char=? (string-ref s 0) #\-))
+                (body (if neg (substring s 1 (string-length s)) s))
+                ;; Split body into mantissa-text and (optional) exponent N.
+                ;; Guile may return "4000000001.0" (no e) or "5.0e10" (with e).
+                (e-idx (let loop ((i 0))
+                         (cond ((>= i (string-length body)) #f)
+                               ((char=? (string-ref body i) #\e) i)
+                               (else (loop (+ i 1))))))
+                (mtext (if e-idx (substring body 0 e-idx) body))
+                (base-exp (if e-idx
+                              (string->number (substring body (+ e-idx 1) (string-length body)))
+                              0))
+                ;; Locate the decimal point in mtext. Should always be present
+                ;; for inexact reals; fall back to end-of-string if not.
+                (dot-idx (let loop ((i 0))
+                           (cond ((>= i (string-length mtext)) (string-length mtext))
+                                 ((char=? (string-ref mtext i) #\.) i)
+                                 (else (loop (+ i 1))))))
+                (digits-before (substring mtext 0 dot-idx))
+                (digits-after (if (< dot-idx (string-length mtext))
+                                  (substring mtext (+ dot-idx 1) (string-length mtext))
+                                  ""))
+                ;; Concatenated raw digit string and the implied decimal-point
+                ;; position (= len(digits-before)).
+                (all-digits (string-append digits-before digits-after))
+                (point-pos (string-length digits-before))
+                ;; Locate first nonzero digit. If the value is exactly zero
+                ;; the outer cond already returned, so a nonzero digit exists.
+                (first-nz (let loop ((i 0))
+                            (cond ((>= i (string-length all-digits)) 0)
+                                  ((char=? (string-ref all-digits i) #\0)
+                                   (loop (+ i 1)))
+                                  (else i))))
+                ;; Trim trailing zeros from the digit stream.
+                (last-nz (let loop ((i (- (string-length all-digits) 1)))
+                           (cond ((<= i first-nz) first-nz)
+                                 ((char=? (string-ref all-digits i) #\0)
+                                  (loop (- i 1)))
+                                 (else i))))
+                (sig (substring all-digits first-nz (+ last-nz 1)))
+                ;; Renormalized exponent: position of the first significant
+                ;; digit relative to the original decimal point, plus any
+                ;; exponent already encoded in the input string.
+                (exp (+ base-exp (- point-pos first-nz 1)))
+                (mantissa (string-append (substring sig 0 1)
+                                         "."
+                                         (if (> (string-length sig) 1)
+                                             (substring sig 1 (string-length sig))
+                                             "0")))
+                (sign (if neg "-" "")))
+           (string-append sign mantissa "e" (number->string exp))))
         (else (number->string x))))
 
     ;; Format a float32 value with minimum digits for unique representation
