@@ -80,7 +80,7 @@ echo ""
 step 1 $TOTAL_STEPS "Checking version synchronization"
 echo ""
 
-CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
+CANONICAL_VERSION=$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version 2>/dev/null || echo "")
 HASKELL_VERSION=$(grep '^version:' heads/haskell/package.yaml | awk '{print $2}')
 BOOT_HASKELL_VERSION=$(grep '^version:' demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
 JAVA_VERSION=$(grep "version = " heads/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
@@ -89,7 +89,7 @@ PYTHON_VERSION=$(grep '^version' heads/python/pyproject.toml | sed 's/.*"\(.*\)"
 BOOT_PYTHON_VERSION=$(grep '^version' demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 SCALA_VERSION=$(grep 'version :=' packages/hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
 
-echo "  VERSION:                              $CANONICAL_VERSION"
+echo "  hydra.json currentVersion:            $CANONICAL_VERSION"
 echo "  heads/haskell/package.yaml:           $HASKELL_VERSION"
 echo "  demos/bootstrapping/.../haskell:      $BOOT_HASKELL_VERSION"
 echo "  heads/java/build.gradle:              $JAVA_VERSION"
@@ -101,7 +101,7 @@ echo ""
 
 EXPECTED="$CANONICAL_VERSION"
 if [ -z "$EXPECTED" ]; then
-    echo "  ERROR: VERSION file is missing or empty"
+    echo "  ERROR: hydra.json currentVersion is missing or empty"
     EXPECTED="$HASKELL_VERSION"
 fi
 
