@@ -11,12 +11,23 @@ if [ -z "$OUTPUT_DIR" ]; then
     exit 1
 fi
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
+HYDRA_ELISP_DIR="$HYDRA_ROOT/heads/lisp/emacs-lisp"
+
+# Defensive re-copy of run-tests.el that setup-emacs-lisp-target.sh laid down.
+# In the scala-host sc->emacs-lisp cell (#456, sibling of #444), run-tests.el
+# was observed missing at test time, even though the setup script ran. Root
+# cause is unidentified; this guarantees the test step has the runner
+# regardless. Idempotent. Mirrors test-{clojure,common-lisp,scheme}-target.sh.
+if [ ! -f "$OUTPUT_DIR/run-tests.el" ]; then
+    cp "$HYDRA_ELISP_DIR/run-tests.el" "$OUTPUT_DIR/"
+fi
+
 # Copy hand-written test_env.el into the dist tree. The DSL emits
 # (require 'hydra.test.testEnv) and references
 # hydra_test_test_env_test_{context,graph} directly; this file provides them.
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-TEST_ENV_SRC="$HYDRA_ROOT/heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el"
+TEST_ENV_SRC="$HYDRA_ELISP_DIR/src/test/emacs-lisp/hydra/test/test_env.el"
 TEST_ENV_DST="$OUTPUT_DIR/src/test/emacs-lisp/hydra/test/test_env.el"
 if [ -f "$TEST_ENV_SRC" ]; then
     mkdir -p "$(dirname "$TEST_ENV_DST")"
