@@ -180,13 +180,13 @@ The script:
 
 End-to-end is ~110 seconds under PyPy (faster than the Haskell incremental pipeline)
 and ~500 seconds under CPython, once `dist/` is current. See
-[bin/update-python-json.md](../../bin/update-python-json.md) for background.
+[bin/update-python-json.md](https://github.com/CategoricalData/hydra/blob/main/bin/update-python-json.md) for background.
 
 > **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-python-from-python.sh`
 > automatically — the native Python DSL path is authoritative. The legacy
 > Haskell DSL copy at `packages/hydra-python/src/main/haskell/` remains as a
 > bootstrap fallback (used by Phase 1 on a cold checkout) and will be
-> retired before 0.16. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> retired before 0.16. See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
 > for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/python/` from the JSON
@@ -271,7 +271,7 @@ but matches Python's standard decimal behavior.
 ## Collections
 
 Hydra-Python uses an API/implementation split for list, map, and set values,
-mirroring [Hydra-Java](../hydra-java/README.md):
+mirroring [Hydra-Java](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/README.md):
 
 - **At the type level**, generated Python uses the standard
   [`collections.abc`](https://docs.python.org/3/library/collections.abc.html)
@@ -280,7 +280,7 @@ mirroring [Hydra-Java](../hydra-java/README.md):
   dependency-free; callers can pass any compatible collection.
 - **At the implementation level**, generated term-level literals construct
   immutable collection classes from
-  [`hydra.python.util`](../../heads/python/src/main/python/hydra/python/util/):
+  [`hydra.python.util`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python/hydra/python/util):
   `ConsList` (a frozen sequence), `PersistentMap` (a frozen map), and
   `PersistentSet` (a frozen set). Each implements the corresponding
   `collections.abc` ABC, so `ConsList` IS a `Sequence`, `PersistentMap` IS

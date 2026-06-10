@@ -6,10 +6,9 @@ infrastructure.
 `packages/hydra-wasm/` contains the **coder**: the Hydra DSL sources that
 translate kernel modules to WAT (the textual form of WebAssembly). The
 **runtime harness** — the Wasm runtime, the import/export plumbing, and
-the test driver — lives in [`heads/wasm/`](../../heads/wasm/).
+the test driver — lives in [`heads/wasm/`](https://github.com/CategoricalData/hydra/tree/main/heads/wasm).
 
-See [feature_325_wasm-plan.md](../../feature_325_wasm-plan.md) for the
-overall milestone plan, and [`heads/wasm/host-abi.md`](../../heads/wasm/host-abi.md)
+See [`heads/wasm/host-abi.md`](https://github.com/CategoricalData/hydra/blob/main/heads/wasm/host-abi.md)
 for the portable contract that runtime adapters honor.
 
 ## Layout
@@ -32,7 +31,7 @@ The default runtime is **Node.js** (>= 20). It uses only the built-in
 
 A second runtime (wasmtime) is planned; it will be added under
 `heads/wasm/runtimes/wasmtime/` once the host-import surface stabilizes.
-See [`heads/wasm/host-abi.md`](../../heads/wasm/host-abi.md) for the portable
+See [`heads/wasm/host-abi.md`](https://github.com/CategoricalData/hydra/blob/main/heads/wasm/host-abi.md) for the portable
 contract both runtimes honor.
 
 ### Prerequisites
@@ -78,7 +77,7 @@ traversal of `hydra.test.TestSuite` from Wasm memory.
 
 ## Milestones
 
-See `feature_325_wasm-plan.md`. In brief:
+In brief:
 
 - **M1** (here): harness + manifest + a handful of zero-arg constants run.
 - **M2**: ~20 first-order kernel functions run, first primitive library

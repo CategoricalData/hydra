@@ -30,7 +30,7 @@ This package contains the TypeScript coder DSL sources
 (`Coder.hs`).
 
 The TypeScript runtime — hand-written `lib/*`, primitive registry, test runner — lives at
-[heads/typescript/](../../heads/typescript/). The runtime is copied alongside the generated
+[heads/typescript/](https://github.com/CategoricalData/hydra/tree/main/heads/typescript). The runtime is copied alongside the generated
 kernel by `bin/sync-typescript.sh` so the published kernel can be consumed standalone.
 
 ## Getting started
