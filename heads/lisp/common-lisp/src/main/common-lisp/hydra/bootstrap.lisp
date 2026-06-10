@@ -278,9 +278,7 @@
     ;; Load main modules
     (format t "~%Step 1: Loading main modules from JSON...~%")
     (force-output)
-    (let* ((main-ns (coerce (read-manifest-field *json-dir* "mainModules") 'list))
-           (default-ns (coerce (read-manifest-field *json-dir* "defaultLibModules") 'list))
-           (all-ns (append main-ns default-ns))
+    (let* ((all-ns (coerce (read-manifest-field *json-dir* "mainModules") 'list))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (reduce #'+ (mapcar (lambda (m)
                                                  (length (cdr (assoc :definitions m))))

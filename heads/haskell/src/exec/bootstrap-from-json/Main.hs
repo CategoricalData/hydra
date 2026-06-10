@@ -288,15 +288,12 @@ main = do
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn ""
 
-  -- Load a single package's mainModules + defaultLibModules from its per-package
-  -- manifest. Returns the accumulated Modules; missing fields are treated as
-  -- empty.
+  -- Load a single package's mainModules from its per-package manifest.
+  -- Returns the accumulated Modules; a missing field is treated as empty.
   let loadPackageMain :: String -> IO [Module]
       loadPackageMain pkg = do
         let pkgDir = pkgMainDir pkg
-        mainNs <- readManifestFieldOrEmpty pkgDir "mainModules"
-        defaultNs <- readManifestFieldOrEmpty pkgDir "defaultLibModules"
-        let allNs = mainNs ++ defaultNs
+        allNs <- readManifestFieldOrEmpty pkgDir "mainModules"
         if Prelude.null allNs
           then return []
           else do
