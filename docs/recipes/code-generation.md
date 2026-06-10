@@ -504,12 +504,16 @@ against the now-updated source state.
 If you edit a synthesizer and only see partial propagation, run
 `/sync-haskell` a second time before debugging.
 
-This is a known limitation of the current cache key, which hashes the
-*input source* but not the *transform binary*. The fix is tracked in
-[#347 (Merkle trees for cache invalidation)](https://github.com/CategoricalData/hydra/issues/347):
-once the cache key incorporates a hash of the synthesizer binary
-itself, edits to the synthesizer will invalidate downstream outputs
-correctly and a single sync will suffice.
+This is a known limitation of the Phase-1 cache key, which hashes the
+*input source* but not the *transform binary* at this stage.
+[#347 (Merkle trees for cache invalidation)](https://github.com/CategoricalData/hydra/issues/347)
+addresses the transform side for **Layer 2** via the per-target generator
+stamp — `hash(kernel-id, coder-id, runtime-id)`, where each component's
+identity is the published host version when the host is published
+(`hydra.json:hostVersion`) or a content hash otherwise. See
+[build-system.md](../build-system.md). The Phase-1 synthesizer double-sync
+above is the narrower remaining case; until it is covered, run
+`/sync-haskell` twice when editing a synthesizer.
 
 ### Phase 1 cache doesn't hash `src/exec`
 

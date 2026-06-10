@@ -26,7 +26,7 @@ HYDRA_ROOT="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 KEEP=false
 [ "${1:-}" = "--keep" ] && KEEP=true
 
-VERSION="$(cat "$HYDRA_ROOT/VERSION")"
+VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 PKGS=(hydra-kernel hydra-haskell hydra)
 
 WORK="$(mktemp -d -t hydra-verify-dist-XXXXXX)"

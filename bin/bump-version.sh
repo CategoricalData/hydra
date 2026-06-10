@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
-# Propagate the version from the VERSION file to all implementation config files.
+# Propagate the CURRENT version (hydra.json:currentVersion) to all implementation
+# config files. hydra.json is the single source of truth for the version; the old
+# standalone VERSION file has been retired (#347).
+#
+# This bumps the package *release* version — each host's own package version and
+# its inter-package release dependency coordinates. It does NOT touch hostVersion
+# (the published-host version the build/sync depends on) — that has its own bump
+# script, bin/bump-host-version.sh.
 #
 # Usage:
-#   bin/bump-version.sh          # Read VERSION and patch all config files
-#   bin/bump-version.sh 0.16.0   # Set VERSION to 0.16.0 and patch all config files
+#   bin/bump-version.sh          # Read currentVersion and patch all config files
+#   bin/bump-version.sh 0.16.0   # Set currentVersion to 0.16.0 and patch all config files
 #   bin/bump-version.sh --help
 #
 # Files patched:
@@ -23,7 +30,7 @@ REPO_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
 source "$REPO_ROOT/bin/lib/common.sh"
 
-VERSION_FILE="$REPO_ROOT/VERSION"
+PACKAGES_PY="$REPO_ROOT/bin/lib/hydra-packages.py"
 
 case "${1:-}" in
     --help|-h)
@@ -32,19 +39,18 @@ case "${1:-}" in
         ;;
 esac
 
+# Validate the requested version before writing it.
 if [ $# -ge 1 ]; then
-    echo "$1" > "$VERSION_FILE"
+    if ! echo "$1" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+        die "'$1' does not look like a version (expected X.Y.Z)"
+    fi
+    "$PACKAGES_PY" set-current-version "$1"
 fi
 
-VERSION=$(tr -d '[:space:]' < "$VERSION_FILE")
+VERSION=$("$PACKAGES_PY" current-version)
 
 if [ -z "$VERSION" ]; then
-    die "VERSION file is empty"
-fi
-
-# Validate format
-if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-    die "'$VERSION' does not look like a version (expected X.Y.Z)"
+    die "hydra.json:currentVersion is empty"
 fi
 
 echo "Setting version to $VERSION"

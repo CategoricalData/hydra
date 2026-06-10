@@ -43,7 +43,7 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-VERSION="$(cat "$HYDRA_ROOT/VERSION")"
+VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-python)
 
 # --- Guard: dependency closure -----------------------------------------------
