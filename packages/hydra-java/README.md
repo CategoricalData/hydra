@@ -192,7 +192,7 @@ The script:
    kernel universe from `dist/json/hydra-kernel/`, discovers the Java DSL source
    modules via reflection, infers types for those that don't carry pre-computed
    type schemes (Coder ships its schemes pre-computed; see
-   [bin/update-java-json.md](../../bin/update-java-json.md) for the rationale),
+   [bin/update-java-json.md](https://github.com/CategoricalData/hydra/blob/main/bin/update-java-json.md) for the rationale),
    and writes the resulting JSON.
 
 End-to-end is ~30 seconds once `dist/` is current.
@@ -201,7 +201,7 @@ End-to-end is ~30 seconds once `dist/` is current.
 > automatically — the native Java DSL path is authoritative. The legacy
 > Haskell DSL copy at `packages/hydra-java/src/main/haskell/` remains as a
 > bootstrap fallback (used by Phase 1 on a cold checkout) and will be
-> retired before 0.16. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> retired before 0.16. See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
 > for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/java/` from the JSON
@@ -231,7 +231,7 @@ afterward (or do a full bootstrap demo via `bin/run-bootstrapping-demo.sh
 > `hydra.{python,haskell,lisp,typescript}.*` from per-language `dist/java/`
 > trees, so on a cold checkout Phase 5 will fail until those siblings
 > have been populated by `bin/sync.sh` (full matrix) or `bin/sync.sh
-> --hosts java --targets <every-language>`. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> --hosts java --targets <every-language>`. See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
 > §"`gradle :hydra-java:test` needs all coder language packages in `dist/java/`".
 
 ## Design notes
