@@ -42,7 +42,7 @@ public interface Types {
 
     /**
      * Attach an annotation map to a type, wrapping it as a TermMap per Hydra's
-     * map convention (#386 — annotation is now a Term, not Map<Name, Term>).
+     * map convention (#386 — annotation is now a Term, not {@code Map<Name, Term>}).
      * Example: annot(Map.of(name("min"), int32(0)), int32())
      * @param ann the annotation map
      * @param base the base type
