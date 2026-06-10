@@ -518,6 +518,27 @@ The following are Python-specific release steps:
   * **PyPI uploads are immutable.** Once `<pkg>-<version>` is uploaded it cannot be replaced
     (you would bump to `<version>.post1`). There is no candidate stage as on Hackage, so the
     `twine check` pass + a clean build are the pre-flight; verify before `--upload`.
+  * **Dry-run on TestPyPI first.** Because the real upload is irreversible and has no candidate
+    stage, validate the whole upload path on [TestPyPI](https://test.pypi.org/) before the
+    production upload. TestPyPI is a throwaway sandbox: it exercises authentication, metadata
+    acceptance, and project naming end-to-end without consuming a real version number.
+    ```bash
+    heads/python/bin/publish-pypi.sh                          # build wheels+sdists into wheels/
+    twine check wheels/*                                      # metadata pre-flight
+    # Dry-run to TestPyPI (needs a SEPARATE test.pypi.org account + token):
+    TWINE_USERNAME=__token__ TWINE_PASSWORD='pypi-<TESTPYPI-token>' \
+      twine upload --repository-url https://test.pypi.org/legacy/ wheels/*
+    # If that succeeds, do the real upload:
+    heads/python/bin/publish-pypi.sh --upload
+    ```
+    Caveats specific to TestPyPI:
+    - **Separate credentials.** TestPyPI has its own accounts and API tokens, distinct from
+      production PyPI; a production token returns `403` there and vice versa.
+    - **Not a release.** TestPyPI is periodically wiped — a successful dry-run does *not* publish
+      the version; you still run the production upload afterward.
+    - **Inter-package deps won't resolve.** A `pip install` *from* TestPyPI fails to find Hydra's
+      own dependencies (e.g. `hydra-python` needs `hydra-kernel`), because those resolve against
+      real PyPI. This is expected — the dry-run validates *upload*, not cross-package install.
   * **`403 Forbidden` after the token is accepted** is a *permissions* problem, not a bad token:
     the token's account is not Owner/Maintainer of that project, or the token is scoped to other
     projects. See Access prerequisites. twine stops at the first failure, so check what (if
