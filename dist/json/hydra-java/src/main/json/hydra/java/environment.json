@@ -91,14 +91,14 @@
                     "type": {
                       "annotated": {
                         "body": {"variable": "hydra.packaging.ModuleName"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module name context"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]}}}},
                   {
                     "name": "packages",
                     "type": {
                       "annotated": {
                         "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]}}}},
                   {
                     "name": "branchVars",
                     "type": {

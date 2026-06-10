@@ -112,11 +112,18 @@ to investigating and fixing it.
   sessions. If you hit a permission prompt and pause, the coordinator
   sees a marker file with your worktree name and can act.
 
-### IMPORTANT: never ask the user free-form questions interactively
+### IMPORTANT: never call AskUserQuestion. Use the coordinator inbox instead.
 
 The human is supervising N parallel sub-sessions and cannot watch each pane.
-If you would normally pause your turn to ask the user a clarifying question,
-**don't**. Instead, route the question through the coordinator:
+**Your settings.json denies the \`AskUserQuestion\` tool by default** — calling
+it will fail. This is intentional: every multiple-choice prompt blocks your
+turn while the human has to cycle through every pane to answer, which doesn't
+scale across sessions.
+
+The same principle applies to any other form of pause-and-wait-for-the-user:
+don't end your turn with "Should I do X or Y?" expecting the human to answer.
+The human will not see it in time. Instead, route the question through the
+coordinator:
 
 1. Write a message to the coordinator's inbox at
    \`../feature_409_bootstrap_everything/claude-hydra-messages/inbox/\`
@@ -127,6 +134,9 @@ If you would normally pause your turn to ask the user a clarifying question,
    (b) if the question is truly blocking, end your turn with a brief
    "blocked — waiting on coordinator's answer" status; your next inbox
    pickup will include the reply.
+3. **Default to (a).** Making a judgment call and writing it in the plan-doc
+   is almost always better than blocking. The coordinator can redirect you
+   later if the choice was wrong; if it was right, you've saved a round-trip.
 3. The coordinator may answer directly (your inbox surfaces it on the next
    prompt) or escalate to the human and relay the answer back.
 

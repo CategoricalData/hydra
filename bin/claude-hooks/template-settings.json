@@ -4,7 +4,10 @@
       {
         "matcher": "",
         "hooks": [
-          {"type": "command", "command": "bin/claude-hooks/inbox-hook.sh"}
+          {
+            "type": "command",
+            "command": "bin/claude-hooks/inbox-hook.sh"
+          }
         ]
       }
     ],
@@ -12,7 +15,10 @@
       {
         "matcher": "",
         "hooks": [
-          {"type": "command", "command": "bin/claude-hooks/notification-hook.sh"}
+          {
+            "type": "command",
+            "command": "bin/claude-hooks/notification-hook.sh"
+          }
         ]
       }
     ],
@@ -20,7 +26,10 @@
       {
         "matcher": "",
         "hooks": [
-          {"type": "command", "command": "bin/claude-hooks/stop-hook.sh"}
+          {
+            "type": "command",
+            "command": "bin/claude-hooks/stop-hook.sh"
+          }
         ]
       }
     ]
@@ -123,6 +132,10 @@
       "Bash(sed -n *)",
       "Bash(diff -rq *)",
       "Bash(diff -u *)"
+    ],
+    "defaultMode": "bypassPermissions",
+    "deny": [
+      "AskUserQuestion"
     ]
   }
 }

@@ -1484,13 +1484,18 @@ declarationForRecordType' = def "declarationForRecordType'" $
     "memberVars'" <<~ (Eithers.mapList (lambda "p" $ addComment @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")) @@ var "cx" @@ var "g")
       (Lists.zip (var "memberVars") (var "fields"))) $
     "elNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "elName")) $
+    "linkTargetStr" <~ Optionals.cases (var "parentName")
+      (var "elNameStr")
+      (lambda "pn" $ Strings.cat2
+        (Strings.cat2 (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "pn")) (string "."))
+        (JavaUtilsSource.sanitizeJavaName @@ Util.qualifiedNameLocal (Names.qualifyName @@ var "elName"))) $
     "withMethods" <<~ (Logic.ifElse (Equality.gt (Lists.length (var "fields")) (int32 1))
       (Eithers.mapList (lambda "f" $
           "decl" <<~ (recordWithMethod @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "f" @@ var "cx" @@ var "g") $
           "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
           "comment" <~ Strings.cat (list [
             string "Returns a copy of this {@link ",
-            var "elNameStr",
+            var "linkTargetStr",
             string "} with {@code ",
             var "fname",
             string "} replaced."]) $
@@ -1499,7 +1504,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
       (right (list ([] :: [TypedTerm Java.ClassBodyDeclarationWithComments])))) $
     "cons" <<~ (recordConstructor @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "cx" @@ var "g") $
     "paramLines" <<~ (Eithers.mapList (lambda "f" $
-      "fname" <~ (unwrap _Name @@ Core.fieldTypeName (var "f")) $
+      "fname" <~ (JavaUtilsSource.sanitizeJavaName @@ (unwrap _Name @@ Core.fieldTypeName (var "f"))) $
       "mDoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "f") $
       right (Optionals.cases (var "mDoc") (string "") (lambda "d" $ Strings.cat (list [
           string "@param ",
@@ -1512,7 +1517,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
       (var "paramLines") $
     "consBaseComment" <~ Strings.cat (list [
       string "Constructs an immutable {@link ",
-      var "elNameStr",
+      var "linkTargetStr",
       string "}."]) $
     "consComment" <~ Logic.ifElse (Lists.null (var "nonEmptyParamLines"))
       (var "consBaseComment")
@@ -1589,6 +1594,10 @@ declarationForUnionType = def "declarationForUnionType" $
         "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
         "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
         "varNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "varName")) $
+        "varLocalStr" <~ (JavaUtilsSource.sanitizeJavaName @@ Util.qualifiedNameLocal (Names.qualifyName @@ var "varName")) $
+        "linkVarNameStr" <~ Strings.cat2
+          (Strings.cat2 (var "elNameStr") (string "."))
+          (var "varLocalStr") $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
             @@ var "varName" @@ nothing)) $
@@ -1596,7 +1605,7 @@ declarationForUnionType = def "declarationForUnionType" $
         "resultR" <~ (JavaUtilsSource.javaTypeToJavaResult @@ (JavaDsl.typeReference (asTerm JavaUtilsSource.visitorTypeVariable))) $
         "comment" <~ Strings.cat (list [
           string "Visit the {@link ",
-          var "varNameStr",
+          var "linkVarNameStr",
           string "} case."]) $
         pair (var "comment")
           (JavaUtilsSource.interfaceMethodDeclaration @@ list ([] :: [TypedTerm Java.InterfaceMethodModifier]) @@ list ([] :: [TypedTerm Java.TypeParameter])
@@ -1640,6 +1649,10 @@ declarationForUnionType = def "declarationForUnionType" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
         "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
         "varNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "varName")) $
+        "varLocalStr" <~ (JavaUtilsSource.sanitizeJavaName @@ Util.qualifiedNameLocal (Names.qualifyName @@ var "varName")) $
+        "linkVarNameStr" <~ Strings.cat2
+          (Strings.cat2 (var "elNameStr") (string "."))
+          (var "varLocalStr") $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
             @@ var "varName" @@ nothing)) $
@@ -1652,7 +1665,7 @@ declarationForUnionType = def "declarationForUnionType" $
             (JavaUtilsSource.javaMethodInvocationToJavaPrimary @@ var "mi")))) $
         "comment" <~ Strings.cat (list [
           string "Visit the {@link ",
-          var "varNameStr",
+          var "linkVarNameStr",
           string "} case."]) $
         pair (var "comment")
           (JavaUtilsSource.interfaceMethodDeclaration @@ var "defaultMod" @@ list ([] :: [TypedTerm Java.TypeParameter])

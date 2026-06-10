@@ -340,10 +340,11 @@
     ((string? obj) (list 'string obj))
     ((null? obj) (list 'array '()))  ;; empty JSON arrays
     ((and (pair? obj) (pair? (car obj)) (string? (caar obj)))
-     ;; alist (JSON object)
+     ;; alist (JSON object); each entry becomes a 2-element Pair list
+     ;; per the Hydra JSON model (Value.object = [Pair String Value]).
      (list 'object
            (map (lambda (pair)
-                  (cons (car pair) (scheme-to-hydra-json (cdr pair))))
+                  (list (car pair) (scheme-to-hydra-json (cdr pair))))
                 obj)))
     ((list? obj)
      ;; list (JSON array)
@@ -417,9 +418,12 @@
   (let ((bs-graph (bootstrap-graph))
         (schema-map (bootstrap-schema-map)))
     (map (lambda (ns)
-           (display (string-append "  Loaded: " ns "\n"))
+           (display (string-append "  Loading: " ns "\n"))
            (force-output (current-output-port))
-           (load-module-from-json bs-graph schema-map json-dir ns))
+           (let ((result (load-module-from-json bs-graph schema-map json-dir ns)))
+             (display (string-append "  Loaded:  " ns "\n"))
+             (force-output (current-output-port))
+             result))
          namespaces)))
 
 ;; ============================================================================
