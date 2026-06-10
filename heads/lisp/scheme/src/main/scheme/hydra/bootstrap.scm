@@ -340,10 +340,11 @@
     ((string? obj) (list 'string obj))
     ((null? obj) (list 'array '()))  ;; empty JSON arrays
     ((and (pair? obj) (pair? (car obj)) (string? (caar obj)))
-     ;; alist (JSON object)
+     ;; alist (JSON object); each entry becomes a 2-element Pair list
+     ;; per the Hydra JSON model (Value.object = [Pair String Value]).
      (list 'object
            (map (lambda (pair)
-                  (cons (car pair) (scheme-to-hydra-json (cdr pair))))
+                  (list (car pair) (scheme-to-hydra-json (cdr pair))))
                 obj)))
     ((list? obj)
      ;; list (JSON array)
