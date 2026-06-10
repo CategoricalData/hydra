@@ -381,11 +381,35 @@ a Java-coder change invalidates only Java; an edit to `heads/python/src/main/` i
 only Python. This is the desired precision: the dependency graph determines the
 invalidation graph.
 
-`component_identity` is the swappable layer. Today every host is built from local source,
-so it returns a content hash of `packages/<pkg>/src/main/haskell/**`. After
-[#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts),
-it will branch on published-vs-local and return the pinned version string for published
-hosts. The composition above is unchanged either way; only the leaf computation differs.
+`component_identity` is the swappable layer, and it now has two modes:
+
+- **Published-host mode.** When `<pkg>` resolves to a published-host version via
+  `hydra.json` — the global `hostVersion`, or a per-host `hostVersionOverrides` entry —
+  the identity is the version string `host:<pkg>:<ver>`. In this mode the build is
+  conceptually depending on the published artifact, so **local source edits to that
+  package do not change its identity**: the Layer 2 cache stays warm until the pinned
+  version bumps. Tweaking a comment in `hydra.graph` no longer forces a rebuild of every
+  downstream target. The resolution lives in `bin/lib/hydra-packages.py` (`host-version`),
+  keyed off the `PUBLISHED_HOSTS` allowlist there.
+- **Local-source mode (the migration shim).** When `<pkg>` is not a consumed published
+  host, the identity is a content hash of `packages/<pkg>/src/main/haskell/**`, exactly as
+  before — a source edit invalidates the stamp. This preserves correct invalidation while
+  iterating on a host that isn't yet (or shouldn't be) consumed from a release.
+
+The version basis is the right Merkle key for a published host: bumping `hostVersion`
+(via `bin/bump-host-version.sh`) changes the kernel-id leaf, which ripples through every
+target's stamp; a single bad host can be pinned back via `hostVersionOverrides`, which
+invalidates only that host's stamp. This is the cache half of
+[#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts):
+#347 wires the cache to key off published versions; #370 makes the build actually consume
+those published artifacts (the host-dependency coordinates — Stack `extra-deps`, Gradle/pip
+deps — do not exist yet).
+
+Note a cross-host asymmetry that #370 must navigate but #347 does not: the Maven Central
+(Java) and PyPI (Python) artifacts are directly runnable (bytecode JARs / importable
+wheels), whereas the Hackage `hydra-kernel`/`hydra-haskell` packages are library-only (the
+codegen executables live in `heads/haskell/` and are unpublished). `component_identity`
+sidesteps this — it only needs a version *string*, which all three ecosystems expose.
 
 #### Retired: `encoderId`
 
@@ -429,11 +453,15 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
   invalidated unless they themselves changed. The current design treats the per-package
   digest as the unit of invalidation, not the file-level dependency DAG. See [Remaining
   gaps](#remaining-gaps).
-- ❌ Version-pin path for hosts. Today every host is built from local source, so the
-  generator stamp uses content hashes. Once [#370](https://github.com/CategoricalData/hydra/issues/370)
-  ships hosts as published artifacts, `component_identity` will branch on
-  published-vs-local and return the version string for published hosts. The composition
-  is unchanged; only the leaf computation differs.
+- ✅ Version-pin path for published hosts. `component_identity` returns
+  `host:<pkg>:<ver>` for any host that resolves to a published version via `hydra.json`
+  (`hostVersion` / `hostVersionOverrides`), falling back to a local content hash for
+  hosts built from source (the migration shim). The generator stamp therefore keys off
+  the published host version for published hosts — a kernel-version bump invalidates
+  every target; a per-host override invalidates only that host. See
+  [The per-target generator stamp](#the-per-target-generator-stamp). This is the cache
+  half of [#370](https://github.com/CategoricalData/hydra/issues/370); the build does
+  not yet *consume* the published artifacts (that is #370 proper).
 
 ## Operational entry points
 
@@ -470,16 +498,25 @@ change at the root propagates exactly to dependents. Substantially overlaps with
 [#329 (definition-level change detection)](https://github.com/CategoricalData/hydra/issues/329);
 worth treating as one piece of work.
 
-### 2. Version-pin path for published hosts (T-side)
+### 2. Consuming published hosts in the build (T-side) — cache half done
 
-The compositional generator stamp is in place, but every `component_identity` call still
-returns a content hash because no host is published yet. After
-[#370](https://github.com/CategoricalData/hydra/issues/370) lands the publishing
-machinery, `component_identity` needs a branch: when the package has a pinned published
-version in this build's manifest, return that version string; otherwise fall back to the
-current content hash (the migration-shim case).
+The cache half of this is **resolved**: `component_identity` returns the published host
+version (`host:<pkg>:<ver>`) for any host pinned in `hydra.json`, with a local-content-hash
+fallback for the shim case (see
+[The per-target generator stamp](#the-per-target-generator-stamp)). The generator stamp
+now correctly keys off published versions, so a build that depends on a published host
+cache-hits across syncs until the pin bumps.
 
-This is a small, well-scoped change — one function body — gated on #370.
+What remains is [#370](https://github.com/CategoricalData/hydra/issues/370) proper: making
+the build *actually consume* the published artifacts instead of compiling the host from
+local source. That means host-dependency coordinates that do not exist yet — Stack
+`extra-deps` for the Hackage libraries, Gradle/pip deps for the Maven/PyPI artifacts —
+plus a local-override escape hatch for the migration-shim case. Note the cross-host
+asymmetry: Maven (Java) and PyPI (Python) artifacts are directly runnable, while the
+Hackage packages are library-only (the codegen executables are unpublished), so the
+Haskell path needs the published library plus locally-compiled exe wrappers (or a future
+published tools package). `bin/bump-host-version.sh` already owns `hydra.json:hostVersion`
+and will gain the coordinate rewrites when those sites exist.
 
 ### 3. `modulesToGraph` realloc per Phase 1 iteration
 
@@ -525,8 +562,10 @@ definition-level checksums.
 
 **T-side: compositional transform identity.**
 Per-target generator stamp = `hash(kernel-id, coder-id, runtime-id)`. Each component
-is a version pin when published, a content hash when local. Already shipped in its
-content-hash form; the version-pin path activates with #370.
+is a published-version pin (`host:<pkg>:<ver>` from `hydra.json`) when the host is
+published, a content hash when built from local source. Both forms shipped under #347;
+#370 remains for making the build *consume* the published artifact rather than just
+keying the cache off its version.
 
 Both pieces are independent and can land separately. The T-side is closer to done.
 

@@ -66,16 +66,36 @@ compute_generator_stamp() {
     } | shasum -a 256 | awk '{print substr($1,1,16)}'
 }
 
-# Identity of a Hydra package. Today: hash of every Haskell source under
-# packages/<pkg>/src/main/haskell/ — this transitively covers the package's
-# DSL sources, manifests, and (for the kernel) all the json/encode/decode
-# modules previously fingerprinted by Hydra.Digest.encoderId (now retired).
+# Identity of a Hydra package, used as a component of the per-target generator
+# stamp. Two modes:
 #
-# Post-#370 swap point: when the package is available as a published
-# artifact pinned in this build's manifest, return the version string
-# instead. Single-function change; callers don't need updating.
+#   1. Published-host mode (#347/#370): when <pkg> resolves to a published-host
+#      version via hydra.json (hostVersion, or a per-host hostVersionOverrides
+#      entry), the identity is the version string `host:<pkg>:<ver>`. In this
+#      mode the build is conceptually depending on the published artifact, so
+#      local source edits to <pkg> do NOT change its identity — the cache stays
+#      warm until the pinned version bumps. That is the #370 speed property
+#      ("don't rebuild on every comment tweak"). The per-package resolution
+#      lives in bin/lib/hydra-packages.py (`host-version`), keyed off the
+#      PUBLISHED_HOSTS allowlist there.
+#
+#   2. Local-source mode (the migration shim): when <pkg> is NOT a consumed
+#      published host, fall back to a hash of every Haskell source under
+#      packages/<pkg>/src/main/haskell/. This transitively covers the package's
+#      DSL sources, manifests, and (for the kernel) all the json/encode/decode
+#      modules previously fingerprinted by Hydra.Digest.encoderId (now retired).
+#      A source edit invalidates the stamp, exactly as before publishing.
+#
+# This is the swap point #347 wired and #370 builds on. Single function;
+# callers (compute_generator_stamp) don't need updating.
 component_identity() {
     local pkg="$1"
+    local ver
+    if ver=$("$HYDRA_ROOT_DIR/bin/lib/hydra-packages.py" host-version "$pkg" 2>/dev/null) \
+            && [ -n "$ver" ]; then
+        printf 'host:%s:%s' "$pkg" "$ver"
+        return
+    fi
     local src_dir="$HYDRA_ROOT_DIR/packages/$pkg/src/main/haskell"
     if [ -d "$src_dir" ]; then
         find "$src_dir" -type f -name '*.hs' 2>/dev/null \

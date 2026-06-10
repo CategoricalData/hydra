@@ -72,7 +72,7 @@ case "$PKG" in
     *) echo "ERROR: unsupported package '$PKG' (expected hydra-kernel|hydra-haskell|hydra)" >&2; exit 1 ;;
 esac
 
-VERSION="$(cat "$HYDRA_ROOT/VERSION")"
+VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 mkdir -p "$OUT_DIR"
 # Resolve OUT_DIR to an absolute path: the sdist step `cd`s into the staging
 # dir before copying the tarball out, so a relative --out would break there.
