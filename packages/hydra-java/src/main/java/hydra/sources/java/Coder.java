@@ -3038,13 +3038,32 @@ public class Coder {
                                         var("g"))),
                                 Lists.zip(var("memberVars"), var("fields"))),
                             lambda("memberVars'",
-                                let("elNameStr",
-                                    apply(
-                                        unwrap(Identifier.TYPE_),
+                                let(java.util.Arrays.asList(
+                                    field("elNameStr",
                                         apply(
-                                            ref(Utils.nameToJavaName),
-                                            var("aliases"),
-                                            var("elName"))),
+                                            unwrap(Identifier.TYPE_),
+                                            apply(
+                                                ref(Utils.nameToJavaName),
+                                                var("aliases"),
+                                                var("elName")))),
+                                    field("linkTargetStr",
+                                        Optionals.cases(
+                                            var("parentName"),
+                                            var("elNameStr"),
+                                            lambda("pn",
+                                                Strings.cat2(
+                                                    Strings.cat2(
+                                                        apply(
+                                                            unwrap(Identifier.TYPE_),
+                                                            apply(
+                                                                ref(Utils.nameToJavaName),
+                                                                var("aliases"),
+                                                                var("pn"))),
+                                                        string(".")),
+                                                    apply(
+                                                        ref(Utils.sanitizeJavaName),
+                                                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL,
+                                                            apply(var("hydra.names.qualifyName"), var("elName"))))))))),
                                     Eithers.bind(
                                         Logic.ifElse(
                                             Equality.gt(Lists.length(var("fields")), int32(1)),
@@ -3069,7 +3088,7 @@ public class Coder {
                                                                     Strings.cat(
                                                                         list(
                                                                             string("Returns a copy of this {@link "),
-                                                                            var("elNameStr"),
+                                                                            var("linkTargetStr"),
                                                                             string("} with {@code "),
                                                                             var("fname"),
                                                                             string("} replaced.")))),
@@ -3095,8 +3114,10 @@ public class Coder {
                                                             lambda("f",
                                                                 let("fname",
                                                                     apply(
-                                                                        unwrap(Name.TYPE_),
-                                                                        proj(FieldType.TYPE_, FieldType.NAME, "f")),
+                                                                        ref(Utils.sanitizeJavaName),
+                                                                        apply(
+                                                                            unwrap(Name.TYPE_),
+                                                                            proj(FieldType.TYPE_, FieldType.NAME, "f"))),
                                                                     Eithers.bind(
                                                                         apply(
                                                                             var("hydra.annotations.commentsFromFieldType"),
@@ -3127,7 +3148,7 @@ public class Coder {
                                                                     Strings.cat(
                                                                         list(
                                                                             string("Constructs an immutable {@link "),
-                                                                            var("elNameStr"),
+                                                                            var("linkTargetStr"),
                                                                             string("}.")))),
                                                                 field("consComment",
                                                                     Logic.ifElse(
@@ -3398,6 +3419,17 @@ public class Coder {
                                                                     ref(Utils.nameToJavaName),
                                                                     var("aliases"),
                                                                     var("varName")))),
+    field("varLocalStr",
+                                                            apply(
+                                                                ref(Utils.sanitizeJavaName),
+                                                                proj(QualifiedName.TYPE_, QualifiedName.LOCAL,
+                                                                    apply(var("hydra.names.qualifyName"), var("varName"))))),
+    field("linkVarNameStr",
+                                                            Strings.cat2(
+                                                                Strings.cat2(
+                                                                    var("elNameStr"),
+                                                                    string(".")),
+                                                                var("varLocalStr"))),
     field("varRef",
                                                             apply(
                                                                 ref(Utils.javaClassTypeToJavaType),
@@ -3424,7 +3456,7 @@ public class Coder {
                                                             Strings.cat(
                                                                 list(
                                                                     string("Visit the {@link "),
-                                                                    var("varNameStr"),
+                                                                    var("linkVarNameStr"),
                                                                     string("} case."))))),
                                                         pair(
                                                             var("comment"),
@@ -3574,6 +3606,17 @@ public class Coder {
                                                                     ref(Utils.nameToJavaName),
                                                                     var("aliases"),
                                                                     var("varName")))),
+    field("varLocalStr",
+                                                            apply(
+                                                                ref(Utils.sanitizeJavaName),
+                                                                proj(QualifiedName.TYPE_, QualifiedName.LOCAL,
+                                                                    apply(var("hydra.names.qualifyName"), var("varName"))))),
+    field("linkVarNameStr",
+                                                            Strings.cat2(
+                                                                Strings.cat2(
+                                                                    var("elNameStr"),
+                                                                    string(".")),
+                                                                var("varLocalStr"))),
     field("varRef",
                                                             apply(
                                                                 ref(Utils.javaClassTypeToJavaType),
@@ -3619,7 +3662,7 @@ public class Coder {
                                                             Strings.cat(
                                                                 list(
                                                                     string("Visit the {@link "),
-                                                                    var("varNameStr"),
+                                                                    var("linkVarNameStr"),
                                                                     string("} case."))))),
                                                         pair(
                                                             var("comment"),
