@@ -529,6 +529,29 @@ Fix: `find .stack-work -name <exe> -type f -delete && stack build`. The
 forced relink restores the expected behavior. Suspect this any time a
 binary's behavior contradicts source you know you edited.
 
+### A version bump forces a full `.stack-work` recompile on the next sync
+
+Bumping the version (now `hydra.json:currentVersion` → propagated by
+`bin/bump-version.sh` into `heads/haskell/package.yaml`) changes the
+`hydra-N.N.N` package id, which invalidates the entire `.stack-work` build:
+the next `/sync-haskell` or `/sync` recompiles all ~782 modules from scratch
+(20–30+ min on a cold tree), even though no Haskell source changed. This is
+expected, not a regression — the log shows `hydra-0.16.0: unregistering` /
+`Configuring hydra-0.16.1...` at Step 1. Budget for it when verifying a
+version-touching branch; a no-op sync after the bump still pays the full
+compile once, then warms.
+
+### Version state lives in `hydra.json`, not a `VERSION` file (#347)
+
+The standalone `VERSION` file was retired in #347. `hydra.json` now holds
+`currentVersion` (the release version, propagated by `bin/bump-version.sh`)
+and `hostVersion` (the published-host version the build cache keys off, bumped
+by `bin/bump-host-version.sh`; optional per-host `hostVersionOverrides`). Read
+either via `bin/lib/hydra-packages.py current-version` / `host-version <pkg>`.
+The per-target generator stamp's `component_identity` returns `host:<pkg>:<ver>`
+for published hosts (so local source edits don't bust the Layer-2 cache) and a
+content hash otherwise (the migration shim). See `docs/build-system.md`.
+
 ### The full-matrix `/bootstrap all` has expected-fail cells — don't read them as regressions
 
 `bin/run-bootstrapping-demo.sh --hosts all --targets all` is a **4 hosts × 9 targets = 36** matrix

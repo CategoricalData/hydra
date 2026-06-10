@@ -72,25 +72,39 @@ account lacks upload rights for that project, not a bad token.
 ## Version synchronization
 
 All implementations share a single version number.
-The canonical version lives in the `VERSION` file at the repository root,
-and `bin/bump-version.sh` propagates it to all config files.
+The canonical version lives in `hydra.json` at the repository root as the
+`currentVersion` field (the standalone `VERSION` file was retired in #347), and
+`bin/bump-version.sh` propagates it to all config files.
+
+`hydra.json` carries two distinct version fields:
+
+- `currentVersion` — the package *release* version this repository builds and
+  publishes. Bumped by `bin/bump-version.sh` and fanned out to every host's build
+  files (below).
+- `hostVersion` — the version of the *published hosts the build/sync depends on*
+  (the Merkle basis for the per-target generator cache; see
+  [build-system.md](build-system.md)). Bumped separately by
+  `bin/bump-host-version.sh`. Per-host exceptions live in the
+  `hostVersionOverrides` map and are hand-edited. This field is independent of the
+  release flow and is normally left alone during a release.
 
 ### Bumping the version
 
 ```bash
-# Set the new version and propagate to all config files
+# Set the new release version and propagate to all config files
 bin/bump-version.sh 0.13.0
 
-# Or, if you've already edited the VERSION file manually:
+# Or, if you've already edited hydra.json currentVersion manually:
 bin/bump-version.sh
 ```
 
-The script validates the version format (X.Y.Z), writes it to the `VERSION` file
-(if a version argument is given), and patches all of the following files:
+The script validates the version format (X.Y.Z), writes it to
+`hydra.json:currentVersion` (if a version argument is given), and patches all of
+the following files:
 
 | File | Format |
 |------|--------|
-| `VERSION` | `0.15.0` |
+| `hydra.json` | `"currentVersion": "0.15.0"` |
 | `heads/haskell/package.yaml` | `version: 0.15.0` |
 | `demos/bootstrapping/resources/haskell/package.yaml` | `version: 0.15.0` |
 | `heads/java/build.gradle` | `version = '0.15.0'` |
