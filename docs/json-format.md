@@ -376,7 +376,7 @@ separate rule; see [Records](#records)).
 ### Manifest array values
 
 `manifest.json` files (per package, under `dist/json/<pkg>/src/main/json/manifest.json`) list each module
-name owned by the package, grouped by category (`mainModules`, `dslModules`, `defaultLibModules`, etc.;
+name owned by the package, grouped by category (`mainModules`, `dslModules`, etc.;
 see [Sidecar and metadata files](#sidecar-and-metadata-files) for the full field set).
 Each array's entries must be sorted **lexicographically by module name string**.
 This is independent of the source code's enumeration order — the wire-format requirement is
@@ -479,13 +479,11 @@ scanning the filesystem. Each array is sorted lexicographically by module name.
 | `mainModules` | array of string | Module names making up the package's main source set. |
 | `testModules` | array of string | Module names in the package's test source set (empty for most packages). |
 | `dslModules` | array of string | Generated DSL-wrapper module names (empty when the package defines no DSL-wrapped types). |
-| `defaultLibModules` | array of string | Historically: default-implementation library module names. Permanently empty after #437 (defaults are inline in their canonical `Lib/<Sub>.hs` registry now). Field retained for manifest-schema continuity until a follow-up drops it. |
 
 Example (`mainModules` abbreviated):
 
 ```json
 {
-  "defaultLibModules": [],
   "dslModules": [],
   "mainModules": ["hydra.owl.syntax", "hydra.rdf.serde", "hydra.rdf.syntax"],
   "manifestFormatVersion": 1,
