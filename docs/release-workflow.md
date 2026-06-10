@@ -384,12 +384,15 @@ The following are Java-specific release steps:
 * Set up your Java environment as described in the
   [Hydra-Java README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/README.md).
 * Update the JavaDocs.
-  * JavaDocs are automatically generated and deployed to GitHub Pages when a new tag is pushed
-    (via the `pages.yml` GitHub Actions workflow).
+  * A combined JavaDoc site spanning hydra-kernel, hydra-rdf, hydra-pg, and hydra-java
+    is automatically generated and deployed to GitHub Pages when a new tag is pushed.
+    The `pages.yml` workflow fires after CI succeeds on the tag, pulls the
+    `dist-java` artifact from that CI run, and javadocs the combined source tree
+    in a single invocation so cross-package `@link`s resolve.
     No manual steps are needed for JavaDoc publishing.
-  * Check the updated hydra-java JavaDocs
+  * Check the updated combined JavaDocs
     [here](https://categoricaldata.net/hydra/hydra-java/javadoc)
-    after the tag is pushed.
+    after the tag is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
 * Publish each artifact to Maven Central via the [Central Portal](https://central.sonatype.com).
   * **JDK requirement:** the `nmcp` plugin (which the generated `build.gradle` uses to talk
     to the Central Portal publisher API) requires JDK 17+ to *run* Gradle, even though it
@@ -623,7 +626,6 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `sync-default.sh` | `bin/` | Shorthand for `sync.sh --hosts haskell,java,python --targets haskell,java,python`. |
 | `sync-<lang>.sh` | `bin/` | Per-language wrapper (`sync-java.sh`, `sync-python.sh`, `sync-scala.sh`, `sync-typescript.sh`, `sync-go.sh`, `sync-clojure.sh`, `sync-scheme.sh`, `sync-common-lisp.sh`, `sync-emacs-lisp.sh`). Each sets host == target for one language. |
 | `prepare-release.sh` | `bin/` | Cross-implementation pre-release preparation: runs all verification steps and produces upload-ready per-package Hackage sdists + Haddock-for-Hackage docs in `release-artifacts/`. |
-| `update-javadoc.sh` | `bin/` | Regenerate JavaDoc HTML for `packages/hydra-java`. |
 | `assemble-distribution.sh` | `heads/<lang>/bin/` | Layer 2 per-package assembler. Takes `<pkg>`, writes `dist/<lang>/<pkg>/`. Called by `sync-packages.sh`. For `hydra-kernel`, also copies the hand-written runtime support; for every package, generates a per-package `build.gradle` (Java) or `pyproject.toml` (Python). |
 | `test-distribution.sh` | `heads/<lang>/bin/` | Layer 2.5 per-target tester. |
 | `copy-kernel-runtime.sh` | `heads/{java,python}/bin/` | Per-language helper invoked by `assemble-distribution.sh hydra-kernel` to overlay the hand-written kernel runtime from `overlay/<lang>/hydra-kernel/` into the kernel dist (#418). The overlay tree holds only runtime, so this is a dumb full-tree merge — no selective lists. (Multi-coder drivers, json-io stubs, and the per-language coder stay in `heads/<lang>/src`, not in the overlay.) |

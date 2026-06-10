@@ -1,14 +1,30 @@
-name: Deploy docs to GitHub Pages
+name: Deploy JavaDocs to GitHub Pages
+
+# Tag-triggered: build the combined JavaDoc site from the dist/java/ tree the
+# CI workflow already generated on a tag push, and deploy it as a Pages
+# artifact. Commits nothing to any branch. workflow_dispatch covers manual
+# re-runs without re-tagging.
+#
+# Why workflow_run instead of inlining into ci.yml: keeps Pages-specific
+# logic (permissions: pages/id-token, concurrency: pages, environment:
+# github-pages) isolated from the test matrix. The trade-off is a
+# cross-workflow artifact download, handled below via run-id + github-token.
+#
+# Resolves #450. Companion: #449 (the strict @link errors absorbed here via
+# -Xdoclint:none). Companion: #451 (restore hydra-ext to the combined
+# sourcepath once it ships to Maven Central).
 
 on:
-  push:
-    tags: ['*']
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read  # required for cross-workflow artifact download
 
 concurrency:
   group: pages
@@ -16,55 +32,148 @@ concurrency:
 
 jobs:
   build:
-    name: Build docs
+    name: Build combined JavaDoc site
     runs-on: ubuntu-latest
+    # Coarse gate: cheap rejections happen here so the job doesn't even start
+    # for non-tag CI runs. The fine-grained tag check (which needs the GitHub
+    # API to disambiguate workflow_run's `head_branch` field) runs in the
+    # "Resolve CI run" step and exits the job early if the run wasn't for a
+    # tag.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
     steps:
       - uses: actions/checkout@v4
 
-      # JDK 17+ is required: the published dist/java/<pkg>/ builds use the nmcp
-      # plugin, which the init script + javadoc path pull in.
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '11'
 
-      - uses: gradle/actions/setup-gradle@v4
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle', 'heads/java/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: gradle-
-
-      # After the #418 per-package split, the compilable + javadoc-able Java lives
-      # in dist/java/<pkg>/, each depending on `net.fortytwo.hydra:hydra-kernel`.
-      # JavaDoc on hydra-java therefore needs the kernel resolvable: publish it to
-      # the local Maven repo first. The init script makes Javadoc non-fatal — the
-      # generated code carries cosmetic javadoc issues (unqualified @link refs #449,
-      # bad-HTML-entity warnings) that would otherwise fail the strict task; the
-      # generated build stays strict by default, this lenience is for Pages only.
-      # hydra-ext is excluded (not in the Java build / Maven publish set); restore
-      # it here when hydra-ext is published to Maven Central.
-      - name: Generate JavaDocs
+      # Cross-workflow artifact download: pull dist-java from the CI run that
+      # triggered us. For workflow_dispatch, fall back to the latest successful
+      # CI run on main.
+      #
+      # Also: confirm the triggering run was a tag push (not a branch push),
+      # by querying the GitHub API for the run's head_branch and matching it
+      # against the repo's tags. This is the fine-grained tag gate.
+      - name: Resolve CI run and confirm tag
+        id: ci-run
         env:
-          INIT: ${{ github.workspace }}/heads/java/bin/javadoc-nonfatal.init.gradle
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
-          ( cd dist/java/hydra-kernel && gradle publishToMavenLocal -x test --init-script "$INIT" )
-          ( cd dist/java/hydra-java   && gradle javadoc --refresh-dependencies --init-script "$INIT" )
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            run_id=$(gh run list --workflow=CI --status=success \
+              --limit 1 --json databaseId --jq '.[0].databaseId')
+          else
+            run_id="${{ github.event.workflow_run.id }}"
+          fi
+          echo "Resolved CI run ID: $run_id"
 
-      - name: Assemble site
+          head_branch=$(gh api "/repos/${GH_REPO}/actions/runs/${run_id}" \
+            --jq '.head_branch // ""')
+          echo "head_branch reported by API: '${head_branch}'"
+
+          # Confirm it names an existing tag. (workflow_dispatch can bypass
+          # this; we trust the operator if they invoked Pages manually.)
+          proceed=true
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            if [ -z "$head_branch" ] || \
+               ! gh api "/repos/${GH_REPO}/git/refs/tags/${head_branch}" \
+                    >/dev/null 2>&1; then
+              echo "::notice::triggering run was not a tag push; skipping."
+              proceed=false
+            else
+              echo "Confirmed '${head_branch}' is a tag."
+            fi
+          fi
+
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          echo "proceed=$proceed" >> "$GITHUB_OUTPUT"
+
+      - name: Download dist-java from CI run
+        if: steps.ci-run.outputs.proceed == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-java
+          path: dist/java/
+          run-id: ${{ steps.ci-run.outputs.run_id }}
+          github-token: ${{ github.token }}
+
+      # Single combined javadoc invocation over the union of published Java
+      # package sources, so cross-package @link references resolve. Per-package
+      # builds would produce dead cross-links.
+      #
+      # -Xdoclint:none downgrades all doc-checking errors to warnings. This
+      # absorbs the cosmetic issues covered by #449 (unqualified @link refs
+      # to nested case-classes, @param-name mismatches) plus three
+      # `Map<Name, Term>` doc-comments in overlay/java/hydra-kernel/.../dsl/
+      # (Terms.java, Types.java) that javadoc reads as malformed HTML.
+      # `-Xdoclint:all,-reference,-missing,-html` does NOT suppress the
+      # malformed-HTML error in practice — it surfaces from the parser, not
+      # doclint — so `none` is the only working knob today.
+      # This lenience is Pages-only; the per-package Maven build keeps the
+      # strict default.
+      #
+      # hydra-ext is excluded until it ships to Maven Central (#451).
+      - name: Run combined javadoc
+        if: steps.ci-run.outputs.proceed == 'true'
         run: |
-          mkdir -p _site/hydra-java/javadoc
-          cp docs/index.html _site/
-          cp -r dist/java/hydra-java/build/docs/javadoc/* _site/hydra-java/javadoc/
+          set -euo pipefail
+          out=_site/hydra-java/javadoc
+          mkdir -p "$out"
 
-      - uses: actions/upload-pages-artifact@v3
+          # Collect every .java file under the four published packages.
+          srcs=$(mktemp)
+          find \
+            dist/java/hydra-kernel/src/main/java \
+            dist/java/hydra-rdf/src/main/java \
+            dist/java/hydra-pg/src/main/java \
+            dist/java/hydra-java/src/main/java \
+            -name '*.java' -print > "$srcs"
+
+          echo "JavaDoc source count: $(wc -l < "$srcs")"
+
+          sourcepath="dist/java/hydra-kernel/src/main/java"
+          sourcepath="$sourcepath:dist/java/hydra-rdf/src/main/java"
+          sourcepath="$sourcepath:dist/java/hydra-pg/src/main/java"
+          sourcepath="$sourcepath:dist/java/hydra-java/src/main/java"
+
+          javadoc \
+            -d "$out" \
+            -quiet \
+            -Xdoclint:none \
+            -encoding UTF-8 \
+            -charset UTF-8 \
+            -docencoding UTF-8 \
+            -windowtitle "Hydra Java API" \
+            -doctitle "Hydra Java API" \
+            -sourcepath "$sourcepath" \
+            @"$srcs"
+
+          # Sanity check: Term.html confirms the kernel sources rendered.
+          test -f "$out/hydra/core/Term.html" || {
+            echo "::error::hydra/core/Term.html missing from generated javadoc"
+            exit 1
+          }
+
+      - name: Stage landing page
+        if: steps.ci-run.outputs.proceed == 'true'
+        run: cp docs/index.html _site/index.html
+
+      - if: steps.ci-run.outputs.proceed == 'true'
+        uses: actions/upload-pages-artifact@v3
+
+    outputs:
+      proceed: ${{ steps.ci-run.outputs.proceed }}
 
   deploy:
     name: Deploy to Pages
     needs: build
+    if: needs.build.outputs.proceed == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
