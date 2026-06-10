@@ -532,16 +532,16 @@
   ;; hydra.test.lib.chars references hydra.test.testGraph.testContext but
   ;; doesn't declare hydra.test.testGraph in dependencies). With the
   ;; vhash maps fix, single-call codegen is fast enough.
+  ;; doExpand/doHoistCase/doHoistPoly are derived inside the kernel from
+  ;; lang.supportedFeatures; only doInfer is passed in. Generation.hs's
+  ;; type signature is stale (declares 4 Bools) but the body takes 1.
   (let* ((bs-graph (bootstrap-graph))
          (cx (make-hydra_typing_inference_context 0 '()))
          (do-infer (list-ref flags 0))
-         (do-expand (list-ref flags 1))
-         (do-hoist-case (list-ref flags 2))
-         (do-hoist-poly (list-ref flags 3))
          (t0 (current-time-millis))
-         (result ((((((((((hydra_codegen_generate_source_files
-                            coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
-                       bs-graph) universe-mods) mods-to-generate) cx)))
+         (result (((((((hydra_codegen_generate_source_files
+                          coder) language) do-infer)
+                     bs-graph) universe-mods) mods-to-generate) cx)))
     (when (eq? (car result) 'left)
       (error "Code generation failed" (cadr result)))
     (let* ((files (cadr result))
