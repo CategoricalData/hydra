@@ -1,5 +1,4 @@
 {
-  "defaultLibModules": [],
   "dslModules": ["hydra.dsl.python.environment", "hydra.dsl.python.syntax"],
   "mainModules": [
     "hydra.python.coder",
