@@ -12,7 +12,7 @@ producing output identical to the Haskell, Java, Python, and Lisp hosts for all 
   logic, maps, math, maybes, pairs, sets, strings)
 - **Lazy evaluation support** via Scala's by-name parameters for `ifElse`, `cases`, `fromOptional`, etc.
   (other target languages thunk lazy primitive arguments instead, driven by per-parameter `isLazy`
-  metadata — see [Lazy evaluation and thunking](../../docs/recipes/new-implementation.md#lazy-evaluation-and-thunking))
+  metadata — see [Lazy evaluation and thunking](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/new-implementation.md#lazy-evaluation-and-thunking))
 
 ## Build
 
@@ -78,7 +78,7 @@ In 0.15, Hydra's Scala code is split across three locations
 
 Hydra-Java ships custom `ConsList` / `PersistentMap` / `PersistentSet`
 helpers to match Haskell's `[a]` / `Data.Map` / `Data.Set` semantics — see
-the [Collection classes](../hydra-java/README.md#collection-classes) section
+the [Collection classes](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/README.md#collection-classes) section
 in the hydra-java README and issue #359. Hydra-Scala does **not** need
 equivalent helpers: Scala 3's `Predef.{Seq, Map, Set}` already resolve to
 `scala.collection.immutable.{List, Map, Set}`, all persistent and

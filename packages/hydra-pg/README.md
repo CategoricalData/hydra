@@ -25,13 +25,13 @@ For background on Hydra's approach to property graphs, see the
 
 Four demos exercise this package end-to-end:
 
-- [demos/avro](../../demos/avro) — bidirectional Avro coder; one of its modes maps
+- [demos/avro](https://github.com/CategoricalData/hydra/tree/main/demos/avro) — bidirectional Avro coder; one of its modes maps
   Avro data to a TinkerPop-annotated property graph and emits GraphSON.
-- [demos/genpg](../../demos/genpg) — generates a property graph from relational CSV data
+- [demos/genpg](https://github.com/CategoricalData/hydra/tree/main/demos/genpg) — generates a property graph from relational CSV data
   and emits it as either GraphSON or RDF/SHACL N-Triples.
-- [demos/pg-formats](../../demos/pg-formats) — shows three views of the TinkerPop "Modern"
+- [demos/pg-formats](https://github.com/CategoricalData/hydra/tree/main/demos/pg-formats) — shows three views of the TinkerPop "Modern"
   reference graph: Hydra-PG JSON, GraphSON 3.0, and JSON Schema.
-- [demos/validatepg](../../demos/validatepg) — translingual property-graph validation,
+- [demos/validatepg](https://github.com/CategoricalData/hydra/tree/main/demos/validatepg) — translingual property-graph validation,
   running the same Hydra validation logic in Haskell, Java, and Python.
 
 ## See also

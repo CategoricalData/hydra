@@ -22,11 +22,11 @@ For background on how Hydra relates to RDF and SHACL, see the
 
 Three demos exercise this package end-to-end:
 
-- [demos/shacl](../../demos/shacl) — generates SHACL shapes from the Hydra kernel types,
+- [demos/shacl](https://github.com/CategoricalData/hydra/tree/main/demos/shacl) — generates SHACL shapes from the Hydra kernel types,
   encodes kernel modules as N-Triples, and validates the data against the shapes.
-- [demos/avro](../../demos/avro) — bidirectional Avro coder; the included
+- [demos/avro](https://github.com/CategoricalData/hydra/tree/main/demos/avro) — bidirectional Avro coder; the included
   AvroWorkflows tool transforms Avro-schema'd JSON data into SHACL RDF.
-- [demos/genpg](../../demos/genpg) — generates a property graph from relational CSV data
+- [demos/genpg](https://github.com/CategoricalData/hydra/tree/main/demos/genpg) — generates a property graph from relational CSV data
   and emits it as either GraphSON or RDF/SHACL N-Triples.
 
 ## N-Triples output
