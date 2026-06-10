@@ -58,7 +58,7 @@ public interface Terms {
 
     /**
      * Attach an annotation to a term, wrapping the map as a TermMap per Hydra's
-     * map convention (#386 — annotation is now a Term, not a Map<Name, Term>).
+     * map convention (#386 — annotation is now a Term, not a {@code Map<Name, Term>}).
      * Example: annot(Map.of(name("comment"), string("A user ID")), var("userId"))
      * @param ann the annotation map
      * @param base the base term to annotate
@@ -81,7 +81,7 @@ public interface Terms {
     }
 
     /**
-     * Wrap a Map<Name, Term> as a TermMap, the conventional annotation shape.
+     * Wrap a {@code Map<Name, Term>} as a TermMap, the conventional annotation shape.
      */
     static Term annotationMapAsTerm(Map<Name, Term> ann) {
         // Term.Map's key type is Term, so lift each Name to a Term.Variable.
