@@ -1763,7 +1763,6 @@ DSL change in `packages/hydra-ext/Sources/`, run
 | `sync-clojure.sh`, `sync-common-lisp.sh`, `sync-emacs-lisp.sh`, `sync-scheme.sh` | Per-Lisp-dialect wrappers. |
 | `regenerate-lexicon.sh` | Regenerate `docs/hydra-lexicon.txt` from the Haskell kernel. On-demand / pre-release (not part of regular sync). |
 | `prepare-release.sh` | Cross-implementation pre-release preparation: verification + upload-ready sdist/docs. |
-| `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java`. |
 
 ### Haskell (`heads/haskell/bin/`)
 
