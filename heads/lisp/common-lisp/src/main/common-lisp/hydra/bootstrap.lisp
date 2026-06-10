@@ -88,10 +88,11 @@
     ((numberp obj) (list :number (coerce obj 'double-float)))
     ((stringp obj) (list :string obj))
     ((and (consp obj) (consp (car obj)) (stringp (caar obj)))
-     ;; alist (JSON object)
+     ;; alist (JSON object); each entry becomes a 2-element Pair list
+     ;; per the Hydra JSON model (Value.object = [Pair String Value]).
      (list :object
            (mapcar (lambda (pair)
-                     (cons (car pair) (cl-to-hydra-json (cdr pair))))
+                     (list (car pair) (cl-to-hydra-json (cdr pair))))
                    obj)))
     ((listp obj)
      ;; list (JSON array)
