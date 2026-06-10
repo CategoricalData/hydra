@@ -212,6 +212,20 @@ object Libraries:
   private def mkPrimImpl(name: String, ts: TypeScheme, impl: Impl): Primitive =
     Primitive(mkPrimDef(name, ts), impl)
 
+  // Mark the given (0-based) parameter positions as lazy. The Lisp coder
+  // reads parameterIsLazy to decide which arguments to wrap in `(fn [] ...)`
+  // thunks; without this, higher-order primitives like optionals.cases emit
+  // strict recursive calls that blow the stack (#453). Mirrors Haskell's
+  // lazySig / markLazyParams in Hydra.Sources.Kernel.Lib.{Optionals,Logic,...}.
+  private def withLazy(prim: Primitive, idxs: Seq[Int]): Primitive =
+    val sig = prim.definition.signature
+    val params = sig.parameters.zipWithIndex.map { (p, i) =>
+      if idxs.contains(i) then p.copy(isLazy = true) else p
+    }
+    val sig2 = sig.copy(parameters = params)
+    val def2 = prim.definition.copy(signature = sig2)
+    prim.copy(definition = def2)
+
   // Type construction helpers
   private def tVar(n: String): Type = Type.variable(n)
   private def tFun(d: Type, c: Type): Type = Type.function(FunctionType(d, c))
@@ -346,16 +360,16 @@ object Libraries:
           }
         }),
       // First-order: fromLeft, fromRight, isLeft, isRight, lefts, rights, partitionEithers
-      s"$ns.fromLeft" -> mkPrimImpl(s"$ns.fromLeft", tScheme(Seq("x", "y"),
+      s"$ns.fromLeft" -> withLazy(mkPrimImpl(s"$ns.fromLeft", tScheme(Seq("x", "y"),
         tFun(x, tFun(tEither(x, y), x))),
         impl2((d, e) => exEither(e) match
           case Left(a) => a
-          case Right(_) => d)),
-      s"$ns.fromRight" -> mkPrimImpl(s"$ns.fromRight", tScheme(Seq("x", "y"),
+          case Right(_) => d)), Seq(0)),
+      s"$ns.fromRight" -> withLazy(mkPrimImpl(s"$ns.fromRight", tScheme(Seq("x", "y"),
         tFun(y, tFun(tEither(x, y), y))),
         impl2((d, e) => exEither(e) match
           case Left(_) => d
-          case Right(b) => b)),
+          case Right(b) => b)), Seq(0)),
       s"$ns.isLeft" -> mkPrimImpl(s"$ns.isLeft", tScheme(Seq("x", "y"),
         tFun(tEither(x, y), tBool)),
         impl1(e => mkBool(exEither(e).isLeft))),
@@ -658,9 +672,9 @@ object Libraries:
       s"$ns.and" -> mkPrimImpl(s"$ns.and", tMono(tFun(tBool, tFun(tBool, tBool))),
         impl2((a, b) => mkBool(exBool(a) && exBool(b)))),
       // ifElse is higher-order (lazy args act like functions)
-      s"$ns.ifElse" -> mkPrimImpl(s"$ns.ifElse", tScheme(Seq("a"),
+      s"$ns.ifElse" -> withLazy(mkPrimImpl(s"$ns.ifElse", tScheme(Seq("a"),
         tFun(tBool, tFun(a, tFun(a, a)))),
-        impl3((cond, ifTrue, ifFalse) => if exBool(cond) then ifTrue else ifFalse)),
+        impl3((cond, ifTrue, ifFalse) => if exBool(cond) then ifTrue else ifFalse)), Seq(1, 2)),
       s"$ns.not" -> mkPrimImpl(s"$ns.not", tMono(tFun(tBool, tBool)),
         impl1(a => mkBool(!exBool(a)))),
       s"$ns.or" -> mkPrimImpl(s"$ns.or", tMono(tFun(tBool, tFun(tBool, tBool))),
@@ -740,9 +754,9 @@ object Libraries:
       s"$ns.empty" -> mkPrimImpl(s"$ns.empty", tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         mapKV),
         impl0(mkMapTerm(Map.empty))),
-      s"$ns.findWithDefault" -> mkPrimImpl(s"$ns.findWithDefault", tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
+      s"$ns.findWithDefault" -> withLazy(mkPrimImpl(s"$ns.findWithDefault", tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
         tFun(v, tFun(k, tFun(mapKV, v)))),
-        impl3((d, key, m) => exMap(m).getOrElse(key, d))),
+        impl3((d, key, m) => exMap(m).getOrElse(key, d))), Seq(0)),
       s"$ns.fromList" -> mkPrimImpl(s"$ns.fromList", tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(tList(tPair(k, v)), mapKV)),
         impl1(pairs => mkMapTerm(exList(pairs).map(p => { val (a, b) = exPair(p); a -> b }).toMap))),
@@ -899,13 +913,13 @@ object Libraries:
             case None => mkMaybe(None)
             case Some(x) => app(f, x)
         }),
-      s"$ns.cases" -> mkPrimImpl(s"$ns.cases", tScheme(Seq("a", "b"),
+      s"$ns.cases" -> withLazy(mkPrimImpl(s"$ns.cases", tScheme(Seq("a", "b"),
         tFun(tOpt(a), tFun(b, tFun(tFun(a, b), b)))),
         impl3 { (mx, d, f) =>
           exMaybe(mx) match
             case None => d
             case Some(x) => app(f, x)
-        }),
+        }), Seq(1)),
       s"$ns.compose" -> mkPrimImpl(s"$ns.compose", tScheme(Seq("a", "b", "c"),
         tFun(tFun(a, tOpt(b)), tFun(tFun(b, tOpt(c)), tFun(a, tOpt(c))))),
         cx => g => args => {
@@ -941,9 +955,9 @@ object Libraries:
       s"$ns.cat" -> mkPrimImpl(s"$ns.cat", tScheme(Seq("a"),
         tFun(tList(tOpt(a)), tList(a))),
         impl1(xs => mkList(exList(xs).flatMap(exMaybe)))),
-      s"$ns.fromOptional" -> mkPrimImpl(s"$ns.fromOptional", tScheme(Seq("a"),
+      s"$ns.fromOptional" -> withLazy(mkPrimImpl(s"$ns.fromOptional", tScheme(Seq("a"),
         tFun(a, tFun(tOpt(a), a))),
-        impl2((d, ma) => exMaybe(ma).getOrElse(d))),
+        impl2((d, ma) => exMaybe(ma).getOrElse(d))), Seq(0)),
       s"$ns.isGiven" -> mkPrimImpl(s"$ns.isGiven", tScheme(Seq("a"),
         tFun(tOpt(a), tBool)),
         impl1(ma => mkBool(exMaybe(ma).isDefined))),
