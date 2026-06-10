@@ -45,13 +45,13 @@ runtime for the kernel.) Output lands in `dist/coq/`.
 ## Known limitations
 
 See the open issues tagged with `coq` and the
-[design violations](../../docs/recipes/maintenance.md) recipe for
+[design violations](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/maintenance.md) recipe for
 ongoing work. The largest current issue is that some terms emit Coq
 that exceeds reasonable `coqc` memory bounds (see #326); the underlying
 fix is in the Coq coder's handling of inner typeLambdas.
 
 ## See also
 
-- [Hydra root README](../../README.md) — overall project context
-- [`packages/hydra-kernel/`](../hydra-kernel/) — the kernel that the
+- [Hydra root README](https://github.com/CategoricalData/hydra/blob/main/README.md) — overall project context
+- [`packages/hydra-kernel/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel) — the kernel that the
   Coq coder emits
