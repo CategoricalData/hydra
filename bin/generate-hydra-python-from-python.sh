@@ -1,19 +1,35 @@
 #!/usr/bin/env bash
 # Generate dist/json/hydra-python entirely from the Python DSL sources.
 #
-# This is the user-callable wrapper around bin/update-python-json.py:
-# it checks whether the Python host is built (kernel JSON + kernel Python
-# runtime + hydra-python dist helpers), runs `bin/sync-python.sh` to build
-# them if not, then invokes the driver. Originally introduced for issue
-# #344 (the "Python self-host demo"); now the canonical Python DSL → JSON
-# step in the regular sync pipeline (Phase 5).
+# This is the user-callable wrapper around bin/update-python-json.py. It runs the
+# Python DSL→JSON driver against the hydra-python coder runtime, in one of two
+# classpath modes (#370):
+#
+#   --published-host  (DEFAULT)  Import the hydra-python coder runtime from the
+#                                PUBLISHED PyPI wheels (hydra-python==<hostVersion>,
+#                                which pulls hydra-kernel) into a managed venv at
+#                                heads/python/.venv-published-host/. No local Python
+#                                host build is required — edits to the Python DSL
+#                                sources flow straight through. This is the path the
+#                                regular sync uses. Needs only dist/json/hydra-kernel.
+#
+#   --local-host                 BOOTSTRAP SHIM. Import the coder runtime from the
+#                                LOCAL dist/python/hydra-{kernel,python} build (built
+#                                by bin/sync-python.sh). Use this only for a
+#                                backward-INCOMPATIBLE kernel change the last published
+#                                host cannot handle yet; build a local interim host,
+#                                publish it, and bump hydra.json:hostVersion(Overrides)
+#                                so the default published-host path picks it up.
+#
+# Originally introduced for issue #344 (the "Python self-host demo"); now the
+# canonical Python DSL → JSON step in the regular sync pipeline (Phase 5).
 #
 # Usage:
-#   bin/generate-hydra-python-from-python.sh                  # CPython
+#   bin/generate-hydra-python-from-python.sh                  # published-host, CPython
+#   bin/generate-hydra-python-from-python.sh --local-host     # bootstrap shim (local)
 #   bin/generate-hydra-python-from-python.sh --pypy           # PyPy (~4x faster)
 #   bin/generate-hydra-python-from-python.sh --out-root DIR   # Override output
-#   bin/generate-hydra-python-from-python.sh --force-rebuild  # Run sync-python.sh
-#                                                              # even if host present
+#   bin/generate-hydra-python-from-python.sh --force-rebuild  # Recreate host env
 #   bin/generate-hydra-python-from-python.sh --compare        # After generation,
 #                                                              # byte-compare to the
 #                                                              # Haskell-generated
@@ -27,6 +43,7 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
 # Defaults
 INTERP="uv"
+MODE="published-host"
 CANON_ROOT="$HYDRA_ROOT/dist/json/hydra-python/src/main/json"
 OUT_ROOT="$CANON_ROOT"
 USER_SET_OUT_ROOT=0
@@ -38,6 +55,8 @@ while [ $# -gt 0 ]; do
     case "$1" in
         --pypy) INTERP="pypy3"; shift ;;
         --cpython) INTERP="uv"; shift ;;
+        --published-host) MODE="published-host"; shift ;;
+        --local-host) MODE="local-host"; shift ;;
         --out-root) OUT_ROOT="$2"; USER_SET_OUT_ROOT=1; shift 2 ;;
         --out-root=*) OUT_ROOT="${1#--out-root=}"; USER_SET_OUT_ROOT=1; shift ;;
         --force-rebuild) FORCE_REBUILD=1; shift ;;
@@ -49,30 +68,38 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-# Ensure the dist trees this script reads (dist/json/hydra-kernel,
-# dist/python/hydra-kernel, dist/python/hydra-python) are present and
-# up to date. sync-python.sh covers all three. Warm-cache is fast;
-# cold-cache is self-healing.
-#
-# HYDRA_IN_SYNC=1 indicates sync.sh is already calling us (Phase 5);
-# don't recurse.
-if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
-    if [ "$FORCE_REBUILD" = "1" ]; then
-        echo "=== Forcing Python host rebuild via bin/sync-python.sh ==="
-    else
-        echo "=== Running bin/sync-python.sh to ensure dist trees are current ==="
-    fi
-    "$HYDRA_ROOT/bin/sync-python.sh"
-fi
-
-# Build PYTHONPATH — same set the demo expects.
+# Assemble PYTHONPATH. The Python DSL sources (packages/hydra-python) and the
+# driver (heads/python) are always local; the coder RUNTIME comes from either the
+# published wheels (default) or the local dist/python build (shim).
 PP="$HYDRA_ROOT/packages/hydra-python/src/main/python"
-PP="$PP:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
-PP="$PP:$HYDRA_ROOT/dist/python/hydra-python/src/main/python"
+if [ "$MODE" = "published-host" ]; then
+    # Published host: resolve hydra-python==<hostVersion> into a managed venv and
+    # put its site-packages on PYTHONPATH. No local Python host build needed; the
+    # driver only also needs dist/json/hydra-kernel (produced by Phase 1).
+    PREP_ARGS=()
+    [ "$FORCE_REBUILD" = "1" ] && PREP_ARGS+=("--force")
+    HOST_SITE="$("$HYDRA_ROOT/bin/lib/python-published-host.sh" "${PREP_ARGS[@]+"${PREP_ARGS[@]}"}")"
+    PP="$PP:$HOST_SITE"
+else
+    # Bootstrap shim: ensure the local dist trees (dist/json/hydra-kernel,
+    # dist/python/hydra-kernel, dist/python/hydra-python) are present + current.
+    # sync-python.sh covers all three. HYDRA_IN_SYNC=1 means sync.sh is already
+    # calling us (Phase 5); don't recurse.
+    if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
+        if [ "$FORCE_REBUILD" = "1" ]; then
+            echo "=== Forcing Python host rebuild via bin/sync-python.sh ==="
+        else
+            echo "=== Running bin/sync-python.sh to ensure dist trees are current ==="
+        fi
+        "$HYDRA_ROOT/bin/sync-python.sh"
+    fi
+    PP="$PP:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
+    PP="$PP:$HYDRA_ROOT/dist/python/hydra-python/src/main/python"
+fi
 PP="$PP:$HYDRA_ROOT/heads/python/src/main/python"
 
 echo ""
-echo "=== Running update-python-json.py (interp: $INTERP) ==="
+echo "=== Running update-python-json.py (mode: $MODE, interp: $INTERP) ==="
 
 # If --compare was requested without an explicit --out-root, write to a
 # temp directory so we can compare against the in-tree canonical (which
@@ -85,23 +112,37 @@ if [ "$DO_COMPARE" = "1" ] && [ "$USER_SET_OUT_ROOT" = "0" ]; then
     mkdir -p "$ACTUAL_OUT_ROOT"
 fi
 
-case "$INTERP" in
-    pypy3)
-        PYTHONPATH="$PP" pypy3 "$HYDRA_ROOT/bin/update-python-json.py" \
-            --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
-        ;;
-    uv)
-        # uv resolves its own venv; pass PYTHONPATH explicitly so the driver
-        # picks up packages/hydra-python and the dist trees.
-        PYTHONPATH="$PP" \
-            uv --directory "$HYDRA_ROOT/heads/python" run python \
-            "$HYDRA_ROOT/bin/update-python-json.py" \
-            --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
-        ;;
-    *)
-        echo "Unknown interpreter: $INTERP" >&2
-        exit 2 ;;
-esac
+if [ "$MODE" = "published-host" ]; then
+    # The published coder runtime is installed (as CPython wheels) into the
+    # managed venv; run with that venv's interpreter so the wheels import. PyPy
+    # cannot load a CPython venv's site-packages, so --pypy is not honored here
+    # (a PyPy published-host venv could be added later if speed demands it).
+    if [ "$INTERP" = "pypy3" ]; then
+        echo "Note: --pypy is ignored in --published-host mode (using the venv interpreter)." >&2
+    fi
+    VENV_DIR="$HYDRA_ROOT/heads/python/.venv-published-host"
+    HYDRA_PYTHON_HOST_MODE=published PYTHONPATH="$PP" \
+        "$VENV_DIR/bin/python" "$HYDRA_ROOT/bin/update-python-json.py" \
+        --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
+else
+    case "$INTERP" in
+        pypy3)
+            PYTHONPATH="$PP" pypy3 "$HYDRA_ROOT/bin/update-python-json.py" \
+                --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
+            ;;
+        uv)
+            # uv resolves its own venv; pass PYTHONPATH explicitly so the driver
+            # picks up packages/hydra-python and the dist trees.
+            PYTHONPATH="$PP" \
+                uv --directory "$HYDRA_ROOT/heads/python" run python \
+                "$HYDRA_ROOT/bin/update-python-json.py" \
+                --out-root "$ACTUAL_OUT_ROOT" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
+            ;;
+        *)
+            echo "Unknown interpreter: $INTERP" >&2
+            exit 2 ;;
+    esac
+fi
 
 if [ "$DO_COMPARE" = "1" ]; then
     # Per-package driver writes under <dist-json-root>/hydra-python/src/main/json/.
