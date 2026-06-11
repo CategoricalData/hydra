@@ -195,8 +195,8 @@
                                   (code (funcall 'hydra_serialization_print_expr
                                           (funcall 'hydra_serialization_parenthesize
                                             (funcall pte program))))
-                                  (ns-val (let ((ns (cdr (assoc :namespace mod))))
-                                            (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                  (ns-val (let ((mn (hydra_packaging_module-name mod)))
+                                            (if (stringp mn) mn (hydra_packaging_module_name-value mn))))
                                   (case-conv (if (string= target "clojure")
                                                  (list :camel nil)
                                                  (list :lower_snake nil)))
