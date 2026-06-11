@@ -19,15 +19,27 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
-echo "  Overlaying hand-written distribution-package source onto dist/haskell/..."
+# #370: in published-host mode the head links the published hydra-kernel from
+# Hackage, so the kernel-MAIN runtime (Hydra.Haskell.Lib.*, Hydra.Kernel,
+# Hydra.Settings, Hydra.Dsl.{Terms,Literals,Meta.Common}) ships INSIDE that
+# dependency and must NOT also be overlaid onto the head's compile path (it would
+# double-define). The test bridge (src/test) and the umbrella still overlay in
+# both modes — the test suite + umbrella build need them regardless.
+HOST_MODE="${HYDRA_HASKELL_HOST_MODE:-local}"
 
-# hydra-kernel runtime: MERGE onto the generated kernel dist (it shares the
-# Hydra.Dsl.* namespace with generated modules, so merge — never wipe — the dir).
-KERNEL_RUNTIME_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/main/haskell"
-KERNEL_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell"
-mkdir -p "$KERNEL_DST"
-cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
-echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
+echo "  Overlaying hand-written distribution-package source onto dist/haskell/ (mode: $HOST_MODE)..."
+
+if [ "$HOST_MODE" = "published" ]; then
+  echo "    hydra-kernel: SKIP main runtime overlay (provided by published hydra-kernel)"
+else
+  # hydra-kernel runtime: MERGE onto the generated kernel dist (it shares the
+  # Hydra.Dsl.* namespace with generated modules, so merge — never wipe — the dir).
+  KERNEL_RUNTIME_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/main/haskell"
+  KERNEL_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell"
+  mkdir -p "$KERNEL_DST"
+  cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
+  echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
+fi
 
 # hydra-kernel test bridge: hand-written test infra (Hydra.Test.TestEnv) referenced
 # by the generated TestGraph. MERGE onto the generated src/test dist (shares the dir

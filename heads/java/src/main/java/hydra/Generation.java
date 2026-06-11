@@ -2,6 +2,7 @@ package hydra;
 
 import hydra.Annotations;
 import hydra.Codegen;
+import hydra.Dsls;
 import hydra.Sorting;
 import hydra.core.Binding;
 import hydra.core.Name;
@@ -382,153 +383,12 @@ public class Generation {
         return result;
     }
 
-    /**
-     * Generate source files and write them to disk.
-     *
-     * Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
-     * are now read from {@code language.supportedFeatures} inside
-     * {@code generateSourceFiles}; the caller only supplies {@code doInfer}.
-     */
-    public static void generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.typing.InferenceContext, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
-            hydra.coders.Language language,
-            boolean doInfer,
-            String basePath,
-            List<Module> universe,
-            List<Module> modulesToGenerate) {
-        Graph bsGraph = bootstrapGraph();
-        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
-        Either<hydra.errors.Error_, List<Pair<String, String>>> result =
-                Codegen.generateSourceFiles(coder, language,
-                        doInfer,
-                        bsGraph, universe, modulesToGenerate, cx);
-        List<Pair<String, String>> files;
-        if (result.isLeft()) {
-            hydra.errors.Error_ err = ((Either.Left<hydra.errors.Error_, List<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + hydra.show.Errors.error(err));
-        }
-        files = ((Either.Right<hydra.errors.Error_, List<Pair<String, String>>>) result).value;
-        for (Pair<String, String> pair : files) {
-            String filePath = basePath + File.separator + pair.first;
-            String content = pair.second;
-            if (!content.endsWith("\n")) {
-                content = content + "\n";
-            }
-            try {
-                Path p = Paths.get(filePath);
-                Files.createDirectories(p.getParent());
-                Files.write(p, content.getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to write " + filePath, e);
-            }
-        }
-    }
-
-    /**
-     * Generate Java source files from modules.
-     */
-    public static void writeJava(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
-                mod -> defs -> cx -> g -> hydra.java.Coder.moduleToJava(mod, defs, cx, g),
-                hydra.java.Language.javaLanguage(),
-                false,
-                basePath, universe, mods);
-    }
-
-    /**
-     * Generate Python source files from modules.
-     */
-    public static void writePython(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
-                mod -> defs -> cx -> g -> hydra.python.Coder.moduleToPython(mod, defs, cx, g),
-                hydra.python.Language.pythonLanguage(),
-                false,
-                basePath, universe, mods);
-    }
-
-    /**
-     * Generate Scala source files from modules.
-     */
-    public static void writeScala(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
-                mod -> defs -> cx -> g -> hydra.scala.Coder.moduleToScala(mod, defs, cx, g),
-                hydra.scala.Language.scalaLanguage(),
-                false,
-                basePath, universe, mods);
-    }
-
-    /**
-     * Generate TypeScript source files from modules.
-     */
-    public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
-                mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
-                hydra.typeScript.Language.typeScriptLanguage(),
-                false,
-                basePath, universe, mods);
-    }
-
-    /**
-     * Generate Haskell source files from modules.
-     */
-    public static void writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
-                mod -> defs -> cx -> g -> hydra.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
-                hydra.haskell.Language.haskellLanguage(),
-                false,
-                basePath, universe, mods);
-    }
-
-    /**
-     * Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp).
-     */
-    public static void writeLispDialect(String basePath, String dialectName, String fileExt,
-                                         List<Module> universe, List<Module> mods) {
-        hydra.lisp.syntax.Dialect dialect;
-        hydra.util.CaseConvention caseConv;
-        switch (dialectName) {
-            case "clojure":
-                dialect = new hydra.lisp.syntax.Dialect.Clojure();
-                caseConv = new hydra.util.CaseConvention.Camel();
-                break;
-            case "scheme":
-                dialect = new hydra.lisp.syntax.Dialect.Scheme();
-                caseConv = new hydra.util.CaseConvention.LowerSnake();
-                break;
-            case "commonLisp":
-                dialect = new hydra.lisp.syntax.Dialect.CommonLisp();
-                caseConv = new hydra.util.CaseConvention.LowerSnake();
-                break;
-            case "emacsLisp":
-                dialect = new hydra.lisp.syntax.Dialect.EmacsLisp();
-                caseConv = new hydra.util.CaseConvention.LowerSnake();
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown Lisp dialect: " + dialectName);
-        }
-
-        final hydra.lisp.syntax.Dialect d = dialect;
-        final hydra.util.CaseConvention cc = caseConv;
-        generateSources(
-                mod -> defs -> cx -> g -> {
-                    hydra.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
-                    if (result instanceof hydra.util.Either.Left) {
-                        return result;
-                    }
-                    hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.util.Either.Right) result).value;
-                    String code = hydra.Serialization.printExpr(
-                            hydra.Serialization.parenthesize(
-                                    hydra.lisp.Serde.programToExpr(program)));
-                    String filePath = hydra.Names.moduleNameToFilePath(
-                            cc, new hydra.util.FileExtension(fileExt), mod.name);
-                    Map<String, String> fileMap = new java.util.TreeMap<>();
-                    fileMap.put(filePath, code);
-                    return new hydra.util.Either.Right(fileMap);
-                },
-                hydra.lisp.Language.lispLanguage(),
-                false,
-                basePath, universe, mods);
-    }
+    // The cross-target source-code writers (generateSources, writeJava,
+    // writePython, writeScala, writeTypeScript, writeHaskell, writeLispDialect)
+    // moved to GenerationTargets (#370). They reference every target coder and so
+    // only compile against the full local dist/java tree; keeping them out of
+    // Generation lets the DSL->JSON driver here compile against the published
+    // Java host (net.fortytwo.hydra:hydra-java) alone.
 
     /**
      * Convert a module name to a file path.
@@ -1090,5 +950,58 @@ public class Generation {
                 Files.write(filePath, newContent.getBytes(StandardCharsets.UTF_8));
             }
         }
+    }
+
+    /**
+     * Synthesize the DSL-wrapper modules (hydra.dsl.java.*) for a set of
+     * type-defining modules, mirroring {@code Hydra.Generation.generateDslModules}
+     * and the Python driver's {@code generate_dsl_modules}.
+     *
+     * <p>Each type module {@code hydra.java.X} yields a {@code hydra.dsl.java.X}
+     * module of phantom-typed builder functions, auto-derived from its type
+     * definitions by the kernel's {@code hydra.Dsls.dslModule} transform. Both the
+     * transform and the orchestrator ({@code hydra.Codegen.generateCoderModules})
+     * are kernel functions present in the published hydra-kernel jar, so this runs
+     * against the published host with no local Haskell build. Replaces the Haskell
+     * update-json-main DSL pass for hydra-java (#370/#346).</p>
+     */
+    public static List<Module> generateDslModules(
+            List<Module> universeMods, List<Module> typeMods) {
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
+            0, new java.util.ArrayList<>());
+        // dslModule(cx, graph, module) curried into the codec shape
+        // generateCoderModules expects: cx -> graph -> module -> Either.
+        Function<hydra.typing.InferenceContext,
+            Function<Graph, Function<Module,
+                Either<hydra.errors.Error_, Optional<Module>>>>> codec =
+            c -> g -> m -> Dsls.dslModule(c, g, m);
+        Either<hydra.errors.Error_, List<Module>> result =
+            Codegen.generateCoderModules(codec, bootstrapGraph(), universeMods, typeMods, cx);
+        if (result instanceof Either.Left) {
+            hydra.errors.Error_ err =
+                ((Either.Left<hydra.errors.Error_, List<Module>>) result).value;
+            throw new RuntimeException("generateDslModules: synthesis failed: " + err);
+        }
+        return ((Either.Right<hydra.errors.Error_, List<Module>>) result).value;
+    }
+
+    /**
+     * Generate the DSL-wrapper modules for {@code typeMods} and write them under
+     * {@code distJsonRoot/<pkg>/src/main/json/}. Skips modules with no DSL-eligible
+     * definitions (matching the Haskell
+     * {@code filter (not . null . moduleDefinitions)}). Returns the modules written.
+     */
+    public static List<Module> synthesizeAndWriteDslModules(
+            String distJsonRoot, List<Module> universeMods, List<Module> typeMods)
+            throws IOException {
+        List<Module> dslMods = generateDslModules(universeMods, typeMods);
+        List<Module> nonEmpty = new ArrayList<>();
+        for (Module m : dslMods) {
+            if (!m.definitions.isEmpty()) nonEmpty.add(m);
+        }
+        if (!nonEmpty.isEmpty()) {
+            writePackageSplitJson(distJsonRoot, universeMods, nonEmpty, nonEmpty);
+        }
+        return nonEmpty;
     }
 }

@@ -38,11 +38,9 @@ import qualified Hydra.Sources.Bench.Manifest as BenchManifest
 import qualified Hydra.Sources.Coq.Manifest as CoqManifest
 import qualified Hydra.Sources.Ext.Manifest as ExtManifest
 import qualified Hydra.Sources.Go.Manifest as GoManifest
-import qualified Hydra.Sources.Java.Manifest as JavaManifest
 import qualified Hydra.Sources.TypeScript.Manifest as TypeScriptManifest
 import qualified Hydra.Sources.Lisp.Manifest as LispManifest
 import qualified Hydra.Sources.Pg.Manifest as PgManifest
-import qualified Hydra.Sources.Python.Manifest as PythonManifest
 import qualified Hydra.Sources.Rdf.Manifest as RdfManifest
 import qualified Hydra.Sources.Scala.Manifest as ScalaManifest
 import qualified Hydra.Sources.Wasm.Manifest as WasmManifest
@@ -97,8 +95,14 @@ hydraExtPackageModules = ExtManifest.mainModules
 hydraGoModules :: [Module]
 hydraGoModules = GoManifest.mainModules
 
+-- | hydra-java is no longer sourced from a Haskell DSL (#346/#370), exactly like
+-- hydra-python. Its canonical hydra.java.* and hydra.dsl.java.* JSON is produced
+-- solely by the native Java driver (hydra.UpdateJavaJson via
+-- bin/update-java-json.sh) running against the published hydra-java host. The
+-- Haskell DSL copy under packages/hydra-java/src/main/haskell/ has been deleted.
+-- Kept as an empty binding to preserve the shape of the aggregations below.
 hydraJavaModules :: [Module]
-hydraJavaModules = JavaManifest.mainModules
+hydraJavaModules = []
 
 hydraTypeScriptModules :: [Module]
 hydraTypeScriptModules = TypeScriptManifest.mainModules
@@ -109,8 +113,15 @@ hydraLispModules = LispManifest.mainModules
 hydraPgModules :: [Module]
 hydraPgModules = PgManifest.mainModules
 
+-- | hydra-python is no longer sourced from a Haskell DSL (#346/#370). Its
+-- canonical hydra.python.* and hydra.dsl.python.* JSON is produced solely by the
+-- native Python driver (bin/update-python-json.py) running against the published
+-- hydra-python host. The Haskell DSL copy under
+-- packages/hydra-python/src/main/haskell/ has been deleted, so there is nothing to
+-- pull into the Haskell universe here. Kept as an empty binding to preserve the
+-- shape of the aggregations below.
 hydraPythonModules :: [Module]
-hydraPythonModules = PythonManifest.mainModules
+hydraPythonModules = []
 
 hydraRdfModules :: [Module]
 hydraRdfModules = RdfManifest.mainModules
@@ -142,8 +153,10 @@ hydraExtPackageDslTypeModules = ExtManifest.dslTypeModules
 hydraGoDslTypeModules :: [Module]
 hydraGoDslTypeModules = GoManifest.dslTypeModules
 
+-- | Empty for the same reason as hydraJavaModules: the hydra.dsl.java.* wrappers
+-- are now synthesized by the native Java driver, not the Haskell DSL.
 hydraJavaDslTypeModules :: [Module]
-hydraJavaDslTypeModules = JavaManifest.dslTypeModules
+hydraJavaDslTypeModules = []
 
 hydraTypeScriptDslTypeModules :: [Module]
 hydraTypeScriptDslTypeModules = TypeScriptManifest.dslTypeModules
@@ -154,8 +167,10 @@ hydraLispDslTypeModules = LispManifest.dslTypeModules
 hydraPgDslTypeModules :: [Module]
 hydraPgDslTypeModules = PgManifest.dslTypeModules
 
+-- | Empty for the same reason as hydraPythonModules: the hydra.dsl.python.*
+-- wrappers are now synthesized by the native Python driver, not the Haskell DSL.
 hydraPythonDslTypeModules :: [Module]
-hydraPythonDslTypeModules = PythonManifest.dslTypeModules
+hydraPythonDslTypeModules = []
 
 hydraRdfDslTypeModules :: [Module]
 hydraRdfDslTypeModules = RdfManifest.dslTypeModules
