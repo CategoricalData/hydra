@@ -66,7 +66,9 @@ library:
     - ../../dist/haskell/hydra-rdf/src/main/haskell
     - ../../packages/hydra-coq/src/main/haskell
     - ../../packages/hydra-haskell/src/main/haskell
-    - ../../packages/hydra-java/src/main/haskell
+    # hydra-java has no Haskell DSL sources: generated solely by the native Java
+    # driver against the published host (#346/#370), like hydra-python. Source-dir
+    # removed. (dist/haskell/hydra-java above stays — generated coder runtime.)
     - ../../packages/hydra-typescript/src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
     - ../../packages/hydra-lisp/src/main/haskell
@@ -74,7 +76,10 @@ library:
     - ../../packages/hydra-ext/src/main/haskell
     - ../../packages/hydra-go/src/main/haskell
     - ../../packages/hydra-pg/src/main/haskell
-    - ../../packages/hydra-python/src/main/haskell
+    # hydra-python has no Haskell DSL sources: it is generated solely by the native
+    # Python driver against the published host (#346/#370). The source-dir entry is
+    # removed. (dist/haskell/hydra-python above stays — that is the generated coder
+    # runtime, still compiled into the head.)
     - ../../packages/hydra-rdf/src/main/haskell
     - ../../packages/hydra-scala/src/main/haskell
     - ../../packages/hydra-wasm/src/main/haskell
