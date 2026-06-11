@@ -1,5 +1,4 @@
 {
-  "defaultLibModules": [],
   "dslModules": ["hydra.dsl.java.environment", "hydra.dsl.java.syntax"],
   "mainModules": [
     "hydra.java.coder",

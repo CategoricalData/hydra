@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 
 
@@ -142,10 +143,17 @@ def main() -> int:
     # Reference packages/<pkg>/README.md only if it exists. Most kernel-set
     # packages don't have one; pyproject.toml's `readme` field requires the
     # file to exist if it's referenced.
+    #
+    # The README must be COPIED into the package dir and referenced as a
+    # package-local path ("README.md"), not as ../../../packages/<pkg>/README.md.
+    # A path that escapes the package root works in the monorepo but is absent
+    # from the published sdist, so any from-sdist build (conda-forge, strict
+    # pip) fails with "Readme file does not exist" during metadata generation.
     readme_src = os.path.join(args.repo_root, "packages", args.package, "README.md")
     readme_rel: str | None
     if os.path.isfile(readme_src):
-        readme_rel = f"../../../packages/{args.package}/README.md"
+        shutil.copyfile(readme_src, os.path.join(out_dir, "README.md"))
+        readme_rel = "README.md"
     else:
         readme_rel = None
 

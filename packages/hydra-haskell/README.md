@@ -26,11 +26,19 @@ for the full picture.
   - `Hydra/Sources/Kernel/Terms/` — term-level logic (Inference, Checking, Reduction, ...)
   - `Hydra/Sources/Libraries.hs` — primitive function registration
 
+- **Haskell kernel overlay** ([`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra))
+  — hand-written Haskell kernel runtime, overlaid onto `dist/haskell/hydra-kernel/`
+  so the published `hydra` Hackage package is self-contained
+  - `Haskell/Lib/` — native primitive implementations for the Haskell host
+  - `Dsl/Terms.hs`, `Dsl/Literals.hs`, `Dsl/Meta/Common.hs` — DSL syntax definitions
+    used by the generated kernel
+  - `Kernel.hs`, `Settings.hs` — runtime helpers
 - **Haskell head** ([`heads/haskell/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra))
-  - `Dsl/` — DSL syntax definitions (hand-written)
-  - `Lib/` — native primitive implementations
+  — the bootstrapping layer above the kernel
+  - `Dsl/` — additional DSL syntax definitions used to write the kernel + coder sources
+    (Annotations, Bootstrap, Types, Prims, Tests, the rest of `Meta/`, ...)
   - `Generation.hs` / `ExtGeneration.hs` / `Haskell/Generation.hs` — code-generation drivers
-  - `Kernel.hs`, `Minimal.hs`, `Settings.hs`, `Tools/` — runtime helpers
+  - `Minimal.hs`, `Tools/` — runtime helpers
 
 - **Generated Haskell kernel** ([`dist/haskell/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell))
   - `Hydra/Core.hs`, `Hydra/Graph.hs`, etc. — generated from the kernel DSL sources
@@ -74,7 +82,9 @@ Haskell is Hydra's **bootstrapping language**, and the runnable head lives in
 
 - **DSL syntax and runtime**:
   [`heads/haskell/src/main/haskell/Hydra/Dsl`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Dsl)
-  and [`Hydra/Lib`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib)
+  (head DSL helpers)
+  and [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib)
+  (overlaid kernel primitive implementations)
 - **Kernel DSL sources**:
   [`packages/hydra-kernel/src/main/haskell/Hydra/Sources`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources)
 - **Haskell coder DSL sources** (this package):
