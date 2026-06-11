@@ -20,6 +20,10 @@
 #   bin/sync.sh --hosts H1,H2                    # targets mirror hosts
 #   bin/sync.sh --targets T1,T2                  # hosts mirror targets
 #   bin/sync.sh --no-tests                       # skip target-lang tests
+#   bin/sync.sh --local-host                     # build the Haskell host from
+#                                                # local source (default consumes
+#                                                # published hydra-kernel/haskell
+#                                                # from Hackage; #370)
 #   bin/sync.sh --help
 #
 # For the common "bootstrapping triad" default (haskell, java, python),
@@ -69,11 +73,21 @@ ALL_LANGS="haskell java python scala go typescript clojure scheme common-lisp em
 NO_TESTS=false
 HOSTS_ARG=""
 TARGETS_ARG=""
+# #370: Haskell host mode. published (default) → the head links published
+# hydra-kernel/hydra-haskell from Hackage; local → build the whole host from
+# source. Phase 0 + Phase 1 must agree on this, else the head double-builds.
+HOST_MODE=published
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests)
             NO_TESTS=true
+            ;;
+        --published-host)
+            HOST_MODE=published
+            ;;
+        --local-host)
+            HOST_MODE=local
             ;;
         --hosts)
             HOSTS_ARG="$2"
@@ -214,13 +228,31 @@ echo ""
 # and one-time cost on cold CI (amortized by actions/cache on ~/.stack).
 # Unconditional ensures correctness.
 
+# #370: emit the head's build files for the chosen host mode BEFORE the Phase-0
+# stack build, so Phase 0 and Phase 1 (sync-haskell.sh, below) build the host
+# identically — otherwise Phase 0 (local) + Phase 1 (published) double-build and
+# thrash .stack-work. The committed package.yaml/stack.yaml are the hand-maintained
+# LOCAL-mode source of truth; published mode transiently rewrites them, restored on
+# EXIT. Mirrors sync-haskell.sh's own mode wiring (and is skipped there via the
+# already-generated files when sync.sh drives the sync).
+echo "  Haskell host mode: $HOST_MODE"
+if [ "$HOST_MODE" = "published" ]; then
+    _sync_restore_head_build_files() {
+        git -C "$HYDRA_ROOT" checkout -q -- \
+            heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
+    }
+    trap _sync_restore_head_build_files EXIT
+fi
+python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HOST_MODE"
+
 # The head compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir) which
 # includes hand-written runtime modules (Hydra.Haskell.Lib.*, the umbrella Hydra.hs)
 # that live in the top-level overlay/haskell/ tree (#418). The dist Lib/ location is
 # gitignored and empty on a cold tree, so they must be overlaid into dist/ BEFORE
 # this stack build — otherwise GHC can't find them. (sync-haskell.sh's own overlay
 # step runs in Phase 1, too late for Phase 0; this is the fix for that ordering.)
-"$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
+# In published mode the overlay skips the kernel-main runtime (it's in the dep).
+HYDRA_HASKELL_HOST_MODE="$HOST_MODE" "$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
 
 (cd "$HYDRA_HASKELL_DIR" && stack build \
     hydra:exe:update-json-main \
@@ -250,18 +282,20 @@ echo ""
 
 PHASE1_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-phase1-fresh.py"
 
-# #344: native generators own dist/json/hydra-{java,python}/ in normal
-# operation, so Phase 1 (Haskell DSL → JSON) skips those namespaces by
-# default. On a cold tree where the JSON is missing, do a one-time
-# Haskell-DSL bootstrap so Phases 3/4 have something to read; native
-# generators then take over from Phase 5 onward.
+# #344/#346/#370: the native generators are the SOLE writers of
+# dist/json/hydra-{java,python}/ — the legacy Haskell DSL copies have been
+# deleted. Phase 1 never writes hydra.{java,python}.* (hydraJavaModules /
+# hydraPythonModules are []). On a cold tree where the JSON is missing, we seed it
+# in Phase 1.5 via the native drivers (published hosts), which need only the fresh
+# kernel JSON — not a built local host. HYDRA_INCLUDE_JAVA_PYTHON flags cold-start
+# so Phase 1.5 always re-seeds (vs. the warm freshness gate).
 JAVA_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-java/src/main/json/hydra/java/coder.json"
 PYTHON_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-python/src/main/json/hydra/python/coder.json"
 if [ ! -f "$JAVA_JSON_SENTINEL" ] || [ ! -f "$PYTHON_JSON_SENTINEL" ]; then
     export HYDRA_INCLUDE_JAVA_PYTHON=1
     echo ""
     echo "Cold-start detected (missing hydra-java/hydra-python JSON);"
-    echo "Phase 1 will run with --include-java-python to seed the bootstrap."
+    echo "Phase 1.5 will seed it via the native Java/Python drivers (published hosts)."
     echo ""
 fi
 
@@ -278,7 +312,7 @@ if [ -x "$PHASE1_FRESH_CHECK" ] \
 else
     banner1 "Phase 1: DSL → JSON + Haskell kernel"
     echo ""
-    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" $NO_TESTS_FLAG
+    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" --"$HOST_MODE"-host $NO_TESTS_FLAG
 fi
 
 # ────────────────────────────────────────────────────────────────────
@@ -293,27 +327,31 @@ fi
 # regenerated kernel; Phase 2 then emits a Coder.hs referencing a renamed-away
 # field and the next `stack build` dies (#406).
 #
-# The native Phase 5 generator (the authoritative writer post-#344, and the
-# sole writer once the legacy Haskell coder DSL is deleted) cannot run here:
-# it needs the host built (Phase 4 output), which needs this library. So we
-# heal in place: detect staleness against the now-fresh kernel JSON and re-run
-# update-json-main --include-java-python (the JSON-write step only — Phase 0
-# already built the executable) so Phase 2 translates fresh coder JSON.
+# Both hydra-java and hydra-python heal via their NATIVE drivers against the
+# PUBLISHED hosts (#346/#370). Each needs only dist/json/hydra-kernel (fresh from
+# Phase 1), NOT a built local host — so this sidesteps the #406 chicken-and-egg
+# entirely (the native generators no longer have to wait for Phase 4). The legacy
+# Haskell-DSL heal (update-json-main --include-java-python) is gone: hydraJavaModules
+# and hydraPythonModules are both [] now that their Haskell DSL sources are deleted.
 #
-# check-java-python-json-fresh.py keys on the translated kernel JSON (the
-# rename signal that survives the legacy-DSL deletion), so this gate is
-# correct both today and after that deletion. The cold-start branch above
-# already re-exported; there we only stamp the cache.
+# check-java-python-json-fresh.py keys on the translated kernel JSON (the rename
+# signal), so this gate is correct.
 JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
+heal_java_python_native() {
+    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
+    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" || return 1
+}
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
-        # Cold-start (or already forced): Phase 1 wrote fresh coder JSON. Stamp.
+        banner1 "Phase 1.5: cold-start native Java/Python coder JSON (published hosts) (#346)"
+        echo ""
+        heal_java_python_native || exit 1
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
+        echo ""
     elif ! "$JP_FRESH_CHECK" "$HYDRA_ROOT"; then
         banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python coder JSON (#406)"
         echo ""
-        ( cd "$HYDRA_HASKELL_DIR" \
-            && stack exec update-json-main -- --include-java-python ) || exit 1
+        heal_java_python_native || exit 1
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
         echo ""
     fi

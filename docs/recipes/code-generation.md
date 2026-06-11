@@ -41,17 +41,18 @@ The authoring host language varies per package:
 | **hydra-python** | **Python (`src/main/python/hydra/sources/python/`)** | `bin/generate-hydra-python-from-python.sh` |
 | hydra-scala, hydra-lisp, hydra-pg, hydra-rdf, hydra-ext, ... | Haskell (`src/main/haskell/...`) | (Haskell Phase 1) |
 
-> **Legacy backup for hydra-java and hydra-python:** the Haskell-DSL versions
-> of these two packages' coder modules still live under
-> `packages/hydra-{java,python}/src/main/haskell/Hydra/Sources/{Java,Python}/`.
-> They produce byte-identical Phase-1 output to the host-native sources and
-> served as a fallback through the 0.15 line. The main sync sequence
-> (`bin/sync.sh`, `bin/sync-all.sh`, the per-language `bin/sync-<lang>.sh`
-> wrappers) still drives Phase 1 through the legacy Haskell path until the
-> host-native integration lands; explicit Phase-1 regen via the
-> `generate-hydra-<lang>-from-<lang>.sh` scripts already uses the host-native
-> source. Both copies remained in lock-step through the 0.15 line; the
-> legacy backup is scheduled for removal during 0.16 development.
+> **hydra-java and hydra-python are host-native, sole source of truth (#346/#370):**
+> their coder sources are authored in Java and Python under
+> `packages/hydra-{java,python}/src/main/{java,python}/hydra/sources/`. The legacy
+> Haskell DSL copies have been **deleted** — there is no fallback. The native
+> drivers (`bin/generate-hydra-{java,python}-from-{java,python}.sh`, run by `bin/sync.sh`
+> Phase 5) are the sole writers of `dist/json/hydra-{java,python}/`, and they
+> default to the **published host** (Maven `hydra-java` / PyPI `hydra-python`, version
+> from `hydra.json` `hostVersion`). `update-json-main` still *loads* the resulting
+> `hydra.{java,python}.*` JSON into its inference universe so cross-package references
+> resolve (e.g. `hydra-scala` → `hydra.java.serde`), but no longer *generates* it. See
+> [The build system § Consuming published hosts](../build-system.md#consuming-published-hosts)
+> and [Migration shims](migration-shims.md).
 
 ## Per-package layout
 
@@ -255,12 +256,14 @@ and the legacy Haskell sources still agree.
 > background on how each driver works internally, including the
 > pre-computed type-scheme workaround used for `hydra.java.coder`.
 
-> **Sync integration:** the main sync scripts (`bin/sync.sh`,
-> `bin/sync-all.sh`, the `bin/sync-<lang>.sh` wrappers) still drive Phase 1
-> via the legacy Haskell pipeline; switching them over to the host-native
-> scripts is planned during 0.16 development. Until then, run the
-> `generate-...` scripts explicitly when editing the Java or Python DSL
-> sources.
+> **Sync integration:** the main sync (`bin/sync.sh`) regenerates
+> `dist/json/hydra-{java,python}/` via the native drivers in Phase 5 (and heals them
+> in Phase 1.5 when the kernel changed) — automatically, no explicit run needed.
+> The drivers default to the **published host**; pass `--local-host` (or set
+> `hostVersionOverrides["hydra-<pkg>"]="local"` in `hydra.json`) to build the coder
+> from local `dist/` for a backward-incompatible kernel change. The
+> `generate-hydra-{java,python}-from-{java,python}.sh` scripts run the same path
+> standalone.
 
 ## Generating from DSL modules directly
 

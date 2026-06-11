@@ -477,7 +477,7 @@
                   "argument": {
                     "annotated": {
                       "body": {"variable": "hydra.packaging.ModuleName"},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]}}}}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module name context"}}}]}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -488,7 +488,7 @@
                     "annotated": {
                       "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                       "annotation": {
-                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]}}}}},
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}}},
               "isLazy": false},
             {
               "name": "arg2",
@@ -652,7 +652,7 @@
                     "argument": {
                       "annotated": {
                         "body": {"variable": "hydra.packaging.ModuleName"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]}}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module name context"}}}]}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "packages",
@@ -663,7 +663,7 @@
                           "annotated": {
                             "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                             "annotation": {
-                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]}}}}},
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}}},
                     "body": {
                       "lambda": {
                         "parameter": "branchVars",
@@ -962,7 +962,7 @@
                 "argument": {
                   "annotated": {
                     "body": {"variable": "hydra.packaging.ModuleName"},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]}}}}}}},
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module name context"}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1026,7 +1026,7 @@
                   "annotated": {
                     "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                     "annotation": {
-                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]}}}}}}},
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1811,7 +1811,7 @@
                   "argument": {
                     "annotated": {
                       "body": {"variable": "hydra.packaging.ModuleName"},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]}}}}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module name context"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1832,7 +1832,7 @@
                         "argument": {
                           "annotated": {
                             "body": {"variable": "hydra.packaging.ModuleName"},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module namespace context"}}}]}}}}},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Current module name context"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -2311,7 +2311,7 @@
                     "annotated": {
                       "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                       "annotation": {
-                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]}}}}},
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2333,7 +2333,7 @@
                           "annotated": {
                             "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                             "annotation": {
-                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps namespaces to Java package names"}}}]}}}}},
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
