@@ -28,6 +28,13 @@ file has been retired):
   set-host-version <X.Y.Z>      Write the global hostVersion. Per-host overrides in
                                 hostVersionOverrides are hand-edited (uncommon).
   is-published <pkg>            Exit 0 if host-version <pkg> would resolve, else 1.
+  haskell-hackage <pkg>         Print the version iff <pkg> is consumable from
+                                Hackage at its resolved host version (probes the
+                                actual artifact: local Stack index, then a live
+                                HEAD request). Exit 1 otherwise — the #370 Haskell
+                                host then keeps <pkg>'s source-dirs local. An
+                                override of "local" in hostVersionOverrides forces
+                                local (exit 1).
 
 Roots the registry at HYDRA_ROOT_DIR (env var) if set, else at the repo root
 inferred from this script's location (../..).
@@ -201,11 +208,16 @@ def resolve_host_version(root: Path, pkg: str) -> Optional[str]:
     """The published-host version the build should depend on for <pkg>, or None.
 
     Resolution: hostVersionOverrides[pkg] → hostVersion (if pkg is a published
-    host) → None (build pkg locally; caller uses a local content hash)."""
+    host) → None (build pkg locally; caller uses a local content hash).
+
+    An override value of "local" is the explicit "build this package from local
+    source" signal (#370): it resolves to None, exactly like an unconsumed
+    package, so component_identity content-hashes it and edits rebuild."""
     config = load_config(root)
     overrides = config.get("hostVersionOverrides") or {}
     if pkg in overrides:
-        return overrides[pkg]
+        ov = overrides[pkg]
+        return None if ov == "local" else ov
     if pkg in PUBLISHED_HOSTS:
         return config.get("hostVersion")
     return None
@@ -259,7 +271,59 @@ def cmd_is_published(root: Path, args: list[str]) -> int:
     return 0 if resolve_host_version(root, args[0]) else 1
 
 
+def _hackage_has(pkg: str, version: str) -> bool:
+    """True if <pkg>-<version> is resolvable as a Hackage package.
+
+    #370 Haskell-host gate: the host consumes a Haskell coder package from
+    Hackage iff its artifact actually exists there — we probe the artifact, not a
+    declared list, so a coder published in a future cycle flips local→consumed
+    with no config edit. Checks the local Stack Hackage index first (offline-safe,
+    and exactly what `stack build` resolves against); falls back to a live HEAD
+    request to hackage.haskell.org."""
+    name = f"{pkg}-{version}"
+    # 1. Local Stack index (no network). The pantry index lists entries as
+    #    "<pkg>/<version>/<pkg>.cabal".
+    idx = Path.home() / ".stack" / "pantry" / "hackage" / "00-index.tar"
+    if idx.is_file():
+        import tarfile
+        try:
+            prefix = f"{pkg}/{version}/"
+            with tarfile.open(idx, "r") as tar:
+                for member in tar:
+                    if member.name.startswith(prefix):
+                        return True
+        except (tarfile.TarError, OSError):
+            pass  # fall through to the live check
+    # 2. Live Hackage check.
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            f"https://hackage.haskell.org/package/{name}", method="HEAD")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return 200 <= resp.status < 300
+    except Exception:
+        return False
+
+
+def cmd_haskell_hackage(root: Path, args: list[str]) -> int:
+    """Print the version iff <pkg> is consumable from Hackage at its resolved
+    host version (and not overridden "local"); exit 1 otherwise so the caller
+    keeps that package's source-dirs on the local compile path."""
+    if len(args) != 1:
+        print("Usage: hydra-packages.py haskell-hackage <pkg>", file=sys.stderr)
+        return 2
+    pkg = args[0]
+    ver = resolve_host_version(root, pkg)  # respects "local" override (→ None)
+    if not ver:
+        return 1
+    if _hackage_has(pkg, ver):
+        print(ver)
+        return 0
+    return 1
+
+
 COMMANDS = {
+    "haskell-hackage": cmd_haskell_hackage,
     "list": cmd_list,
     "deps": cmd_deps,
     "topo": cmd_topo,

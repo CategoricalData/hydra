@@ -18,7 +18,8 @@
 
 module Main where
 
-import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit, modulesToGraph)
+import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit, modulesToGraph,
+  loadModulesFromJson, readManifestField)
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
@@ -42,12 +43,38 @@ import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import Control.Exception (catch, SomeException)
 import Control.Monad (when)
+import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Set as S
+import qualified System.Directory as DD
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
+import qualified System.FilePath as FP
 import System.IO (hFlush, stdout)
 
+
+-- | Load the hydra-java and hydra-python modules (hydra.{java,python}.* +
+-- hydra.dsl.{java,python}.*) from their already-generated dist/json so they can
+-- seed the inference universe. Their Haskell DSL sources have been deleted
+-- (#346/#370); the native drivers are the sole writers, but the Haskell generator
+-- still needs these modules present to resolve cross-package references (e.g.
+-- hydra-scala -> hydra.java.serde.escapeJavaString). Missing manifests (a truly
+-- cold tree before Phase 1.5 seeds them) are tolerated: such a run cannot
+-- reference them yet either. The decode context is the base universe (kernel etc.).
+loadNativePackageModules :: FilePath -> [Kernel.Module] -> IO [Kernel.Module]
+loadNativePackageModules distRoot baseUniverse =
+    fmap L.concat $ CM.forM ["hydra-java", "hydra-python"] $ \pkg -> do
+      let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          manifest = pkgJson FP.</> "manifest.json"
+      exists <- DD.doesFileExist manifest
+      if not exists
+        then do
+          putStrLn $ "  (skipping " ++ pkg ++ ": no manifest yet — cold tree)"
+          return []
+        else do
+          mainNs <- readManifestField pkgJson "mainModules"
+          dslNs  <- readManifestField pkgJson "dslModules"
+          loadModulesFromJson pkgJson baseUniverse (mainNs ++ dslNs)
 
 -- | Deduplicate a list of modules by namespace, keeping the first occurrence.
 dedupByNamespace :: [Kernel.Module] -> [Kernel.Module]
@@ -69,7 +96,16 @@ main = do
   -- to add the synthetic inference workloads to the universe. Default sync
   -- (bin/sync.sh) omits them so they don't balloon every host's codegen step.
   let extraBench = if includeBench then hydraBenchModules else []
-  let universe = dedupByNamespace $ L.concat
+
+  -- #346/#370: hydra-java and hydra-python have NO Haskell DSL sources
+  -- (hydraJavaModules / hydraPythonModules are []), so their hydra.{java,python}.*
+  -- and hydra.dsl.{java,python}.* modules are absent from the compiled universe.
+  -- But other packages may REFERENCE them at inference time — notably hydra-scala's
+  -- serde calls hydra.java.serde.escapeJavaString. Load those modules from their
+  -- already-generated dist/json (written by the native drivers) so cross-package
+  -- references resolve. These are excluded from the write pass below by
+  -- isNativeOwned, so loading them only seeds the inference universe.
+  let baseUniverse = dedupByNamespace $ L.concat
         [ mainModules
         , defaultLibModules
         , dslSourceModules
@@ -89,6 +125,8 @@ main = do
         , hydraExtEncodingModules
         , [GenPGTransform.module_]
         ]
+  nativeModules <- loadNativePackageModules distRoot baseUniverse
+  let universe = dedupByNamespace (baseUniverse ++ nativeModules)
 
   putStrLn "=== Generate Hydra JSON modules ==="
   putStrLn ""
