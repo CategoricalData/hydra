@@ -67,6 +67,24 @@ with open('$fp', 'w') as f:
 # stack-exec runs whatever's in .stack-work; on a stale build cache the
 # refresh-input subcommand (added by #469) may not exist yet. Mirror
 # the test-stale-output-prune.sh pattern: build before exec.
+#
+# The committed heads/haskell/{package.yaml,stack.yaml} are local-mode,
+# which expects an in-tree dist/haskell/hydra-{kernel,haskell}. On a
+# tree where sync.sh hasn't been run, those dirs are empty and the
+# build fails on missing Hydra.Haskell.Lib.* modules. Mirror sync.sh's
+# Phase-0 prep: switch to published-host build files (which link the
+# published hydra-kernel / hydra-haskell from Hackage), and overlay the
+# umbrella + test runtime onto dist/haskell. We restore the local-mode
+# build files on exit to keep the working tree clean.
+_test_469_restore_build_files() {
+    git -C "$HYDRA_ROOT_DIR" checkout -q -- \
+        heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
+}
+trap _test_469_restore_build_files EXIT
+python3 "$HYDRA_ROOT_DIR/bin/lib/generate-head-haskell-build.py" --mode published >/dev/null
+HYDRA_HASKELL_HOST_MODE=published \
+    "$HYDRA_ROOT_DIR/heads/haskell/bin/overlay-kernel-runtime.sh" >/dev/null
+
 echo "Building digest-check + bootstrap-from-json from current source..."
 ( cd "$HYDRA_ROOT_DIR/heads/haskell" && stack build hydra:exe:digest-check hydra:exe:bootstrap-from-json )
 
