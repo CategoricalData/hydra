@@ -18,7 +18,6 @@ import Hydra.Sources.Ext (
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules,
   allDslTypeModules)
-import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
@@ -54,7 +53,6 @@ main = do
   let extraBench = if includeBench then hydraBenchModules else []
   let mainUniverse = dedupByNamespace $ L.concat
         [ mainModules
-        , defaultLibModules
         , dslSourceModules
         , extraBench
         , hydraCoqModules

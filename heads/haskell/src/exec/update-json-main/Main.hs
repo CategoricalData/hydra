@@ -6,7 +6,7 @@
 -- directory via the routing table in Hydra.PackageRouting.
 --
 -- Universe (deduped by namespace before writing):
---   * hydra-kernel: mainModules + defaultLibModules + dslSourceModules
+--   * hydra-kernel: mainModules + dslSourceModules
 --   * hydra-haskell: haskellModules (already in mainModules; routed here)
 --   * coder packages: hydraJavaModules, hydraPythonModules, hydraScalaModules,
 --     hydraLispModules
@@ -30,7 +30,6 @@ import Hydra.Sources.Ext (
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules,
   allDslTypeModules)
-import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 
 import qualified Hydra.Kernel as Kernel
 import qualified Hydra.Core as Core
@@ -107,7 +106,6 @@ main = do
   -- isNativeOwned, so loading them only seeds the inference universe.
   let baseUniverse = dedupByNamespace $ L.concat
         [ mainModules
-        , defaultLibModules
         , dslSourceModules
         , extraBench
         , hydraCoqModules

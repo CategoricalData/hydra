@@ -33,7 +33,6 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
-import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
@@ -83,7 +82,6 @@ isNativeOwned m =
 fullMainUniverse :: [Kernel.Module]
 fullMainUniverse = dedupByNamespace $ L.concat
   [ mainModules
-  , defaultLibModules
   , dslSourceModules
   , hydraCoqModules
   , hydraGoModules

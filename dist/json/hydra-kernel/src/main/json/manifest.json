@@ -1,5 +1,4 @@
 {
-  "defaultLibModules": [],
   "dslModules": [
     "hydra.dsl.ast",
     "hydra.dsl.coders",

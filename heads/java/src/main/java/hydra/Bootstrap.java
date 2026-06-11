@@ -381,14 +381,11 @@ public class Bootstrap {
         }
     }
 
-    /** Load a package's mainModules + defaultLibModules from its manifest. */
+    /** Load a package's mainModules from its manifest. */
     private static List<Module> loadPackageMain(String root, String pkg,
             Map<hydra.core.Name, hydra.core.Type> schemaMap) throws Exception {
         String pkgDir = packageMainDir(root, pkg);
-        List<ModuleName> mainNs = readManifestFieldOrEmpty(pkgDir, "mainModules");
-        List<ModuleName> defaultNs = readManifestFieldOrEmpty(pkgDir, "defaultLibModules");
-        List<ModuleName> allNs = new ArrayList<>(mainNs);
-        allNs.addAll(defaultNs);
+        List<ModuleName> allNs = readManifestFieldOrEmpty(pkgDir, "mainModules");
         if (allNs.isEmpty()) return new ArrayList<>();
         System.out.println("  " + pkg + ": " + allNs.size() + " modules from " + pkgDir);
         return Generation.loadModulesFromJson(pkgDir, schemaMap, allNs);

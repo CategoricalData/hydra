@@ -89,11 +89,9 @@ def _read_manifest_field_or_empty(pkg_dir, field_name):
 
 
 def _load_package_main(root, pkg):
-    """Load the mainModules + defaultLibModules from a package's manifest."""
+    """Load the mainModules from a package's manifest."""
     pkg_dir = _package_main_dir(root, pkg)
-    main_ns = _read_manifest_field_or_empty(pkg_dir, "mainModules")
-    default_ns = _read_manifest_field_or_empty(pkg_dir, "defaultLibModules")
-    all_ns = main_ns + default_ns
+    all_ns = _read_manifest_field_or_empty(pkg_dir, "mainModules")
     if not all_ns:
         return []
     print(f"  {pkg}: {len(all_ns)} modules from {pkg_dir}", flush=True)
