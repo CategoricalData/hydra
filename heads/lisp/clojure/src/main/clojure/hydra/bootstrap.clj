@@ -237,7 +237,7 @@
 
               (let [step-start2 (System/currentTimeMillis)
                     main-file-count (gen-sources (:coder coder-info) (:language coder-info)
-                                                 do-infer do-expand do-hoist-case do-hoist-poly
+                                                 do-infer
                                                  out-main all-main-mods mods-to-generate)
                     step-time2 (- (System/currentTimeMillis) step-start2)]
                 (println (str "  Generated " main-file-count " files."))
@@ -271,7 +271,7 @@
                           (flush)
                           (let [step-start3 (System/currentTimeMillis)
                                 count (gen-sources (:coder coder-info) (:language coder-info)
-                                                    do-infer do-expand do-hoist-case do-hoist-poly
+                                                    do-infer
                                                     out-test all-universe test-mods-to-emit)
                                 step-time3 (- (System/currentTimeMillis) step-start3)]
                             (println (str "  Generated " count " test files."))
