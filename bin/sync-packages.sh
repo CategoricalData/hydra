@@ -331,9 +331,11 @@ echo ""
 # Returns 0 if $target is in the package's declared targetLanguages (or if
 # the package has no targetLanguages field, meaning it targets every host).
 # Returns 1 otherwise. The targetLanguages field is read from each
-# package's package.json; coder-only packages like hydra-coq,
-# hydra-typescript, and hydra-wasm list just ["haskell"] because their
-# coders are implemented only against the Haskell runtime.
+# package's package.json; coder-only packages like hydra-coq and
+# hydra-wasm list just ["haskell"] because their coders are implemented
+# only against the Haskell runtime. (hydra-typescript dropped that
+# restriction in #468 — it is now a full target alongside the other
+# coders, published as a Java/Maven + PyPI artifact.)
 pkg_supports_target() {
     "$HYDRA_PACKAGES_PY" supports-target "$1" "$2"
 }
