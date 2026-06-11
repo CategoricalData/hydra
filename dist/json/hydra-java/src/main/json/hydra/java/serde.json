@@ -5334,6 +5334,13 @@
                             "domain": {"unit": {}},
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "abstract"}}}}}}},
                       {
+                        "name": "static",
+                        "handler": {
+                          "lambda": {
+                            "parameter": "_",
+                            "domain": {"unit": {}},
+                            "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "static"}}}}}}},
+                      {
                         "name": "final",
                         "handler": {
                           "lambda": {
