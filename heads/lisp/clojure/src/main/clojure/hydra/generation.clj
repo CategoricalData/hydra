@@ -112,16 +112,16 @@
 
 (defn generate-sources
   "Generate source files and write them to disk."
-  [coder language do-infer do-expand do-hoist-case do-hoist-poly
+  [coder language do-infer
    base-path universe modules-to-generate]
   (let [bs-graph (bootstrap-graph)
         cx (empty-context)
         t0 (System/currentTimeMillis)
         _ (println (str "  [gen] Starting generate_source_files at " (java.time.Instant/now)))
         _ (flush)
-        result (((((((((((r 'hydra_codegen_generate_source_files)
-                          coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
-                     bs-graph) universe) modules-to-generate) cx)
+        result ((((((((r 'hydra_codegen_generate_source_files)
+                      coder) language) do-infer)
+                 bs-graph) universe) modules-to-generate) cx)
         files (unwrap-either result)
         t1 (System/currentTimeMillis)]
     (println (str "  Code generation took " (/ (- t1 t0) 1000.0) "s for " (count files) " files"))
