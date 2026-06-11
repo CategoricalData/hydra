@@ -33,8 +33,23 @@
 # Prerequisites:
 #   - Stack is installed and configured
 #
+# Host mode (#370):
+#   --published-host  (DEFAULT)  Link the kernel + Haskell-coder runtime as the
+#                                PUBLISHED hydra-kernel / hydra-haskell packages
+#                                from Hackage (pinned at hydra.json hostVersion).
+#                                The head compiles only the other coders + drivers
+#                                + DSL sources, not the ~215 kernel modules.
+#   --local-host                 Build the whole host from local source (today's
+#                                behavior): kernel + Haskell coder back on the
+#                                compile path, overlay applied in full. The
+#                                foolproof escape — use for cutting a kernel/coder
+#                                release, or a backward-incompatible kernel change
+#                                the published kernel can't express. Per-package:
+#                                set hydra.json hostVersionOverrides[pkg]="local".
+#
 # Usage:
-#   heads/haskell/bin/sync-haskell.sh             # Full sync (all steps including tests)
+#   heads/haskell/bin/sync-haskell.sh             # Full sync (published host, all steps incl tests)
+#   heads/haskell/bin/sync-haskell.sh --local-host  # Build host from local source
 #   heads/haskell/bin/sync-haskell.sh --no-tests  # Skip tests (for faster iteration)
 #   heads/haskell/bin/sync-haskell.sh --help      # Show this help
 
@@ -47,11 +62,18 @@ HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 NO_TESTS=false
+HOST_MODE=published
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests)
             NO_TESTS=true
+            ;;
+        --published-host)
+            HOST_MODE=published
+            ;;
+        --local-host)
+            HOST_MODE=local
             ;;
         --help|-h)
             sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
@@ -71,6 +93,29 @@ TOTAL_STEPS=6
 banner2 "Synchronizing Hydra-Haskell (via DSL → JSON → Haskell)"
 echo ""
 
+# #370: emit heads/haskell/{package.yaml,stack.yaml} for the chosen host mode.
+# published → kernel + Haskell coder come from published Hackage deps (extra-deps,
+# version-pinned from hydra.json); local → the committed (hand-maintained) form,
+# whole host built from source. Mirrors the Java json-driver / Python venv
+# published-host wiring.
+#
+# package.yaml + stack.yaml are TRACKED files whose committed form is the
+# hand-maintained LOCAL-mode source of truth (like hpack's input). Published mode
+# transiently rewrites them for the build, so we restore the committed form on
+# exit (success or failure) — the published-mode forms are build artifacts, never
+# committed. `stack build` consumes them across all of Steps 1-6, so the restore
+# must run only at the very end, hence the EXIT trap.
+echo "  Host mode: $HOST_MODE"
+if [ "$HOST_MODE" = "published" ]; then
+    _restore_head_build_files() {
+        git -C "$HYDRA_ROOT_DIR" checkout -q -- \
+            heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
+    }
+    trap _restore_head_build_files EXIT
+fi
+python3 "$HYDRA_ROOT_DIR/bin/lib/generate-head-haskell-build.py" --mode "$HOST_MODE"
+echo ""
+
 # Overlay hand-written distribution-package source onto the dist tree (#418) so
 # each dist/haskell/<pkg>/ is a COMPLETE distribution package before stack build.
 # MUST run before step 1: hydra-ext (a transitive dep of bootstrap-from-json)
@@ -81,7 +126,7 @@ echo ""
 # follows the same overlay→build sequence; this aligns the standalone wrapper
 # with it.
 echo ""
-"$SCRIPT_DIR/overlay-kernel-runtime.sh"
+HYDRA_HASKELL_HOST_MODE="$HOST_MODE" "$SCRIPT_DIR/overlay-kernel-runtime.sh"
 echo ""
 
 step 1 $TOTAL_STEPS "Building required executables"
