@@ -80,8 +80,22 @@ import qualified Data.Maybe                                as Y
 -- Additional imports
 import Hydra.Ast
 import qualified Hydra.Scala.Syntax as Scala
-import qualified Hydra.Sources.Java.Serde as JavaSerdeSource
 import qualified Hydra.Sources.Scala.Syntax as ScalaSyntax
+
+-- #346/#370: the Scala serde reuses hydra.java.serde.escapeJavaString at RUNTIME
+-- (Scala string-literal escaping happens to match Java's today). That runtime
+-- dependency on the hydra.java.serde JSON module is fine — it is generated before
+-- hydra-scala. But we must NOT import the Java coder's Haskell DSL source module
+-- (Hydra.Sources.Java.Serde), because that source is deleted along with the rest
+-- of hydra-java's Haskell DSL. A reference to a definition needs only its Name
+-- (asTerm (TypedTermDefinition name _) = TermVariable name — the body is
+-- discarded), so we construct a by-name handle locally instead of importing the
+-- module. Emitted output is byte-identical.
+javaSerdeNs :: ModuleName
+javaSerdeNs = ModuleName "hydra.java.serde"
+
+escapeJavaStringRef :: TypedTermDefinition (String -> String)
+escapeJavaStringRef = definitionInModuleName javaSerdeNs "escapeJavaString" unit
 
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -94,7 +108,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns, JavaSerdeSource.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns, javaSerdeNs] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting Scala AST to abstract expressions")}
   where
     definitions = [
@@ -393,7 +407,7 @@ litToExpr = define "litToExpr" $
       Scala._Lit_double>>: lambda "f" $
         Serialization.cst @@ (scalaFloatLiteralText @@ string "Double" @@ string "" @@ Literals.showFloat64 (var "f")),
       Scala._Lit_unit>>: constant $ Serialization.cst @@ string "()",
-      Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (JavaSerdeSource.escapeJavaString @@ var "s") (string "\"")),
+      Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (escapeJavaStringRef @@ var "s") (string "\"")),
       Name "bytes">>: lambda "bs" $
         Serialization.cst @@ Strings.cat2 (string "Array[Byte](")
           (Strings.cat2

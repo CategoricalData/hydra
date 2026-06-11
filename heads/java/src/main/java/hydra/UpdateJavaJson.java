@@ -172,9 +172,25 @@ public class UpdateJavaJson {
         try {
             Generation.inferAndWriteByPackage(
                 hydraRoot, distJsonRoot, universePlusSources, sources, universe);
-        } catch (RuntimeException ex) {
+            // #370/#346: also synthesize the DSL-wrapper modules
+            // (hydra.dsl.java.{environment,syntax}) that the legacy Haskell
+            // update-json-main DSL pass used to write. Now that hydra-java is
+            // single-writer (no Haskell DSL fallback), the native driver owns its
+            // full emission set. The DSL-type source modules are the type-defining
+            // ones: hydra.java.environment and hydra.java.syntax.
+            List<Module> dslTypeMods = new ArrayList<>();
+            for (Module m : sources) {
+                String ns = m.name.value;
+                if (ns.equals("hydra.java.environment") || ns.equals("hydra.java.syntax")) {
+                    dslTypeMods.add(m);
+                }
+            }
+            List<Module> writtenDsl = Generation.synthesizeAndWriteDslModules(
+                distJsonRoot, universePlusSources, dslTypeMods);
+            System.err.println("  DSL wrappers: " + writtenDsl.size() + " module(s) written");
+        } catch (RuntimeException | java.io.IOException ex) {
             System.err.println("  FAILED: " + ex.getMessage());
-            Throwable cause = ex.getCause();
+            Throwable cause = (ex instanceof RuntimeException) ? ex.getCause() : ex;
             if (cause != null) {
                 System.err.println("  cause: " + cause);
             }

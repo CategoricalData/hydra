@@ -1,0 +1,7 @@
+// Standalone, single-project build for the #370 published-host Java DSL->JSON
+// driver. Deliberately NOT part of heads/java/settings.gradle: keeping it out of
+// that multi-project build is what lets `net.fortytwo.hydra:hydra-java` resolve
+// to the PUBLISHED Maven artifact instead of being substituted to the local
+// :hydra-java project (which shares the same group:name coordinates and would
+// otherwise always win).
+rootProject.name = 'hydra-java-json-driver'
