@@ -181,7 +181,7 @@ else
     # source DSL (kernelModules) produces. On drift it exits 1 with e.g.
     # "element count differs: N vs M". The recovery is purely mechanical: run
     # update-json-kernel — the authoritative DSL→JSON writer for exactly this
-    # tree (kernelModules ++ defaultLibModules → dist/json/hydra-kernel/.../) —
+    # tree (kernelModules → dist/json/hydra-kernel/.../) —
     # then re-verify. So do that automatically instead of forcing the human to.
     #
     # This is NOT a post-generation patch: it runs the generator to make

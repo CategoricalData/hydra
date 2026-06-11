@@ -535,16 +535,16 @@
   ;; hydra.test.lib.chars references hydra.test.testGraph.testContext but
   ;; doesn't declare hydra.test.testGraph in dependencies). With the
   ;; vhash maps fix, single-call codegen is fast enough.
+  ;; doExpand/doHoistCase/doHoistPoly are derived inside the kernel from
+  ;; lang.supportedFeatures; only doInfer is passed in. Generation.hs's
+  ;; type signature is stale (declares 4 Bools) but the body takes 1.
   (let* ((bs-graph (bootstrap-graph))
          (cx (make-hydra_typing_inference_context 0 '()))
          (do-infer (list-ref flags 0))
-         (do-expand (list-ref flags 1))
-         (do-hoist-case (list-ref flags 2))
-         (do-hoist-poly (list-ref flags 3))
          (t0 (current-time-millis))
-         (result ((((((((((hydra_codegen_generate_source_files
-                            coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
-                       bs-graph) universe-mods) mods-to-generate) cx)))
+         (result (((((((hydra_codegen_generate_source_files
+                          coder) language) do-infer)
+                     bs-graph) universe-mods) mods-to-generate) cx)))
     (when (eq? (car result) 'left)
       (error "Code generation failed" (cadr result)))
     (let* ((files (cadr result))
@@ -582,9 +582,7 @@
     ;; Load main modules
     (display "\nStep 1: Loading main modules from JSON...\n")
     (force-output (current-output-port))
-    (let* ((main-ns (read-manifest-field *json-dir* "mainModules"))
-           (default-ns (read-manifest-field *json-dir* "defaultLibModules"))
-           (all-ns (append main-ns default-ns))
+    (let* ((all-ns (read-manifest-field *json-dir* "mainModules"))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (apply + (map (lambda (m)
                                            (let ((els (hydra_packaging_module-definitions m)))
@@ -595,8 +593,8 @@
       (force-output (current-output-port))
 
       ;; Filter modules. Note: in scheme's case the universe already comes from
-      ;; manifest.mainModules + defaultLibModules (which are all the kernel +
-      ;; eval-lib namespaces). There is no separate set of "coder packages" to
+      ;; manifest.mainModules (all the kernel + eval-lib namespaces). There is
+      ;; no separate set of "coder packages" to
       ;; exclude here; --kernel-only is therefore a no-op and we generate the
       ;; entire loaded universe. (The Haskell host's bootstrap-from-json sees
       ;; both kernel and ext modules and uses --kernel-only to exclude ext.)

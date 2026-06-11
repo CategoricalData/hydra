@@ -1,5 +1,4 @@
 {
-  "defaultLibModules": [],
   "dslModules": ["hydra.dsl.pg.model"],
   "mainModules": [
     "com.gdblab.pathAlgebra.expressions",
