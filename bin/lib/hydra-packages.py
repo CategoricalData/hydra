@@ -54,6 +54,7 @@ PUBLISHED_HOSTS = frozenset({
     "hydra-python",
     "hydra-scala",
     "hydra-lisp",
+    "hydra-typescript",
 })
 
 
