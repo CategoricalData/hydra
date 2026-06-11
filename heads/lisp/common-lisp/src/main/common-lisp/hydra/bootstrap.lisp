@@ -154,6 +154,43 @@
               (load-module-from-json bs-graph schema-map ns json-dir))
             namespaces)))
 
+;; --- Per-package loading (baseline + coders, mirroring Scala/Python hosts) ---
+
+(defun ends-with-p (s suffix)
+  (let ((ls (length s)) (lf (length suffix)))
+    (and (>= ls lf) (string= (subseq s (- ls lf)) suffix))))
+
+(defun dist-json-root-of (json-dir)
+  "Strip a legacy <pkg>/src/main/json suffix to recover the dist/json root.
+   If json-dir does not match the expected shape, return it unchanged."
+  (let ((trimmed (string-right-trim "/" json-dir)))
+    (if (ends-with-p trimmed "/src/main/json")
+        (let* ((without-suffix (subseq trimmed 0 (- (length trimmed)
+                                                   (length "/src/main/json"))))
+               (slash (position #\/ without-suffix :from-end t)))
+          (if slash (subseq without-suffix 0 slash) "."))
+        trimmed)))
+
+(defun package-main-dir (root pkg)
+  (format nil "~A/~A/src/main/json" root pkg))
+
+(defun read-manifest-field-or-empty (pkg-dir field-name)
+  (let ((manifest-path (format nil "~A/manifest.json" pkg-dir)))
+    (if (probe-file manifest-path)
+        (coerce (read-manifest-field pkg-dir field-name) 'list)
+        nil)))
+
+(defun load-package-main (root pkg)
+  "Load mainModules + defaultLibModules for the given package under dist/json/<pkg>."
+  (let* ((pkg-dir (package-main-dir root pkg))
+         (main-ns (read-manifest-field-or-empty pkg-dir "mainModules"))
+         (default-ns (read-manifest-field-or-empty pkg-dir "defaultLibModules"))
+         (all-ns (append main-ns default-ns)))
+    (when all-ns
+      (format t "  ~A: ~A modules from ~A~%" pkg (length all-ns) pkg-dir)
+      (force-output)
+      (load-modules-from-json pkg-dir all-ns))))
+
 ;; --- Coder resolution ---
 
 (defun resolve-coder (target)
@@ -271,26 +308,35 @@
     (format t "==========================================~%")
     (force-output)
 
-    ;; Load main modules
-    (format t "~%Step 1: Loading main modules from JSON...~%")
+    ;; Load baseline packages (hydra-kernel + hydra-haskell), mirroring the
+    ;; Scala and Python hosts. The hydra-haskell package supplies the runtime
+    ;; AST modules (Hydra.Haskell.Syntax, .Environment, etc.) that the
+    ;; generated DSL source modules import. Without it the Haskell rebuild
+    ;; step fails on dangling imports.
+    (format t "~%Step 1: Loading baseline main modules from JSON...~%")
     (force-output)
-    (let* ((all-ns (coerce (read-manifest-field *json-dir* "mainModules") 'list))
-           (all-mods (load-modules-from-json *json-dir* all-ns))
+    (let* ((dist-json-root (dist-json-root-of *json-dir*))
+           (kernel-mods (load-package-main dist-json-root "hydra-kernel"))
+           (haskell-mods (load-package-main dist-json-root "hydra-haskell"))
+           (all-mods (append kernel-mods haskell-mods))
            (total-bindings (reduce #'+ (mapcar (lambda (m)
                                                  (length (cdr (assoc :definitions m))))
-                                               all-mods))))
-      (format t "  Loaded ~A modules (~A bindings).~%" (length all-mods) total-bindings)
+                                               all-mods)))
+           (kernel-ns-set (mapcar (lambda (m)
+                                    (let ((ns (cdr (assoc :namespace m))))
+                                      (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                  all-mods)))
+      (format t "  Loaded ~A baseline modules (~A bindings).~%" (length all-mods) total-bindings)
       (force-output)
 
       ;; Filter if needed
       (let* ((mods-to-generate
                (if *kernel-only*
-                   (remove-if (lambda (m)
-                                (let ((ns (cdr (assoc :namespace m))))
-                                  (let ((ns-str (if (stringp ns) ns (cdr (assoc :value ns)))))
-                                    (or (search "hydra." ns-str)
-                                        (search "hydra.json.yaml." ns-str)))))
-                              all-mods)
+                   (remove-if-not (lambda (m)
+                                    (let ((ns (cdr (assoc :namespace m))))
+                                      (let ((ns-str (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                        (member ns-str kernel-ns-set :test #'string=))))
+                                  all-mods)
                    all-mods))
              (out-main (format nil "~A/common-lisp-to-~A/src/main/~A"
                                *output-base* *target* subdir)))
