@@ -21,7 +21,6 @@ import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
 import qualified Hydra.Show.Errors as ShowError
-import qualified Hydra.Sources.Kernel.Lib.Defaults.All as DefaultAll
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Inference as Inference
@@ -1341,7 +1340,6 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     -- Keep fields alphabetized so the emitted manifest.json byte order is unchanged
     -- by the switch to order-preserving JSON objects (see docs/json-format.md).
     let jsonVal = Json.ValueObject [
-            ("defaultLibModules", namespacesJson DefaultAll.defaultLibModules),
             ("dslModules", namespacesJson nonEmptyDsls),
             ("kernelModules", namespacesJson kernelModules),
             ("mainModules", namespacesJson mainModules),
@@ -1382,21 +1380,17 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
     let mainByPkg = groupByPackage mainModules
     let dslByPkg  = M.fromList (groupByPackage nonEmptyDsls)
     let testByPkg = M.fromList (groupByPackage testModules)
-    let defaultLibSet = M.fromList (groupByPackage DefaultAll.defaultLibModules)
     let packages = L.nub
           $ fmap fst mainByPkg
           ++ M.keys dslByPkg
           ++ M.keys testByPkg
-          ++ M.keys defaultLibSet
     CM.forM_ (L.sort packages) $ \pkg -> do
       let mainForPkg   = Y.fromMaybe [] (lookup pkg mainByPkg)
           dslForPkg    = M.findWithDefault [] pkg dslByPkg
           testForPkg   = M.findWithDefault [] pkg testByPkg
-          defaultForPkg   = M.findWithDefault [] pkg defaultLibSet
           -- Keep fields alphabetized so the emitted manifest.json byte order is unchanged
           -- by the switch to order-preserving JSON objects (see docs/json-format.md).
           jsonVal = Json.ValueObject [
-              ("defaultLibModules", namespacesJson defaultForPkg),
               ("dslModules",     namespacesJson dslForPkg),
               ("mainModules",    namespacesJson mainForPkg),
               ("manifestFormatVersion", Json.ValueNumber 1),
