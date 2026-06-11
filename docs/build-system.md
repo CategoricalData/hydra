@@ -180,23 +180,29 @@ strictly in order, but any phase can short-circuit independently.
 | 5. Native DSL → JSON for hydra-java and hydra-python | `bin/generate-hydra-<lang>-from-<lang>.sh` | Overwrites `dist/json/hydra-{java,python}/` from host-native sources |
 
 Phase 1.5 closes a warm/cold asymmetry from #344 that
-[#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic. Phase 1
-re-exports the `hydra.java.*` / `hydra.python.*` coder JSON only on cold-start (when the
-sentinel JSON is missing); on a warm tree it skips them, since Phase 5 owns those paths.
-But `dist/json/hydra-{java,python}/coder.json` feeds Phase 2's
+[#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic.
+`dist/json/hydra-{java,python}/coder.json` feeds Phase 2's
 `dist/haskell/hydra-{java,python}/Coder.hs`, which compiles into the core `hydra` library.
 A kernel rename that ripples into the coders therefore leaves that JSON stale against the
-freshly regenerated kernel, and Phase 2 emits a `Coder.hs` referencing a renamed-away field
-— breaking the next `stack build`, before Phase 5 (which would refresh the JSON) ever runs.
-Reordering Phase 5 ahead of Phase 2 cannot fix this today: the native generator needs the
-host built (Phase 4 output), which needs this very library. So Phase 1.5 heals in place —
-it keys on the just-regenerated kernel JSON (the rename signal, which survives the eventual
-deletion of the legacy Haskell coder DSL) and, on a miss, re-exports the coder JSON via
-`update-json-main --include-java-python` so Phase 2 reads fresh input.
+freshly regenerated kernel, and Phase 2 would emit a `Coder.hs` referencing a renamed-away
+field — breaking the next `stack build`. So Phase 1.5 heals the coder JSON in place, keyed on
+the just-regenerated kernel JSON (the rename signal).
 
-Phase 5 is the migration path for [#344](https://github.com/CategoricalData/hydra/issues/344):
-`hydra-java` and `hydra-python` are now authored in their own host languages, with the
-legacy Haskell-DSL copies retained as a fallback through 0.15.
+As of #346/#370 both heals run via the **native drivers against the published hosts**
+(`bin/generate-hydra-{java,python}-from-{java,python}.sh`), which need only
+`dist/json/hydra-kernel/` — not a built local host — so they sidestep the chicken-and-egg
+(the native generator no longer has to wait for Phase 4). The legacy
+`update-json-main --include-java-python` heal is gone: the Haskell DSL copies under
+`packages/hydra-{java,python}/src/main/haskell/` have been **deleted**, so `hydraJavaModules`
+and `hydraPythonModules` are empty and `update-json-main` no longer writes those namespaces.
+It does still *load* the `hydra.{java,python}.*` JSON into its inference universe so
+cross-package references resolve (e.g. `hydra-scala` → `hydra.java.serde.escapeJavaString`).
+
+Phase 5 completed the migration for [#344](https://github.com/CategoricalData/hydra/issues/344):
+`hydra-java` and `hydra-python` are authored in their own host languages, and as of #346 those
+host-native sources are the **sole** source of truth — the Haskell DSL copies are deleted. The
+native drivers also synthesize the `hydra.dsl.{java,python}.*` wrapper modules that the Haskell
+DSL pass used to write, making each package a clean single-writer.
 
 Because Phase 5 is last but its output (`dist/json/hydra-{java,python}/`) is an *input* to
 Phases 2–4, a change to a native coder would otherwise take two sync passes to fully land —
@@ -211,10 +217,11 @@ detects the change without any output-digest force-drop. The downstream `dist/<t
 trees are gitignored and regenerated on the next run, so they are intentionally not
 re-emitted here.
 
-Once the legacy Haskell DSL copies for hydra-java/hydra-python are removed (post-0.16), the
-native generators become the sole writers of `dist/json/hydra-{java,python}/`. This native
-DSL→JSON step should then move ahead of Phase 2, eliminating the producer-ordering lag and
-the re-assemble block above.
+Now that the legacy Haskell DSL copies for hydra-java/hydra-python are removed (#346), the
+native generators are the sole writers of `dist/json/hydra-{java,python}/`. Phase 1.5 already
+seeds them via the native drivers (above), so the Phase-5 re-assemble block is a single-pass
+safety net rather than the producer of record. A further simplification — folding Phase 5's
+write into Phase 1.5 entirely — is possible but not yet done.
 
 `bin/sync.sh` runs Phases 0–5 over the matrix the caller specifies via `--hosts` and
 `--targets`. `bin/sync.sh` does NOT run target-language tests; only Haskell `stack test`
@@ -402,8 +409,10 @@ target's stamp; a single bad host can be pinned back via `hostVersionOverrides`,
 invalidates only that host's stamp. This is the cache half of
 [#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts):
 #347 wires the cache to key off published versions; #370 makes the build actually consume
-those published artifacts (the host-dependency coordinates — Stack `extra-deps`, Gradle/pip
-deps — do not exist yet).
+those published artifacts. As of 0.16 the **Java and Python DSL→JSON steps consume the
+published host by default**, and the **Haskell host links the published `hydra-kernel` +
+`hydra-haskell` from Hackage** for its own compile — see
+[Consuming published hosts](#consuming-published-hosts) below.
 
 Note a cross-host asymmetry that #370 must navigate but #347 does not: the Maven Central
 (Java) and PyPI (Python) artifacts are directly runnable (bytecode JARs / importable
@@ -460,8 +469,84 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
   the published host version for published hosts — a kernel-version bump invalidates
   every target; a per-host override invalidates only that host. See
   [The per-target generator stamp](#the-per-target-generator-stamp). This is the cache
-  half of [#370](https://github.com/CategoricalData/hydra/issues/370); the build does
-  not yet *consume* the published artifacts (that is #370 proper).
+  half of [#370](https://github.com/CategoricalData/hydra/issues/370); for the consume
+  half (Java/Python DSL→JSON now run against the published host), see
+  [Consuming published hosts](#consuming-published-hosts).
+
+## Consuming published hosts
+
+[#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts) has
+two halves: the *cache* half (#347, above — key invalidation off published versions) and the
+*consume* half (run the build against published artifacts instead of a locally-built host).
+As of 0.16 the consume half is implemented for **all three big hosts**:
+
+- **Java and Python** consume their published coder runtime in the DSL→JSON step that regenerates
+  `dist/json/hydra-{java,python}/` (Maven `hydra-java` / PyPI `hydra-python`) — see below.
+- **Haskell** consumes the published `hydra-kernel` + `hydra-haskell` from Hackage as its *host
+  runtime* — see [The Haskell host: runtime vs. sources](#the-haskell-host-runtime-vs-sources) below.
+
+All three resolve the version from `hydra.json` `hostVersion` (with per-host `hostVersionOverrides`),
+default to the published artifact, and offer a `--local-host` shim. The output is byte-identical to a
+local-host build (the forward-compatibility no-op proven for each).
+
+**How it works.** The Java and Python coder packages are authored host-natively
+(`packages/hydra-{java,python}/src/main/{java,python}/hydra/sources/`) and regenerated to
+`dist/json/hydra-{java,python}` by a thin driver (`hydra.UpdateJavaJson` /
+`bin/update-python-json.py`). The driver reads the kernel universe from
+`dist/json/hydra-kernel/` (data) and the DSL sources from `packages/` (local), and applies a
+**coder runtime**. That coder runtime is the only piece that needs to be a *host*: for Java it
+is the `hydra-java` jar; for Python the `hydra-python` wheel.
+
+- **Published-host mode (default).** The driver resolves
+  `net.fortytwo.hydra:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle
+  project at `heads/java/json-driver/`) or `hydra-python==<hostVersion>` from PyPI (a managed
+  venv at `heads/python/.venv-published-host/`, prepared by `bin/lib/python-published-host.sh`).
+  `<hostVersion>` is resolved from `hydra.json` (`hostVersion` / `hostVersionOverrides`) via
+  `bin/lib/hydra-packages.py host-version <pkg>`. No local Java/Python host build is required —
+  edits to the DSL sources flow straight through, and even a kernel rename that breaks the
+  local host build does not block JSON regeneration. This is the default for
+  `bin/update-java-json.sh` and `bin/generate-hydra-python-from-python.sh`, and therefore for
+  Phase 5 of `bin/sync.sh`.
+- **Local-host mode (`--local-host`, the bootstrap shim).** Builds the coder runtime from the
+  local source tree (the Java rollup's `headsExtras` source set / `dist/python/hydra-*`).
+  Use this only for a backward-incompatible kernel change the last published host cannot handle
+  yet: build a local interim host, publish it (to `mavenLocal` / the default pip index, or bump
+  `hydra.json`), then the default published-host path picks it up. See
+  [hostVersionOverrides](#component-identity).
+
+**The output is identical.** The published 0.16.0 host and a freshly-built local host produce
+byte-for-byte identical `dist/json/hydra-{java,python}` from the same DSL sources — this is the
+forward-compatibility contract (#369) that makes consuming a *previous* release's host safe.
+See [Self-bootstrapping and forward-compatibility](https://github.com/CategoricalData/hydra/wiki/Packaging#self-bootstrapping-and-forward-compatibility)
+on the Packaging wiki page for the principle.
+
+### The Haskell host: runtime vs. sources
+
+The Haskell case is shaped by a host/target split. The
+Haskell DSL *sources* are Haskell code compiled into the head (`Hydra.Sources.*`; `mainModules ::
+[Module]` is built by running compiled Haskell), and they stay local — they are the source of truth and
+must be recompiled to pick up edits. But the *kernel runtime* the head links to **run** the build
+(`Hydra.Codegen`, `Hydra.Inference`, `Hydra.Lib.*`, …) is exactly what the published `hydra-kernel` +
+`hydra-haskell` Hackage packages provide. So `heads/haskell` consumes those two from Hackage (Stack
+`extra-deps`, pinned at `hostVersion`) and compiles only the drivers, the DSL sources, and the
+not-yet-published target coders — not the ~200 kernel modules. The host-vs-target distinction matters:
+`dist/haskell/hydra-kernel` is still *generated* as a target (other Haskell targets depend on that
+freshly-generated current-version kernel), but it is no longer a prerequisite for the host's own compile.
+
+`heads/haskell/bin/sync-haskell.sh` defaults to `--published-host`; `bin/lib/generate-head-haskell-build.py`
+rewrites `package.yaml`/`stack.yaml` for the mode (the committed form is the hand-maintained local-mode
+source of truth, restored after a published sync). Which coder packages are consumed is *derived by
+probing* actual Hackage availability of `hydra-<pkg>-<hostVersion>` (`hydra-packages.py haskell-hackage`)
+— today only `hydra-kernel` + `hydra-haskell`; a coder published next cycle is consumed automatically
+with no config change. `--local-host` (build the whole host from source) and
+`hostVersionOverrides["hydra-<pkg>"] = "local"` (one package local, the rest from Hackage) are the shims.
+Consuming the published kernel is a no-op for codegen: the host generates byte-identical output whether
+its kernel came from Hackage or a local compile.
+
+`bin/sync.sh` carries the same `--published-host` (default) / `--local-host` flags and applies the mode
+to both Phase 0 (the exec build) and Phase 1 (`sync-haskell.sh`), so the host is built once in a single
+mode. The Phase-1 freshness gate (`check-phase1-fresh.py`) hashes the *committed* (mode-invariant) build
+files, so a published-mode sync never poisons the warm-tree cache.
 
 ## Operational entry points
 

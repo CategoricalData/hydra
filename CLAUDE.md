@@ -17,12 +17,29 @@ All eight pass the common test suite as targets; Haskell, Java, Python, Scala, a
 Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README implementation
 status).
 
-The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are now
-authored in Java and Python respectively (host-native). The native sources are authoritative for the
-generated output: the main sync regenerates `dist/json/hydra-{java,python}` from them in Phase 5
-(`bin/generate-hydra-java-from-java.sh`, `bin/generate-hydra-python-from-python.sh`). The legacy
-Haskell DSL copies are retained as a Phase-1 cold-start bootstrap fallback through 0.16 and are slated
-for deletion in 0.17 (#346).
+The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are
+authored in Java and Python respectively (host-native), and are now the **sole** source of truth: the
+Haskell DSL copies under `packages/hydra-{java,python}/src/main/haskell/` have been **deleted** (#346).
+The native sources are authoritative for the generated output: the main sync regenerates
+`dist/json/hydra-{java,python}` from them in Phase 5 (`bin/generate-hydra-java-from-java.sh`,
+`bin/generate-hydra-python-from-python.sh`), and the native drivers also synthesize the
+`hydra.dsl.{java,python}.*` wrapper modules (previously written by the Haskell DSL pass). As of 0.16 the
+drivers run against the **published host by default** (`net.fortytwo.hydra:hydra-java` from Maven /
+`hydra-python` from PyPI, version from `hydra.json` `hostVersion`), with a `--local-host` bootstrap shim
+for backward-incompatible kernel changes — the #370 "consume" path. See
+[Consuming published hosts](docs/build-system.md#consuming-published-hosts)
+and [Migration shims](docs/recipes/migration-shims.md). Note: the Haskell generator still loads the
+`hydra.{java,python}.*` JSON into its inference universe (so cross-package references like
+`hydra-scala` → `hydra.java.serde` resolve), but no longer *generates* those packages.
+
+The **Haskell host** now likewise consumes published artifacts: `heads/haskell` links published
+`hydra-kernel` + `hydra-haskell` from **Hackage** as its runtime, compiling only drivers + DSL sources +
+not-yet-published coders — not the kernel. `dist/haskell/hydra-kernel` is still *generated* as a target
+but is no longer a host prerequisite (the host-vs-target split). `sync-haskell.sh` / `bin/sync.sh`
+default to `--published-host`; `--local-host` builds the whole host from source, and
+`hostVersionOverrides[pkg]="local"` forces one package local while the rest come from the registry. See
+[build-system.md § Consuming published hosts](docs/build-system.md#consuming-published-hosts) for the
+full model (probe gate, the per-host mechanics).
 
 A ninth target, Go (`hydra-go`, `heads/go/`), is a "head bud" — the kernel can be generated
 to Go via `bin/sync-go.sh`, but the Go coder still has emission bugs and the head's
@@ -256,7 +273,8 @@ Primary entry point — the doc most likely to answer the question by task:
 | Set up a contributor environment (fresh checkout) | [docs/contributor-setup.md](docs/contributor-setup.md) — toolchain prerequisites tiered by scope; `bin/check-env.sh` probes what is installed |
 | Use Hydra as a library (library user, not contributor) | [docs/getting-started.md](docs/getting-started.md) — dependency coordinates and minimal-program walk-throughs per host |
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
-| Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, gap to #347 |
+| Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, and the published-host consume model (#370) for all three hosts |
+| Build when a published host can't (pin / local-host shim) | [docs/recipes/migration-shims.md](docs/recipes/migration-shims.md) — `hostVersionOverrides` pinning vs `--local-host`; the per-host shims |
 | Understand the JSON wire format | [docs/json-format.md](docs/json-format.md) — tagged-union duality, optional-field rules, IEEE sentinels, integer threshold |
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
 | Understand design rationale (the "why" for each major choice) | [Design wiki](https://github.com/CategoricalData/hydra/wiki/Design) |
