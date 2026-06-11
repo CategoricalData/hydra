@@ -582,9 +582,7 @@
     ;; Load main modules
     (display "\nStep 1: Loading main modules from JSON...\n")
     (force-output (current-output-port))
-    (let* ((main-ns (read-manifest-field *json-dir* "mainModules"))
-           (default-ns (read-manifest-field *json-dir* "defaultLibModules"))
-           (all-ns (append main-ns default-ns))
+    (let* ((all-ns (read-manifest-field *json-dir* "mainModules"))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (apply + (map (lambda (m)
                                            (let ((els (hydra_packaging_module-definitions m)))
@@ -595,8 +593,8 @@
       (force-output (current-output-port))
 
       ;; Filter modules. Note: in scheme's case the universe already comes from
-      ;; manifest.mainModules + defaultLibModules (which are all the kernel +
-      ;; eval-lib namespaces). There is no separate set of "coder packages" to
+      ;; manifest.mainModules (all the kernel + eval-lib namespaces). There is
+      ;; no separate set of "coder packages" to
       ;; exclude here; --kernel-only is therefore a no-op and we generate the
       ;; entire loaded universe. (The Haskell host's bootstrap-from-json sees
       ;; both kernel and ext modules and uses --kernel-only to exclude ext.)
