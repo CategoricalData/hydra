@@ -634,6 +634,13 @@ echo ""
 # sync.sh themselves to ensure the cross-language dist trees their
 # gradle compile imports from are populated.
 export HYDRA_IN_SYNC=1
+# Expose the host mode to the Phase 5 freshness gate (check-phase5-fresh.py) so
+# a published<->local switch invalidates the cache even when source inputs are
+# unchanged. Without this, flipping --local-host on a warm tree would be skipped
+# as "fresh" and the native re-export would never actually re-run under the new
+# host. Forwarded to the Python driver as a CLI flag below; the Java native pass
+# has no published/local switch, so its freshness is mode-independent.
+export HYDRA_PHASE5_HOST_MODE="$HOST_MODE"
 # Skip a language's native DSL→JSON pass entirely when that language
 # is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
 # has no reason to spin up Java's full kernel build or Python's pypy
@@ -649,16 +656,25 @@ else
 fi
 if printf '%s\n' $HOSTS | grep -qx python; then
     echo "--- hydra-python (native Python DSL → JSON) ---"
+    # Forward the sync's host mode to the Python coder driver. The wrapper
+    # defaults to --published-host; without this, `sync.sh --local-host` would
+    # silently leave Phase 5's Python re-export on the published host, defeating
+    # the whole point of --local-host (e.g. when the published hydra-python wheel
+    # is incompatible with the current kernel — the #370 migration-shim case).
+    # The Java wrapper has no published/local switch (its host is a build-presence
+    # check), so this forwarding is Python-only.
+    PY_HOST_MODE_FLAG="--${HOST_MODE}-host"   # published -> --published-host, local -> --local-host
     # Use PyPy when available — ~4x faster than CPython.
     if command -v pypy3 >/dev/null 2>&1; then
         native_generate_and_report python \
             "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
             "$PYTHON_HOST_SENTINEL" \
-            --pypy
+            "$PY_HOST_MODE_FLAG" --pypy
     else
         native_generate_and_report python \
             "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
-            "$PYTHON_HOST_SENTINEL"
+            "$PYTHON_HOST_SENTINEL" \
+            "$PY_HOST_MODE_FLAG"
     fi
 else
     echo "--- hydra-python (skipped: python not in HOSTS) ---"
