@@ -719,6 +719,7 @@ methodModifierToExpr m =
       Syntax.MethodModifierProtected -> Serialization.cst "protected"
       Syntax.MethodModifierPrivate -> Serialization.cst "private"
       Syntax.MethodModifierAbstract -> Serialization.cst "abstract"
+      Syntax.MethodModifierStatic -> Serialization.cst "static"
       Syntax.MethodModifierFinal -> Serialization.cst "final"
       Syntax.MethodModifierSynchronized -> Serialization.cst "synchronized"
       Syntax.MethodModifierNative -> Serialization.cst "native"

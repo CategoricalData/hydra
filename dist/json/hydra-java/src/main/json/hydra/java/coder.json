@@ -4042,6 +4042,58 @@
                         "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "actualType"}}}}}}}}}}}}},
     {
       "term": {
+        "name": "hydra.java.coder.builderSetterName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "body": {
+          "lambda": {
+            "parameter": "fname",
+            "domain": {"variable": "hydra.core.Name"},
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "base",
+                    "term": {
+                      "application": {
+                        "function": {"variable": "hydra.java.utils.sanitizeJavaName"},
+                        "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "fname"}}}}},
+                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.logic.or"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                            "argument": {"variable": "base"}}},
+                                        "argument": {"literal": {"string": "build"}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                        "argument": {"variable": "base"}}},
+                                    "argument": {"literal": {"string": "builder"}}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "base"}}},
+                            "argument": {"literal": {"string": "_"}}}}}},
+                    "argument": {"variable": "base"}}}}}}}}},
+    {
+      "term": {
         "name": "hydra.java.coder.buildTypeSubst_go",
         "signature": {
           "typeParameters": [],
@@ -9043,11 +9095,17 @@
                                                                                                     "parameter": "tn",
                                                                                                     "domain": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}},
                                                                                                     "body": {
-                                                                                                      "let": {
-                                                                                                        "bindings": [
-                                                                                                          {
-                                                                                                            "name": "comparableMethods",
-                                                                                                            "term": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                    "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                                                                                "type": {"variable": "hydra.java.syntax.ClassDeclaration"}}},
+                                                                                                            "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
                                                                                                                   "application": {
@@ -9055,50 +9113,51 @@
                                                                                                                       "application": {
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                            "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
-                                                                                                                        "argument": {"variable": "parentName"}}},
+                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                            "type": {
+                                                                                                                              "either": {
+                                                                                                                                "left": {"variable": "hydra.errors.Error"},
+                                                                                                                                "right": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}},
+                                                                                                                        "argument": {"variable": "isInner"}}},
                                                                                                                     "argument": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "either": {
+                                                                                                                                "right": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}},
+                                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                        "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
                                                                                                                       "application": {
                                                                                                                         "function": {
                                                                                                                           "application": {
                                                                                                                             "function": {
                                                                                                                               "application": {
                                                                                                                                 "function": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                                    "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
-                                                                                                                                "argument": {
-                                                                                                                                  "application": {
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "function": {"variable": "hydra.lib.logic.and"},
-                                                                                                                                        "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "isInner"}}}}},
-                                                                                                                                    "argument": {"variable": "isSer"}}}}},
-                                                                                                                            "argument": {
-                                                                                                                              "list": [
-                                                                                                                                {
                                                                                                                                   "application": {
                                                                                                                                     "function": {
                                                                                                                                       "application": {
                                                                                                                                         "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "function": {
-                                                                                                                                              "application": {
-                                                                                                                                                "function": {
-                                                                                                                                                  "typeApplication": {
-                                                                                                                                                    "body": {"variable": "hydra.java.coder.recordCompareToMethod"},
-                                                                                                                                                    "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}}},
-                                                                                                                                                "argument": {"variable": "aliases"}}},
-                                                                                                                                            "argument": {"variable": "tparams"}}},
-                                                                                                                                        "argument": {"variable": "elName"}}},
-                                                                                                                                    "argument": {"variable": "fields"}}}]}}},
-                                                                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}}}}},
-                                                                                                                "argument": {
-                                                                                                                  "lambda": {
-                                                                                                                    "parameter": "pn",
-                                                                                                                    "domain": {"variable": "hydra.core.Name"},
-                                                                                                                    "body": {
+                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.java.coder.recordBuilderClass"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                                                                        "argument": {"variable": "aliases"}}},
+                                                                                                                                    "argument": {"variable": "tparams"}}},
+                                                                                                                                "argument": {"variable": "elName"}}},
+                                                                                                                            "argument": {"variable": "fields"}}},
+                                                                                                                        "argument": {"variable": "cx"}}},
+                                                                                                                    "argument": {"variable": "g"}}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "parameter": "builderDecls",
+                                                                                                            "domain": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}},
+                                                                                                            "body": {
+                                                                                                              "let": {
+                                                                                                                "bindings": [
+                                                                                                                  {
+                                                                                                                    "name": "comparableMethods",
+                                                                                                                    "term": {
                                                                                                                       "application": {
                                                                                                                         "function": {
                                                                                                                           "application": {
@@ -9106,12 +9165,166 @@
                                                                                                                               "application": {
                                                                                                                                 "function": {
                                                                                                                                   "typeApplication": {
-                                                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                     "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
-                                                                                                                                "argument": {"variable": "isSer"}}},
+                                                                                                                                "argument": {"variable": "parentName"}}},
                                                                                                                             "argument": {
-                                                                                                                              "list": [
-                                                                                                                                {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                                            "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
+                                                                                                                                        "argument": {
+                                                                                                                                          "application": {
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "function": {"variable": "hydra.lib.logic.and"},
+                                                                                                                                                "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "isInner"}}}}},
+                                                                                                                                            "argument": {"variable": "isSer"}}}}},
+                                                                                                                                    "argument": {
+                                                                                                                                      "list": [
+                                                                                                                                        {
+                                                                                                                                          "application": {
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "function": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "function": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "function": {
+                                                                                                                                                          "typeApplication": {
+                                                                                                                                                            "body": {"variable": "hydra.java.coder.recordCompareToMethod"},
+                                                                                                                                                            "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}}},
+                                                                                                                                                        "argument": {"variable": "aliases"}}},
+                                                                                                                                                    "argument": {"variable": "tparams"}}},
+                                                                                                                                                "argument": {"variable": "elName"}}},
+                                                                                                                                            "argument": {"variable": "fields"}}}]}}},
+                                                                                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}}}}},
+                                                                                                                        "argument": {
+                                                                                                                          "lambda": {
+                                                                                                                            "parameter": "pn",
+                                                                                                                            "domain": {"variable": "hydra.core.Name"},
+                                                                                                                            "body": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                                            "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
+                                                                                                                                        "argument": {"variable": "isSer"}}},
+                                                                                                                                    "argument": {
+                                                                                                                                      "list": [
+                                                                                                                                        {
+                                                                                                                                          "application": {
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "function": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "function": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "function": {
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {"variable": "hydra.java.coder.variantCompareToMethod"},
+                                                                                                                                                                "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}}},
+                                                                                                                                                            "argument": {"variable": "aliases"}}},
+                                                                                                                                                        "argument": {"variable": "tparams"}}},
+                                                                                                                                                    "argument": {"variable": "pn"}}},
+                                                                                                                                                "argument": {"variable": "elName"}}},
+                                                                                                                                            "argument": {"variable": "fields"}}}]}}},
+                                                                                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}}}}}}},
+                                                                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
+                                                                                                                  {
+                                                                                                                    "name": "noCommentMethods",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
+                                                                                                                                "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                                                                                            "argument": {
+                                                                                                                              "lambda": {
+                                                                                                                                "parameter": "x",
+                                                                                                                                "domain": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
+                                                                                                                                "body": {"application": {"function": {"variable": "hydra.java.coder.noComment"}, "argument": {"variable": "x"}}}}}}},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
+                                                                                                                                "argument": {
+                                                                                                                                  "list": [
+                                                                                                                                    {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "function": {"application": {"function": {"variable": "hydra.java.coder.recordEqualsMethod"}, "argument": {"variable": "aliases"}}},
+                                                                                                                                            "argument": {"variable": "elName"}}},
+                                                                                                                                        "argument": {"variable": "fields"}}},
+                                                                                                                                    {"application": {"function": {"variable": "hydra.java.coder.recordHashCodeMethod"}, "argument": {"variable": "fields"}}}]}}},
+                                                                                                                            "argument": {"variable": "comparableMethods"}}}}},
+                                                                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                                                                                  {
+                                                                                                                    "name": "bodyDecls",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"variable": "hydra.lib.lists.concat"},
+                                                                                                                            "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                                                                                        "argument": {
+                                                                                                                          "list": [
+                                                                                                                            {"variable": "tn"},
+                                                                                                                            {"variable": "memberVars'"},
+                                                                                                                            {"list": [{"variable": "consWithComment"}]},
+                                                                                                                            {"variable": "noCommentMethods"},
+                                                                                                                            {"variable": "withMethods"},
+                                                                                                                            {"variable": "builderDecls"}]}}},
+                                                                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                                                                                  {
+                                                                                                                    "name": "ifaces",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"variable": "hydra.java.syntax.InterfaceType"}}}},
+                                                                                                                                "argument": {"variable": "isInner"}}},
+                                                                                                                            "argument": {"application": {"function": {"variable": "hydra.java.coder.serializableTypes"}, "argument": {"variable": "isSer"}}}}},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {"application": {"function": {"variable": "hydra.java.coder.interfaceTypes"}, "argument": {"variable": "isSer"}}},
+                                                                                                                                    "argument": {"variable": "aliases"}}},
+                                                                                                                                "argument": {"variable": "tparams"}}},
+                                                                                                                            "argument": {"variable": "elName"}}}}},
+                                                                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.InterfaceType"}}}}],
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "either": {
+                                                                                                                            "right": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
                                                                                                                                   "application": {
                                                                                                                                     "function": {
                                                                                                                                       "application": {
@@ -9122,117 +9335,15 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "application": {
                                                                                                                                                     "function": {
-                                                                                                                                                      "typeApplication": {
-                                                                                                                                                        "body": {"variable": "hydra.java.coder.variantCompareToMethod"},
-                                                                                                                                                        "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}}},
-                                                                                                                                                    "argument": {"variable": "aliases"}}},
-                                                                                                                                                "argument": {"variable": "tparams"}}},
-                                                                                                                                            "argument": {"variable": "pn"}}},
-                                                                                                                                        "argument": {"variable": "elName"}}},
-                                                                                                                                    "argument": {"variable": "fields"}}}]}}},
-                                                                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}}}}}}},
-                                                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}}},
-                                                                                                          {
-                                                                                                            "name": "noCommentMethods",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {
-                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
-                                                                                                                        "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
-                                                                                                                    "argument": {
-                                                                                                                      "lambda": {
-                                                                                                                        "parameter": "x",
-                                                                                                                        "domain": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
-                                                                                                                        "body": {"application": {"function": {"variable": "hydra.java.coder.noComment"}, "argument": {"variable": "x"}}}}}}},
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "function": {
-                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}}},
-                                                                                                                        "argument": {
-                                                                                                                          "list": [
-                                                                                                                            {
-                                                                                                                              "application": {
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "function": {"application": {"function": {"variable": "hydra.java.coder.recordEqualsMethod"}, "argument": {"variable": "aliases"}}},
-                                                                                                                                    "argument": {"variable": "elName"}}},
-                                                                                                                                "argument": {"variable": "fields"}}},
-                                                                                                                            {"application": {"function": {"variable": "hydra.java.coder.recordHashCodeMethod"}, "argument": {"variable": "fields"}}}]}}},
-                                                                                                                    "argument": {"variable": "comparableMethods"}}}}},
-                                                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
-                                                                                                          {
-                                                                                                            "name": "bodyDecls",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.lists.concat"},
-                                                                                                                    "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
-                                                                                                                "argument": {
-                                                                                                                  "list": [
-                                                                                                                    {"variable": "tn"},
-                                                                                                                    {"variable": "memberVars'"},
-                                                                                                                    {"list": [{"variable": "consWithComment"}]},
-                                                                                                                    {"variable": "noCommentMethods"},
-                                                                                                                    {"variable": "withMethods"}]}}},
-                                                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
-                                                                                                          {
-                                                                                                            "name": "ifaces",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "function": {
-                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"variable": "hydra.java.syntax.InterfaceType"}}}},
-                                                                                                                        "argument": {"variable": "isInner"}}},
-                                                                                                                    "argument": {"application": {"function": {"variable": "hydra.java.coder.serializableTypes"}, "argument": {"variable": "isSer"}}}}},
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "function": {"application": {"function": {"variable": "hydra.java.coder.interfaceTypes"}, "argument": {"variable": "isSer"}}},
-                                                                                                                            "argument": {"variable": "aliases"}}},
-                                                                                                                        "argument": {"variable": "tparams"}}},
-                                                                                                                    "argument": {"variable": "elName"}}}}},
-                                                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.InterfaceType"}}}}],
-                                                                                                        "body": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {
-                                                                                                                  "either": {
-                                                                                                                    "right": {
-                                                                                                                      "application": {
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "function": {
-                                                                                                                              "application": {
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "function": {
-                                                                                                                                              "application": {"function": {"variable": "hydra.java.utils.javaClassDeclaration"}, "argument": {"variable": "aliases"}}},
-                                                                                                                                            "argument": {"variable": "tparams"}}},
-                                                                                                                                        "argument": {"variable": "elName"}}},
-                                                                                                                                    "argument": {"variable": "hydra.java.coder.classModsPublic"}}},
-                                                                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Name"}}}}},
-                                                                                                                            "argument": {"variable": "ifaces"}}},
-                                                                                                                        "argument": {"variable": "bodyDecls"}}}}},
-                                                                                                                "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                            "type": {"variable": "hydra.java.syntax.ClassDeclaration"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                                                                                                      "application": {"function": {"variable": "hydra.java.utils.javaClassDeclaration"}, "argument": {"variable": "aliases"}}},
+                                                                                                                                                    "argument": {"variable": "tparams"}}},
+                                                                                                                                                "argument": {"variable": "elName"}}},
+                                                                                                                                            "argument": {"variable": "hydra.java.coder.classModsPublic"}}},
+                                                                                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                                                                    "argument": {"variable": "ifaces"}}},
+                                                                                                                                "argument": {"variable": "bodyDecls"}}}}},
+                                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                    "type": {"variable": "hydra.java.syntax.ClassDeclaration"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.java.coder.declarationForUnionType",
@@ -34153,6 +34264,600 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"variable": "hydra.core.Term"}}},
                                                     "argument": {"variable": "args"}}}}}}}}}}]}},
                             "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "fType"}}}}}}}}}}}}}}},
+    {
+      "term": {
+        "name": "hydra.java.coder.recordBuilderClass",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.java.environment.Aliases"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.java.syntax.TypeParameter"}}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.core.Name"}, "isLazy": false},
+            {"name": "arg3", "type": {"list": {"variable": "hydra.core.FieldType"}}, "isLazy": false},
+            {"name": "arg4", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg5", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "lambda": {
+                "parameter": "aliases",
+                "domain": {"variable": "hydra.java.environment.Aliases"},
+                "body": {
+                  "lambda": {
+                    "parameter": "tparams",
+                    "domain": {"list": {"variable": "hydra.java.syntax.TypeParameter"}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "elName",
+                        "domain": {"variable": "hydra.core.Name"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "fields",
+                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                            "body": {
+                              "lambda": {
+                                "parameter": "cx",
+                                "domain": {"variable": "t0"},
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "g",
+                                    "domain": {"variable": "hydra.graph.Graph"},
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "typeArgRefs",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.java.syntax.TypeParameter"}}},
+                                                        "type": {"variable": "hydra.java.syntax.ReferenceType"}}},
+                                                    "argument": {"variable": "hydra.java.utils.typeParameterToReferenceType"}}},
+                                                "argument": {"variable": "tparams"}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.ReferenceType"}}}},
+                                          {
+                                            "name": "typeArgs",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.java.syntax.ReferenceType"}}},
+                                                        "type": {"variable": "hydra.java.syntax.TypeArgument"}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "rt",
+                                                        "domain": {"variable": "hydra.java.syntax.ReferenceType"},
+                                                        "body": {"inject": {"typeName": "hydra.java.syntax.TypeArgument", "field": {"name": "reference", "term": {"variable": "rt"}}}}}}}},
+                                                "argument": {"variable": "typeArgRefs"}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.TypeArgument"}}}},
+                                          {
+                                            "name": "mTypeArgs",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {"optional": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.java.syntax.TypeParameter"}}},
+                                                            "argument": {"variable": "tparams"}}}}},
+                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"}}}}},
+                                                "argument": {
+                                                  "optional": {
+                                                    "inject": {
+                                                      "typeName": "hydra.java.syntax.TypeArgumentsOrDiamond",
+                                                      "field": {"name": "arguments", "term": {"variable": "typeArgs"}}}}}}},
+                                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.java.syntax.TypeArgumentsOrDiamond"}}}},
+                                          {
+                                            "name": "recordLocalName",
+                                            "term": {
+                                              "application": {
+                                                "function": {"variable": "hydra.java.utils.sanitizeJavaName"},
+                                                "argument": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "elName"}}}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                          {
+                                            "name": "builderType",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.java.utils.javaRefType"}, "argument": {"variable": "typeArgRefs"}}},
+                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                                                "argument": {"literal": {"string": "Builder"}}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.Type"}}},
+                                          {
+                                            "name": "builderResult",
+                                            "term": {
+                                              "application": {"function": {"variable": "hydra.java.utils.javaTypeToJavaResult"}, "argument": {"variable": "builderType"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.Result"}}},
+                                          {
+                                            "name": "recordType",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.java.utils.javaRefType"}, "argument": {"variable": "typeArgRefs"}}},
+                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                                                "argument": {"variable": "recordLocalName"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.Type"}}},
+                                          {
+                                            "name": "recordResult",
+                                            "term": {
+                                              "application": {"function": {"variable": "hydra.java.utils.javaTypeToJavaResult"}, "argument": {"variable": "recordType"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.Result"}}},
+                                          {
+                                            "name": "returnThisStmt",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.java.syntax.BlockStatement",
+                                                "field": {
+                                                  "name": "statement",
+                                                  "term": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.java.utils.javaReturnStatement"},
+                                                      "argument": {"optional": {"variable": "hydra.java.utils.javaThis"}}}}}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.BlockStatement"}}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                        "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                    "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "f",
+                                                            "domain": {"variable": "hydra.core.FieldType"},
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "mods",
+                                                                    "term": {
+                                                                      "list": [{"inject": {"typeName": "hydra.java.syntax.FieldModifier", "field": {"name": "private", "term": {"unit": {}}}}}]},
+                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.FieldModifier"}}}},
+                                                                  {
+                                                                    "name": "ftype",
+                                                                    "term": {
+                                                                      "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "type"}}, "argument": {"variable": "f"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}},
+                                                                  {
+                                                                    "name": "fname",
+                                                                    "term": {
+                                                                      "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "name"}}, "argument": {"variable": "f"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                                                "body": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                "type": {"variable": "hydra.java.syntax.Type"}}},
+                                                                            "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.java.coder.encodeType"}, "type": {"variable": "t0"}}},
+                                                                                            "argument": {"variable": "aliases"}}},
+                                                                                        "argument": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                    "argument": {"variable": "ftype"}}},
+                                                                                "argument": {"variable": "cx"}}},
+                                                                            "argument": {"variable": "g"}}}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "parameter": "jt",
+                                                                        "domain": {"variable": "hydra.java.syntax.Type"},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "either": {
+                                                                                    "right": {
+                                                                                      "application": {
+                                                                                        "function": {"variable": "hydra.java.coder.noComment"},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {"application": {"function": {"variable": "hydra.java.utils.javaMemberField"}, "argument": {"variable": "mods"}}},
+                                                                                                "argument": {"variable": "jt"}}},
+                                                                                            "argument": {
+                                                                                              "application": {"function": {"variable": "hydra.java.utils.fieldNameToJavaVariableDeclarator"}, "argument": {"variable": "fname"}}}}}}}}},
+                                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                                            "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}}}}}}}}},
+                                                    "argument": {"variable": "fields"}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "builderFields",
+                                                "domain": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                            "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                        "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "f",
+                                                                    "domain": {"variable": "hydra.core.FieldType"},
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "mods",
+                                                                            "term": {
+                                                                              "list": [{"inject": {"typeName": "hydra.java.syntax.MethodModifier", "field": {"name": "public", "term": {"unit": {}}}}}]},
+                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.MethodModifier"}}}},
+                                                                          {
+                                                                            "name": "fname",
+                                                                            "term": {
+                                                                              "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "name"}}, "argument": {"variable": "f"}}},
+                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                          {
+                                                                            "name": "assignStmt",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "typeName": "hydra.java.syntax.BlockStatement",
+                                                                                "field": {
+                                                                                  "name": "statement",
+                                                                                  "term": {"application": {"function": {"variable": "hydra.java.utils.toAssignStmt"}, "argument": {"variable": "fname"}}}}}},
+                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.BlockStatement"}}}],
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                        "type": {"variable": "hydra.java.syntax.FormalParameter"}}},
+                                                                                    "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.java.coder.fieldTypeToFormalParam"}, "type": {"variable": "t0"}}},
+                                                                                                "argument": {"variable": "aliases"}}},
+                                                                                            "argument": {"variable": "f"}}},
+                                                                                        "argument": {"variable": "cx"}}},
+                                                                                    "argument": {"variable": "g"}}}}},
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "parameter": "param",
+                                                                                "domain": {"variable": "hydra.java.syntax.FormalParameter"},
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "either": {
+                                                                                            "right": {
+                                                                                              "application": {
+                                                                                                "function": {"variable": "hydra.java.coder.noComment"},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {"application": {"function": {"variable": "hydra.java.utils.methodDeclaration"}, "argument": {"variable": "mods"}}},
+                                                                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.TypeParameter"}}}}},
+                                                                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Annotation"}}}}},
+                                                                                                                "argument": {"application": {"function": {"variable": "hydra.java.coder.builderSetterName"}, "argument": {"variable": "fname"}}}}},
+                                                                                                            "argument": {"list": [{"variable": "param"}]}}},
+                                                                                                        "argument": {"variable": "builderResult"}}},
+                                                                                                    "argument": {"optional": {"list": [{"variable": "assignStmt"}, {"variable": "returnThisStmt"}]}}}}}}}},
+                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                    "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}}}}}}}}},
+                                                            "argument": {"variable": "fields"}}}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "setterMethods",
+                                                        "domain": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}},
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "buildMods",
+                                                                "term": {
+                                                                  "list": [{"inject": {"typeName": "hydra.java.syntax.MethodModifier", "field": {"name": "public", "term": {"unit": {}}}}}]},
+                                                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.MethodModifier"}}}},
+                                                              {
+                                                                "name": "buildArgs",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                            "type": {"variable": "hydra.java.syntax.Expression"}}},
+                                                                        "argument": {
+                                                                          "lambda": {
+                                                                            "parameter": "f",
+                                                                            "domain": {"variable": "hydra.core.FieldType"},
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.java.utils.fieldNameToJavaExpression"},
+                                                                                "argument": {
+                                                                                  "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "name"}}, "argument": {"variable": "f"}}}}}}}}},
+                                                                    "argument": {"variable": "fields"}}},
+                                                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.Expression"}}}},
+                                                              {
+                                                                "name": "buildReturnStmt",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.java.syntax.BlockStatement",
+                                                                    "field": {
+                                                                      "name": "statement",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "function": {"variable": "hydra.java.utils.javaReturnStatement"},
+                                                                          "argument": {
+                                                                            "optional": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"variable": "hydra.java.utils.javaConstructorCall"},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {"variable": "hydra.java.utils.javaConstructorName"},
+                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"variable": "recordLocalName"}}}}},
+                                                                                            "argument": {"variable": "mTypeArgs"}}}}},
+                                                                                    "argument": {"variable": "buildArgs"}}},
+                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.ClassBody"}}}}}}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.BlockStatement"}}},
+                                                              {
+                                                                "name": "buildMethod",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.java.coder.withCommentString"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "Builds an immutable {@link "}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "recordLocalName"}}},
+                                                                                "argument": {"literal": {"string": "}."}}}}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"application": {"function": {"variable": "hydra.java.utils.methodDeclaration"}, "argument": {"variable": "buildMods"}}},
+                                                                                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.TypeParameter"}}}}},
+                                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Annotation"}}}}},
+                                                                                    "argument": {"literal": {"string": "build"}}}},
+                                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.FormalParameter"}}}}},
+                                                                            "argument": {"variable": "recordResult"}}},
+                                                                        "argument": {"optional": {"list": [{"variable": "buildReturnStmt"}]}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                              {
+                                                                "name": "builderClassDecl",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {"function": {"variable": "hydra.java.utils.javaClassDeclaration"}, "argument": {"variable": "aliases"}}},
+                                                                                        "argument": {"variable": "tparams"}}},
+                                                                                    "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Builder"}}}}}},
+                                                                                "argument": {
+                                                                                  "list": [
+                                                                                    {"inject": {"typeName": "hydra.java.syntax.ClassModifier", "field": {"name": "public", "term": {"unit": {}}}}},
+                                                                                    {"inject": {"typeName": "hydra.java.syntax.ClassModifier", "field": {"name": "static", "term": {"unit": {}}}}},
+                                                                                    {"inject": {"typeName": "hydra.java.syntax.ClassModifier", "field": {"name": "final", "term": {"unit": {}}}}}]}}},
+                                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Name"}}}}},
+                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.InterfaceType"}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.lists.concat"},
+                                                                            "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                                        "argument": {"list": [{"variable": "builderFields"}, {"variable": "setterMethods"}, {"list": [{"variable": "buildMethod"}]}]}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.ClassDeclaration"}}},
+                                                              {
+                                                                "name": "builderClassMember",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.java.coder.withCommentString"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                "argument": {"literal": {"string": "A fluent builder for {@link "}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "recordLocalName"}}},
+                                                                                "argument": {"literal": {"string": "}."}}}}}}}},
+                                                                    "argument": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.java.syntax.ClassBodyDeclaration",
+                                                                        "field": {
+                                                                          "name": "classMember",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.java.syntax.ClassMemberDeclaration",
+                                                                              "field": {"name": "class", "term": {"variable": "builderClassDecl"}}}}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                                              {
+                                                                "name": "factoryMods",
+                                                                "term": {
+                                                                  "list": [
+                                                                    {"inject": {"typeName": "hydra.java.syntax.MethodModifier", "field": {"name": "public", "term": {"unit": {}}}}},
+                                                                    {"inject": {"typeName": "hydra.java.syntax.MethodModifier", "field": {"name": "static", "term": {"unit": {}}}}}]},
+                                                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.java.syntax.MethodModifier"}}}},
+                                                              {
+                                                                "name": "factoryReturnStmt",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.java.syntax.BlockStatement",
+                                                                    "field": {
+                                                                      "name": "statement",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "function": {"variable": "hydra.java.utils.javaReturnStatement"},
+                                                                          "argument": {
+                                                                            "optional": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"variable": "hydra.java.utils.javaConstructorCall"},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {"variable": "hydra.java.utils.javaConstructorName"},
+                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "Builder"}}}}}},
+                                                                                            "argument": {"variable": "mTypeArgs"}}}}},
+                                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}},
+                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.ClassBody"}}}}}}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.BlockStatement"}}},
+                                                              {
+                                                                "name": "factoryMethod",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.java.coder.withCommentString"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                "argument": {"literal": {"string": "Creates a new fluent builder for {@link "}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "recordLocalName"}}},
+                                                                                "argument": {"literal": {"string": "}."}}}}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {"function": {"variable": "hydra.java.utils.methodDeclaration"}, "argument": {"variable": "factoryMods"}}},
+                                                                                            "argument": {"variable": "tparams"}}},
+                                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Annotation"}}}}},
+                                                                                    "argument": {"literal": {"string": "builder"}}}},
+                                                                                "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.FormalParameter"}}}}},
+                                                                            "argument": {"variable": "builderResult"}}},
+                                                                        "argument": {"optional": {"list": [{"variable": "factoryReturnStmt"}]}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}],
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"either": {"right": {"list": [{"variable": "factoryMethod"}, {"variable": "builderClassMember"}]}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {"list": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.java.coder.recordCompareToMethod",
