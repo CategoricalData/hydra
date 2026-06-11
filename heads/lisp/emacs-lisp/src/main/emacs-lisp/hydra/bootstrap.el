@@ -343,9 +343,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
 
     ;; Load main modules
     (princ (format "\nStep 1: Loading main modules from JSON...\n"))
-    (let* ((main-ns (bootstrap-read-manifest-field bootstrap-json-dir "mainModules"))
-           (default-ns (bootstrap-read-manifest-field bootstrap-json-dir "defaultLibModules"))
-           (all-ns (append main-ns default-ns))
+    (let* ((all-ns (bootstrap-read-manifest-field bootstrap-json-dir "mainModules"))
            (all-mods (bootstrap-load-modules-from-json bootstrap-json-dir all-ns))
            (total-bindings (cl-reduce #'+ (mapcar (lambda (m)
                                                     (length (cdr (assoc :definitions m))))
