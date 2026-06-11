@@ -967,7 +967,7 @@ from a pre-0.15 version.
 that have a generated sibling tree (e.g. `hydra/`, `hydra/dsl/`, `hydra/sources/`,
 `hydra/python/`, `hydra/dsl/python/` — these merge with `src/gen-main/python/...`
 content). Directories that are *entirely hand-written* runtime trees, copied into
-`dist/python/hydra-kernel/` from `heads/python/src/main/python/` via
+`dist/python/hydra-kernel/` from `overlay/python/hydra-kernel/src/main/python/` via
 `copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
 following intentionally lack `extend_path`:
 
@@ -976,8 +976,8 @@ following intentionally lack `extend_path`:
 - `hydra/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
 - `hydra/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
   library helpers.
-- `hydra/python/util/__init__.py` (in `heads/python/` only; not copied into
-  `dist/`) — explicit re-exports for the persistent-collection types.
+- `hydra/python/util/__init__.py` — explicit re-exports for the persistent-collection
+  types (`ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`).
 
 The check above flags these by design; they are not stale.
 
