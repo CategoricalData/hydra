@@ -43,6 +43,25 @@ def hash_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def hash_committed(hydra_root: Path, rel: str) -> str:
+    """SHA-256 of the COMMITTED (HEAD) form of a tracked file.
+
+    #370: heads/haskell/{package.yaml,stack.yaml} are transiently rewritten into
+    published-host mode during a sync (generate-head-haskell-build.py) and restored
+    after. Their committed form is the mode-invariant local-mode source of truth.
+    Hashing the committed form keeps the Phase-1 freshness stamp stable across host
+    modes — a published-mode rewrite must not poison the cache, since the host
+    produces byte-identical DSL→JSON output regardless of where its kernel came
+    from. Falls back to the working-tree file if git is unavailable."""
+    import subprocess
+    r = subprocess.run(
+        ["git", "-C", str(hydra_root), "show", f"HEAD:{rel}"],
+        capture_output=True)
+    if r.returncode != 0:
+        return hash_file(hydra_root / rel)
+    return hashlib.sha256(r.stdout).hexdigest()
+
+
 def collect_inputs(hydra_root: Path) -> list:
     """Return a sorted list of (relpath, sha256) covering every Phase 1
     input. Determinism matters — bytes-on-disk reproducibility is the
@@ -74,15 +93,15 @@ def collect_inputs(hydra_root: Path) -> list:
         if d.is_dir():
             for hs in d.rglob("*.hs"):
                 paths.add(hs)
-    for cfg in ("package.yaml", "stack.yaml"):
-        p = heads_haskell / cfg
-        if p.is_file():
-            paths.add(p)
     runner = heads_haskell / "bin" / "sync-haskell.sh"
     if runner.is_file():
         paths.add(runner)
-    return sorted((str(p.relative_to(hydra_root)), hash_file(p))
-                  for p in paths)
+    result = [(str(p.relative_to(hydra_root)), hash_file(p)) for p in paths]
+    # #370: hash the COMMITTED (mode-invariant) form of the head build files so a
+    # transient published-host rewrite doesn't poison the Phase-1 cache.
+    for cfg in ("heads/haskell/package.yaml", "heads/haskell/stack.yaml"):
+        result.append((cfg, hash_committed(hydra_root, cfg)))
+    return sorted(result)
 
 
 def hash_inputs(hydra_root: Path) -> str:
