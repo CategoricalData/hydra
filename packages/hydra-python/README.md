@@ -123,13 +123,16 @@ Hydra's Python code is split across three locations
   > will be dropped before 0.16. Edits should go into the Python sources, not the Haskell
   > ones.
 
-- **Python head** ([`heads/python/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python))
-  — hand-written Python runtime
+- **Python kernel overlay** ([`overlay/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python))
+  — hand-written Python kernel runtime, overlaid onto `dist/python/hydra-kernel/`
+  by `bin/copy-kernel-runtime.sh` so the published `hydra-kernel` wheel is self-contained
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
   - `hydra/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`
   - `hydra/sources/libraries.py` — primitive registration
-  - `pyproject.toml` lives in `heads/python/`
+- **Python head** ([`heads/python/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python))
+  — bootstrap layer above the kernel (`bootstrap.py`, `generation.py`, the `hydra.python` coder
+  package). `pyproject.toml` lives in `heads/python/`.
 
 - **Generated Python kernel** ([`dist/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/dist/python/hydra-kernel/src/main/python))
   - `hydra/core.py` — core types (Term, Type, Literal, ...)
@@ -280,7 +283,7 @@ mirroring [Hydra-Java](https://github.com/CategoricalData/hydra/blob/main/packag
   dependency-free; callers can pass any compatible collection.
 - **At the implementation level**, generated term-level literals construct
   immutable collection classes from
-  [`hydra.python.util`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python/hydra/python/util):
+  [`hydra.python.util`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python/hydra/python/util):
   `ConsList` (a frozen sequence), `PersistentMap` (a frozen map), and
   `PersistentSet` (a frozen set). Each implements the corresponding
   `collections.abc` ABC, so `ConsList` IS a `Sequence`, `PersistentMap` IS
