@@ -1,5 +1,6 @@
 {
-  "dslModules": [],
+  "mainDslModules": ["hydra.typeScript.syntax"],
+  "mainEncodingModules": [],
   "mainModules": [
     "hydra.typeScript.coder",
     "hydra.typeScript.language",

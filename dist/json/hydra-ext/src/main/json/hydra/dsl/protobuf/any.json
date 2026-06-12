@@ -1,0 +1,463 @@
+{
+  "name": "hydra.dsl.protobuf.any",
+  "metadata": {"description": "DSL functions for hydra.protobuf.any", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.protobuf.any"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.any.any",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"string": {}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]}}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"binary": {}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "typeUrl",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]}}}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "value",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": {"binary": {}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeUrl"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "typeUrl"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "value"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.protobuf.any.Any"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.any.anyTypeUrl",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": {"string": {}}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                              {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeUrl"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the typeUrl field of hydra.protobuf.any.Any"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.any.anyValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": {"binary": {}}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                              {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the value field of hydra.protobuf.any.Any"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.any.anyWithTypeUrl",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"string": {}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": {"string": {}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message."}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeUrl"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the typeUrl field of hydra.protobuf.any.Any"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.any.anyWithValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"binary": {}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.protobuf.any.Any"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": {"binary": {}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeUrl"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeUrl"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the value field of hydra.protobuf.any.Any"}}}]}}}}}]}
