@@ -2614,22 +2614,27 @@ def _encode_python_module():
     )
 
 
+def _field_snake(env, fname):
+    # The sanitized lower_snake Python identifier for a field name. Uses
+    # encodeFieldName (= encodeName lowerSnake), which BOTH snake-cases AND escapes
+    # Python reserved words (e.g. `in` -> `in_`, `class` -> `class_`). This is the
+    # same value used for the dataclass field attribute, so methods/params/kwargs
+    # that reference a field stay consistent with it (and are valid Python).
+    return unwrap("hydra.python.syntax.Name")(
+        _kref.names_encode_field_name(env, fname)
+    )
+
+
 def _builder_setter_name():
-    # The fluent-builder setter name for a record field: the field's lower_snake
-    # name, with `build`/`builder` escaped to `build_`/`builder_` so a field with
-    # such a name does not shadow the generated build() method or builder() factory.
+    # The fluent-builder setter name for a record field: the field's sanitized
+    # lower_snake name, with `build`/`builder` further escaped to `build_`/`builder_`
+    # so a field with such a name does not shadow the generated build() method or
+    # builder() factory.
     body = lambdas(
-        ["fname"],
+        ["env", "fname"],
         let_chain(
             [
-                (
-                    "base",
-                    _kref.formatting_convert_case(
-                        _kref.util_case_convention_camel,
-                        _kref.util_case_convention_lower_snake,
-                        Core.un_name(var("fname")),
-                    ),
-                ),
+                ("base", _field_snake(var("env"), var("fname"))),
             ],
             Logic.if_else(
                 Logic.or_(
@@ -2733,17 +2738,16 @@ def _replace_call(kwarg_terms):
     )
 
 
-def _builder_field_name(field_type):
-    # The Builder's INTERNAL storage field name: `_` + the field's lower_snake name.
-    # The leading underscore keeps the storage attribute from colliding with the
-    # same-named fluent setter METHOD (Python shares one class namespace for both,
-    # unlike Java). It is not user-facing; users only call the setters and build().
-    snake = _kref.formatting_convert_case(
-        _kref.util_case_convention_camel,
-        _kref.util_case_convention_lower_snake,
-        Core.un_name(Core.field_type_name(field_type)),
+def _builder_field_name(env, field_type):
+    # The Builder's INTERNAL storage field name: `_` + the field's sanitized
+    # lower_snake name. The leading underscore keeps the storage attribute from
+    # colliding with the same-named fluent setter METHOD (Python shares one class
+    # namespace for both, unlike Java). It is not user-facing; users only call the
+    # setters and build().
+    return Strings.cat2(
+        string("_"),
+        _field_snake(env, Core.field_type_name(field_type)),
     )
-    return Strings.cat2(string("_"), snake)
 
 
 def _none_default_field(env, field_type):
@@ -2751,7 +2755,7 @@ def _none_default_field(env, field_type):
     # The annotation reuses the record's field-type encoding; the default is None so a
     # partially-populated builder is allowed (build() does no null-check, like Java).
     ftype = Core.field_type_type(field_type)
-    py_name = PySyn.single_target_name(_py_name(_builder_field_name(field_type)))
+    py_name = PySyn.single_target_name(_py_name(_builder_field_name(env, field_type)))
     none_rhs = PySyn.annotated_rhs_star(
         list_([PySyn.star_expression_simple(
             _kref.utils_py_name_to_py_expression(_kref.utils_py_none)
@@ -2771,16 +2775,12 @@ def _none_default_field(env, field_type):
 def _builder_field_kwarg(env, field_type):
     # `<field>=self._<field>` kwarg for the build() constructor call: passes each
     # builder's internal storage field through to the record's keyword constructor.
-    # The constructor arg keeps the record's field name; the value reads the
-    # underscore-prefixed internal builder field.
-    snake = _kref.formatting_convert_case(
-        _kref.util_case_convention_camel,
-        _kref.util_case_convention_lower_snake,
-        Core.un_name(Core.field_type_name(field_type)),
-    )
+    # The constructor arg keeps the record's (sanitized) field name; the value reads
+    # the underscore-prefixed internal builder field.
+    snake = _field_snake(env, Core.field_type_name(field_type))
     self_dot_field = _kref.utils_project_from_expression(
         _kref.utils_py_name_to_py_expression(_py_name("self")),
-        _py_name(_builder_field_name(field_type)),
+        _py_name(_builder_field_name(env, field_type)),
     )
     return PySyn.kwarg_or_starred_kwarg(PySyn.kwarg(_py_name(snake), self_dot_field))
 
@@ -2795,14 +2795,7 @@ def _record_with_method():
         let_chain(
             [
                 ("fname", Core.field_type_name(var("fieldType"))),
-                (
-                    "snake",
-                    _kref.formatting_convert_case(
-                        _kref.util_case_convention_camel,
-                        _kref.util_case_convention_lower_snake,
-                        Core.un_name(var("fname")),
-                    ),
-                ),
+                ("snake", _field_snake(var("env"), var("fname"))),
                 ("methodName", Strings.cat2(string("with_"), var("snake"))),
                 ("paramName", _py_name(var("snake"))),
                 # replace(self, <field>=<field>)
@@ -2836,13 +2829,13 @@ def _record_builder_setter():
     # build/builder; the parameter shares it; but it writes to the INTERNAL storage field
     # `_<field>` so the method and storage don't collide in Python's single class namespace.
     body = lambdas(
-        ["fieldType"],
+        ["env", "fieldType"],
         let_chain(
             [
                 ("fname", Core.field_type_name(var("fieldType"))),
-                ("setterName", _local("builderSetterName")(var("fname"))),
+                ("setterName", _local("builderSetterName")(var("env"), var("fname"))),
                 ("paramName", _py_name(var("setterName"))),
-                ("storageName", _builder_field_name(var("fieldType"))),
+                ("storageName", _builder_field_name(var("env"), var("fieldType"))),
                 # replace(self, _<field>=<param>)
                 (
                     "kwarg",
@@ -2891,7 +2884,7 @@ def _record_builder_class():
                         (
                             "setters",
                             Lists.map(
-                                _local("recordBuilderSetter"),
+                                lam("ft", _local("recordBuilderSetter")(var("env"), var("ft"))),
                                 var("rowType"),
                             ),
                         ),
