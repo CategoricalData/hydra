@@ -70,10 +70,10 @@ analyzePythonFunction :: Typing.InferenceContext -> PythonEnvironment.PythonEnvi
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
 -- | Escape a builder setter name that would collide with build()/builder()
-builderSetterName :: Core.Name -> String
-builderSetterName fname =
+builderSetterName :: PythonEnvironment.PythonEnvironment -> Core.Name -> String
+builderSetterName env fname =
 
-      let base = Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake (Core.unName fname)
+      let base = Syntax.unName (PythonNames.encodeFieldName env fname)
       in (Logic.ifElse (Logic.or (Equality.equal base "build") (Equality.equal base "builder")) (Strings.cat2 base "_") base)
 -- | Encode a single case (Field) into a CaseBlock for a match statement
 caseBlockToExpr :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.CaseAlternative -> Either t1 Syntax.CaseBlock
@@ -1900,16 +1900,16 @@ pythonEnvironmentSetGraph tc env =
 recordBuilderClass :: PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe Syntax.Args -> Either t0 [Syntax.Statement]
 recordBuilderClass env name rowType recordArgs =
     Eithers.bind (Eithers.mapList (\ft -> Eithers.map (\pyType -> Utils.pyAssignmentToPyStatement (Syntax.AssignmentTyped (Syntax.TypedAssignment {
-      Syntax.typedAssignmentLhs = (Syntax.SingleTargetName (Syntax.Name (Strings.cat2 "_" (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake (Core.unName (Core.fieldTypeName ft)))))),
+      Syntax.typedAssignmentLhs = (Syntax.SingleTargetName (Syntax.Name (Strings.cat2 "_" (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName ft)))))),
       Syntax.typedAssignmentType = pyType,
       Syntax.typedAssignmentRhs = (Just (Syntax.AnnotatedRhsStar [
         Syntax.StarExpressionSimple (Utils.pyNameToPyExpression Utils.pyNone)]))}))) (encodeType env (Core.fieldTypeType ft))) rowType) (\builderFields ->
-      let setters = Lists.map recordBuilderSetter rowType
+      let setters = Lists.map (\ft -> recordBuilderSetter env ft) rowType
           pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
           buildKwargs =
                   Lists.map (\ft -> Syntax.KwargOrStarredKwarg (Syntax.Kwarg {
-                    Syntax.kwargName = (Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake (Core.unName (Core.fieldTypeName ft)))),
-                    Syntax.kwargValue = (Utils.projectFromExpression (Utils.pyNameToPyExpression (Syntax.Name "self")) (Syntax.Name (Strings.cat2 "_" (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake (Core.unName (Core.fieldTypeName ft))))))})) rowType
+                    Syntax.kwargName = (Syntax.Name (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName ft)))),
+                    Syntax.kwargValue = (Utils.projectFromExpression (Utils.pyNameToPyExpression (Syntax.Name "self")) (Syntax.Name (Strings.cat2 "_" (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName ft))))))})) rowType
           ctorCall =
                   Utils.pyPrimaryToPyExpression (Utils.primaryWithRhs (Utils.pyNameToPyPrimary pyName) (Syntax.PrimaryRhsCall (Syntax.Args {
                     Syntax.argsPositional = [],
@@ -1975,14 +1975,13 @@ recordBuilderClass env name rowType recordArgs =
         factoryMethod,
         builderClass]))
 -- | Build a fluent setter for the nested Builder of a record
-recordBuilderSetter :: Core.FieldType -> Syntax.Statement
-recordBuilderSetter fieldType =
+recordBuilderSetter :: PythonEnvironment.PythonEnvironment -> Core.FieldType -> Syntax.Statement
+recordBuilderSetter env fieldType =
 
       let fname = Core.fieldTypeName fieldType
-          setterName = builderSetterName fname
+          setterName = builderSetterName env fname
           paramName = Syntax.Name setterName
-          storageName =
-                  Strings.cat2 "_" (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake (Core.unName (Core.fieldTypeName fieldType)))
+          storageName = Strings.cat2 "_" (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName fieldType)))
           kwarg =
                   Syntax.KwargOrStarredKwarg (Syntax.Kwarg {
                     Syntax.kwargName = (Syntax.Name storageName),
@@ -2018,11 +2017,11 @@ recordBuilderSetter fieldType =
                   kwarg],
                 Syntax.argsKwargOrDoubleStarred = []}))))]])}})))
 -- | Build a per-field copy-update method (with_<field>) for a record
-recordWithMethod :: t0 -> Core.FieldType -> Syntax.Statement
+recordWithMethod :: PythonEnvironment.PythonEnvironment -> Core.FieldType -> Syntax.Statement
 recordWithMethod env fieldType =
 
       let fname = Core.fieldTypeName fieldType
-          snake = Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake (Core.unName fname)
+          snake = Syntax.unName (PythonNames.encodeFieldName env fname)
           methodName = Strings.cat2 "with_" snake
           paramName = Syntax.Name snake
           kwarg =
