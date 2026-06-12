@@ -13,7 +13,8 @@
 module Hydra.Sources.Pg.Manifest (
   mainModules,
   testModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -88,9 +89,13 @@ mainModules = [
 -- Hydra.Dsl.Pg.Schemas (used by the genpg demos) are NOT derived from
 -- type modules; they live in packages/hydra-pg/.../Hydra/Dsl/Pg/ and
 -- don't go through this list.
-dslTypeModules :: [Module]
-dslTypeModules = [
+mainDslModules :: [Module]
+mainDslModules = [
   PgModel.module_]
+
+-- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+mainEncodingModules :: [Module]
+mainEncodingModules = []
 
 testModules :: [Module]
 testModules = []

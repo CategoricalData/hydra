@@ -3,7 +3,8 @@
 module Hydra.Sources.Wasm.Manifest (
   mainModules,
   testModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -20,11 +21,21 @@ mainModules = [
   WasmSerdeSource.module_,
   WasmSyntax.module_]
 
--- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules. Empty today — WasmSyntax is the natural
--- candidate if/when the wrappers are wanted.
-dslTypeModules :: [Module]
-dslTypeModules = []
+-- Source modules from which dsl/encode/decode are derived (#474): every
+-- type-defining module in the package, no per-module curation.
+mainDslModules :: [Module]
+mainDslModules = filter moduleDefinesType mainModules
+
+-- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+mainEncodingModules :: [Module]
+mainEncodingModules = []
+
+-- | True if a module defines at least one type.
+moduleDefinesType :: Module -> Bool
+moduleDefinesType m = any isTypeDef (moduleDefinitions m)
+  where
+    isTypeDef (DefinitionType _) = True
+    isTypeDef _                  = False
 
 testModules :: [Module]
 testModules = []
