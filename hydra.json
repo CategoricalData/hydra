@@ -2,6 +2,7 @@
   "currentVersion": "0.16.1",
   "hostVersion": "0.16.0",
   "hostOverrides": {
+    "haskell": "local",
     "python": "local"
   },
   "group": "net.fortytwo.hydra",

@@ -77,9 +77,14 @@ PUBLISHED_HOSTS = frozenset({
 # PACKAGE-keyed (it is genuinely about packages), so resolve_host_version bridges
 # host→package via these maps. Lisp dialects are distinct hosts that share the one
 # hydra-lisp coder package, so several hosts map to it.
+# Note hydra-kernel maps to the "haskell" host, not a host of its own: the kernel
+# is the data model the Haskell host *consumes* (alongside the hydra-haskell coder
+# runtime), so the two move together — routing the Haskell host local pulls both
+# hydra-kernel and hydra-haskell to the local compile path. A kernel-only override
+# would leave the head linking a local kernel against a published coder (or vice
+# versa), a mismatch; so "haskell" is the single knob for the whole host.
 PACKAGE_FOR_HOST = {
-    "kernel":      "hydra-kernel",
-    "haskell":     "hydra-haskell",
+    "haskell":     "hydra-haskell",   # also covers hydra-kernel (see HOST_FOR_PACKAGE)
     "java":        "hydra-java",
     "python":      "hydra-python",
     "scala":       "hydra-scala",
@@ -89,12 +94,13 @@ PACKAGE_FOR_HOST = {
     "common-lisp": "hydra-lisp",
     "emacs-lisp":  "hydra-lisp",
 }
-# Inverse: package → the canonical host name. For hydra-lisp (shared by four
-# dialects) the canonical host is "lisp"; the four dialect keys above still resolve
-# to hydra-lisp via PACKAGE_FOR_HOST, so an override can target either "lisp"
-# (all dialects) or a single dialect.
+# Inverse: package → the canonical host name. hydra-kernel → "haskell" (it is part
+# of the Haskell host's consumed set, not a separate host). For hydra-lisp (shared
+# by four dialects) the canonical host is "lisp"; the four dialect keys in
+# PACKAGE_FOR_HOST still resolve to hydra-lisp, so an override can target either
+# "lisp" (all dialects) or a single dialect.
 HOST_FOR_PACKAGE = {
-    "hydra-kernel":     "kernel",
+    "hydra-kernel":     "haskell",
     "hydra-haskell":    "haskell",
     "hydra-java":       "java",
     "hydra-python":     "python",
