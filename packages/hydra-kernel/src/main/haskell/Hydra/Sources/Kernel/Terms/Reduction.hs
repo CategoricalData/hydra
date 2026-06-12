@@ -823,7 +823,7 @@ reduceTerm = define "reduceTerm" $
       "reducedArgs" <<~ Eithers.mapList (var "reduceArg" @@ var "eager") (var "argList") $
       -- Strip annotations from reduced args so primitives can extract values properly
       "strippedArgs" <~ Lists.map Strip.deannotateTerm (var "reducedArgs") $
-      "primResult" <<~ Eithers.bimap (var "mapErrorToString") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "cx" @@ var "graph" @@ var "strippedArgs") $
+      "primResult" <<~ Eithers.bimap (var "mapErrorToString") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "graph" @@ var "strippedArgs") $
       "reducedResult" <<~ var "reduce" @@ var "eager" @@ var "primResult" $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     cases _Term (var "stripped")
