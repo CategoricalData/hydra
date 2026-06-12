@@ -714,6 +714,7 @@ Generated Java classes for Hydra types provide:
 2. **Static name constants** (`TYPE_NAME`, `FIELD_NAME_*`)
 3. **Serializable** implementations
 4. **Comparable** implementations
+5. **Fluent builders** and **copy-update methods** for record types (see below)
 
 ### Example: Generated Term class
 
@@ -732,6 +733,52 @@ public abstract class Term implements Serializable, Comparable<Term> {
     public abstract <R> R accept(Visitor<R> visitor);
 }
 ```
+
+### Constructing record values: builders and copy-update
+
+Every generated record type carries two native-Java affordances for construction, so applications
+do not have to call the all-args constructor directly or re-implement builder boilerplate.
+
+**Fluent builder.**
+Each record exposes a static `builder()` factory and a nested `Builder` class with one setter per
+field (named after the field) and a `build()` that returns the immutable record:
+
+```java
+import hydra.core.Binding;
+
+Binding b = Binding.builder()
+    .name(new hydra.core.Name("x"))
+    .term(myTerm)
+    .typeScheme(hydra.util.Optional.empty())
+    .build();
+```
+
+For generic records the type parameters are threaded through, so the builder stays type-safe:
+
+```java
+// hydra.coders.Coder<V1, V2>
+Coder<A, B> c = Coder.<A, B>builder()
+    .encode(myEncode)
+    .decode(myDecode)
+    .build();   // returns Coder<A, B>
+```
+
+**Copy-update methods.**
+Each record also has one `withFieldName(...)` method per field, returning a new instance with that one
+field replaced and all others copied — useful for tweaking a single field of an immutable value:
+
+```java
+Binding b2 = b.withName(new hydra.core.Name("y"));   // same term + typeScheme, new name
+```
+
+Notes:
+- Setters and copy-update methods are emitted for **every** generated record (no opt-in flag).
+- A field whose name is a Java reserved word (e.g. `default`, `static`, `implements`) gets a
+  trailing underscore in its setter, matching the field/parameter escaping (e.g. `.default_(...)`).
+- A field literally named `build` or `builder` would collide with the generated methods and is
+  likewise escaped to `build_` / `builder_`.
+- Builders do not null-check in `build()`; Hydra-generated code never passes nulls, and user code is
+  expected to supply every field (the all-args constructor remains available as well).
 
 ## Error handling
 

@@ -350,12 +350,9 @@ inferAndWriteByPackageSeededFor
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
             targetNs     = S.fromList (map moduleName pkgTargets)
-            -- All this package's modules go into the universe so cross-
-            -- references within the package resolve; only the subset that's
-            -- in the original target set gets re-inferred + written.
-            -- (For packages with no target modules — e.g. hydra-java
-            -- under #344 — we still infer the whole package so its types
-            -- seed downstream packages, but skip the write step below.)
+            -- Infer only this package's write targets — re-inferring its whole
+            -- universe (e.g. the full Java coder) blows the CI heap cap. The
+            -- universe still participates as type-resolution context below.
             inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
         putStrLn $ "  [" ++ pkg ++ "] "
           ++ show (length pkgTargets) ++ " write / "
@@ -391,15 +388,30 @@ inferAndWriteByPackageSeededFor
         -- Force the writes to disk before folding the new schemes into
         -- the accumulators; this also forces 'inferred' to NF, breaking
         -- any lazy thunk chain across iterations.
-        let !newBindingSchemes = M.fromList
+        --
+        -- Schemes are harvested from the package's FULL universe, not just the
+        -- (re-)inferred targets. Universe modules excluded from inference still
+        -- carry the TypeSchemes the native generators already emitted in their
+        -- JSON signatures (#344: hydra.{java,python}.* — produced by the native
+        -- Java/Python generators in Phase 0). Harvesting those existing
+        -- signatures is free (no inference), and it seeds bindings like
+        -- hydra.java.serde.escapeJavaString so a downstream by-name reference
+        -- (hydra-scala -> that binding) resolves. (#470)
+        --
+        -- A freshly (re-)inferred target's scheme must override the native
+        -- signature for the same name, so 'inferred' is listed AFTER
+        -- 'pkgUniverse': Data.Map.fromList keeps the LAST value for a duplicate
+        -- key, so the inferred scheme wins.
+        let schemeSources = pkgUniverse ++ inferred
+            !newBindingSchemes = M.fromList
               [ (termDefinitionName td, ts)
-              | m <- inferred
+              | m <- schemeSources
               , DefinitionTerm td <- moduleDefinitions m
               , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
               ]
             !newSchemaSchemes = M.fromList
               [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionBody td))
-              | m <- inferred
+              | m <- schemeSources
               , DefinitionType td <- moduleDefinitions m
               ]
             !accBindingSchemes' = M.union newBindingSchemes accBindingSchemes

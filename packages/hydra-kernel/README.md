@@ -94,10 +94,10 @@ live in adjacent directories:
 
 | Where | What |
 |-------|------|
-| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/` | Kernel DSL sources (this package) |
-| `heads/haskell/src/main/haskell/Hydra/Dsl/`             | Hand-written Haskell DSL helpers used to write the sources |
-| `heads/haskell/src/main/haskell/Hydra/Lib/`             | Hand-written Haskell primitive implementations |
-| `dist/haskell/hydra-kernel/`                            | Generated Haskell kernel (`Hydra/Core.hs`, `Hydra/Graph.hs`, etc.) |
+| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`            | Kernel DSL sources (this package) |
+| `heads/haskell/src/main/haskell/Hydra/Dsl/`                        | Hand-written Haskell DSL helpers used to write the sources |
+| `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
+| `dist/haskell/hydra-kernel/`                                       | Generated Haskell kernel (`Hydra/Core.hs`, `Hydra/Graph.hs`, etc.) |
 | `dist/java/hydra-kernel/`                               | Generated Java kernel (`hydra.core.*`, `hydra.graph.*`, etc.) |
 | `dist/python/hydra-kernel/`                             | Generated Python kernel |
 | `dist/scala/hydra-kernel/`                              | Generated Scala kernel |

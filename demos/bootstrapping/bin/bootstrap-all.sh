@@ -57,11 +57,18 @@ RUNS_DIR="$HYDRA_ROOT/bootstrap/runs"
 REPEAT=1
 RUN_SPEC=""
 PATH_FILTER=""
+# Host mode for the pre-sync below. Empty = let bin/sync.sh use its default
+# (published-host). --local-host forces the migration-shim path, needed when a
+# published host wheel is incompatible with the current kernel (e.g. a
+# pre-release window where hydra-python's published wheel lags the kernel).
+HOST_MODE_FLAG=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --hosts) HOSTS="$2"; shift ;;
         --hosts=*) HOSTS="${1#--hosts=}" ;;
+        --local-host) HOST_MODE_FLAG="--local-host" ;;
+        --published-host) HOST_MODE_FLAG="--published-host" ;;
         --targets) TARGETS="$2"; shift ;;
         --targets=*) TARGETS="${1#--targets=}" ;;
         --types-only) EXTRA_FLAGS="$EXTRA_FLAGS --types-only" ;;
@@ -157,7 +164,7 @@ echo "[Pre-sync] Overlaying hand-written Haskell runtime onto dist/haskell/..."
 "$HYDRA_ROOT/heads/haskell/bin/overlay-kernel-runtime.sh"
 echo ""
 echo "[Pre-sync] Ensuring dist/ is fresh for the selected hosts × targets..."
-"$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests
+"$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests $HOST_MODE_FLAG
 echo ""
 
 # ============================================================
