@@ -95,6 +95,24 @@ python_host_mode() {
     fi
 }
 
+# Per-host mode for the Haskell host build (the head links published hydra-kernel
+# + hydra-haskell from Hackage in "published" mode, or compiles them from local
+# source in "local" mode). Same per-host override mechanism as python_host_mode:
+# hostOverrides:{"haskell":"local"} routes just the Haskell host local — needed
+# when a backward-incompatible kernel change (e.g. #446's InferenceContext-drop)
+# means no published kernel can compile the current DSL sources, but the rest of
+# the build can still consume published artifacts. is-published hydra-haskell
+# (and hydra-kernel) exits non-zero when the host resolves to local.
+haskell_host_mode() {
+    if [ "$HOST_MODE" = "local" ]; then
+        echo local
+    elif ! python3 "$HYDRA_ROOT/bin/lib/hydra-packages.py" is-published hydra-haskell >/dev/null 2>&1; then
+        echo local
+    else
+        echo published
+    fi
+}
+
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests)
@@ -252,15 +270,20 @@ echo ""
 # LOCAL-mode source of truth; published mode transiently rewrites them, restored on
 # EXIT. Mirrors sync-haskell.sh's own mode wiring (and is skipped there via the
 # already-generated files when sync.sh drives the sync).
-echo "  Haskell host mode: $HOST_MODE"
-if [ "$HOST_MODE" = "published" ]; then
+# Effective Haskell-host mode: the global HOST_MODE, unless a per-host
+# hostOverrides entry routes the Haskell host local (e.g. a breaking kernel change
+# the published kernel can't compile — #446). Computed once so the banner, build
+# files, overlay, and sync-haskell.sh flag all agree.
+HASKELL_HOST_MODE="$(haskell_host_mode)"
+echo "  Haskell host mode: $HASKELL_HOST_MODE"
+if [ "$HASKELL_HOST_MODE" = "published" ]; then
     _sync_restore_head_build_files() {
         git -C "$HYDRA_ROOT" checkout -q -- \
             heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
     }
     trap _sync_restore_head_build_files EXIT
 fi
-python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HOST_MODE"
+python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HOST_MODE"
 
 # The head compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir) which
 # includes hand-written runtime modules (Hydra.Haskell.Lib.*, the umbrella Hydra.hs)
@@ -269,7 +292,7 @@ python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HOST_MODE"
 # this stack build — otherwise GHC can't find them. (sync-haskell.sh's own overlay
 # step runs in Phase 1, too late for Phase 0; this is the fix for that ordering.)
 # In published mode the overlay skips the kernel-main runtime (it's in the dep).
-HYDRA_HASKELL_HOST_MODE="$HOST_MODE" "$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
+HYDRA_HASKELL_HOST_MODE="$HASKELL_HOST_MODE" "$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
 
 (cd "$HYDRA_HASKELL_DIR" && stack build \
     hydra:exe:update-json-main \
@@ -329,7 +352,7 @@ if [ -x "$PHASE1_FRESH_CHECK" ] \
 else
     banner1 "Phase 1: DSL → JSON + Haskell kernel"
     echo ""
-    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" --"$HOST_MODE"-host $NO_TESTS_FLAG
+    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" --"$HASKELL_HOST_MODE"-host $NO_TESTS_FLAG
 fi
 
 # ────────────────────────────────────────────────────────────────────
