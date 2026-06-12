@@ -40,6 +40,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.packaging",
     "hydra.errors",
     "hydra.extract.json",
     "hydra.graph",
@@ -65,7 +66,9 @@
     "hydra.typed",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"],
+    "hydra.validation",
+    "hydra.variants",
+    "hydra.yaml.model"],
   "mainModules": [
     "hydra.adapt",
     "hydra.analysis",
