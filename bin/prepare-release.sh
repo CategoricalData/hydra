@@ -26,9 +26,19 @@
 #   9.  Per-package Hackage sdist case-sensitivity check (assembles cleanly
 #       on a case-sensitive filesystem + `cabal v2-build --dry-run`)       [gate]
 #   10. Per-package Haddock-for-Hackage docs build (ready for `cabal upload`)[gate]
+#   11. Canonical source archive + checksum + signature: a single
+#       `git archive` source tarball (the Apache "release of record"),
+#       its SHA-512 checksum, and a detached GPG signature.               [gate*]
 #
 # On success, the upload-ready per-package artifacts (sdists + docs tarballs)
-# land in release-artifacts/ at the repo root. Logs land in verify-logs/.
+# plus the canonical source archive (tarball + .sha512 + .asc) land in
+# release-artifacts/ at the repo root. Logs land in verify-logs/.
+#
+# *Step 11 gate detail: the archive + checksum are a hard gate (LICENSE and
+# NOTICE must be present; the tarball must build); the GPG signature degrades
+# to a WARNING when no signing key is configured, so the script stays runnable
+# outside a real release. Set HYDRA_RELEASE_SIGNING_KEY (a gpg key id/email) to
+# sign; otherwise gpg's default key is used, and a missing key is a warning.
 #
 # Prerequisites:
 #   - Stack, Java 11+, Python 3.12+, uv, sbt, Clojure, SBCL, Emacs, Guile,
@@ -69,7 +79,7 @@ mkdir -p "$LOG_DIR"
 ARTIFACT_DIR="$HYDRA_ROOT/release-artifacts"
 mkdir -p "$ARTIFACT_DIR"
 
-TOTAL_STEPS=10
+TOTAL_STEPS=11
 
 ERRORS=0
 WARNINGS=0
@@ -425,6 +435,77 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
+# --- Step 11: Canonical source archive + checksum + signature ---
+# The Apache "release of record" is a single source archive, not the per-registry
+# convenience artifacts (Hackage sdists, Maven jars, PyPI wheels). We build it with
+# `git archive` from HEAD so it is exactly the tracked source at the release commit
+# (clean, reproducible, no build cruft), then emit a SHA-512 checksum and a detached
+# GPG signature.
+#
+# Gate vs. warning: a missing LICENSE/NOTICE or a failed archive/checksum is a hard
+# ERROR (Apache requires both files in every source release). The signature degrades
+# to a WARNING when no signing key is configured, so a developer can run this script
+# outside a real release without a key. Set HYDRA_RELEASE_SIGNING_KEY to a gpg key
+# id/email to choose the signing identity; otherwise gpg's default key is used.
+step 11 $TOTAL_STEPS "Building canonical source archive (tarball + sha512 + signature)"
+echo ""
+
+cd "$HYDRA_ROOT"
+SRC_LOG="$LOG_DIR/source-archive.log"
+: > "$SRC_LOG"
+
+SRC_ARCHIVE="$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar.gz"
+SRC_PREFIX="hydra-${EXPECTED}/"
+
+# Apache requires LICENSE + NOTICE in the source release. Assert both are tracked
+# (so `git archive` will include them) before building.
+SRC_META_OK=true
+for required in LICENSE NOTICE; do
+    if ! git ls-files --error-unmatch "$required" >/dev/null 2>&1; then
+        echo "  FAIL: $required is missing or untracked — required in an Apache source release"
+        SRC_META_OK=false
+    fi
+done
+
+if [ "$SRC_META_OK" != true ]; then
+    ERRORS=$((ERRORS + 1))
+else
+    if git archive --format=tar.gz --prefix="$SRC_PREFIX" -o "$SRC_ARCHIVE" HEAD 2>>"$SRC_LOG"; then
+        echo "  OK: source archive built -> release-artifacts/hydra-${EXPECTED}-src.tar.gz"
+
+        # SHA-512 checksum (portable: shasum on macOS, sha512sum on Linux).
+        if command -v sha512sum >/dev/null 2>&1; then
+            ( cd "$ARTIFACT_DIR" && sha512sum "hydra-${EXPECTED}-src.tar.gz" > "hydra-${EXPECTED}-src.tar.gz.sha512" )
+        else
+            ( cd "$ARTIFACT_DIR" && shasum -a 512 "hydra-${EXPECTED}-src.tar.gz" > "hydra-${EXPECTED}-src.tar.gz.sha512" )
+        fi
+        echo "  OK: SHA-512 checksum written -> hydra-${EXPECTED}-src.tar.gz.sha512"
+
+        # Detached GPG signature. Missing key / gpg => WARNING, not a gate.
+        if ! command -v gpg >/dev/null 2>&1; then
+            echo "  WARNING: gpg not found — source archive is unsigned (install gpg and re-run to sign)"
+            WARNINGS=$((WARNINGS + 1))
+        else
+            GPG_KEY_ARGS=()
+            if [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
+                GPG_KEY_ARGS=(--local-user "$HYDRA_RELEASE_SIGNING_KEY")
+            fi
+            if gpg "${GPG_KEY_ARGS[@]}" --armor --detach-sign --yes \
+                 --output "$SRC_ARCHIVE.asc" "$SRC_ARCHIVE" 2>>"$SRC_LOG"; then
+                echo "  OK: detached signature written -> hydra-${EXPECTED}-src.tar.gz.asc"
+            else
+                echo "  WARNING: gpg signing failed (no key configured? see verify-logs/source-archive.log)"
+                echo "           Set HYDRA_RELEASE_SIGNING_KEY or configure a gpg default key; the"
+                echo "           release of record must be signed before a real release."
+                WARNINGS=$((WARNINGS + 1))
+            fi
+        fi
+    else
+        echo "  FAIL: git archive failed (see verify-logs/source-archive.log)"
+        ERRORS=$((ERRORS + 1))
+    fi
+fi
+
 # --- Summary ---
 echo ""
 banner1 "Release Preparation Summary"
@@ -438,6 +519,11 @@ if [ $ERRORS -eq 0 ]; then
     echo "All checks passed! Release artifacts are ready in:"
     echo "  $ARTIFACT_DIR"
     echo ""
+    echo "  - hydra-${EXPECTED}-src.tar.gz         (canonical source archive — release of record)"
+    echo "  - hydra-${EXPECTED}-src.tar.gz.sha512  (SHA-512 checksum)"
+    if [ -f "$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar.gz.asc" ]; then
+        echo "  - hydra-${EXPECTED}-src.tar.gz.asc     (detached GPG signature)"
+    fi
     for pkg in "${HACKAGE_PKGS[@]}"; do
         echo "  - $pkg-${EXPECTED}.tar.gz       (Hackage sdist)"
         if [ "$DOC_OK" = true ]; then
@@ -445,6 +531,12 @@ if [ $ERRORS -eq 0 ]; then
         fi
     done
     echo ""
+    if [ ! -f "$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar.gz.asc" ]; then
+        echo "  NOTE: the source archive is UNSIGNED (no gpg key configured). The release of"
+        echo "        record must be signed — set HYDRA_RELEASE_SIGNING_KEY and re-run before"
+        echo "        a real release. Verify keys are published in the repo-root KEYS file."
+        echo ""
+    fi
     echo "Next steps:"
     echo "  1. Update CHANGELOG.md"
     echo "  2. Commit all changes"

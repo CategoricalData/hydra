@@ -78,6 +78,41 @@ TARGETS_ARG=""
 # source. Phase 0 + Phase 1 must agree on this, else the head double-builds.
 HOST_MODE=published
 
+# Per-host mode for the Python native heal/re-export. The global HOST_MODE
+# (set by --local-host/--published-host) is the default, but a per-host
+# hostOverrides entry in hydra.json can route just one host local while the
+# rest stay published — e.g. hostOverrides:{"python":"local"} when the published
+# hydra-python wheel is incompatible with the current kernel (#370/#472). The
+# is-published check encodes exactly that decision: it exits non-zero when the
+# host resolves to local. An explicit --local-host still forces all hosts local.
+python_host_mode() {
+    if [ "$HOST_MODE" = "local" ]; then
+        echo local
+    elif ! python3 "$HYDRA_ROOT/bin/lib/hydra-packages.py" is-published hydra-python >/dev/null 2>&1; then
+        echo local
+    else
+        echo published
+    fi
+}
+
+# Per-host mode for the Haskell host build (the head links published hydra-kernel
+# + hydra-haskell from Hackage in "published" mode, or compiles them from local
+# source in "local" mode). Same per-host override mechanism as python_host_mode:
+# hostOverrides:{"haskell":"local"} routes just the Haskell host local — needed
+# when a backward-incompatible kernel change (e.g. #446's InferenceContext-drop)
+# means no published kernel can compile the current DSL sources, but the rest of
+# the build can still consume published artifacts. is-published hydra-haskell
+# (and hydra-kernel) exits non-zero when the host resolves to local.
+haskell_host_mode() {
+    if [ "$HOST_MODE" = "local" ]; then
+        echo local
+    elif ! python3 "$HYDRA_ROOT/bin/lib/hydra-packages.py" is-published hydra-haskell >/dev/null 2>&1; then
+        echo local
+    else
+        echo published
+    fi
+}
+
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests)
@@ -235,15 +270,20 @@ echo ""
 # LOCAL-mode source of truth; published mode transiently rewrites them, restored on
 # EXIT. Mirrors sync-haskell.sh's own mode wiring (and is skipped there via the
 # already-generated files when sync.sh drives the sync).
-echo "  Haskell host mode: $HOST_MODE"
-if [ "$HOST_MODE" = "published" ]; then
+# Effective Haskell-host mode: the global HOST_MODE, unless a per-host
+# hostOverrides entry routes the Haskell host local (e.g. a breaking kernel change
+# the published kernel can't compile — #446). Computed once so the banner, build
+# files, overlay, and sync-haskell.sh flag all agree.
+HASKELL_HOST_MODE="$(haskell_host_mode)"
+echo "  Haskell host mode: $HASKELL_HOST_MODE"
+if [ "$HASKELL_HOST_MODE" = "published" ]; then
     _sync_restore_head_build_files() {
         git -C "$HYDRA_ROOT" checkout -q -- \
             heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
     }
     trap _sync_restore_head_build_files EXIT
 fi
-python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HOST_MODE"
+python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HOST_MODE"
 
 # The head compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir) which
 # includes hand-written runtime modules (Hydra.Haskell.Lib.*, the umbrella Hydra.hs)
@@ -252,7 +292,7 @@ python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HOST_MODE"
 # this stack build — otherwise GHC can't find them. (sync-haskell.sh's own overlay
 # step runs in Phase 1, too late for Phase 0; this is the fix for that ordering.)
 # In published mode the overlay skips the kernel-main runtime (it's in the dep).
-HYDRA_HASKELL_HOST_MODE="$HOST_MODE" "$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
+HYDRA_HASKELL_HOST_MODE="$HASKELL_HOST_MODE" "$HYDRA_HASKELL_DIR/bin/overlay-kernel-runtime.sh"
 
 (cd "$HYDRA_HASKELL_DIR" && stack build \
     hydra:exe:update-json-main \
@@ -312,7 +352,7 @@ if [ -x "$PHASE1_FRESH_CHECK" ] \
 else
     banner1 "Phase 1: DSL → JSON + Haskell kernel"
     echo ""
-    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" --"$HOST_MODE"-host $NO_TESTS_FLAG
+    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" --"$HASKELL_HOST_MODE"-host $NO_TESTS_FLAG
 fi
 
 # ────────────────────────────────────────────────────────────────────
@@ -338,15 +378,17 @@ fi
 # signal), so this gate is correct.
 JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
 heal_java_python_native() {
+    # Forward the sync's host mode to the native Python driver, exactly as the
+    # Phase 5 invocation does. Phase 1.5's banner says "published hosts" because
+    # that is the default seeding path, but when the user passes --local-host
+    # (e.g. the published hydra-python wheel is incompatible with the current
+    # kernel — the #370/#472 migration-shim case) this heal must also run local,
+    # or it hits the broken published wheel and aborts the whole sync. The Java
+    # wrapper has no published/local switch (its host is a build-presence check),
+    # so this forwarding is Python-only.
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
-    # Forward the sync's host mode to the Python heal, exactly as Phase 5 does
-    # (commit 3a60d5597d). Without this, `sync.sh --local-host` silently runs the
-    # Phase 1.5 Python re-export on the published host — which breaks outright when
-    # the published wheel predates a kernel-runtime move (e.g. #461 relocating
-    # hydra.python.util into the kernel overlay, absent from published 0.16.0).
-    # The Java wrapper has no published/local switch, so only Python needs this.
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
-        "--${HOST_MODE}-host" || return 1
+        "--$(python_host_mode)-host" || return 1
 }
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
@@ -647,7 +689,7 @@ export HYDRA_IN_SYNC=1
 # as "fresh" and the native re-export would never actually re-run under the new
 # host. Forwarded to the Python driver as a CLI flag below; the Java native pass
 # has no published/local switch, so its freshness is mode-independent.
-export HYDRA_PHASE5_HOST_MODE="$HOST_MODE"
+export HYDRA_PHASE5_HOST_MODE="$(python_host_mode)"
 # Skip a language's native DSL→JSON pass entirely when that language
 # is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
 # has no reason to spin up Java's full kernel build or Python's pypy
@@ -670,7 +712,7 @@ if printf '%s\n' $HOSTS | grep -qx python; then
     # is incompatible with the current kernel — the #370 migration-shim case).
     # The Java wrapper has no published/local switch (its host is a build-presence
     # check), so this forwarding is Python-only.
-    PY_HOST_MODE_FLAG="--${HOST_MODE}-host"   # published -> --published-host, local -> --local-host
+    PY_HOST_MODE_FLAG="--$(python_host_mode)-host"   # per-host: hostOverrides[python]=local OR global --local-host
     # Use PyPy when available — ~4x faster than CPython.
     if command -v pypy3 >/dev/null 2>&1; then
         native_generate_and_report python \

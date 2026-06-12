@@ -94,6 +94,9 @@ cp "$HYDRA_HASKELL_DIR/LICENSE" "$STAGE/LICENSE"
 # Bundle the shared repo CHANGELOG so Hackage shows release notes per package
 # (declared in extra-source-files by generate-haskell-package-build.py).
 cp "$HYDRA_ROOT/CHANGELOG.md" "$STAGE/CHANGELOG.md"
+# Bundle the repo NOTICE alongside LICENSE — an Apache-2.0 source distribution
+# must carry both (also declared in extra-source-files by the build generator).
+cp "$HYDRA_ROOT/NOTICE" "$STAGE/NOTICE"
 
 # Copy a source tree into the staging main dir, refusing collisions (a collision
 # means two source dirs declared the same module — a real conflict to surface).

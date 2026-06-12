@@ -87,7 +87,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -187,7 +190,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -287,7 +293,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -387,7 +396,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -500,7 +512,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -600,7 +615,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -700,7 +718,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -813,7 +834,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -913,7 +937,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1013,7 +1040,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1113,7 +1143,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1226,7 +1259,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1326,7 +1362,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1426,7 +1465,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1539,7 +1581,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1645,7 +1690,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1751,7 +1799,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1870,7 +1921,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -1976,7 +2030,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {
@@ -2082,7 +2139,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.reduction.reduceTerm"}, "argument": {"variable": "hydra.test.testGraph.testContext"}}},
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {"body": {"variable": "hydra.reduction.reduceTerm"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
+                                                                                  "argument": {"variable": "hydra.test.testGraph.testContext"}}},
                                                                               "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
                                                                           "argument": {"literal": {"boolean": true}}}},
                                                                       "argument": {

@@ -6,7 +6,8 @@
 module Hydra.Sources.Haskell.Manifest (
   mainModules,
   testModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -37,10 +38,14 @@ mainModules = [
 -- for each TypeDefinition. Term-only modules (Coder, Serde, Operators,
 -- etc.) are deliberately excluded. Extend the list when a new
 -- type-defining module needs DSL wrappers.
-dslTypeModules :: [Module]
-dslTypeModules = [
+mainDslModules :: [Module]
+mainDslModules = [
   HaskellEnvironment.module_,
   HaskellSyntax.module_]
+
+-- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+mainEncodingModules :: [Module]
+mainEncodingModules = []
 
 testModules :: [Module]
 testModules = []
