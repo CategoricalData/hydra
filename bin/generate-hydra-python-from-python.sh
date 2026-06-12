@@ -83,8 +83,10 @@ if [ "$MODE" = "published-host" ]; then
 else
     # Bootstrap shim: ensure the local dist trees (dist/json/hydra-kernel,
     # dist/python/hydra-kernel, dist/python/hydra-python) are present + current.
-    # sync-python.sh covers all three. HYDRA_IN_SYNC=1 means sync.sh is already
-    # calling us (Phase 5); don't recurse.
+    # sync-python.sh covers all three but is a full recursive `sync.sh --hosts
+    # python --targets python`, so HYDRA_IN_SYNC=1 (sync.sh is already calling us)
+    # must NOT trigger it — that would recurse.
+    KERNEL_PY="$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python/hydra/codegen.py"
     if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
         if [ "$FORCE_REBUILD" = "1" ]; then
             echo "=== Forcing Python host rebuild via bin/sync-python.sh ==="
@@ -92,6 +94,16 @@ else
             echo "=== Running bin/sync-python.sh to ensure dist trees are current ==="
         fi
         "$HYDRA_ROOT/bin/sync-python.sh"
+    elif [ ! -f "$KERNEL_PY" ]; then
+        # Cold tree under HYDRA_IN_SYNC (e.g. CI at Phase 1.5, before Phase 3 has
+        # built dist/python): the local-host runtime we are about to put on
+        # PYTHONPATH doesn't exist yet. We can't recurse via sync-python.sh, but
+        # the per-package assembler is NON-recursive and reads dist/json/hydra-kernel
+        # (already produced by Phase 1), so build just the two runtime packages the
+        # shim imports. (#446/#472 hostOverrides interim — see staging-plan.md.)
+        echo "=== dist/python runtime absent under sync; assembling hydra-kernel + hydra-python locally for the shim ==="
+        "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-kernel
+        "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-python
     fi
     PP="$PP:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
     PP="$PP:$HYDRA_ROOT/dist/python/hydra-python/src/main/python"
