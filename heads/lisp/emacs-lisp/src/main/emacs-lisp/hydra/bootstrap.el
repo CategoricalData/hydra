@@ -266,8 +266,8 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                                (code (funcall 'hydra_serialization_print_expr
                                        (funcall 'hydra_serialization_parenthesize
                                          (funcall pte program))))
-                               (ns-val (let ((ns (cdr (assoc :namespace mod))))
-                                         (if (stringp ns) ns (cdr (assoc :value ns)))))
+                               (ns-val (let ((mn (hydra_packaging_module-name mod)))
+                                         (if (stringp mn) mn (hydra_packaging_module_name-value mn))))
                                (fp (format "%s%s" (bootstrap-namespace-to-path ns-val) ext)))
                           (list :right (list (cons fp code))))))))))
             (symbol-value 'hydra_lisp_language_lisp_language)
@@ -354,8 +354,8 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
       (let* ((mods-to-generate
               (if bootstrap-kernel-only
                   (cl-remove-if (lambda (m)
-                                  (let ((ns (cdr (assoc :namespace m))))
-                                    (let ((ns-str (if (stringp ns) ns (cdr (assoc :value ns)))))
+                                  (let ((mn (hydra_packaging_module-name m)))
+                                    (let ((ns-str (if (stringp mn) mn (hydra_packaging_module_name-value mn))))
                                       (or (string-match-p "hydra\\.ext\\." ns-str)
                                           (string-match-p "hydra\\.json\\.yaml\\." ns-str)))))
                                 all-mods)
@@ -396,9 +396,9 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    (test-mods-to-emit
                      (cl-remove-if
                        (lambda (m)
-                         (let* ((ns (hydra_packaging_module-namespace m))
-                                (ns-str (if (stringp ns) ns
-                                            (hydra_packaging_namespace-value ns))))
+                         (let* ((mn (hydra_packaging_module-name m))
+                                (ns-str (if (stringp mn) mn
+                                            (hydra_packaging_module_name-value mn))))
                            (string= ns-str "hydra.test.testEnv")))
                        test-mods))
                    (out-test (format "%s/emacs-lisp-to-%s/src/test/%s"

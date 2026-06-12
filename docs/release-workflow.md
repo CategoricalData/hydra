@@ -425,11 +425,25 @@ The published artifacts under group `net.fortytwo.hydra` are:
 | Artifact | Description | `api` dependencies |
 |----------|-------------|--------------------|
 | `hydra-kernel` | Core types, terms, DSL, eval, primitives + the Java runtime support classes (`hydra.util.*`, `hydra.lib.*`, `hydra.dsl.*`, `hydra.tools.*`, plus `Adapters`/`Coders`). Self-contained; downstream packages depend on this. | (none) |
+| `hydra-haskell` | Haskell syntax and coder (generates Haskell code from Hydra schemas). | `hydra-kernel` |
+| `hydra-java` | Java syntax, serde, and coder (generates Java code from Hydra schemas). | `hydra-kernel` |
+| `hydra-python` | Python syntax and coder. | `hydra-kernel` |
+| `hydra-scala` | Scala syntax and coder. | `hydra-kernel` |
+| `hydra-lisp` | Lisp syntax and the shared coder for the four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme). | `hydra-kernel` |
+| `hydra-typescript` | TypeScript syntax and coder. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
-| `hydra-java` | Java syntax, serde, and coder (generates Java code from Hydra schemas). | `hydra-kernel` |
 
-`hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) is intentionally NOT in the 0.15 Java
+Starting with 0.16.1, the publish set covers a Java/Maven artifact for **every official Hydra
+target language** — one coder package per implementation family
+(`hydra-haskell`/`-java`/`-python`/`-scala`/`-lisp`/`-typescript`, covering all nine of the
+implementation languages), plus the `hydra-kernel` base and the `hydra-pg`/`hydra-rdf` domain
+packages (#468). The set is encoded in two places that must stay in sync: `batch_emit_packages()`
+in `bin/lib/assemble-common.sh` (which packages the batch assembler emits a `build.gradle` for) and
+`PUBLISHED_HOSTS` in `bin/lib/hydra-packages.py` (which packages resolve to a published host
+version). The newer `hydra-coq`, `hydra-go`, and `hydra-wasm` targets do NOT yet qualify.
+
+`hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) is intentionally NOT in the Java
 publish set due to a known Java-coder limitation with parametric union case-elimination on
 concretely-instantiated arguments. Track this before adding `hydra-ext` to a future Java publish set.
 
