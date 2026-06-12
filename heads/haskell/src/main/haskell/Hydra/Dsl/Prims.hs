@@ -26,8 +26,18 @@ import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Hydra.Strip (removeTermAnnotations)
+import Hydra.Lexical (emptyInferenceContext)
 import Data.String(IsString(..))
 import Data.Either (Either)
+
+-- | Placeholder InferenceContext for the TermCoder encode/decode machinery used inside the prim*
+-- wrappers. Since #446, a Primitive's implementation carrier no longer threads the InferenceContext:
+-- coders use it only for error context (otherErr ignores it) and decode (which doesn't consult it),
+-- so an empty cx is sufficient and correct. The Graph, by contrast, is still threaded through the
+-- carrier and passed to the coders, because the higher-order primitives that evaluate a function
+-- argument (via functionWithReduce) need the live graph to resolve primitive names.
+primCx :: Typing.InferenceContext
+primCx = emptyInferenceContext
 
 bigint :: TermCoder Integer
 bigint = TermCoder Types.bigint encode decode
@@ -145,6 +155,31 @@ function :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
     encode cx _g term = Left $ otherErr cx $ "cannot encode term to a function: " ++ ShowCore.term term
+    decode cx _val = Left $ otherErr cx "cannot decode functions to terms"
+
+-- | A graph-free TermCoder for function types (issue #446). Instead of calling the reducer to
+--   evaluate the application eagerly, the bridged native function builds an UNREDUCED application
+--   term @apply funTerm argTerm@ and lets the interpreter's outer @reduce@ fold it. This is the
+--   replacement for @functionWithReduce@ for the higher-order primitives whose result shape is
+--   fixed by the (already-reduced) data argument's spine — i.e. those that never need to inspect
+--   the reduced value of a per-element application mid-computation. It threads no InferenceContext
+--   or Graph, which is what lets the @Primitive.implementation@ carrier drop those parameters.
+--
+--   Only the encode side is defined (functions are never decoded back to terms), matching
+--   @functionWithReduce@. dom/cod are the term coders for the argument and result; for the
+--   higher-order primitives this is always the identity @term@/@variable@ coder, so a bridged
+--   @Term -> Term@ is @\\argTerm -> TermApplication (Application funTerm argTerm)@.
+functionDeferred :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionDeferred dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
+  where
+    encode cx g funTerm = Right $ \x ->
+      let argTerm = case termCoderDecode dom cx x of
+            Left _ -> error "functionDeferred: failed to decode argument"
+            Right t -> t
+          resultTerm = TermApplication (Application funTerm argTerm)
+      in case termCoderEncode cod cx g resultTerm of
+           Left _ -> error "functionDeferred: failed to encode result"
+           Right v -> v
     decode cx _val = Left $ otherErr cx "cannot decode functions to terms"
 
 -- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
@@ -265,7 +300,7 @@ prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
     typ = buildTypeScheme vars $ termCoderType output
-    impl cx _g _args = termCoderDecode output cx value
+    impl _g _args = termCoderDecode output primCx value
 
 prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
 prim1 name compute vars input1 output = Primitive (defaultPrimitiveDefinition name typ) impl
@@ -273,10 +308,10 @@ prim1 name compute vars input1 output = Primitive (defaultPrimitiveDefinition na
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType output]
-    impl cx g args = do
+    impl g args = do
       ExtractCore.nArgs name 1 args
-      arg1 <- termCoderEncode input1 cx g (args !! 0)
-      termCoderDecode output cx $ compute arg1
+      arg1 <- termCoderEncode input1 primCx g (args !! 0)
+      termCoderDecode output primCx $ compute arg1
 
 prim2 :: Name -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim2 name compute vars input1 input2 output = Primitive (defaultPrimitiveDefinition name typ) impl
@@ -285,11 +320,11 @@ prim2 name compute vars input1 input2 output = Primitive (defaultPrimitiveDefini
       termCoderType input1,
       termCoderType input2,
       termCoderType output]
-    impl cx g args = do
+    impl g args = do
       ExtractCore.nArgs name 2 args
-      arg1 <- termCoderEncode input1 cx g (args !! 0)
-      arg2 <- termCoderEncode input2 cx g (args !! 1)
-      termCoderDecode output cx $ compute arg1 arg2
+      arg1 <- termCoderEncode input1 primCx g (args !! 0)
+      arg2 <- termCoderEncode input2 primCx g (args !! 1)
+      termCoderDecode output primCx $ compute arg1 arg2
 
 prim3 :: Name -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim3 name compute vars input1 input2 input3 output = Primitive (defaultPrimitiveDefinition name typ) impl
@@ -299,12 +334,12 @@ prim3 name compute vars input1 input2 input3 output = Primitive (defaultPrimitiv
       termCoderType input2,
       termCoderType input3,
       termCoderType output]
-    impl cx g args = do
+    impl g args = do
       ExtractCore.nArgs name 3 args
-      arg1 <- termCoderEncode input1 cx g (args !! 0)
-      arg2 <- termCoderEncode input2 cx g (args !! 1)
-      arg3 <- termCoderEncode input3 cx g (args !! 2)
-      termCoderDecode output cx $ compute arg1 arg2 arg3
+      arg1 <- termCoderEncode input1 primCx g (args !! 0)
+      arg2 <- termCoderEncode input2 primCx g (args !! 1)
+      arg3 <- termCoderEncode input3 primCx g (args !! 2)
+      termCoderDecode output primCx $ compute arg1 arg2 arg3
 
 set :: Ord x => TermCoder x -> TermCoder (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) encode decode

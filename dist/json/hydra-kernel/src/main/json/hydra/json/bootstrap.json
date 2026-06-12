@@ -14395,7 +14395,7 @@
                                                                                       "typeName": "hydra.core.Type",
                                                                                       "field": {
                                                                                         "name": "variable",
-                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.typing.InferenceContext"}}}}}}}},
+                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graph.Graph"}}}}}}}},
                                                                                 {
                                                                                   "name": "codomain",
                                                                                   "term": {
@@ -14413,59 +14413,40 @@
                                                                                                   "inject": {
                                                                                                     "typeName": "hydra.core.Type",
                                                                                                     "field": {
-                                                                                                      "name": "variable",
-                                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graph.Graph"}}}}}}}},
+                                                                                                      "name": "list",
+                                                                                                      "term": {
+                                                                                                        "inject": {
+                                                                                                          "typeName": "hydra.core.Type",
+                                                                                                          "field": {
+                                                                                                            "name": "variable",
+                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Term"}}}}}}}}}}},
                                                                                               {
                                                                                                 "name": "codomain",
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "typeName": "hydra.core.Type",
                                                                                                     "field": {
-                                                                                                      "name": "function",
+                                                                                                      "name": "either",
                                                                                                       "term": {
                                                                                                         "record": {
-                                                                                                          "typeName": "hydra.core.FunctionType",
+                                                                                                          "typeName": "hydra.core.EitherType",
                                                                                                           "fields": [
                                                                                                             {
-                                                                                                              "name": "domain",
+                                                                                                              "name": "left",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.Type",
                                                                                                                   "field": {
-                                                                                                                    "name": "list",
-                                                                                                                    "term": {
-                                                                                                                      "inject": {
-                                                                                                                        "typeName": "hydra.core.Type",
-                                                                                                                        "field": {
-                                                                                                                          "name": "variable",
-                                                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Term"}}}}}}}}}}},
+                                                                                                                    "name": "variable",
+                                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.Error"}}}}}}}},
                                                                                                             {
-                                                                                                              "name": "codomain",
+                                                                                                              "name": "right",
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.Type",
                                                                                                                   "field": {
-                                                                                                                    "name": "either",
-                                                                                                                    "term": {
-                                                                                                                      "record": {
-                                                                                                                        "typeName": "hydra.core.EitherType",
-                                                                                                                        "fields": [
-                                                                                                                          {
-                                                                                                                            "name": "left",
-                                                                                                                            "term": {
-                                                                                                                              "inject": {
-                                                                                                                                "typeName": "hydra.core.Type",
-                                                                                                                                "field": {
-                                                                                                                                  "name": "variable",
-                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.Error"}}}}}}}},
-                                                                                                                          {
-                                                                                                                            "name": "right",
-                                                                                                                            "term": {
-                                                                                                                              "inject": {
-                                                                                                                                "typeName": "hydra.core.Type",
-                                                                                                                                "field": {
-                                                                                                                                  "name": "variable",
-                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Term"}}}}}}}}]}}}}}}]}}}}}}]}}}}}}]}}}}}},
+                                                                                                                    "name": "variable",
+                                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Term"}}}}}}}}]}}}}}}]}}}}}}]}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -14492,7 +14473,7 @@
                                                                                             "name": "string",
                                                                                             "term": {
                                                                                               "literal": {
-                                                                                                "string": "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437."}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
+                                                                                                "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {

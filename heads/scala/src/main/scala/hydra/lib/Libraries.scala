@@ -14,31 +14,42 @@ object Libraries:
 
   // ===== Infrastructure =====
 
-  private type Impl = hydra.typing.InferenceContext => hydra.graph.Graph => Seq[Term] => Either[hydra.errors.Error, Term]
+  // Since #446 a Primitive's implementation carrier no longer threads the InferenceContext (cx);
+  // it carries only the Graph and the argument terms. The Graph is still threaded because the
+  // higher-order primitives that evaluate a function argument (via reduceTerm) need the live graph
+  // to resolve primitive names.
+  private type Impl = hydra.graph.Graph => Seq[Term] => Either[hydra.errors.Error, Term]
 
   private val stubImpl: Impl =
-    _ => _ => _ => Left(hydra.errors.Error.other("stub primitive"))
+    _ => _ => Left(hydra.errors.Error.other("stub primitive"))
 
   private def ok(t: Term): Either[hydra.errors.Error, Term] = Right(t)
 
   private type E = Either[hydra.errors.Error, Term]
 
+  // Placeholder InferenceContext for the reducer machinery used inside the higher-order prim impls.
+  // Since #446 the implementation carrier no longer threads the InferenceContext, but reduceTerm
+  // still takes one (used only for error context / fresh-variable bookkeeping, neither of which
+  // matters for primitive reduction), so an empty cx is sufficient and correct. Mirrors Haskell's
+  // primCx = emptyInferenceContext in Hydra.Dsl.Prims.
+  private val primCx: hydra.typing.InferenceContext = hydra.typing.InferenceContext(0, Seq.empty)
+
   // Reduce a term using the full reducer
-  private def reduce(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, t: Term): E =
-    hydra.reduction.reduceTerm(cx)(g)(true)(t)
+  private def reduce(g: hydra.graph.Graph, t: Term): E =
+    hydra.reduction.reduceTerm(primCx)(g)(true)(t)
 
   // Apply a function term to an argument and reduce
-  private def applyAndReduce(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, f: Term, x: Term): E =
-    reduce(cx, g, Term.application(Application(f, x)))
+  private def applyAndReduce(g: hydra.graph.Graph, f: Term, x: Term): E =
+    reduce(g, Term.application(Application(f, x)))
 
   // Apply a curried function to two arguments and reduce
-  private def apply2AndReduce(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, f: Term, x: Term, y: Term): E =
-    reduce(cx, g, Term.application(Application(Term.application(Application(f, x)), y)))
+  private def apply2AndReduce(g: hydra.graph.Graph, f: Term, x: Term, y: Term): E =
+    reduce(g, Term.application(Application(Term.application(Application(f, x)), y)))
 
-  private def impl0(t: => Term): Impl = _ => _ => _ => ok(t)
-  private def impl1(f: Term => Term): Impl = _ => _ => args => ok(f(args(0)))
-  private def impl2(f: (Term, Term) => Term): Impl = _ => _ => args => ok(f(args(0), args(1)))
-  private def impl3(f: (Term, Term, Term) => Term): Impl = _ => _ => args => ok(f(args(0), args(1), args(2)))
+  private def impl0(t: => Term): Impl = _ => _ => ok(t)
+  private def impl1(f: Term => Term): Impl = _ => args => ok(f(args(0)))
+  private def impl2(f: (Term, Term) => Term): Impl = _ => args => ok(f(args(0), args(1)))
+  private def impl3(f: (Term, Term, Term) => Term): Impl = _ => args => ok(f(args(0), args(1), args(2)))
 
   // --- Term extraction helpers ---
 
@@ -166,20 +177,20 @@ object Libraries:
   // --- Higher-order traversal helpers ---
 
   /** Apply predicate to each element, collecting those where it returns true. */
-  private def filterList(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
+  private def filterList(g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
     xs.foldLeft[E](ok(mkList(Seq.empty))) { (accE, x) =>
       for {
         acc <- accE
-        result <- applyAndReduce(cx, g, p, x)
+        result <- applyAndReduce(g, p, x)
       } yield if exBool(result) then mkList(exList(acc) :+ x) else acc
     }
 
   /** Apply predicate to each element, partitioning into (true, false). */
-  private def partitionList(cx: hydra.typing.InferenceContext, g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
+  private def partitionList(g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
     xs.foldLeft[E](ok(mkPairTerm(mkList(Seq.empty), mkList(Seq.empty)))) { (accE, x) =>
       for {
         acc <- accE
-        result <- applyAndReduce(cx, g, p, x)
+        result <- applyAndReduce(g, p, x)
       } yield {
         val (ts, fs) = exPair(acc)
         if exBool(result) then mkPairTerm(mkList(exList(ts) :+ x), fs)
@@ -353,10 +364,10 @@ object Libraries:
         }),
       s"$ns.foldl" -> mkPrimImpl(s"$ns.foldl", tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tFun(y, tEither(z, x))), tFun(x, tFun(tList(y), tEither(z, x))))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val init = args(1); val xs = exList(args(2))
           xs.foldLeft[E](ok(init)) { (accE, elem) =>
-            accE.flatMap(acc => apply2AndReduce(cx, g, f, acc, elem))
+            accE.flatMap(acc => apply2AndReduce(g, f, acc, elem))
           }
         }),
       // First-order: fromLeft, fromRight, isLeft, isRight, lefts, rights, partitionEithers
@@ -388,14 +399,14 @@ object Libraries:
         }),
       s"$ns.mapList" -> mkPrimImpl(s"$ns.mapList", tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tEither(z, y)), tFun(tList(x), tEither(z, tList(y))))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val xs = exList(args(1))
           xs.foldLeft[E](ok(mkEither(Right(mkList(Seq.empty))))) { (accE, elem) =>
             accE.flatMap { acc =>
               exEither(acc) match
                 case Left(_) => ok(acc)
                 case Right(soFar) =>
-                  applyAndReduce(cx, g, f, elem).map { result =>
+                  applyAndReduce(g, f, elem).map { result =>
                     exEither(result) match
                       case Left(err) => mkEither(Left(err))
                       case Right(v) => mkEither(Right(mkList(exList(soFar) :+ v)))
@@ -405,12 +416,12 @@ object Libraries:
         }),
       s"$ns.mapOptional" -> mkPrimImpl(s"$ns.mapOptional", tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tEither(z, y)), tFun(tOpt(x), tEither(z, tOpt(y))))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val mx = exMaybe(args(1))
           mx match
             case None => ok(mkEither(Right(mkMaybe(None))))
             case Some(x) =>
-              applyAndReduce(cx, g, f, x).map { result =>
+              applyAndReduce(g, f, x).map { result =>
                 exEither(result) match
                   case Left(err) => mkEither(Left(err))
                   case Right(v) => mkEither(Right(mkMaybe(Some(v))))
@@ -418,14 +429,14 @@ object Libraries:
         }),
       s"$ns.mapSet" -> mkPrimImpl(s"$ns.mapSet", tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tEither(z, y)), tFun(tSet(x), tEither(z, tSet(y))))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val xs = exSet(args(1)).toSeq
           xs.foldLeft[E](ok(mkEither(Right(mkSet(Set.empty))))) { (accE, elem) =>
             accE.flatMap { acc =>
               exEither(acc) match
                 case Left(_) => ok(acc)
                 case Right(soFar) =>
-                  applyAndReduce(cx, g, f, elem).map { result =>
+                  applyAndReduce(g, f, elem).map { result =>
                     exEither(result) match
                       case Left(err) => mkEither(Left(err))
                       case Right(v) => mkEither(Right(mkSet(exSet(soFar) + v)))
@@ -460,20 +471,20 @@ object Libraries:
       // Higher-order: apply, bind, dropWhile, filter, find, foldl, foldr, map, partition, sortOn, span, zipWith
       s"$ns.apply" -> mkPrimImpl(s"$ns.apply", tScheme(Seq("a", "b"),
         tFun(tList(tFun(a, b)), tFun(tList(a), tList(b)))),
-        cx => g => args => {
+        g => args => {
           val fs = exList(args(0)); val xs = exList(args(1))
-          val results = for { f <- fs; x <- xs } yield applyAndReduce(cx, g, f, x)
+          val results = for { f <- fs; x <- xs } yield applyAndReduce(g, f, x)
           results.foldLeft[E](ok(mkList(Seq.empty))) { (accE, rE) =>
             for { acc <- accE; r <- rE } yield mkList(exList(acc) :+ r)
           }
         }),
       s"$ns.bind" -> mkPrimImpl(s"$ns.bind", tScheme(Seq("a", "b"),
         tFun(tList(a), tFun(tFun(a, tList(b)), tList(b)))),
-        cx => g => args => {
+        g => args => {
           val xs = exList(args(0)); val f = args(1)
           xs.foldLeft[E](ok(mkList(Seq.empty))) { (accE, x) =>
             accE.flatMap { acc =>
-              applyAndReduce(cx, g, f, x).map { result =>
+              applyAndReduce(g, f, x).map { result =>
                 mkList(exList(acc) ++ exList(result))
               }
             }
@@ -481,13 +492,13 @@ object Libraries:
         }),
       s"$ns.dropWhile" -> mkPrimImpl(s"$ns.dropWhile", tScheme(Seq("a"),
         tFun(tFun(a, tBool), tFun(tList(a), tList(a)))),
-        cx => g => args => {
+        g => args => {
           val p = args(0); val xs = exList(args(1))
           // Find index of first element where predicate is false
           xs.indices.foldLeft[E](ok(mkInt32(-1))) { (accE, i) =>
             accE.flatMap { acc =>
               if exInt32(acc) >= 0 then ok(acc) // already found
-              else applyAndReduce(cx, g, p, xs(i)).map(r => if !exBool(r) then mkInt32(i) else acc)
+              else applyAndReduce(g, p, xs(i)).map(r => if !exBool(r) then mkInt32(i) else acc)
             }
           }.map { idx =>
             val i = exInt32(idx)
@@ -496,16 +507,16 @@ object Libraries:
         }),
       s"$ns.filter" -> mkPrimImpl(s"$ns.filter", tScheme(Seq("a"),
         tFun(tFun(a, tBool), tFun(tList(a), tList(a)))),
-        cx => g => args => filterList(cx, g, args(0), exList(args(1)))),
+        g => args => filterList(g, args(0), exList(args(1)))),
       s"$ns.find" -> mkPrimImpl(s"$ns.find", tScheme(Seq("a"),
         tFun(tFun(a, tBool), tFun(tList(a), tOpt(a)))),
-        cx => g => args => {
+        g => args => {
           val p = args(0); val xs = exList(args(1))
           xs.foldLeft[E](ok(mkMaybe(None))) { (accE, x) =>
             accE.flatMap { acc =>
               exMaybe(acc) match
                 case Some(_) => ok(acc) // already found
-                case None => applyAndReduce(cx, g, p, x).map(r => if exBool(r) then mkMaybe(Some(x)) else acc)
+                case None => applyAndReduce(g, p, x).map(r => if exBool(r) then mkMaybe(Some(x)) else acc)
             }
           }
         }),
@@ -526,15 +537,15 @@ object Libraries:
         }),
       s"$ns.partition" -> mkPrimImpl(s"$ns.partition", tScheme(Seq("a"),
         tFun(tFun(a, tBool), tFun(tList(a), tPair(tList(a), tList(a))))),
-        cx => g => args => partitionList(cx, g, args(0), exList(args(1)))),
+        g => args => partitionList(g, args(0), exList(args(1)))),
       s"$ns.sortOn" -> mkPrimImpl(s"$ns.sortOn", tSchemeConstrained(Seq(("a", Seq.empty), ("b", Seq("ordering"))),
         tFun(tFun(a, b), tFun(tList(a), tList(a)))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val xs = exList(args(1))
           // Compute sort keys for each element
           xs.foldLeft[E](ok(mkList(Seq.empty))) { (accE, x) =>
             accE.flatMap { acc =>
-              applyAndReduce(cx, g, f, x).map { key =>
+              applyAndReduce(g, f, x).map { key =>
                 mkList(exList(acc) :+ mkPairTerm(key, x))
               }
             }
@@ -545,13 +556,13 @@ object Libraries:
         }),
       s"$ns.span" -> mkPrimImpl(s"$ns.span", tScheme(Seq("a"),
         tFun(tFun(a, tBool), tFun(tList(a), tPair(tList(a), tList(a))))),
-        cx => g => args => {
+        g => args => {
           val p = args(0); val xs = exList(args(1))
           // Find index of first element where predicate is false
           xs.indices.foldLeft[E](ok(mkInt32(-1))) { (accE, i) =>
             accE.flatMap { acc =>
               if exInt32(acc) >= 0 then ok(acc)
-              else applyAndReduce(cx, g, p, xs(i)).map(r => if !exBool(r) then mkInt32(i) else acc)
+              else applyAndReduce(g, p, xs(i)).map(r => if !exBool(r) then mkInt32(i) else acc)
             }
           }.map { idx =>
             val i = exInt32(idx)
@@ -696,10 +707,10 @@ object Libraries:
       // Higher-order: alter, bimap, filter, filterWithKey, map, mapKeys
       s"$ns.alter" -> mkPrimImpl(s"$ns.alter", tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
         tFun(tFun(tOpt(v), tOpt(v)), tFun(k, tFun(mapKV, mapKV)))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val key = args(1); val m = exMap(args(2))
           val current = mkMaybe(m.get(key))
-          applyAndReduce(cx, g, f, current).map { result =>
+          applyAndReduce(g, f, current).map { result =>
             exMaybe(result) match
               case None => mkMapTerm(m.removed(key))
               case Some(v) => mkMapTerm(m.updated(key, v))
@@ -712,11 +723,11 @@ object Libraries:
         }),
       s"$ns.filter" -> mkPrimImpl(s"$ns.filter", tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
         tFun(tFun(v, tBool), tFun(mapKV, mapKV))),
-        cx => g => args => {
+        g => args => {
           val p = args(0); val m = exMap(args(1))
           m.toSeq.foldLeft[E](ok(mkMapTerm(Map.empty))) { case (accE, (ek, ev)) =>
             accE.flatMap { acc =>
-              applyAndReduce(cx, g, p, ev).map { result =>
+              applyAndReduce(g, p, ev).map { result =>
                 if exBool(result) then mkMapTerm(exMap(acc).updated(ek, ev)) else acc
               }
             }
@@ -724,11 +735,11 @@ object Libraries:
         }),
       s"$ns.filterWithKey" -> mkPrimImpl(s"$ns.filterWithKey", tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(tFun(k, tFun(v, tBool)), tFun(mapKV, mapKV))),
-        cx => g => args => {
+        g => args => {
           val p = args(0); val m = exMap(args(1))
           m.toSeq.foldLeft[E](ok(mkMapTerm(Map.empty))) { case (accE, (ek, ev)) =>
             accE.flatMap { acc =>
-              apply2AndReduce(cx, g, p, ek, ev).map { result =>
+              apply2AndReduce(g, p, ek, ev).map { result =>
                 if exBool(result) then mkMapTerm(exMap(acc).updated(ek, ev)) else acc
               }
             }
@@ -922,12 +933,12 @@ object Libraries:
         }), Seq(1)),
       s"$ns.compose" -> mkPrimImpl(s"$ns.compose", tScheme(Seq("a", "b", "c"),
         tFun(tFun(a, tOpt(b)), tFun(tFun(b, tOpt(c)), tFun(a, tOpt(c))))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val g2 = args(1); val x = args(2)
-          applyAndReduce(cx, g, f, x).flatMap { mb =>
+          applyAndReduce(g, f, x).flatMap { mb =>
             exMaybe(mb) match
               case None => ok(mkMaybe(None))
-              case Some(b) => applyAndReduce(cx, g, g2, b)
+              case Some(b) => applyAndReduce(g, g2, b)
           }
         }),
       s"$ns.map" -> mkPrimImpl(s"$ns.map", tScheme(Seq("a", "b"),
@@ -939,11 +950,11 @@ object Libraries:
         }),
       s"$ns.mapOptional" -> mkPrimImpl(s"$ns.mapOptional", tScheme(Seq("a", "b"),
         tFun(tFun(a, tOpt(b)), tFun(tList(a), tList(b)))),
-        cx => g => args => {
+        g => args => {
           val f = args(0); val xs = exList(args(1))
           xs.foldLeft[E](ok(mkList(Seq.empty))) { (accE, x) =>
             accE.flatMap { acc =>
-              applyAndReduce(cx, g, f, x).map { result =>
+              applyAndReduce(g, f, x).map { result =>
                 exMaybe(result) match
                   case None => acc
                   case Some(v) => mkList(exList(acc) :+ v)

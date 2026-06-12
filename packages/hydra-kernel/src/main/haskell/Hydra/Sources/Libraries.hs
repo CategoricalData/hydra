@@ -369,8 +369,19 @@ z_ = variable "z"
 -- | A TermCoder for function types which uses beta reduction to bridge term-level
 --   functions to native functions. This allows higher-order primitives like map,
 --   filter, foldl, etc. to use native implementations rather than eval-level ones.
+--   Used by the DYNAMIC higher-order primitives (those that must inspect a reduced
+--   per-element application result), pending their migration to term-level
+--   defaultImplementations under issue #446.
 fun :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
 fun = Prims.functionWithReduce (\cx g t -> reduceTerm cx g True t)
+
+-- | A graph-free TermCoder for function types (issue #446): the bridged native function builds an
+--   unreduced @apply funTerm argTerm@ term and lets the outer reducer fold it, rather than calling
+--   the reducer here. Used by the STATIC higher-order primitives — those whose result shape is fixed
+--   by the (already-reduced) data argument's spine, so they never inspect a reduced per-element
+--   application. This is the form that requires no InferenceContext/Graph, enabling the carrier drop.
+funT :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
+funT = Prims.functionDeferred
 
 hydraLibChars :: Library
 hydraLibChars = standardLibrary _hydra_lib_chars [
@@ -383,16 +394,16 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary _hydra_lib_eithers [
-    prim3       _eithers_bimap            Eithers.bimap            [_x, _y, _z, _w] (fun x_ z_) (fun y_ w_) (Prims.either_ x_ y_) (Prims.either_ z_ w_),
+    prim3       _eithers_bimap            Eithers.bimap            [_x, _y, _z, _w] (funT x_ z_) (funT y_ w_) (Prims.either_ x_ y_) (Prims.either_ z_ w_),
     prim2       _eithers_bind             Eithers.bind             [_x, _y, _z]     (Prims.either_ x_ y_) (fun y_ (Prims.either_ x_ z_)) (Prims.either_ x_ z_),
-    prim3       _eithers_either           Eithers.either           [_x, _y, _z]     (fun x_ z_) (fun y_ z_) (Prims.either_ x_ y_) z_,
+    prim3       _eithers_either           Eithers.either           [_x, _y, _z]     (funT x_ z_) (funT y_ z_) (Prims.either_ x_ y_) z_,
     prim3       _eithers_foldl            Eithers.foldl            [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
     Prims.lazyArgs [0] $ prim2 _eithers_fromLeft  Eithers.fromLeft  [_x, _y]         x_ (Prims.either_ x_ y_) x_,
     Prims.lazyArgs [0] $ prim2 _eithers_fromRight Eithers.fromRight [_x, _y]         y_ (Prims.either_ x_ y_) y_,
     prim1       _eithers_isLeft           Eithers.isLeft           [_x, _y]         (Prims.either_ x_ y_) boolean,
     prim1       _eithers_isRight          Eithers.isRight          [_x, _y]         (Prims.either_ x_ y_) boolean,
     prim1       _eithers_lefts            Eithers.lefts            [_x, _y]         (list $ Prims.either_ x_ y_) (list x_),
-    prim2       _eithers_map              Eithers.map              [_x, _y, _z]     (fun x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
+    prim2       _eithers_map              Eithers.map              [_x, _y, _z]     (funT x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
     prim2       _eithers_mapList          Eithers.mapList          [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
     prim2       _eithers_mapOptional         Eithers.mapOptional         [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
     prim2       _eithers_mapSet           Eithers.mapSet           [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
@@ -413,7 +424,7 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
-    prim2     _lists_apply        Lists.apply         [_x, _y]     (list $ fun x_ y_) (list x_) (list y_),
+    prim2     _lists_apply        Lists.apply         [_x, _y]     (list $ funT x_ y_) (list x_) (list y_),
     prim2     _lists_bind        Lists.bind          [_x, _y]     (list x_) (fun x_ (list y_)) (list y_),
     prim1     _lists_concat      Lists.concat        [_x]         (list (list x_)) (list x_),
     prim2     _lists_concat2     Lists.concat2       [_x]         (list x_) (list x_) (list x_),
@@ -423,13 +434,13 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2     _lists_elem        Lists.elem          [_xEq]       x_ (list x_) boolean,
     prim2     _lists_filter      Lists.filter        [_x]         (fun x_ boolean) (list x_) (list x_),
     prim2     _lists_find        Lists.find          [_x]         (fun x_ boolean) (list x_) (optional x_),
-    prim3     _lists_foldl       Lists.foldl         [_y, _x]     (fun y_ (fun x_ y_)) y_ (list x_) y_,
-    prim3     _lists_foldr       Lists.foldr         [_x, _y]     (fun x_ (fun y_ y_)) y_ (list x_) y_,
+    prim3     _lists_foldl       Lists.foldl         [_y, _x]     (funT y_ (funT x_ y_)) y_ (list x_) y_,
+    prim3     _lists_foldr       Lists.foldr         [_x, _y]     (funT x_ (funT y_ y_)) y_ (list x_) y_,
     prim1     _lists_group       Lists.group         [_xEq]       (list x_) (list (list x_)),
     prim2     _lists_intercalate Lists.intercalate   [_x]         (list x_) (list (list x_)) (list x_),
     prim2     _lists_intersperse Lists.intersperse   [_x]         x_ (list x_) (list x_),
     prim1     _lists_length      Lists.length        [_x]         (list x_) int32,
-    prim2     _lists_map         Lists.map           [_x, _y]     (fun x_ y_) (list x_) (list y_),
+    prim2     _lists_map         Lists.map           [_x, _y]     (funT x_ y_) (list x_) (list y_),
     prim2     _lists_maybeAt     Lists.maybeAt       [_x]         int32 (list x_) (optional x_),
     prim1     _lists_maybeHead   Lists.maybeHead     [_x]         (list x_) (optional x_),
     prim1     _lists_maybeInit   Lists.maybeInit     [_x]         (list x_) (optional (list x_)),
@@ -449,7 +460,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1     _lists_transpose   Lists.transpose     [_x]         (list (list x_)) (list (list x_)),
     prim1     _lists_uncons      Lists.uncons        [_x]         (list x_) (optional (pair x_ (list x_))),
     prim2     _lists_zip         Lists.zip           [_x, _y]     (list x_) (list y_) (list (pair x_ y_)),
-    prim3     _lists_zipWith     Lists.zipWith       [_x, _y, _z] (fun x_ $ fun y_ z_) (list x_) (list y_) (list z_)]
+    prim3     _lists_zipWith     Lists.zipWith       [_x, _y, _z] (funT x_ $ funT y_ z_) (list x_) (list y_) (list z_)]
 
 hydraLibLiterals :: Library
 hydraLibLiterals = standardLibrary _hydra_lib_literals [
@@ -530,7 +541,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim3     _maps_insert          Maps.insert            [_kOrd, _v]                  k_ v_ mapKv mapKv,
     prim1     _maps_keys            Maps.keys              [_kOrd, _v]                  mapKv (list k_),
     prim2     _maps_lookup          Maps.lookup            [_kOrd, _v]                  k_ mapKv (optional v_),
-    prim2     _maps_map             Maps.map               [_v1, _v2, _kOrd]            (fun v1_ v2_) (Prims.map k_ v1_) (Prims.map k_ v2_),
+    prim2     _maps_map             Maps.map               [_v1, _v2, _kOrd]            (funT v1_ v2_) (Prims.map k_ v1_) (Prims.map k_ v2_),
     prim2     _maps_mapKeys         Maps.mapKeys           [_k1Ord, _k2Ord, _v]         (fun k1_ k2_) (Prims.map k1_ v_) (Prims.map k2_ v_),
     prim2     _maps_member          Maps.member            [_kOrd, _v]                  k_ mapKv boolean,
     prim1     _maps_null            Maps.null              [_kOrd, _v]                  mapKv boolean,
@@ -595,22 +606,22 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
 
 hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary _hydra_lib_optionals [
-    prim2     _optionals_apply     Optionals.apply        [_x, _y]     (optional $ fun x_ y_) (optional x_) (optional y_),
+    prim2     _optionals_apply     Optionals.apply        [_x, _y]     (optional $ funT x_ y_) (optional x_) (optional y_),
     prim2     _optionals_bind      Optionals.bind         [_x, _y]     (optional x_) (fun x_ (optional y_)) (optional y_),
-    Prims.lazyArgs [1] $ prim3 _optionals_cases     Optionals.cases        [_x, _y]     (optional x_) y_ (fun x_ y_) y_,
+    Prims.lazyArgs [1] $ prim3 _optionals_cases     Optionals.cases        [_x, _y]     (optional x_) y_ (funT x_ y_) y_,
     prim1     _optionals_cat       Optionals.cat          [_x]         (list $ optional x_) (list x_),
     prim3     _optionals_compose   Optionals.compose      [_x, _y, _z] (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
     Prims.lazyArgs [0] $ prim2 _optionals_fromOptional Optionals.fromOptional    [_x]         x_ (optional x_) x_,
     prim1     _optionals_isGiven    Optionals.isGiven       [_x]         (optional x_) boolean,
     prim1     _optionals_isNone Optionals.isNone    [_x]         (optional x_) boolean,
-    prim2     _optionals_map       Optionals.map          [_x, _y]     (fun x_ y_) (optional x_) (optional y_),
+    prim2     _optionals_map       Optionals.map          [_x, _y]     (funT x_ y_) (optional x_) (optional y_),
     prim2     _optionals_mapOptional  Optionals.mapOptional     [_x, _y]     (fun x_ $ optional y_) (list x_) (list y_),
     prim1     _optionals_pure      Optionals.pure         [_x]         x_ (optional x_),
     prim1     _optionals_toList    Optionals.toList       [_x]         (optional x_) (list x_)]
 
 hydraLibPairs :: Library
 hydraLibPairs = standardLibrary _hydra_lib_pairs [
-    prim3     _pairs_bimap  Pairs.bimap      [_a, _b, _c, _d] (fun a_ c_) (fun b_ d_) (pair a_ b_) (pair c_ d_),
+    prim3     _pairs_bimap  Pairs.bimap      [_a, _b, _c, _d] (funT a_ c_) (funT b_ d_) (pair a_ b_) (pair c_ d_),
     prim1     _pairs_first  Pairs.first      [_a, _b]         (pair a_ b_) a_,
     prim1     _pairs_second Pairs.second     [_a, _b]         (pair a_ b_) b_]
 

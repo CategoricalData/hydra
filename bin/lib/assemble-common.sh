@@ -70,7 +70,7 @@ compute_generator_stamp() {
 # stamp. Two modes:
 #
 #   1. Published-host mode (#347/#370): when <pkg> resolves to a published-host
-#      version via hydra.json (hostVersion, or a per-host hostVersionOverrides
+#      version via hydra.json (hostVersion, or a per-host hostOverrides
 #      entry), the identity is the version string `host:<pkg>:<ver>`. In this
 #      mode the build is conceptually depending on the published artifact, so
 #      local source edits to <pkg> do NOT change its identity — the cache stays
@@ -199,13 +199,14 @@ assemble_refresh_digest() {
 # --include-coders` produces output for, regardless of target language.
 # This is the union of:
 #   - the two baseline packages (hydra-kernel, hydra-haskell), always loaded
-#   - the four coder packages (hydra-java, hydra-python, hydra-scala,
-#     hydra-lisp), loaded by --include-coders
+#   - the five coder packages (hydra-java, hydra-python, hydra-scala,
+#     hydra-lisp, hydra-typescript), loaded by --include-coders
 #
 # It does NOT include the ext / ext-demo packages (hydra-pg, hydra-rdf,
-# hydra-coq, hydra-typescript, hydra-wasm, hydra-ext) — those are
-# auto-loaded only when explicitly named via --package <pkg>, so they
-# go through the per-package assemble-distribution.sh path instead.
+# hydra-coq, hydra-wasm, hydra-ext) — those are auto-loaded only when
+# explicitly named via --package <pkg>, so they go through the per-package
+# assemble-distribution.sh path instead. (hydra-go is loaded as a coder for
+# the universe but not emitted here — it has no publishable JVM artifact.)
 # See heads/haskell/src/exec/bootstrap-from-json/Main.hs around
 # "--all-packages alone does NOT auto-load these" for the executable
 # side of the same contract.
@@ -215,5 +216,5 @@ assemble_refresh_digest() {
 #
 # Usage: batch_emit_packages
 batch_emit_packages() {
-    echo "hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
+    echo "hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript"
 }

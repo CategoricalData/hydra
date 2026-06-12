@@ -101,6 +101,16 @@ echo "=== Artifacts in $OUT_DIR ==="
 ls -1 "$OUT_DIR"/*.whl "$OUT_DIR"/*.tar.gz 2>/dev/null | sed 's/^/  /'
 echo ""
 
+# --- Packaging-boundary gate (#472) ------------------------------------------
+# Install the just-built wheels into a fresh, isolated venv and import the
+# top-level kernel modules. This catches the 0.16.0-class bug — a wheel that
+# ships code importing a package the wheel omits — BEFORE upload. No local-tree
+# leakage can mask it (the gate runs from a neutral cwd with --no-index). It is
+# a hard gate: a failure here aborts the publish.
+echo "=== Smoke-testing wheels across the packaging boundary (#472 gate) ==="
+"$SCRIPT_DIR/smoke-test-wheels.sh" --wheels "$OUT_DIR"
+echo ""
+
 if [ "$DO_UPLOAD" != true ]; then
     echo "Build-only (no upload). To upload to PyPI: --upload"
     exit 0

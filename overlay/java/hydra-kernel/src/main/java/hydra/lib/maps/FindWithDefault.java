@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -52,8 +51,8 @@ public class FindWithDefault extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(
                 (Function<Map<Term, Term>, Term>) mp -> {
                     Optional<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
