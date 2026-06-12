@@ -18,7 +18,7 @@ them in place:
   - write `extra-deps: [hydra-<pkg>-<ver>, ...]` into stack.yaml.
 
 `--mode local` restores the committed files verbatim (the foolproof escape /
-release-cutting / migration-shim path). A package with hostVersionOverrides[pkg]
+release-cutting / migration-shim path). A package with hostOverrides[pkg]
 == "local" is treated as not-consumable (kept local) even in published mode,
 because `haskell-hackage` returns non-zero for it.
 

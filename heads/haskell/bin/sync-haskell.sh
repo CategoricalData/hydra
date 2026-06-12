@@ -45,7 +45,7 @@
 #                                foolproof escape — use for cutting a kernel/coder
 #                                release, or a backward-incompatible kernel change
 #                                the published kernel can't express. Per-package:
-#                                set hydra.json hostVersionOverrides[pkg]="local".
+#                                set hydra.json hostOverrides[pkg]="local".
 #
 # Usage:
 #   heads/haskell/bin/sync-haskell.sh             # Full sync (published host, all steps incl tests)

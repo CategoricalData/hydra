@@ -19,7 +19,6 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -38,8 +37,8 @@ public class Uncons extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(
             (Function<List<Term>, Term>) l -> Terms.optional(
                 Uncons.apply(l).map(p -> Terms.pair(p.first, Terms.list(p.second)))),
             hydra.extract.Core.list(graph, args.get(0)));

@@ -10,8 +10,9 @@
 module Main where
 
 import Hydra.Generation (writeTestModulesJson)
-import Hydra.PackageRouting (defaultDistJsonRoot)
+import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.All (mainModules)
+import Hydra.Sources.Ext (extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
@@ -29,7 +30,8 @@ main = do
   putStrLn $ "dist-json root: " ++ distRoot
   putStrLn ""
 
-  result <- catch (writeTestModulesJson distRoot mainModules testModules >> return True)
+  let routingMap = buildRoutingMap extRoutingInput
+  result <- catch (writeTestModulesJson routingMap distRoot mainModules testModules >> return True)
                   (\e -> do
                     putStrLn $ "Error: " ++ show (e :: SomeException)
                     return False)

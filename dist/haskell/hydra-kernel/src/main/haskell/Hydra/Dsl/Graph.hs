@@ -683,7 +683,7 @@ libraryWithPrimitives original newVal =
           Core.fieldName = (Core.Name "primitives"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.graph.Primitive
-primitive :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Typing.InferenceContext -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Typed.TypedTerm Graph.Primitive
+primitive :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm (Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Typed.TypedTerm Graph.Primitive
 primitive definition implementation =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
@@ -703,7 +703,7 @@ primitiveDefinition x =
         Core.projectionFieldName = (Core.Name "definition")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the implementation field of hydra.graph.Primitive
-primitiveImplementation :: Typed.TypedTerm Graph.Primitive -> Typed.TypedTerm (Typing.InferenceContext -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term)
+primitiveImplementation :: Typed.TypedTerm Graph.Primitive -> Typed.TypedTerm (Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term)
 primitiveImplementation x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -727,7 +727,7 @@ primitiveWithDefinition original newVal =
               Core.projectionFieldName = (Core.Name "implementation")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the implementation field of hydra.graph.Primitive
-primitiveWithImplementation :: Typed.TypedTerm Graph.Primitive -> Typed.TypedTerm (Typing.InferenceContext -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Typed.TypedTerm Graph.Primitive
+primitiveWithImplementation :: Typed.TypedTerm Graph.Primitive -> Typed.TypedTerm (Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Typed.TypedTerm Graph.Primitive
 primitiveWithImplementation original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),

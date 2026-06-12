@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.go.syntax"],
+  "mainDslModules": ["hydra.go.syntax"],
+  "mainEncodingModules": [],
   "mainModules": ["hydra.go.language", "hydra.go.syntax"],
   "manifestFormatVersion": 1,
   "package": "hydra-go",

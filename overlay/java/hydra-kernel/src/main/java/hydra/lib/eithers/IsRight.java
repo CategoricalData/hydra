@@ -15,7 +15,6 @@ import static hydra.dsl.Types.either;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -36,8 +35,8 @@ public class IsRight extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(e -> Terms.boolean_(apply(e)), hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(e -> Terms.boolean_(apply(e)), hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

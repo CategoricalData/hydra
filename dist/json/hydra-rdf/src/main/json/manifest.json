@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.rdf.syntax", "hydra.dsl.shacl.model"],
+  "mainDslModules": ["hydra.rdf.syntax", "hydra.shacl.model"],
+  "mainEncodingModules": [],
   "mainModules": [
     "hydra.owl.syntax",
     "hydra.rdf.serde",

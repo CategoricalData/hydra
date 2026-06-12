@@ -13,7 +13,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -43,8 +42,8 @@ public class Cat2 extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.string(graph, args.get(0)), l -> hydra.lib.eithers.Map.apply(r -> Terms.string(Cat2.apply(l, r)), hydra.extract.Core.string(graph, args.get(1))));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.string(graph, args.get(0)), l -> hydra.lib.eithers.Map.apply(r -> Terms.string(Cat2.apply(l, r)), hydra.extract.Core.string(graph, args.get(1))));
     }
 
     /**

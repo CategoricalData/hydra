@@ -163,6 +163,7 @@ github:       {GITHUB}
 
 extra-source-files:
   - LICENSE
+  - NOTICE
   - CHANGELOG.md
 
 dependencies:
