@@ -137,3 +137,20 @@ PY
         rm -rf "$COMPARE_CLEANUP"
     fi
 fi
+
+# #469: Refresh dist/json/hydra-java/build/main/digest.json so the JSON
+# we just wrote is reflected in the Phase-2 freshness gate. Without
+# this, the next 'assemble-distribution.sh hydra-java' compares the
+# stale input digest against the output digest's recorded inputs (also
+# stale), reports a cache hit, and skips the JSON->Haskell render —
+# which is exactly the recurrence pattern #469 closes. Skip when we
+# wrote to a tmp dir (compare-only mode without --out-root); in that
+# case the canonical dist/json is untouched.
+if [ "$ACTUAL_OUT_ROOT" = "$CANON_ROOT" ]; then
+    echo ""
+    echo "=== Refreshing per-package input digest for hydra-java (#469) ==="
+    (cd "$HYDRA_ROOT/heads/haskell" && \
+     stack exec digest-check -- refresh-input \
+       --package hydra-java \
+       --dist-json-root "$HYDRA_ROOT/dist/json")
+fi
