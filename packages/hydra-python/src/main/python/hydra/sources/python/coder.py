@@ -2021,7 +2021,7 @@ def _encode_default_case_block():
                     [
                         (
                             "patterns",
-                            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard),
+                            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard()),
                         ),
                         (
                             "body",
@@ -2657,6 +2657,134 @@ def _self_param():
     )
 
 
+def _plain_param(name_term):
+    # A single un-annotated ParamNoDefault wrapping the given py-name term.
+    return record("hydra.python.syntax.ParamNoDefault",
+        [
+            field("param", PySyn.param(name_term, nothing())),
+            field("typeComment", nothing()),
+        ],
+    )
+
+
+def _params_no_default(param_terms):
+    # Wrap a list of ParamNoDefault terms as a Parameters (paramNoDefault flavor).
+    return PySyn.parameters_param_no_default(
+        record("hydra.python.syntax.ParamNoDefaultParameters",
+            [
+                field("paramNoDefault", param_terms),
+                field("paramWithDefault", list_([])),
+                field("starEtc", nothing()),
+            ],
+        )
+    )
+
+
+def _decorators(name_strs):
+    # Build a just(Decorators) from a list of bare decorator names (e.g. ["staticmethod"]),
+    # or nothing() when the list is empty.
+    if not name_strs:
+        return nothing()
+    decs = [
+        PySyn.named_expression_simple(
+            _kref.utils_py_name_to_py_expression(_py_name(n))
+        )
+        for n in name_strs
+    ]
+    return just(wrap("hydra.python.syntax.Decorators", list_(decs)))
+
+
+def _method_statement(method_name_term, param_terms, return_expr, decorators=None):
+    # Build `def <name>(<params>): return <return_expr>` as a compound Statement.
+    # decorators: optional list of bare decorator-name strings (e.g. ["staticmethod"]).
+    block = _kref.utils_indented_block(
+        nothing(),
+        list_([list_([_kref.utils_return_single(return_expr)])]),
+    )
+    func_def_raw = record("hydra.python.syntax.FunctionDefRaw",
+        [
+            field("async", false()),
+            field("name", method_name_term),
+            field("typeParams", list_([])),
+            field("params", just(_params_no_default(param_terms))),
+            field("returnType", nothing()),
+            field("funcTypeComment", nothing()),
+            field("block", block),
+        ],
+    )
+    return PySyn.statement_compound(
+        PySyn.compound_statement_function(
+            PySyn.function_definition(_decorators(decorators or []), func_def_raw)
+        )
+    )
+
+
+def _replace_call(kwarg_terms):
+    # Build `replace(self, <kwargs...>)` as an Expression.
+    self_arg = PySyn.pos_arg_expression(
+        _kref.utils_py_name_to_py_expression(_py_name("self"))
+    )
+    call_args = PySyn.args(list_([self_arg]), kwarg_terms, list_([]))
+    return _kref.utils_py_primary_to_py_expression(
+        _kref.utils_primary_with_rhs(
+            _kref.utils_py_name_to_py_primary(_py_name("replace")),
+            PySyn.primary_rhs_call(call_args),
+        )
+    )
+
+
+def _builder_field_name(field_type):
+    # The Builder's INTERNAL storage field name: `_` + the field's lower_snake name.
+    # The leading underscore keeps the storage attribute from colliding with the
+    # same-named fluent setter METHOD (Python shares one class namespace for both,
+    # unlike Java). It is not user-facing; users only call the setters and build().
+    snake = _kref.formatting_convert_case(
+        _kref.util_case_convention_camel,
+        _kref.util_case_convention_lower_snake,
+        Core.un_name(Core.field_type_name(field_type)),
+    )
+    return Strings.cat2(string("_"), snake)
+
+
+def _none_default_field(env, field_type):
+    # Build `_<field>: <T> = None` (a TypedAssignment statement) for a builder field.
+    # The annotation reuses the record's field-type encoding; the default is None so a
+    # partially-populated builder is allowed (build() does no null-check, like Java).
+    ftype = Core.field_type_type(field_type)
+    py_name = PySyn.single_target_name(_py_name(_builder_field_name(field_type)))
+    none_rhs = PySyn.annotated_rhs_star(
+        list_([PySyn.star_expression_simple(
+            _kref.utils_py_name_to_py_expression(_kref.utils_py_none)
+        )]),
+    )
+    return Eithers.map_(
+        lam(
+            "pyType",
+            _kref.utils_py_assignment_to_py_statement(PySyn.assignment_typed(
+                PySyn.typed_assignment(py_name, var("pyType"), just(none_rhs))
+            )),
+        ),
+        _local("encodeType")(env, ftype),
+    )
+
+
+def _builder_field_kwarg(env, field_type):
+    # `<field>=self._<field>` kwarg for the build() constructor call: passes each
+    # builder's internal storage field through to the record's keyword constructor.
+    # The constructor arg keeps the record's field name; the value reads the
+    # underscore-prefixed internal builder field.
+    snake = _kref.formatting_convert_case(
+        _kref.util_case_convention_camel,
+        _kref.util_case_convention_lower_snake,
+        Core.un_name(Core.field_type_name(field_type)),
+    )
+    self_dot_field = _kref.utils_project_from_expression(
+        _kref.utils_py_name_to_py_expression(_py_name("self")),
+        _py_name(_builder_field_name(field_type)),
+    )
+    return PySyn.kwarg_or_starred_kwarg(PySyn.kwarg(_py_name(snake), self_dot_field))
+
+
 def _record_with_method():
     # Per-field copy-update method on a record:
     #   def with_<field>(self, <field>): return replace(self, <field>=<field>)
@@ -2677,34 +2805,7 @@ def _record_with_method():
                 ),
                 ("methodName", Strings.cat2(string("with_"), var("snake"))),
                 ("paramName", _py_name(var("snake"))),
-                (
-                    "param",
-                    record("hydra.python.syntax.ParamNoDefault",
-                        [
-                            field("param", PySyn.param(var("paramName"), nothing())),
-                            field("typeComment", nothing()),
-                        ],
-                    ),
-                ),
-                (
-                    "params",
-                    PySyn.parameters_param_no_default(
-                        record("hydra.python.syntax.ParamNoDefaultParameters",
-                            [
-                                field("paramNoDefault", list_([_self_param(), var("param")])),
-                                field("paramWithDefault", list_([])),
-                                field("starEtc", nothing()),
-                            ],
-                        )
-                    ),
-                ),
                 # replace(self, <field>=<field>)
-                (
-                    "selfArg",
-                    PySyn.pos_arg_expression(
-                        _kref.utils_py_name_to_py_expression(_py_name("self"))
-                    ),
-                ),
                 (
                     "kwarg",
                     PySyn.kwarg_or_starred_kwarg(
@@ -2714,53 +2815,188 @@ def _record_with_method():
                         )
                     ),
                 ),
-                (
-                    "callArgs",
-                    PySyn.args(
-                        list_([var("selfArg")]),
-                        list_([var("kwarg")]),
-                        list_([]),
-                    ),
-                ),
-                (
-                    "replaceCall",
-                    _kref.utils_py_primary_to_py_expression(
-                        _kref.utils_primary_with_rhs(
-                            _kref.utils_py_name_to_py_primary(_py_name("replace")),
-                            PySyn.primary_rhs_call(var("callArgs")),
-                        )
-                    ),
-                ),
-                ("returnStmt", _kref.utils_return_single(var("replaceCall"))),
-                (
-                    "block",
-                    _kref.utils_indented_block(nothing(), list_([list_([var("returnStmt")])])),
-                ),
-                (
-                    "funcDefRaw",
-                    record("hydra.python.syntax.FunctionDefRaw",
-                        [
-                            field("async", false()),
-                            field("name", _py_name(var("methodName"))),
-                            field("typeParams", list_([])),
-                            field("params", just(var("params"))),
-                            field("returnType", nothing()),
-                            field("funcTypeComment", nothing()),
-                            field("block", var("block")),
-                        ],
-                    ),
-                ),
             ],
-            PySyn.statement_compound(
-                PySyn.compound_statement_function(
-                    PySyn.function_definition(nothing(), var("funcDefRaw"))
-                )
+            _method_statement(
+                _py_name(var("methodName")),
+                list_([_self_param(), _plain_param(var("paramName"))]),
+                _replace_call(list_([var("kwarg")])),
             ),
         ),
     )
     return _def(
         "recordWithMethod",
         doc("Build a per-field copy-update method (with_<field>) for a record", body),
+    )
+
+
+def _record_builder_setter():
+    # One fluent setter on the Builder: `def <field>(self, <field>): return replace(self, <field>=<field>)`.
+    # The setter name is escaped (build/builder -> build_/builder_) so it can't shadow build().
+    # The setter METHOD keeps the clean field name (e.g. `body`), escaped only against
+    # build/builder; the parameter shares it; but it writes to the INTERNAL storage field
+    # `_<field>` so the method and storage don't collide in Python's single class namespace.
+    body = lambdas(
+        ["fieldType"],
+        let_chain(
+            [
+                ("fname", Core.field_type_name(var("fieldType"))),
+                ("setterName", _local("builderSetterName")(var("fname"))),
+                ("paramName", _py_name(var("setterName"))),
+                ("storageName", _builder_field_name(var("fieldType"))),
+                # replace(self, _<field>=<param>)
+                (
+                    "kwarg",
+                    PySyn.kwarg_or_starred_kwarg(
+                        PySyn.kwarg(
+                            _py_name(var("storageName")),
+                            _kref.utils_py_name_to_py_expression(var("paramName")),
+                        )
+                    ),
+                ),
+            ],
+            _method_statement(
+                _py_name(var("setterName")),
+                list_([_self_param(), _plain_param(var("paramName"))]),
+                _replace_call(list_([var("kwarg")])),
+            ),
+        ),
+    )
+    return _def(
+        "recordBuilderSetter",
+        doc("Build a fluent setter for the nested Builder of a record", body),
+    )
+
+
+def _record_builder_class():
+    # Emit a fluent builder for a record: a static `builder()` factory plus a nested
+    #   @dataclass(frozen=True) class Builder(Generic[...]):
+    #       <field>: <T> = None        # one per field
+    #       def <field>(self, v): return replace(self, <field>=v)   # fluent setters
+    #       def build(self): return R(<field>=self.<field>, ...)    # freeze into the record
+    # Returns Either error [factory_stmt, builder_class_stmt]. The builder reuses the
+    # record's Generic[...] arg and the dataclass+replace machinery (issue #466).
+    body = lambdas(
+        ["env", "name", "rowType", "recordArgs"],
+        Eithers.bind(
+            # Builder fields: `<field>: <T> = None`.
+            Eithers.map_list(
+                lam("ft", _none_default_field(var("env"), var("ft"))),
+                var("rowType"),
+            ),
+            lam(
+                "builderFields",
+                let_chain(
+                    [
+                        # Fluent setters, one per field.
+                        (
+                            "setters",
+                            Lists.map(
+                                _local("recordBuilderSetter"),
+                                var("rowType"),
+                            ),
+                        ),
+                        # build(): return R(<field>=self.<field>, ...).
+                        ("pyName", _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name"))),
+                        (
+                            "buildKwargs",
+                            Lists.map(
+                                lam("ft", _builder_field_kwarg(var("env"), var("ft"))),
+                                var("rowType"),
+                            ),
+                        ),
+                        (
+                            "ctorCall",
+                            _kref.utils_py_primary_to_py_expression(
+                                _kref.utils_primary_with_rhs(
+                                    _kref.utils_py_name_to_py_primary(var("pyName")),
+                                    PySyn.primary_rhs_call(
+                                        PySyn.args(list_([]), var("buildKwargs"), list_([]))
+                                    ),
+                                )
+                            ),
+                        ),
+                        (
+                            "buildMethod",
+                            _method_statement(
+                                _py_name("build"),
+                                list_([_self_param()]),
+                                var("ctorCall"),
+                            ),
+                        ),
+                        # The nested Builder class body: fields ++ setters ++ [build()].
+                        (
+                            "builderBody",
+                            _kref.utils_indented_block(
+                                nothing(),
+                                list_([
+                                    Lists.concat(list_([
+                                        var("builderFields"),
+                                        var("setters"),
+                                        list_([var("buildMethod")]),
+                                    ]))
+                                ]),
+                            ),
+                        ),
+                        # @dataclass(frozen=True) class Builder(Generic[...]): ...
+                        (
+                            "builderDecs",
+                            just(
+                                wrap("hydra.python.syntax.Decorators",
+                                    list_([_local("dataclassDecorator")]),
+                                )
+                            ),
+                        ),
+                        (
+                            "builderClass",
+                            _kref.utils_py_class_definition_to_py_statement(
+                                record("hydra.python.syntax.ClassDefinition",
+                                    [
+                                        field("decorators", var("builderDecs")),
+                                        field("name", _py_name("Builder")),
+                                        field("typeParams", list_([])),
+                                        field("arguments", var("recordArgs")),
+                                        field("body", var("builderBody")),
+                                    ],
+                                )
+                            ),
+                        ),
+                        # The static factory on the record:
+                        #   @staticmethod
+                        #   def builder(): return <RecordName>.Builder()
+                        # The nested class must be referenced through the enclosing record
+                        # name (a bare `Builder` is not in scope inside the staticmethod).
+                        (
+                            "qualifiedBuilderName",
+                            _py_name(Strings.cat2(
+                                unwrap("hydra.python.syntax.Name")(var("pyName")),
+                                string(".Builder"),
+                            )),
+                        ),
+                        (
+                            "builderCall",
+                            _kref.utils_function_call(
+                                _kref.utils_py_name_to_py_primary(var("qualifiedBuilderName")),
+                                list_([]),
+                            ),
+                        ),
+                        (
+                            "factoryMethod",
+                            _method_statement(
+                                _py_name("builder"),
+                                list_([]),
+                                var("builderCall"),
+                                decorators=["staticmethod"],
+                            ),
+                        ),
+                    ],
+                    right(list_([var("factoryMethod"), var("builderClass")])),
+                ),
+            ),
+        ),
+    )
+    return _def(
+        "recordBuilderClass",
+        doc("Build a fluent builder (factory + nested Builder dataclass) for a record", body),
     )
 
 
@@ -2787,16 +3023,6 @@ def _encode_record_type():
                                 _local("recordWithMethod")(var("env")),
                                 var("rowType"),
                             ),
-                        ),
-                        (
-                            "body",
-                            _kref.utils_indented_block(var("comment"), list_(
-                                    [
-                                        var("pyFields"),
-                                        var("constStmts"),
-                                        var("withMethods"),
-                                    ]
-                                )),
                         ),
                         ("boundVars", _env("boundTypeVariables", "env")),
                         ("tparamList", Pairs.first(var("boundVars"))),
@@ -2827,22 +3053,39 @@ def _encode_record_type():
                         ),
                         ("noTypeParams", list_([])),
                     ],
-                    right(
-                        _kref.utils_py_class_definition_to_py_statement(record("hydra.python.syntax.ClassDefinition",
+                    # Fluent builder (factory + nested Builder dataclass), then assemble
+                    # the class body: fields, name constants, with_* methods, builder.
+                    Eithers.bind(
+                        _local("recordBuilderClass")(var("env"), var("name"), var("rowType"), var("args")),
+                        lam(
+                            "builderStmts",
+                            let_chain(
                                 [
-                                    field("decorators", var("decs")
-                                    ),
-                                    field("name", var("pyName")
-                                    ),
-                                    field("typeParams",
-                                        var("noTypeParams"),
-                                    ),
-                                    field("arguments", var("args")
-                                    ),
-                                    field("body", var("body")
+                                    (
+                                        "body",
+                                        _kref.utils_indented_block(var("comment"), list_(
+                                                [
+                                                    var("pyFields"),
+                                                    var("constStmts"),
+                                                    var("withMethods"),
+                                                    var("builderStmts"),
+                                                ]
+                                            )),
                                     ),
                                 ],
-                            ))
+                                right(
+                                    _kref.utils_py_class_definition_to_py_statement(record("hydra.python.syntax.ClassDefinition",
+                                            [
+                                                field("decorators", var("decs")),
+                                                field("name", var("pyName")),
+                                                field("typeParams", var("noTypeParams")),
+                                                field("arguments", var("args")),
+                                                field("body", var("body")),
+                                            ],
+                                        ))
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),
@@ -4181,7 +4424,7 @@ def _encode_term_multiline_tco():
                                     "continueStmt",
                                     PySyn.statement_simple(
                                         list_(
-                                            [PySyn.simple_statement_continue]
+                                            [PySyn.simple_statement_continue()]
                                         )
                                     ),
                                 ),
@@ -5106,8 +5349,8 @@ def _encode_literal():
                         right(
                             _kref.utils_py_atom_to_py_expression(Logic.if_else(
                                     var("b"),
-                                    PySyn.atom_true,
-                                    PySyn.atom_false,
+                                    PySyn.atom_true(),
+                                    PySyn.atom_false(),
                                 ))
                         ),
                     ),
@@ -5138,7 +5381,7 @@ def _encode_literal():
                     lam(
                         "s",
                         right(
-                            _kref.utils_string_to_py_expression(PySyn.quote_style_double, var("s"))
+                            _kref.utils_string_to_py_expression(PySyn.quote_style_double(), var("s"))
                         ),
                     ),
                 ),
@@ -6335,7 +6578,7 @@ def _function_definition_to_expr():
                     (
                         "trueExpr",
                         PySyn.named_expression_simple(
-                            _kref.utils_py_atom_to_py_expression(PySyn.atom_true)
+                            _kref.utils_py_atom_to_py_expression(PySyn.atom_true())
                         ),
                     ),
                     (
@@ -6872,7 +7115,7 @@ def _dataclass_decorator():
     kwarg = PySyn.kwarg_or_starred_kwarg(
         PySyn.kwarg(
             wrap("hydra.python.syntax.Name", string("frozen")),
-            _kref.utils_py_atom_to_py_expression(PySyn.atom_true),
+            _kref.utils_py_atom_to_py_expression(PySyn.atom_true()),
         )
     )
     args_term = PySyn.args(
@@ -7702,7 +7945,7 @@ def _unsupported_expression():
         ["msg"],
         _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(_kref.utils_project_from_expression(_kref.utils_project_from_expression(_kref.utils_project_from_expression(PyDsl.py_name_to_py_expression(_py_name("hydra")), _py_name("dsl")), _py_name("python")), _py_name("unsupported"))), list_(
                 [
-                    _kref.utils_string_to_py_expression(PySyn.quote_style_double, var("msg"))
+                    _kref.utils_string_to_py_expression(PySyn.quote_style_double(), var("msg"))
                 ]
             )),
     )
@@ -7761,7 +8004,7 @@ def _wildcard_case_block():
     body = lambdas(
         ["stmt"],
         PySyn.case_block(
-            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard),
+            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard()),
             nothing(),
             _kref.utils_indented_block(nothing(), list_([list_([var("stmt")])])),
         ),
@@ -8083,6 +8326,8 @@ def _build_module() -> Module:
             to_definition(_encode_name_constants()),
             to_definition(_encode_python_module()),
             to_definition(_builder_setter_name()),
+            to_definition(_record_builder_class()),
+            to_definition(_record_builder_setter()),
             to_definition(_record_with_method()),
             to_definition(_encode_record_type()),
             to_definition(_encode_term_assignment()),
