@@ -14,7 +14,6 @@ import static hydra.dsl.Types.either;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 
 /**
@@ -38,8 +37,8 @@ public class Either extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, hydra.util.Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> {
+    protected Function<List<Term>, Function<Graph, hydra.util.Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
             Term forLeft = args.get(0);
             Term forRight = args.get(1);
             return hydra.lib.eithers.Map.apply(e -> e.accept(new hydra.util.Either.Visitor<Term, Term, Term>() {

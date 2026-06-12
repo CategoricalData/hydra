@@ -329,7 +329,7 @@
                                          (hydra--make-field "annotation" ann-term))))))))
 
 
-(defun hydra--prim-set-term-annotation (_cx _g args)
+(defun hydra--prim-set-term-annotation (_g args)
   (let* ((key (car args)) (val (cadr args)) (term (nth 2 args))
          (cached-anns (hydra--lookup-cached-annotations term))
          (term-anns (hydra--term-annotations term))
@@ -338,7 +338,7 @@
          (anns (hydra--set-annotation key val existing-anns)))
     (list :right (if anns (hydra--make-annotated stripped anns) stripped))))
 
-(defun hydra--prim-get-term-annotation (_cx _g args)
+(defun hydra--prim-get-term-annotation (_g args)
   (let* ((key (car args)) (term (cadr args))
          (cached-anns (hydra--lookup-cached-annotations term))
          (term-anns (hydra--term-annotations term))
@@ -364,16 +364,16 @@
         (cadr (cadr inner)))
        (t (format "%S" inner))))))
 
-(defun hydra--prim-set-term-description (_cx _g args)
+(defun hydra--prim-set-term-description (_g args)
   (let* ((d (car args)) (term (cadr args))
          (s (hydra--unwrap-maybe-string d))
          (term-val (when s (list :literal (list :string s))))
          (desc-key (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
          (maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))))
-    (hydra--prim-set-term-annotation _cx _g (list desc-key maybe-val term))))
+    (hydra--prim-set-term-annotation _g (list desc-key maybe-val term))))
 
-(defun hydra--prim-get-term-description (_cx _g args)
+(defun hydra--prim-get-term-description (_g args)
   (let* ((term (nth 2 args))
          ;; Peel type lambdas/applications
          (peeled (let ((t_ term))
@@ -433,10 +433,10 @@
 (defun hydra--make-annotation-primitive (name arity impl-fn)
   ;; #368: errors flow through Either Left Error directly; no InContext wrap
   (make-hydra_graph_primitive (make-prim-def-from-arity name arity)
-    (lambda (cx) (lambda (g) (lambda (args)
+    (lambda (g) (lambda (args)
       (condition-case err
-          (funcall impl-fn cx g args)
-        (error (list :left (list :other (make-hydra_errors_other_error (format "%S" err)))))))))))
+          (funcall impl-fn g args)
+        (error (list :left (list :other (make-hydra_errors_other_error (format "%S" err))))))))))
 
 ;; ============================================================================
 ;; Annotation cache — preserves annotations stripped by the reducer

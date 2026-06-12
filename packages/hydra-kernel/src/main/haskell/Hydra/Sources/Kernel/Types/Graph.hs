@@ -83,16 +83,16 @@ primitive = define "Primitive" $
       doc "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."
       Packaging.primitiveDefinition,
     "implementation">:
-      doc ("A concrete, host-specific implementation of the primitive function: a mapping from a list of"
-        ++ " argument terms to a result term, or an error."
+      doc ("A concrete, host-specific implementation of the primitive function: given the current graph,"
+        ++ " a mapping from a list of argument terms to a result term, or an error."
         ++ " Arguments are reduced and stripped of annotations by the interpreter before the implementation is"
         ++ " invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive"
-        ++ " can return an unreduced applicative term and let the outer reducer fold it."
-        ++ " The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and"
-        ++ " reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal"
-        ++ " (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation`"
-        ++ " integration tracked in https://github.com/CategoricalData/hydra/issues/437.") $
-      Typing.inferenceContext ~> graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
+        ++ " whose result shape is fixed by its data argument can return an unreduced applicative term and let the"
+        ++ " outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that"
+        ++ " must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function"
+        ++ " resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter"
+        ++ " was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446).") $
+      graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
 
 termCoder :: TypeDefinition
 termCoder = define "TermCoder" $
