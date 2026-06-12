@@ -12,6 +12,8 @@ module Hydra.Digest (
     discoverModuleNameFiles,
     hashFile,
     hashUniverse,
+    hashPackageJsonContent,
+    jsonContentKeyPrefix,
     readDigest,
     writeDigest,
     digestPath,
@@ -208,6 +210,66 @@ hashUniverse nsFiles mods = do
             Left _  -> return Nothing
             Right h -> return $ Just (ns, h)
     return $ M.fromList (Y.catMaybes pairs)
+
+
+-- | Prefix used to namespace JSON-content entries inside a per-package
+-- input digest. Entries look like @jsonContent:<rel-path>@ where
+-- @<rel-path>@ is the JSON file's path relative to
+-- @<distJsonRoot>/<pkg>/src/main/json@.
+--
+-- The prefix keeps these entries syntactically distinct from real
+-- @<namespace>@ keys (namespaces use @.@ as separator and never contain
+-- @:@) and from the @depHash:@ prefix used by 'PerPackageDigest' for
+-- transitive dep selfHashes (#347). 'parseDigest' and
+-- 'parsePerPackageDigest' both treat unknown prefixes as opaque
+-- key-value pairs that round-trip through 'hashes' — so no parser
+-- change is needed to read or write them.
+jsonContentKeyPrefix :: String
+jsonContentKeyPrefix = "jsonContent:"
+
+-- | Hash every @*.json@ file under @<distJsonRoot>/<pkg>/src/main/json@
+-- and return them as digest entries keyed by
+-- @jsonContent:<rel-path>@.
+--
+-- For native-coder packages (hydra-java, hydra-python), the JSON
+-- content is the product of a *published coder runtime* applied to the
+-- @.java@/@.py@ sources. The runtime can change behavior independently
+-- of the sources (#398 reordered fields without touching any source),
+-- and the existing source-hashing in 'hashUniverse' cannot see that.
+-- Folding the JSON content into the per-package input digest closes
+-- the gap: any change to the JSON the assembler is about to consume
+-- invalidates the render gate, regardless of which writer produced it
+-- (Phase-1 Haskell DSL, Phase-5 native driver, hand-edit, future
+-- writers).
+--
+-- Returns an empty map if the JSON tree is absent (cold checkout).
+-- Callers should fold this into the existing digest with
+-- @M.union jsonHashes pkgDigest@ before writing.
+hashPackageJsonContent :: FilePath -> String -> IO DigestMap
+hashPackageJsonContent distJsonRoot pkg = do
+    let jsonRoot = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+    exists <- SD.doesDirectoryExist jsonRoot
+    if not exists then return M.empty else do
+      files <- listFilesWithExt ".json" jsonRoot
+      pairs <- CM.forM files $ \fp -> do
+        result <- E.try (hashFile fp) :: IO (Either E.SomeException String)
+        case result of
+          Left _  -> return Nothing
+          Right h -> do
+            let rel = makeRelativeTo jsonRoot fp
+                key = ModuleName (jsonContentKeyPrefix ++ rel)
+            return $ Just (key, h)
+      return $ M.fromList (Y.catMaybes pairs)
+  where
+    listFilesWithExt suffix dir = do
+      entries <- SD.listDirectory dir
+      subResults <- CM.forM entries $ \e -> do
+        let p = dir FP.</> e
+        isDir <- SD.doesDirectoryExist p
+        if isDir
+          then listFilesWithExt suffix p
+          else if suffix `L.isSuffixOf` e then return [p] else return []
+      return $ concat subResults
 
 
 -- | Digest path for a single-tree writer: lives under the package's
