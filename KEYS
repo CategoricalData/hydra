@@ -1,0 +1,33 @@
+This file contains the OpenPGP public keys that Hydra release managers use to
+sign release artifacts. To verify a Hydra source release, import this file and
+check the detached signature (`.asc`) that ships alongside the source archive:
+
+    # Import the project signing keys
+    gpg --import KEYS
+
+    # Verify a downloaded source archive against its signature
+    gpg --verify hydra-<version>-src.tar.gz.asc hydra-<version>-src.tar.gz
+
+A good signature from a key listed below, together with a matching SHA-512
+checksum (`.sha512`), confirms the archive is an authentic, untampered release.
+
+-------------------------------------------------------------------------------
+
+Release managers: append your public key to this file, never replace existing
+keys (downstream users may have pinned an older key, and prior releases were
+signed with it). For each key, include the human-readable `gpg --fingerprint`
+block above the ASCII-armored key so a verifier can confirm the fingerprint
+out of band:
+
+    gpg --list-sigs --fingerprint <your-key-id> >> KEYS
+    gpg --armor --export <your-key-id> >> KEYS
+
+Then commit the updated KEYS file. The signing key id can be selected at
+release time via the HYDRA_RELEASE_SIGNING_KEY environment variable, which
+bin/prepare-release.sh passes to gpg; see docs/release-workflow.md.
+
+-------------------------------------------------------------------------------
+
+No release-signing keys have been registered yet. The first release manager to
+sign a Hydra source release adds their public key below this line, following the
+procedure above.
