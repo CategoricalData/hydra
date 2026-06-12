@@ -1,0 +1,73 @@
+// #370 published-host Java DSL->JSON driver (standalone build).
+//
+// Compiles ONLY the hand-written hydra-java DSL authoring sources
+// (hydra.sources.java.*, hydra.dsl.meta.*, hydra.dsl.java.Helpers, ...) plus the
+// two driver files (hydra.Generation, hydra.UpdateJavaJson) against the PUBLISHED
+// Java host net.fortytwo.hydra:hydra-java:<hostVersion> resolved from Maven
+// Central — NOT against any local dist/java build. This is the default path the
+// regular sync uses to regenerate dist/json/hydra-java: edits to the DSL sources
+// in packages/hydra-java/src/main/java/ flow straight through without rebuilding
+// a local Java host. The local-host path (UpdateJavaJson on the rollup's
+// headsExtras source set) is retained only as the bootstrap shim for
+// backward-incompatible kernel changes.
+//
+// hydra.GenerationTargets is deliberately NOT compiled here: it references every
+// target language's coder and so only compiles against the full local dist. The
+// JSON driver never calls it (UpdateJavaJson uses only the kernel/Java-coder
+// methods on hydra.Generation).
+plugins {
+    id 'java-library'
+}
+
+// hydraRoot = .../worktree (this project sits at heads/java/json-driver/).
+def hydraRoot = file("$projectDir/../../..")
+
+// Single source of truth for the published host version: hydra.json
+// (hostVersionOverrides["hydra-java"] -> hostVersion), read via
+// bin/lib/hydra-packages.py so Gradle and the shell scripts always agree.
+def hostVersion = providers.exec {
+    workingDir = hydraRoot
+    commandLine 'python3', 'bin/lib/hydra-packages.py', 'host-version', 'hydra-java'
+}.standardOutput.asText.get().trim()
+
+repositories {
+    mavenCentral()
+    mavenLocal() // so a locally-published interim host (the #370 bootstrap shim) is visible
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+sourceSets {
+    main {
+        java {
+            // All hand-written hydra-java DSL authoring sources + DSL modules.
+            srcDir file("$hydraRoot/packages/hydra-java/src/main/java")
+            // Just the two driver files from heads/java (everything else there
+            // needs the local dist or the cross-target coders).
+            srcDir file("$hydraRoot/heads/java/src/main/java")
+            include 'hydra/sources/java/**'
+            include 'hydra/dsl/**'
+            include 'hydra/Generation.java'
+            include 'hydra/UpdateJavaJson.java'
+        }
+    }
+}
+
+dependencies {
+    // Pulls net.fortytwo.hydra:hydra-kernel transitively (per the hydra-java
+    // POM): kernel runtime + hydra.Codegen + hydra.dsl.java.* coder.
+    api "net.fortytwo.hydra:hydra-java:${hostVersion}"
+}
+
+// Print the runtime classpath (compiled driver classes + the published host and
+// its transitive deps) on a single line. Consumed by bin/update-java-json.sh to
+// run hydra.UpdateJavaJson. Depends on compileJava so the driver classes exist.
+tasks.register('printRuntimeClasspath') {
+    dependsOn 'classes'
+    doLast {
+        println sourceSets.main.runtimeClasspath.asPath
+    }
+}

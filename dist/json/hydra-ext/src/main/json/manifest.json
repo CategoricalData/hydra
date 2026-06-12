@@ -1,5 +1,4 @@
 {
-  "defaultLibModules": [],
   "dslModules": [],
   "mainModules": [
     "hydra.atlas",

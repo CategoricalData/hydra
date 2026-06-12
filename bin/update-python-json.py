@@ -27,19 +27,33 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import os
 import sys
 import time
 from pathlib import Path
 
 # Anchor PYTHONPATH to the worktree root.
+#
+# #370: the hydra-python coder RUNTIME comes from one of two places.
+#   - published-host (default): the wrapper (generate-hydra-python-from-python.sh)
+#     puts the published hydra-python wheels' site-packages on PYTHONPATH and sets
+#     HYDRA_PYTHON_HOST_MODE=published. We then must NOT prepend the local
+#     dist/python/* trees, or they would shadow the published wheels.
+#   - local-host (bootstrap shim) or a direct run: we prepend the local
+#     dist/python/hydra-{kernel,python} trees as before.
+# The DSL sources (packages/hydra-python) and the driver (heads/python) are always
+# local in both modes.
 _HERE = Path(__file__).resolve().parent
 _ROOT = _HERE.parent
-for sub in (
-    "packages/hydra-python/src/main/python",
-    "dist/python/hydra-kernel/src/main/python",
-    "dist/python/hydra-python/src/main/python",
-    "heads/python/src/main/python",
-):
+_PUBLISHED = os.environ.get("HYDRA_PYTHON_HOST_MODE") == "published"
+_subs = ["packages/hydra-python/src/main/python"]
+if not _PUBLISHED:
+    _subs += [
+        "dist/python/hydra-kernel/src/main/python",
+        "dist/python/hydra-python/src/main/python",
+    ]
+_subs += ["heads/python/src/main/python"]
+for sub in _subs:
     p = str(_ROOT / sub)
     if p not in sys.path:
         sys.path.insert(0, p)
@@ -51,6 +65,7 @@ from hydra.generation import (
     infer_and_write_by_package,
     load_modules_from_json,
     read_manifest_field,
+    synthesize_and_write_dsl_modules,
 )
 
 # Python source module names under hydra.sources.python.* (matches Haskell
@@ -179,6 +194,19 @@ def main():
             mods=tuple(py_sources),
             seed_acc=tuple(universe),
         )
+        # #370/#346: also synthesize the DSL-wrapper modules
+        # (hydra.dsl.python.{environment,syntax}) that the legacy Haskell
+        # update-json-main DSL pass used to write. Now that hydra-python is
+        # single-writer (no Haskell DSL fallback), the native driver owns its
+        # full emission set. The DSL-type source modules are the type-defining
+        # ones: hydra.python.environment and hydra.python.syntax.
+        dsl_type_mods = [
+            m for m in py_sources
+            if m.name.value in ("hydra.python.environment", "hydra.python.syntax")
+        ]
+        written_dsl = synthesize_and_write_dsl_modules(
+            dist_json_root, universe_all, dsl_type_mods)
+        print(f"  DSL wrappers: {len(written_dsl)} module(s) written", flush=True)
         t_pkg = time.perf_counter() - t0
         print(f"  done ({t_pkg:.1f}s)", flush=True)
 
