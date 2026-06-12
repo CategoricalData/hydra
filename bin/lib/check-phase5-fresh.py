@@ -38,6 +38,7 @@ Inputs hashed per kind:
 Cache file per kind: dist/json/hydra-<kind>/build/phase5-input-cache.txt
 """
 import hashlib
+import os
 import sys
 from pathlib import Path
 
@@ -127,6 +128,16 @@ def collect_inputs(hydra_root: Path, kind: str) -> list:
 
 def hash_inputs(hydra_root: Path, kind: str) -> str:
     h = hashlib.sha256()
+    # Fold the host mode into the hash so a published<->local switch is a cache
+    # miss even when every source input is byte-identical. The native re-export's
+    # output can depend on which host runtime it runs against (e.g. the Python
+    # driver imports the coder runtime from the published wheel vs the local
+    # dist tree), so "same inputs, different host" must NOT be treated as fresh.
+    # sync.sh sets HYDRA_PHASE5_HOST_MODE; a bare/standalone run (unset) hashes
+    # as the empty string, matching the prior modeless behavior.
+    h.update(b"host-mode\0")
+    h.update(os.environ.get("HYDRA_PHASE5_HOST_MODE", "").encode("utf-8"))
+    h.update(b"\n")
     for rel, content_hash in collect_inputs(hydra_root, kind):
         h.update(rel.encode('utf-8'))
         h.update(b'\0')
