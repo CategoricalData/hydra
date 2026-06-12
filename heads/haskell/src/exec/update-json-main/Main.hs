@@ -18,9 +18,9 @@
 
 module Main where
 
-import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit, modulesToGraph,
+import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, modulesToGraph,
   loadModulesFromJson, readManifestField)
-import Hydra.PackageRouting (defaultDistJsonRoot)
+import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
   hydraBenchModules,
@@ -29,7 +29,7 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules,
-  allDslTypeModules)
+  allDslModules, allEncodingModules, extRoutingInput)
 
 import qualified Hydra.Kernel as Kernel
 import qualified Hydra.Core as Core
@@ -126,6 +126,19 @@ main = do
   nativeModules <- loadNativePackageModules distRoot baseUniverse
   let universe = dedupByNamespace (baseUniverse ++ nativeModules)
 
+  -- Routing map (#474), derived from each package's compiled mainModules plus
+  -- the native (hydra-java / hydra-python) modules loaded from dist/json.
+  -- Native modules are tagged by namespace prefix; everything else comes from
+  -- extRoutingInput.
+  let nativeRoutingInput =
+        [ ("hydra-java",   [ Kernel.moduleName m | m <- nativeModules
+                           , L.isPrefixOf "hydra.java." (Packaging.unModuleName (Kernel.moduleName m))
+                             || L.isPrefixOf "hydra.dsl.java." (Packaging.unModuleName (Kernel.moduleName m)) ])
+        , ("hydra-python", [ Kernel.moduleName m | m <- nativeModules
+                           , L.isPrefixOf "hydra.python." (Packaging.unModuleName (Kernel.moduleName m))
+                             || L.isPrefixOf "hydra.dsl.python." (Packaging.unModuleName (Kernel.moduleName m)) ]) ]
+      routingMap = buildRoutingMap (extRoutingInput ++ nativeRoutingInput)
+
   putStrLn "=== Generate Hydra JSON modules ==="
   putStrLn ""
 
@@ -164,25 +177,27 @@ main = do
   putStrLn ""
 
   result <- catch
-    (writeModulesJsonPackageSplit True distRoot universe writeUniverse >> return True)
+    (writeModulesJsonPackageSplit routingMap True distRoot universe writeUniverse >> return True)
     (\e -> do
       putStrLn $ "Error: " ++ show (e :: SomeException)
       return False)
 
   putStrLn ""
-  putStrLn "Generating DSL wrapper modules to JSON..."
-  -- The DSL generator runs over each package's curated dslTypeModules
-  -- list (see each package's Manifest.hs). DSL wrappers are routed to
-  -- their owning package's dist/json/<pkg>/.../hydra/dsl/<lang>/ via
-  -- PackageRouting, so the resulting Hydra/Dsl/<lang>/<Name>.hs phantom
-  -- helpers regenerate whenever the corresponding syntax model changes.
-  -- Per-package opt-in: add a module to a package's dslTypeModules
-  -- list to start emitting DSL wrappers for it; remove to stop.
-  let dslTypeMods = allDslTypeModules
+  putStrLn "Generating derived modules (DSL + encode + decode) to JSON..."
+  -- The derived-module generators run over each package's derivedMainModules
+  -- list (see each package's Manifest.hs). For each source module we emit
+  -- hydra.dsl.<x>, hydra.encode.<x>, and hydra.decode.<x>, routed to their
+  -- owning package's dist/json/<pkg>/ via the derived RoutingMap. The
+  -- encode/decode JSON is emitted DIRECTLY from the synthesized Modules — no
+  -- per-host Hydra.Sources.{Encode,Decode}.*.hs source-as-data copy is needed
+  -- for the JSON to exist (#474, #448-aligned). Per-package opt-in: add a
+  -- module to a package's derivedMainModules list to start deriving for it.
+  let dslSrcMods = allDslModules
+      encSrcMods = allEncodingModules
   dslResult <- catch
-    (writeDslJsonPackageSplit distRoot universe dslTypeMods >> return True)
+    (writeDerivedJsonPackageSplit routingMap distRoot universe dslSrcMods encSrcMods >> return True)
     (\e -> do
-      putStrLn $ "Error generating DSL JSON: " ++ show (e :: SomeException)
+      putStrLn $ "Error generating derived JSON: " ++ show (e :: SomeException)
       return False)
 
   if result && dslResult

@@ -9,7 +9,7 @@ module Hydra.Generation (
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.PackageRouting (groupByPackage, namespaceToPackage)
+import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn)
 import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
@@ -88,7 +88,14 @@ generateSourcesWithTransform
 generateSourcesWithTransform transform printDefinitions lang doInfer basePath universeModules modulesToGenerate = do
     let cx = emptyInferenceContext
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer bootstrapGraph universeModules modulesToGenerate cx of
-      Left err -> fail $ "Failed to generate source files: " ++ showError err
+      Left err -> do
+        -- #474 diagnostic: on a batch failure, re-run each module individually
+        -- against the full universe to name the culprit(s) before failing.
+        CM.forM_ modulesToGenerate $ \m ->
+          case CodeGeneration.generateSourceFiles printDefinitions lang doInfer bootstrapGraph universeModules [m] cx of
+            Left e  -> putStrLn $ "  [gen-fail] " ++ unModuleName (moduleName m) ++ ": " ++ showError e
+            Right _ -> return ()
+        fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
         mapM_ writePair files
         return $ map fst files
@@ -245,9 +252,9 @@ inferModulesGivenIO universeMods targetMods = do
 -- inferred modules through to NF, which is what dodges the lazy
 -- thunk chain that wrecked the per-SCC attempt
 -- (see docs/history/inferModules-per-scc-attempt.md on staging).
-inferAndWriteByPackage :: FilePath -> [Module] -> [Module] -> IO ()
-inferAndWriteByPackage distJsonRoot universeMods mods =
-  inferAndWriteByPackageSeeded distJsonRoot M.empty M.empty [] universeMods mods
+inferAndWriteByPackage :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
+inferAndWriteByPackage routingMap distJsonRoot universeMods mods =
+  inferAndWriteByPackageSeeded routingMap distJsonRoot M.empty M.empty [] universeMods mods
 
 -- | Source-set-aware variant of 'inferAndWriteByPackageSeeded'. The main
 -- path writes into src/main/json (srcSet = "main"); the test-side writer
@@ -255,14 +262,15 @@ inferAndWriteByPackage distJsonRoot universeMods mods =
 -- modules into src/test/json. Everything else (seed maps, topo iteration,
 -- bounded-memory accumulator) is identical.
 inferAndWriteByPackageSeeded
-  :: FilePath
+  :: RoutingMap
+  -> FilePath
   -> M.Map Name TypeScheme
   -> M.Map Name TypeScheme
   -> [Module]
   -> [Module]
   -> [Module]
   -> IO ()
-inferAndWriteByPackageSeeded = inferAndWriteByPackageSeededFor "main"
+inferAndWriteByPackageSeeded routingMap = inferAndWriteByPackageSeededFor routingMap "main"
 
 -- | As 'inferAndWriteByPackage' but with a 'seedSchemes' map of
 -- 'Name -> TypeScheme' for bindings that are already typed (e.g. clean
@@ -284,7 +292,8 @@ inferAndWriteByPackageSeeded = inferAndWriteByPackageSeededFor "main"
 -- retained every prior package's full payload (term bodies, annotations,
 -- everything) — fine for ~10 modules dirty, OOM at -M6G for ~250.
 inferAndWriteByPackageSeededFor
-  :: String                 -- ^ source set ("main" | "test"); selects src/<set>/json
+  :: RoutingMap
+  -> String                 -- ^ source set ("main" | "test"); selects src/<set>/json
   -> FilePath
   -> M.Map Name TypeScheme  -- ^ accumulated term-binding schemes from prior packages
   -> M.Map Name TypeScheme  -- ^ accumulated type-def schemes from prior packages
@@ -297,7 +306,7 @@ inferAndWriteByPackageSeededFor
   -> [Module]               -- ^ target subset to re-infer + write
   -> IO ()
 inferAndWriteByPackageSeededFor
-    srcSet distJsonRoot seedBindingSchemes seedSchemaSchemes schemaContextMods universeMods mods = do
+    routingMap srcSet distJsonRoot seedBindingSchemes seedSchemaSchemes schemaContextMods universeMods mods = do
   -- Build the JSON-write schemaMap ONCE, up front, from the full module
   -- universe (schemaContextMods + universeMods). The encoder needs every
   -- universe type reachable from this map — in particular
@@ -316,8 +325,8 @@ inferAndWriteByPackageSeededFor
   -- modules (e.g. hydra-java when #344 excludes its JSON from this write
   -- pass) still get inferred so their TypeSchemes seed the typed universe
   -- for downstream packages.
-  let targetGroups    = groupByPackage mods
-      universeGroups  = groupByPackage universeMods
+  let targetGroups    = groupByPackageIn routingMap mods
+      universeGroups  = groupByPackageIn routingMap universeMods
       pkgToMods       = M.fromList targetGroups
       pkgToUniverse   = M.fromList universeGroups
       pkgsInScope     = L.nub (map fst universeGroups ++ map fst targetGroups)
@@ -350,13 +359,20 @@ inferAndWriteByPackageSeededFor
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
             targetNs     = S.fromList (map moduleName pkgTargets)
-            -- All this package's modules go into the universe so cross-
-            -- references within the package resolve; only the subset that's
-            -- in the original target set gets re-inferred + written.
-            -- (For packages with no target modules — e.g. hydra-java
-            -- under #344 — we still infer the whole package so its types
-            -- seed downstream packages, but skip the write step below.)
-            inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
+            -- Infer this package's FULL universe (everything it owns), not
+            -- just its write-targets, so that EVERY binding it owns is typed
+            -- and seeds the typed-so-far accumulator for downstream packages.
+            -- This matters for by-name cross-package refs to modules that are
+            -- owned-but-not-written: e.g. hydra-scala's serde references
+            -- hydra.java.serde.escapeJavaString, but hydra-java's write-targets
+            -- are only its DSL wrappers (its hydra.java.* modules are
+            -- native-owned and excluded from the write set, #344). Inferring
+            -- only the write-targets left escapeJavaString untyped, so scala
+            -- failed to resolve it. Writing is still filtered to the target
+            -- subset below ('toWrite'); for non-native packages pkgUniverse
+            -- equals pkgTargets, so this adds inference work only for the
+            -- native-owning packages (hydra-java / hydra-python).
+            inferTargets = pkgUniverse
         putStrLn $ "  [" ++ pkg ++ "] "
           ++ show (length pkgTargets) ++ " write / "
           ++ show (length inferTargets) ++ " infer / "
@@ -565,9 +581,9 @@ writeModulesJson doInfer basePath universeMods mods = do
 --     freshness checks are wired in.
 --
 -- See 'writeModulesJson' for the (non-split) caching semantics.
-writeModulesJsonPackageSplit :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
-writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
-  hit <- if doInfer then tryCacheHitSplit distJsonRoot universeMods mods else return Nothing
+writeModulesJsonPackageSplit :: RoutingMap -> Bool -> FilePath -> [Module] -> [Module] -> IO ()
+writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods = do
+  hit <- if doInfer then tryCacheHitSplit routingMap distJsonRoot universeMods mods else return Nothing
   case hit of
     Just _ -> do
       putStrLn $ "  Cache hit (" ++ show (length universeMods) ++ " modules clean); skipping inference and writes."
@@ -579,7 +595,7 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
       -- per-package input digest must cover native-generator-owned
       -- hydra.<lang>.* modules even though their JSON write is excluded
       -- (#344). See refreshPerPackageDigests for the full rationale (#400).
-      CM.when doInfer $ ensurePerPackageDigests distJsonRoot universeMods
+      CM.when doInfer $ ensurePerPackageDigests routingMap distJsonRoot universeMods
     Nothing -> do
       -- Try the incremental path: partition modules into clean
       -- (DSL hash unchanged) and dirty. Re-infer only the dirty ones
@@ -587,15 +603,15 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
       -- for the dirty subset. Falls through to full inference if
       -- the incremental setup fails.
       result <- if doInfer
-                  then tryIncrementalInference distJsonRoot universeMods mods
+                  then tryIncrementalInference routingMap distJsonRoot universeMods mods
                   else return (Just (IncrementalFull mods))
       case result of
         Just (IncrementalFull allMods) -> do
           -- Full inference was needed; write JSON for every module.
-          writePackageSplitJson distJsonRoot universeMods allMods allMods
+          writePackageSplitJson routingMap distJsonRoot universeMods allMods allMods
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
-            refreshPerPackageDigests distJsonRoot universeMods allMods
+            refreshPerPackageDigests routingMap distJsonRoot universeMods allMods
         Just (IncrementalPartial allMods dirtyMods) -> do
           -- Incremental inference succeeded; only rewrite JSON for the
           -- dirty modules. Clean modules' on-disk JSON is already
@@ -604,10 +620,10 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
           putStrLn $ "  Writing JSON for " ++ show (length dirtyMods)
             ++ " dirty modules (skipping " ++ show (length allMods - length dirtyMods)
             ++ " clean)"
-          writePackageSplitJson distJsonRoot universeMods allMods dirtyMods
+          writePackageSplitJson routingMap distJsonRoot universeMods allMods dirtyMods
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
-            refreshPerPackageDigests distJsonRoot universeMods allMods
+            refreshPerPackageDigests routingMap distJsonRoot universeMods allMods
         Just IncrementalPartialPreWritten -> do
           -- #381 follow-up: tryIncrementalInference routed through
           -- inferAndWriteByPackage, which already inferred and wrote JSON
@@ -617,7 +633,7 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
           -- through the foldl).
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
-            refreshPerPackageDigests distJsonRoot universeMods mods
+            refreshPerPackageDigests routingMap distJsonRoot universeMods mods
         Nothing -> do
           -- #381: per-package iterative inference. Replaces the
           -- universe-wide 'inferModulesIO universeMods mods' that runs
@@ -628,10 +644,10 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
           -- emitted as a side effect inside the loop; we still need to
           -- refresh the universe-wide + per-package digests below.
           putStrLn "  Incremental inference unavailable; running per-package inference."
-          inferAndWriteByPackage distJsonRoot universeMods mods
+          inferAndWriteByPackage routingMap distJsonRoot universeMods mods
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
-            refreshPerPackageDigests distJsonRoot universeMods mods
+            refreshPerPackageDigests routingMap distJsonRoot universeMods mods
 
 -- | Test-side digest anchor. The test universe routes entirely to
 -- hydra-kernel today (every test namespace is hydra.test.*), so its
@@ -641,9 +657,9 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
 -- the targets actually route to (rather than hardcoding hydra-kernel)
 -- so the anchor follows the routing table if test namespaces ever split
 -- across packages.
-testDigestAnchor :: FilePath -> [Module] -> FilePath
-testDigestAnchor distJsonRoot testMods =
-  let pkg = case map fst (groupByPackage testMods) of
+testDigestAnchor :: RoutingMap -> FilePath -> [Module] -> FilePath
+testDigestAnchor routingMap distJsonRoot testMods =
+  let pkg = case map fst (groupByPackageIn routingMap testMods) of
               (p:_) -> p
               []    -> "hydra-kernel"
   in perPackageDigestPathFor "test" distJsonRoot pkg
@@ -682,13 +698,13 @@ testDigestAnchor distJsonRoot testMods =
 -- source change still invalidates the test cache (a test module may
 -- reference the changed binding) — but the *re-inference* only runs over
 -- the test modules, against main schemes loaded from JSON.
-writeTestModulesJson :: FilePath -> [Module] -> [Module] -> IO ()
-writeTestModulesJson distJsonRoot mainMods testMods = do
+writeTestModulesJson :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
+writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
   let universeMods = mainMods ++ testMods
-      digestFile   = testDigestAnchor distJsonRoot testMods
+      digestFile   = testDigestAnchor routingMap distJsonRoot testMods
       testPaths    = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
                                      FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json"
-                     | (pkg, pkgMods) <- groupByPackage testMods, m <- pkgMods ]
+                     | (pkg, pkgMods) <- groupByPackageIn routingMap testMods, m <- pkgMods ]
   hit <- checkCacheHit digestFile universeMods testPaths
   case hit of
     Just _ ->
@@ -698,7 +714,7 @@ writeTestModulesJson distJsonRoot mainMods testMods = do
       -- Load the typed main universe from its src/main/json. These carry
       -- the inferred TypeSchemes that seed test-module inference.
       let mainNs = map moduleName mainMods
-      loaded <- E.try (loadCleanFromJson distJsonRoot universeMods mainNs)
+      loaded <- E.try (loadCleanFromJson routingMap distJsonRoot universeMods mainNs)
                 :: IO (Either E.SomeException [Module])
       case loaded of
         Left e -> do
@@ -725,7 +741,7 @@ writeTestModulesJson distJsonRoot mainMods testMods = do
           -- the main types so cross-package refs resolve. mainLoaded is the
           -- schema-context-only set so the JSON-write schemaMap (built once)
           -- covers main types like hydra.packaging.Module.
-          inferAndWriteByPackageSeededFor "test" distJsonRoot
+          inferAndWriteByPackageSeededFor routingMap "test" distJsonRoot
             seedBindingSchemes seedSchemaSchemes
             mainLoaded testMods testMods
           refreshDigestAt digestFile universeMods
@@ -735,7 +751,7 @@ writeTestModulesJson distJsonRoot mainMods testMods = do
     -- digest. Only reached if the main-JSON seed load throws.
     flatFallback universeMods digestFile = do
       mods' <- inferModulesIO universeMods testMods
-      writePackageSplitJsonFor "test" distJsonRoot universeMods universeMods mods'
+      writePackageSplitJsonFor routingMap "test" distJsonRoot universeMods universeMods mods'
       refreshDigestAt digestFile universeMods
 
 -- | Incremental inference result. 'IncrementalFull mods' means all
@@ -765,21 +781,21 @@ data IncrementalResult
 -- Callers should pass the full universe here for a complete schemaMap.
 -- 'toWrite' is the subset that actually needs its JSON rewritten
 -- (full set on a cache miss; dirty subset on an incremental hit).
-writePackageSplitJson :: FilePath -> [Module] -> [Module] -> [Module] -> IO ()
-writePackageSplitJson = writePackageSplitJsonFor "main"
+writePackageSplitJson :: RoutingMap -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
+writePackageSplitJson routingMap = writePackageSplitJsonFor routingMap "main"
 
 -- | As 'writePackageSplitJson' but writes into the given source set's
 -- tree (dist/json/<pkg>/src/<set>/json). Used by the test-side writer
 -- to route into src/test/json; the main path uses srcSet = "main".
-writePackageSplitJsonFor :: String -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
-writePackageSplitJsonFor srcSet distJsonRoot universeMods universeForSchema toWrite = do
+writePackageSplitJsonFor :: RoutingMap -> String -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
+writePackageSplitJsonFor routingMap srcSet distJsonRoot universeMods universeForSchema toWrite = do
   -- Seed the graph's schema with the broader of the two inputs so
   -- hydra.packaging.Module (and every other universe type) is always
   -- reachable from the schemaMap, even when 'toWrite' is a narrow set
   -- like DSL wrappers whose declared type-deps omit packaging.
   let graph = modulesToGraph universeMods (universeMods ++ universeForSchema)
       schemaMap = buildSchemaMap graph
-      groups = groupByPackage toWrite
+      groups = groupByPackageIn routingMap toWrite
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
     putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
@@ -903,10 +919,10 @@ discoverPackagesWithDigests distJsonRoot = do
 --
 -- 'targetMods' (the post-inference write set) is retained in the signature
 -- for call-site symmetry but is no longer used for digest computation.
-refreshPerPackageDigests :: FilePath -> [Module] -> [Module] -> IO ()
-refreshPerPackageDigests distJsonRoot universeMods _targetMods = do
+refreshPerPackageDigests :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
+refreshPerPackageDigests routingMap distJsonRoot universeMods _targetMods = do
   nsFiles <- Digest.discoverModuleNameFiles
-  let groups = groupByPackage universeMods
+  let groups = groupByPackageIn routingMap universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     pkgDigest <- Digest.hashUniverse nsFiles pkgMods
     -- Some packages (e.g. hydra-haskell with its synthesized coder
@@ -933,10 +949,10 @@ refreshPerPackageDigests distJsonRoot universeMods _targetMods = do
 -- 'universeMods' must be the *unfiltered* universe so the digest covers
 -- native-generator-owned hydra.<lang>.* modules (#400); see
 -- 'refreshPerPackageDigests'.
-ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
-ensurePerPackageDigests distJsonRoot universeMods = do
+ensurePerPackageDigests :: RoutingMap -> FilePath -> [Module] -> IO ()
+ensurePerPackageDigests routingMap distJsonRoot universeMods = do
   nsFiles <- Digest.discoverModuleNameFiles
-  let groups = groupByPackage universeMods
+  let groups = groupByPackageIn routingMap universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
     pkgDigest <- Digest.hashUniverse nsFiles pkgMods
     CM.when (not (M.null pkgDigest)) $ do
@@ -994,8 +1010,8 @@ closeDirtySet universeMods initialDirty = fixedPoint initialDirty
 --
 -- If anything goes wrong (no digest yet, JSON load failure, etc.),
 -- returns Nothing — caller falls back to full inferModulesIO.
-tryIncrementalInference :: FilePath -> [Module] -> [Module] -> IO (Maybe IncrementalResult)
-tryIncrementalInference distJsonRoot universeMods targetMods = do
+tryIncrementalInference :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO (Maybe IncrementalResult)
+tryIncrementalInference routingMap distJsonRoot universeMods targetMods = do
   -- Read the universe-wide digest to learn which sources were clean
   -- as of the last successful regen.
   let digestFile = packageSplitDigestAnchor distJsonRoot
@@ -1076,7 +1092,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                 ++ show (length cleanMods) ++ " clean"
               -- Load clean modules from JSON (they carry inferred types).
               let cleanNs = fmap moduleName cleanMods
-              loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
+              loaded <- E.try (loadCleanFromJson routingMap distJsonRoot universeMods cleanNs)
                         :: IO (Either E.SomeException [Module])
               case loaded of
                 Left e -> do
@@ -1112,7 +1128,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                   -- schemaMap (built once up front) covers prior-package
                   -- types like hydra.packaging.Module — without that,
                   -- Maybe String fields encode as single-element arrays.
-                  inferAndWriteByPackageSeeded distJsonRoot
+                  inferAndWriteByPackageSeeded routingMap distJsonRoot
                     seedBindingSchemes seedSchemaSchemes
                     cleanLoaded dirtyMods dirtyMods
                   return (Just IncrementalPartialPreWritten)
@@ -1121,10 +1137,10 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
 -- each namespace through namespaceToPackage to find its package
 -- subdirectory.
-loadCleanFromJson :: FilePath -> [Module] -> [ModuleName] -> IO [Module]
-loadCleanFromJson distJsonRoot universeModules namespaces =
+loadCleanFromJson :: RoutingMap -> FilePath -> [Module] -> [ModuleName] -> IO [Module]
+loadCleanFromJson routingMap distJsonRoot universeModules namespaces =
   CM.forM namespaces $ \ns -> do
-    let pkg = namespaceToPackage ns
+    let pkg = namespaceToPackageIn routingMap ns
         pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
         filePath = pkgDir FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
     parseResult <- parseJsonFile filePath
@@ -1146,12 +1162,12 @@ tryCacheHit basePath universeMods targetMods = do
       targetPaths = [basePath FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json" | m <- targetMods]
   checkCacheHit digestFile universeMods targetPaths
 
-tryCacheHitSplit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
-tryCacheHitSplit distJsonRoot universeMods targetMods = do
+tryCacheHitSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
+tryCacheHitSplit routingMap distJsonRoot universeMods targetMods = do
   let digestFile = packageSplitDigestAnchor distJsonRoot
       targetPaths = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
                                     FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json"
-                    | (pkg, pkgMods) <- groupByPackage targetMods, m <- pkgMods]
+                    | (pkg, pkgMods) <- groupByPackageIn routingMap targetMods, m <- pkgMods]
   checkCacheHit digestFile universeMods targetPaths
 
 -- | Shared logic: compare current source-file hashes against the stored
@@ -1212,12 +1228,12 @@ writeDslJson basePath universeModules typeModules = do
 -- Hydra/Sources/Kernel/Terms/Dsls.hs re-emits a binding under a new name,
 -- the per-package input digest is unchanged and the .hs stays stale.
 -- See feature_347_merkle_trees for the broader transform-fingerprint story.
-writeDslJsonPackageSplit :: FilePath -> [Module] -> [Module] -> IO ()
-writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
+writeDslJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
+writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
-    writeModulesJsonPackageSplit False distJsonRoot universeModules nonEmpty
-    mergeDslJsonIntoPerPackageDigests distJsonRoot nonEmpty
+    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules nonEmpty
+    mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot nonEmpty
     -- After both type/term and DSL hash entries are settled, compute the
     -- per-package selfHash and depHashes that drive transitive
     -- invalidation. See finalizePerPackageDigests and #347.
@@ -1229,13 +1245,51 @@ writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
     -- else under the package's src/main/json is an orphan (e.g. a DSL/type
     -- module dropped from the emission set, like the stale hydra.dsl.classes
     -- left by the #397 rename — see #405).
-    reconcilePackageJsonOrphans distJsonRoot (writtenMainModules ++ nonEmpty)
+    reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ nonEmpty)
   where
     -- The main pass writes every universe module EXCEPT native-generator-owned
     -- hydra.java.*/hydra.python.* (#344). Mirror that exclusion so the keep-set
     -- matches what was actually written. (Those two packages are skipped by
     -- the reconcile below anyway, but keeping the keep-set faithful avoids any
     -- accidental cross-package surprise.)
+    writtenMainModules = filter (not . isNativeOwnedNs) universeModules
+    isNativeOwnedNs m =
+      let ns = unModuleName (moduleName m)
+      in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+
+-- | Generate ALL derived modules (DSL wrappers + term encoders + term
+-- decoders) for a list of source type modules and write them, routed per
+-- package, directly as JSON (#474). This replaces the DSL-only
+-- 'writeDslJsonPackageSplit' and the historical two-cycle path where
+-- encode/decode JSON came from compiled Hydra.Sources.{Encode,Decode}.*.hs
+-- source-as-data modules: here the inner hydra.{encode,decode}.<x> Modules are
+-- emitted straight to dist/json, so no per-host .hs source-as-data copy is
+-- needed for the JSON to exist (#448-aligned).
+--
+-- DSL wrappers are derived from 'dslSourceModules' (broad: every type module);
+-- encoders + decoders from 'encodingSourceModules' (narrower — only modules the
+-- eta-expanding targets can compile, see #475). Each derived module is routed to
+-- its owning package via the RoutingMap. The terminal digest/orphan steps run
+-- ONCE over the union of all derived kinds plus the already-written main modules.
+writeDerivedJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
+writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceModules encodingSourceModules = do
+    dslMods <- generateDslModules universeModules dslSourceModules
+    encMods <- generateEncoderModules universeModules encodingSourceModules
+    decMods <- generateDecoderModules universeModules encodingSourceModules
+    let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
+    -- doInfer=True: the encoder/decoder modules carry only the synthesizer's
+    -- coarse static types — e.g. a decoder for a `type Vertex = int32` alias is
+    -- synthesized returning the raw `hydra.core.Literal`, and ONLY full type
+    -- inference specializes it to `int32`/Int. Without inference the coarse
+    -- types leak into the JSON and produce type-incorrect generated code in the
+    -- targets (e.g. dist/haskell .../Decode/Topology.hs failing to compile, and
+    -- "untyped lambda" after Java/Python eta-expansion). DSL wrappers don't
+    -- need it but re-inferring them is harmless. (#474)
+    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules derived
+    mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
+    finalizePerPackageDigests distJsonRoot
+    reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)
+  where
     writtenMainModules = filter (not . isNativeOwnedNs) universeModules
     isNativeOwnedNs m =
       let ns = unModuleName (moduleName m)
@@ -1274,9 +1328,9 @@ jsonReconcileProtect = S.fromList [FP.normalise "manifest.json"]
 -- 'writtenModules' must be the UNION of every module the write path emitted
 -- this run (main write-universe + non-empty DSL wrappers), so one pass's
 -- legitimate output is never mistaken for another pass's orphan.
-reconcilePackageJsonOrphans :: FilePath -> [Module] -> IO ()
-reconcilePackageJsonOrphans distJsonRoot writtenModules = do
-    let groups = groupByPackage writtenModules
+reconcilePackageJsonOrphans :: RoutingMap -> FilePath -> [Module] -> IO ()
+reconcilePackageJsonOrphans routingMap distJsonRoot writtenModules = do
+    let groups = groupByPackageIn routingMap writtenModules
     CM.forM_ groups $ \(pkg, pkgMods) ->
       CM.unless (S.member pkg jsonReconcileSkipPackages) $ do
         let pkgJsonDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
@@ -1297,9 +1351,9 @@ reconcilePackageJsonOrphans distJsonRoot writtenModules = do
 --
 -- The JSON file path is derived the same way 'writeModuleJson' derives it:
 -- <distJsonRoot>/<pkg>/src/main/json/<moduleNameToPath ns>.json.
-mergeDslJsonIntoPerPackageDigests :: FilePath -> [Module] -> IO ()
-mergeDslJsonIntoPerPackageDigests distJsonRoot dslMods = do
-    let groups = groupByPackage dslMods
+mergeDslJsonIntoPerPackageDigests :: RoutingMap -> FilePath -> [Module] -> IO ()
+mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot dslMods = do
+    let groups = groupByPackageIn routingMap dslMods
     CM.forM_ groups $ \(pkg, pkgMods) -> do
       let pkgJsonDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
       newEntries <- fmap (M.fromList . Y.catMaybes) $ CM.forM pkgMods $ \m -> do
@@ -1365,33 +1419,38 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
 -- (testModules alone aren't enough — test packages use their own
 -- src/test/json/manifest.json path, not covered here).
 --
--- The 'kernelTypesModules' argument is used only for DSL synthesis, same as
--- 'writeManifestJson'. 'dslSynthUniverse' is the module universe passed to
--- the DSL generator.
-writePerPackageManifestsJson :: FilePath
-                             -> [Module] -- ^ dslSynthUniverse (for DSL generation)
-                             -> [Module] -- ^ kernelTypesModules
+-- The 'dslSourceModules' / 'encodingSourceModules' arguments are the per-package
+-- lists of SOURCE modules from which dsl wrappers (broad) and encoders/decoders
+-- (narrower — #475) are derived (#474). They are emitted directly as the
+-- manifest's @mainDslModules@ / @mainEncodingModules@ fields (the source lists,
+-- not the generated wrapper namespaces).
+writePerPackageManifestsJson :: RoutingMap
+                             -> FilePath
+                             -> [Module] -- ^ dslSourceModules (broad: source modules for hydra.dsl.<x>)
+                             -> [Module] -- ^ encodingSourceModules (narrower: source modules for hydra.{encode,decode}.<x>)
                              -> [Module] -- ^ mainModules (to partition)
                              -> [Module] -- ^ testModules (today always hydra-kernel)
                              -> IO ()
-writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules mainModules testModules = do
-    dslMods <- generateDslModules dslSynthUniverse kernelTypesModules
-    let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
-    let mainByPkg = groupByPackage mainModules
-    let dslByPkg  = M.fromList (groupByPackage nonEmptyDsls)
-    let testByPkg = M.fromList (groupByPackage testModules)
+writePerPackageManifestsJson routingMap distJsonRoot dslSourceModules encodingSourceModules mainModules testModules = do
+    let mainByPkg    = groupByPackageIn routingMap mainModules
+    let dslByPkg     = M.fromList (groupByPackageIn routingMap dslSourceModules)
+    let encByPkg     = M.fromList (groupByPackageIn routingMap encodingSourceModules)
+    let testByPkg    = M.fromList (groupByPackageIn routingMap testModules)
     let packages = L.nub
           $ fmap fst mainByPkg
           ++ M.keys dslByPkg
+          ++ M.keys encByPkg
           ++ M.keys testByPkg
     CM.forM_ (L.sort packages) $ \pkg -> do
-      let mainForPkg   = Y.fromMaybe [] (lookup pkg mainByPkg)
-          dslForPkg    = M.findWithDefault [] pkg dslByPkg
-          testForPkg   = M.findWithDefault [] pkg testByPkg
+      let mainForPkg    = Y.fromMaybe [] (lookup pkg mainByPkg)
+          dslForPkg     = M.findWithDefault [] pkg dslByPkg
+          encForPkg     = M.findWithDefault [] pkg encByPkg
+          testForPkg    = M.findWithDefault [] pkg testByPkg
           -- Keep fields alphabetized so the emitted manifest.json byte order is unchanged
           -- by the switch to order-preserving JSON objects (see docs/json-format.md).
           jsonVal = Json.ValueObject [
-              ("dslModules",     namespacesJson dslForPkg),
+              ("mainDslModules",      namespacesJson dslForPkg),
+              ("mainEncodingModules", namespacesJson encForPkg),
               ("mainModules",    namespacesJson mainForPkg),
               ("manifestFormatVersion", Json.ValueNumber 1),
               ("package",        Json.ValueString pkg),
