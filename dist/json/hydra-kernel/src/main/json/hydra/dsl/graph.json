@@ -4169,21 +4169,18 @@
                     "annotated": {
                       "body": {
                         "function": {
-                          "domain": {"variable": "hydra.typing.InferenceContext"},
+                          "domain": {"variable": "hydra.graph.Graph"},
                           "codomain": {
                             "function": {
-                              "domain": {"variable": "hydra.graph.Graph"},
-                              "codomain": {
-                                "function": {
-                                  "domain": {"list": {"variable": "hydra.core.Term"}},
-                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}}}},
+                              "domain": {"list": {"variable": "hydra.core.Term"}},
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
                             "value": {
                               "literal": {
-                                "string": "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437."}}}]}}}}},
+                                "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.graph.Primitive"}}}}},
@@ -4215,21 +4212,18 @@
                           "annotated": {
                             "body": {
                               "function": {
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
+                                "domain": {"variable": "hydra.graph.Graph"},
                                 "codomain": {
                                   "function": {
-                                    "domain": {"variable": "hydra.graph.Graph"},
-                                    "codomain": {
-                                      "function": {
-                                        "domain": {"list": {"variable": "hydra.core.Term"}},
-                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}}}},
+                                    "domain": {"list": {"variable": "hydra.core.Term"}},
+                                    "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
                                   "value": {
                                     "literal": {
-                                      "string": "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437."}}}]}}}}},
+                                      "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -4350,21 +4344,18 @@
                   "annotated": {
                     "body": {
                       "function": {
-                        "domain": {"variable": "hydra.typing.InferenceContext"},
+                        "domain": {"variable": "hydra.graph.Graph"},
                         "codomain": {
                           "function": {
-                            "domain": {"variable": "hydra.graph.Graph"},
-                            "codomain": {
-                              "function": {
-                                "domain": {"list": {"variable": "hydra.core.Term"}},
-                                "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}}}},
+                            "domain": {"list": {"variable": "hydra.core.Term"}},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}},
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
                           "value": {
                             "literal": {
-                              "string": "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437."}}}]}}}}}}},
+                              "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -4545,21 +4536,18 @@
                     "annotated": {
                       "body": {
                         "function": {
-                          "domain": {"variable": "hydra.typing.InferenceContext"},
+                          "domain": {"variable": "hydra.graph.Graph"},
                           "codomain": {
                             "function": {
-                              "domain": {"variable": "hydra.graph.Graph"},
-                              "codomain": {
-                                "function": {
-                                  "domain": {"list": {"variable": "hydra.core.Term"}},
-                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}}}},
+                              "domain": {"list": {"variable": "hydra.core.Term"}},
+                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
                             "value": {
                               "literal": {
-                                "string": "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437."}}}]}}}}},
+                                "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.graph.Primitive"}}}}},
@@ -4579,21 +4567,18 @@
                           "annotated": {
                             "body": {
                               "function": {
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
+                                "domain": {"variable": "hydra.graph.Graph"},
                                 "codomain": {
                                   "function": {
-                                    "domain": {"variable": "hydra.graph.Graph"},
-                                    "codomain": {
-                                      "function": {
-                                        "domain": {"list": {"variable": "hydra.core.Term"}},
-                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}}}},
+                                    "domain": {"list": {"variable": "hydra.core.Term"}},
+                                    "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.core.Term"}}}}}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
                                   "value": {
                                     "literal": {
-                                      "string": "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437."}}}]}}}}},
+                                      "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",

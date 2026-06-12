@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 
 
@@ -178,6 +179,17 @@ tasks.named('sourcesJar') {{
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }}
 
+// Bundle LICENSE + NOTICE into META-INF of every jar (main, sources, javadoc),
+// the Maven-standard location, so the published artifacts carry the Apache-2.0
+// license text and the project NOTICE — not just the POM license declaration.
+// The files are copied into this package dir by generate-java-package-build.py.
+tasks.withType(Jar).configureEach {{
+    metaInf {{
+        from("$projectDir/LICENSE")
+        from("$projectDir/NOTICE")
+    }}
+}}
+
 // Sonatype Central Portal credentials are read from gradle.properties /
 // environment. Set sonatypeUsername + sonatypePassword (token-based) in
 // ~/.gradle/gradle.properties, or via -Psonatype{{Username,Password}}=...
@@ -253,6 +265,13 @@ def main() -> int:
         f.write(render_build_gradle(pkg_name, description, version, deps))
     with open(settings_path, "w") as f:
         f.write(render_settings_gradle(pkg_name))
+
+    # Copy LICENSE + NOTICE into the package dir so the build.gradle metaInf
+    # block can bundle them into every jar. Like the README, these must be
+    # package-local (a path escaping the package root is absent from a
+    # published/standalone build).
+    for fname in ("LICENSE", "NOTICE"):
+        shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
 
     print(f"  wrote {build_path}")
     print(f"  wrote {settings_path}")
