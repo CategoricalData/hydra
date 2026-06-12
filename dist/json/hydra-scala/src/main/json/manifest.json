@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.scala.syntax"],
+  "mainDslModules": ["hydra.scala.syntax"],
+  "mainEncodingModules": [],
   "mainModules": ["hydra.scala.coder", "hydra.scala.language", "hydra.scala.serde", "hydra.scala.syntax", "hydra.scala.utils"],
   "manifestFormatVersion": 1,
   "package": "hydra-scala",

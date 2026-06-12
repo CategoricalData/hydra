@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.pg.model"],
+  "mainDslModules": ["hydra.pg.model"],
+  "mainEncodingModules": [],
   "mainModules": [
     "com.gdblab.pathAlgebra.expressions",
     "com.gdblab.pathAlgebra.syntax",
