@@ -396,16 +396,15 @@
 (defun make-annotation-primitive (pname arity impl-fn)
   "Create a Primitive for annotation operations."
   (make-primitive (make-ann-prim-def pname arity)
-    (lambda (cx)
-      (lambda (g)
-        (lambda (args)
-          ;; (format t "  DBG-PRIM ~A called with ~A args~%" pname (length args))
-          ;; #368: errors flow through Either Left Error directly; no InContext wrap
-          (handler-case
-              (funcall impl-fn cx g args)
-            (error (e)
-              (format t "  DBG-PRIM ~A error: ~A~%" pname e)
-              (list :left (list :other (make-hydra_errors_other_error (princ-to-string e)))))))))))
+    (lambda (g)
+      (lambda (args)
+        ;; (format t "  DBG-PRIM ~A called with ~A args~%" pname (length args))
+        ;; #368: errors flow through Either Left Error directly; no InContext wrap
+        (handler-case
+            (funcall impl-fn g args)
+          (error (e)
+            (format t "  DBG-PRIM ~A error: ~A~%" pname e)
+            (list :left (list :other (make-hydra_errors_other_error (princ-to-string e))))))))))
 
 ;; --------------------------------------------------------------------------
 ;; Extract annotations from terms in either format
@@ -466,8 +465,8 @@
     (t term)))
 
 ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
-(defun prim-set-term-annotation (cx g args)
-  (declare (ignore cx g))
+(defun prim-set-term-annotation (g args)
+  (declare (ignore g))
   (let* ((key (first args))
          (val (second args))
          (term (third args))
@@ -484,8 +483,8 @@
           (if (null anns) stripped (make-meta-annotated stripped anns)))))
 
 ;; getTermAnnotation :: Name -> Term -> Maybe Term
-(defun prim-get-term-annotation (cx g args)
-  (declare (ignore cx g))
+(defun prim-get-term-annotation (g args)
+  (declare (ignore g))
   (let* ((key (first args))
          (term (second args))
          ;; Check cache for stripped annotations
@@ -498,7 +497,7 @@
           (if result (list :optional result) (list :optional nil)))))
 
 ;; setTermDescription :: Maybe String -> Term -> Term
-(defun prim-set-term-description (cx g args)
+(defun prim-set-term-description (g args)
   (let* ((d (first args))
          (term (second args))
          (term-val
@@ -507,11 +506,11 @@
          (desc-key (list :wrap (make-wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
          (maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))))
-    (prim-set-term-annotation cx g (list desc-key maybe-val term))))
+    (prim-set-term-annotation g (list desc-key maybe-val term))))
 
 ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
-(defun prim-get-term-description (cx g args)
-  (declare (ignore cx g))
+(defun prim-get-term-description (g args)
+  (declare (ignore g))
   (let* ((term (third args))
          ;; Peel type lambdas/applications (struct-compat format)
          (peeled
