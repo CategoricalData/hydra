@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 import static hydra.dsl.Types.var;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentSet;
@@ -41,8 +40,8 @@ public class MapSet extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(graph, args.get(1)), items -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(graph, args.get(1)), items -> {
                 Term fn = args.get(0);
                 PersistentSet<Term> results = PersistentSet.<Term>empty();
                 for (Term element : items) {

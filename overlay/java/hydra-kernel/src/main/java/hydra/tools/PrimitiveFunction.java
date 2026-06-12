@@ -8,7 +8,6 @@ import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.packaging.PrimitiveDefinition;
-import hydra.typing.InferenceContext;
 import hydra.typing.Parameter;
 import hydra.typing.TermSignature;
 import hydra.util.Either;
@@ -40,7 +39,7 @@ public abstract class PrimitiveFunction {
      * Subclasses implement this with Either-based logic.
      * @return the function implementation
      */
-    protected abstract Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation();
+    protected abstract Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation();
 
     /**
      * The 0-based positions of value parameters that must be passed lazily (thunked) at call sites
@@ -86,10 +85,10 @@ public abstract class PrimitiveFunction {
      * @return the primitive function as a Hydra Primitive object
      */
     public Primitive toNative() {
-        Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> impl = implementation();
-        Function<InferenceContext, Function<Graph, Function<List<Term>, Either<Error_, Term>>>> nativeImpl =
-            cx -> graph -> args -> {
-                Either<Error_, Term> result = impl.apply(args).apply(cx).apply(graph);
+        Function<List<Term>, Function<Graph, Either<Error_, Term>>> impl = implementation();
+        Function<Graph, Function<List<Term>, Either<Error_, Term>>> nativeImpl =
+            graph -> args -> {
+                Either<Error_, Term> result = impl.apply(args).apply(graph);
                 if (result.isRight()) {
                     return Either.right(((Either.Right<Error_, Term>) result).value);
                 } else {

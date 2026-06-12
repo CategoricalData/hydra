@@ -16,7 +16,6 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -36,8 +35,8 @@ public class Filter extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph ->
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
                 ConsList<Term> reversed = ConsList.empty();
                 for (Term x : lst) {

@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -51,8 +50,8 @@ public class Cases extends PrimitiveFunction {
      * @return a function that performs pattern matching on optional values
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), opt ->
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), opt ->
             opt.isGiven()
                 ? Either.right(Terms.apply(args.get(2), opt.fromGiven()))
                 : Either.right(args.get(1)));
