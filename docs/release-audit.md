@@ -153,8 +153,12 @@ binaries (Hackage/Maven/PyPI) provide. The source archive optimizes for auditabi
    source archive (P0 #2) and treat the registry artifacts as unsigned convenience binaries — which
    is acceptable under Apache policy as long as the source archive is the voted artifact.
 5. **Add a CI verification job** that, on a tag, asserts: `LICENSE` + `NOTICE` present in the
-   assembled source archive; the archive builds; the `.asc`/`.sha512` verify. This turns the
-   above into an enforced gate rather than a manual checklist.
+   assembled source archive; the archive builds; the `.asc`/`.sha512` verify. ✅ **Done** —
+   `.github/workflows/release-verify.yml` runs on a version tag (and `workflow_dispatch`): asserts
+   `LICENSE`/`NOTICE`/`KEYS` are tracked, builds the `git archive` source tarball, asserts both files
+   are inside it, round-trips the SHA-512 checksum, and verifies the GPG signature once a key is
+   registered in `KEYS` (skips with a notice until then). Toolchain-free; separate from `ci.yml`'s
+   per-language matrix so it does not re-run that matrix on tags.
 6. **Add a Scala `licenses` declaration** to `packages/hydra-scala/build.sbt` for parity with the
    other hosts (one line; the generated Java POM and the Haskell/Python build files already declare
    Apache-2.0).
