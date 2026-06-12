@@ -471,7 +471,7 @@ etaReduceTerm term =
         Core.TermLambda v0 -> reduceLambda v0
         _ -> noChange
 -- | A term evaluation function which is alternatively lazy or eager
-reduceTerm :: Typing.InferenceContext -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
+reduceTerm :: t0 -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
 reduceTerm cx graph eager term =
 
       let reduce = \eager2 -> reduceTerm cx graph eager2
@@ -534,7 +534,7 @@ reduceTerm cx graph eager term =
                                       remainingArgs = Lists.drop arity args2
                                   in (Eithers.bind (Eithers.mapList (reduceArg eager2) argList) (\reducedArgs ->
                                     let strippedArgs = Lists.map Strip.deannotateTerm reducedArgs
-                                    in (Eithers.bind (Eithers.bimap mapErrorToString (\x -> x) (Graph.primitiveImplementation prim cx graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager2 primResult) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))))
+                                    in (Eithers.bind (Eithers.bimap mapErrorToString (\x -> x) (Graph.primitiveImplementation prim graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager2 primResult) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))))
                     in case stripped of
                       Core.TermApplication v0 -> applyIfNullary eager2 (Core.applicationFunction v0) (Lists.cons (Core.applicationArgument v0) args)
                       Core.TermCases v0 -> Logic.ifElse (Lists.null args) (Right original) (forCases v0 args)
