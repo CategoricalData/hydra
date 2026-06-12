@@ -467,9 +467,9 @@
                                   (code (hydra_serialization_print_expr
                                           (hydra_serialization_parenthesize
                                             (pte program))))
-                                  (ns-val (let ((ns (hydra_packaging_module-namespace mod)))
-                                            (if (string? ns) ns
-                                                (hydra_packaging_namespace-value ns))))
+                                  (ns-val (let ((mn (hydra_packaging_module-name mod)))
+                                            (if (string? mn) mn
+                                                (hydra_packaging_module_name-value mn))))
                                   (ext (cond ((equal? target "clojure") "clj")
                                              ((equal? target "scheme") "scm")
                                              ((equal? target "common-lisp") "lisp")
@@ -655,8 +655,8 @@
                            ((null? ms) (reverse out))
                            (else
                              (let* ((m (car ms))
-                                    (ns (hydra_packaging_module-namespace m))
-                                    (ns-str (if (string? ns) ns (hydra_packaging_namespace-value ns))))
+                                    (mn (hydra_packaging_module-name m))
+                                    (ns-str (if (string? mn) mn (hydra_packaging_module_name-value mn))))
                                (if (equal? ns-str "hydra.test.testEnv")
                                    (loop (cdr ms) out)
                                    (loop (cdr ms) (cons m out))))))))
