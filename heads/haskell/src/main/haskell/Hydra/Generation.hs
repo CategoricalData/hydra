@@ -1285,7 +1285,11 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     -- targets (e.g. dist/haskell .../Decode/Topology.hs failing to compile, and
     -- "untyped lambda" after Java/Python eta-expansion). DSL wrappers don't
     -- need it but re-inferring them is harmless. (#474)
-    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules derived
+    -- #475: include 'derived' in the per-package universe so pkgUniverse picks
+    -- them up — brand-new derived modules (e.g. hydra.encode.validation) whose
+    -- source-side JSON isn't on disk would otherwise be in pkgTargets but not
+    -- pkgUniverse, and the inferTargets=pkgUniverse path would drop them silently.
+    writeModulesJsonPackageSplit routingMap True distJsonRoot (universeModules ++ derived) derived
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
     finalizePerPackageDigests distJsonRoot
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)
