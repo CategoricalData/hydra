@@ -24,7 +24,7 @@
 module Main where
 
 import Hydra.Generation (writeModulesJson, writeModulesJsonPackageSplit, writeDslJsonPackageSplit)
-import Hydra.PackageRouting (defaultDistJsonRoot, namespaceToPackage)
+import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   kernelModules, haskellModules, jsonModules, otherModules,
@@ -32,7 +32,8 @@ import Hydra.Sources.Ext (
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
-  hydraExtDecodingModules, hydraExtEncodingModules)
+  hydraExtDecodingModules, hydraExtEncodingModules,
+  extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
@@ -215,23 +216,24 @@ main = do
   let srcSet           = optSourceSet opts
       distRoot         = optDistJsonRoot opts
       includeJavaPython = optIncludeJavaPython opts
+      routingMap        = buildRoutingMap extRoutingInput
 
   case optPackage opts of
-    Just pkg -> runSinglePackage pkg srcSet distRoot includeJavaPython
-    Nothing  -> runAllPackages      srcSet distRoot includeJavaPython
+    Just pkg -> runSinglePackage routingMap pkg srcSet distRoot includeJavaPython
+    Nothing  -> runAllPackages      routingMap srcSet distRoot includeJavaPython
 
   putStrLn "=== Done. ==="
 
 -- | Transform a single package. Historical behaviour, kept for scoped
 -- callers that invoke one package at a time.
-runSinglePackage :: String -> String -> FilePath -> Bool -> IO ()
-runSinglePackage pkg srcSet distRoot includeJavaPython = do
+runSinglePackage :: RoutingMap -> String -> String -> FilePath -> Bool -> IO ()
+runSinglePackage routingMap pkg srcSet distRoot includeJavaPython = do
   let outDir = distRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
   putStrLn $ "=== Transform Haskell DSL -> JSON: " ++ pkg ++ " (" ++ srcSet ++ ") ==="
 
   let (mods, universe) = case srcSet of
         "main" ->
-          let owned = filter (\m -> namespaceToPackage (Kernel.moduleName m) == pkg)
+          let owned = filter (\m -> namespaceToPackageIn routingMap (Kernel.moduleName m) == pkg)
                              fullMainUniverse
               -- #344: skip term-level JSON for hydra.java.*/hydra.python.* unless
               -- --include-java-python (cold-start bootstrap). The native generators
@@ -263,7 +265,7 @@ runSinglePackage pkg srcSet distRoot includeJavaPython = do
   case srcSet of
     "main" -> do
       when (not (null mods)) $
-        writeModulesJsonPackageSplit True distRoot universe mods
+        writeModulesJsonPackageSplit routingMap True distRoot universe mods
       let dslInputs = packageDslInputModules pkg
       case dslInputs of
         [] -> return ()
@@ -271,7 +273,7 @@ runSinglePackage pkg srcSet distRoot includeJavaPython = do
           putStrLn ""
           putStrLn $ "  Generating DSL wrapper modules for "
             ++ show (length dslInputs) ++ " type modules..."
-          writeDslJsonPackageSplit distRoot universe dslInputs
+          writeDslJsonPackageSplit routingMap distRoot universe dslInputs
     "test" -> writeModulesJson True outDir universe mods
     _      -> return ()
 
@@ -280,8 +282,8 @@ runSinglePackage pkg srcSet distRoot includeJavaPython = do
 -- per-package JSON tree based on namespaceToPackage, so passing the whole
 -- universe produces the same on-disk layout as per-package calls — but
 -- we only pay the Haskell startup + DSL-compile cost once.
-runAllPackages :: String -> FilePath -> Bool -> IO ()
-runAllPackages srcSet distRoot includeJavaPython = do
+runAllPackages :: RoutingMap -> String -> FilePath -> Bool -> IO ()
+runAllPackages routingMap srcSet distRoot includeJavaPython = do
   putStrLn $ "=== Transform Haskell DSL -> JSON: all packages (" ++ srcSet ++ ") ==="
 
   case srcSet of
@@ -299,17 +301,17 @@ runAllPackages srcSet distRoot includeJavaPython = do
       when (excluded > 0) $
         putStrLn $ "  (excluded " ++ show excluded
           ++ " hydra.java.*/hydra.python.* modules — owned by native generators; see #344)"
-      writeModulesJsonPackageSplit True distRoot fullMainUniverse writeUniverse
+      writeModulesJsonPackageSplit routingMap True distRoot fullMainUniverse writeUniverse
       -- DSL wrappers: generate for every package that has type-defining
-      -- inputs. The routing is implicit — wrapper namespaces like
-      -- hydra.dsl.<pkg>.* resolve to their owning package via
-      -- packagePrefixes in PackageRouting.
+      -- inputs. The routing is derived (#474): wrapper namespaces like
+      -- hydra.dsl.<pkg>.* resolve to their owning package via the RoutingMap
+      -- built from each package's declared mainModules.
       let allDslInputs = concatMap packageDslInputModules allPackages
       when (not (null allDslInputs)) $ do
         putStrLn ""
         putStrLn $ "  Generating DSL wrapper modules for "
           ++ show (length allDslInputs) ++ " type modules..."
-        writeDslJsonPackageSplit distRoot fullMainUniverse allDslInputs
+        writeDslJsonPackageSplit routingMap distRoot fullMainUniverse allDslInputs
     "test" -> do
       let allTestMods = concatMap packageTestModules allPackages
           testUniverse = fullMainUniverse ++ allTestMods

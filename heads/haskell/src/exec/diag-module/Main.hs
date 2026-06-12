@@ -59,7 +59,8 @@ aesonToJsonModel v = case v of
 
 loadModuleFromJson :: FilePath -> [Module] -> ModuleName -> IO Module
 loadModuleFromJson distJsonRoot universe ns = do
-  let pkg = PackageRouting.namespaceToPackage ns
+  let routingMap = PackageRouting.buildRoutingMap Ext.extRoutingInput
+      pkg = PackageRouting.namespaceToPackageIn routingMap ns
       pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
       filePath = pkgDir FP.</> CodeGeneration.moduleNameToPath ns ++ ".json"
   parseResult <- parseJsonFile filePath
