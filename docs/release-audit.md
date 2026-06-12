@@ -107,10 +107,12 @@ Ordered by how blocking each is for an Apache-style release. Each is independent
 
 1. **Add a root `NOTICE` file.** ✅ **Done** — `NOTICE` added at the repo root (Apache-2.0 §4(d)
    project notice; no third-party attributions needed, since the publish set bundles no third-party
-   code). **Bundled into the Hackage sdists** (`assemble-haskell-distribution.sh` + `extra-source-files`;
-   verified present in a freshly-built `hydra-kernel` sdist). Still open: the Java jars and Python
-   wheels currently bundle **neither** LICENSE nor NOTICE as files (only metadata declarations) — a
-   separate follow-up needs jar `META-INF/{LICENSE,NOTICE}` and wheel `license-files` (PEP 639).
+   code). **Bundled into all three publish-set hosts' artifacts:** Hackage sdists
+   (`assemble-haskell-distribution.sh` + `extra-source-files`), Java jars (`META-INF/{LICENSE,NOTICE}`
+   via the generated `build.gradle` `metaInf` block), and Python wheels (`.dist-info/licenses/` via
+   PEP 639 `license-files`). Each was verified by building the artifact and confirming both files are
+   present with correct content. (Before this, Java/Python carried only metadata license declarations,
+   not the files.)
 2. **Produce a signed, checksummed canonical source archive.** ✅ **Done** — `bin/prepare-release.sh`
    Step 11 builds `hydra-<version>-src.tar.gz` via `git archive` from `HEAD`, emits a `.sha512`
    checksum and a detached `.asc` GPG signature, and asserts `LICENSE`/`NOTICE` are present. This is
