@@ -2614,6 +2614,156 @@ def _encode_python_module():
     )
 
 
+def _builder_setter_name():
+    # The fluent-builder setter name for a record field: the field's lower_snake
+    # name, with `build`/`builder` escaped to `build_`/`builder_` so a field with
+    # such a name does not shadow the generated build() method or builder() factory.
+    body = lambdas(
+        ["fname"],
+        let_chain(
+            [
+                (
+                    "base",
+                    _kref.formatting_convert_case(
+                        _kref.util_case_convention_camel,
+                        _kref.util_case_convention_lower_snake,
+                        Core.un_name(var("fname")),
+                    ),
+                ),
+            ],
+            Logic.if_else(
+                Logic.or_(
+                    Equality.equal(var("base"), string("build")),
+                    Equality.equal(var("base"), string("builder")),
+                ),
+                Strings.cat2(var("base"), string("_")),
+                var("base"),
+            ),
+        ),
+    )
+    return _def(
+        "builderSetterName",
+        doc("Escape a builder setter name that would collide with build()/builder()", body),
+    )
+
+
+def _self_param():
+    # A single `self` parameter (no annotation), as a ParamNoDefault.
+    return record("hydra.python.syntax.ParamNoDefault",
+        [
+            field("param", PySyn.param(_py_name("self"), nothing())),
+            field("typeComment", nothing()),
+        ],
+    )
+
+
+def _record_with_method():
+    # Per-field copy-update method on a record:
+    #   def with_<field>(self, <field>): return replace(self, <field>=<field>)
+    # Relies on every record being @dataclass(frozen=True), so dataclasses.replace
+    # (imported as `replace`) produces a new instance with one field changed.
+    body = lambdas(
+        ["env", "fieldType"],
+        let_chain(
+            [
+                ("fname", Core.field_type_name(var("fieldType"))),
+                (
+                    "snake",
+                    _kref.formatting_convert_case(
+                        _kref.util_case_convention_camel,
+                        _kref.util_case_convention_lower_snake,
+                        Core.un_name(var("fname")),
+                    ),
+                ),
+                ("methodName", Strings.cat2(string("with_"), var("snake"))),
+                ("paramName", _py_name(var("snake"))),
+                (
+                    "param",
+                    record("hydra.python.syntax.ParamNoDefault",
+                        [
+                            field("param", PySyn.param(var("paramName"), nothing())),
+                            field("typeComment", nothing()),
+                        ],
+                    ),
+                ),
+                (
+                    "params",
+                    PySyn.parameters_param_no_default(
+                        record("hydra.python.syntax.ParamNoDefaultParameters",
+                            [
+                                field("paramNoDefault", list_([_self_param(), var("param")])),
+                                field("paramWithDefault", list_([])),
+                                field("starEtc", nothing()),
+                            ],
+                        )
+                    ),
+                ),
+                # replace(self, <field>=<field>)
+                (
+                    "selfArg",
+                    PySyn.pos_arg_expression(
+                        _kref.utils_py_name_to_py_expression(_py_name("self"))
+                    ),
+                ),
+                (
+                    "kwarg",
+                    PySyn.kwarg_or_starred_kwarg(
+                        PySyn.kwarg(
+                            var("paramName"),
+                            _kref.utils_py_name_to_py_expression(var("paramName")),
+                        )
+                    ),
+                ),
+                (
+                    "callArgs",
+                    PySyn.args(
+                        list_([var("selfArg")]),
+                        list_([var("kwarg")]),
+                        list_([]),
+                    ),
+                ),
+                (
+                    "replaceCall",
+                    _kref.utils_py_primary_to_py_expression(
+                        _kref.utils_primary_with_rhs(
+                            _kref.utils_py_name_to_py_primary(_py_name("replace")),
+                            PySyn.primary_rhs_call(var("callArgs")),
+                        )
+                    ),
+                ),
+                ("returnStmt", _kref.utils_return_single(var("replaceCall"))),
+                (
+                    "block",
+                    _kref.utils_indented_block(nothing(), list_([list_([var("returnStmt")])])),
+                ),
+                (
+                    "funcDefRaw",
+                    record("hydra.python.syntax.FunctionDefRaw",
+                        [
+                            field("async", false()),
+                            field("name", _py_name(var("methodName"))),
+                            field("typeParams", list_([])),
+                            field("params", just(var("params"))),
+                            field("returnType", nothing()),
+                            field("funcTypeComment", nothing()),
+                            field("block", var("block")),
+                        ],
+                    ),
+                ),
+            ],
+            PySyn.statement_compound(
+                PySyn.compound_statement_function(
+                    PySyn.function_definition(nothing(), var("funcDefRaw"))
+                )
+            ),
+        ),
+    )
+    return _def(
+        "recordWithMethod",
+        doc("Build a per-field copy-update method (with_<field>) for a record", body),
+    )
+
+
 def _encode_record_type():
     body = lambdas(
         ["cx", "env", "name", "rowType", "comment"],
@@ -2630,12 +2780,21 @@ def _encode_record_type():
                             "constStmts",
                             _local("encodeNameConstants")(var("env"), var("name"), var("rowType")),
                         ),
+                        # Per-field copy-update methods: with_<field>(self, <field>).
+                        (
+                            "withMethods",
+                            Lists.map(
+                                _local("recordWithMethod")(var("env")),
+                                var("rowType"),
+                            ),
+                        ),
                         (
                             "body",
                             _kref.utils_indented_block(var("comment"), list_(
                                     [
                                         var("pyFields"),
                                         var("constStmts"),
+                                        var("withMethods"),
                                     ]
                                 )),
                         ),
@@ -6937,7 +7096,12 @@ def _module_standard_imports():
         ),
         pair(
             string("dataclasses"),
-            list_([cond("dataclass", "usesDataclass")]),
+            list_([
+                cond("dataclass", "usesDataclass"),
+                # `replace` backs the generated with_<field> copy-update methods,
+                # which exist on every dataclass record.
+                cond("replace", "usesDataclass"),
+            ]),
         ),
         pair(
             string("decimal"),
@@ -7918,6 +8082,8 @@ def _build_module() -> Module:
             to_definition(_encode_literal_type()),
             to_definition(_encode_name_constants()),
             to_definition(_encode_python_module()),
+            to_definition(_builder_setter_name()),
+            to_definition(_record_with_method()),
             to_definition(_encode_record_type()),
             to_definition(_encode_term_assignment()),
             to_definition(_encode_term_inline()),
