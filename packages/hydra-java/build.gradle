@@ -57,6 +57,7 @@ sourceSets {
             include 'hydra/BenchInference.java'
             include 'hydra/Bootstrap.java'
             include 'hydra/Generation.java'
+            include 'hydra/GenerationTargets.java'
             include 'hydra/HydraTestBase.java'
             include 'hydra/UpdateJavaJson.java'
             include 'hydra/ProfileJavaCoder.java'

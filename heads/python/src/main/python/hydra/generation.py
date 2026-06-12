@@ -689,6 +689,56 @@ def _list_json_files_recursive(root):
     return out
 
 
+def generate_dsl_modules(universe_mods, type_mods):
+    """Synthesize the DSL-wrapper modules (hydra.dsl.<lang>.*) for a set of
+    type-defining modules, mirroring Hydra.Generation.generateDslModules.
+
+    Each type module hydra.<lang>.X yields a hydra.dsl.<lang>.X module of
+    phantom-typed builder functions, auto-derived from its type definitions by
+    the kernel's hydra.dsls.dsl_module transform. Returns the list of generated
+    DSL modules (empty modules — those with no DSL-eligible definitions — are
+    filtered by the caller).
+
+    Both the transform (hydra.dsls.dsl_module) and the orchestrator
+    (hydra.codegen.generate_coder_modules) are kernel functions present in the
+    published hydra-kernel wheel, so this runs against the published host with
+    no local Haskell build. Replaces the Haskell update-json-main DSL pass for
+    hydra-python (#370/#346).
+    """
+    from hydra import codegen
+    from hydra import dsls
+    from hydra.dsl.python import Left, Right
+
+    cx = empty_context()
+    result = codegen.generate_coder_modules(
+        dsls.dsl_module, bootstrap_graph(),
+        tuple(universe_mods), tuple(type_mods), cx)
+    match result:
+        case Right(value=mods):
+            return list(mods)
+        case Left(value=err):
+            raise RuntimeError(f"generate_dsl_modules: synthesis failed: {err}")
+        case _:
+            raise RuntimeError(
+                f"generate_dsl_modules: unexpected result {result!r}")
+
+
+def synthesize_and_write_dsl_modules(dist_json_root, universe_mods, type_mods):
+    """Generate the DSL-wrapper modules for type_mods and write them under
+    dist_json_root/<pkg>/src/main/json/. Skips modules with no DSL-eligible
+    definitions (matching the Haskell `filter (not . null . moduleDefinitions)`).
+    Returns the list of modules actually written.
+    """
+    dsl_mods = generate_dsl_modules(universe_mods, type_mods)
+    non_empty = [m for m in dsl_mods if len(m.definitions) > 0]
+    if non_empty:
+        # Schema universe is the full module set (kernel + sources); the DSL
+        # wrappers themselves are the write set.
+        _write_package_split_json(
+            dist_json_root, tuple(universe_mods), tuple(non_empty), non_empty)
+    return non_empty
+
+
 def _prune_empty_dirs(root):
     """Remove empty subdirectories under root (depth-first); root itself is
     left alone. Best-effort."""

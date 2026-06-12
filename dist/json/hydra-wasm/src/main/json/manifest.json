@@ -1,5 +1,4 @@
 {
-  "defaultLibModules": [],
   "dslModules": [],
   "mainModules": ["hydra.wasm.coder", "hydra.wasm.language", "hydra.wasm.serde", "hydra.wasm.syntax"],
   "manifestFormatVersion": 1,

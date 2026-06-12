@@ -43,7 +43,7 @@ mkdir -p "$JAVA_DST"
 
 # Head-only driver classes (NOT part of the kernel runtime overlay; #418): they
 # stay in heads/java/src and are copied directly.
-for f in Bootstrap.java Generation.java HydraTestBase.java; do
+for f in Bootstrap.java Generation.java GenerationTargets.java HydraTestBase.java; do
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
 
