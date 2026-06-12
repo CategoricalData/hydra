@@ -391,7 +391,7 @@ invalidation graph.
 `component_identity` is the swappable layer, and it now has two modes:
 
 - **Published-host mode.** When `<pkg>` resolves to a published-host version via
-  `hydra.json` — the global `hostVersion`, or a per-host `hostVersionOverrides` entry —
+  `hydra.json` — the global `hostVersion`, or a per-host `hostOverrides` entry —
   the identity is the version string `host:<pkg>:<ver>`. In this mode the build is
   conceptually depending on the published artifact, so **local source edits to that
   package do not change its identity**: the Layer 2 cache stays warm until the pinned
@@ -405,7 +405,7 @@ invalidation graph.
 
 The version basis is the right Merkle key for a published host: bumping `hostVersion`
 (via `bin/bump-host-version.sh`) changes the kernel-id leaf, which ripples through every
-target's stamp; a single bad host can be pinned back via `hostVersionOverrides`, which
+target's stamp; a single bad host can be pinned back via `hostOverrides`, which
 invalidates only that host's stamp. This is the cache half of
 [#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts):
 #347 wires the cache to key off published versions; #370 makes the build actually consume
@@ -464,7 +464,7 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
   gaps](#remaining-gaps).
 - ✅ Version-pin path for published hosts. `component_identity` returns
   `host:<pkg>:<ver>` for any host that resolves to a published version via `hydra.json`
-  (`hostVersion` / `hostVersionOverrides`), falling back to a local content hash for
+  (`hostVersion` / `hostOverrides`), falling back to a local content hash for
   hosts built from source (the migration shim). The generator stamp therefore keys off
   the published host version for published hosts — a kernel-version bump invalidates
   every target; a per-host override invalidates only that host. See
@@ -485,9 +485,26 @@ As of 0.16 the consume half is implemented for **all three big hosts**:
 - **Haskell** consumes the published `hydra-kernel` + `hydra-haskell` from Hackage as its *host
   runtime* — see [The Haskell host: runtime vs. sources](#the-haskell-host-runtime-vs-sources) below.
 
-All three resolve the version from `hydra.json` `hostVersion` (with per-host `hostVersionOverrides`),
+All three resolve the version from `hydra.json` `hostVersion` (with per-host `hostOverrides`),
 default to the published artifact, and offer a `--local-host` shim. The output is byte-identical to a
 local-host build (the forward-compatibility no-op proven for each).
+
+**Language vs. host vs. coder package.** `hostOverrides` is keyed by **host** — a language name like
+`java`, `python`, `haskell` — *not* by the coder package (`hydra-java`). These are three distinct
+things with a 1:1 correspondence today, but they diverge once hosts become independently-versioned
+artifacts (a future `hydra-java-host`, post-0.17): the *language* is the stable identity (`java`), the
+*coder package* is the translingual DSL that emits that language (`hydra-java`, versioned with the
+kernel), and the *host* is the runtime that executes generation (today `heads/java/`, unversioned).
+`hostOverrides` answers a question about the **host** ("consume the published Java host, or build it
+local?"), so it keys on the host's stable identity. The build-cache / `component_identity` path stays
+**package**-keyed (it is genuinely about packages); `bin/lib/hydra-packages.py` bridges host → package
+internally (`hostOverrides["java"]` applies to `hydra-java`). Lisp dialects (`clojure`, `scheme`,
+`common-lisp`, `emacs-lisp`) are distinct hosts sharing the one `hydra-lisp` coder, so an override can
+target a single dialect or `lisp` for all four. Value space: a version string (pin to that published
+version) or `"local"` (build that host from source); an absent key means published at the global
+`hostVersion`. Setting one host to `"local"` while the rest stay published is the per-host migration
+knob — e.g. `hostOverrides: { "python": "local" }` builds the Python host from source while Java and
+Haskell continue consuming their published artifacts.
 
 **How it works.** The Java and Python coder packages are authored host-natively
 (`packages/hydra-{java,python}/src/main/{java,python}/hydra/sources/`) and regenerated to
@@ -501,7 +518,7 @@ is the `hydra-java` jar; for Python the `hydra-python` wheel.
   `net.fortytwo.hydra:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle
   project at `heads/java/json-driver/`) or `hydra-python==<hostVersion>` from PyPI (a managed
   venv at `heads/python/.venv-published-host/`, prepared by `bin/lib/python-published-host.sh`).
-  `<hostVersion>` is resolved from `hydra.json` (`hostVersion` / `hostVersionOverrides`) via
+  `<hostVersion>` is resolved from `hydra.json` (`hostVersion` / `hostOverrides`) via
   `bin/lib/hydra-packages.py host-version <pkg>`. No local Java/Python host build is required —
   edits to the DSL sources flow straight through, and even a kernel rename that breaks the
   local host build does not block JSON regeneration. This is the default for
@@ -512,7 +529,7 @@ is the `hydra-java` jar; for Python the `hydra-python` wheel.
   Use this only for a backward-incompatible kernel change the last published host cannot handle
   yet: build a local interim host, publish it (to `mavenLocal` / the default pip index, or bump
   `hydra.json`), then the default published-host path picks it up. See
-  [hostVersionOverrides](#component-identity).
+  [hostOverrides](#component-identity).
 
 **The output is identical.** The published 0.16.0 host and a freshly-built local host produce
 byte-for-byte identical `dist/json/hydra-{java,python}` from the same DSL sources — this is the
@@ -539,7 +556,7 @@ source of truth, restored after a published sync). Which coder packages are cons
 probing* actual Hackage availability of `hydra-<pkg>-<hostVersion>` (`hydra-packages.py haskell-hackage`)
 — today only `hydra-kernel` + `hydra-haskell`; a coder published next cycle is consumed automatically
 with no config change. `--local-host` (build the whole host from source) and
-`hostVersionOverrides["hydra-<pkg>"] = "local"` (one package local, the rest from Hackage) are the shims.
+`hostOverrides["<host>"] = "local"` (one package local, the rest from Hackage) are the shims.
 Consuming the published kernel is a no-op for codegen: the host generates byte-identical output whether
 its kernel came from Hackage or a local compile.
 

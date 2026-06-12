@@ -609,20 +609,47 @@ def "Primitive" $
     "definition">: doc "Host-independent metadata (name, signature, purity, totality)" $
       packaging "PrimitiveDefinition",
     "implementation">: doc "Concrete, host-specific implementation" $
-      list (core "Term") ~> Types.either_ (errors "Error") (core "Term")
+      graph ~> list (core "Term") ~> Types.either_ (errors "Error") (core "Term")
   ]
 ```
 
-The implementation is a mapping from already-reduced argument terms to a result term, or an error.
-The interpreter strips annotations and reduces each argument before invoking the primitive,
-so the implementation can pattern-match the argument terms directly;
-a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it.
-This shape mirrors `PrimitiveDefinition.defaultImplementation`,
-allowing a host to derive its primitive shell from the same Hydra term that serves as the canonical reference implementation.
+The implementation maps the (already-reduced, annotation-stripped) argument terms to a result term,
+or an error, given the current graph. The interpreter strips annotations and reduces each argument
+before invoking the primitive, so the implementation can pattern-match the argument terms directly.
+
+The two faces have deliberately different shapes:
+
+- `PrimitiveDefinition.defaultImplementation` is an optional **pure** Hydra term whose type is
+  exactly the primitive's public signature (`int32 -> int32 -> int32` for `math.add`,
+  `(a -> Bool) -> [a] -> [a]` for `lists.filter`). It never mentions a graph. It is the portable
+  *reference* implementation — *what* the primitive computes — and is used for type-checking and
+  cross-host documentation, not as a runtime substitute (interpreting it would be far slower than a
+  native impl).
+- `Primitive.implementation` is the host-native runtime carrier, `Graph -> [Term] -> Either Error Term`.
+  It is *how* a host evaluates the primitive, natively and quickly.
+
+So the graph appears in the runtime carrier but **never** in a primitive's signature or in its
+`defaultImplementation`. The graph is a property of the implementation's *calling convention*, not
+of the primitive's *type*.
+
+Why does the carrier carry a graph at all? Most primitives ignore it — `math.add` just adds its two
+arguments. The graph matters only for *higher-order* primitives that must evaluate a function
+argument mid-computation. Take `lists.filter` applied to the predicate `\x -> equality.gt x 2`: the
+native impl is `(Term -> Bool) -> [Term] -> [Term]`, so it must turn that predicate *term* into a
+native `Term -> Bool`, which means reducing `gt x 2` per element. But `gt` arrives as an unresolved
+name (`hydra.lib.equality.gt`) — it sits under a lambda binder and cannot be evaluated until `filter`
+supplies a concrete `x` — and resolving that name requires the graph's primitive table. The graph
+passed in is the interpreter's *live* graph at the call site (which may hold primitives or bindings
+beyond the kernel's), so a captured or global graph would be wrong; it must be threaded from the
+reducer. The complementary case — a higher-order primitive whose result shape is fixed by its data
+argument, e.g. `lists.map` or `eithers.bimap` — can instead return an *unreduced* applicative term
+(`[f x1, f x2, ...]`) and let the outer reducer fold it, needing no graph. The graph is retained for
+the minority of primitives that branch on a reduced function result (filter, find, foldl over Either, …).
 
 (The `Either`-based implementation replaces the former `Flow` monad, removed in #245.
 The host-independent `PrimitiveDefinition` was split out from the implementation in #156.
-The carrier type still threads `InferenceContext` and `Graph` parameters pending the cleanup tracked in #446, sequenced with the `defaultImplementation` integration in #437.)
+The vestigial `InferenceContext` parameter — which no primitive ever consulted — was dropped from the
+carrier in #446, leaving the graph; this was sequenced with the `defaultImplementation` integration in #437.)
 
 #### Level 2: PrimitiveDefinition declaration (the canonical registry)
 

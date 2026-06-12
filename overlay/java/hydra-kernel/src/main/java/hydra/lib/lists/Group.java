@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeEq;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -36,8 +35,8 @@ public class Group extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
                 List<List<Term>> groups = apply(lst);
                 ConsList<Term> reversed = ConsList.empty();
                 for (List<Term> g : groups) {

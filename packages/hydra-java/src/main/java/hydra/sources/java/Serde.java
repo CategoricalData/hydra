@@ -2152,6 +2152,9 @@ public class Serde {
                         MethodModifier.ABSTRACT,
                         constant(apply(var("hydra.serialization.cst"), string("abstract")))),
                     field(
+                        MethodModifier.STATIC,
+                        constant(apply(var("hydra.serialization.cst"), string("static")))),
+                    field(
                         MethodModifier.FINAL,
                         constant(apply(var("hydra.serialization.cst"), string("final")))),
                     field(

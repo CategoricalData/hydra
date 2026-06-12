@@ -1,6 +1,5 @@
 package hydra.lib.equality;
 
-import hydra.typing.InferenceContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
@@ -89,8 +88,8 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph ->
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph ->
             hydra.lib.eithers.Bind.apply(expect.apply(graph, args.get(0)), arg0 ->
                 hydra.lib.eithers.Map.apply(arg1 ->
                     Terms.boolean_(criterion.apply(arg0, arg1)),

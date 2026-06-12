@@ -18,7 +18,6 @@ import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentMap;
@@ -50,8 +49,8 @@ public class FromList extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)), hydra.extract.Core.listOf(term -> hydra.extract.Core.pair(t -> Either.right(t), t -> Either.right(t), graph, term), graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<List<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)), hydra.extract.Core.listOf(term -> hydra.extract.Core.pair(t -> Either.right(t), t -> Either.right(t), graph, term), graph, args.get(0)));
     }
 
     /**

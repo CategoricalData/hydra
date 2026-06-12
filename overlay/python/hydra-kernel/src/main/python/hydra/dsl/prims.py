@@ -37,6 +37,14 @@ X = TypeVar("X")
 Y = TypeVar("Y")
 
 
+# Placeholder InferenceContext for the TermCoder encode/decode machinery used inside the prim*
+# wrappers. Since #446, a Primitive's implementation carrier no longer threads the InferenceContext:
+# it is now (Graph -> [Term] -> Either Error Term). The encode/decode coders still take a cx for
+# error context (and decode ignores it entirely), so we hand them an empty context. Mirrors
+# Hydra.Dsl.Prims.primCx on the Haskell host.
+PRIM_CX = InferenceContext(fresh_type_variable_count=0, trace=())
+
+
 def other_err(cx: InferenceContext, msg: str) -> Error:
     """Create an Error (Other) from a string message."""
     return ErrorOther(OtherError(msg))
@@ -547,8 +555,8 @@ def prim0(
         name: Name, value: Callable[[], A], variables: list[TypeVar_], output: TermCoder[A]
 ) -> Primitive:
     """Create a 0-argument primitive function."""
-    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
-        result = output.decode(cx, value())
+    def impl(g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+        result = output.decode(PRIM_CX, value())
         return result
 
     return Primitive(
@@ -565,7 +573,7 @@ def prim1(
         output: TermCoder[B],
 ) -> Primitive:
     """Create a 1-argument primitive function."""
-    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 1, args)
             match r:
@@ -573,13 +581,13 @@ def prim1(
                     return Left(ic)
                 case Right(_):
                     pass
-            r1 = input1.encode(cx, g, args[0])
+            r1 = input1.encode(PRIM_CX, g, args[0])
             match r1:
                 case Left(value=ic):
                     return Left(ic)
                 case Right(value=arg1):
                     pass
-            return output.decode(cx, compute(arg1))
+            return output.decode(PRIM_CX, compute(arg1))
         return go()
 
     return Primitive(
@@ -598,7 +606,7 @@ def prim2(
         lazy_args: list[int] = [],
 ) -> Primitive:
     """Create a 2-argument primitive function. lazy_args: 0-based lazy parameter positions (#391)."""
-    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 2, args)
             match r:
@@ -606,19 +614,19 @@ def prim2(
                     return Left(ic)
                 case Right(_):
                     pass
-            r1 = input1.encode(cx, g, args[0])
+            r1 = input1.encode(PRIM_CX, g, args[0])
             match r1:
                 case Left(value=ic):
                     return Left(ic)
                 case Right(value=arg1):
                     pass
-            r2 = input2.encode(cx, g, args[1])
+            r2 = input2.encode(PRIM_CX, g, args[1])
             match r2:
                 case Left(value=ic):
                     return Left(ic)
                 case Right(value=arg2):
                     pass
-            return output.decode(cx, compute(arg1, arg2))
+            return output.decode(PRIM_CX, compute(arg1, arg2))
         return go()
 
     return Primitive(
@@ -641,7 +649,7 @@ def prim3(
         lazy_args: list[int] = [],
 ) -> Primitive:
     """Create a 3-argument primitive function. lazy_args: 0-based lazy parameter positions (#391)."""
-    def impl(cx: InferenceContext, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+    def impl(g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
             r = extract.n_args(name, 3, args)
             match r:
@@ -649,25 +657,25 @@ def prim3(
                     return Left(ic)
                 case Right(_):
                     pass
-            r1 = input1.encode(cx, g, args[0])
+            r1 = input1.encode(PRIM_CX, g, args[0])
             match r1:
                 case Left(value=ic):
                     return Left(ic)
                 case Right(value=arg1):
                     pass
-            r2 = input2.encode(cx, g, args[1])
+            r2 = input2.encode(PRIM_CX, g, args[1])
             match r2:
                 case Left(value=ic):
                     return Left(ic)
                 case Right(value=arg2):
                     pass
-            r3 = input3.encode(cx, g, args[2])
+            r3 = input3.encode(PRIM_CX, g, args[2])
             match r3:
                 case Left(value=ic):
                     return Left(ic)
                 case Right(value=arg3):
                     pass
-            return output.decode(cx, compute(arg1, arg2, arg3))
+            return output.decode(PRIM_CX, compute(arg1, arg2, arg3))
         return go()
 
     return Primitive(

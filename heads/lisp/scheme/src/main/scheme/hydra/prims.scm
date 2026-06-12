@@ -412,59 +412,65 @@
     ;; Primitive constructors
     ;; ============================================================================
 
+    ;; #446 dropped InferenceContext from the primitive implementation carrier
+    ;; (now (lambda (g) (lambda (args) ...))). The TermCoder encode/decode layer
+    ;; still takes a cx argument, but the Scheme coders never inspect it
+    ;; (wrap-other-error ignores it; the encode/decode lambdas discard it), so an
+    ;; inert placeholder suffices here. This avoids importing the typing module's
+    ;; InferenceContext constructor into (hydra prims). Mirrors the Haskell host's
+    ;; primCx = emptyInferenceContext and Python's PRIM_CX, which are likewise
+    ;; vestigial under #446.
+    (define prim-cx '())
+
     (define (prim0 pname value-fn variables output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
         (make-hydra_graph_primitive (build-prim-def pname variables '() output constraints)
-          (lambda (cx)
-            (lambda (g)
-              (lambda (args)
-                (let ((result (((hydra_graph_term_coder-decode output) cx) (value-fn))))
-                  (wrap-other-error cx result))))))))
+          (lambda (g)
+            (lambda (args)
+              (let ((result (((hydra_graph_term_coder-decode output) prim-cx) (value-fn))))
+                (wrap-other-error prim-cx result)))))))
 
     (define (prim1 pname compute variables input1 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
       (make-hydra_graph_primitive (build-prim-def pname variables (list input1) output constraints)
-        (lambda (cx)
-          (lambda (g)
-            (lambda (args)
-              (let ((check (((hydra_extract_core_n_args pname) 1) args)))
-                (if (eq? (car check) 'left) check
-                    (let ((r1 ((((hydra_graph_term_coder-encode input1) cx) g) (car args))))
-                      (if (eq? (car r1) 'left) (wrap-other-error cx r1)
-                          (let ((result (((hydra_graph_term_coder-decode output) cx) (compute (cadr r1)))))
-                            (wrap-other-error cx result))))))))))))
+        (lambda (g)
+          (lambda (args)
+            (let ((check (((hydra_extract_core_n_args pname) 1) args)))
+              (if (eq? (car check) 'left) check
+                  (let ((r1 ((((hydra_graph_term_coder-encode input1) prim-cx) g) (car args))))
+                    (if (eq? (car r1) 'left) (wrap-other-error prim-cx r1)
+                        (let ((result (((hydra_graph_term_coder-decode output) prim-cx) (compute (cadr r1)))))
+                          (wrap-other-error prim-cx result)))))))))))
 
     (define (prim2 pname compute variables input1 input2 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
       (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2) output constraints)
-        (lambda (cx)
-          (lambda (g)
-            (lambda (args)
-              (let ((check (((hydra_extract_core_n_args pname) 2) args)))
-                (if (eq? (car check) 'left) check
-                    (let ((r1 ((((hydra_graph_term_coder-encode input1) cx) g) (car args))))
-                      (if (eq? (car r1) 'left) (wrap-other-error cx r1)
-                          (let ((r2 ((((hydra_graph_term_coder-encode input2) cx) g) (cadr args))))
-                            (if (eq? (car r2) 'left) (wrap-other-error cx r2)
-                                (let ((result (((hydra_graph_term_coder-decode output) cx) ((compute (cadr r1)) (cadr r2)))))
-                                  (wrap-other-error cx result))))))))))))))
+        (lambda (g)
+          (lambda (args)
+            (let ((check (((hydra_extract_core_n_args pname) 2) args)))
+              (if (eq? (car check) 'left) check
+                  (let ((r1 ((((hydra_graph_term_coder-encode input1) prim-cx) g) (car args))))
+                    (if (eq? (car r1) 'left) (wrap-other-error prim-cx r1)
+                        (let ((r2 ((((hydra_graph_term_coder-encode input2) prim-cx) g) (cadr args))))
+                          (if (eq? (car r2) 'left) (wrap-other-error prim-cx r2)
+                              (let ((result (((hydra_graph_term_coder-decode output) prim-cx) ((compute (cadr r1)) (cadr r2)))))
+                                (wrap-other-error prim-cx result)))))))))))))
 
     (define (prim3 pname compute variables input1 input2 input3 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
       (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
-        (lambda (cx)
-          (lambda (g)
-            (lambda (args)
-              (let ((check (((hydra_extract_core_n_args pname) 3) args)))
-                (if (eq? (car check) 'left) check
-                    (let ((r1 ((((hydra_graph_term_coder-encode input1) cx) g) (car args))))
-                      (if (eq? (car r1) 'left) (wrap-other-error cx r1)
-                          (let ((r2 ((((hydra_graph_term_coder-encode input2) cx) g) (cadr args))))
-                            (if (eq? (car r2) 'left) (wrap-other-error cx r2)
-                                (let ((r3 ((((hydra_graph_term_coder-encode input3) cx) g) (caddr args))))
-                                  (if (eq? (car r3) 'left) (wrap-other-error cx r3)
-                                      (let ((result (((hydra_graph_term_coder-decode output) cx)
-                                                      (((compute (cadr r1)) (cadr r2)) (cadr r3)))))
-                                        (wrap-other-error cx result))))))))))))))))
+        (lambda (g)
+          (lambda (args)
+            (let ((check (((hydra_extract_core_n_args pname) 3) args)))
+              (if (eq? (car check) 'left) check
+                  (let ((r1 ((((hydra_graph_term_coder-encode input1) prim-cx) g) (car args))))
+                    (if (eq? (car r1) 'left) (wrap-other-error prim-cx r1)
+                        (let ((r2 ((((hydra_graph_term_coder-encode input2) prim-cx) g) (cadr args))))
+                          (if (eq? (car r2) 'left) (wrap-other-error prim-cx r2)
+                              (let ((r3 ((((hydra_graph_term_coder-encode input3) prim-cx) g) (caddr args))))
+                                (if (eq? (car r3) 'left) (wrap-other-error prim-cx r3)
+                                    (let ((result (((hydra_graph_term_coder-decode output) prim-cx)
+                                                    (((compute (cadr r1)) (cadr r2)) (cadr r3)))))
+                                      (wrap-other-error prim-cx result)))))))))))))))
 
 ))

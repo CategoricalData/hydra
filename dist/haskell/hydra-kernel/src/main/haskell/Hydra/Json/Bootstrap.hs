@@ -2142,18 +2142,16 @@ typesByName =
               Core.fieldTypeName = (Core.Name "implementation"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-                    Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Term"))),
-                      Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
-                        Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))}))})),
+                    Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Term"))),
+                    Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
+                      Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))})),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
-                    (Core.TermLiteral (Core.LiteralString "A concrete, host-specific implementation of the primitive function: a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it. The current carrier still threads `InferenceContext` and `Graph` for historical encode/decode and reducer-callback plumbing; no primitive's compute logic uses them, and they are slated for removal (https://github.com/CategoricalData/hydra/issues/446), sequenced with the `defaultImplementation` integration tracked in https://github.com/CategoricalData/hydra/issues/437.")))]))}))}]),
+                    (Core.TermLiteral (Core.LiteralString "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446).")))]))}))}]),
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),
