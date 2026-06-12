@@ -39,13 +39,33 @@
 --
 --     Run after a successful regen to record what was produced.
 --
+--   digest-check refresh-input --package <pkg> --dist-json-root <dir>
+--     Rewrites <dir>/<pkg>/build/main/digest.json to reflect the
+--     CURRENT content of:
+--       packages/<pkg>/src/main/.../<source>     (Haskell DSL + native
+--                                                 .java/.py self-host
+--                                                 coder sources)
+--       <dir>/<pkg>/src/main/json/**/*.json      (#469: JSON content)
+--
+--     For native-coder packages (hydra-java, hydra-python) the JSON
+--     content can change independently of the source files (the
+--     published coder runtime can ship an in-place behavior change),
+--     so a JSON write that doesn't update the input digest leaves the
+--     freshness gate inconsistent: the next 'fresh' check sees the
+--     stale input hashes and reports a cache hit even though the JSON
+--     the assembler is about to consume is different. Run this after
+--     any JSON-writing step that doesn't go through update-json-main
+--     (the native Java/Python DSL→JSON drivers, ad-hoc edits, etc.).
+--
 -- All paths are taken as-is (no implicit normalization).
 
 {-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
 import Hydra.Digest
+import qualified Hydra.Digest as Digest
 import Hydra.Packaging (ModuleName(..))
+import qualified Hydra.PackageRouting as PackageRouting
 
 import Control.Monad (forM)
 import qualified Data.Map as M
@@ -56,47 +76,68 @@ import System.Exit (exitFailure, exitSuccess)
 import qualified System.FilePath as FP
 import System.IO (hPutStrLn, stderr)
 
-data Mode = Fresh | Refresh deriving (Eq, Show)
+data Mode = Fresh | Refresh | RefreshInput deriving (Eq, Show)
 
 data Options = Options
   { optMode         :: Mode
   , optInputDigest  :: FilePath
   , optOutputDigest :: FilePath
   , optOutputDir    :: Maybe FilePath
+  , optPackage      :: Maybe String      -- for RefreshInput
+  , optDistJsonRoot :: Maybe FilePath    -- for RefreshInput
   } deriving Show
 
 usage :: String
 usage = unlines
   [ "Usage:"
-  , "  digest-check fresh   --inputs <file> --output-dir <dir> --output-digest <file>"
-  , "  digest-check refresh --inputs <file> --output-dir <dir> --output-digest <file>"
+  , "  digest-check fresh         --inputs <file> --output-dir <dir> --output-digest <file>"
+  , "  digest-check refresh       --inputs <file> --output-dir <dir> --output-digest <file>"
+  , "  digest-check refresh-input --package <pkg> --dist-json-root <dir>"
   , ""
-  , "  fresh:    exit 0 if cache hit (skip work), exit 1 if miss (do work)."
-  , "            Resolves recorded (relative) output paths against <output-dir>."
-  , "            If the package is otherwise a hit but extra (orphan) files"
-  , "            are present in <output-dir>, deletes them, refreshes the"
-  , "            output digest, and reports a hit (#393 reconcile)."
-  , "  refresh:  walk <output-dir>, hash every file, write a new"
-  , "            <output-digest> with paths stored relative to <output-dir>."
+  , "  fresh:         exit 0 if cache hit (skip work), exit 1 if miss (do work)."
+  , "                 Resolves recorded (relative) output paths against <output-dir>."
+  , "                 If the package is otherwise a hit but extra (orphan) files"
+  , "                 are present in <output-dir>, deletes them, refreshes the"
+  , "                 output digest, and reports a hit (#393 reconcile)."
+  , "  refresh:       walk <output-dir>, hash every file, write a new"
+  , "                 <output-digest> with paths stored relative to <output-dir>."
+  , "  refresh-input: rewrite <dir>/<pkg>/build/main/digest.json from current"
+  , "                 source files + JSON content (#469). For native-coder"
+  , "                 packages this is what closes the gap left when a JSON"
+  , "                 writer outside update-json-main produces new content."
   ]
+
+emptyOptions :: Mode -> Options
+emptyOptions m = Options m "" "" Nothing Nothing Nothing
 
 parseArgs :: [String] -> Either String Options
 parseArgs [] = Left "Missing subcommand"
 parseArgs (cmd : rest) = do
   mode <- case cmd of
-    "fresh"   -> Right Fresh
-    "refresh" -> Right Refresh
-    _         -> Left ("Unknown subcommand: " ++ cmd)
-  go (Options mode "" "" Nothing) rest
+    "fresh"         -> Right Fresh
+    "refresh"       -> Right Refresh
+    "refresh-input" -> Right RefreshInput
+    _               -> Left ("Unknown subcommand: " ++ cmd)
+  go (emptyOptions mode) rest
   where
-    go opts [] = if null (optInputDigest opts) || null (optOutputDigest opts)
-      then Left "Missing required --inputs or --output-digest"
-      else if optOutputDir opts == Nothing
-        then Left "--output-dir is required"
-        else Right opts
-    go opts ("--inputs" : v : xs)        = go (opts { optInputDigest  = v }) xs
-    go opts ("--output-digest" : v : xs) = go (opts { optOutputDigest = v }) xs
-    go opts ("--output-dir" : v : xs)    = go (opts { optOutputDir    = Just v }) xs
+    -- fresh / refresh: --inputs + --output-dir + --output-digest required
+    -- refresh-input:   --package + --dist-json-root required
+    go opts [] = case optMode opts of
+      RefreshInput ->
+        if optPackage opts == Nothing || optDistJsonRoot opts == Nothing
+          then Left "refresh-input requires --package and --dist-json-root"
+          else Right opts
+      _ ->
+        if null (optInputDigest opts) || null (optOutputDigest opts)
+          then Left "Missing required --inputs or --output-digest"
+          else if optOutputDir opts == Nothing
+            then Left "--output-dir is required"
+            else Right opts
+    go opts ("--inputs" : v : xs)          = go (opts { optInputDigest  = v }) xs
+    go opts ("--output-digest" : v : xs)   = go (opts { optOutputDigest = v }) xs
+    go opts ("--output-dir" : v : xs)      = go (opts { optOutputDir    = Just v }) xs
+    go opts ("--package" : v : xs)         = go (opts { optPackage      = Just v }) xs
+    go opts ("--dist-json-root" : v : xs)  = go (opts { optDistJsonRoot = Just v }) xs
     go _ (a : _) = Left ("Unknown argument: " ++ a)
 
 main :: IO ()
@@ -108,8 +149,9 @@ main = do
       hPutStrLn stderr usage
       exitFailure
     Right opts -> case optMode opts of
-      Fresh   -> doFresh opts
-      Refresh -> doRefresh opts
+      Fresh        -> doFresh opts
+      Refresh      -> doRefresh opts
+      RefreshInput -> doRefreshInput opts
 
 doFresh :: Options -> IO ()
 doFresh opts = do
@@ -279,3 +321,70 @@ doRefresh opts = do
     ++ " (" ++ show (M.size inputsAsMap) ++ " inputs, "
     ++ show (M.size outputs) ++ " outputs, "
     ++ show (M.size (Hydra.Digest.ppDeps inputPpd)) ++ " deps)"
+
+-- | Rewrite the per-package INPUT digest at
+-- @<distJsonRoot>/<pkg>/build/main/digest.json@ from the current
+-- on-disk state. Composes two hash sets:
+--
+--   * source-file hashes for every namespace owned by <pkg>, as
+--     determined by 'discoverModuleNameFiles' + the package routing
+--     table — the same set 'refreshPerPackageDigests' computes during
+--     a full Phase-1 run.
+--   * JSON content hashes for every @*.json@ under
+--     @<distJsonRoot>/<pkg>/src/main/json@, keyed under the
+--     @jsonContent:@ prefix (#469).
+--
+-- Use case: the native Java / Python DSL→JSON drivers write JSON
+-- without going through update-json-main, so they bypass
+-- 'refreshPerPackageDigests'. Without this hook, a native-driver
+-- write leaves the per-package input digest stale, and the next
+-- assembler 'digest-check fresh' reports a cache hit against the
+-- pre-write JSON content even though the JSON the assembler is about
+-- to consume has changed. Have those drivers call us after writing
+-- JSON; the digest stays current and the gate behaves.
+doRefreshInput :: Options -> IO ()
+doRefreshInput opts = do
+  let pkg = case optPackage opts of
+        Just p  -> p
+        Nothing -> error "doRefreshInput called without --package (parseArgs bug)"
+      distJsonRoot = case optDistJsonRoot opts of
+        Just d  -> d
+        Nothing -> error "doRefreshInput called without --dist-json-root (parseArgs bug)"
+      dpath = distJsonRoot FP.</> pkg FP.</> "build" FP.</> "main" FP.</> "digest.json"
+
+  -- Source hashes: discover every (namespace, file) pair, filter to
+  -- the ones routed to <pkg>, hash those source files.
+  nsFiles <- Digest.discoverModuleNameFiles
+  let ownedPairs =
+        [ (ns, fp)
+        | (ns, fp) <- M.toList nsFiles
+        , PackageRouting.namespaceToPackage ns == pkg
+        ]
+  srcEntries <- forM ownedPairs $ \(ns, fp) -> do
+    exists <- doesFileExist fp
+    if not exists
+      then return Nothing
+      else do
+        h <- Digest.hashFile fp
+        return $ Just (ns, h)
+  let srcDigest = M.fromList [ p | Just p <- srcEntries ]
+
+  -- JSON content hashes (#469).
+  jsonDigest <- Digest.hashPackageJsonContent distJsonRoot pkg
+
+  let pkgDigest = M.union srcDigest jsonDigest
+      selfH     = Digest.computeSelfHash pkgDigest
+      -- Preserve existing depHash:<pkg> entries; we only updated
+      -- the hashes + selfHash. Cross-package deps are unchanged by
+      -- a single-package input refresh.
+  existingPpd <- Digest.readPerPackageDigest dpath
+  let newPpd = PerPackageDigest
+        { ppHashes   = pkgDigest
+        , ppSelfHash = selfH
+        , ppDeps     = ppDeps existingPpd
+        }
+  Digest.writePerPackageDigest dpath newPpd
+  putStrLn $ "  digest-check refresh-input: wrote " ++ dpath
+    ++ " (" ++ show (M.size srcDigest) ++ " src + "
+    ++ show (M.size jsonDigest) ++ " json = "
+    ++ show (M.size pkgDigest) ++ " entries)"
