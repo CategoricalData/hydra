@@ -32,15 +32,21 @@ mainModules = kernelModules ++ haskellModules ++ jsonModules ++ otherModules
 dslSourceModules :: [Module]
 dslSourceModules = [Dsls.module_]
 
--- | Per-package list of modules whose type definitions become derived
--- DSL wrapper modules (Hydra/Dsl/<Lang>/<Name>.hs). These thin aliases
--- pull from each package's Manifest.dslTypeModules. The driver
--- concatenates them into the input set for the DSL generator.
-kernelDslInputModules :: [Module]
-kernelDslInputModules = KernelManifest.dslTypeModules
+-- | Per-package source-module lists for derived generation (#474). DSL wrappers
+-- are derived from the broad `mainDslModules`; encoders/decoders from the
+-- narrower `mainEncodingModules` (only modules the eta-expanding targets can
+-- compile — see #475). These thin aliases pull from each package's Manifest.
+kernelDslSourceModules :: [Module]
+kernelDslSourceModules = KernelManifest.mainDslModules
 
-haskellDslInputModules :: [Module]
-haskellDslInputModules = HaskellManifest.dslTypeModules
+kernelEncodingSourceModules :: [Module]
+kernelEncodingSourceModules = KernelManifest.mainEncodingModules
+
+haskellDslSourceModules :: [Module]
+haskellDslSourceModules = HaskellManifest.mainDslModules
+
+haskellEncodingSourceModules :: [Module]
+haskellEncodingSourceModules = HaskellManifest.mainEncodingModules
 
 -- | Kernel types and terms plus JSON runtime.
 --

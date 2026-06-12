@@ -8,7 +8,7 @@
 module Main where
 
 import Hydra.Generation (writePerPackageManifestsJson)
-import Hydra.PackageRouting (defaultDistJsonRoot)
+import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   hydraBenchModules,
@@ -17,7 +17,7 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules,
-  allDslTypeModules)
+  allDslModules, allEncodingModules, extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
@@ -70,17 +70,14 @@ main = do
         , hydraExtEncodingModules
         , [GenPGTransform.module_]
         ]
-  -- DSL generator input: every package whose syntax model defines types.
-  -- Use the same canonical list as update-json-main's caller in
-  -- Hydra.Sources.Ext, so the manifest's dslModules field matches the
-  -- DSL JSON files update-json-main actually writes. Previously this
-  -- script hand-built a subset that omitted hydra-pg, hydra-rdf,
-  -- hydra-coq, and hydra-ext, causing those packages' manifests to
-  -- report "dslModules": [] even when their DSL JSON existed on disk.
-  -- bootstrap-from-json reads the manifest to decide which DSL modules
-  -- to load, so a missing manifest entry left downstream .hs stale.
-  let dslTypeMods = allDslTypeModules
+  -- Derived-module source list (#474): every package's derivedMainModules,
+  -- the source modules from which dsl/encode/decode are derived. Emitted
+  -- directly as the manifest's derivedMainModules field, matching the same
+  -- canonical list update-json-main feeds to writeDerivedJsonPackageSplit.
+  let dslSrcMods = allDslModules
+      encSrcMods = allEncodingModules
 
-  writePerPackageManifestsJson defaultDistJsonRoot mainUniverse dslTypeMods mainUniverse testModules
+  let routingMap = buildRoutingMap extRoutingInput
+  writePerPackageManifestsJson routingMap defaultDistJsonRoot dslSrcMods encSrcMods mainUniverse testModules
   putStrLn ""
   putStrLn "=== Done! ==="
