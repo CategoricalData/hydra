@@ -144,7 +144,7 @@ drivers, test bases, json-io stubs, each language's own coder) stay in
 |----------|------------------------|-------------|--------------------|
 | Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, 13 `Hydra.Haskell.Lib.*`, `Hydra.Dsl.{Terms,Literals,Meta.Common}` | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | 18 |
 | Java | `overlay/java/hydra-kernel/`: `Adapters.java`, `Coders.java`, full `hydra/{util,lib,dsl,tools}/`, `hydra/json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
-| Python | `overlay/python/hydra-kernel/`: `tools.py`, `py.typed`, `hydra/{lib,dsl,sources}/` (no `__init__.py` — PEP 420) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~47 |
+| Python | `overlay/python/hydra-kernel/`: `tools.py`, `py.typed`, `hydra/{lib,dsl,sources,python/util}/` (no `__init__.py` — PEP 420) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~53 |
 | TypeScript | (not yet migrated) `heads/typescript/src`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts`, test helpers | `heads/typescript/bin/copy-kernel-runtime.sh` | ~19 |
 | Scala, Go, Lisp dialects | — none — | Their runtimes live under `heads/<lang>/` and are referenced via build-tool source-dir paths (sbt's `unmanagedSourceDirectories`, etc.). Nothing is copied. | 0 |
 
