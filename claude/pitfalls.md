@@ -546,7 +546,7 @@ compile once, then warms.
 The standalone `VERSION` file was retired in #347. `hydra.json` now holds
 `currentVersion` (the release version, propagated by `bin/bump-version.sh`)
 and `hostVersion` (the published-host version the build cache keys off, bumped
-by `bin/bump-host-version.sh`; optional per-host `hostVersionOverrides`). Read
+by `bin/bump-host-version.sh`; optional per-host `hostOverrides`). Read
 either via `bin/lib/hydra-packages.py current-version` / `host-version <pkg>`.
 The per-target generator stamp's `component_identity` returns `host:<pkg>:<ver>`
 for published hosts (so local source edits don't bust the Layer-2 cache) and a

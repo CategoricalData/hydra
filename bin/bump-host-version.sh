@@ -7,7 +7,7 @@
 #
 # hostVersion is usually the newest published release, but not always — if a
 # release is buggy for a given host you depend on an earlier good one. The global
-# value is set here; per-host exceptions live in hydra.json:hostVersionOverrides
+# value is set here; per-host exceptions live in hydra.json:hostOverrides
 # and are hand-edited (uncommon — a single bad host in an otherwise good release).
 #
 # This is DISTINCT from bin/bump-version.sh, which bumps the package *release*
@@ -49,4 +49,4 @@ fi
 
 "$PACKAGES_PY" set-host-version "$1"
 echo "Set hostVersion to $1"
-echo "(Per-host overrides in hydra.json:hostVersionOverrides are unchanged.)"
+echo "(Per-host overrides in hydra.json:hostOverrides are unchanged.)"

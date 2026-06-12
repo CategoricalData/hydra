@@ -206,14 +206,14 @@
    After #368 InContext removal, errors flow through as Either Left Error directly."
   [name arity impl-fn]
   (->hydra_graph_primitive (make-prim-def name arity)
-    (fn [cx] (fn [g] (fn [args]
+    (fn [g] (fn [args]
       (try
-        (impl-fn cx g args)
+        (impl-fn g args)
         (catch Throwable e
-          (list :left (list :other (->hydra_errors_other_error (.getMessage e)))))))))))
+          (list :left (list :other (->hydra_errors_other_error (.getMessage e))))))))))
 
 ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
-(defn- prim-set-term-annotation [_cx _g args]
+(defn- prim-set-term-annotation [_g args]
   (let [key (first args)     ;; Name (wrapped)
         val (second args)    ;; Maybe Term
         term (nth args 2)    ;; Term
@@ -226,7 +226,7 @@
         (make-meta-annotated stripped anns)))))
 
 ;; getTermAnnotation :: Name -> Term -> Maybe Term
-(defn- prim-get-term-annotation [_cx _g args]
+(defn- prim-get-term-annotation [_g args]
   (let [key (first args)    ;; Name (wrapped) — use as map key directly
         term (second args)  ;; Term (meta-encoded)
         anns (term-annotation-internal term)
@@ -240,7 +240,7 @@
 ;; d is Maybe String. The reducer extracts it to (:optional (:literal (:string S))) for Just,
 ;; or (:optional (:none)) for Nothing.
 ;; We need to convert the string to a meta-encoded literal string Term for the annotation value.
-(defn- prim-set-term-description [_cx _g args]
+(defn- prim-set-term-description [_g args]
   (let [d (first args)
         term (second args)
         term-val
@@ -258,10 +258,10 @@
         desc-key (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
                                (list :literal (list :string "description"))))
         maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))]
-    (prim-set-term-annotation _cx _g [desc-key maybe-val term])))
+    (prim-set-term-annotation _g [desc-key maybe-val term])))
 
 ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either Error (Maybe String)
-(defn- prim-get-term-description [_cx _g args]
+(defn- prim-get-term-description [_g args]
   (let [;; cx = first, g = second, term = third
         term (nth args 2)
         ;; Peel type lambdas/applications (meta-encoded)
@@ -806,7 +806,7 @@
   "Convert a TypeScheme back to a Type by wrapping forall binders around the body."
   [ts]
   (let [vars (:variables ts)
-        body (:type ts)]
+        body (:body ts)]
     (reduce (fn [t v] (list :forall {:parameter v :body t}))
             body
             (reverse vars))))

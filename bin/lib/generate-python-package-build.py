@@ -99,6 +99,14 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/main/python/hydra"]
+
+# Bundle LICENSE + NOTICE into the published wheel + sdist so the artifact
+# carries the Apache-2.0 license text and project NOTICE, not just the metadata
+# declaration above. Hatchling routes `license-files` into the wheel's
+# .dist-info/licenses/ directory (PEP 639). The files are copied into this
+# package dir by generate-python-package-build.py.
+[tool.hatch.build]
+license-files = ["LICENSE", "NOTICE"]
 """
 
 
@@ -156,6 +164,12 @@ def main() -> int:
         readme_rel = "README.md"
     else:
         readme_rel = None
+
+    # Copy LICENSE + NOTICE into the package dir so the `license-files` entries
+    # resolve in a standalone/published build. Like the README, these must be
+    # package-local — a path escaping the package root is absent from the sdist.
+    for fname in ("LICENSE", "NOTICE"):
+        shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
 
     pyproject_path = os.path.join(out_dir, "pyproject.toml")
     with open(pyproject_path, "w") as f:

@@ -454,6 +454,11 @@ buildTypeVarSubst_go svs ft ct =
         _ -> case ct of
           Core.TypeForall v0 -> buildTypeVarSubst_go svs ft (Strip.deannotateType (Core.forallTypeBody v0))
           _ -> Maps.empty
+builderSetterName :: Core.Name -> String
+builderSetterName fname =
+
+      let base = Utils.sanitizeJavaName (Core.unName fname)
+      in (Logic.ifElse (Logic.or (Equality.equal base "build") (Equality.equal base "builder")) (Strings.cat2 base "_") base)
 classModsPublic :: [Syntax.ClassModifier]
 classModsPublic = [
   Syntax.ClassModifierPublic]
@@ -763,7 +768,7 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
                       "\n\n",
                       (Strings.intercalate "\n" nonEmptyParamLines)])
             consWithComment = withCommentString consComment cons
-        in (Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType elName aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
+        in (Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType elName aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn -> Eithers.bind (Logic.ifElse isInner (Right []) (recordBuilderClass aliases tparams elName fields cx g)) (\builderDecls ->
           let comparableMethods =
                   Optionals.cases parentName (Logic.ifElse (Logic.and (Logic.not isInner) isSer) [
                     recordCompareToMethod aliases tparams elName fields] []) (\pn -> Logic.ifElse isSer [
@@ -779,9 +784,10 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
                         [
                           consWithComment],
                         noCommentMethods,
-                        withMethods]
+                        withMethods,
+                        builderDecls]
               ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
-          in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls))))))))))
+          in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))))))
 declarationForUnionType :: Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForUnionType isSer aliases tparams elName fields cx g =
     Eithers.bind (Eithers.mapList (\ft ->
@@ -2427,6 +2433,63 @@ rebuildApps f args fType =
       _ -> Lists.foldl (\acc -> \a -> Core.TermApplication (Core.Application {
         Core.applicationFunction = acc,
         Core.applicationArgument = a})) f args)
+recordBuilderClass :: JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> t0 -> Graph.Graph -> Either Errors.Error [Syntax.ClassBodyDeclarationWithComments]
+recordBuilderClass aliases tparams elName fields cx g =
+
+      let typeArgRefs = Lists.map Utils.typeParameterToReferenceType tparams
+          typeArgs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) typeArgRefs
+          mTypeArgs = Logic.ifElse (Lists.null tparams) Nothing (Just (Syntax.TypeArgumentsOrDiamondArguments typeArgs))
+          recordLocalName = Utils.sanitizeJavaName (Names.localNameOf elName)
+          builderType = Utils.javaRefType typeArgRefs Nothing "Builder"
+          builderResult = Utils.javaTypeToJavaResult builderType
+          recordType = Utils.javaRefType typeArgRefs Nothing recordLocalName
+          recordResult = Utils.javaTypeToJavaResult recordType
+          returnThisStmt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just Utils.javaThis))
+      in (Eithers.bind (Eithers.mapList (\f ->
+        let mods = [
+              Syntax.FieldModifierPrivate]
+            ftype = Core.fieldTypeType f
+            fname = Core.fieldTypeName f
+        in (Eithers.bind (encodeType aliases Sets.empty ftype cx g) (\jt -> Right (noComment (Utils.javaMemberField mods jt (Utils.fieldNameToJavaVariableDeclarator fname)))))) fields) (\builderFields -> Eithers.bind (Eithers.mapList (\f ->
+        let mods = [
+              Syntax.MethodModifierPublic]
+            fname = Core.fieldTypeName f
+            assignStmt = Syntax.BlockStatementStatement (Utils.toAssignStmt fname)
+        in (Eithers.bind (fieldTypeToFormalParam aliases f cx g) (\param -> Right (noComment (Utils.methodDeclaration mods [] [] (builderSetterName fname) [
+          param] builderResult (Just [
+          assignStmt,
+          returnThisStmt])))))) fields) (\setterMethods ->
+        let buildMods = [
+              Syntax.MethodModifierPublic]
+            buildArgs = Lists.map (\f -> Utils.fieldNameToJavaExpression (Core.fieldTypeName f)) fields
+            buildReturnStmt =
+                    Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier recordLocalName) mTypeArgs) buildArgs Nothing)))
+            buildMethod =
+                    withCommentString (Strings.cat2 "Builds an immutable {@link " (Strings.cat2 recordLocalName "}.")) (Utils.methodDeclaration buildMods [] [] "build" [] recordResult (Just [
+                      buildReturnStmt]))
+            builderClassDecl =
+                    Utils.javaClassDeclaration aliases tparams (Core.Name "Builder") [
+                      Syntax.ClassModifierPublic,
+                      Syntax.ClassModifierStatic,
+                      Syntax.ClassModifierFinal] Nothing [] (Lists.concat [
+                      builderFields,
+                      setterMethods,
+                      [
+                        buildMethod]])
+            builderClassMember =
+                    withCommentString (Strings.cat2 "A fluent builder for {@link " (Strings.cat2 recordLocalName "}.")) (Syntax.ClassBodyDeclarationClassMember (Syntax.ClassMemberDeclarationClass builderClassDecl))
+            factoryMods =
+                    [
+                      Syntax.MethodModifierPublic,
+                      Syntax.MethodModifierStatic]
+            factoryReturnStmt =
+                    Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "Builder") mTypeArgs) [] Nothing)))
+            factoryMethod =
+                    withCommentString (Strings.cat2 "Creates a new fluent builder for {@link " (Strings.cat2 recordLocalName "}.")) (Utils.methodDeclaration factoryMods tparams [] "builder" [] builderResult (Just [
+                      factoryReturnStmt]))
+        in (Right [
+          factoryMethod,
+          builderClassMember]))))
 recordCompareToMethod :: JavaEnvironment.Aliases -> t0 -> Core.Name -> [Core.FieldType] -> Syntax.ClassBodyDeclaration
 recordCompareToMethod aliases tparams elName fields =
 

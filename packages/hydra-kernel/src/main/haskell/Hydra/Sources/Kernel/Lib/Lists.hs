@@ -4,6 +4,9 @@ module Hydra.Sources.Kernel.Lib.Lists where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
@@ -12,6 +15,9 @@ import           Prelude hiding ((++))
 
 ns :: ModuleName
 ns = ModuleName "hydra.lib.lists"
+
+define :: String -> TypedTerm a -> TypedTermDefinition a
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
@@ -26,10 +32,10 @@ module_ = Module {
         \ loop), for each x in xs (inner loop).",
         "Equivalent to the applicative list instance.",
         "Total. Corresponds to Haskell's (<*>) :: [a -> b] -> [a] -> [b]."],
-      primNoDef "bind"        "Apply a function that returns lists to each element and flatten the results." bindSig [
+      toPrimitive "Apply a function that returns lists to each element and flatten the results." bindSig [
         "bind(xs, f) applies f to each element of xs and concatenates the resulting lists in order.\
         \ Equivalent to concatMap.",
-        "Total. Corresponds to Haskell's (>>=) :: [a] -> (a -> [b]) -> [b]."],
+        "Total. Corresponds to Haskell's (>>=) :: [a] -> (a -> [b]) -> [b]."] bind_,
       primNoDef "concat"      "Concatenate a list of lists." concatSig [
         "concat(xss) returns the list obtained by appending all the lists in xss in order.",
         "Total. Corresponds to Haskell's concat :: [[a]] -> [a]."],
@@ -44,21 +50,21 @@ module_ = Module {
         \ equal to length(xs) the result is the empty list; if n is non-positive the result is xs\
         \ unchanged.",
         "Total. Corresponds to Haskell's drop :: Int -> [a] -> [a]."],
-      primNoDef "dropWhile"   "Drop elements from the beginning of a list while the predicate is true." dropWhileSig [
+      toPrimitive "Drop elements from the beginning of a list while the predicate is true." dropWhileSig [
         "dropWhile(p, xs) returns the suffix of xs starting at the first element for which p returns false.\
         \ If p is true for every element, the result is the empty list.",
-        "Total. Corresponds to Haskell's dropWhile :: (a -> Bool) -> [a] -> [a]."],
+        "Total. Corresponds to Haskell's dropWhile :: (a -> Bool) -> [a] -> [a]."] dropWhile_,
       primNoDef "elem"        "Test whether an element is in a list." elemSig [
         "elem(x, xs) returns true iff some element of xs is equal to x.",
         "Requires an 'equality' constraint on the element type.",
         "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."],
-      primNoDef "filter"      "Filter a list by a predicate." filterSig [
+      toPrimitive "Filter a list by a predicate." filterSig [
         "filter(p, xs) returns the list of elements x in xs for which p(x) is true, in original order.",
-        "Total. Corresponds to Haskell's filter :: (a -> Bool) -> [a] -> [a]."],
-      primNoDef "find"        "Find the first element matching a predicate." findSig [
+        "Total. Corresponds to Haskell's filter :: (a -> Bool) -> [a] -> [a]."] filter_,
+      toPrimitive "Find the first element matching a predicate." findSig [
         "find(p, xs) returns Just(x) where x is the first element of xs for which p(x) is true, or Nothing\
         \ if no such element exists.",
-        "Total. Corresponds to Haskell's find :: (a -> Bool) -> [a] -> Maybe a."],
+        "Total. Corresponds to Haskell's find :: (a -> Bool) -> [a] -> Maybe a."] find_,
       primNoDef "foldl"       "Left-fold a list with an accumulator." foldlSig [
         "foldl(f, acc0, xs) reduces xs left-associatively: foldl(f, acc0, [x1, x2, ..., xn]) =\
         \ f(f(f(acc0, x1), x2), ..., xn). For the empty list the result is acc0.",
@@ -114,10 +120,10 @@ module_ = Module {
       primNoDef "null"        "Test whether a list is empty." nullSig [
         "null(xs) returns true iff xs is the empty list.",
         "Total. Corresponds to Haskell's null :: [a] -> Bool."],
-      primNoDef "partition"   "Partition a list into elements that satisfy a predicate and those that do not." partitionSig [
+      toPrimitive "Partition a list into elements that satisfy a predicate and those that do not." partitionSig [
         "partition(p, xs) returns a pair (yes, no) where yes is the list of elements of xs for which p is\
         \ true and no is the list of elements for which p is false, each preserving original order.",
-        "Total. Corresponds to Haskell's partition :: (a -> Bool) -> [a] -> ([a], [a])."],
+        "Total. Corresponds to Haskell's partition :: (a -> Bool) -> [a] -> ([a], [a])."] partition_,
       primNoDef "pure"        "Wrap a value in a single-element list." pureSig [
         "pure(x) = [x]. The applicative pure for lists.",
         "Total. Corresponds to Haskell's pure :: a -> [a]."],
@@ -140,11 +146,11 @@ module_ = Module {
         \ elements with equal keys preserve their original relative order.",
         "Requires an 'ordering' constraint on the key type.",
         "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."],
-      primNoDef "span"        "Split a list at the first element where the predicate fails." spanSig [
+      toPrimitive "Split a list at the first element where the predicate fails." spanSig [
         "span(p, xs) returns a pair (ys, zs) where ys is the longest prefix of xs whose elements all\
         \ satisfy p, and zs is the remainder of xs starting at the first element that fails p (or zs is\
         \ empty if all elements satisfy p).",
-        "Total. Corresponds to Haskell's span :: (a -> Bool) -> [a] -> ([a], [a])."],
+        "Total. Corresponds to Haskell's span :: (a -> Bool) -> [a] -> ([a], [a])."] span_,
       primNoDef "take"        "Take the first n elements of a list." takeSig [
         "take(n, xs) returns the prefix of xs of length min(n, length(xs)); if n is non-positive the result\
         \ is the empty list.",
@@ -248,3 +254,76 @@ zipSig = sig $ TypeScheme [Name "x", Name "y"]
   (l tx Types.~> l ty Types.~> l (Types.pair tx ty)) Nothing
 zipWithSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
   ((tx Types.~> ty Types.~> tz) Types.~> l tx Types.~> l ty Types.~> l tz) Nothing
+
+-- Default implementations.
+-- These express each higher-order list primitive as a pure Hydra term over lists.foldr,
+-- so they require no InferenceContext/Graph (issue #446). `find`/`dropWhile`/`span` are eager
+-- (they traverse the whole list) rather than short-circuiting like the host-native impls; the
+-- result is identical, only the early-exit optimization is lost in the portable reference.
+
+-- bind xs f = foldr (\x acc -> concat2 (f x) acc) [] xs
+bind_ :: TypedTermDefinition ([a] -> (a -> [b]) -> [b])
+bind_ = define "bind" $
+  doc "Monadic bind (concatMap) for lists, defined in terms of foldr and concat2." $
+  "xs" ~> "f" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~> Lists.concat2 (var "f" @@ var "x") (var "acc"))
+      (list ([] :: [TypedTerm b]))
+      (var "xs")
+
+-- dropWhile p xs = second (span p xs)
+dropWhile_ :: TypedTermDefinition ((a -> Bool) -> [a] -> [a])
+dropWhile_ = define "dropWhile" $
+  doc "Drop the leading run satisfying a predicate, defined as the suffix component of span." $
+  "p" ~> "xs" ~> Pairs.second (Lists.span (var "p") (var "xs"))
+
+-- filter p xs = foldr (\x acc -> ifElse (p x) (cons x acc) acc) [] xs
+filter_ :: TypedTermDefinition ((a -> Bool) -> [a] -> [a])
+filter_ = define "filter" $
+  doc "Filter a list by a predicate, defined in terms of foldr." $
+  "p" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~> Logic.ifElse (var "p" @@ var "x")
+        (Lists.cons (var "x") (var "acc"))
+        (var "acc"))
+      (list ([] :: [TypedTerm a]))
+      (var "xs")
+
+-- find p xs = foldr (\x acc -> ifElse (p x) (just x) acc) nothing xs
+-- (First match wins because foldr visits leftmost elements last.)
+find_ :: TypedTermDefinition ((a -> Bool) -> [a] -> Maybe a)
+find_ = define "find" $
+  doc "Find the first matching element, defined in terms of foldr." $
+  "p" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~> Logic.ifElse (var "p" @@ var "x")
+        (just (var "x"))
+        (var "acc"))
+      (nothing :: TypedTerm (Maybe a))
+      (var "xs")
+
+-- partition p xs = foldr (\x (yes,no) -> ifElse (p x) (cons x yes, no) (yes, cons x no)) ([],[]) xs
+partition_ :: TypedTermDefinition ((a -> Bool) -> [a] -> ([a], [a]))
+partition_ = define "partition" $
+  doc "Partition a list by a predicate, defined in terms of foldr over a pair of accumulators." $
+  "p" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~> Logic.ifElse (var "p" @@ var "x")
+        (pair (Lists.cons (var "x") (Pairs.first $ var "acc")) (Pairs.second $ var "acc"))
+        (pair (Pairs.first $ var "acc") (Lists.cons (var "x") (Pairs.second $ var "acc"))))
+      (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm a])))
+      (var "xs")
+
+-- span p xs = foldr (\x (pre,post) ->
+--   ifElse (p x && null post) (cons x pre, post) ([], cons x post)) ([],[]) xs
+span_ :: TypedTermDefinition ((a -> Bool) -> [a] -> ([a], [a]))
+span_ = define "span" $
+  doc "Split a list at the first predicate failure, defined in terms of foldr over a pair." $
+  "p" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~> Logic.ifElse
+        (Logic.and (var "p" @@ var "x") (Lists.null (Pairs.second $ var "acc")))
+        (pair (Lists.cons (var "x") (Pairs.first $ var "acc")) (Pairs.second $ var "acc"))
+        (pair (list ([] :: [TypedTerm a])) (Lists.cons (var "x") (Pairs.second $ var "acc"))))
+      (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm a])))
+      (var "xs")
