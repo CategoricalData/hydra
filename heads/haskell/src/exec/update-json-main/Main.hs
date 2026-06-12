@@ -164,9 +164,26 @@ main = do
   let isNativeOwned m =
         let ns = Packaging.unModuleName (Kernel.moduleName m)
         in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+      -- The native packages (#344) are loaded into the universe together with
+      -- their ALREADY-DERIVED DSL wrapper modules (hydra.dsl.{java,python}.*),
+      -- via loadNativePackageModules reading both mainModules and dslModules
+      -- from JSON. Those wrappers are DERIVED modules: their phantom types
+      -- (atomTrue : TypedTerm Atom) are declared at construction, not inferred.
+      -- The main write pass runs per-package inference (doInfer=True), so if a
+      -- wrapper module reaches writeUniverse it gets RE-INFERRED — and a nullary
+      -- builder like atomTrue (body `inject Atom.true ()`, nothing forcing the
+      -- result to Atom) generalizes to ∀t. TypedTerm t, emitting a poly/thunked
+      -- wrapper the target coders mishandle. Inference must NEVER run on derived
+      -- modules. So exclude the loaded native DSL wrappers from the main pass in
+      -- BOTH branches; they were loaded only to seed the inference universe and
+      -- their canonical JSON is already on disk. (The non-native packages' DSL
+      -- wrappers are written by the derived pass below, not here.)
+      isNativeDslWrapper m =
+        let ns = Packaging.unModuleName (Kernel.moduleName m)
+        in L.isPrefixOf "hydra.dsl.java." ns || L.isPrefixOf "hydra.dsl.python." ns
       writeUniverse
-        | includeJavaPython = universe
-        | otherwise         = filter (not . isNativeOwned) universe
+        | includeJavaPython = filter (not . isNativeDslWrapper) universe
+        | otherwise         = filter (\m -> not (isNativeOwned m) && not (isNativeDslWrapper m)) universe
       excluded = length universe - length writeUniverse
 
   putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."
