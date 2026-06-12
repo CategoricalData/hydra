@@ -70,6 +70,28 @@ jobs:
               bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
             done
           done
+      # #469: pointed guard for the native-coder JSON->Haskell render gate.
+      # Forces a cache miss by deleting the per-package output digest,
+      # re-runs the assembler against committed JSON, and fails on any
+      # diff. Catches the recurrence pattern where Phase 5 short-circuits
+      # but the .hs is stale w.r.t. committed dist/json — the gap closed
+      # by the digest schema change in this PR. Independent from the
+      # broader dist-diff check below: if that one passes, this is a
+      # no-op redundancy; if not, this points at the specific package.
+      - name: Force-regen and diff dist/haskell/hydra-{java,python}
+        run: |
+          set -e
+          for pkg in hydra-java hydra-python; do
+            rm -f "dist/haskell/$pkg/build/main/digest.json"
+            heads/haskell/bin/assemble-distribution.sh "$pkg"
+            if ! git diff --quiet "dist/haskell/$pkg/"; then
+              echo "::error::dist/haskell/$pkg/ differs after force-regen from committed dist/json/$pkg/."
+              echo "::error::The committed .hs is stale w.r.t. the committed JSON for this native-coder package."
+              git diff --stat "dist/haskell/$pkg/"
+              git diff "dist/haskell/$pkg/" | head -100
+              exit 1
+            fi
+          done
       - name: Fail if committed dist/json or dist/haskell differs from regenerated
         run: |
           if ! git diff --quiet dist/json/ dist/haskell/; then
