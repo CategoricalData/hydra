@@ -118,6 +118,31 @@ Ordered by how blocking each is for an Apache-style release. Each is independent
    `KEYS` file added with the standard import/verify/append procedure. Still open: a release manager
    must **register an actual signing key** in it before the first signed release (none exists yet).
 
+#### Canonical source archive scope (decided 2026-06-11)
+
+`bin/prepare-release.sh` Step 11 builds the archive with `git archive HEAD`, i.e. it ships the **full
+tracked source tree** (equivalent to a `git clone` minus `.git`). No `.gitattributes` `export-ignore`
+rules are applied, so the archive is a faithful mirror of the repository at the release commit.
+
+This is a deliberate choice, and it rests on an important fact about Hydra's source model: **`dist/json`
+is canonical source, not generated output** — it is the language-neutral representation of the kernel
+(the kernel *as data*) from which every host is generated. The upstream Haskell/Java/Python DSLs are
+effectively the *generator* that produces `dist/json`; a consumer building from the archive builds
+*from* `dist/json`, never from an empty one. So `dist/json` must ship, and does.
+
+The only other tracked tree under `dist/` is `dist/haskell` (the per-language Haskell output, 421
+files); the remaining per-language trees (`dist/java`, `dist/python`, `dist/scala`, `dist/lisp`, …) are
+not tracked and never enter the archive. `dist/haskell` *is* regenerable from `dist/json`, so it could
+in principle be excluded via `export-ignore` to slim the archive — but doing so would make the archive
+build only if a clean checkout regenerates `dist/haskell` from `dist/json`, which is **not yet
+verified**. Rather than ship a possibly-unbuildable archive to save ~400 files, we keep the full tree
+for now. **Open:** if a leaner source/generated split is wanted before a real release, verify the
+from-`dist/json` rebuild and then add `dist/haskell/** export-ignore`.
+
+Note also that "a consumer needs a complex multi-language toolchain to build from source" is expected
+and acceptable for a source release — convenience without the toolchain is exactly what the published
+binaries (Hackage/Maven/PyPI) provide. The source archive optimizes for auditability, not convenience.
+
 ### P1 — required for a credible production/Apache posture
 
 4. **Extend signing/checksums to the Hackage and PyPI paths**, or (cleaner) sign the canonical
