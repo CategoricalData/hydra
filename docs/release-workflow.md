@@ -317,6 +317,14 @@ Use version-specific package links when the registry supports them, especially f
 Do not emphasize temporary namespaces such as `net.fortytwo.hydra` in link text; use artifact names like
 `hydra-kernel`, `hydra-java`, `hydra-pg`, and `hydra-rdf`.
 
+## Publishing to registries
+
+The per-registry artifacts below — Hackage sdists, Maven Central jars, PyPI wheels, conda packages —
+are **convenience binaries**: downstream of, and secondary to, the canonical signed source archive
+(see [Release preparation](#release-preparation) Step 11 and [Verifying a release](#verifying-a-release)).
+The source archive is the release of record; the registry artifacts are how consumers obtain usable
+packages without running the codegen toolchain themselves.
+
 ## Haskell releases
 
 We have Haskell code in `packages/hydra-kernel/` (kernel DSL sources),
