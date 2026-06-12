@@ -6,7 +6,8 @@
 module Hydra.Sources.TypeScript.Manifest (
   mainModules,
   testModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -25,12 +26,21 @@ mainModules = [
   TypeScriptSerde.module_,
   TypeScriptSyntax.module_]
 
--- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules. Empty today — no source file imports
--- `Hydra.Dsl.TypeScript.*` wrappers. Add `TypeScriptSyntax.module_` if/when
--- a real consumer appears.
-dslTypeModules :: [Module]
-dslTypeModules = []
+-- Source modules from which dsl/encode/decode are derived (#474): every
+-- type-defining module in the package, no per-module curation.
+mainDslModules :: [Module]
+mainDslModules = filter moduleDefinesType mainModules
+
+-- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+mainEncodingModules :: [Module]
+mainEncodingModules = []
+
+-- | True if a module defines at least one type.
+moduleDefinesType :: Module -> Bool
+moduleDefinesType m = any isTypeDef (moduleDefinitions m)
+  where
+    isTypeDef (DefinitionType _) = True
+    isTypeDef _                  = False
 
 testModules :: [Module]
 testModules = []

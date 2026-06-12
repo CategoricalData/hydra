@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.lisp.syntax"],
+  "mainDslModules": ["hydra.lisp.syntax"],
+  "mainEncodingModules": [],
   "mainModules": ["hydra.lisp.coder", "hydra.lisp.language", "hydra.lisp.serde", "hydra.lisp.syntax"],
   "manifestFormatVersion": 1,
   "package": "hydra-lisp",

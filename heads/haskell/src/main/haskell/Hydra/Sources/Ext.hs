@@ -133,74 +133,90 @@ hydraWasmModules :: [Module]
 hydraWasmModules = WasmManifest.mainModules
 
 -- ----------------------------------------------------------------------
--- Per-package DSL-input lists
+-- Per-package derived-module source lists (#474)
 -- ----------------------------------------------------------------------
--- These pull from each package's Manifest.dslTypeModules — the curated
--- subset of mainModules whose type definitions should produce derived
--- DSL wrapper modules (Hydra/Dsl/<Lang>/<Name>.hs). Extend each list in
--- its package's Manifest.hs when a new type-defining module needs DSL
--- wrappers; the driver picks the change up via allDslTypeModules below.
+-- Two lists per package (decoupled — #474/#475):
+--   * mainDslModules      — broad: every type module gets a hydra.dsl.<x> wrapper.
+--   * mainEncodingModules — narrower: source modules whose synthesized
+--                           hydra.encode.<x>/hydra.decode.<x> compile across all
+--                           eta-expanding targets (Java/Python). #475 will let
+--                           this re-broaden toward mainDslModules.
+-- hydra-java / hydra-python are native-owned, so both are empty here.
 
-hydraBenchDslTypeModules :: [Module]
-hydraBenchDslTypeModules = BenchManifest.dslTypeModules
+allDslModules :: [Module]
+allDslModules =
+  kernelDslSourceModules
+  ++ haskellDslSourceModules
+  ++ BenchManifest.mainDslModules
+  ++ CoqManifest.mainDslModules
+  ++ ExtManifest.mainDslModules
+  ++ GoManifest.mainDslModules
+  ++ TypeScriptManifest.mainDslModules
+  ++ LispManifest.mainDslModules
+  ++ PgManifest.mainDslModules
+  ++ RdfManifest.mainDslModules
+  ++ ScalaManifest.mainDslModules
+  ++ WasmManifest.mainDslModules
 
-hydraCoqDslTypeModules :: [Module]
-hydraCoqDslTypeModules = CoqManifest.dslTypeModules
+allEncodingModules :: [Module]
+allEncodingModules =
+  kernelEncodingSourceModules
+  ++ haskellEncodingSourceModules
+  ++ BenchManifest.mainEncodingModules
+  ++ CoqManifest.mainEncodingModules
+  ++ ExtManifest.mainEncodingModules
+  ++ GoManifest.mainEncodingModules
+  ++ TypeScriptManifest.mainEncodingModules
+  ++ LispManifest.mainEncodingModules
+  ++ PgManifest.mainEncodingModules
+  ++ RdfManifest.mainEncodingModules
+  ++ ScalaManifest.mainEncodingModules
+  ++ WasmManifest.mainEncodingModules
 
-hydraExtPackageDslTypeModules :: [Module]
-hydraExtPackageDslTypeModules = ExtManifest.dslTypeModules
+-- ----------------------------------------------------------------------
+-- Package routing input (#474)
+-- ----------------------------------------------------------------------
 
-hydraGoDslTypeModules :: [Module]
-hydraGoDslTypeModules = GoManifest.dslTypeModules
-
--- | Empty for the same reason as hydraJavaModules: the hydra.dsl.java.* wrappers
--- are now synthesized by the native Java driver, not the Haskell DSL.
-hydraJavaDslTypeModules :: [Module]
-hydraJavaDslTypeModules = []
-
-hydraTypeScriptDslTypeModules :: [Module]
-hydraTypeScriptDslTypeModules = TypeScriptManifest.dslTypeModules
-
-hydraLispDslTypeModules :: [Module]
-hydraLispDslTypeModules = LispManifest.dslTypeModules
-
-hydraPgDslTypeModules :: [Module]
-hydraPgDslTypeModules = PgManifest.dslTypeModules
-
--- | Empty for the same reason as hydraPythonModules: the hydra.dsl.python.*
--- wrappers are now synthesized by the native Python driver, not the Haskell DSL.
-hydraPythonDslTypeModules :: [Module]
-hydraPythonDslTypeModules = []
-
-hydraRdfDslTypeModules :: [Module]
-hydraRdfDslTypeModules = RdfManifest.dslTypeModules
-
-hydraScalaDslTypeModules :: [Module]
-hydraScalaDslTypeModules = ScalaManifest.dslTypeModules
-
-hydraWasmDslTypeModules :: [Module]
-hydraWasmDslTypeModules = WasmManifest.dslTypeModules
-
--- | Concatenation of every package's dslTypeModules. This is what the
--- DSL wrapper generator consumes (see update-json-main/Main.hs). Replace
--- this with a different aggregation if a package should be excluded;
--- extend each package's Manifest.dslTypeModules to add a module.
-allDslTypeModules :: [Module]
-allDslTypeModules =
-  kernelDslInputModules
-  ++ haskellDslInputModules
-  ++ hydraBenchDslTypeModules
-  ++ hydraCoqDslTypeModules
-  ++ hydraExtPackageDslTypeModules
-  ++ hydraGoDslTypeModules
-  ++ hydraJavaDslTypeModules
-  ++ hydraTypeScriptDslTypeModules
-  ++ hydraLispDslTypeModules
-  ++ hydraPgDslTypeModules
-  ++ hydraPythonDslTypeModules
-  ++ hydraRdfDslTypeModules
-  ++ hydraScalaDslTypeModules
-  ++ hydraWasmDslTypeModules
+-- | One @(package, declaredModuleNames)@ row per package, built from the
+-- compiled per-package manifest module lists. This is the source of truth
+-- for 'Hydra.PackageRouting.buildRoutingMap' in the JSON-writing drivers
+-- (update-json-main / update-json-manifest / transform-haskell-dsl-to-json /
+-- diag-module): package ownership comes from each package's
+-- @Manifest.mainModules@, never from a hardcoded name prefix.
+--
+-- hydra-java / hydra-python have empty compiled lists (their modules are
+-- produced by native drivers and loaded from dist/json at runtime); callers
+-- that need those routed should augment this list with the loaded native
+-- modules tagged by package. The kernel baseline (kernel/json/other +
+-- dslSourceModules + testModules) routes to hydra-kernel; haskellModules to
+-- hydra-haskell.
+--
+-- hydra-pg additionally owns the override modules that live in the universe
+-- but not in any package's Manifest.mainModules: the GenPGTransform demo
+-- source and the pg decode/encode meta-sources. Without these explicit rows
+-- they would fall through to the hydra-kernel fallback and drag pg references
+-- into kernel inference (the old hardcoded table routed them via
+-- hydra.demos.genpg./hydra.{encode,decode}.pg. prefixes).
+extRoutingInput :: [(String, [ModuleName])]
+extRoutingInput =
+  [ ("hydra-kernel",     map moduleName (kernelModules ++ otherModules ++ dslSourceModules ++ testModules))
+  , ("hydra-haskell",    map moduleName haskellModules)
+  , ("hydra-bench",      map moduleName hydraBenchModules)
+  , ("hydra-coq",        map moduleName hydraCoqModules)
+  , ("hydra-ext",        map moduleName hydraExtPackageModules)
+  , ("hydra-go",         map moduleName hydraGoModules)
+  , ("hydra-java",       map moduleName hydraJavaModules)
+  , ("hydra-typescript", map moduleName hydraTypeScriptModules)
+  , ("hydra-lisp",       map moduleName hydraLispModules)
+  , ("hydra-pg",         map moduleName (hydraPgModules
+                           ++ [GenPGTransform.module_]
+                           ++ hydraExtDecodingModules
+                           ++ hydraExtEncodingModules))
+  , ("hydra-python",     map moduleName hydraPythonModules)
+  , ("hydra-rdf",        map moduleName hydraRdfModules)
+  , ("hydra-scala",      map moduleName hydraScalaModules)
+  , ("hydra-wasm",       map moduleName hydraWasmModules)
+  ]
 
 -- ----------------------------------------------------------------------
 -- Overrides for second-order and demo-only modules
