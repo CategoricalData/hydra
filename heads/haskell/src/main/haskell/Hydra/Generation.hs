@@ -359,20 +359,10 @@ inferAndWriteByPackageSeededFor
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
             targetNs     = S.fromList (map moduleName pkgTargets)
-            -- Infer this package's FULL universe (everything it owns), not
-            -- just its write-targets, so that EVERY binding it owns is typed
-            -- and seeds the typed-so-far accumulator for downstream packages.
-            -- This matters for by-name cross-package refs to modules that are
-            -- owned-but-not-written: e.g. hydra-scala's serde references
-            -- hydra.java.serde.escapeJavaString, but hydra-java's write-targets
-            -- are only its DSL wrappers (its hydra.java.* modules are
-            -- native-owned and excluded from the write set, #344). Inferring
-            -- only the write-targets left escapeJavaString untyped, so scala
-            -- failed to resolve it. Writing is still filtered to the target
-            -- subset below ('toWrite'); for non-native packages pkgUniverse
-            -- equals pkgTargets, so this adds inference work only for the
-            -- native-owning packages (hydra-java / hydra-python).
-            inferTargets = pkgUniverse
+            -- Infer only this package's write targets — re-inferring its whole
+            -- universe (e.g. the full Java coder) blows the CI heap cap. The
+            -- universe still participates as type-resolution context below.
+            inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
         putStrLn $ "  [" ++ pkg ++ "] "
           ++ show (length pkgTargets) ++ " write / "
           ++ show (length inferTargets) ++ " infer / "
@@ -407,15 +397,30 @@ inferAndWriteByPackageSeededFor
         -- Force the writes to disk before folding the new schemes into
         -- the accumulators; this also forces 'inferred' to NF, breaking
         -- any lazy thunk chain across iterations.
-        let !newBindingSchemes = M.fromList
+        --
+        -- Schemes are harvested from the package's FULL universe, not just the
+        -- (re-)inferred targets. Universe modules excluded from inference still
+        -- carry the TypeSchemes the native generators already emitted in their
+        -- JSON signatures (#344: hydra.{java,python}.* — produced by the native
+        -- Java/Python generators in Phase 0). Harvesting those existing
+        -- signatures is free (no inference), and it seeds bindings like
+        -- hydra.java.serde.escapeJavaString so a downstream by-name reference
+        -- (hydra-scala -> that binding) resolves. (#470)
+        --
+        -- A freshly (re-)inferred target's scheme must override the native
+        -- signature for the same name, so 'inferred' is listed AFTER
+        -- 'pkgUniverse': Data.Map.fromList keeps the LAST value for a duplicate
+        -- key, so the inferred scheme wins.
+        let schemeSources = pkgUniverse ++ inferred
+            !newBindingSchemes = M.fromList
               [ (termDefinitionName td, ts)
-              | m <- inferred
+              | m <- schemeSources
               , DefinitionTerm td <- moduleDefinitions m
               , Just ts <- [termSignatureToTypeScheme <$> termDefinitionSignature td]
               ]
             !newSchemaSchemes = M.fromList
               [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionBody td))
-              | m <- inferred
+              | m <- schemeSources
               , DefinitionType td <- moduleDefinitions m
               ]
             !accBindingSchemes' = M.union newBindingSchemes accBindingSchemes

@@ -7,6 +7,20 @@
 (in-package :cl-user)
 
 ;; ============================================================================
+;; Primitive InferenceContext placeholder
+;; ============================================================================
+
+;; #446 dropped the InferenceContext (cx) parameter from the Primitive
+;; implementation carrier (now Graph -> [Term] -> Either Error Term). The
+;; TermCoder encode/decode coders still thread a cx value (which Common Lisp
+;; never inspects), so we supply a fixed empty-InferenceContext placeholder
+;; here, mirroring the Haskell host's `primCx = emptyInferenceContext` and
+;; Python's `PRIM_CX`. Positional fields are (:fresh_type_variable_count :trace),
+;; matching make-hydra_typing_inference_context in struct-compat.lisp.
+(defparameter *prim-cx* (make-hydra_typing_inference_context 0 nil)
+  "Empty InferenceContext passed to TermCoders from primitive implementations (#446).")
+
+;; ============================================================================
 ;; Type scheme helpers
 ;; ============================================================================
 
@@ -384,55 +398,51 @@
 (defun prim0 (pname value-fn variables output &optional constraints)
   "Create a 0-argument primitive function."
   (make-primitive (build-prim-def pname variables nil output constraints)
-    (lambda (cx)
-      (lambda (g)
-        (declare (ignore g))
-        (lambda (args)
-          (declare (ignore args))
-          (let ((result (funcall (funcall (term_coder-decode output) cx) (funcall value-fn))))
-            (wrap-other-error cx result)))))))
+    (lambda (g)
+      (declare (ignore g))
+      (lambda (args)
+        (declare (ignore args))
+        (let ((result (funcall (funcall (term_coder-decode output) *prim-cx*) (funcall value-fn))))
+          (wrap-other-error *prim-cx* result))))))
 
 (defun prim1 (pname compute variables input1 output &optional constraints)
   "Create a 1-argument primitive function."
   (make-primitive (build-prim-def pname variables (list input1) output constraints)
-    (lambda (cx)
-      (lambda (g)
-        (lambda (args)
-          (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 1) args)))
-            (if (eq (first check) :left) check
-                (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) cx) g) (first args))))
-                  (if (eq (first r1) :left) (wrap-other-error cx r1)
-                      (let ((result (funcall (funcall (term_coder-decode output) cx) (funcall compute (second r1)))))
-                        (wrap-other-error cx result)))))))))))
+    (lambda (g)
+      (lambda (args)
+        (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 1) args)))
+          (if (eq (first check) :left) check
+              (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) *prim-cx*) g) (first args))))
+                (if (eq (first r1) :left) (wrap-other-error *prim-cx* r1)
+                    (let ((result (funcall (funcall (term_coder-decode output) *prim-cx*) (funcall compute (second r1)))))
+                      (wrap-other-error *prim-cx* result))))))))))
 
 (defun prim2 (pname compute variables input1 input2 output &optional constraints)
   "Create a 2-argument primitive function."
   (make-primitive (build-prim-def pname variables (list input1 input2) output constraints)
-    (lambda (cx)
-      (lambda (g)
-        (lambda (args)
-          (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 2) args)))
-            (if (eq (first check) :left) check
-                (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) cx) g) (first args))))
-                  (if (eq (first r1) :left) (wrap-other-error cx r1)
-                      (let ((r2 (funcall (funcall (funcall (term_coder-encode input2) cx) g) (second args))))
-                        (if (eq (first r2) :left) (wrap-other-error cx r2)
-                            (let ((result (funcall (funcall (term_coder-decode output) cx) (funcall (funcall compute (second r1)) (second r2)))))
-                              (wrap-other-error cx result)))))))))))))
+    (lambda (g)
+      (lambda (args)
+        (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 2) args)))
+          (if (eq (first check) :left) check
+              (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) *prim-cx*) g) (first args))))
+                (if (eq (first r1) :left) (wrap-other-error *prim-cx* r1)
+                    (let ((r2 (funcall (funcall (funcall (term_coder-encode input2) *prim-cx*) g) (second args))))
+                      (if (eq (first r2) :left) (wrap-other-error *prim-cx* r2)
+                          (let ((result (funcall (funcall (term_coder-decode output) *prim-cx*) (funcall (funcall compute (second r1)) (second r2)))))
+                            (wrap-other-error *prim-cx* result))))))))))))
 
 (defun prim3 (pname compute variables input1 input2 input3 output &optional constraints)
   "Create a 3-argument primitive function."
   (make-primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
-    (lambda (cx)
-      (lambda (g)
-        (lambda (args)
-          (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 3) args)))
-            (if (eq (first check) :left) check
-                (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) cx) g) (first args))))
-                  (if (eq (first r1) :left) (wrap-other-error cx r1)
-                      (let ((r2 (funcall (funcall (funcall (term_coder-encode input2) cx) g) (second args))))
-                        (if (eq (first r2) :left) (wrap-other-error cx r2)
-                            (let ((r3 (funcall (funcall (funcall (term_coder-encode input3) cx) g) (third args))))
-                              (if (eq (first r3) :left) (wrap-other-error cx r3)
-                                  (let ((result (funcall (funcall (term_coder-decode output) cx) (funcall (funcall (funcall compute (second r1)) (second r2)) (second r3)))))
-                                    (wrap-other-error cx result)))))))))))))))
+    (lambda (g)
+      (lambda (args)
+        (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 3) args)))
+          (if (eq (first check) :left) check
+              (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) *prim-cx*) g) (first args))))
+                (if (eq (first r1) :left) (wrap-other-error *prim-cx* r1)
+                    (let ((r2 (funcall (funcall (funcall (term_coder-encode input2) *prim-cx*) g) (second args))))
+                      (if (eq (first r2) :left) (wrap-other-error *prim-cx* r2)
+                          (let ((r3 (funcall (funcall (funcall (term_coder-encode input3) *prim-cx*) g) (third args))))
+                            (if (eq (first r3) :left) (wrap-other-error *prim-cx* r3)
+                                (let ((result (funcall (funcall (term_coder-decode output) *prim-cx*) (funcall (funcall (funcall compute (second r1)) (second r2)) (second r3)))))
+                                  (wrap-other-error *prim-cx* result))))))))))))))

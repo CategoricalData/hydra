@@ -3197,6 +3197,20 @@ public class Coder {
                                                                                                 var("d"),
                                                                                                 var("dfields")))))))),
                                                                     lambda("tn",
+                                                                        Eithers.bind(
+                                                                            // Fluent builder (static builder() + nested Builder class), top-level records only.
+                                                                            Logic.ifElse(
+                                                                                var("isInner"),
+                                                                                right(list()),
+                                                                                apply(
+                                                                                    ref(Coder.recordBuilderClass),
+                                                                                    var("aliases"),
+                                                                                    var("tparams"),
+                                                                                    var("elName"),
+                                                                                    var("fields"),
+                                                                                    var("cx"),
+                                                                                    var("g"))),
+                                                                        lambda("builderDecls",
                                                                         let(
                                                                             field(
                                                                                 "comparableMethods",
@@ -3253,7 +3267,8 @@ public class Coder {
                                                                                         list(
                                                                                             var("consWithComment")),
                                                                                         var("noCommentMethods"),
-                                                                                        var("withMethods")))),
+                                                                                        var("withMethods"),
+                                                                                        var("builderDecls")))),
                                                                             field("ifaces",
                                                                                 Logic.ifElse(
                                                                                     var("isInner"),
@@ -3275,7 +3290,7 @@ public class Coder {
                                                                                     ref(Coder.classModsPublic),
                                                                                     nothing(),
                                                                                     var("ifaces"),
-                                                                                    var("bodyDecls"))))))))))))))))))));
+                                                                                    var("bodyDecls"))))))))))))))))))))));
 
     public static final Def declarationForUnionType = def(
         "declarationForUnionType",
@@ -11860,6 +11875,287 @@ public class Coder {
                                                     var("remainingType")))),
                                         Lists.uncons(var("args"))))))))));
 
+    // Escapes a builder setter name that would collide with the generated builder() / build() methods.
+    // The builder setter name for a field: the sanitized field name (reserved words like
+    // `implements`/`static` get a trailing underscore via sanitizeJavaName, matching the private field
+    // and parameter), plus an extra escape for `build`/`builder`, which would collide with the
+    // generated build()/builder() methods but are not Java reserved words.
+    public static final Def builderSetterName = def(
+        "builderSetterName",
+        () -> lambda("fname",
+                let("base",
+                    apply(
+                        ref(Utils.sanitizeJavaName),
+                        apply(unwrap(Name.TYPE_), var("fname"))),
+                    Logic.ifElse(
+                        Logic.or_(
+                            Equality.equal(var("base"), string("build")),
+                            Equality.equal(var("base"), string("builder"))),
+                        Strings.cat2(var("base"), string("_")),
+                        var("base")))));
+
+    // Emits the per-record fluent builder: a static generic builder() factory plus a nested
+    // 'public static final class Builder' with one mutable field and one fluent setter per record
+    // field and a build() method that calls the record's all-args constructor. Generic type
+    // parameters are threaded through so that Builder<V>, its setters, and build() are type-safe.
+    public static final Def recordBuilderClass = def(
+        "recordBuilderClass",
+        () -> lambda(
+                java.util.Arrays.asList("aliases", "tparams", "elName", "fields", "cx", "g"),
+                let(java.util.Arrays.asList(
+                    // ReferenceTypes for the record's type parameters, e.g. [V] for Vertex<V>.
+                    field("typeArgRefs",
+                        Lists.map(
+                            ref(Utils.typeParameterToReferenceType),
+                            var("tparams"))),
+                    // The same type parameters as TypeArguments, for constructor calls (new Builder<V>(), new R<V>(...)).
+                    field("typeArgs",
+                        Lists.map(
+                            lambda("rt",
+                                inject(TypeArgument.TYPE_,
+                                    TypeArgument.REFERENCE,
+                                    var("rt"))),
+                            var("typeArgRefs"))),
+                    // Optional type-arguments-or-diamond for constructor calls: nothing() for a
+                    // non-generic record (new R(...)), or just(<V...>) to thread the type params.
+                    field("mTypeArgs",
+                        Logic.ifElse(
+                            Lists.null_(var("tparams")),
+                            nothing(),
+                            just(
+                                inject(TypeArgumentsOrDiamond.TYPE_,
+                                    TypeArgumentsOrDiamond.ARGUMENTS,
+                                    var("typeArgs"))))),
+                    field("recordLocalName",
+                        apply(
+                            ref(Utils.sanitizeJavaName),
+                            apply(var("hydra.names.localNameOf"), var("elName")))),
+                    // Type of Builder<...>, as a Java syntax Type.
+                    field("builderType",
+                        apply(
+                            ref(Utils.javaRefType),
+                            var("typeArgRefs"),
+                            nothing(),
+                            string("Builder"))),
+                    field("builderResult",
+                        apply(
+                            ref(Utils.javaTypeToJavaResult),
+                            var("builderType"))),
+                    // Type of the enclosing record R<...>, as a Java syntax Type.
+                    field("recordType",
+                        apply(
+                            ref(Utils.javaRefType),
+                            var("typeArgRefs"),
+                            nothing(),
+                            var("recordLocalName"))),
+                    field("recordResult",
+                        apply(
+                            ref(Utils.javaTypeToJavaResult),
+                            var("recordType"))),
+                    // 'return this;' — every fluent setter ends with this.
+                    field("returnThisStmt",
+                        inject(BlockStatement.TYPE_,
+                            BlockStatement.STATEMENT,
+                            apply(
+                                ref(Utils.javaReturnStatement),
+                                just(ref(Utils.javaThis)))))),
+                    // The private mutable member fields of the builder (one per record field).
+                    Eithers.bind(
+                        Eithers.mapList(
+                            lambda("f",
+                                let(
+                                    field("mods",
+                                    list(
+                                        inject(FieldModifier.TYPE_,
+                                            FieldModifier.PRIVATE,
+                                            unit()))),
+                                    field("ftype",
+                                        proj(FieldType.TYPE_, FieldType.TYPE, "f")),
+                                    field("fname",
+                                        proj(FieldType.TYPE_, FieldType.NAME, "f")),
+                                    Eithers.bind(
+                                        apply(
+                                            ref(Coder.encodeType),
+                                            var("aliases"),
+                                            var("hydra.lib.sets.empty"),
+                                            var("ftype"),
+                                            var("cx"),
+                                            var("g")),
+                                        lambda("jt",
+                                            right(
+                                                apply(
+                                                    ref(Coder.noComment),
+                                                    apply(
+                                                        ref(Utils.javaMemberField),
+                                                        var("mods"),
+                                                        var("jt"),
+                                                        apply(
+                                                            ref(Utils.fieldNameToJavaVariableDeclarator),
+                                                            var("fname"))))))))),
+                            var("fields")),
+                        lambda("builderFields",
+                            // The fluent setters (one per record field): 'this.f = f; return this;' returning Builder<...>.
+                            Eithers.bind(
+                                Eithers.mapList(
+                                    lambda("f",
+                                        let(
+                                            field("mods",
+                                            list(
+                                                inject(MethodModifier.TYPE_,
+                                                    MethodModifier.PUBLIC,
+                                                    unit()))),
+                                            field("fname",
+                                                proj(FieldType.TYPE_, FieldType.NAME, "f")),
+                                            field("assignStmt",
+                                                inject(BlockStatement.TYPE_,
+                                                    BlockStatement.STATEMENT,
+                                                    apply(
+                                                        ref(Utils.toAssignStmt),
+                                                        var("fname")))),
+                                            Eithers.bind(
+                                                apply(
+                                                    ref(Coder.fieldTypeToFormalParam),
+                                                    var("aliases"),
+                                                    var("f"),
+                                                    var("cx"),
+                                                    var("g")),
+                                                lambda("param",
+                                                    right(
+                                                        apply(
+                                                            ref(Coder.noComment),
+                                                            apply(
+                                                                ref(Utils.methodDeclaration),
+                                                                var("mods"),
+                                                                list(),
+                                                                list(),
+                                                                apply(
+                                                                    ref(Coder.builderSetterName),
+                                                                    var("fname")),
+                                                                list(var("param")),
+                                                                var("builderResult"),
+                                                                just(
+                                                                    list(
+                                                                        var("assignStmt"),
+                                                                        var("returnThisStmt")))))))))),
+                                    var("fields")),
+                                lambda("setterMethods",
+                                    let(java.util.Arrays.asList(
+                                        // build(): 'return new R<...>(f1, ..., fn);'
+                                        field("buildMods",
+                                            list(
+                                                inject(MethodModifier.TYPE_,
+                                                    MethodModifier.PUBLIC,
+                                                    unit()))),
+                                        field("buildArgs",
+                                            Lists.map(
+                                                lambda("f",
+                                                    apply(
+                                                        ref(Utils.fieldNameToJavaExpression),
+                                                        proj(FieldType.TYPE_, FieldType.NAME, "f"))),
+                                                var("fields"))),
+                                        field("buildReturnStmt",
+                                            inject(BlockStatement.TYPE_,
+                                                BlockStatement.STATEMENT,
+                                                apply(
+                                                    ref(Utils.javaReturnStatement),
+                                                    just(
+                                                        apply(
+                                                            ref(Utils.javaConstructorCall),
+                                                            apply(
+                                                                ref(Utils.javaConstructorName),
+                                                                wrap(Identifier.TYPE_, var("recordLocalName")),
+                                                                var("mTypeArgs")),
+                                                            var("buildArgs"),
+                                                            nothing()))))),
+                                        field("buildMethod",
+                                            apply(
+                                                ref(Coder.withCommentString),
+                                                Strings.cat2(
+                                                    string("Builds an immutable {@link "),
+                                                    Strings.cat2(
+                                                        var("recordLocalName"),
+                                                        string("}."))),
+                                                apply(
+                                                    ref(Utils.methodDeclaration),
+                                                    var("buildMods"),
+                                                    list(),
+                                                    list(),
+                                                    string("build"),
+                                                    list(),
+                                                    var("recordResult"),
+                                                    just(list(var("buildReturnStmt")))))),
+                                        // The nested 'public static final class Builder<...>'.
+                                        field("builderClassDecl",
+                                            apply(
+                                                ref(Utils.javaClassDeclaration),
+                                                var("aliases"),
+                                                var("tparams"),
+                                                wrap(Name.TYPE_, string("Builder")),
+                                                list(
+                                                    inject(ClassModifier.TYPE_, ClassModifier.PUBLIC, unit()),
+                                                    inject(ClassModifier.TYPE_, ClassModifier.STATIC, unit()),
+                                                    inject(ClassModifier.TYPE_, ClassModifier.FINAL, unit())),
+                                                nothing(),
+                                                list(),
+                                                Lists.concat(
+                                                    list(
+                                                        var("builderFields"),
+                                                        var("setterMethods"),
+                                                        list(var("buildMethod")))))),
+                                        field("builderClassMember",
+                                            apply(
+                                                ref(Coder.withCommentString),
+                                                Strings.cat2(
+                                                    string("A fluent builder for {@link "),
+                                                    Strings.cat2(
+                                                        var("recordLocalName"),
+                                                        string("}."))),
+                                                inject(ClassBodyDeclaration.TYPE_,
+                                                    ClassBodyDeclaration.CLASS_MEMBER,
+                                                    inject(ClassMemberDeclaration.TYPE_,
+                                                        ClassMemberDeclaration.CLASS,
+                                                        var("builderClassDecl"))))),
+                                        // The static generic factory: 'public static <...> Builder<...> builder() { return new Builder<...>(); }'.
+                                        field("factoryMods",
+                                            list(
+                                                inject(MethodModifier.TYPE_, MethodModifier.PUBLIC, unit()),
+                                                inject(MethodModifier.TYPE_, MethodModifier.STATIC, unit()))),
+                                        field("factoryReturnStmt",
+                                            inject(BlockStatement.TYPE_,
+                                                BlockStatement.STATEMENT,
+                                                apply(
+                                                    ref(Utils.javaReturnStatement),
+                                                    just(
+                                                        apply(
+                                                            ref(Utils.javaConstructorCall),
+                                                            apply(
+                                                                ref(Utils.javaConstructorName),
+                                                                wrap(Identifier.TYPE_, string("Builder")),
+                                                                var("mTypeArgs")),
+                                                            list(),
+                                                            nothing()))))),
+                                        field("factoryMethod",
+                                            apply(
+                                                ref(Coder.withCommentString),
+                                                Strings.cat2(
+                                                    string("Creates a new fluent builder for {@link "),
+                                                    Strings.cat2(
+                                                        var("recordLocalName"),
+                                                        string("}."))),
+                                                apply(
+                                                    ref(Utils.methodDeclaration),
+                                                    var("factoryMods"),
+                                                    var("tparams"),
+                                                    list(),
+                                                    string("builder"),
+                                                    list(),
+                                                    var("builderResult"),
+                                                    just(list(var("factoryReturnStmt"))))))),
+                                        right(
+                                            list(
+                                                var("factoryMethod"),
+                                                var("builderClassMember")))))))))));
+
     public static final Def recordCompareToMethod = def(
         "recordCompareToMethod",
         () -> lambda(
@@ -14119,6 +14415,7 @@ public class Coder {
             buildSubstFromAnnotations,
             buildSubstFromAnnotations_go,
             buildTypeSubst,
+            builderSetterName,
             buildTypeSubst_go,
             buildTypeVarSubst,
             buildTypeVarSubst_go,
@@ -14261,6 +14558,7 @@ public class Coder {
             propagateType_rebuildLet,
             propagateTypesInAppChain,
             rebuildApps,
+            recordBuilderClass,
             recordCompareToMethod,
             recordConstructor,
             recordEqualsMethod,

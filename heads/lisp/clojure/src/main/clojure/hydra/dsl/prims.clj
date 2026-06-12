@@ -12,6 +12,13 @@
            [hydra.packaging hydra_packaging_primitive_definition]
            [hydra.errors hydra_errors_other_error]))
 
+;; Empty InferenceContext placeholder. After #446 the primitive implementation
+;; carrier no longer receives an InferenceContext, but the coder encode/decode
+;; functions still take one as their first argument. Mirror the Haskell host's
+;; `primCx = emptyInferenceContext` and the Python host's
+;; `PRIM_CX = InferenceContext(fresh_type_variable_count=0, trace=())`.
+(def ^:private prim-cx (->hydra_typing_inference_context 0 (list)))
+
 ;; Type scheme helpers -- the reducer uses primitive arity (from TypeScheme)
 ;; to decide how many args to collect before calling the implementation.
 
@@ -99,6 +106,27 @@
   (let [ts (build-type-scheme variables inputs output constraints)
         sig (hydra_scoping_type_scheme_to_term_signature ts)]
     (->hydra_packaging_primitive_definition pname (list :none) sig true true (list :none))))
+
+(defn lazy-args
+  "Mirror of Hydra.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
+   positions of `prim`'s signature as lazy. Used at registration sites to
+   record which arguments coders must thunk in hosts that distinguish strict
+   from lazy evaluation (#391). Without this, Lisp-coder emission for
+   maybes_maybe / eithers_fromLeft / etc. inlines the default expression
+   eagerly, which infinite-recurses for tail-recursive defaults (e.g. the
+   primitive_derivative lookup in differentiation.clj)."
+  [idxs prim]
+  (let [idx-set (set idxs)
+        def_ (:definition prim)
+        sig (:signature def_)
+        params (:parameters sig)
+        new-params (vec (map-indexed
+                          (fn [i p]
+                            (if (idx-set i) (assoc p :is_lazy true) p))
+                          params))
+        new-sig (assoc sig :parameters new-params)
+        new-def (assoc def_ :signature new-sig)]
+    (assoc prim :definition new-def)))
 
 (defn lazy-args
   "Mirror of Hydra.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
@@ -416,9 +444,9 @@
   ([pname value-fn _variables output constraints]
    (->hydra_graph_primitive
     (build-prim-def pname _variables [] output constraints)
-    (fn [cx] (fn [g] (fn [args]
-      (let [result ((.decode output) cx (value-fn))]
-        (wrap-other result))))))))
+    (fn [g] (fn [args]
+      (let [result ((.decode output) prim-cx (value-fn))]
+        (wrap-other result)))))))
 
 (defn prim1
   "Create a 1-argument primitive function."
@@ -427,15 +455,15 @@
   ([pname compute _variables input1 output constraints]
    (->hydra_graph_primitive
     (build-prim-def pname _variables [input1] output constraints)
-    (fn [cx] (fn [g] (fn [args]
+    (fn [g] (fn [args]
       (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 1) args)]
         (if (= (first check) :left)
           check
-          (let [r1 ((.encode input1) cx g (first args))]
+          (let [r1 ((.encode input1) prim-cx g (first args))]
             (if (= (first r1) :left)
               (wrap-other r1)
-              (let [result ((.decode output) cx (compute (second r1)))]
-                (wrap-other result))))))))))))
+              (let [result ((.decode output) prim-cx (compute (second r1)))]
+                (wrap-other result)))))))))))
 
 (defn prim2
   "Create a 2-argument primitive function."
@@ -444,18 +472,18 @@
   ([pname compute _variables input1 input2 output constraints]
   (->hydra_graph_primitive
    (build-prim-def pname _variables [input1 input2] output constraints)
-   (fn [cx] (fn [g] (fn [args]
+   (fn [g] (fn [args]
      (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 2) args)]
        (if (= (first check) :left)
          check
-         (let [r1 ((.encode input1) cx g (first args))]
+         (let [r1 ((.encode input1) prim-cx g (first args))]
            (if (= (first r1) :left)
              (wrap-other r1)
-             (let [r2 ((.encode input2) cx g (second args))]
+             (let [r2 ((.encode input2) prim-cx g (second args))]
                (if (= (first r2) :left)
                  (wrap-other r2)
-                 (let [result ((.decode output) cx (compute (second r1) (second r2)))]
-                   (wrap-other result))))))))))))))
+                 (let [result ((.decode output) prim-cx (compute (second r1) (second r2)))]
+                   (wrap-other result)))))))))))))
 
 (defn prim3
   "Create a 3-argument primitive function."
@@ -464,18 +492,18 @@
   ([pname compute _variables input1 input2 input3 output constraints]
   (->hydra_graph_primitive
    (build-prim-def pname _variables [input1 input2 input3] output constraints)
-   (fn [cx] (fn [g] (fn [args]
+   (fn [g] (fn [args]
      (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 3) args)]
        (if (= (first check) :left)
          check
-         (let [r1 ((.encode input1) cx g (first args))]
+         (let [r1 ((.encode input1) prim-cx g (first args))]
            (if (= (first r1) :left)
              (wrap-other r1)
-             (let [r2 ((.encode input2) cx g (second args))]
+             (let [r2 ((.encode input2) prim-cx g (second args))]
                (if (= (first r2) :left)
                  (wrap-other r2)
-                 (let [r3 ((.encode input3) cx g (nth args 2))]
+                 (let [r3 ((.encode input3) prim-cx g (nth args 2))]
                    (if (= (first r3) :left)
                      (wrap-other r3)
-                     (let [result ((.decode output) cx (compute (second r1) (second r2) (second r3)))]
-                       (wrap-other result))))))))))))))))
+                     (let [result ((.decode output) prim-cx (compute (second r1) (second r2) (second r3)))]
+                       (wrap-other result)))))))))))))))

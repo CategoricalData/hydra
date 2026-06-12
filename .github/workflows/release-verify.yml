@@ -1,0 +1,127 @@
+name: Release verification
+
+# Verifies the release-trust invariants for a Hydra source release (Track 7 of
+# #441): the canonical source archive carries LICENSE + NOTICE, builds via
+# `git archive`, and round-trips its SHA-512 checksum; and, once a signing key
+# is registered in KEYS, that its detached GPG signature verifies.
+#
+# This is intentionally a SEPARATE workflow from ci.yml: ci.yml runs the
+# per-language test matrix on every push/PR to main, whereas this runs only on
+# a release tag (and on manual dispatch). It needs no language toolchain — it
+# checks artifact hygiene, not code — so it is fast and self-contained.
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to verify (branch, tag, or SHA). Defaults to the checked-out ref.'
+        required: false
+        default: ''
+
+jobs:
+  verify-source-release:
+    name: Verify canonical source archive
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the ref under verification
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+          fetch-depth: 0
+
+      - name: Assert LICENSE, NOTICE, and KEYS are present and tracked
+        run: |
+          fail=0
+          for f in LICENSE NOTICE KEYS; do
+            if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+              echo "OK: $f is tracked"
+            else
+              echo "FAIL: $f is missing or untracked (required for an Apache source release)"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Determine version
+        id: version
+        run: |
+          # On a tag push the tag name is the version; otherwise use hydra.json.
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            version="${{ github.ref_name }}"
+          else
+            version="$(python3 -c "import json; print(json.load(open('hydra.json'))['currentVersion'])")"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Verifying release version: $version"
+
+          # If this is a tag, it must match hydra.json:currentVersion.
+          canonical="$(python3 -c "import json; print(json.load(open('hydra.json'))['currentVersion'])")"
+          if [ "${{ github.ref_type }}" = "tag" ] && [ "$version" != "$canonical" ]; then
+            echo "FAIL: tag $version != hydra.json currentVersion $canonical"
+            exit 1
+          fi
+
+      - name: Build the canonical source archive (git archive)
+        id: archive
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          archive="hydra-${version}-src.tar.gz"
+          git archive --format=tar.gz --prefix="hydra-${version}/" -o "$archive" HEAD
+          echo "archive=$archive" >> "$GITHUB_OUTPUT"
+          echo "Built $archive ($(du -h "$archive" | cut -f1))"
+
+      - name: Assert LICENSE + NOTICE are inside the archive
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          archive="${{ steps.archive.outputs.archive }}"
+          fail=0
+          for f in LICENSE NOTICE; do
+            if tar tzf "$archive" | grep -qx "hydra-${version}/$f"; then
+              echo "OK: archive contains $f"
+            else
+              echo "FAIL: archive is missing $f"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Generate and verify the SHA-512 checksum
+        run: |
+          archive="${{ steps.archive.outputs.archive }}"
+          sha512sum "$archive" > "$archive.sha512"
+          sha512sum -c "$archive.sha512"
+          echo "OK: checksum verifies"
+
+      - name: Verify the GPG signature (if a signing key is registered)
+        run: |
+          archive="${{ steps.archive.outputs.archive }}"
+          # KEYS holds the public signing keys. Until a release manager registers
+          # one (see KEYS), there is no key to verify against and no .asc is
+          # produced — so this step reports and skips rather than failing.
+          if ! grep -q "BEGIN PGP PUBLIC KEY BLOCK" KEYS; then
+            echo "NOTE: no signing key registered in KEYS yet — skipping signature"
+            echo "      verification. Register a release manager's key in KEYS and"
+            echo "      sign the archive (bin/prepare-release.sh Step 11) before the"
+            echo "      first real release."
+            exit 0
+          fi
+          if [ ! -f "$archive.asc" ]; then
+            echo "FAIL: KEYS contains a signing key but no $archive.asc was found."
+            echo "      A signed release must ship a detached signature."
+            exit 1
+          fi
+          gpg --import KEYS
+          gpg --verify "$archive.asc" "$archive"
+          echo "OK: signature verifies"
+
+      - name: Upload the verified source archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: hydra-source-release
+          path: |
+            hydra-*-src.tar.gz
+            hydra-*-src.tar.gz.sha512
+          if-no-files-found: error

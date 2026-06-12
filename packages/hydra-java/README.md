@@ -137,16 +137,22 @@ Hydra's Java code is split across three locations
   > will be dropped before 0.16. Edits should go into the Java sources, not the Haskell
   > ones.
 
-- **Java head** ([`heads/java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java))
-  — hand-written Java runtime
+- **Java kernel overlay** ([`overlay/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java))
+  — hand-written Java kernel runtime, overlaid onto `dist/java/hydra-kernel/`
+  by `bin/copy-kernel-runtime.sh` so the published `hydra-kernel` Maven artifact
+  is self-contained
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — Java DSL (Terms, Types, Expect, ...)
   - `hydra/util/` — core utilities (Either, Optional, Pair, Lazy) plus the
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
   - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
+- **Java head** ([`heads/java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java))
+  — bootstrap and driver layer above the kernel
+  - `hydra/Bootstrap.java`, `hydra/Generation.java` — code-generation drivers
   - `hydra/UpdateJavaJson.java` — driver that updates `dist/json/hydra-java/`
     from the Java DSL sources in this package (see [Generate Java code](#generate-java-code))
+  - `hydra/json/` — JSON I/O glue
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
   — code-generated from the kernel DSL sources

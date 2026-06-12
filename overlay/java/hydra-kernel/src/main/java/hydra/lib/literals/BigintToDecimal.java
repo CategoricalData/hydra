@@ -15,7 +15,6 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -34,8 +33,8 @@ public class BigintToDecimal extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(i -> Terms.decimal(apply(i)), hydra.extract.Core.bigint(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(i -> Terms.decimal(apply(i)), hydra.extract.Core.bigint(graph, args.get(0)));
     }
 
     public static BigDecimal apply(BigInteger value) {

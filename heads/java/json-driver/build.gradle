@@ -23,7 +23,7 @@ plugins {
 def hydraRoot = file("$projectDir/../../..")
 
 // Single source of truth for the published host version: hydra.json
-// (hostVersionOverrides["hydra-java"] -> hostVersion), read via
+// (hostOverrides["java"] -> hostVersion), read via
 // bin/lib/hydra-packages.py so Gradle and the shell scripts always agree.
 def hostVersion = providers.exec {
     workingDir = hydraRoot

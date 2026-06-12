@@ -18,7 +18,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -50,8 +49,8 @@ public class ToList extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(terms -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(terms -> {
             // Term needs a custom comparator (compareTerms), so sort in an ArrayList scratch
             // buffer and convert the sorted result to a ConsList.
             ArrayList<Term> scratch = new ArrayList<>(terms);

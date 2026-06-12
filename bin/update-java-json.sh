@@ -12,7 +12,7 @@
 #                                PUBLISHED Java host
 #                                net.fortytwo.hydra:hydra-java:<hostVersion>
 #                                (resolved from Maven via hydra.json's
-#                                hostVersion / hostVersionOverrides) in the
+#                                hostVersion / hostOverrides) in the
 #                                standalone heads/java/json-driver project. No
 #                                local Java host build is required — edits to the
 #                                DSL sources flow straight through. This is the

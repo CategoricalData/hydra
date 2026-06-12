@@ -17,7 +17,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -48,8 +47,8 @@ public class Member extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(terms -> Terms.boolean_(apply(args.get(0), terms)), hydra.extract.Core.set(graph, args.get(1)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(terms -> Terms.boolean_(apply(args.get(0), terms)), hydra.extract.Core.set(graph, args.get(1)));
     }
 
     /**
