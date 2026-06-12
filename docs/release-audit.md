@@ -105,17 +105,18 @@ Ordered by how blocking each is for an Apache-style release. Each is independent
 
 ### P0 — blocks any Apache source release
 
-1. **Add a root `NOTICE` file.** Apache requires it alongside `LICENSE` in every source archive.
-   The initial content is minimal (project name, copyright line, and any required third-party
-   attributions). Bundle it into every published artifact the same way `CHANGELOG.md` is bundled
+1. **Add a root `NOTICE` file.** ✅ **Done** — `NOTICE` added at the repo root (Apache-2.0 §4(d)
+   project notice; no third-party attributions needed, since the publish set bundles no third-party
+   code). Still open: **bundle it** into every published artifact the way `CHANGELOG.md` is bundled
    into the Hackage sdists today (`assemble-haskell-distribution.sh`).
-2. **Produce a signed, checksummed canonical source archive.** Add a step to
-   `bin/prepare-release.sh` that builds one source tarball of the repository at the release tag and
-   emits `<archive>.asc` (detached GPG signature) and `<archive>.sha512` next to it. This is the
-   Apache "release of record"; the Hackage/Maven/PyPI artifacts become convenience binaries
-   downstream of it.
-3. **Publish a `KEYS` file** listing the release managers' public signing keys, so a verifier can
-   check the `.asc`. Today only the Maven path signs, and its key is not published in-repo.
+2. **Produce a signed, checksummed canonical source archive.** ✅ **Done** — `bin/prepare-release.sh`
+   Step 11 builds `hydra-<version>-src.tar.gz` via `git archive` from `HEAD`, emits a `.sha512`
+   checksum and a detached `.asc` GPG signature, and asserts `LICENSE`/`NOTICE` are present. This is
+   the "release of record"; the Hackage/Maven/PyPI artifacts are convenience binaries downstream of
+   it. Signing degrades to a warning when no key is configured (set `HYDRA_RELEASE_SIGNING_KEY`).
+3. **Publish a `KEYS` file** listing the release managers' public signing keys. ✅ **Done** — repo-root
+   `KEYS` file added with the standard import/verify/append procedure. Still open: a release manager
+   must **register an actual signing key** in it before the first signed release (none exists yet).
 
 ### P1 — required for a credible production/Apache posture
 
