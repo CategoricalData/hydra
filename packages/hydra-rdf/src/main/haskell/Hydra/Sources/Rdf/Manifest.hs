@@ -6,7 +6,8 @@
 module Hydra.Sources.Rdf.Manifest (
   mainModules,
   testModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -41,10 +42,14 @@ mainModules = [
 -- Current consumers (as of 2026-05-16), both via Hydra.Sources.Pg.Rdf.Mappings:
 --   * Hydra.Dsl.Rdf.Syntax
 --   * Hydra.Dsl.Shacl.Model
-dslTypeModules :: [Module]
-dslTypeModules = [
+mainDslModules :: [Module]
+mainDslModules = [
   RdfSyntax.module_,
   ShaclModel.module_]
+
+-- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+mainEncodingModules :: [Module]
+mainEncodingModules = []
 
 testModules :: [Module]
 testModules = []
