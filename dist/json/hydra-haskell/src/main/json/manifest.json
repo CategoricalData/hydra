@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.haskell.environment", "hydra.dsl.haskell.syntax"],
+  "mainDslModules": ["hydra.haskell.environment", "hydra.haskell.syntax"],
+  "mainEncodingModules": [],
   "mainModules": [
     "hydra.haskell.coder",
     "hydra.haskell.environment",

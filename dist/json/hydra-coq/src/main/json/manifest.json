@@ -1,5 +1,6 @@
 {
-  "dslModules": ["hydra.dsl.coq.syntax"],
+  "mainDslModules": ["hydra.coq.syntax"],
+  "mainEncodingModules": [],
   "mainModules": [
     "hydra.coq.coder",
     "hydra.coq.environment",

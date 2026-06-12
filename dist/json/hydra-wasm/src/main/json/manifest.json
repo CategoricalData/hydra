@@ -1,5 +1,6 @@
 {
-  "dslModules": [],
+  "mainDslModules": ["hydra.wasm.syntax"],
+  "mainEncodingModules": [],
   "mainModules": ["hydra.wasm.coder", "hydra.wasm.language", "hydra.wasm.serde", "hydra.wasm.syntax"],
   "manifestFormatVersion": 1,
   "package": "hydra-wasm",
