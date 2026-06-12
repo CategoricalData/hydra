@@ -18,23 +18,25 @@ file has been retired):
   current-version               Print hydra.json:currentVersion (this repo's
                                 release/dev version).
   set-current-version <X.Y.Z>   Write currentVersion. Leaves hostVersion and
-                                hostVersionOverrides untouched.
+                                hostOverrides untouched.
   host-version <pkg>            Print the published-host version the build/sync
-                                should depend on for <pkg>: hostVersionOverrides[pkg]
-                                if present, else hostVersion if <pkg> is a published
-                                host. Exits 1 (no output) when <pkg> is not a
-                                consumed published host, so the caller falls back to
-                                a local content hash (the migration-shim path).
+                                should depend on for <pkg>: the hostOverrides entry
+                                for <pkg>'s host if present (host-keyed — e.g.
+                                hostOverrides["java"] applies to hydra-java), else
+                                hostVersion if <pkg> is a published host. Exits 1
+                                (no output) when <pkg> is not a consumed published
+                                host, so the caller falls back to a local content
+                                hash (the migration-shim path).
   set-host-version <X.Y.Z>      Write the global hostVersion. Per-host overrides in
-                                hostVersionOverrides are hand-edited (uncommon).
+                                hostOverrides are hand-edited (uncommon).
   is-published <pkg>            Exit 0 if host-version <pkg> would resolve, else 1.
   haskell-hackage <pkg>         Print the version iff <pkg> is consumable from
                                 Hackage at its resolved host version (probes the
                                 actual artifact: local Stack index, then a live
                                 HEAD request). Exit 1 otherwise — the #370 Haskell
-                                host then keeps <pkg>'s source-dirs local. An
-                                override of "local" in hostVersionOverrides forces
-                                local (exit 1).
+                                host then keeps <pkg>'s source-dirs local. A
+                                hostOverrides value of "local" for <pkg>'s host
+                                forces local (exit 1).
 
 Roots the registry at HYDRA_ROOT_DIR (env var) if set, else at the repo root
 inferred from this script's location (../..).
@@ -63,6 +65,64 @@ PUBLISHED_HOSTS = frozenset({
     "hydra-lisp",
     "hydra-typescript",
 })
+
+
+# Host-mode overrides (hydra.json `hostOverrides`) are keyed by HOST — a language
+# name like "java" — not by the coder *package* (`hydra-java`). The language, the
+# coder package, and the host runtime are three distinct things that happen to
+# correspond 1:1 today; they diverge once hosts become independently-versioned
+# artifacts (post-0.17). The override answers a question about the *host* ("consume
+# the published Java host, or build it locally?"), so it is keyed on the host's
+# stable identity — its language. The build-cache / component-identity path stays
+# PACKAGE-keyed (it is genuinely about packages), so resolve_host_version bridges
+# host→package via these maps. Lisp dialects are distinct hosts that share the one
+# hydra-lisp coder package, so several hosts map to it.
+PACKAGE_FOR_HOST = {
+    "kernel":      "hydra-kernel",
+    "haskell":     "hydra-haskell",
+    "java":        "hydra-java",
+    "python":      "hydra-python",
+    "scala":       "hydra-scala",
+    "typescript":  "hydra-typescript",
+    "clojure":     "hydra-lisp",
+    "scheme":      "hydra-lisp",
+    "common-lisp": "hydra-lisp",
+    "emacs-lisp":  "hydra-lisp",
+}
+# Inverse: package → the canonical host name. For hydra-lisp (shared by four
+# dialects) the canonical host is "lisp"; the four dialect keys above still resolve
+# to hydra-lisp via PACKAGE_FOR_HOST, so an override can target either "lisp"
+# (all dialects) or a single dialect.
+HOST_FOR_PACKAGE = {
+    "hydra-kernel":     "kernel",
+    "hydra-haskell":    "haskell",
+    "hydra-java":       "java",
+    "hydra-python":     "python",
+    "hydra-scala":      "scala",
+    "hydra-typescript": "typescript",
+    "hydra-lisp":       "lisp",
+}
+
+
+def host_override_for_package(root: Path, pkg: str) -> Optional[str]:
+    """The hostOverrides value (version string or "local") that applies to <pkg>,
+    or None if no override applies. Bridges the package-keyed caller to the
+    host-keyed `hostOverrides` map: looks up the package's canonical host, and —
+    for the shared hydra-lisp coder — also honours a more specific per-dialect
+    override key if present."""
+    overrides = load_config(root).get("hostOverrides") or {}
+    if not overrides:
+        return None
+    host = HOST_FOR_PACKAGE.get(pkg)
+    if host is not None and host in overrides:
+        return overrides[host]
+    # hydra-lisp: a single-dialect override (e.g. "clojure") also applies, since
+    # every dialect host maps to the one hydra-lisp coder package.
+    if pkg == "hydra-lisp":
+        for dialect in ("clojure", "scheme", "common-lisp", "emacs-lisp"):
+            if dialect in overrides:
+                return overrides[dialect]
+    return None
 
 
 def repo_root() -> Path:
@@ -208,19 +268,19 @@ def _valid_version(s: str) -> bool:
 def resolve_host_version(root: Path, pkg: str) -> Optional[str]:
     """The published-host version the build should depend on for <pkg>, or None.
 
-    Resolution: hostVersionOverrides[pkg] → hostVersion (if pkg is a published
+    Resolution: hostOverrides[host_for(pkg)] → hostVersion (if pkg is a published
     host) → None (build pkg locally; caller uses a local content hash).
 
-    An override value of "local" is the explicit "build this package from local
-    source" signal (#370): it resolves to None, exactly like an unconsumed
-    package, so component_identity content-hashes it and edits rebuild."""
-    config = load_config(root)
-    overrides = config.get("hostVersionOverrides") or {}
-    if pkg in overrides:
-        ov = overrides[pkg]
+    The override is HOST-keyed (a language name like "java"); this function bridges
+    from the package-keyed caller via host_override_for_package. An override value
+    of "local" is the explicit "build this host from local source" signal (#370):
+    it resolves to None, exactly like an unconsumed package, so component_identity
+    content-hashes it and edits rebuild."""
+    ov = host_override_for_package(root, pkg)
+    if ov is not None:
         return None if ov == "local" else ov
     if pkg in PUBLISHED_HOSTS:
-        return config.get("hostVersion")
+        return load_config(root).get("hostVersion")
     return None
 
 

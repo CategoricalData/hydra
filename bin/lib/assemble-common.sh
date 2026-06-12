@@ -70,7 +70,7 @@ compute_generator_stamp() {
 # stamp. Two modes:
 #
 #   1. Published-host mode (#347/#370): when <pkg> resolves to a published-host
-#      version via hydra.json (hostVersion, or a per-host hostVersionOverrides
+#      version via hydra.json (hostVersion, or a per-host hostOverrides
 #      entry), the identity is the version string `host:<pkg>:<ver>`. In this
 #      mode the build is conceptually depending on the published artifact, so
 #      local source edits to <pkg> do NOT change its identity — the cache stays

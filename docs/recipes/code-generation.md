@@ -260,7 +260,7 @@ and the legacy Haskell sources still agree.
 > `dist/json/hydra-{java,python}/` via the native drivers in Phase 5 (and heals them
 > in Phase 1.5 when the kernel changed) — automatically, no explicit run needed.
 > The drivers default to the **published host**; pass `--local-host` (or set
-> `hostVersionOverrides["hydra-<pkg>"]="local"` in `hydra.json`) to build the coder
+> `hostOverrides["<host>"]="local"` in `hydra.json`) to build the coder
 > from local `dist/` for a backward-incompatible kernel change. The
 > `generate-hydra-{java,python}-from-{java,python}.sh` scripts run the same path
 > standalone.

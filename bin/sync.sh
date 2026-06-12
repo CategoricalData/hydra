@@ -78,6 +78,23 @@ TARGETS_ARG=""
 # source. Phase 0 + Phase 1 must agree on this, else the head double-builds.
 HOST_MODE=published
 
+# Per-host mode for the Python native heal/re-export. The global HOST_MODE
+# (set by --local-host/--published-host) is the default, but a per-host
+# hostOverrides entry in hydra.json can route just one host local while the
+# rest stay published — e.g. hostOverrides:{"python":"local"} when the published
+# hydra-python wheel is incompatible with the current kernel (#370/#472). The
+# is-published check encodes exactly that decision: it exits non-zero when the
+# host resolves to local. An explicit --local-host still forces all hosts local.
+python_host_mode() {
+    if [ "$HOST_MODE" = "local" ]; then
+        echo local
+    elif ! python3 "$HYDRA_ROOT/bin/lib/hydra-packages.py" is-published hydra-python >/dev/null 2>&1; then
+        echo local
+    else
+        echo published
+    fi
+}
+
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests)
@@ -348,7 +365,7 @@ heal_java_python_native() {
     # so this forwarding is Python-only.
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
-        "--${HOST_MODE}-host" || return 1
+        "--$(python_host_mode)-host" || return 1
 }
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
@@ -649,7 +666,7 @@ export HYDRA_IN_SYNC=1
 # as "fresh" and the native re-export would never actually re-run under the new
 # host. Forwarded to the Python driver as a CLI flag below; the Java native pass
 # has no published/local switch, so its freshness is mode-independent.
-export HYDRA_PHASE5_HOST_MODE="$HOST_MODE"
+export HYDRA_PHASE5_HOST_MODE="$(python_host_mode)"
 # Skip a language's native DSL→JSON pass entirely when that language
 # is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
 # has no reason to spin up Java's full kernel build or Python's pypy
@@ -672,7 +689,7 @@ if printf '%s\n' $HOSTS | grep -qx python; then
     # is incompatible with the current kernel — the #370 migration-shim case).
     # The Java wrapper has no published/local switch (its host is a build-presence
     # check), so this forwarding is Python-only.
-    PY_HOST_MODE_FLAG="--${HOST_MODE}-host"   # published -> --published-host, local -> --local-host
+    PY_HOST_MODE_FLAG="--$(python_host_mode)-host"   # per-host: hostOverrides[python]=local OR global --local-host
     # Use PyPy when available — ~4x faster than CPython.
     if command -v pypy3 >/dev/null 2>&1; then
         native_generate_and_report python \

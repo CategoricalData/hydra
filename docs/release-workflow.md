@@ -89,7 +89,7 @@ The canonical version lives in `hydra.json` at the repository root as the
   (the Merkle basis for the per-target generator cache; see
   [build-system.md](build-system.md)). Bumped separately by
   `bin/bump-host-version.sh`. Per-host exceptions live in the
-  `hostVersionOverrides` map and are hand-edited. This field is independent of the
+  `hostOverrides` map and are hand-edited. This field is independent of the
   release flow and is normally left alone during a release.
 
 ### Bumping the version
