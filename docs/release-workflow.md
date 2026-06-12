@@ -9,6 +9,10 @@ so that compatibility of different Hydra artifacts can be understood
 on the basis of their version numbers alone, regardless of the implementation language.
 However, this makes it very important to maintain a unified and consistent release process.
 
+For how this process measures up against Apache Software Foundation source-release expectations
+(signing, checksums, `NOTICE`, dependency-license attestation) and the gaps that remain, see
+[release-audit.md](release-audit.md).
+
 As of May 2026, eight complete Hydra hosts pass the common test suite: Hydra-Haskell, Hydra-Java,
 Hydra-Python, Hydra-Scala, Hydra-Clojure, Hydra-Common Lisp, Hydra-Scheme, and Hydra-Emacs Lisp.
 The four Lisp dialects share a single coder and serializer. Hydra-TypeScript graduated to a full
