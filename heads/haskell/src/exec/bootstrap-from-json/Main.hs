@@ -171,7 +171,7 @@ usage = unlines
   , ""
   , "Options:"
   , "  --output <dir>           Output base directory"
-  , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp)"
+  , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp/typescript/go)"
   , "  --include-dsls           Also load DSL wrapper modules"
   , "  --include-tests          Also generate kernel test modules"
   , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
@@ -263,9 +263,9 @@ main = do
   -- --include-coders. Ext demo packages are loaded with --ext-only. Other
   -- non-baseline non-coder packages (extPackages and extDemoPackages) are
   -- auto-loaded based on --package or --all-packages — see Step 2c.
-  let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-go"]
+  let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-typescript", "hydra-go"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
-  let extPackages     = ["hydra-coq", "hydra-typescript", "hydra-ext", "hydra-wasm", "hydra-bench"]
+  let extPackages     = ["hydra-coq", "hydra-ext", "hydra-wasm", "hydra-bench"]
 
   -- Derived routing map (#474). Built from every known package's manifest
   -- (its declared mainModules + testModules + derivedMainModules), so a
@@ -386,8 +386,8 @@ main = do
 
   -- Step 2b: Optionally load DSL wrapper modules from every loaded package.
   -- Compute which non-baseline non-coder packages need to be loaded into
-  -- the universe. Each of hydra-rdf, hydra-coq, hydra-typescript,
-  -- hydra-ext, hydra-wasm is independent. hydra-pg depends on hydra-rdf
+  -- the universe. Each of hydra-rdf, hydra-coq, hydra-ext, hydra-wasm is
+  -- independent. hydra-pg depends on hydra-rdf
   -- (e.g. hydra.pg.rdf.environment references hydra.rdf.syntax.Iri), so
   -- loading hydra-pg implicitly loads hydra-rdf.
   --
