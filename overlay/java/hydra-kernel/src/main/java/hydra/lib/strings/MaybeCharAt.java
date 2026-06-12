@@ -16,7 +16,6 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -35,8 +34,8 @@ public class MaybeCharAt extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(s -> Terms.optional(MaybeCharAt.apply(i, s).map(Terms::int32)), hydra.extract.Core.string(graph, args.get(1))));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(s -> Terms.optional(MaybeCharAt.apply(i, s).map(Terms::int32)), hydra.extract.Core.string(graph, args.get(1))));
     }
 
     /**
