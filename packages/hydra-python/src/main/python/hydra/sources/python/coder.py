@@ -2021,7 +2021,7 @@ def _encode_default_case_block():
                     [
                         (
                             "patterns",
-                            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard()),
+                            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard),
                         ),
                         (
                             "body",
@@ -4417,7 +4417,7 @@ def _encode_term_multiline_tco():
                                     "continueStmt",
                                     PySyn.statement_simple(
                                         list_(
-                                            [PySyn.simple_statement_continue()]
+                                            [PySyn.simple_statement_continue]
                                         )
                                     ),
                                 ),
@@ -5342,8 +5342,8 @@ def _encode_literal():
                         right(
                             _kref.utils_py_atom_to_py_expression(Logic.if_else(
                                     var("b"),
-                                    PySyn.atom_true(),
-                                    PySyn.atom_false(),
+                                    PySyn.atom_true,
+                                    PySyn.atom_false,
                                 ))
                         ),
                     ),
@@ -5374,7 +5374,7 @@ def _encode_literal():
                     lam(
                         "s",
                         right(
-                            _kref.utils_string_to_py_expression(PySyn.quote_style_double(), var("s"))
+                            _kref.utils_string_to_py_expression(PySyn.quote_style_double, var("s"))
                         ),
                     ),
                 ),
@@ -6571,7 +6571,7 @@ def _function_definition_to_expr():
                     (
                         "trueExpr",
                         PySyn.named_expression_simple(
-                            _kref.utils_py_atom_to_py_expression(PySyn.atom_true())
+                            _kref.utils_py_atom_to_py_expression(PySyn.atom_true)
                         ),
                     ),
                     (
@@ -7108,7 +7108,7 @@ def _dataclass_decorator():
     kwarg = PySyn.kwarg_or_starred_kwarg(
         PySyn.kwarg(
             wrap("hydra.python.syntax.Name", string("frozen")),
-            _kref.utils_py_atom_to_py_expression(PySyn.atom_true()),
+            _kref.utils_py_atom_to_py_expression(PySyn.atom_true),
         )
     )
     args_term = PySyn.args(
@@ -7938,7 +7938,7 @@ def _unsupported_expression():
         ["msg"],
         _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(_kref.utils_project_from_expression(_kref.utils_project_from_expression(_kref.utils_project_from_expression(PyDsl.py_name_to_py_expression(_py_name("hydra")), _py_name("dsl")), _py_name("python")), _py_name("unsupported"))), list_(
                 [
-                    _kref.utils_string_to_py_expression(PySyn.quote_style_double(), var("msg"))
+                    _kref.utils_string_to_py_expression(PySyn.quote_style_double, var("msg"))
                 ]
             )),
     )
@@ -7997,7 +7997,7 @@ def _wildcard_case_block():
     body = lambdas(
         ["stmt"],
         PySyn.case_block(
-            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard()),
+            _kref.utils_py_closed_pattern_to_py_patterns(PySyn.closed_pattern_wildcard),
             nothing(),
             _kref.utils_indented_block(nothing(), list_([list_([var("stmt")])])),
         ),
