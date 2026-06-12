@@ -103,11 +103,11 @@ def py_comparison_to_py_expression(c):
 
 
 def comp_pair_eq(rhs):
-    return PySyn.compare_op_bitwise_or_pair(PySyn.compare_op_eq, rhs)
+    return PySyn.compare_op_bitwise_or_pair(PySyn.compare_op_eq(), rhs)
 
 
 def double_quoted_string(val):
-    return PySyn.string(val, nothing(), PySyn.quote_style_double)
+    return PySyn.string(val, nothing(), PySyn.quote_style_double())
 
 
 # Custom helpers (mirrors of Hydra.Dsl.Python.Helpers)

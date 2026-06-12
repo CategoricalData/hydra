@@ -385,7 +385,7 @@ def _dotted_assignment_statement():
 
 
 def _double_quoted_string():
-    body = _local("stringToPyExpression")(PySyn.quote_style_double, var("s"))
+    body = _local("stringToPyExpression")(PySyn.quote_style_double(), var("s"))
     return _def(
         "doubleQuotedString",
         doc(
@@ -474,7 +474,7 @@ def _indented_block():
             PySyn.block_indented(list_([
                 list_([
                     PySyn.statement_simple(list_([
-                        _local("pyExpressionToPySimpleStatement")(_local("pyAtomToPyExpression")(PySyn.atom_ellipsis)),
+                        _local("pyExpressionToPySimpleStatement")(_local("pyAtomToPyExpression")(PySyn.atom_ellipsis())),
                     ])),
                 ]),
             ])),
@@ -520,7 +520,7 @@ def _or_expression():
     build_body = Optionals.cases(Lists.uncons(var("ps")), # Unreachable fallback
         PySyn.bitwise_or(
             var("prev"),
-            _local("pyPrimaryToPyBitwiseXor")(PySyn.primary_simple(PySyn.atom_ellipsis)),
+            _local("pyPrimaryToPyBitwiseXor")(PySyn.primary_simple(PySyn.atom_ellipsis())),
         ), lam(
             "p",
             Logic.if_else(
@@ -1075,7 +1075,7 @@ def _self_other_params():
 
 
 def _single_quoted_string():
-    body = _local("stringToPyExpression")(PySyn.quote_style_single, var("s"))
+    body = _local("stringToPyExpression")(PySyn.quote_style_single(), var("s"))
     return _def(
         "singleQuotedString",
         doc(
@@ -1113,9 +1113,9 @@ def _triple_quoted_string():
     body = _local("pyAtomToPyExpression")(
         PySyn.atom_string(
             PyDsl.prefixed_string_(
-                PySyn.string_prefix_raw,
+                PySyn.string_prefix_raw(),
                 var("s"),
-                PySyn.quote_style_triple_double,
+                PySyn.quote_style_triple_double(),
             )
         )
     )
@@ -1211,7 +1211,7 @@ def _union_type_class_statements_310():
     body_groups_def = Logic.if_else(
         Lists.null(var("extraStmts")),
         let_chain(
-            [("passStmt", _local("pySimpleStatementToPyStatement")(PySyn.simple_statement_pass))],
+            [("passStmt", _local("pySimpleStatementToPyStatement")(PySyn.simple_statement_pass()))],
             list_([
                 list_([var("docStmt")]),
                 list_([var("passStmt")]),
