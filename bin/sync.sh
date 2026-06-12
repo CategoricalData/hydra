@@ -338,8 +338,17 @@ fi
 # signal), so this gate is correct.
 JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
 heal_java_python_native() {
+    # Forward the sync's host mode to the native Python driver, exactly as the
+    # Phase 5 invocation does. Phase 1.5's banner says "published hosts" because
+    # that is the default seeding path, but when the user passes --local-host
+    # (e.g. the published hydra-python wheel is incompatible with the current
+    # kernel — the #370/#472 migration-shim case) this heal must also run local,
+    # or it hits the broken published wheel and aborts the whole sync. The Java
+    # wrapper has no published/local switch (its host is a build-presence check),
+    # so this forwarding is Python-only.
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
-    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" || return 1
+    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
+        "--${HOST_MODE}-host" || return 1
 }
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
