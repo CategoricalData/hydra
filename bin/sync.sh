@@ -339,7 +339,14 @@ fi
 JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
 heal_java_python_native() {
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
-    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" || return 1
+    # Forward the sync's host mode to the Python heal, exactly as Phase 5 does
+    # (commit 3a60d5597d). Without this, `sync.sh --local-host` silently runs the
+    # Phase 1.5 Python re-export on the published host — which breaks outright when
+    # the published wheel predates a kernel-runtime move (e.g. #461 relocating
+    # hydra.python.util into the kernel overlay, absent from published 0.16.0).
+    # The Java wrapper has no published/local switch, so only Python needs this.
+    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
+        "--${HOST_MODE}-host" || return 1
 }
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
