@@ -66,6 +66,8 @@ import Hydra.Digest
 import qualified Hydra.Digest as Digest
 import Hydra.Packaging (ModuleName(..))
 import qualified Hydra.PackageRouting as PackageRouting
+import Hydra.PackageRouting (buildRoutingMap)
+import Hydra.Sources.Ext (extRoutingInput)
 
 import Control.Monad (forM)
 import qualified Data.Map as M
@@ -353,12 +355,17 @@ doRefreshInput opts = do
       dpath = distJsonRoot FP.</> pkg FP.</> "build" FP.</> "main" FP.</> "digest.json"
 
   -- Source hashes: discover every (namespace, file) pair, filter to
-  -- the ones routed to <pkg>, hash those source files.
+  -- the ones routed to <pkg>, hash those source files. Package ownership
+  -- is resolved through the declared-modules routing map (#474), not a
+  -- name prefix; native-owned hydra.{java,python}.* namespaces have no
+  -- discoverable source files, so extRoutingInput alone is a sufficient
+  -- routing basis here.
+  let routingMap = buildRoutingMap extRoutingInput
   nsFiles <- Digest.discoverModuleNameFiles
   let ownedPairs =
         [ (ns, fp)
         | (ns, fp) <- M.toList nsFiles
-        , PackageRouting.namespaceToPackage ns == pkg
+        , PackageRouting.namespaceToPackageIn routingMap ns == pkg
         ]
   srcEntries <- forM ownedPairs $ \(ns, fp) -> do
     exists <- doesFileExist fp

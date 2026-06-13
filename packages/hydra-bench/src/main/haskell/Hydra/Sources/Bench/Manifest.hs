@@ -9,7 +9,8 @@
 module Hydra.Sources.Bench.Manifest (
   mainModules,
   testModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -28,8 +29,12 @@ mainModules = [
 -- DSL wrapper modules. Empty — benchmark workloads are deliberately
 -- stress-shaped term modules, not type modules, and would not benefit
 -- from DSL wrappers.
-dslTypeModules :: [Module]
-dslTypeModules = []
+mainDslModules :: [Module]
+mainDslModules = []
+
+-- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+mainEncodingModules :: [Module]
+mainEncodingModules = []
 
 testModules :: [Module]
 testModules = []
