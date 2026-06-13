@@ -16,8 +16,10 @@ import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Map as M
+import qualified Data.Set as S
 -- | DSL constructor for hydra.java.environment.Aliases
-aliases :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2 -> Typed.TypedTerm t3 -> Typed.TypedTerm t4 -> Typed.TypedTerm t5 -> Typed.TypedTerm t6 -> Typed.TypedTerm t7 -> Typed.TypedTerm t8 -> Typed.TypedTerm t9 -> Typed.TypedTerm t10 -> Typed.TypedTerm t11 -> Typed.TypedTerm t12 -> Typed.TypedTerm t13
+aliases :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm (M.Map Packaging.ModuleName Syntax.PackageName) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (M.Map Core.Name Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (M.Map Core.Name Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (Maybe Core.Type) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliases currentNamespace packages branchVars recursiveVars inScopeTypeParams polymorphicLocals inScopeJavaVars varRenames lambdaVars typeVarSubst trustedTypeVars methodCodomain thunkedVars =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -62,7 +64,7 @@ aliases currentNamespace packages branchVars recursiveVars inScopeTypeParams pol
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Typed.unTypedTerm thunkedVars)}]}))
 -- | DSL accessor for the branchVars field of hydra.java.environment.Aliases
-aliasesBranchVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesBranchVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesBranchVars x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -70,7 +72,7 @@ aliasesBranchVars x =
         Core.projectionFieldName = (Core.Name "branchVars")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the currentNamespace field of hydra.java.environment.Aliases
-aliasesCurrentNamespace :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesCurrentNamespace :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm Packaging.ModuleName
 aliasesCurrentNamespace x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -78,7 +80,7 @@ aliasesCurrentNamespace x =
         Core.projectionFieldName = (Core.Name "currentNamespace")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the inScopeJavaVars field of hydra.java.environment.Aliases
-aliasesInScopeJavaVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesInScopeJavaVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesInScopeJavaVars x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -86,7 +88,7 @@ aliasesInScopeJavaVars x =
         Core.projectionFieldName = (Core.Name "inScopeJavaVars")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the inScopeTypeParams field of hydra.java.environment.Aliases
-aliasesInScopeTypeParams :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesInScopeTypeParams :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesInScopeTypeParams x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -94,7 +96,7 @@ aliasesInScopeTypeParams x =
         Core.projectionFieldName = (Core.Name "inScopeTypeParams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the lambdaVars field of hydra.java.environment.Aliases
-aliasesLambdaVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesLambdaVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesLambdaVars x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -102,7 +104,7 @@ aliasesLambdaVars x =
         Core.projectionFieldName = (Core.Name "lambdaVars")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the methodCodomain field of hydra.java.environment.Aliases
-aliasesMethodCodomain :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesMethodCodomain :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (Maybe Core.Type)
 aliasesMethodCodomain x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -110,7 +112,7 @@ aliasesMethodCodomain x =
         Core.projectionFieldName = (Core.Name "methodCodomain")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the packages field of hydra.java.environment.Aliases
-aliasesPackages :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesPackages :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (M.Map Packaging.ModuleName Syntax.PackageName)
 aliasesPackages x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -118,7 +120,7 @@ aliasesPackages x =
         Core.projectionFieldName = (Core.Name "packages")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the polymorphicLocals field of hydra.java.environment.Aliases
-aliasesPolymorphicLocals :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesPolymorphicLocals :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesPolymorphicLocals x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -126,7 +128,7 @@ aliasesPolymorphicLocals x =
         Core.projectionFieldName = (Core.Name "polymorphicLocals")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the recursiveVars field of hydra.java.environment.Aliases
-aliasesRecursiveVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesRecursiveVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesRecursiveVars x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -134,7 +136,7 @@ aliasesRecursiveVars x =
         Core.projectionFieldName = (Core.Name "recursiveVars")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the thunkedVars field of hydra.java.environment.Aliases
-aliasesThunkedVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesThunkedVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesThunkedVars x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -142,7 +144,7 @@ aliasesThunkedVars x =
         Core.projectionFieldName = (Core.Name "thunkedVars")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the trustedTypeVars field of hydra.java.environment.Aliases
-aliasesTrustedTypeVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesTrustedTypeVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesTrustedTypeVars x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -150,7 +152,7 @@ aliasesTrustedTypeVars x =
         Core.projectionFieldName = (Core.Name "trustedTypeVars")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the typeVarSubst field of hydra.java.environment.Aliases
-aliasesTypeVarSubst :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesTypeVarSubst :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (M.Map Core.Name Core.Name)
 aliasesTypeVarSubst x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -158,7 +160,7 @@ aliasesTypeVarSubst x =
         Core.projectionFieldName = (Core.Name "typeVarSubst")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the varRenames field of hydra.java.environment.Aliases
-aliasesVarRenames :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+aliasesVarRenames :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (M.Map Core.Name Core.Name)
 aliasesVarRenames x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -166,7 +168,7 @@ aliasesVarRenames x =
         Core.projectionFieldName = (Core.Name "varRenames")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the branchVars field of hydra.java.environment.Aliases
-aliasesWithBranchVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithBranchVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithBranchVars original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -259,7 +261,7 @@ aliasesWithBranchVars original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the currentNamespace field of hydra.java.environment.Aliases
-aliasesWithCurrentNamespace :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithCurrentNamespace :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Environment.Aliases
 aliasesWithCurrentNamespace original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -352,7 +354,7 @@ aliasesWithCurrentNamespace original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the inScopeJavaVars field of hydra.java.environment.Aliases
-aliasesWithInScopeJavaVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithInScopeJavaVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithInScopeJavaVars original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -445,7 +447,7 @@ aliasesWithInScopeJavaVars original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the inScopeTypeParams field of hydra.java.environment.Aliases
-aliasesWithInScopeTypeParams :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithInScopeTypeParams :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithInScopeTypeParams original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -538,7 +540,7 @@ aliasesWithInScopeTypeParams original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the lambdaVars field of hydra.java.environment.Aliases
-aliasesWithLambdaVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithLambdaVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithLambdaVars original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -631,7 +633,7 @@ aliasesWithLambdaVars original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the methodCodomain field of hydra.java.environment.Aliases
-aliasesWithMethodCodomain :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithMethodCodomain :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (Maybe Core.Type) -> Typed.TypedTerm Environment.Aliases
 aliasesWithMethodCodomain original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -724,7 +726,7 @@ aliasesWithMethodCodomain original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the packages field of hydra.java.environment.Aliases
-aliasesWithPackages :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithPackages :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (M.Map Packaging.ModuleName Syntax.PackageName) -> Typed.TypedTerm Environment.Aliases
 aliasesWithPackages original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -817,7 +819,7 @@ aliasesWithPackages original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the polymorphicLocals field of hydra.java.environment.Aliases
-aliasesWithPolymorphicLocals :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithPolymorphicLocals :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithPolymorphicLocals original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -910,7 +912,7 @@ aliasesWithPolymorphicLocals original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the recursiveVars field of hydra.java.environment.Aliases
-aliasesWithRecursiveVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithRecursiveVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithRecursiveVars original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -1003,7 +1005,7 @@ aliasesWithRecursiveVars original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the thunkedVars field of hydra.java.environment.Aliases
-aliasesWithThunkedVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithThunkedVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithThunkedVars original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -1096,7 +1098,7 @@ aliasesWithThunkedVars original newVal =
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the trustedTypeVars field of hydra.java.environment.Aliases
-aliasesWithTrustedTypeVars :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithTrustedTypeVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithTrustedTypeVars original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -1189,7 +1191,7 @@ aliasesWithTrustedTypeVars original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the typeVarSubst field of hydra.java.environment.Aliases
-aliasesWithTypeVarSubst :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithTypeVarSubst :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (M.Map Core.Name Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithTypeVarSubst original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -1282,7 +1284,7 @@ aliasesWithTypeVarSubst original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the varRenames field of hydra.java.environment.Aliases
-aliasesWithVarRenames :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+aliasesWithVarRenames :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (M.Map Core.Name Core.Name) -> Typed.TypedTerm Environment.Aliases
 aliasesWithVarRenames original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.Aliases"),
@@ -1375,7 +1377,7 @@ aliasesWithVarRenames original newVal =
               Core.projectionFieldName = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.java.environment.JavaEnvironment
-javaEnvironment :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+javaEnvironment :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Environment.JavaEnvironment
 javaEnvironment aliases graph =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
@@ -1387,7 +1389,7 @@ javaEnvironment aliases graph =
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Typed.unTypedTerm graph)}]}))
 -- | DSL accessor for the aliases field of hydra.java.environment.JavaEnvironment
-javaEnvironmentAliases :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+javaEnvironmentAliases :: Typed.TypedTerm Environment.JavaEnvironment -> Typed.TypedTerm Environment.Aliases
 javaEnvironmentAliases x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1395,7 +1397,7 @@ javaEnvironmentAliases x =
         Core.projectionFieldName = (Core.Name "aliases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the graph field of hydra.java.environment.JavaEnvironment
-javaEnvironmentGraph :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+javaEnvironmentGraph :: Typed.TypedTerm Environment.JavaEnvironment -> Typed.TypedTerm Graph.Graph
 javaEnvironmentGraph x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1403,7 +1405,7 @@ javaEnvironmentGraph x =
         Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the aliases field of hydra.java.environment.JavaEnvironment
-javaEnvironmentWithAliases :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+javaEnvironmentWithAliases :: Typed.TypedTerm Environment.JavaEnvironment -> Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm Environment.JavaEnvironment
 javaEnvironmentWithAliases original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
@@ -1419,7 +1421,7 @@ javaEnvironmentWithAliases original newVal =
               Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the graph field of hydra.java.environment.JavaEnvironment
-javaEnvironmentWithGraph :: Typed.TypedTerm t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+javaEnvironmentWithGraph :: Typed.TypedTerm Environment.JavaEnvironment -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Environment.JavaEnvironment
 javaEnvironmentWithGraph original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
@@ -1435,7 +1437,7 @@ javaEnvironmentWithGraph original newVal =
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for hydra.java.environment.JavaFeatures
-javaFeatures :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+javaFeatures :: Typed.TypedTerm Bool -> Typed.TypedTerm Environment.JavaFeatures
 javaFeatures supportsDiamondOperator =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.JavaFeatures"),
@@ -1444,7 +1446,7 @@ javaFeatures supportsDiamondOperator =
           Core.fieldName = (Core.Name "supportsDiamondOperator"),
           Core.fieldTerm = (Typed.unTypedTerm supportsDiamondOperator)}]}))
 -- | DSL accessor for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures
-javaFeaturesSupportsDiamondOperator :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+javaFeaturesSupportsDiamondOperator :: Typed.TypedTerm Environment.JavaFeatures -> Typed.TypedTerm Bool
 javaFeaturesSupportsDiamondOperator x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1452,7 +1454,7 @@ javaFeaturesSupportsDiamondOperator x =
         Core.projectionFieldName = (Core.Name "supportsDiamondOperator")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL updater for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures
-javaFeaturesWithSupportsDiamondOperator :: t0 -> Typed.TypedTerm t1 -> Typed.TypedTerm t2
+javaFeaturesWithSupportsDiamondOperator :: Typed.TypedTerm Environment.JavaFeatures -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.JavaFeatures
 javaFeaturesWithSupportsDiamondOperator original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.environment.JavaFeatures"),
@@ -1461,7 +1463,7 @@ javaFeaturesWithSupportsDiamondOperator original newVal =
           Core.fieldName = (Core.Name "supportsDiamondOperator"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the constant variant of hydra.java.environment.JavaSymbolClass
-javaSymbolClassConstant :: Typed.TypedTerm t0
+javaSymbolClassConstant :: Typed.TypedTerm Environment.JavaSymbolClass
 javaSymbolClassConstant =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
@@ -1469,7 +1471,7 @@ javaSymbolClassConstant =
         Core.fieldName = (Core.Name "constant"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the hoistedLambda variant of hydra.java.environment.JavaSymbolClass
-javaSymbolClassHoistedLambda :: Typed.TypedTerm t0 -> Typed.TypedTerm t1
+javaSymbolClassHoistedLambda :: Typed.TypedTerm Int -> Typed.TypedTerm Environment.JavaSymbolClass
 javaSymbolClassHoistedLambda x =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
@@ -1477,7 +1479,7 @@ javaSymbolClassHoistedLambda x =
         Core.fieldName = (Core.Name "hoistedLambda"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the localVariable variant of hydra.java.environment.JavaSymbolClass
-javaSymbolClassLocalVariable :: Typed.TypedTerm t0
+javaSymbolClassLocalVariable :: Typed.TypedTerm Environment.JavaSymbolClass
 javaSymbolClassLocalVariable =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
@@ -1485,7 +1487,7 @@ javaSymbolClassLocalVariable =
         Core.fieldName = (Core.Name "localVariable"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the nullaryFunction variant of hydra.java.environment.JavaSymbolClass
-javaSymbolClassNullaryFunction :: Typed.TypedTerm t0
+javaSymbolClassNullaryFunction :: Typed.TypedTerm Environment.JavaSymbolClass
 javaSymbolClassNullaryFunction =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
@@ -1493,7 +1495,7 @@ javaSymbolClassNullaryFunction =
         Core.fieldName = (Core.Name "nullaryFunction"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the unaryFunction variant of hydra.java.environment.JavaSymbolClass
-javaSymbolClassUnaryFunction :: Typed.TypedTerm t0
+javaSymbolClassUnaryFunction :: Typed.TypedTerm Environment.JavaSymbolClass
 javaSymbolClassUnaryFunction =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),

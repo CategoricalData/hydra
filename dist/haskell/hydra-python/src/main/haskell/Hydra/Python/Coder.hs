@@ -69,6 +69,12 @@ import qualified Data.Set as S
 analyzePythonFunction :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure PythonEnvironment.PythonEnvironment)
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
+-- | Escape a builder setter name that would collide with build()/builder()
+builderSetterName :: PythonEnvironment.PythonEnvironment -> Core.Name -> String
+builderSetterName env fname =
+
+      let base = Syntax.unName (PythonNames.encodeFieldName env fname)
+      in (Logic.ifElse (Logic.or (Equality.equal base "build") (Equality.equal base "builder")) (Strings.cat2 base "_") base)
 -- | Encode a single case (Field) into a CaseBlock for a match statement
 caseBlockToExpr :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.CaseAlternative -> Either t1 Syntax.CaseBlock
 caseBlockToExpr cx env tname rowType isEnum encodeBody field =
@@ -836,10 +842,7 @@ encodeRecordType :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [C
 encodeRecordType cx env name rowType comment =
     Eithers.bind (Eithers.mapList (encodeFieldType cx env) rowType) (\pyFields ->
       let constStmts = encodeNameConstants env name rowType
-          body =
-                  Utils.indentedBlock comment [
-                    pyFields,
-                    constStmts]
+          withMethods = Lists.map (recordWithMethod env) rowType
           boundVars = PythonEnvironment.pythonEnvironmentBoundTypeVariables env
           tparamList = Pairs.first boundVars
           mGenericArg = genericArg tparamList
@@ -849,12 +852,19 @@ encodeRecordType cx env name rowType comment =
                 dataclassDecorator])
           pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
           noTypeParams = []
-      in (Right (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-        Syntax.classDefinitionDecorators = decs,
-        Syntax.classDefinitionName = pyName,
-        Syntax.classDefinitionTypeParams = noTypeParams,
-        Syntax.classDefinitionArguments = args,
-        Syntax.classDefinitionBody = body}))))
+      in (Eithers.bind (recordBuilderClass env name rowType args) (\builderStmts ->
+        let body =
+                Utils.indentedBlock comment [
+                  pyFields,
+                  constStmts,
+                  withMethods,
+                  builderStmts]
+        in (Right (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+          Syntax.classDefinitionDecorators = decs,
+          Syntax.classDefinitionName = pyName,
+          Syntax.classDefinitionTypeParams = noTypeParams,
+          Syntax.classDefinitionArguments = args,
+          Syntax.classDefinitionBody = body}))))))
 -- | Encode a term assignment to a Python statement
 encodeTermAssignment :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Bool -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either Errors.Error Syntax.Statement
 encodeTermAssignment cx env topLevel name term ts comment =
@@ -1810,8 +1820,11 @@ moduleStandardImports meta =
                     (condImportSymbol "Mapping" (PythonEnvironment.pythonModuleMetadataUsesFrozenDict meta)),
                     (condImportSymbol "Sequence" (PythonEnvironment.pythonModuleMetadataUsesFrozenList meta)),
                     (condImportSymbol "Set" (PythonEnvironment.pythonModuleMetadataUsesFrozenSet meta))]),
-                ("dataclasses", [
-                  condImportSymbol "dataclass" (PythonEnvironment.pythonModuleMetadataUsesDataclass meta)]),
+                (
+                  "dataclasses",
+                  [
+                    condImportSymbol "dataclass" (PythonEnvironment.pythonModuleMetadataUsesDataclass meta),
+                    (condImportSymbol "replace" (PythonEnvironment.pythonModuleMetadataUsesDataclass meta))]),
                 ("decimal", [
                   condImportSymbol "Decimal" (PythonEnvironment.pythonModuleMetadataUsesDecimal meta)]),
                 ("enum", [
@@ -1883,6 +1896,168 @@ pythonEnvironmentSetGraph tc env =
       PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
       PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
       PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
+-- | Build a fluent builder (factory + nested Builder dataclass) for a record
+recordBuilderClass :: PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe Syntax.Args -> Either t0 [Syntax.Statement]
+recordBuilderClass env name rowType recordArgs =
+    Eithers.bind (Eithers.mapList (\ft -> Eithers.map (\pyType -> Utils.pyAssignmentToPyStatement (Syntax.AssignmentTyped (Syntax.TypedAssignment {
+      Syntax.typedAssignmentLhs = (Syntax.SingleTargetName (Syntax.Name (Strings.cat2 "_" (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName ft)))))),
+      Syntax.typedAssignmentType = pyType,
+      Syntax.typedAssignmentRhs = (Just (Syntax.AnnotatedRhsStar [
+        Syntax.StarExpressionSimple (Utils.pyNameToPyExpression Utils.pyNone)]))}))) (encodeType env (Core.fieldTypeType ft))) rowType) (\builderFields ->
+      let setters = Lists.map (\ft -> recordBuilderSetter env ft) rowType
+          pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
+          buildKwargs =
+                  Lists.map (\ft -> Syntax.KwargOrStarredKwarg (Syntax.Kwarg {
+                    Syntax.kwargName = (Syntax.Name (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName ft)))),
+                    Syntax.kwargValue = (Utils.projectFromExpression (Utils.pyNameToPyExpression (Syntax.Name "self")) (Syntax.Name (Strings.cat2 "_" (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName ft))))))})) rowType
+          ctorCall =
+                  Utils.pyPrimaryToPyExpression (Utils.primaryWithRhs (Utils.pyNameToPyPrimary pyName) (Syntax.PrimaryRhsCall (Syntax.Args {
+                    Syntax.argsPositional = [],
+                    Syntax.argsKwargOrStarred = buildKwargs,
+                    Syntax.argsKwargOrDoubleStarred = []})))
+          buildMethod =
+                  Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
+                    Syntax.functionDefinitionDecorators = Nothing,
+                    Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
+                      Syntax.functionDefRawAsync = False,
+                      Syntax.functionDefRawName = (Syntax.Name "build"),
+                      Syntax.functionDefRawTypeParams = [],
+                      Syntax.functionDefRawParams = (Just (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
+                        Syntax.paramNoDefaultParametersParamNoDefault = [
+                          Syntax.ParamNoDefault {
+                            Syntax.paramNoDefaultParam = Syntax.Param {
+                              Syntax.paramName = (Syntax.Name "self"),
+                              Syntax.paramAnnotation = Nothing},
+                            Syntax.paramNoDefaultTypeComment = Nothing}],
+                        Syntax.paramNoDefaultParametersParamWithDefault = [],
+                        Syntax.paramNoDefaultParametersStarEtc = Nothing}))),
+                      Syntax.functionDefRawReturnType = Nothing,
+                      Syntax.functionDefRawFuncTypeComment = Nothing,
+                      Syntax.functionDefRawBlock = (Utils.indentedBlock Nothing [
+                        [
+                          Utils.returnSingle ctorCall]])}}))
+          builderBody =
+                  Utils.indentedBlock Nothing [
+                    Lists.concat [
+                      builderFields,
+                      setters,
+                      [
+                        buildMethod]]]
+          builderDecs = Just (Syntax.Decorators [
+                dataclassDecorator])
+          builderClass =
+                  Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+                    Syntax.classDefinitionDecorators = builderDecs,
+                    Syntax.classDefinitionName = (Syntax.Name "Builder"),
+                    Syntax.classDefinitionTypeParams = [],
+                    Syntax.classDefinitionArguments = recordArgs,
+                    Syntax.classDefinitionBody = builderBody})
+          qualifiedBuilderName = Syntax.Name (Strings.cat2 (Syntax.unName pyName) ".Builder")
+          builderCall = Utils.functionCall (Utils.pyNameToPyPrimary qualifiedBuilderName) []
+          factoryMethod =
+                  Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
+                    Syntax.functionDefinitionDecorators = (Just (Syntax.Decorators [
+                      Syntax.NamedExpressionSimple (Utils.pyNameToPyExpression (Syntax.Name "staticmethod"))])),
+                    Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
+                      Syntax.functionDefRawAsync = False,
+                      Syntax.functionDefRawName = (Syntax.Name "builder"),
+                      Syntax.functionDefRawTypeParams = [],
+                      Syntax.functionDefRawParams = (Just (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
+                        Syntax.paramNoDefaultParametersParamNoDefault = [],
+                        Syntax.paramNoDefaultParametersParamWithDefault = [],
+                        Syntax.paramNoDefaultParametersStarEtc = Nothing}))),
+                      Syntax.functionDefRawReturnType = Nothing,
+                      Syntax.functionDefRawFuncTypeComment = Nothing,
+                      Syntax.functionDefRawBlock = (Utils.indentedBlock Nothing [
+                        [
+                          Utils.returnSingle builderCall]])}}))
+      in (Right [
+        factoryMethod,
+        builderClass]))
+-- | Build a fluent setter for the nested Builder of a record
+recordBuilderSetter :: PythonEnvironment.PythonEnvironment -> Core.FieldType -> Syntax.Statement
+recordBuilderSetter env fieldType =
+
+      let fname = Core.fieldTypeName fieldType
+          setterName = builderSetterName env fname
+          paramName = Syntax.Name setterName
+          storageName = Strings.cat2 "_" (Syntax.unName (PythonNames.encodeFieldName env (Core.fieldTypeName fieldType)))
+          kwarg =
+                  Syntax.KwargOrStarredKwarg (Syntax.Kwarg {
+                    Syntax.kwargName = (Syntax.Name storageName),
+                    Syntax.kwargValue = (Utils.pyNameToPyExpression paramName)})
+      in (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
+        Syntax.functionDefinitionDecorators = Nothing,
+        Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
+          Syntax.functionDefRawAsync = False,
+          Syntax.functionDefRawName = (Syntax.Name setterName),
+          Syntax.functionDefRawTypeParams = [],
+          Syntax.functionDefRawParams = (Just (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
+            Syntax.paramNoDefaultParametersParamNoDefault = [
+              Syntax.ParamNoDefault {
+                Syntax.paramNoDefaultParam = Syntax.Param {
+                  Syntax.paramName = (Syntax.Name "self"),
+                  Syntax.paramAnnotation = Nothing},
+                Syntax.paramNoDefaultTypeComment = Nothing},
+              Syntax.ParamNoDefault {
+                Syntax.paramNoDefaultParam = Syntax.Param {
+                  Syntax.paramName = paramName,
+                  Syntax.paramAnnotation = Nothing},
+                Syntax.paramNoDefaultTypeComment = Nothing}],
+            Syntax.paramNoDefaultParametersParamWithDefault = [],
+            Syntax.paramNoDefaultParametersStarEtc = Nothing}))),
+          Syntax.functionDefRawReturnType = Nothing,
+          Syntax.functionDefRawFuncTypeComment = Nothing,
+          Syntax.functionDefRawBlock = (Utils.indentedBlock Nothing [
+            [
+              Utils.returnSingle (Utils.pyPrimaryToPyExpression (Utils.primaryWithRhs (Utils.pyNameToPyPrimary (Syntax.Name "replace")) (Syntax.PrimaryRhsCall (Syntax.Args {
+                Syntax.argsPositional = [
+                  Syntax.PosArgExpression (Utils.pyNameToPyExpression (Syntax.Name "self"))],
+                Syntax.argsKwargOrStarred = [
+                  kwarg],
+                Syntax.argsKwargOrDoubleStarred = []}))))]])}})))
+-- | Build a per-field copy-update method (with_<field>) for a record
+recordWithMethod :: PythonEnvironment.PythonEnvironment -> Core.FieldType -> Syntax.Statement
+recordWithMethod env fieldType =
+
+      let fname = Core.fieldTypeName fieldType
+          snake = Syntax.unName (PythonNames.encodeFieldName env fname)
+          methodName = Strings.cat2 "with_" snake
+          paramName = Syntax.Name snake
+          kwarg =
+                  Syntax.KwargOrStarredKwarg (Syntax.Kwarg {
+                    Syntax.kwargName = paramName,
+                    Syntax.kwargValue = (Utils.pyNameToPyExpression paramName)})
+      in (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
+        Syntax.functionDefinitionDecorators = Nothing,
+        Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
+          Syntax.functionDefRawAsync = False,
+          Syntax.functionDefRawName = (Syntax.Name methodName),
+          Syntax.functionDefRawTypeParams = [],
+          Syntax.functionDefRawParams = (Just (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
+            Syntax.paramNoDefaultParametersParamNoDefault = [
+              Syntax.ParamNoDefault {
+                Syntax.paramNoDefaultParam = Syntax.Param {
+                  Syntax.paramName = (Syntax.Name "self"),
+                  Syntax.paramAnnotation = Nothing},
+                Syntax.paramNoDefaultTypeComment = Nothing},
+              Syntax.ParamNoDefault {
+                Syntax.paramNoDefaultParam = Syntax.Param {
+                  Syntax.paramName = paramName,
+                  Syntax.paramAnnotation = Nothing},
+                Syntax.paramNoDefaultTypeComment = Nothing}],
+            Syntax.paramNoDefaultParametersParamWithDefault = [],
+            Syntax.paramNoDefaultParametersStarEtc = Nothing}))),
+          Syntax.functionDefRawReturnType = Nothing,
+          Syntax.functionDefRawFuncTypeComment = Nothing,
+          Syntax.functionDefRawBlock = (Utils.indentedBlock Nothing [
+            [
+              Utils.returnSingle (Utils.pyPrimaryToPyExpression (Utils.primaryWithRhs (Utils.pyNameToPyPrimary (Syntax.Name "replace")) (Syntax.PrimaryRhsCall (Syntax.Args {
+                Syntax.argsPositional = [
+                  Syntax.PosArgExpression (Utils.pyNameToPyExpression (Syntax.Name "self"))],
+                Syntax.argsKwargOrStarred = [
+                  kwarg],
+                Syntax.argsKwargOrDoubleStarred = []}))))]])}})))
 setMetaNamespaces :: Util.ModuleNames Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaNamespaces ns m =
     PythonEnvironment.PythonModuleMetadata {
