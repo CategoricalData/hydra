@@ -1324,16 +1324,28 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     dslMods <- generateDslModules universeModules dslSourceModules
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
-    let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
-    -- doInfer=True: the encoder/decoder modules carry only the synthesizer's
-    -- coarse static types — e.g. a decoder for a `type Vertex = int32` alias is
-    -- synthesized returning the raw `hydra.core.Literal`, and ONLY full type
-    -- inference specializes it to `int32`/Int. Without inference the coarse
-    -- types leak into the JSON and produce type-incorrect generated code in the
-    -- targets (e.g. dist/haskell .../Decode/Topology.hs failing to compile, and
-    -- "untyped lambda" after Java/Python eta-expansion). DSL wrappers don't
-    -- need it but re-inferring them is harmless. (#474)
-    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules derived
+    let dslDerived = filter (not . null . moduleDefinitions) dslMods
+        encDecDerived = filter (not . null . moduleDefinitions) (encMods ++ decMods)
+        derived = dslDerived ++ encDecDerived
+    -- Derived modules must NEVER be inferred: the synthesizer is the source of
+    -- truth for their type annotations, and inference over a derived module is
+    -- at best a no-op and at worst corrupts those annotations.
+    --
+    -- DSL wrappers (Dsls.hs) ALREADY fully populate their in-term annotations
+    -- (explicit lambda domains + binding TypeSchemes), so they are written with
+    -- doInfer=False — matching writeDslJsonPackageSplit.
+    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules dslDerived
+    -- Encoder/decoder modules do NOT yet fully populate their in-term annotations
+    -- (the synthesizer omits lambda domains and the type-applications that
+    -- instantiate polymorphic primitive calls), so they STILL require inference
+    -- here (doInfer=True) to specialize before the JSON is written — without it
+    -- the coarse types leak into the JSON and produce type-incorrect generated
+    -- code in the targets. This is the one remaining inference-on-derived-modules
+    -- violation; the fix is to extend Encoding.hs / Decoding.hs to stamp those
+    -- in-term annotations at construction (like Dsls.hs does), after which this
+    -- becomes doInfer=False. Tracked by #476 (defining requirement: doInfer=False
+    -- for encode/decode); related symptom in the Java/Python targets is #475.
+    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules encDecDerived
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
     finalizePerPackageDigests distJsonRoot
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)
