@@ -622,6 +622,23 @@ The following are Python-specific release steps:
     projects. See Access prerequisites. twine stops at the first failure, so check what (if
     anything) landed before retrying. Order does not matter for upload; PyPI accepts each
     independently.
+  * **Packaging-boundary smoke gate (`smoke-test-wheels.sh`).** After building each wheel set,
+    `publish-pypi.sh` invokes `heads/python/bin/smoke-test-wheels.sh` as a hard gate before any
+    upload. The gate installs the just-built wheels into a fresh, isolated venv with
+    `--no-index --find-links <wheels>` and imports the top-level kernel modules
+    (`hydra.codegen`, `hydra.rewriting`, `hydra.encoding`, `hydra.arity`, `hydra.analysis`,
+    `hydra.query`, `hydra.predicates`, `hydra.validate.core`, `hydra.validate.packaging`,
+    `hydra.python.util`) from a neutral cwd, so the worktree's own `heads/python/` cannot leak
+    onto `sys.path` and mask a missing-from-wheel package. A failure aborts the publish.
+    This gate exists because 0.16.0 shipped a `hydra-kernel` wheel whose generated modules imported
+    `hydra.python.util` from a runtime package that lived only in `heads/python/` and was therefore
+    not packaged into the wheel — every local test passed, but `pip install hydra-kernel==0.16.0`
+    in a clean venv failed with `ModuleNotFoundError`. The fix landed in #461 (the runtime moved to
+    `overlay/python/hydra-kernel/`, which is copied into `dist/python/hydra-kernel/` and packaged);
+    the gate is the standing assurance against the same class of break. See
+    [#472](https://github.com/CategoricalData/hydra/issues/472). If you add a new top-level kernel
+    module that imports a fresh runtime package, add it to `KERNEL_IMPORTS` in the script so the
+    gate covers it.
 * Publish to conda-forge:
 
   conda-forge is maintained for Hydra by [@phreed](https://github.com/phreed) (with
@@ -707,7 +724,8 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `assemble-haskell-distribution.sh` | `heads/haskell/bin/` | Layer 2 per-package Haskell assembler (Haskell analog of `assemble-distribution.sh`). Takes `<pkg>` (`hydra-kernel`/`hydra-haskell`/`hydra`) and tarballs the already-complete `dist/haskell/<pkg>/` tree (made complete by `sync-haskell.sh`, which overlays the hand-written runtime from `overlay/haskell/`): generates `package.yaml` + `stack.yaml` and runs `stack sdist`. A uniform `dist/` consumer — no per-package special-casing. Replaces the 0.15 monolithic `assemble-hackage-sdist.sh`. |
 | `publish-hackage.sh` | `heads/haskell/bin/` | Assembles (and optionally uploads, `--upload`/`--publish`) the per-package Hackage distributions in leaves-first order. Asserts the publish set is dependency-closed before assembling. |
 | `publish-maven.sh` | `heads/java/bin/` | Builds (and optionally uploads, `--upload`) the per-package Maven Central distributions leaves-first. Guards JDK 17+ and credentials; refreshes `~/.m2` with freshly-built siblings to avoid the stale-same-version trap. `--allow-javadoc-errors` applies a transient init script for #449. |
-| `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. |
+| `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `smoke-test-wheels.sh` as a hard gate before any upload. |
+| `smoke-test-wheels.sh` | `heads/python/bin/` | Packaging-boundary gate: installs the just-built wheels into an isolated venv with `--no-index` and imports the top-level kernel modules from a neutral cwd, so a worktree-local `hydra.*` cannot mask a wheel that is missing a package it imports. Catches the 0.16.0-class self-broken-wheel bug (#472) before upload. |
 | `verify-haskell-distribution.sh` | `heads/haskell/bin/` | Stages all per-package distributions into one multi-package stack project and `stack build`s them, proving the trio compiles as published (the dependents' `== <version>` pins resolve against the local staged siblings). |
 | `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `VERSION`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
 | `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `VERSION`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
