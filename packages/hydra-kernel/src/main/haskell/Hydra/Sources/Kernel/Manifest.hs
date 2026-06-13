@@ -69,17 +69,12 @@ mainDslModules :: [Module]
 mainDslModules = kernelTypesModules ++ jsonModules ++ otherModules
 
 -- | Source modules from which term encoder + decoder modules
--- (hydra.encode.<x> / hydra.decode.<x>) are derived. Narrower than
--- 'mainDslModules': it excludes modules whose synthesized encoders/decoders
--- the eta-expanding targets (Java/Python) cannot yet compile — currently
--- hydra.validation, hydra.error.packaging, and hydra.yaml.model, whose types
--- are polymorphic / recursive / Set-typed (see #475). Re-add them here once
--- #475 is fixed; the DSL side is unaffected and stays broad.
+-- (hydra.encode.<x> / hydra.decode.<x>) are derived. Broad: every
+-- type-defining module in the package. (#475 unblock — the previous
+-- narrowing excluded hydra.validation, hydra.error.packaging,
+-- hydra.yaml.model; restored here as part of the #475 fix.)
 mainEncodingModules :: [Module]
-mainEncodingModules = filter (not . isEncodingUnsupported) mainDslModules
-  where
-    isEncodingUnsupported m = unModuleName (moduleName m) `elem`
-      ["hydra.validation", "hydra.error.packaging", "hydra.yaml.model"]
+mainEncodingModules = mainDslModules
 
 testModules :: [Module]
 testModules = Test.testModules

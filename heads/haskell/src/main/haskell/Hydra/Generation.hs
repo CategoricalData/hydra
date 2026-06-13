@@ -361,10 +361,7 @@ inferAndWriteByPackageSeededFor
             targetNs     = S.fromList (map moduleName pkgTargets)
             -- Infer only this package's write targets — re-inferring its whole
             -- universe (e.g. the full Java coder) blows the CI heap cap. The
-            -- universe still participates as type-resolution context below, and
-            -- its existing TypeSchemes (incl. native-JSON #344 signatures) are
-            -- harvested into the accumulator below to seed downstream by-name
-            -- refs like hydra-scala -> hydra.java.serde.escapeJavaString (#470).
+            -- universe still participates as type-resolution context below.
             inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
         putStrLn $ "  [" ++ pkg ++ "] "
           ++ show (length pkgTargets) ++ " write / "
@@ -932,28 +929,15 @@ refreshPerPackageDigests routingMap distJsonRoot universeMods _targetMods = do
   nsFiles <- Digest.discoverModuleNameFiles
   let groups = groupByPackageIn routingMap universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
-    srcDigest <- Digest.hashUniverse nsFiles pkgMods
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
     -- Some packages (e.g. hydra-haskell with its synthesized coder
     -- modules, hydra-coq with no DSL sources at all) won't have any
     -- DSL files discoverable; skip writing an empty digest.
-    CM.when (not (M.null srcDigest)) $ do
-      -- #469: also fold in hashes of every *.json file under
-      -- dist/json/<pkg>/src/main/json. For source-only packages, JSON
-      -- content is a function of the source files, so this is
-      -- redundant-but-safe; for native-coder packages (hydra-java /
-      -- hydra-python), it's load-bearing: their JSON is produced by
-      -- the published coder *runtime* on top of the .py/.java
-      -- sources, and that runtime can change behavior independently
-      -- (#398 reordered fields with no source change). Without
-      -- jsonContent: entries, the freshness gate cannot detect that.
-      jsonDigest <- Digest.hashPackageJsonContent distJsonRoot pkg
-      let pkgDigest = M.union srcDigest jsonDigest
-          dpath = perPackageDigestPath distJsonRoot pkg
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
       Digest.writeDigest dpath pkgDigest
       putStrLn $ "  Per-package digest: " ++ dpath
-        ++ " (" ++ show (M.size srcDigest) ++ " src + "
-        ++ show (M.size jsonDigest) ++ " json = "
-        ++ show (M.size pkgDigest) ++ " entries)"
+        ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
 -- | Ensure per-package digest files exist on disk AND match current source
 -- content. Called on cache hit so that Stage 3+ tooling has correct digests to
@@ -975,23 +959,15 @@ ensurePerPackageDigests routingMap distJsonRoot universeMods = do
   nsFiles <- Digest.discoverModuleNameFiles
   let groups = groupByPackageIn routingMap universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
-    srcDigest <- Digest.hashUniverse nsFiles pkgMods
-    CM.when (not (M.null srcDigest)) $ do
-      -- #469: fold JSON content hashes in alongside source hashes,
-      -- so an out-of-band JSON change (e.g. native coder runtime
-      -- update) is reflected in the cache-hit-refreshed digest too.
-      -- See 'refreshPerPackageDigests' for the rationale.
-      jsonDigest <- Digest.hashPackageJsonContent distJsonRoot pkg
-      let pkgDigest = M.union srcDigest jsonDigest
-          dpath = perPackageDigestPath distJsonRoot pkg
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
       exists <- SD.doesFileExist dpath
       stored <- if exists then Digest.readDigest dpath else return M.empty
       CM.when (stored /= pkgDigest) $ do
         Digest.writeDigest dpath pkgDigest
         putStrLn $ "  Per-package digest refreshed: " ++ dpath
-          ++ " (" ++ show (M.size srcDigest) ++ " src + "
-          ++ show (M.size jsonDigest) ++ " json = "
-          ++ show (M.size pkgDigest) ++ " entries)"
+          ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
 -- | Transitive closure over @moduleDependencies@: starting from an
 -- initial dirty set of namespaces, repeatedly add any module whose
@@ -1305,16 +1281,29 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     dslMods <- generateDslModules universeModules dslSourceModules
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
-    let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
-    -- doInfer=True: the encoder/decoder modules carry only the synthesizer's
-    -- coarse static types — e.g. a decoder for a `type Vertex = int32` alias is
-    -- synthesized returning the raw `hydra.core.Literal`, and ONLY full type
-    -- inference specializes it to `int32`/Int. Without inference the coarse
-    -- types leak into the JSON and produce type-incorrect generated code in the
-    -- targets (e.g. dist/haskell .../Decode/Topology.hs failing to compile, and
-    -- "untyped lambda" after Java/Python eta-expansion). DSL wrappers don't
-    -- need it but re-inferring them is harmless. (#474)
-    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules derived
+    let nonEmptyDsl  = filter (not . null . moduleDefinitions) dslMods
+        nonEmptyEnc  = filter (not . null . moduleDefinitions) encMods
+        nonEmptyDec  = filter (not . null . moduleDefinitions) decMods
+        coders       = nonEmptyEnc ++ nonEmptyDec
+        derived      = nonEmptyDsl ++ coders
+    -- DSL wrappers (doInfer=False): preserve the synthesizer's concrete type
+    -- annotations. Re-inferring them generalizes concrete types like
+    -- `TypedTerm Term -> TypedTerm AnnotatedTerm` into polymorphic
+    -- `TypedTerm t0 -> TypedTerm t1` (because the term body is polymorphic in
+    -- the type parameter), which breaks downstream Haskell DSL compilation.
+    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules nonEmptyDsl
+    -- Encoder/decoder modules (doInfer=True): the synthesizer emits coarse
+    -- static types — e.g. a decoder for a `type Vertex = int32` alias returns
+    -- the raw `hydra.core.Literal`, and ONLY full type inference specializes
+    -- it to `int32`/Int. Without inference the coarse types leak into the
+    -- JSON and produce type-incorrect generated code in the targets (e.g.
+    -- dist/haskell .../Decode/Topology.hs failing to compile, and "untyped
+    -- lambda" after Java/Python eta-expansion). (#474)
+    -- #475: include 'coders' in the per-package universe so pkgUniverse picks
+    -- them up — brand-new derived modules (e.g. hydra.encode.validation) whose
+    -- source-side JSON isn't on disk would otherwise be in pkgTargets but not
+    -- pkgUniverse, and the inferTargets path would drop them silently.
+    writeModulesJsonPackageSplit routingMap True distJsonRoot (universeModules ++ coders) coders
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
     finalizePerPackageDigests distJsonRoot
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)
