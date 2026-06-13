@@ -359,13 +359,32 @@ inferAndWriteByPackageSeededFor
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
             targetNs     = S.fromList (map moduleName pkgTargets)
+            -- Native-owned packages (#344: hydra-java, hydra-python) are NEVER
+            -- inferred here. Their canonical JSON is produced by the native
+            -- generators, and their full universe includes the native coder
+            -- module (e.g. hydra.java.coder), which references kernel term
+            -- bindings by name (hydra.annotations.commentsFromFieldType) that
+            -- are not in this pass's by-name accumulator — re-inferring it
+            -- fails with "no such binding". Their existing JSON TypeSchemes are
+            -- still harvested below (free, no inference), so downstream by-name
+            -- refs like hydra-scala -> hydra.java.serde.escapeJavaString still
+            -- resolve (#470). Before #466 these packages had the dsl wrappers as
+            -- write targets so inferTargets was non-empty and never hit the
+            -- null-pkgTargets fallback; now that the wrappers are excluded from
+            -- the write universe (they're derived modules; inference must not
+            -- run on them) the fallback would otherwise infer the whole native
+            -- universe — hence this explicit skip.
+            isNativeOwnedPkg = pkg == "hydra-java" || pkg == "hydra-python"
             -- Infer only this package's write targets — re-inferring its whole
             -- universe (e.g. the full Java coder) blows the CI heap cap. The
             -- universe still participates as type-resolution context below, and
             -- its existing TypeSchemes (incl. native-JSON #344 signatures) are
             -- harvested into the accumulator below to seed downstream by-name
             -- refs like hydra-scala -> hydra.java.serde.escapeJavaString (#470).
-            inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
+            inferTargets
+              | isNativeOwnedPkg = []
+              | null pkgTargets  = pkgUniverse
+              | otherwise        = pkgTargets
         putStrLn $ "  [" ++ pkg ++ "] "
           ++ show (length pkgTargets) ++ " write / "
           ++ show (length inferTargets) ++ " infer / "
