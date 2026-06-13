@@ -151,6 +151,11 @@ At the beginning of every new session, follow these steps **before doing any oth
     consolidated via the squash workflow, it represents shippable history.
     The absence of `WIP:` is what tells a reader the work is finalized.
     See [.claude/commands/squash.md](.claude/commands/squash.md).
+  - **`WIP:` must never reach `origin/main`.** It leaks two ways: dragged in by a
+    merge from integration/a feature branch, and self-authored fix commits pushed
+    without finalizing. The staging loop gates both — a post-pull check and a
+    pre-push scan of `origin/main..staging`. See
+    [Handling pulled WIP commits](claude/branch-flow.md#handling-pulled-wip-commits).
   - **All commit messages are short (≤120 chars), single-line, no body.**
     No `Co-Authored-By` line. End with `For #<issue>` (or `Resolves #<issue>`
     if this branch closes it). Example:
