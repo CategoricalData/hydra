@@ -199,6 +199,29 @@ a real first build takes.
 > whenever the downstream consumer compiles or tests cross-language
 > code.
 
+### Local `/sync` + `/bootstrap` don't run every CI step — green locally can still fail CI
+
+CI's gating "Haskell tests (JSON build + consistency check)" job runs steps that a plain local
+`bin/sync.sh` does **not**, so a clean local sync + green bootstrap is not proof CI will pass:
+
+- **On-demand package regen** — CI runs `bin/sync-packages.sh hydra-pg/rdf/ext --targets java,python`
+  (via `transform-haskell-dsl-to-json`), a separate executable with a *narrower* universe than
+  `update-json-main`. A full `bin/sync.sh` never invokes it.
+- **#469 consistency guards** — CI force-regenerates and diffs `dist/haskell/hydra-{java,python}`,
+  and runs the JSON-content-invalidates-render gate. Local sync doesn't.
+
+Three CI-red cycles in one session (poly-wrapper drift, `commentsFromFieldType`, `escapeJavaString`)
+all hid in these CI-only steps and passed every local check first. When validating before a push:
+
+- Reproduce the on-demand step locally: `bin/sync-packages.sh hydra-pg --targets java --no-tests`
+  (then `hydra-rdf`, `hydra-ext`, both `java` and `python`) — fast on a warm tree.
+- A `no such binding: hydra.java.serde.escapeJavaString` from `transform-haskell-dsl-to-json` means
+  the native packages weren't loaded into that exe's inference universe (see
+  `Hydra.Generation.loadNativePackageModules`).
+- Symptom pattern: each fix tends to unblock CI to the *next* latent CI-only step, so a passing
+  fix that makes CI run *longer* before failing is progress, not a new regression. Read the
+  *active step* (`gh run view <id> --json jobs` → `steps[]`) to see how far it got.
+
 ### Wrapper scripts auto-sync; testers don't
 
 Convention: any **user-callable wrapper script** that invokes a build
