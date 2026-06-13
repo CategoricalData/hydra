@@ -198,6 +198,32 @@ and `hydraPythonModules` are empty and `update-json-main` no longer writes those
 It does still *load* the `hydra.{java,python}.*` JSON into its inference universe so
 cross-package references resolve (e.g. `hydra-scala` → `hydra.java.serde.escapeJavaString`).
 
+The general invariant: **when a package is inferred, the typed output of every package it
+depends on must already be in its inference universe** — that is just the dependency DAG, and it
+holds for any inter-package edge. The default model is that packages may be written in *different*
+source languages and depend on each other through their generated JSON: a package's types are read
+from its `dist/json`, regardless of what language authored it.
+
+The one current exception is the package whose source language is compiled directly into the
+generator. Today that is `hydra-kernel`, written in the Haskell DSL — its modules are in the
+inference universe automatically without reading any JSON. This is not a property of Haskell *per
+se*; Haskell just happens to be the kernel's source language and the bootstrap host right now.
+That is provisional: [#459](https://github.com/CategoricalData/hydra/issues/459) tracks moving the
+build's default host off Haskell (the Haskell host must be built from Hackage sources, while the
+Java host ships as Maven bytecode), and the kernel's source language could itself change. Treat
+"compiled into the generator" as the special, shrinking case — not the rule.
+
+Everything else is loaded from JSON. `hydra-java` and `hydra-python` are simply the packages
+already operating this way (their DSL sources were removed in #346, so `dist/json` is their only
+typed representation); the driver loads them via `Hydra.Generation.loadNativePackageModules`. As
+more packages move off the compiled-in path, the same on-disk loading applies to them. Every
+JSON-writing driver that runs per-package inference must satisfy the invariant — not just
+`update-json-main`. The concrete bug this prevents: `transform-haskell-dsl-to-json` (the on-demand
+sync, `bin/sync-packages.sh hydra-pg/rdf/ext`) once skipped that load, so inferring `hydra-scala`
+— which references `hydra.java.serde.escapeJavaString` — failed with `no such binding`. That
+on-demand path is CI-exercised but a plain `bin/sync.sh` does not run it (see the local-vs-CI gap
+note in [claude/pitfalls.md](../claude/pitfalls.md)).
+
 Phase 5 completed the migration for [#344](https://github.com/CategoricalData/hydra/issues/344):
 `hydra-java` and `hydra-python` are authored in their own host languages, and as of #346 those
 host-native sources are the **sole** source of truth — the Haskell DSL copies are deleted. The
