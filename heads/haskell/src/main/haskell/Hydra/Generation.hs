@@ -1611,3 +1611,31 @@ loadModulesFromJson basePath universeModules namespaces = do
             putStrLn $ "  Loaded: " ++ unModuleName ns
             return mod
 
+-- | Load the hydra-java and hydra-python modules (hydra.{java,python}.* +
+-- hydra.dsl.{java,python}.*) from their already-generated dist/json so they can
+-- seed the inference universe. Their Haskell DSL sources have been deleted
+-- (#346/#370); the native drivers are the sole writers, but the Haskell generator
+-- still needs these modules present to resolve cross-package references (e.g.
+-- hydra-scala -> hydra.java.serde.escapeJavaString). Missing manifests (a truly
+-- cold tree before Phase 1.5 seeds them) are tolerated: such a run cannot
+-- reference them yet either. The decode context is the base universe (kernel etc.).
+--
+-- Lives here (not in a single exe's Main) so every JSON-writing driver shares
+-- one loader: update-json-main AND transform-haskell-dsl-to-json must seed the
+-- native packages identically, else the on-demand sync path (sync-packages.sh)
+-- can't resolve hydra.java.serde.* for hydra-scala. (#346)
+loadNativePackageModules :: FilePath -> [Module] -> IO [Module]
+loadNativePackageModules distRoot baseUniverse =
+    fmap L.concat $ CM.forM ["hydra-java", "hydra-python"] $ \pkg -> do
+      let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          manifest = pkgJson FP.</> "manifest.json"
+      exists <- SD.doesFileExist manifest
+      if not exists
+        then do
+          putStrLn $ "  (skipping " ++ pkg ++ ": no manifest yet — cold tree)"
+          return []
+        else do
+          mainNs <- readManifestField pkgJson "mainModules"
+          dslNs  <- readManifestField pkgJson "dslModules"
+          loadModulesFromJson pkgJson baseUniverse (mainNs ++ dslNs)
+
