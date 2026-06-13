@@ -2627,9 +2627,9 @@ def _field_snake(env, fname):
 
 def _builder_setter_name():
     # The fluent-builder setter name for a record field: the field's sanitized
-    # lower_snake name, with `build`/`builder` further escaped to `build_`/`builder_`
-    # so a field with such a name does not shadow the generated build() method or
-    # builder() factory.
+    # lower_snake name, with `build`/`builder`/`self` further escaped to
+    # `build_`/`builder_`/`self_` so a field with such a name does not shadow the
+    # generated build() method, builder() factory, or the implicit `self` parameter.
     body = lambdas(
         ["env", "fname"],
         let_chain(
@@ -2639,7 +2639,10 @@ def _builder_setter_name():
             Logic.if_else(
                 Logic.or_(
                     Equality.equal(var("base"), string("build")),
-                    Equality.equal(var("base"), string("builder")),
+                    Logic.or_(
+                        Equality.equal(var("base"), string("builder")),
+                        Equality.equal(var("base"), string("self")),
+                    ),
                 ),
                 Strings.cat2(var("base"), string("_")),
                 var("base"),
@@ -2648,7 +2651,7 @@ def _builder_setter_name():
     )
     return _def(
         "builderSetterName",
-        doc("Escape a builder setter name that would collide with build()/builder()", body),
+        doc("Escape a builder setter name that would collide with build()/builder()/self", body),
     )
 
 
@@ -2790,6 +2793,9 @@ def _record_with_method():
     #   def with_<field>(self, <field>): return replace(self, <field>=<field>)
     # Relies on every record being @dataclass(frozen=True), so dataclasses.replace
     # (imported as `replace`) produces a new instance with one field changed.
+    # When <field> is literally `self`, the parameter is renamed to `_self` to
+    # avoid the duplicate-argument SyntaxError (issue #478); the kwarg key still
+    # references the field name `self`.
     body = lambdas(
         ["env", "fieldType"],
         let_chain(
@@ -2797,13 +2803,22 @@ def _record_with_method():
                 ("fname", Core.field_type_name(var("fieldType"))),
                 ("snake", _field_snake(var("env"), var("fname"))),
                 ("methodName", Strings.cat2(string("with_"), var("snake"))),
-                ("paramName", _py_name(var("snake"))),
-                # replace(self, <field>=<field>)
+                ("kwargKey", _py_name(var("snake"))),
+                (
+                    "paramSnake",
+                    Logic.if_else(
+                        Equality.equal(var("snake"), string("self")),
+                        string("_self"),
+                        var("snake"),
+                    ),
+                ),
+                ("paramName", _py_name(var("paramSnake"))),
+                # replace(self, <field>=<param>)
                 (
                     "kwarg",
                     PySyn.kwarg_or_starred_kwarg(
                         PySyn.kwarg(
-                            var("paramName"),
+                            var("kwargKey"),
                             _kref.utils_py_name_to_py_expression(var("paramName")),
                         )
                     ),
