@@ -1281,20 +1281,29 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     dslMods <- generateDslModules universeModules dslSourceModules
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
-    let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
-    -- doInfer=True: the encoder/decoder modules carry only the synthesizer's
-    -- coarse static types — e.g. a decoder for a `type Vertex = int32` alias is
-    -- synthesized returning the raw `hydra.core.Literal`, and ONLY full type
-    -- inference specializes it to `int32`/Int. Without inference the coarse
-    -- types leak into the JSON and produce type-incorrect generated code in the
-    -- targets (e.g. dist/haskell .../Decode/Topology.hs failing to compile, and
-    -- "untyped lambda" after Java/Python eta-expansion). DSL wrappers don't
-    -- need it but re-inferring them is harmless. (#474)
-    -- #475: include 'derived' in the per-package universe so pkgUniverse picks
+    let nonEmptyDsl  = filter (not . null . moduleDefinitions) dslMods
+        nonEmptyEnc  = filter (not . null . moduleDefinitions) encMods
+        nonEmptyDec  = filter (not . null . moduleDefinitions) decMods
+        coders       = nonEmptyEnc ++ nonEmptyDec
+        derived      = nonEmptyDsl ++ coders
+    -- DSL wrappers (doInfer=False): preserve the synthesizer's concrete type
+    -- annotations. Re-inferring them generalizes concrete types like
+    -- `TypedTerm Term -> TypedTerm AnnotatedTerm` into polymorphic
+    -- `TypedTerm t0 -> TypedTerm t1` (because the term body is polymorphic in
+    -- the type parameter), which breaks downstream Haskell DSL compilation.
+    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules nonEmptyDsl
+    -- Encoder/decoder modules (doInfer=True): the synthesizer emits coarse
+    -- static types — e.g. a decoder for a `type Vertex = int32` alias returns
+    -- the raw `hydra.core.Literal`, and ONLY full type inference specializes
+    -- it to `int32`/Int. Without inference the coarse types leak into the
+    -- JSON and produce type-incorrect generated code in the targets (e.g.
+    -- dist/haskell .../Decode/Topology.hs failing to compile, and "untyped
+    -- lambda" after Java/Python eta-expansion). (#474)
+    -- #475: include 'coders' in the per-package universe so pkgUniverse picks
     -- them up — brand-new derived modules (e.g. hydra.encode.validation) whose
     -- source-side JSON isn't on disk would otherwise be in pkgTargets but not
-    -- pkgUniverse, and the inferTargets=pkgUniverse path would drop them silently.
-    writeModulesJsonPackageSplit routingMap True distJsonRoot (universeModules ++ derived) derived
+    -- pkgUniverse, and the inferTargets path would drop them silently.
+    writeModulesJsonPackageSplit routingMap True distJsonRoot (universeModules ++ coders) coders
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
     finalizePerPackageDigests distJsonRoot
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)
