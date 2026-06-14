@@ -138,6 +138,166 @@ for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
 done
 
 # ============================================================
+# Run-directory + JSON utilities — defined early because the prep block
+# below calls them; their canonical homes (Shared utilities, further down)
+# remain unchanged for callers like do_test/find_run_dir.
+# ============================================================
+
+# Create a run directory with timestamp
+create_run_dir() {
+    local ts
+    ts=$(python3 -c 'from datetime import datetime,timezone; t=datetime.now(timezone.utc); print(t.strftime("%Y-%m-%d_%H%M%S") + "_" + f"{t.microsecond//1000:03d}")')
+    local dirname="run_${ts}"
+    if [ -n "$TAG" ]; then
+        dirname="${dirname}_${TAG}"
+    fi
+    local run_dir="$RUNS_DIR/$dirname"
+    mkdir -p "$run_dir"
+    echo "$run_dir"
+}
+
+json_escape() {
+    python3 -c "import json,sys; print(json.dumps(sys.argv[1]))" "$1"
+}
+
+# ============================================================
+# Prep-phase result-record utilities (issue #481)
+# ============================================================
+#
+# Originally `create_run_dir` was only called from `do_generate`, after
+# all prep had succeeded. If prep died (overlay error, sync failure, env
+# check, etc.), no `bootstrap/runs/run_*/` directory was ever created
+# and the failure was invisible to anything scanning the runs tree.
+# These helpers — plus the hoisted `create_run_dir` call further below —
+# fix that by leaving `metadata.json` + `prep.json` + `prep.log` behind
+# when prep dies.
+#
+# Schema of `prep.json` (written on prep failure only):
+#   { "status": "fail",
+#     "stage": "prep:<phaseName>",   # e.g. prep:overlay, prep:sync, prep:env-check
+#     "exitCode": N,
+#     "firstError": "first matching error/fail line from prep.log, or empty",
+#     "prepLog": "prep.log" }
+#
+# Schema of `metadata.json` on prep failure: same fields as a successful
+# run, plus `"status": "fail"` and `"failedStage": "prep:<phaseName>"`.
+# `totalTimeSeconds` reflects only the prep duration in that case.
+
+# Run a prep step, mirror its output into the run's prep.log via tee,
+# and propagate the step's true exit status (not tee's). On non-zero,
+# `set -e` plus the ERR trap below fire, producing a prep.json sentinel.
+# (Bash has no `pipefail` enabled in this script, so $PIPESTATUS is used
+# explicitly — same pattern as do_generate's setup/invoke/test calls.)
+run_prep_step() {
+    "$@" 2>&1 | tee -a "$PREP_LOG"
+    return ${PIPESTATUS[0]}
+}
+
+# Write a preliminary metadata.json. Same shape as the final one written
+# by write_metadata, but with `status: "prep"` and `totalTimeSeconds: 0`.
+# Overwritten at end-of-run on success.
+write_preliminary_metadata() {
+    local run_dir=$1
+    local overall_start=$2
+
+    local branch commit commit_msg start_time
+    branch=$(cd "$HYDRA_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+    commit=$(cd "$HYDRA_ROOT" && git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+    commit_msg=$(cd "$HYDRA_ROOT" && git log -1 --format=%s 2>/dev/null || echo "")
+    start_time=$(python3 -c "from datetime import datetime,timezone; print(datetime.fromtimestamp($overall_start, timezone.utc).isoformat())")
+
+    cat > "$run_dir/metadata.json" <<ENDJSON
+{
+  "status": "prep",
+  "startTime": "${start_time}",
+  "totalTimeSeconds": 0,
+  "branch": $(json_escape "$branch"),
+  "commit": $(json_escape "$commit"),
+  "commitMessage": $(json_escape "$commit_msg"),
+  "hosts": $(python3 -c "import json; print(json.dumps('${HOSTS}'.split(',')))" ),
+  "targets": $(python3 -c "import json; print(json.dumps('${TARGETS}'.split(',')))" ),
+  "outputBase": $(json_escape "$OUTPUT_BASE")
+}
+ENDJSON
+}
+
+# ERR trap: fires on any non-zero exit while PREP_STAGE is set. Writes
+# prep.json and updates metadata.json to record the failed stage, then
+# re-exits with the original code so the script still terminates non-zero.
+prep_failure_trap() {
+    local exit_code=$1
+    # Guard against re-entry if our own writes fail.
+    trap - ERR
+    local first_err=""
+    if [ -f "$PREP_LOG" ]; then
+        # Case-insensitive match against the noisiest signals: lines starting
+        # with Error/ERROR/Fatal, GHC-style "<path>:<L>:<C>: error:" lines,
+        # Python tracebacks, and explicit FAIL banners. -i means we catch
+        # both Java/Python (`Error:`) and Haskell (`error:`) conventions.
+        first_err=$(grep -aEi '^(error|fatal|traceback)|: error:|.*Error:|.*Exception:|.*FAIL' "$PREP_LOG" 2>/dev/null | head -1 || true)
+    fi
+    local prep_end=$(date +%s)
+    local prep_secs=$((prep_end - PREP_START))
+
+    cat > "$RUN_DIR/prep.json" <<ENDJSON
+{
+  "status": "fail",
+  "stage": $(json_escape "$PREP_STAGE"),
+  "exitCode": ${exit_code},
+  "prepTimeSeconds": ${prep_secs},
+  "firstError": $(json_escape "$first_err"),
+  "prepLog": "prep.log"
+}
+ENDJSON
+
+    # Rewrite metadata.json with status=fail and the failing stage.
+    local start_time branch commit commit_msg
+    branch=$(cd "$HYDRA_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+    commit=$(cd "$HYDRA_ROOT" && git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+    commit_msg=$(cd "$HYDRA_ROOT" && git log -1 --format=%s 2>/dev/null || echo "")
+    start_time=$(python3 -c "from datetime import datetime,timezone; print(datetime.fromtimestamp($PREP_START, timezone.utc).isoformat())")
+    cat > "$RUN_DIR/metadata.json" <<ENDJSON
+{
+  "status": "fail",
+  "failedStage": $(json_escape "$PREP_STAGE"),
+  "startTime": "${start_time}",
+  "totalTimeSeconds": ${prep_secs},
+  "branch": $(json_escape "$branch"),
+  "commit": $(json_escape "$commit"),
+  "commitMessage": $(json_escape "$commit_msg"),
+  "hosts": $(python3 -c "import json; print(json.dumps('${HOSTS}'.split(',')))" ),
+  "targets": $(python3 -c "import json; print(json.dumps('${TARGETS}'.split(',')))" ),
+  "outputBase": $(json_escape "$OUTPUT_BASE")
+}
+ENDJSON
+
+    echo "" >&2
+    echo "Prep phase failed at stage: $PREP_STAGE (exit $exit_code)" >&2
+    echo "  Run directory: $RUN_DIR" >&2
+    echo "  See: $RUN_DIR/prep.log, $RUN_DIR/prep.json" >&2
+    exit "$exit_code"
+}
+
+# Prep runs only for subcommands that actually generate code. `test` and
+# `display` re-use an existing run directory and must not re-create one.
+RUN_DIR=""
+case "$SUBCOMMAND" in
+    all|generate) DO_PREP=true ;;
+    *)            DO_PREP=false ;;
+esac
+
+if $DO_PREP; then
+    RUN_DIR=$(create_run_dir)
+    PREP_LOG="$RUN_DIR/prep.log"
+    PREP_START=$(date +%s)
+    write_preliminary_metadata "$RUN_DIR" "$PREP_START"
+    trap 'prep_failure_trap $?' ERR
+    PREP_STAGE="prep:starting"
+fi
+
+if $DO_PREP; then
+
+# ============================================================
 # Pre-sync: ensure dist/<lang>/ has every package the demo will need
 # ============================================================
 #
@@ -161,11 +321,14 @@ echo "[Pre-sync] Overlaying hand-written Haskell runtime onto dist/haskell/..."
 # --hosts doesn't include haskell, so the overlay would be missing for
 # non-Haskell-host runs (TS, Scala, Lisp hosts) — yet downstream stack
 # builds still touch hydra-ext and fail. Always overlay before sync.
-"$HYDRA_ROOT/heads/haskell/bin/overlay-kernel-runtime.sh"
+PREP_STAGE="prep:overlay"
+run_prep_step "$HYDRA_ROOT/heads/haskell/bin/overlay-kernel-runtime.sh"
 echo ""
 echo "[Pre-sync] Ensuring dist/ is fresh for the selected hosts × targets..."
-"$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests $HOST_MODE_FLAG
+PREP_STAGE="prep:sync"
+run_prep_step "$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests $HOST_MODE_FLAG
 echo ""
+PREP_STAGE="prep:env-check"
 
 # ============================================================
 # Environment checks
@@ -340,26 +503,40 @@ if $NEED_NODE; then
     fi
 fi
 
-# Report results.
+# Report results. Mirror to prep.log so the prep-failure trap can extract
+# `firstError` from the same place as for overlay/sync failures.
 if [ ${#ENV_ERRORS[@]} -gt 0 ]; then
-    echo "Environment check FAILED:"
-    for msg in "${ENV_ERRORS[@]}"; do
-        echo "  ERROR: $msg"
-    done
-    if [ ${#ENV_WARNINGS[@]} -gt 0 ]; then
+    {
+        echo "Environment check FAILED:"
+        for msg in "${ENV_ERRORS[@]}"; do
+            echo "  ERROR: $msg"
+        done
+        if [ ${#ENV_WARNINGS[@]} -gt 0 ]; then
+            for msg in "${ENV_WARNINGS[@]}"; do
+                echo "  WARNING: $msg"
+            done
+        fi
+    } 2>&1 | tee -a "$PREP_LOG"
+    # Trip set -e + the prep ERR trap so we leave a prep.json record on disk,
+    # rather than `exit 1`-ing past the trap.
+    false
+fi
+if [ ${#ENV_WARNINGS[@]} -gt 0 ]; then
+    {
+        echo "Environment check:"
         for msg in "${ENV_WARNINGS[@]}"; do
             echo "  WARNING: $msg"
         done
-    fi
-    exit 1
+        echo ""
+    } 2>&1 | tee -a "$PREP_LOG"
 fi
-if [ ${#ENV_WARNINGS[@]} -gt 0 ]; then
-    echo "Environment check:"
-    for msg in "${ENV_WARNINGS[@]}"; do
-        echo "  WARNING: $msg"
-    done
-    echo ""
-fi
+
+# Prep complete — clear the trap so do_generate's per-cell failures are
+# handled by its own status-recording logic, not rewritten as prep failures.
+trap - ERR
+PREP_STAGE=""
+
+fi  # if $DO_PREP
 
 # ============================================================
 # Shared utilities
@@ -424,18 +601,8 @@ capitalize() {
     printf '%s%s' "$(echo "$first" | tr '[:lower:]' '[:upper:]')" "$rest"
 }
 
-# Create a run directory with timestamp
-create_run_dir() {
-    local ts
-    ts=$(python3 -c 'from datetime import datetime,timezone; t=datetime.now(timezone.utc); print(t.strftime("%Y-%m-%d_%H%M%S") + "_" + f"{t.microsecond//1000:03d}")')
-    local dirname="run_${ts}"
-    if [ -n "$TAG" ]; then
-        dirname="${dirname}_${TAG}"
-    fi
-    local run_dir="$RUNS_DIR/$dirname"
-    mkdir -p "$run_dir"
-    echo "$run_dir"
-}
+# create_run_dir is defined earlier (the prep block needs it). See the
+# "Run-directory + JSON utilities" section above.
 
 # If the output base directory already exists, rename it to <dir>.1, .2, etc.
 preserve_existing_output() {
@@ -475,9 +642,7 @@ find_run_dir() {
     echo "$latest"
 }
 
-json_escape() {
-    python3 -c "import json,sys; print(json.dumps(sys.argv[1]))" "$1"
-}
+# json_escape is defined earlier (the prep block needs it).
 
 # Compare generated output against baseline
 compare_output() {
@@ -603,8 +768,11 @@ write_metadata() {
     commit_msg=$(cd "$HYDRA_ROOT" && git log -1 --format=%s 2>/dev/null || echo "")
     start_time=$(python3 -c "from datetime import datetime,timezone; print(datetime.fromtimestamp($overall_start, timezone.utc).isoformat())")
 
+    # `status: "ok"` lets sweep tooling tell a successful run from a prep-failed
+    # one (which carries `status: "fail"` + `failedStage`). See #481.
     cat > "$run_dir/metadata.json" <<ENDJSON
 {
+  "status": "ok",
   "startTime": "${start_time}",
   "totalTimeSeconds": ${overall_secs},
   "branch": $(json_escape "$branch"),
@@ -704,9 +872,10 @@ run_tests_for_path() {
 do_generate() {
     local run_tests=$1  # "true" or "false"
     local TOTAL_PATHS=$(( ${#HOST_LIST[@]} * ${#TARGET_LIST[@]} ))
-    local OVERALL_START=$(date +%s)
-    local RUN_DIR
-    RUN_DIR=$(create_run_dir)
+    # Reuse the run directory already created at script top by the prep block
+    # (see #481). PREP_START is set there; reuse it so totalTimeSeconds covers
+    # prep + generate, matching pre-#481 semantics.
+    local OVERALL_START=$PREP_START
 
     preserve_existing_output
 
