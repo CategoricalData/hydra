@@ -185,7 +185,7 @@ encodeEitherType = define "encodeEitherType" $
   "et" ~>
     DeepCore.lambda "e" $
       DeepCore.injection _Term (DeepCore.field _Term_either
-        (DeepCore.primitiveEncoded (Prims.primName DefEithers.bimap)
+        (DeepCore.primitiveEncoded DefEithers.bimap
           @@@ (encodeType @@ Core.eitherTypeLeft (var "et"))
           @@@ (encodeType @@ Core.eitherTypeRight (var "et"))
           @@@ DeepCore.var "e"))
@@ -289,7 +289,7 @@ encodeListType = define "encodeListType" $
   "elemType" ~>
     DeepCore.lambda "xs" $
       DeepCore.injection _Term (DeepCore.field _Term_list
-        (DeepCore.primitiveEncoded (Prims.primName DefLists.map) @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "xs"))
+        (DeepCore.primitiveEncoded DefLists.map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "xs"))
 
 -- | Generate an encoder for a map type
 -- Encodes each key/value pair and wraps in Term.map
@@ -333,7 +333,7 @@ encodeMapType = define "encodeMapType" $
   "mt" ~>
     DeepCore.lambda "m" $
       DeepCore.injection _Term (DeepCore.field _Term_map
-        (DeepCore.primitiveEncoded (Prims.primName DefMaps.bimap)
+        (DeepCore.primitiveEncoded DefMaps.bimap
           @@@ (encodeType @@ Core.mapTypeKeys (var "mt"))
           @@@ (encodeType @@ Core.mapTypeValues (var "mt"))
           @@@ DeepCore.var "m"))
@@ -368,7 +368,7 @@ encodeModule = define "encodeModule" $
               Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
             (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
-            (primitive (Prims.primName DefLists.map) @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
+            (primitive DefLists.map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") nothing
@@ -407,7 +407,7 @@ encodeOptionalType = define "encodeOptionalType" $
   doc "Generate an encoder for a Maybe type" $
   "elemType" ~> DeepCore.lambda "opt" $
     DeepCore.injection _Term (DeepCore.field _Term_optional
-      (DeepCore.primitiveEncoded (Prims.primName DefOptionals.map) @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
+      (DeepCore.primitiveEncoded DefOptionals.map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
 
 -- | Generate an encoder for a pair type
 -- Encodes both elements and wraps in Term.pair
@@ -416,7 +416,7 @@ encodeOptionalType = define "encodeOptionalType" $
 encodePairType :: TypedTermDefinition (PairType -> Term)
 encodePairType = define "encodePairType" $
   doc "Generate an encoder for a pair type" $
-  "pt" ~> DeepCore.lambda "p" $ DeepCore.injection _Term $ DeepCore.field _Term_pair $ DeepCore.primitiveEncoded (Prims.primName DefPairs.bimap)
+  "pt" ~> DeepCore.lambda "p" $ DeepCore.injection _Term $ DeepCore.field _Term_pair $ DeepCore.primitiveEncoded DefPairs.bimap
     @@@ (encodeType @@ Core.pairTypeFirst (var "pt"))
     @@@ (encodeType @@ Core.pairTypeSecond (var "pt"))
     @@@ DeepCore.var "p"
@@ -440,7 +440,7 @@ encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
         (DeepCore.record _Record [
           DeepCore.field _Record_typeName (encodeName @@ var "ename"),
           DeepCore.field _Record_fields
-            (DeepCore.list (primitive (Prims.primName DefLists.map) @@ (encodeRecordFieldNamed @@ var "ename" @@ var "rt") @@ var "rt"))]))
+            (DeepCore.list (primitive DefLists.map @@ (encodeRecordFieldNamed @@ var "ename" @@ var "rt") @@ var "rt"))]))
   where
     encodeRecordFieldNamed :: TypedTerm (Name -> [FieldType] -> FieldType -> Term)
     encodeRecordFieldNamed =
@@ -461,7 +461,7 @@ encodeSetType = define "encodeSetType" $
   doc "Generate an encoder for a set type" $
   "elemType" ~> DeepCore.lambda "s" $
     DeepCore.injection _Term (DeepCore.field _Term_set
-      (DeepCore.primitiveEncoded (Prims.primName DefSets.map) @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "s"))
+      (DeepCore.primitiveEncoded DefSets.map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "s"))
 
 -- | Generate an encoder term for a given Type (without element name context)
 encodeType :: TypedTermDefinition (Type -> Term)
@@ -566,7 +566,7 @@ encodeUnionTypeNamed = define "encodeUnionTypeNamed" $
     Core.termCases $ Core.caseStatement
         (var "ename")
         nothing
-        (primitive (Prims.primName DefLists.map) @@
+        (primitive DefLists.map @@
           ("ft" ~> Core.caseAlternative
             (Core.fieldTypeName (var "ft"))
             (encodeFieldValue
@@ -878,9 +878,9 @@ filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
     -- First filter to native types, then check serializability for each
-    Eithers.map (primitive (Prims.primName DefOptionals.cat)) $
+    Eithers.map (primitive DefOptionals.cat) $
       Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
-        primitive (Prims.primName DefLists.filter) @@ Annotations.isNativeType @@ var "bindings"
+        primitive DefLists.filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Format a DecodingError as a string
 formatDecodingError :: TypedTerm (DecodingError -> String)
