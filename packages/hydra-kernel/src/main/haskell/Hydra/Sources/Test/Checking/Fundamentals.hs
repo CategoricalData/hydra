@@ -19,6 +19,15 @@ import qualified Data.Map                     as M
 
 import qualified Data.ByteString              as B
 import qualified Data.ByteString.Char8        as BC
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Logic as DefLogic
+import qualified Hydra.Lib.Maps as DefMaps
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Lib.Sets as DefSets
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -97,26 +106,26 @@ applicationsInComplexContextsTests :: TypedTermDefinition TestGroup
 applicationsInComplexContextsTests = define "applicationsInComplexContextsTests" $
   subgroup "Applications in complex contexts" [
   checkTest "application in tuple" []
-    (tuple [primitive _math_add @@ int32 1 @@ int32 2,
-            primitive _strings_cat2 @@ string "a" @@ string "b"])
-    (tyapps (pair (primitive _math_add @@ int32 1 @@ int32 2) (primitive _strings_cat2 @@ string "a" @@ string "b")) [T.int32, T.string])
+    (tuple [primitive (Prims.primName DefMath.add) @@ int32 1 @@ int32 2,
+            primitive (Prims.primName DefStrings.cat2) @@ string "a" @@ string "b"])
+    (tyapps (pair (primitive (Prims.primName DefMath.add) @@ int32 1 @@ int32 2) (primitive (Prims.primName DefStrings.cat2) @@ string "a" @@ string "b")) [T.int32, T.string])
     (T.pair T.int32 T.string),
   noChange "application in record"
     (record TestTypes.testTypePersonName [
-      "firstName">: primitive _strings_cat2 @@ string "John" @@ string "ny",
+      "firstName">: primitive (Prims.primName DefStrings.cat2) @@ string "John" @@ string "ny",
       "lastName">: string "Doe",
-      "age">: primitive _math_add @@ int32 20 @@ int32 5])
+      "age">: primitive (Prims.primName DefMath.add) @@ int32 20 @@ int32 5])
     (Core.typeVariable TestTypes.testTypePersonName),
   checkTest "application in let binding" []
-    (lets ["result">: primitive _math_mul @@ int32 6 @@ int32 7] $
+    (lets ["result">: primitive (Prims.primName DefMath.mul) @@ int32 6 @@ int32 7] $
       var "result")
     (letsTyped [
-      ("result", primitive _math_mul @@ int32 6 @@ int32 7,
+      ("result", primitive (Prims.primName DefMath.mul) @@ int32 6 @@ int32 7,
         T.mono T.int32)] $
       var "result")
     T.int32,
   noChange "nested applications"
-    (primitive _math_add @@ (primitive _math_mul @@ int32 3 @@ int32 4) @@ (primitive _math_add @@ int32 1 @@ int32 2))
+    (primitive (Prims.primName DefMath.add) @@ (primitive (Prims.primName DefMath.mul) @@ int32 3 @@ int32 4) @@ (primitive (Prims.primName DefMath.add) @@ int32 1 @@ int32 2))
     T.int32]
 
 applicationsTests :: TypedTermDefinition TestGroup
@@ -147,10 +156,10 @@ applicationsWithComplexArgumentsTests = define "applicationsWithComplexArguments
         "age">: int32 25])
     T.string,
   checkTest "application with list argument" []
-    (lets ["maybeHead">: lambda "xs" $ primitive _lists_maybeHead @@ var "xs"] $
+    (lets ["maybeHead">: lambda "xs" $ primitive (Prims.primName DefLists.maybeHead) @@ var "xs"] $
       var "maybeHead" @@ list [string "first", string "second"])
     (letsTyped [
-      ("maybeHead", tylam "t0" $ lambdaTyped "xs" (T.list (T.var "t0")) $ tyapp (primitive _lists_maybeHead) (T.var "t0") @@ var "xs",
+      ("maybeHead", tylam "t0" $ lambdaTyped "xs" (T.list (T.var "t0")) $ tyapp (primitive (Prims.primName DefLists.maybeHead)) (T.var "t0") @@ var "xs",
         T.poly ["t0"] $ T.function (T.list (T.var "t0")) (T.optional (T.var "t0")))] $
       tyapp (var "maybeHead") T.string @@ list [string "first", string "second"])
     (T.optional T.string)]
@@ -160,26 +169,26 @@ higherOrderApplicationsTests = define "higherOrderApplicationsTests" $
   subgroup "Higher-order applications" [
   checkTest "apply function to function" []
     (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x",
-           "double">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
+           "double">: lambda "n" $ primitive (Prims.primName DefMath.mul) @@ var "n" @@ int32 2] $
       var "apply" @@ var "double" @@ int32 5)
     (letsTyped [
       ("apply", tylams ["t0", "t1"] $ lambdaTyped "f" (T.function (T.var "t0") (T.var "t1")) $ lambdaTyped "x" (T.var "t0") $ var "f" @@ var "x",
         T.poly ["t0", "t1"] $ T.function (T.function (T.var "t0") (T.var "t1")) (T.function (T.var "t0") (T.var "t1"))),
-      ("double", lambdaTyped "n" T.int32 $ primitive _math_mul @@ var "n" @@ int32 2,
+      ("double", lambdaTyped "n" T.int32 $ primitive (Prims.primName DefMath.mul) @@ var "n" @@ int32 2,
         T.mono $ T.function T.int32 T.int32)] $
       tyapps (var "apply") [T.int32, T.int32] @@ var "double" @@ int32 5)
     T.int32,
   checkTest "function composition" []
     (lets ["compose">: lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
-           "add1">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
-           "mul2">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
+           "add1">: lambda "n" $ primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 1,
+           "mul2">: lambda "n" $ primitive (Prims.primName DefMath.mul) @@ var "n" @@ int32 2] $
       var "compose" @@ var "add1" @@ var "mul2" @@ int32 3)
     (letsTyped [
       ("compose", tylams ["t0", "t1", "t2"] $ lambdaTyped "f" (T.function (T.var "t0") (T.var "t1")) $ lambdaTyped "g" (T.function (T.var "t2") (T.var "t0")) $ lambdaTyped "x" (T.var "t2") $ var "f" @@ (var "g" @@ var "x"),
         T.poly ["t0", "t1", "t2"] $ T.function (T.function (T.var "t0") (T.var "t1")) (T.function (T.function (T.var "t2") (T.var "t0")) (T.function (T.var "t2") (T.var "t1")))),
-      ("add1", lambdaTyped "n" T.int32 $ primitive _math_add @@ var "n" @@ int32 1,
+      ("add1", lambdaTyped "n" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 1,
         T.mono $ T.function T.int32 T.int32),
-      ("mul2", lambdaTyped "n" T.int32 $ primitive _math_mul @@ var "n" @@ int32 2,
+      ("mul2", lambdaTyped "n" T.int32 $ primitive (Prims.primName DefMath.mul) @@ var "n" @@ int32 2,
         T.mono $ T.function T.int32 T.int32)] $
       tyapps (var "compose") [T.int32, T.int32, T.int32] @@ var "add1" @@ var "mul2" @@ int32 3)
     T.int32]
@@ -188,10 +197,10 @@ partialApplicationsTests :: TypedTermDefinition TestGroup
 partialApplicationsTests = define "partialApplicationsTests" $
   subgroup "Partial applications" [
   noChange "partially applied add"
-    (primitive _math_add @@ int32 5)
+    (primitive (Prims.primName DefMath.add) @@ int32 5)
     (T.function T.int32 T.int32),
   noChange "partially applied string cat"
-    (primitive _strings_cat2 @@ string "prefix")
+    (primitive (Prims.primName DefStrings.cat2) @@ string "prefix")
     (T.function T.string T.string)]
 
 polymorphicApplicationsTests :: TypedTermDefinition TestGroup
@@ -215,11 +224,11 @@ polymorphicApplicationsTests = define "polymorphicApplicationsTests" $
     T.string,
   checkTest "polymorphic flip" []
     (lets ["flip">: lambda "f" $ lambda "x" $ lambda "y" $ var "f" @@ var "y" @@ var "x"] $
-      var "flip" @@ primitive _strings_cat2 @@ string "world" @@ string "hello")
+      var "flip" @@ primitive (Prims.primName DefStrings.cat2) @@ string "world" @@ string "hello")
     (letsTyped [
       ("flip", tylams ["t0", "t1", "t2"] $ lambdaTyped "f" (T.function (T.var "t0") (T.function (T.var "t1") (T.var "t2"))) $ lambdaTyped "x" (T.var "t1") $ lambdaTyped "y" (T.var "t0") $ var "f" @@ var "y" @@ var "x",
         T.poly ["t0", "t1", "t2"] $ T.function (T.function (T.var "t0") (T.function (T.var "t1") (T.var "t2"))) (T.function (T.var "t1") (T.function (T.var "t0") (T.var "t2"))))] $
-      tyapps (var "flip") [T.string, T.string, T.string] @@ primitive _strings_cat2 @@ string "world" @@ string "hello")
+      tyapps (var "flip") [T.string, T.string, T.string] @@ primitive (Prims.primName DefStrings.cat2) @@ string "world" @@ string "hello")
     T.string]
 
 simpleFunctionApplicationsTests :: TypedTermDefinition TestGroup
@@ -230,10 +239,10 @@ simpleFunctionApplicationsTests = define "simpleFunctionApplicationsTests" $
     (lambdaTyped "x" T.int32 (var "x") @@ int32 42)
     T.int32,
   noChange "primitive application"
-    (primitive _math_add @@ int32 10 @@ int32 20)
+    (primitive (Prims.primName DefMath.add) @@ int32 10 @@ int32 20)
     T.int32,
   noChange "string concatenation"
-    (primitive _strings_cat2 @@ string "hello" @@ string "world")
+    (primitive (Prims.primName DefStrings.cat2) @@ string "hello" @@ string "world")
     T.string]
 
 ------ Lambdas ------
@@ -254,8 +263,8 @@ higherOrderLambdasTests = define "higherOrderLambdasTests" $
     (tylams ["t0", "t1"] $ lambdaTyped "f" (T.function (T.var "t0") (T.var "t1")) $ lambdaTyped "x" (T.var "t0") $ var "f" @@ var "x")
     (T.forAlls ["t0", "t1"] $ T.function (T.function (T.var "t0") (T.var "t1")) (T.function (T.var "t0") (T.var "t1"))),
   checkTest "curried function" []
-    (lambda "x" $ lambda "y" $ lambda "z" $ primitive _logic_ifElse @@ var "x" @@ var "y" @@ var "z")
-    (tylam "t0" $ lambdaTyped "x" T.boolean $ lambdaTyped "y" (T.var "t0") $ lambdaTyped "z" (T.var "t0") $ tyapp (primitive _logic_ifElse) (T.var "t0") @@ var "x" @@ var "y" @@ var "z")
+    (lambda "x" $ lambda "y" $ lambda "z" $ primitive (Prims.primName DefLogic.ifElse) @@ var "x" @@ var "y" @@ var "z")
+    (tylam "t0" $ lambdaTyped "x" T.boolean $ lambdaTyped "y" (T.var "t0") $ lambdaTyped "z" (T.var "t0") $ tyapp (primitive (Prims.primName DefLogic.ifElse)) (T.var "t0") @@ var "x" @@ var "y" @@ var "z")
     (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.function (T.var "t0") (T.var "t0"))))]
 
 lambdasInComplexContextsTests :: TypedTermDefinition TestGroup
@@ -266,10 +275,10 @@ lambdasInComplexContextsTests = define "lambdasInComplexContextsTests" $
     (tylam "t0" $ tyapps (pair (lambdaTyped "x" (T.var "t0") $ var "x") (int32 42)) [T.function (T.var "t0") (T.var "t0"), T.int32])
     (T.forAlls ["t0"] $ T.pair (T.function (T.var "t0") (T.var "t0")) T.int32),
   checkTest "lambda in list" []
-    (list [lambda "x" $ primitive _math_add @@ var "x" @@ int32 1,
-           lambda "y" $ primitive _math_mul @@ var "y" @@ int32 2])
-    (list [lambdaTyped "x" T.int32 $ primitive _math_add @@ var "x" @@ int32 1,
-           lambdaTyped "y" T.int32 $ primitive _math_mul @@ var "y" @@ int32 2])
+    (list [lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1,
+           lambda "y" $ primitive (Prims.primName DefMath.mul) @@ var "y" @@ int32 2])
+    (list [lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1,
+           lambdaTyped "y" T.int32 $ primitive (Prims.primName DefMath.mul) @@ var "y" @@ int32 2])
     (T.list $ T.function T.int32 T.int32),
   checkTest "lambda in record" []
     (lambda "name" $ record TestTypes.testTypePersonName [
@@ -296,8 +305,8 @@ lambdasWithOperationsTests :: TypedTermDefinition TestGroup
 lambdasWithOperationsTests = define "lambdasWithOperationsTests" $
   subgroup "Lambdas with operations" [
   checkTest "lambda with primitive" []
-    (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1)
-    (lambdaTyped "x" T.int32 $ primitive _math_add @@ var "x" @@ int32 1)
+    (lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1)
+    (lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1)
     (T.function T.int32 T.int32),
   checkTest "lambda with application" []
     (lambda "f" $ lambda "x" $ var "f" @@ var "x")
@@ -424,23 +433,23 @@ letWithComplexExpressionsTests = define "letWithComplexExpressionsTests" $
     (record TestTypes.testTypePersonName [
       "firstName">: lets ["first">: string "John",
                               "middle">: string "Q"] $
-                             primitive _strings_cat2 @@ var "first" @@ var "middle",
+                             primitive (Prims.primName DefStrings.cat2) @@ var "first" @@ var "middle",
       "lastName">: string "Doe",
       "age">: int32 30])
     (record TestTypes.testTypePersonName [
       "firstName">: letsTyped [("first", string "John", T.mono T.string),
                                    ("middle", string "Q", T.mono T.string)] $
-                         primitive _strings_cat2 @@ var "first" @@ var "middle",
+                         primitive (Prims.primName DefStrings.cat2) @@ var "first" @@ var "middle",
       "lastName">: string "Doe",
       "age">: int32 30])
     (Core.typeVariable TestTypes.testTypePersonName),
   checkTest "let in function application" []
     (lets ["x">: int32 5,
            "y">: int32 3] $
-      primitive _math_add @@ var "x" @@ var "y")
+      primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y")
     (letsTyped [("x", int32 5, T.mono T.int32),
                 ("y", int32 3, T.mono T.int32)] $
-      primitive _math_add @@ var "x" @@ var "y")
+      primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y")
     T.int32,
   checkTest "polymorphic let binding" []
     (lets ["id">: lambda "x" $ var "x"] $
@@ -451,8 +460,8 @@ letWithComplexExpressionsTests = define "letWithComplexExpressionsTests" $
     (T.pair T.int32 T.string),
   checkTest "composition" []
     (lets ["compose">: lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
-           "add1">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
-           "double">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
+           "add1">: lambda "n" $ primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 1,
+           "double">: lambda "n" $ primitive (Prims.primName DefMath.mul) @@ var "n" @@ int32 2] $
       (var "compose" @@ var "add1" @@ var "double") @@ int32 5)
     (letsTyped [
       ("compose", tylams ["t0", "t1", "t2"] $
@@ -464,9 +473,9 @@ letWithComplexExpressionsTests = define "letWithComplexExpressionsTests" $
             (T.function (T.var "t0") (T.var "t1"))
             (T.function (T.function (T.var "t2") (T.var "t0"))
               (T.function (T.var "t2") (T.var "t1")))),
-      ("add1", lambdaTyped "n" T.int32 $ primitive _math_add @@ var "n" @@ int32 1,
+      ("add1", lambdaTyped "n" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 1,
        T.mono $ T.function T.int32 T.int32),
-      ("double", lambdaTyped "n" T.int32 $ primitive _math_mul @@ var "n" @@ int32 2,
+      ("double", lambdaTyped "n" T.int32 $ primitive (Prims.primName DefMath.mul) @@ var "n" @@ int32 2,
        T.mono $ T.function T.int32 T.int32)] $
       (tyapps (var "compose") [T.int32, T.int32, T.int32] @@ var "add1" @@ var "double") @@ int32 5)
     T.int32]
@@ -494,11 +503,11 @@ mutualRecursionTests = define "mutualRecursionTests" $
     (T.apply (Core.typeVariable TestTypes.testTypeBuddyListAName) T.int32),
   checkTest "(monomorphic) mutually recursive functions" []
     (lets ["f">: lambda "x" $ var "g" @@ var "x",
-           "g">: lambda "y" $ primitive _math_add @@ var "y" @@ int32 1] $
+           "g">: lambda "y" $ primitive (Prims.primName DefMath.add) @@ var "y" @@ int32 1] $
           var "f" @@ int32 5)
     (letsTyped [("f", lambdaTyped "x" T.int32 $ var "g" @@ var "x",
                  T.mono $ T.function T.int32 T.int32),
-                ("g", lambdaTyped "y" T.int32 $ primitive _math_add @@ var "y" @@ int32 1,
+                ("g", lambdaTyped "y" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "y" @@ int32 1,
                  T.mono $ T.function T.int32 T.int32)] $
       var "f" @@ int32 5)
     T.int32]
@@ -508,12 +517,12 @@ nestedLetTermsTests = define "nestedLetTermsTests" $
   subgroup "Nested let terms" [
   checkTest "monomorphic nesting" []
     (lets ["x">: int32 1] $
-     lets ["y">: primitive _math_add @@ var "x" @@ int32 2] $
-     lets ["z">: primitive _math_mul @@ var "y" @@ int32 3] $
+     lets ["y">: primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 2] $
+     lets ["z">: primitive (Prims.primName DefMath.mul) @@ var "y" @@ int32 3] $
       var "z")
     (letsTyped [("x", int32 1, T.mono T.int32)] $
-     letsTyped [("y", primitive _math_add @@ var "x" @@ int32 2, T.mono T.int32)] $
-     letsTyped [("z", primitive _math_mul @@ var "y" @@ int32 3, T.mono T.int32)] $
+     letsTyped [("y", primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 2, T.mono T.int32)] $
+     letsTyped [("z", primitive (Prims.primName DefMath.mul) @@ var "y" @@ int32 3, T.mono T.int32)] $
       var "z")
     T.int32,
   checkTest "polymorphic nesting" []
@@ -541,9 +550,9 @@ recursiveBindingsTests :: TypedTermDefinition TestGroup
 recursiveBindingsTests = define "recursiveBindingsTests" $
   subgroup "Recursive bindings" [
   checkTest "simple arithmetic recursion" []
-    (lets ["double">: lambda "n" $ primitive _math_add @@ var "n" @@ var "n"] $
+    (lets ["double">: lambda "n" $ primitive (Prims.primName DefMath.add) @@ var "n" @@ var "n"] $
           var "double" @@ int32 5)
-    (letsTyped [("double", lambdaTyped "n" T.int32 $ primitive _math_add @@ var "n" @@ var "n",
+    (letsTyped [("double", lambdaTyped "n" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "n" @@ var "n",
                  T.mono $ T.function T.int32 T.int32)] $
       var "double" @@ int32 5)
     T.int32]
@@ -632,15 +641,15 @@ binaryPrimitivesTests :: TypedTermDefinition TestGroup
 binaryPrimitivesTests = define "binaryPrimitivesTests" $
   subgroup "Binary primitives" [
   noChange "math add"
-    (primitive _math_add)
+    (primitive (Prims.primName DefMath.add))
     (T.function T.int32 (T.function T.int32 T.int32)),
   checkTest "lists cons" []
-    (primitive _lists_cons)
-    (tylam "t0" $ tyapp (primitive _lists_cons) (T.var "t0"))
+    (primitive (Prims.primName DefLists.cons))
+    (tylam "t0" $ tyapp (primitive (Prims.primName DefLists.cons)) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.list $ T.var "t0") (T.list $ T.var "t0"))),
   checkTest "maps insert" []
-    (primitive _maps_insert)
-    (tylams ["t0", "t1"] $ tyapps (primitive _maps_insert) [T.var "t0", T.var "t1"])
+    (primitive (Prims.primName DefMaps.insert))
+    (tylams ["t0", "t1"] $ tyapps (primitive (Prims.primName DefMaps.insert)) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $ T.function
       (T.var "t0")
       (T.function (T.var "t1") (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1")))))]
@@ -649,16 +658,16 @@ higherOrderPrimitivesTests :: TypedTermDefinition TestGroup
 higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
   subgroup "Higher-order primitives" [
   checkTest "lists map function" []
-    (primitive _lists_map @@ (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1))
-    (tyapps (primitive _lists_map) [T.int32, T.int32] @@ (lambdaTyped "x" T.int32 $ primitive _math_add @@ var "x" @@ int32 1))
+    (primitive (Prims.primName DefLists.map) @@ (lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1))
+    (tyapps (primitive (Prims.primName DefLists.map)) [T.int32, T.int32] @@ (lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1))
     (T.function (T.list T.int32) (T.list T.int32)),
   checkTest "lists filter" []
-    (primitive _lists_filter)
-    (tylam "t0" $ tyapp (primitive _lists_filter) (T.var "t0"))
+    (primitive (Prims.primName DefLists.filter))
+    (tylam "t0" $ tyapp (primitive (Prims.primName DefLists.filter)) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.function (T.var "t0") T.boolean) (T.function (T.list $ T.var "t0") (T.list $ T.var "t0"))),
   checkTest "optionals cases" []
-    (primitive _optionals_cases)
-    (tylams ["t0", "t1"] $ tyapps (primitive _optionals_cases) [T.var "t0", T.var "t1"])
+    (primitive (Prims.primName DefOptionals.cases))
+    (tylams ["t0", "t1"] $ tyapps (primitive (Prims.primName DefOptionals.cases)) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $
       T.function (T.optional $ T.var "t0") (T.function (T.var "t1") (T.function (T.function (T.var "t0") (T.var "t1")) (T.var "t1"))))]
 
@@ -666,15 +675,15 @@ monomorphicVsPolymorphicTests :: TypedTermDefinition TestGroup
 monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $
   subgroup "Monomorphic vs polymorphic" [
   noChange "monomorphic math"
-    (primitive _math_add)
+    (primitive (Prims.primName DefMath.add))
     (T.function T.int32 (T.function T.int32 T.int32)),
   checkTest "polymorphic identity" []
-    (primitive _equality_identity)
-    (tylam "t0" $ tyapp (primitive _equality_identity) (T.var "t0"))
+    (primitive (Prims.primName DefEquality.identity))
+    (tylam "t0" $ tyapp (primitive (Prims.primName DefEquality.identity)) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.var "t0") (T.var "t0")),
   checkTest "polymorphic map" []
-    (primitive _lists_map)
-    (tylams ["t0", "t1"] $ tyapps (primitive _lists_map) [T.var "t0", T.var "t1"])
+    (primitive (Prims.primName DefLists.map))
+    (tylams ["t0", "t1"] $ tyapps (primitive (Prims.primName DefLists.map)) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $ T.function
       (T.function (T.var "t0") (T.var "t1"))
       (T.function (T.list $ T.var "t0") (T.list $ T.var "t1")))]
@@ -683,31 +692,31 @@ nullaryPrimitivesTests :: TypedTermDefinition TestGroup
 nullaryPrimitivesTests = define "nullaryPrimitivesTests" $
   subgroup "Nullary primitives" [
   checkTest "empty map" []
-    (primitive _maps_empty)
-    (tylams ["t0", "t1"] $ tyapps (primitive _maps_empty) [T.var "t0", T.var "t1"])
+    (primitive (Prims.primName DefMaps.empty))
+    (tylams ["t0", "t1"] $ tyapps (primitive (Prims.primName DefMaps.empty)) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $ T.map (T.var "t0") (T.var "t1")),
   checkTest "empty set" []
-    (primitive _sets_empty)
-    (tylam "t0" $ tyapp (primitive _sets_empty) (T.var "t0"))
+    (primitive (Prims.primName DefSets.empty))
+    (tylam "t0" $ tyapp (primitive (Prims.primName DefSets.empty)) (T.var "t0"))
     (T.forAll "t0" $ T.set $ T.var "t0")]
 
 primitivesInComplexContextsTests :: TypedTermDefinition TestGroup
 primitivesInComplexContextsTests = define "primitivesInComplexContextsTests" $
   subgroup "Primitives in complex contexts" [
   checkTest "primitive composition" []
-    (lets ["double">: lambda "x" $ primitive _math_mul @@ var "x" @@ int32 2,
-           "increment">: lambda "x" $ primitive _math_add @@ var "x" @@ int32 1] $
-      primitive _lists_map @@ var "double" @@ (primitive _lists_map @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
-    (letsTyped [("double", lambdaTyped "x" T.int32 $ primitive _math_mul @@ var "x" @@ int32 2,
+    (lets ["double">: lambda "x" $ primitive (Prims.primName DefMath.mul) @@ var "x" @@ int32 2,
+           "increment">: lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1] $
+      primitive (Prims.primName DefLists.map) @@ var "double" @@ (primitive (Prims.primName DefLists.map) @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
+    (letsTyped [("double", lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.mul) @@ var "x" @@ int32 2,
                  T.mono $ T.function T.int32 T.int32),
-                ("increment", lambdaTyped "x" T.int32 $ primitive _math_add @@ var "x" @@ int32 1,
+                ("increment", lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1,
                  T.mono $ T.function T.int32 T.int32)] $
-      tyapps (primitive _lists_map) [T.int32, T.int32] @@ var "double" @@ (tyapps (primitive _lists_map) [T.int32, T.int32] @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
+      tyapps (primitive (Prims.primName DefLists.map)) [T.int32, T.int32] @@ var "double" @@ (tyapps (primitive (Prims.primName DefLists.map)) [T.int32, T.int32] @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
     (T.list T.int32),
   checkTest "nested higher-order" []
-    (primitive _lists_map @@ (primitive _lists_map @@ (primitive _math_add @@ int32 1)) @@
+    (primitive (Prims.primName DefLists.map) @@ (primitive (Prims.primName DefLists.map) @@ (primitive (Prims.primName DefMath.add) @@ int32 1)) @@
      list [list [int32 1, int32 2], list [int32 3, int32 4]])
-    (tyapps (primitive _lists_map) [T.list T.int32, T.list T.int32] @@ (tyapps (primitive _lists_map) [T.int32, T.int32] @@ (primitive _math_add @@ int32 1)) @@
+    (tyapps (primitive (Prims.primName DefLists.map)) [T.list T.int32, T.list T.int32] @@ (tyapps (primitive (Prims.primName DefLists.map)) [T.int32, T.int32] @@ (primitive (Prims.primName DefMath.add) @@ int32 1)) @@
      list [list [int32 1, int32 2], list [int32 3, int32 4]])
     (T.list $ T.list T.int32)]
 
@@ -726,12 +735,12 @@ ternaryPrimitivesTests :: TypedTermDefinition TestGroup
 ternaryPrimitivesTests = define "ternaryPrimitivesTests" $
   subgroup "Ternary primitives" [
   checkTest "logic ifElse" []
-    (primitive _logic_ifElse)
-    (tylam "t0" $ tyapp (primitive _logic_ifElse) (T.var "t0"))
+    (primitive (Prims.primName DefLogic.ifElse))
+    (tylam "t0" $ tyapp (primitive (Prims.primName DefLogic.ifElse)) (T.var "t0"))
     (T.forAll "t0" $ T.function T.boolean (T.function (T.var "t0") (T.function (T.var "t0") (T.var "t0")))),
   checkTest "lists foldl" []
-    (primitive _lists_foldl)
-    (tylams ["t0", "t1"] $ tyapps (primitive _lists_foldl) [T.var "t0", T.var "t1"])
+    (primitive (Prims.primName DefLists.foldl))
+    (tylams ["t0", "t1"] $ tyapps (primitive (Prims.primName DefLists.foldl)) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $ T.function
       (T.function (T.var "t0") (T.function (T.var "t1") (T.var "t0")))
       (T.function (T.var "t0") (T.function (T.list $ T.var "t1") (T.var "t0"))))]
@@ -740,14 +749,14 @@ unaryPrimitivesTests :: TypedTermDefinition TestGroup
 unaryPrimitivesTests = define "unaryPrimitivesTests" $
   subgroup "Unary primitives" [
   checkTest "lists maybeHead" []
-    (primitive _lists_maybeHead)
-    (tylam "t0" $ tyapp (primitive _lists_maybeHead) (T.var "t0"))
+    (primitive (Prims.primName DefLists.maybeHead))
+    (tylam "t0" $ tyapp (primitive (Prims.primName DefLists.maybeHead)) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.list $ T.var "t0") (T.optional $ T.var "t0")),
   noChange "math neg"
-    (primitive _math_negate)
+    (primitive (Prims.primName DefMath.negate))
     (T.function T.int32 T.int32),
   noChange "logic not"
-    (primitive _logic_not)
+    (primitive (Prims.primName DefLogic.not))
     (T.function T.boolean T.boolean)]
 
 ------ Variables ------
@@ -782,19 +791,19 @@ recursiveVariablesTests :: TypedTermDefinition TestGroup
 recursiveVariablesTests = define "recursiveVariablesTests" $
   subgroup "Recursive variables" [
   checkTest "simple recursion" []
-    (lets ["f">: lambda "x" $ primitive _math_add @@ var "x" @@ int32 1] $
+    (lets ["f">: lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1] $
           var "f")
-    (letsTyped [("f", lambdaTyped "x" T.int32 $ primitive _math_add @@ var "x" @@ int32 1,
+    (letsTyped [("f", lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1,
                  T.mono $ T.function T.int32 T.int32)] $
       var "f")
     (T.function T.int32 T.int32),
   checkTest "mutual recursion" []
     (lets ["f">: lambda "x" $ var "g" @@ var "x",
-           "g">: lambda "y" $ primitive _math_add @@ var "y" @@ int32 1] $
+           "g">: lambda "y" $ primitive (Prims.primName DefMath.add) @@ var "y" @@ int32 1] $
           var "f")
     (letsTyped [("f", lambdaTyped "x" T.int32 $ var "g" @@ var "x",
                  T.mono $ T.function T.int32 T.int32),
-                ("g", lambdaTyped "y" T.int32 $ primitive _math_add @@ var "y" @@ int32 1,
+                ("g", lambdaTyped "y" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "y" @@ int32 1,
                  T.mono $ T.function T.int32 T.int32)] $
       var "f")
     (T.function T.int32 T.int32)]

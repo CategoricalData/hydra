@@ -17,10 +17,11 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -181,7 +182,7 @@ allTests = define "allTests" $
         test "negative index" (-1) "hello" Nothing,
         test "empty string" 0 "" Nothing]
         where
-          test name idx s result = primCase name _strings_maybeCharAt [int32 idx, string s] (optionalInt32 result)
+          test name idx s result = primCase name (Prims.primName DefStrings.maybeCharAt) [int32 idx, string s] (optionalInt32 result)
           optionalInt32 Nothing = Core.termOptional nothing
           optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 

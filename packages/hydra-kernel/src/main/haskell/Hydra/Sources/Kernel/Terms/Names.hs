@@ -6,7 +6,6 @@ import Hydra.Kernel hiding (
   compactName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
   normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
   uniqueLabel, unqualifyName)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
