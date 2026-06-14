@@ -58,12 +58,12 @@
       (cons (qname ns_ "foldl")   (prim3 (qname ns_ "foldl")
                                           hydra_lib_eithers_foldl
                                           nil (fun x (fun y (tc-either z x))) x (tc-list y) (tc-either z x)))
-      (cons (qname ns_ "fromLeft")  (prim2 (qname ns_ "fromLeft")
-                                            hydra_lib_eithers_from_left
-                                            nil x (tc-either x y) x))
-      (cons (qname ns_ "fromRight") (prim2 (qname ns_ "fromRight")
-                                            hydra_lib_eithers_from_right
-                                            nil y (tc-either x y) y))
+      (cons (qname ns_ "fromLeft")  (lazy-args '(0) (prim2 (qname ns_ "fromLeft")
+                                                            hydra_lib_eithers_from_left
+                                                            nil x (tc-either x y) x)))
+      (cons (qname ns_ "fromRight") (lazy-args '(0) (prim2 (qname ns_ "fromRight")
+                                                            hydra_lib_eithers_from_right
+                                                            nil y (tc-either x y) y)))
       (cons (qname ns_ "isLeft")  (prim1 (qname ns_ "isLeft")  hydra_lib_eithers_is_left  nil (tc-either x y) (tc-boolean)))
       (cons (qname ns_ "isRight") (prim1 (qname ns_ "isRight") hydra_lib_eithers_is_right nil (tc-either x y) (tc-boolean)))
       (cons (qname ns_ "lefts")   (prim1 (qname ns_ "lefts")   hydra_lib_eithers_lefts   nil (tc-list (tc-either x y)) (tc-list x)))
@@ -220,9 +220,9 @@
       (cons (qname ns_ "and")    (prim2 (qname ns_ "and")
                                          hydra_lib_logic_and
                                          nil (tc-boolean) (tc-boolean) (tc-boolean)))
-      (cons (qname ns_ "ifElse") (prim3 (qname ns_ "ifElse")
-                                         hydra_lib_logic_if_else
-                                         nil (tc-boolean) a a a))
+      (cons (qname ns_ "ifElse") (lazy-args '(1 2) (prim3 (qname ns_ "ifElse")
+                                                          hydra_lib_logic_if_else
+                                                          nil (tc-boolean) a a a)))
       (cons (qname ns_ "not")    (prim1 (qname ns_ "not")    hydra_lib_logic_not nil (tc-boolean) (tc-boolean)))
       (cons (qname ns_ "or")     (prim2 (qname ns_ "or")
                                          hydra_lib_logic_or
@@ -261,9 +261,9 @@
         (cons (qname ns_ "filterWithKey")  (prim2 (qname ns_ "filterWithKey")
                                                    hydra_lib_maps_filter_with_key
                                                    nil (fun k (fun v (tc-boolean))) map-kv map-kv ord-k))
-        (cons (qname ns_ "findWithDefault") (prim3 (qname ns_ "findWithDefault")
-                                                    hydra_lib_maps_find_with_default
-                                                    nil v k map-kv v ord-k))
+        (cons (qname ns_ "findWithDefault") (lazy-args '(0) (prim3 (qname ns_ "findWithDefault")
+                                                                   hydra_lib_maps_find_with_default
+                                                                   nil v k map-kv v ord-k)))
         (cons (qname ns_ "fromList")       (prim1 (qname ns_ "fromList") hydra_lib_maps_from_list nil (tc-list (tc-pair k v)) map-kv ord-k))
         (cons (qname ns_ "insert")         (prim3 (qname ns_ "insert")
                                                    hydra_lib_maps_insert
@@ -370,16 +370,16 @@
       (cons (qname ns_ "bind")     (prim2 (qname ns_ "bind")
                                            hydra_lib_optionals_bind
                                            nil (tc-optional a) (fun a (tc-optional b)) (tc-optional b)))
-      (cons (qname ns_ "cases")    (prim3 (qname ns_ "cases")
-                                           hydra_lib_optionals_cases
-                                           nil (tc-optional a) b (fun a b) b))
+      (cons (qname ns_ "cases")    (lazy-args '(1) (prim3 (qname ns_ "cases")
+                                                          hydra_lib_optionals_cases
+                                                          nil (tc-optional a) b (fun a b) b)))
       (cons (qname ns_ "cat")      (prim1 (qname ns_ "cat")      hydra_lib_optionals_cat      nil (tc-list (tc-optional a)) (tc-list a)))
       (cons (qname ns_ "compose")  (prim3 (qname ns_ "compose")
                                            hydra_lib_optionals_compose
                                            nil (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-      (cons (qname ns_ "fromOptional") (prim2 (qname ns_ "fromOptional")
-                                            hydra_lib_optionals_from_optional
-                                            nil a (tc-optional a) a))
+      (cons (qname ns_ "fromOptional") (lazy-args '(0) (prim2 (qname ns_ "fromOptional")
+                                                              hydra_lib_optionals_from_optional
+                                                              nil a (tc-optional a) a)))
       (cons (qname ns_ "isGiven")    (prim1 (qname ns_ "isGiven")    hydra_lib_optionals_is_given    nil (tc-optional a) (tc-boolean)))
       (cons (qname ns_ "isNone") (prim1 (qname ns_ "isNone") hydra_lib_optionals_is_none nil (tc-optional a) (tc-boolean)))
       (cons (qname ns_ "map")       (prim2 (qname ns_ "map")

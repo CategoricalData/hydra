@@ -110,6 +110,48 @@
          (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
     (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
+(defun lazy-args (idxs prim)
+  "Mirror of Hydra.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
+   positions of PRIM's signature as lazy. Used at registration sites to
+   record which arguments coders must thunk in hosts that distinguish strict
+   from lazy evaluation (#391). Without this, the Lisp coder's
+   encodeApplication inlines the default expression eagerly, which
+   infinite-recurses for tail-recursive defaults like the primitive_derivative
+   lookup in differentiation.lisp's optCases call site (issue #477)."
+  (labels ((set-lazy (param)
+             ;; Param is an alist (:name :description :type :is_lazy). When
+             ;; built positionally via make-parameter (4-arg) the :is_lazy
+             ;; entry already exists; when built positionally with fewer
+             ;; args (older callers) it is absent. Handle both: replace if
+             ;; present, cons on if not.
+             (if (assoc :is_lazy param)
+                 (mapcar (lambda (entry)
+                           (if (eq (car entry) :is_lazy)
+                               (cons :is_lazy t)
+                               entry))
+                         param)
+                 (cons (cons :is_lazy t) param))))
+    (let* ((def (primitive-definition prim))
+           (sig (hydra_packaging_primitive_definition-signature def))
+           (params (hydra_typing_term_signature-parameters sig))
+           (type-params (hydra_typing_term_signature-type_parameters sig))
+           (result (hydra_typing_term_signature-result sig))
+           (new-params
+             (loop for p in params
+                   for i from 0
+                   collect (if (member i idxs)
+                               (set-lazy p)
+                               p)))
+           (new-sig (make-hydra_typing_term_signature type-params new-params result))
+           (new-def (make-hydra_packaging_primitive_definition
+                      (hydra_packaging_primitive_definition-name def)
+                      (hydra_packaging_primitive_definition-metadata def)
+                      new-sig
+                      (hydra_packaging_primitive_definition-is_pure def)
+                      (hydra_packaging_primitive_definition-is_total def)
+                      (hydra_packaging_primitive_definition-default_implementation def))))
+      (make-primitive new-def (primitive-implementation prim)))))
+
 ;; ============================================================================
 ;; Error helpers
 ;; ============================================================================
