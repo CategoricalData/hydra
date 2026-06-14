@@ -24,6 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Terms (ToPrimName)
 import qualified Hydra.Dsl.Meta.Types as T
 import qualified Hydra.Dsl.Validation as Validation
 
@@ -208,13 +209,13 @@ noChange name term typ = checkTest name [] term term typ
 noTags :: TypedTerm [Tag]
 noTags = Phantoms.list ([] :: [TypedTerm Tag])
 
-primCase :: String -> Name -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
-primCase cname primName args output = primCaseWithTags cname [] primName args output
+primCase :: ToPrimName n => String -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+primCase cname prim args output = primCaseWithTags cname [] prim args output
 
-primCaseWithTags :: String -> [Tag] -> Name -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
-primCaseWithTags cname tags primName args output = evalCaseWithTags cname tags input output
+primCaseWithTags :: ToPrimName n => String -> [Tag] -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+primCaseWithTags cname tags prim args output = evalCaseWithTags cname tags input output
   where
-    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive primName) args
+    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive prim) args
 
 reduceTermRef :: TypedTerm (InferenceContext -> Graph -> Bool -> Term -> Either Error Term)
 reduceTermRef = TypedTerm $ TermVariable $ Name "hydra.reduction.reduceTerm"
