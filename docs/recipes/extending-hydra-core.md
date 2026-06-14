@@ -126,7 +126,7 @@ def "Term" $
 
 ### Step 2: Verify DSL Constructors
 
-**File:** `heads/haskell/src/main/haskell/Hydra/Dsl/Phantoms.hs`
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs`
 
 Check that term-level constructors exist in the DSL:
 
@@ -455,7 +455,7 @@ Follow the same pattern: use library elimination functions for Haskell built-in 
 
 ### Step 6: Register Library Functions
 
-**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (#473)
 
 If using library functions, ensure they're registered:
 
@@ -888,9 +888,9 @@ stack test
 
 ### Source Files (Sometimes Modified)
 
-- [ ] `heads/haskell/src/main/haskell/Hydra/Dsl/Phantoms.hs` - Add DSL constructors if missing
+- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs` - Add DSL constructors if missing (#473)
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Extract/Core.hs` - Add extraction logic
-- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` - Register library functions
+- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` - Register library functions (#473)
 
 ### Generated Files (Bootstrap Patches)
 

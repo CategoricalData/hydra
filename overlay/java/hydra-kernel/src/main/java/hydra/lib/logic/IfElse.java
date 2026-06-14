@@ -26,7 +26,7 @@ public class IfElse extends PrimitiveFunction {
      * @return the name "hydra.lib.logic.ifElse"
      */
     public Name name() {
-        return new Name("hydra.lib.logic.ifElse");
+        return hydra.lib.Logic.ifElse().name;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class Not extends PrimitiveFunction {
      * @return the name "hydra.lib.logic.not"
      */
     public Name name() {
-        return new Name("hydra.lib.logic.not");
+        return hydra.lib.Logic.not().name;
     }
 
     /**

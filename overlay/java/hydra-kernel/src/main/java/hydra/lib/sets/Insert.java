@@ -30,7 +30,7 @@ public class Insert extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.insert"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.insert");
+        return hydra.lib.Sets.insert().name;
     }
 
     /**

@@ -29,7 +29,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.toList"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.toList");
+        return hydra.lib.Optionals.toList().name;
     }
 
     /**

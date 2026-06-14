@@ -111,7 +111,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     from hydra.packaging import DefinitionTerm
     from hydra.core import Binding
-    import hydra.lib.optionals as Optionals
+    import hydra.python.lib.optionals as Optionals
     from hydra.scoping import term_signature_to_type_scheme
     bindings = {}
     for mod in term_mods:

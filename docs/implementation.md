@@ -388,7 +388,7 @@ Write programs that build programs (meta-programming):
 buildAddFunction :: TypedTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
-    primitive _math_add @@ var "x" @@ var "y"
+    primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y"
 
 -- Can inspect and transform this representation
 ```
@@ -706,23 +706,25 @@ Per host, two things are needed beyond the kernel metadata:
 
 2. **Host-side primitive registry** — binds names to native impls.
    The Haskell registry lives in
-   `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (#473):
 
    ```haskell
    hydraLibMath :: Library
-   hydraLibMath = standardLibrary _hydra_lib_math [
-     prim2 _math_add Math.add [] int32 int32 int32,
+   hydraLibMath = standardLibrary (ModuleName "hydra.lib.math") [
+     prim2 (Prims.primName DefMath.add) Math.add [] int32 int32 int32,
      ...]
    ```
 
-   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by re-deriving a
-   `PrimitiveDefinition` from the host-side argument types (via
-   `defaultPrimitiveDefinition`) and pairing it with the host's native
-   `implementation` function.
+   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the host's
+   native `implementation` with a name and signature. The **name is derived from the
+   generated `PrimitiveDefinition`** (`Prims.primName DefMath.add`, where `DefMath` is the
+   generated `Hydra.Lib.Math` def-module) — the single source of truth (#473); the
+   argument-type info passed to the helper is a host-side repetition the registry needs in
+   native type-coder form, not the source of truth for the name.
 
-   The Java and Python heads have analogous host-side registries
-   (`heads/java/.../Libraries.java`, `heads/python/.../sources/libraries.py`)
-   that wrap each native impl in a `Primitive`.
+   Every other host has an analogous registry that likewise derives names from the generated
+   `hydra.lib.*` def-modules: `overlay/{java,python}/.../lib/Libraries.{java,py}` and
+   `heads/<lang>/.../lib/Libraries.<ext>` for Scala and the Lisp dialects.
 
 The type information passed to `prim1`/`prim2`/`prim3` at host registration is
 a sanity-check repetition of the canonical signature in the kernel-side
@@ -789,9 +791,10 @@ Each TermCoder contains:
 
 ### Multi-language generation
 
-Primitive *signatures* are defined once in Haskell (in
-`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`) and become
-part of the generated kernel in every target language. The *implementations*
+Primitive *names and signatures* are defined once in Haskell, in each kernel
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` module
+(as `PrimitiveDefinition`s), and become part of the generated kernel — the `hydra.lib.*`
+def-modules — in every target language. The *implementations*
 shown below are hand-written per host language. For the big three (Haskell, Java,
 Python) they live in the top-level `overlay/<lang>/hydra-kernel/` tree (#418) and
 are overlaid into the published `dist/<host>/hydra-kernel/` artifact during sync
@@ -1662,7 +1665,7 @@ moved to `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/`. The rest of
 
 [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418)
 
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Host-side bindings (pairs each name with its native impl via `prim1`/`prim2`/`prim3`)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
 ```
 Sources/Kernel/Lib/
 ├── Math.hs

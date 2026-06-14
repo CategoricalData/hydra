@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Transpose extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.transpose");
+        return hydra.lib.Lists.transpose().name;
     }
 
     @Override

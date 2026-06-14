@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class Split extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.regex.split");
+        return hydra.lib.Regex.split().name;
     }
 
     @Override

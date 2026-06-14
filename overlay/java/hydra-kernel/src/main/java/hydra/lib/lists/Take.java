@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Take extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.take");
+        return hydra.lib.Lists.take().name;
     }
 
     @Override

@@ -66,7 +66,7 @@
 ;; as case-sensitive; Emacs' default case-fold-search of t would fold them.
 
 ;; matches :: String -> String -> Bool
-(defvar hydra_lib_regex_matches
+(defvar hydra_lisp_lib_regex_matches
   (lambda (pattern)
     (lambda (input)
       (let* ((emacs-pat (hydra--posix-to-emacs-regex pattern))
@@ -75,7 +75,7 @@
         (if (string-match-p full-pattern input) t nil)))))
 
 ;; find :: String -> String -> Maybe String
-(defvar hydra_lib_regex_find
+(defvar hydra_lisp_lib_regex_find
   (lambda (pattern)
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
@@ -85,7 +85,7 @@
           nil)))))
 
 ;; find_all :: String -> String -> [String]
-(defvar hydra_lib_regex_find_all
+(defvar hydra_lisp_lib_regex_find_all
   (lambda (pattern)
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
@@ -102,7 +102,7 @@
 
 ;; replace :: String -> String -> String -> String
 ;; Replace only the first occurrence
-(defvar hydra_lib_regex_replace
+(defvar hydra_lisp_lib_regex_replace
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
@@ -115,7 +115,7 @@
             input))))))
 
 ;; replace_all :: String -> String -> String -> String
-(defvar hydra_lib_regex_replace_all
+(defvar hydra_lisp_lib_regex_replace_all
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
@@ -124,7 +124,7 @@
           (replace-regexp-in-string emacs-pat replacement input t t))))))
 
 ;; split :: String -> String -> [String]
-(defvar hydra_lib_regex_split
+(defvar hydra_lisp_lib_regex_split
   (lambda (pattern)
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))

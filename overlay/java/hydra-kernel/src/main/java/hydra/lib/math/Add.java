@@ -26,7 +26,7 @@ public class Add extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.add");
+        return hydra.lib.Math_.add().name;
     }
 
     /**

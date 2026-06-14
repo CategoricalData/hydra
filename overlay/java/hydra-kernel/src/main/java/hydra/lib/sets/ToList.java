@@ -32,7 +32,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.toList"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.toList");
+        return hydra.lib.Sets.toList().name;
     }
 
     /**

@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class Intercalate extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.intercalate");
+        return hydra.lib.Lists.intercalate().name;
     }
 
     @Override

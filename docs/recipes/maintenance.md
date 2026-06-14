@@ -764,7 +764,7 @@ Each host pairs canonical primitive names with native implementations in a regis
 
 | Host | Binding registry |
 |------|------------------|
-| Haskell    | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Haskell    | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` |
 | Java       | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
 | Python     | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418) |
 | Scala      | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |

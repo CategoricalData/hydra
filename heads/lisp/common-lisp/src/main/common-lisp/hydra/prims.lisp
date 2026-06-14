@@ -92,7 +92,7 @@
          ;; a Seq[TypeClassConstraint], not Set[String]; wrap each class name.
          (constraint-map
           (when constraints
-            (funcall hydra_lib_maps_from_list
+            (funcall hydra_lisp_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (first entry)
                                      (make-type_variable_constraints
@@ -277,12 +277,12 @@
       (lambda (s)
         (block decode
           (let ((result nil))
-            (dolist (item (funcall hydra_lib_sets_to_list s))
+            (dolist (item (funcall hydra_lisp_lib_sets_to_list s))
               (let ((r (funcall (funcall (term_coder-decode el-coder) cx) item)))
                 (if (eq (first r) :left)
                     (return-from decode r)
                     (push (second r) result))))
-            (list :right (list :set (funcall hydra_lib_sets_from_list (nreverse result))))))))))
+            (list :right (list :set (funcall hydra_lisp_lib_sets_from_list (nreverse result))))))))))
 
 (defun tc-map (key-coder val-coder)
   (make-term_coder (list :map (make-map_type (term_coder-type key-coder) (term_coder-type val-coder)))
@@ -297,15 +297,15 @@
       (lambda (m)
         (block decode
           (let ((result nil))
-            (dolist (pair (funcall hydra_lib_maps_to_list m))
-              (let ((kr (funcall (funcall (term_coder-decode key-coder) cx) (funcall hydra_lib_pairs_first pair))))
+            (dolist (pair (funcall hydra_lisp_lib_maps_to_list m))
+              (let ((kr (funcall (funcall (term_coder-decode key-coder) cx) (funcall hydra_lisp_lib_pairs_first pair))))
                 (if (eq (first kr) :left)
                     (return-from decode kr)
-                    (let ((vr (funcall (funcall (term_coder-decode val-coder) cx) (funcall hydra_lib_pairs_second pair))))
+                    (let ((vr (funcall (funcall (term_coder-decode val-coder) cx) (funcall hydra_lisp_lib_pairs_second pair))))
                       (if (eq (first vr) :left)
                           (return-from decode vr)
                           (push (list (second kr) (second vr)) result))))))
-            (list :right (list :map (funcall hydra_lib_maps_from_list (nreverse result))))))))))
+            (list :right (list :map (funcall hydra_lisp_lib_maps_from_list (nreverse result))))))))))
 
 (defun tc-optional (el-coder)
   (make-term_coder (list :optional (term_coder-type el-coder))
@@ -355,9 +355,9 @@
                             g) t_))))
     (lambda (cx)
       (lambda (p)
-        (let ((fr (funcall (funcall (term_coder-decode first-coder) cx) (funcall hydra_lib_pairs_first p))))
+        (let ((fr (funcall (funcall (term_coder-decode first-coder) cx) (funcall hydra_lisp_lib_pairs_first p))))
           (if (eq (first fr) :left) fr
-              (let ((sr (funcall (funcall (term_coder-decode second-coder) cx) (funcall hydra_lib_pairs_second p))))
+              (let ((sr (funcall (funcall (term_coder-decode second-coder) cx) (funcall hydra_lisp_lib_pairs_second p))))
                 (if (eq (first sr) :left) sr
                     (list :right (list :pair (list (second fr) (second sr))))))))))))
 

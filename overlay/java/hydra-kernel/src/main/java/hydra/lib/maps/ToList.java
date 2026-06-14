@@ -33,7 +33,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.toList");
+        return hydra.lib.Maps.toList().name;
     }
 
     /**

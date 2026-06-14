@@ -14,7 +14,7 @@
     (t m)))
 
 ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
-(defvar hydra_lib_optionals_apply
+(defvar hydra_lisp_lib_optionals_apply
   (lambda (mf)
     (lambda (mx)
       (if (maybe-nothing-p mf)
@@ -24,7 +24,7 @@
               (list :given (funcall (maybe-value mf) (maybe-value mx))))))))
 
 ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
-(defvar hydra_lib_optionals_bind
+(defvar hydra_lisp_lib_optionals_bind
   (lambda (m)
     (lambda (f)
       (if (maybe-nothing-p m)
@@ -33,7 +33,7 @@
 
 ;; cases :: Maybe a -> b -> (a -> b) -> b
 ;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
-(defvar hydra_lib_optionals_cases
+(defvar hydra_lisp_lib_optionals_cases
   (lambda (m)
     (lambda (def)
       (lambda (f)
@@ -42,14 +42,14 @@
             (funcall f (maybe-value m)))))))
 
 ;; cat :: [Maybe a] -> [a]
-(defvar hydra_lib_optionals_cat
+(defvar hydra_lisp_lib_optionals_cat
   (lambda (ms)
     (loop for m in ms
           unless (maybe-nothing-p m)
           collect (maybe-value m))))
 
 ;; compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
-(defvar hydra_lib_optionals_compose
+(defvar hydra_lisp_lib_optionals_compose
   (lambda (f)
     (lambda (g)
       (lambda (x)
@@ -60,7 +60,7 @@
 
 ;; from_optional :: a -> Maybe a -> a
 ;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
-(defvar hydra_lib_optionals_from_optional
+(defvar hydra_lisp_lib_optionals_from_optional
   (lambda (def)
     (lambda (m)
       (if (maybe-nothing-p m)
@@ -68,17 +68,17 @@
           (maybe-value m)))))
 
 ;; is_given :: Maybe a -> Bool
-(defvar hydra_lib_optionals_is_given
+(defvar hydra_lisp_lib_optionals_is_given
   (lambda (m)
     (not (maybe-nothing-p m))))
 
 ;; is_none :: Maybe a -> Bool
-(defvar hydra_lib_optionals_is_none
+(defvar hydra_lisp_lib_optionals_is_none
   (lambda (m)
     (maybe-nothing-p m)))
 
 ;; map :: (a -> b) -> Maybe a -> Maybe b
-(defvar hydra_lib_optionals_map
+(defvar hydra_lisp_lib_optionals_map
   (lambda (f)
     (lambda (m)
       (if (maybe-nothing-p m)
@@ -86,7 +86,7 @@
           (list :given (funcall f (maybe-value m)))))))
 
 ;; map_optional :: (a -> Maybe b) -> [a] -> [b]
-(defvar hydra_lib_optionals_map_optional
+(defvar hydra_lisp_lib_optionals_map_optional
   (lambda (f)
     (lambda (xs)
       (loop for x in xs
@@ -95,12 +95,12 @@
             collect (maybe-value result)))))
 
 ;; pure :: a -> Maybe a
-(defvar hydra_lib_optionals_pure
+(defvar hydra_lisp_lib_optionals_pure
   (lambda (x)
     (list :given x)))
 
 ;; to_list :: Maybe a -> [a]
-(defvar hydra_lib_optionals_to_list
+(defvar hydra_lisp_lib_optionals_to_list
   (lambda (m)
     (if (maybe-nothing-p m)
         nil

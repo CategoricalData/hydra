@@ -28,7 +28,7 @@ public class FindWithDefault extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.findWithDefault");
+        return hydra.lib.Maps.findWithDefault().name;
     }
 
     @Override

@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class Bind extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.bind");
+        return hydra.lib.Lists.bind().name;
     }
 
     @Override

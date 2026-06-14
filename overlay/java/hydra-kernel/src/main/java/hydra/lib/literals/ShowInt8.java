@@ -27,7 +27,7 @@ public class ShowInt8 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showInt8"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showInt8");
+        return hydra.lib.Literals.showInt8().name;
     }
 
     /**

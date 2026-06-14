@@ -26,7 +26,7 @@ public class IsSpace extends PrimitiveFunction {
      * @return the name "hydra.lib.chars.isSpace"
      */
     public Name name() {
-        return new Name("hydra.lib.chars.isSpace");
+        return hydra.lib.Chars.isSpace().name;
     }
 
     /**

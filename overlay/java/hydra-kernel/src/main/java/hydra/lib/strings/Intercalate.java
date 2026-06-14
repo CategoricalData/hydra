@@ -26,7 +26,7 @@ public class Intercalate extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.intercalate"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.intercalate");
+        return hydra.lib.Strings.intercalate().name;
     }
 
     /**

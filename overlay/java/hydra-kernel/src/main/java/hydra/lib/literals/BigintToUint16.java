@@ -27,7 +27,7 @@ public class BigintToUint16 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.bigintToUint16"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.bigintToUint16");
+        return hydra.lib.Literals.bigintToUint16().name;
     }
 
     /**

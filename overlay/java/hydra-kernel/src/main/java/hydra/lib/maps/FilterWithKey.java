@@ -30,7 +30,7 @@ public class FilterWithKey extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.filterWithKey");
+        return hydra.lib.Maps.filterWithKey().name;
     }
 
     /**

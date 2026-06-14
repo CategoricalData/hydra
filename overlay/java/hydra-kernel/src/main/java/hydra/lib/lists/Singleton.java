@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class Singleton extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.singleton");
+        return hydra.lib.Lists.singleton().name;
     }
 
     @Override

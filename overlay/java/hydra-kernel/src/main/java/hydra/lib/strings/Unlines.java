@@ -27,7 +27,7 @@ public class Unlines extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.unlines"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.unlines");
+        return hydra.lib.Strings.unlines().name;
     }
 
     /**

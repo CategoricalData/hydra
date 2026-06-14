@@ -26,7 +26,7 @@ public class Tan extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.tan");
+        return hydra.lib.Math_.tan().name;
     }
 
     /**

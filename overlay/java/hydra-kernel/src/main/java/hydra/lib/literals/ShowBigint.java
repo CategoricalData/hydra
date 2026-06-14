@@ -28,7 +28,7 @@ public class ShowBigint extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showBigint"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showBigint");
+        return hydra.lib.Literals.showBigint().name;
     }
 
     /**

@@ -25,7 +25,7 @@ public class And extends PrimitiveFunction {
      * @return the name "hydra.lib.logic.and"
      */
     public Name name() {
-        return new Name("hydra.lib.logic.and");
+        return hydra.lib.Logic.and().name;
     }
 
     /**

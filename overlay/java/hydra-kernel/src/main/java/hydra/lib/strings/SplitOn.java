@@ -27,7 +27,7 @@ public class SplitOn extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.splitOn"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.splitOn");
+        return hydra.lib.Strings.splitOn().name;
     }
 
     /**

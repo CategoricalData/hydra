@@ -26,7 +26,7 @@ public class Asinh extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.asinh");
+        return hydra.lib.Math_.asinh().name;
     }
 
     /**

@@ -26,7 +26,7 @@ public class Log extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.log");
+        return hydra.lib.Math_.log().name;
     }
 
     /**

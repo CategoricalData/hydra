@@ -26,7 +26,7 @@ public class Exp extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.exp");
+        return hydra.lib.Math_.exp().name;
     }
 
     /**

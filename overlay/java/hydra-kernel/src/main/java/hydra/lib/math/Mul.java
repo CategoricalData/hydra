@@ -26,7 +26,7 @@ public class Mul extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.mul");
+        return hydra.lib.Math_.mul().name;
     }
 
     /**

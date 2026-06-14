@@ -19,7 +19,7 @@ import hydra.util.Either;
  */
 public class Identity extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.identity");
+        return hydra.lib.Equality.identity().name;
     }
 
     @Override

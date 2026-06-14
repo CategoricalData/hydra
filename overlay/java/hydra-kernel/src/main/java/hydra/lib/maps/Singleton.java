@@ -29,7 +29,7 @@ public class Singleton extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.singleton");
+        return hydra.lib.Maps.singleton().name;
     }
 
     /**

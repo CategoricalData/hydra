@@ -30,7 +30,7 @@ public class Size extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.size"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.size");
+        return hydra.lib.Sets.size().name;
     }
 
     /**

@@ -30,7 +30,7 @@ public class Member extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.contains"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.member");
+        return hydra.lib.Sets.member().name;
     }
 
     /**

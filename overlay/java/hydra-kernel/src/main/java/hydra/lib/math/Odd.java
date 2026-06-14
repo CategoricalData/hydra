@@ -27,7 +27,7 @@ public class Odd extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.odd");
+        return hydra.lib.Math_.odd().name;
     }
 
     /**

@@ -21,7 +21,7 @@
     ((and (null a) (null b)) 0)
     ;; Treat an empty hash-table as equal to nil — both represent the
     ;; empty map/set, and the kernel mixes the two representations
-    ;; (e.g. `hydra_lib_maps_empty` is nil; `(from_list nil)` is a
+    ;; (e.g. `hydra_lisp_lib_maps_empty` is nil; `(from_list nil)` is a
     ;; zero-count hash-table).
     ((and (null a) (hash-table-p b) (zerop (hash-table-count b))) 0)
     ((and (hash-table-p a) (zerop (hash-table-count a)) (null b)) 0)
@@ -56,7 +56,7 @@
          (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1))))))
 
 ;; compare :: a -> a -> Comparison
-(defvar hydra_lib_equality_compare
+(defvar hydra_lisp_lib_equality_compare
   (lambda (a)
     "Compare two values and return a Comparison."
     (lambda (b)
@@ -67,55 +67,55 @@
          (t (list :equal_to nil)))))))
 
 ;; equal :: a -> a -> Bool
-(defvar hydra_lib_equality_equal
+(defvar hydra_lisp_lib_equality_equal
   (lambda (a)
     "Check if two values are equal."
     (lambda (b)
       (equal a b))))
 
 ;; gt :: a -> a -> Bool
-(defvar hydra_lib_equality_gt
+(defvar hydra_lisp_lib_equality_gt
   (lambda (a)
     "Check if first value is greater than second."
     (lambda (b)
       (> (generic-compare a b) 0))))
 
 ;; gte :: a -> a -> Bool
-(defvar hydra_lib_equality_gte
+(defvar hydra_lisp_lib_equality_gte
   (lambda (a)
     "Check if first value is greater than or equal to second."
     (lambda (b)
       (>= (generic-compare a b) 0))))
 
 ;; identity :: a -> a
-(defvar hydra_lib_equality_identity
+(defvar hydra_lisp_lib_equality_identity
   (lambda (x)
     "Return a value unchanged."
     x))
 
 ;; lt :: a -> a -> Bool
-(defvar hydra_lib_equality_lt
+(defvar hydra_lisp_lib_equality_lt
   (lambda (a)
     "Check if first value is less than second."
     (lambda (b)
       (< (generic-compare a b) 0))))
 
 ;; lte :: a -> a -> Bool
-(defvar hydra_lib_equality_lte
+(defvar hydra_lisp_lib_equality_lte
   (lambda (a)
     "Check if first value is less than or equal to second."
     (lambda (b)
       (<= (generic-compare a b) 0))))
 
 ;; max :: a -> a -> a
-(defvar hydra_lib_equality_max
+(defvar hydra_lisp_lib_equality_max
   (lambda (a)
     "Return the maximum of two values."
     (lambda (b)
       (if (>= (generic-compare a b) 0) a b))))
 
 ;; min :: a -> a -> a
-(defvar hydra_lib_equality_min
+(defvar hydra_lisp_lib_equality_min
   (lambda (a)
     "Return the minimum of two values."
     (lambda (b)

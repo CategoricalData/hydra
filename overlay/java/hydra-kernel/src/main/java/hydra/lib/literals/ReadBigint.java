@@ -31,7 +31,7 @@ public class ReadBigint extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readBigint"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readBigint");
+        return hydra.lib.Literals.readBigint().name;
     }
 
     /**

@@ -28,7 +28,7 @@ public class ShowUint64 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showUint64"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showUint64");
+        return hydra.lib.Literals.showUint64().name;
     }
 
     /**
