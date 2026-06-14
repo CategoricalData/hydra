@@ -5,10 +5,14 @@
 
 ;; BigInt conversions
 (def hydra_lib_literals_bigint_to_decimal (fn [x] (bigdec x)))
-(def hydra_lib_literals_bigint_to_int8 (fn [x] (byte x)))
-(def hydra_lib_literals_bigint_to_int16 (fn [x] (short x)))
-(def hydra_lib_literals_bigint_to_int32 (fn [x] (int x)))
-(def hydra_lib_literals_bigint_to_int64 (fn [x] (long x)))
+;; Signed conversions reduce modulo 2^width and reinterpret as two's-complement,
+;; wrapping silently with no exception (e.g. 255 -> -1 for int8). The checked
+;; forms (byte/short/int) throw IllegalArgumentException out of range, so use the
+;; unchecked-* casts to honor the kernel's wrap-silently contract.
+(def hydra_lib_literals_bigint_to_int8 (fn [x] (unchecked-byte x)))
+(def hydra_lib_literals_bigint_to_int16 (fn [x] (unchecked-short x)))
+(def hydra_lib_literals_bigint_to_int32 (fn [x] (unchecked-int x)))
+(def hydra_lib_literals_bigint_to_int64 (fn [x] (unchecked-long x)))
 (def hydra_lib_literals_bigint_to_uint8 (fn [x] (int x)))
 (def hydra_lib_literals_bigint_to_uint16 (fn [x] (int x)))
 (def hydra_lib_literals_bigint_to_uint32 (fn [x] (long x)))

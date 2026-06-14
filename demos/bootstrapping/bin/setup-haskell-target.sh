@@ -153,6 +153,18 @@ if [ -d "$HS_HASKELL_BASELINE/Hydra/Dsl" ]; then
     cp -r "$HS_HASKELL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
     echo "    Overlaid Hydra/Dsl (Haskell coder wrappers) from hydra-haskell baseline"
 fi
+# Copy generated Hydra.Lib.* modules (Hydra.Lib.Eithers, Hydra.Lib.Lists, ...).
+# Since #473 relocated the Haskell authoring DSL cluster into overlay/, the
+# hand-written Hydra.Dsl.{Libraries,Meta.Phantoms,Meta.Lib.*} modules import
+# these generated definition modules. They live in the kernel baseline alongside
+# Hydra/Dsl, but were never stitched into the single-tree bootstrap output, so
+# GHC failed with "Could not find module 'Hydra.Lib.Eithers'". Copy them in,
+# parallel to the Hydra/Dsl overlay above.
+if [ -d "$HS_KERNEL_BASELINE/Hydra/Lib" ]; then
+    mkdir -p "$HS_GEN/Hydra"
+    cp -r "$HS_KERNEL_BASELINE/Hydra/Lib" "$HS_GEN/Hydra/"
+    echo "    Copied Hydra/Lib from hydra-kernel baseline"
+fi
 # Copy Hydra.Dsls (DSL source generator module). It is generated separately from
 # mainModules due to stack overflow issues, so it won't be produced by the bootstrap
 # code generator. It is imported by hand-written Generation.hs.

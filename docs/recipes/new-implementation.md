@@ -685,7 +685,9 @@ Add a job to `.github/workflows/ci.yml` so the test suite runs on every push and
 Mirror the structure of an existing job (`common-lisp` and `scheme` are good minimal references):
 check out the repo, install the toolchain via `apt-get`, then invoke the implementation's test
 runner script. The job should fail loudly on any test failure or load error, matching the
-project-wide rule against silently swallowing errors.
+project-wide rule against silently swallowing errors — a corollary of Hydra's
+[formal rigor as a north star](https://github.com/CategoricalData/hydra/wiki/Concepts#key-design-principles)
+design principle.
 
 Without these four pieces — self-hosting I/O, sync integration, a passing bootstrap matrix, and
 CI — regressions in your implementation will only surface during local development and may go

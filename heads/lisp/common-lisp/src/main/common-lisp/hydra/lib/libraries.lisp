@@ -76,12 +76,12 @@
       (cons (prim-name hydra_lib_eithers_foldl)   (prim3 (prim-name hydra_lib_eithers_foldl)
                                           hydra_lisp_lib_eithers_foldl
                                           nil (fun x (fun y (tc-either z x))) x (tc-list y) (tc-either z x)))
-      (cons (prim-name hydra_lib_eithers_from_left)  (prim2 (prim-name hydra_lib_eithers_from_left)
+      (cons (prim-name hydra_lib_eithers_from_left)  (lazy-args '(0) (prim2 (prim-name hydra_lib_eithers_from_left)
                                             hydra_lisp_lib_eithers_from_left
-                                            nil x (tc-either x y) x))
-      (cons (prim-name hydra_lib_eithers_from_right) (prim2 (prim-name hydra_lib_eithers_from_right)
+                                            nil x (tc-either x y) x)))
+      (cons (prim-name hydra_lib_eithers_from_right) (lazy-args '(0) (prim2 (prim-name hydra_lib_eithers_from_right)
                                             hydra_lisp_lib_eithers_from_right
-                                            nil y (tc-either x y) y))
+                                            nil y (tc-either x y) y)))
       (cons (prim-name hydra_lib_eithers_is_left)  (prim1 (prim-name hydra_lib_eithers_is_left)  hydra_lisp_lib_eithers_is_left  nil (tc-either x y) (tc-boolean)))
       (cons (prim-name hydra_lib_eithers_is_right) (prim1 (prim-name hydra_lib_eithers_is_right) hydra_lisp_lib_eithers_is_right nil (tc-either x y) (tc-boolean)))
       (cons (prim-name hydra_lib_eithers_lefts)   (prim1 (prim-name hydra_lib_eithers_lefts)   hydra_lisp_lib_eithers_lefts   nil (tc-list (tc-either x y)) (tc-list x)))
@@ -238,9 +238,9 @@
       (cons (prim-name hydra_lib_logic_and)    (prim2 (prim-name hydra_lib_logic_and)
                                          hydra_lisp_lib_logic_and
                                          nil (tc-boolean) (tc-boolean) (tc-boolean)))
-      (cons (prim-name hydra_lib_logic_if_else) (prim3 (prim-name hydra_lib_logic_if_else)
+      (cons (prim-name hydra_lib_logic_if_else) (lazy-args '(1 2) (prim3 (prim-name hydra_lib_logic_if_else)
                                          hydra_lisp_lib_logic_if_else
-                                         nil (tc-boolean) a a a))
+                                         nil (tc-boolean) a a a)))
       (cons (prim-name hydra_lib_logic_not)    (prim1 (prim-name hydra_lib_logic_not)    hydra_lisp_lib_logic_not nil (tc-boolean) (tc-boolean)))
       (cons (prim-name hydra_lib_logic_or)     (prim2 (prim-name hydra_lib_logic_or)
                                          hydra_lisp_lib_logic_or
@@ -279,9 +279,9 @@
         (cons (prim-name hydra_lib_maps_filter_with_key)  (prim2 (prim-name hydra_lib_maps_filter_with_key)
                                                    hydra_lisp_lib_maps_filter_with_key
                                                    nil (fun k (fun v (tc-boolean))) map-kv map-kv ord-k))
-        (cons (prim-name hydra_lib_maps_find_with_default) (prim3 (prim-name hydra_lib_maps_find_with_default)
+        (cons (prim-name hydra_lib_maps_find_with_default) (lazy-args '(0) (prim3 (prim-name hydra_lib_maps_find_with_default)
                                                     hydra_lisp_lib_maps_find_with_default
-                                                    nil v k map-kv v ord-k))
+                                                    nil v k map-kv v ord-k)))
         (cons (prim-name hydra_lib_maps_from_list)       (prim1 (prim-name hydra_lib_maps_from_list) hydra_lisp_lib_maps_from_list nil (tc-list (tc-pair k v)) map-kv ord-k))
         (cons (prim-name hydra_lib_maps_insert)         (prim3 (prim-name hydra_lib_maps_insert)
                                                    hydra_lisp_lib_maps_insert
@@ -388,16 +388,16 @@
       (cons (prim-name hydra_lib_optionals_bind)     (prim2 (prim-name hydra_lib_optionals_bind)
                                            hydra_lisp_lib_optionals_bind
                                            nil (tc-optional a) (fun a (tc-optional b)) (tc-optional b)))
-      (cons (prim-name hydra_lib_optionals_cases)    (prim3 (prim-name hydra_lib_optionals_cases)
+      (cons (prim-name hydra_lib_optionals_cases)    (lazy-args '(1) (prim3 (prim-name hydra_lib_optionals_cases)
                                            hydra_lisp_lib_optionals_cases
-                                           nil (tc-optional a) b (fun a b) b))
+                                           nil (tc-optional a) b (fun a b) b)))
       (cons (prim-name hydra_lib_optionals_cat)      (prim1 (prim-name hydra_lib_optionals_cat)      hydra_lisp_lib_optionals_cat      nil (tc-list (tc-optional a)) (tc-list a)))
       (cons (prim-name hydra_lib_optionals_compose)  (prim3 (prim-name hydra_lib_optionals_compose)
                                            hydra_lisp_lib_optionals_compose
                                            nil (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-      (cons (prim-name hydra_lib_optionals_from_optional) (prim2 (prim-name hydra_lib_optionals_from_optional)
+      (cons (prim-name hydra_lib_optionals_from_optional) (lazy-args '(0) (prim2 (prim-name hydra_lib_optionals_from_optional)
                                             hydra_lisp_lib_optionals_from_optional
-                                            nil a (tc-optional a) a))
+                                            nil a (tc-optional a) a)))
       (cons (prim-name hydra_lib_optionals_is_given)    (prim1 (prim-name hydra_lib_optionals_is_given)    hydra_lisp_lib_optionals_is_given    nil (tc-optional a) (tc-boolean)))
       (cons (prim-name hydra_lib_optionals_is_none) (prim1 (prim-name hydra_lib_optionals_is_none) hydra_lisp_lib_optionals_is_none nil (tc-optional a) (tc-boolean)))
       (cons (prim-name hydra_lib_optionals_map)       (prim2 (prim-name hydra_lib_optionals_map)

@@ -710,6 +710,9 @@ See the [full style guide](https://github.com/CategoricalData/hydra/wiki/Coding-
   Functions in type-indexed module families are named after the type they operate on.
 - **Error handling**: Fail immediately with informative messages.
   Never silently return defaults or swallow failures.
+  This is a corollary of Hydra's
+  [formal rigor as a north star](https://github.com/CategoricalData/hydra/wiki/Concepts#key-design-principles)
+  design principle.
 
 ---
 
