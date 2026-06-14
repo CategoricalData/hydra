@@ -3,14 +3,14 @@
 module Hydra.Dsl.Meta.Base (
   module Hydra.Dsl.Meta.Phantoms,
   module Hydra.Dsl.Meta.Base,
-  module Hydra.Sources.Libraries,
+  module Hydra.Dsl.Libraries,
 ) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms(asTerm, AsTerm(..), definitionInModule, el, firstClassType, opt)
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Meta.Core as Core
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y

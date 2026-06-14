@@ -19,7 +19,6 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Sources.Kernel.Terms.Show.Util as ShowUtil

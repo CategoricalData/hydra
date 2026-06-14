@@ -1,6 +1,6 @@
 module Hydra.TestUtils (
   module Hydra.TestUtils,
-  module Hydra.Sources.Libraries,
+  module Hydra.Dsl.Libraries,
   module Hydra.Test.TestGraph,
   module Hydra.Test.TestTypes,
   module Hydra.Test.TestTerms,
@@ -28,7 +28,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
 import qualified Hydra.Sources.Decode.Core as TermDecodeCore
 import qualified Hydra.Sources.Encode.Core as TermEncodeCore
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 import Hydra.Test.TestGraph hiding (testGraph, testContext)
 import Hydra.Test.TestTypes
 import Hydra.Test.TestTerms

@@ -80,6 +80,13 @@ decimal = TermCoder Types.decimal encode decode
     encode _cx g = ExtractCore.decimal g
     decode _cx = Right . Terms.decimal
 
+-- | The qualified name of a primitive, read from its PrimitiveDefinition. A short
+-- contextual alias for 'primitiveDefinitionName', used by DSL source modules to
+-- reference primitive names via the generated Hydra.Lib.* definition modules (e.g.
+-- @primName Math.acos@) instead of hand-maintained name constants.
+primName :: PrimitiveDefinition -> Name
+primName = primitiveDefinitionName
+
 -- | Synthesize a minimal PrimitiveDefinition from a name and TypeScheme.
 -- Used by the prim0/prim1/prim2/prim3 helpers to bridge the kernel-shape change
 -- before the per-primitive metadata audit (description, isPure/isTotal exceptions,
@@ -95,7 +102,7 @@ defaultPrimitiveDefinition name typ = PrimitiveDefinition {
 
 -- | Mark the value parameters at the given (0-based) positions of a primitive's
 -- signature as lazy. Used at the prim*-based registration sites in
--- Hydra.Sources.Libraries to record which arguments coders must thunk in hosts
+-- Hydra.Dsl.Libraries to record which arguments coders must thunk in hosts
 -- that distinguish strict from lazy evaluation (issue #391). The kernel DSL
 -- sources (Hydra.Sources.Kernel.Lib.*) carry the same flags via lazySig; this
 -- keeps the Haskell-host bootstrapGraph in agreement with the JSON.

@@ -3,7 +3,6 @@ module Hydra.Sources.Kernel.Terms.Classes where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Typing            as Typing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms

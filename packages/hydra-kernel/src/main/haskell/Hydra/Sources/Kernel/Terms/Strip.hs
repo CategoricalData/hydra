@@ -15,7 +15,6 @@ import Hydra.Kernel hiding (
   removeTypeAnnotationsFromTerm,
   removeTypesFromTerm,
   stripTypeLambdas)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths        as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast

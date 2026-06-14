@@ -12,7 +12,6 @@ import Hydra.Kernel
 import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Common
 import Hydra.Dsl.Meta.Literals
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Show.Core as ShowCore
@@ -23,6 +22,12 @@ import Prelude hiding ((++))
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Eithers as DefEithers
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 -- Operators
@@ -52,7 +57,7 @@ f <.> g = compose (asTerm f) (asTerm g)
 fun @@ arg = apply (asTerm fun) (asTerm arg)
 
 (++) :: (AsTerm f String, AsTerm g String) => f -> g -> TypedTerm String
-f ++ g = primitive2 _strings_cat2 (asTerm f) (asTerm g)
+f ++ g = primitive2 (Prims.primName DefStrings.cat2) (asTerm f) (asTerm g)
 
 -- | Field definition operator for records: name>: value
 -- Example: "name">: string "John"
@@ -126,7 +131,7 @@ docWrapped len = doc . wrapLine len
 
 -- | Bind over Either: extracts the Right value into a variable, short-circuiting on Left
 eitherBind :: AsTerm t (Either e a) => String -> t -> TypedTerm (Either e b) -> TypedTerm (Either e b)
-eitherBind v def body = primitive2 _eithers_bind (asTerm def) $ lambda v $ body
+eitherBind v def body = primitive2 (Prims.primName DefEithers.bind) (asTerm def) $ lambda v $ body
 
 -- | Convert a typed element to an untyped element (legacy name, prefer 'toBinding')
 -- Example: el (definitionInModule myModule "addInts" myFunction)
@@ -232,7 +237,7 @@ firstClassType typ = annot keyFirstClassType (Just $ Terms.boolean True) typ
 -- | Create a fold function to process lists
 -- Example: fold (lambda "acc" (lambda "x" (add @@ var "acc" @@ var "x")))
 fold :: AsTerm t (b -> a -> b) => t -> TypedTerm (b -> [a] -> b)
-fold f = (primitive _lists_foldl) @@ asTerm f
+fold f = (primitive (Prims.primName DefLists.foldl)) @@ asTerm f
 
 -- | Identity function that returns its argument unchanged
 -- Example: identity
@@ -342,12 +347,12 @@ primitive :: Name -> TypedTerm a
 primitive = TypedTerm . Terms.primitive
 
 -- | Apply a primitive function to one argument
--- Example: primitive1 _math_abs (int32 (-5))
+-- Example: primitive1 (Prims.primName DefMath.abs) (int32 (-5))
 primitive1 :: Name -> TypedTerm a -> TypedTerm b
 primitive1 primName (TypedTerm a) = TypedTerm $ Terms.primitive primName Terms.@@ a
 
 -- | Apply a primitive function to two arguments
--- Example: primitive2 _math_add (int32 2) (int32 3)
+-- Example: primitive2 (Prims.primName DefMath.add) (int32 2) (int32 3)
 primitive2 :: Name -> TypedTerm a -> TypedTerm b -> TypedTerm c
 primitive2 primName (TypedTerm a) (TypedTerm b) = TypedTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b
 
@@ -374,7 +379,7 @@ reify f = case (unTypedTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TypedTerm lhs
   TermEither (Prelude.Left _) -> lambda "x" $ TypedTerm $ TermEither $ Prelude.Left $ Terms.var "x"
   TermEither (Prelude.Right _) -> lambda "x" $ TypedTerm $ TermEither $ Prelude.Right $ Terms.var "x"
-  TermOptional (Just _) -> primitive _optionals_pure
+  TermOptional (Just _) -> primitive (Prims.primName DefOptionals.pure)
   TermInject (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
 

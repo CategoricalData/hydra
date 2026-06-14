@@ -20,7 +20,7 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Annotations
 import Hydra.Packaging
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 
 import qualified Data.List as L
 import qualified Data.Map as M

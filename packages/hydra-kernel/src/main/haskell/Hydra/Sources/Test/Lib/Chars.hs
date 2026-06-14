@@ -18,7 +18,8 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Data.Char (ord)
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Chars as DefChars
 
 
 ns :: ModuleName
@@ -53,7 +54,7 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
   test "space" (ord ' ') false,
   test "punctuation" (ord '.') false]
   where
-    test name x result = primCase name _chars_isAlphaNum [int32 x] result
+    test name x result = primCase name (Prims.primName DefChars.isAlphaNum) [int32 x] result
 
 charsIsLower :: TypedTerm TestGroup
 charsIsLower = subgroup "isLower" [
@@ -61,7 +62,7 @@ charsIsLower = subgroup "isLower" [
   test "uppercase" (ord 'A') false,
   test "digit" (ord '5') false]
   where
-    test name x result = primCase name _chars_isLower [int32 x] result
+    test name x result = primCase name (Prims.primName DefChars.isLower) [int32 x] result
 
 charsIsSpace :: TypedTerm TestGroup
 charsIsSpace = subgroup "isSpace" [
@@ -70,7 +71,7 @@ charsIsSpace = subgroup "isSpace" [
   test "newline" (ord '\n') true,
   test "letter" (ord 'a') false]
   where
-    test name x result = primCase name _chars_isSpace [int32 x] result
+    test name x result = primCase name (Prims.primName DefChars.isSpace) [int32 x] result
 
 charsIsUpper :: TypedTerm TestGroup
 charsIsUpper = subgroup "isUpper" [
@@ -78,7 +79,7 @@ charsIsUpper = subgroup "isUpper" [
   test "lowercase" (ord 'a') false,
   test "digit" (ord '5') false]
   where
-    test name x result = primCase name _chars_isUpper [int32 x] result
+    test name x result = primCase name (Prims.primName DefChars.isUpper) [int32 x] result
 
 charsToLower :: TypedTerm TestGroup
 charsToLower = subgroup "toLower" [
@@ -86,7 +87,7 @@ charsToLower = subgroup "toLower" [
   test "lowercase" (ord 'a') (ord 'a'),
   test "digit" (ord '5') (ord '5')]
   where
-    test name x result = primCase name _chars_toLower [int32 x] (int32 result)
+    test name x result = primCase name (Prims.primName DefChars.toLower) [int32 x] (int32 result)
 
 charsToUpper :: TypedTerm TestGroup
 charsToUpper = subgroup "toUpper" [
@@ -94,4 +95,4 @@ charsToUpper = subgroup "toUpper" [
   test "uppercase" (ord 'A') (ord 'A'),
   test "digit" (ord '5') (ord '5')]
   where
-    test name x result = primCase name _chars_toUpper [int32 x] (int32 result)
+    test name x result = primCase name (Prims.primName DefChars.toUpper) [int32 x] (int32 result)

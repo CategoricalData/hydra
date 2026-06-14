@@ -9,7 +9,8 @@ module Hydra.Dsl.Deep.Lib.Math where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Phantoms (encodedName)
-import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Math as DefMath
 
 
 -- | Apply a unary math primitive to a deep term
@@ -30,100 +31,100 @@ ref name = Core.termVariable $ encodedName name
 -- Unary functions
 
 abs :: TypedTerm Term -> TypedTerm Term
-abs = apply1 _math_abs
+abs = apply1 (Prims.primName DefMath.abs)
 
 acos :: TypedTerm Term -> TypedTerm Term
-acos = apply1 _math_acos
+acos = apply1 (Prims.primName DefMath.acos)
 
 acosh :: TypedTerm Term -> TypedTerm Term
-acosh = apply1 _math_acosh
+acosh = apply1 (Prims.primName DefMath.acosh)
 
 asin :: TypedTerm Term -> TypedTerm Term
-asin = apply1 _math_asin
+asin = apply1 (Prims.primName DefMath.asin)
 
 asinh :: TypedTerm Term -> TypedTerm Term
-asinh = apply1 _math_asinh
+asinh = apply1 (Prims.primName DefMath.asinh)
 
 atan :: TypedTerm Term -> TypedTerm Term
-atan = apply1 _math_atan
+atan = apply1 (Prims.primName DefMath.atan)
 
 atanh :: TypedTerm Term -> TypedTerm Term
-atanh = apply1 _math_atanh
+atanh = apply1 (Prims.primName DefMath.atanh)
 
 ceiling :: TypedTerm Term -> TypedTerm Term
-ceiling = apply1 _math_ceiling
+ceiling = apply1 (Prims.primName DefMath.ceiling)
 
 cos :: TypedTerm Term -> TypedTerm Term
-cos = apply1 _math_cos
+cos = apply1 (Prims.primName DefMath.cos)
 
 cosh :: TypedTerm Term -> TypedTerm Term
-cosh = apply1 _math_cosh
+cosh = apply1 (Prims.primName DefMath.cosh)
 
 exp :: TypedTerm Term -> TypedTerm Term
-exp = apply1 _math_exp
+exp = apply1 (Prims.primName DefMath.exp)
 
 floor :: TypedTerm Term -> TypedTerm Term
-floor = apply1 _math_floor
+floor = apply1 (Prims.primName DefMath.floor)
 
 log :: TypedTerm Term -> TypedTerm Term
-log = apply1 _math_log
+log = apply1 (Prims.primName DefMath.log)
 
 negate :: TypedTerm Term -> TypedTerm Term
-negate = apply1 _math_negate
+negate = apply1 (Prims.primName DefMath.negate)
 
 negateFloat64 :: TypedTerm Term -> TypedTerm Term
-negateFloat64 = apply1 _math_negateFloat64
+negateFloat64 = apply1 (Prims.primName DefMath.negateFloat64)
 
 round :: TypedTerm Term -> TypedTerm Term
-round = apply1 _math_round
+round = apply1 (Prims.primName DefMath.round)
 
 signum :: TypedTerm Term -> TypedTerm Term
-signum = apply1 _math_signum
+signum = apply1 (Prims.primName DefMath.signum)
 
 sin :: TypedTerm Term -> TypedTerm Term
-sin = apply1 _math_sin
+sin = apply1 (Prims.primName DefMath.sin)
 
 sinh :: TypedTerm Term -> TypedTerm Term
-sinh = apply1 _math_sinh
+sinh = apply1 (Prims.primName DefMath.sinh)
 
 sqrt :: TypedTerm Term -> TypedTerm Term
-sqrt = apply1 _math_sqrt
+sqrt = apply1 (Prims.primName DefMath.sqrt)
 
 tan :: TypedTerm Term -> TypedTerm Term
-tan = apply1 _math_tan
+tan = apply1 (Prims.primName DefMath.tan)
 
 tanh :: TypedTerm Term -> TypedTerm Term
-tanh = apply1 _math_tanh
+tanh = apply1 (Prims.primName DefMath.tanh)
 
 truncate :: TypedTerm Term -> TypedTerm Term
-truncate = apply1 _math_truncate
+truncate = apply1 (Prims.primName DefMath.truncate)
 
 
 -- Binary functions
 
 add :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-add = apply2 _math_add
+add = apply2 (Prims.primName DefMath.add)
 
 addFloat64 :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-addFloat64 = apply2 _math_addFloat64
+addFloat64 = apply2 (Prims.primName DefMath.addFloat64)
 
 atan2 :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-atan2 = apply2 _math_atan2
+atan2 = apply2 (Prims.primName DefMath.atan2)
 
 logBase :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-logBase = apply2 _math_logBase
+logBase = apply2 (Prims.primName DefMath.logBase)
 
 mul :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-mul = apply2 _math_mul
+mul = apply2 (Prims.primName DefMath.mul)
 
 mulFloat64 :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-mulFloat64 = apply2 _math_mulFloat64
+mulFloat64 = apply2 (Prims.primName DefMath.mulFloat64)
 
 pow :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-pow = apply2 _math_pow
+pow = apply2 (Prims.primName DefMath.pow)
 
 sub :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-sub = apply2 _math_sub
+sub = apply2 (Prims.primName DefMath.sub)
 
 subFloat64 :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-subFloat64 = apply2 _math_subFloat64
+subFloat64 = apply2 (Prims.primName DefMath.subFloat64)
