@@ -60,6 +60,8 @@ case "$TARGET" in
     haskell)                            CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/haskell/coder.clj" ;;
     java)                               CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/java/coder.clj" ;;
     python)                             CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/python/coder.clj" ;;
+    scala)                              CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/scala/coder.clj" ;;
+    typescript)                         CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/typeScript/coder.clj" ;;
     clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/lisp/coder.clj" ;;
 esac
 
