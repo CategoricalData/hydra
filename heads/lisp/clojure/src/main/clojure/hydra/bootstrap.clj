@@ -95,6 +95,21 @@
          :language @(rc 'hydra_python_language_python_language)
          :flags [false true true false]
          :subdir "python"})
+    "scala"
+    (do (load-coder-modules! ["hydra.scala.coder"])
+        {:coder @(rc 'hydra_scala_coder_module_to_scala)
+         :language @(rc 'hydra_scala_language_scala_language)
+         :flags [false false false false]
+         :subdir "scala"})
+    "typescript"
+    ;; Namespace is hydra.typeScript (camelCase S); the lisp coder lowers
+    ;; identifier segments to snake_case, so vars are hydra_type_script_*.
+    ;; CLI target stays "typescript".
+    (do (load-coder-modules! ["hydra.typeScript.coder"])
+        {:coder @(rc 'hydra_type_script_coder_module_to_type_script)
+         :language @(rc 'hydra_type_script_language_type_script_language)
+         :flags [false false false false]
+         :subdir "typescript"})
     ("clojure" "scheme" "common-lisp" "emacs-lisp")
     ;; hydra.lisp.serde is *not* reachable from hydra.lisp.coder's :require graph
     ;; (the coder builds a program; serde converts the program to printable expr).
@@ -141,7 +156,7 @@
            :subdir subdir}))
     ;; Default: unsupported
     (do (println (str "Unsupported target for Clojure host: " target))
-        (println "Supported targets: haskell, java, python, clojure, scheme, common-lisp, emacs-lisp")
+        (println "Supported targets: haskell, java, python, scala, typescript, clojure, scheme, common-lisp, emacs-lisp")
         (System/exit 1))))
 
 (defn -main [& args]
