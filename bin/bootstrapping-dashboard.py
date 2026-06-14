@@ -80,7 +80,9 @@ def load_run(run_dir):
 
     paths = {}
     for f in sorted(run_dir.glob("*.json")):
-        if f.name == "metadata.json" or ".benchmark." in f.name:
+        # `prep.json` (issue #481) is a run-level prep-failure sentinel, not a
+        # per-cell path result; render it via the prep-failure branch instead.
+        if f.name in ("metadata.json", "prep.json") or ".benchmark." in f.name:
             continue
         try:
             data = json.loads(f.read_text())
@@ -296,6 +298,29 @@ def cmd_latest(args):
         run_dir = dirs[-1]
 
     run = load_run(run_dir)
+
+    # A prep-phase failure (issue #481) leaves a run dir with metadata.json
+    # (status="fail") + prep.json + prep.log, and no per-cell *.json. Render
+    # a sensible summary instead of the generic "no path data" message.
+    prep_path = run_dir / "prep.json"
+    if not run["paths"] and prep_path.exists():
+        print_run_header(run)
+        try:
+            prep = json.loads(prep_path.read_text())
+        except (json.JSONDecodeError, OSError):
+            prep = {}
+        stage = prep.get("stage", "?")
+        exit_code = prep.get("exitCode", "?")
+        first_err = prep.get("firstError", "") or ""
+        print(f"  {_RED}PREP FAILED{_RESET} at stage: {stage} (exit {exit_code})")
+        if first_err:
+            print(f"  First error: {first_err}")
+        log_path = run_dir / "prep.log"
+        if log_path.exists():
+            print(f"  See: {log_path}")
+        print()
+        return
+
     if not run["paths"]:
         print(f"Run '{run_dir.name}' contains no path data.")
         return
