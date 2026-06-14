@@ -22,11 +22,11 @@
           (hydra json decode)
           (hydra test test_graph)
           (hydra lib libraries)
-          (hydra lib equality)
-          (hydra lib maps)
-          (hydra lib optionals)
-          (hydra lib pairs)
-          (hydra lib sets))
+          (hydra scheme lib equality)
+          (hydra scheme lib maps)
+          (hydra scheme lib optionals)
+          (hydra scheme lib pairs)
+          (hydra scheme lib sets))
   (export run-test-group)
   (begin
 

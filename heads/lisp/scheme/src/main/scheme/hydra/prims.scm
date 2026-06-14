@@ -5,9 +5,9 @@
           (hydra packaging)
           (hydra scoping)
           (hydra extract core)
-          (hydra lib maps)
-          (hydra lib pairs)
-          (hydra lib sets))
+          (hydra scheme lib maps)
+          (hydra scheme lib pairs)
+          (hydra scheme lib sets))
   (export collect-type-vars-ordered build-type-scheme
           wrap-other-error
           tc-bigint tc-decimal tc-boolean

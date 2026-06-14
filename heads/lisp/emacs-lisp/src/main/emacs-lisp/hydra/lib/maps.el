@@ -115,7 +115,7 @@
          body)))
     (t m)))
 
-(defvar hydra_lib_maps_alter
+(defvar hydra_lisp_lib_maps_alter
   (lambda (f)
     "Alter a value at a key using a function."
     (lambda (k)
@@ -130,7 +130,7 @@
             (alist-insert k (alter-get-value new-maybe) m)))))))
 
 ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-(defvar hydra_lib_maps_bimap
+(defvar hydra_lisp_lib_maps_bimap
   (lambda (fk)
     "Map a function over the keys and values of a map."
     (lambda (fv)
@@ -142,24 +142,24 @@
           result)))))
 
 ;; delete :: k -> Map k v -> Map k v
-(defvar hydra_lib_maps_delete
+(defvar hydra_lisp_lib_maps_delete
   (lambda (k)
     "Remove a key from a map."
     (lambda (m)
       (alist-delete k m))))
 
 ;; elems :: Map k v -> [v]
-(defvar hydra_lib_maps_elems
+(defvar hydra_lisp_lib_maps_elems
   (lambda (m)
     "Get the values of a map, ordered by key."
     (mapcar #'cdr (hydra-map-sorted-pairs m))))
 
 ;; empty :: Map k v
-(defvar hydra_lib_maps_empty nil
+(defvar hydra_lisp_lib_maps_empty nil
   "Create an empty map.")
 
 ;; filter :: (v -> Bool) -> Map k v -> Map k v
-(defvar hydra_lib_maps_filter
+(defvar hydra_lisp_lib_maps_filter
   (lambda (pred)
     "Filter a map based on values."
     (lambda (m)
@@ -170,7 +170,7 @@
         result))))
 
 ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
-(defvar hydra_lib_maps_filter_with_key
+(defvar hydra_lisp_lib_maps_filter_with_key
   (lambda (pred)
     "Filter a map based on key-value pairs."
     (lambda (m)
@@ -182,7 +182,7 @@
 
 ;; find_with_default :: v -> k -> Map k v -> v
 ;; Thunk-aware: the default is lazy (#391); if def is a zero-arg function, only call it on a miss.
-(defvar hydra_lib_maps_find_with_default
+(defvar hydra_lisp_lib_maps_find_with_default
   (lambda (def)
     "Lookup a value with a default."
     (lambda (k)
@@ -192,7 +192,7 @@
 
 ;; from_list :: [Pair k v] -> Map k v
 ;; Input is list of (list k v) pairs
-(defvar hydra_lib_maps_from_list
+(defvar hydra_lisp_lib_maps_from_list
   (lambda (pairs)
     "Create a map from a list of key-value pairs."
     (let ((result (make-hash-table :test 'equal :size (max 1 (length pairs)))))
@@ -200,7 +200,7 @@
         (puthash (car p) (cadr p) result)))))
 
 ;; insert :: k -> v -> Map k v -> Map k v
-(defvar hydra_lib_maps_insert
+(defvar hydra_lisp_lib_maps_insert
   (lambda (k)
     "Insert a key-value pair into a map."
     (lambda (v)
@@ -208,13 +208,13 @@
         (alist-insert k v m)))))
 
 ;; keys :: Map k v -> [k]
-(defvar hydra_lib_maps_keys
+(defvar hydra_lisp_lib_maps_keys
   (lambda (m)
     "Get the keys of a map, in sorted order."
     (mapcar #'car (hydra-map-sorted-pairs m))))
 
 ;; lookup :: k -> Map k v -> Maybe v
-(defvar hydra_lib_maps_lookup
+(defvar hydra_lisp_lib_maps_lookup
   (lambda (k)
     "Lookup a value in a map."
     (lambda (m)
@@ -224,7 +224,7 @@
             (list :none))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
-(defvar hydra_lib_maps_map
+(defvar hydra_lisp_lib_maps_map
   (lambda (f)
     "Map a function over a map."
     (lambda (m)
@@ -235,7 +235,7 @@
         result))))
 
 ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
-(defvar hydra_lib_maps_map_keys
+(defvar hydra_lisp_lib_maps_map_keys
   (lambda (f)
     "Map a function over the keys of a map."
     (lambda (m)
@@ -246,20 +246,20 @@
         result))))
 
 ;; member :: k -> Map k v -> Bool
-(defvar hydra_lib_maps_member
+(defvar hydra_lisp_lib_maps_member
   (lambda (k)
     "Check if a key is present in a map."
     (lambda (m)
       (if (hydra-map-lookup k m) t nil))))
 
 ;; null :: Map k v -> Bool
-(defvar hydra_lib_maps_null
+(defvar hydra_lisp_lib_maps_null
   (lambda (m)
     "Check if a map is empty."
     (hydra-map-empty-p m)))
 
 ;; singleton :: k -> v -> Map k v
-(defvar hydra_lib_maps_singleton
+(defvar hydra_lisp_lib_maps_singleton
   (lambda (k)
     "Create a map with a single key-value pair."
     (lambda (v)
@@ -268,13 +268,13 @@
         h))))
 
 ;; size :: Map k v -> Int
-(defvar hydra_lib_maps_size
+(defvar hydra_lisp_lib_maps_size
   (lambda (m)
     "Get the size of a map."
     (hydra-map-size m)))
 
 ;; to_list :: Map k v -> [Pair k v]
-(defvar hydra_lib_maps_to_list
+(defvar hydra_lisp_lib_maps_to_list
   (lambda (m)
     "Convert a map to a list of key-value pairs, in sorted-by-key order."
     (mapcar (lambda (entry) (list (car entry) (cdr entry)))
@@ -282,7 +282,7 @@
 
 ;; union :: Map k v -> Map k v -> Map k v
 ;; Left-biased: entries from first map take precedence
-(defvar hydra_lib_maps_union
+(defvar hydra_lisp_lib_maps_union
   (lambda (m1)
     "Union two maps, with the first taking precedence."
     (lambda (m2)

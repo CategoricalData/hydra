@@ -59,7 +59,7 @@ object Generation:
     val d = depth - 1
     term match
       case Term.literal(Literal.binary(b)) =>
-        Term.literal(Literal.binary(hydra.lib.literals.stringToBinary(b)))
+        Term.literal(Literal.binary(hydra.scala.lib.literals.stringToBinary(b)))
       case Term.application(app) =>
         Term.application(Application(decodeBinaryLiteralsDepth(app.function, d), decodeBinaryLiteralsDepth(app.argument, d)))
       case Term.lambda(lam) =>
