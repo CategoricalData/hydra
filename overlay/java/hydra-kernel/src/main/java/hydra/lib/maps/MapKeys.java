@@ -28,7 +28,7 @@ public class MapKeys extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.mapKeys");
+        return hydra.lib.Maps.mapKeys().name;
     }
 
     /**

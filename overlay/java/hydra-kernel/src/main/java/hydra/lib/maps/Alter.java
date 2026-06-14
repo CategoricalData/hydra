@@ -31,7 +31,7 @@ public class Alter extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.alter");
+        return hydra.lib.Maps.alter().name;
     }
 
     /**

@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class Gt extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.gt");
+        return hydra.lib.Equality.gt().name;
     }
 
     @Override

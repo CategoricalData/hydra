@@ -22,7 +22,7 @@ import hydra.util.Either;
  */
 public class Min extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.min");
+        return hydra.lib.Equality.min().name;
     }
 
     @Override

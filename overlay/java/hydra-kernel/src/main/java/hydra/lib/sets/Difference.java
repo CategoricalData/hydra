@@ -29,7 +29,7 @@ public class Difference extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.difference"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.difference");
+        return hydra.lib.Sets.difference().name;
     }
 
     /**

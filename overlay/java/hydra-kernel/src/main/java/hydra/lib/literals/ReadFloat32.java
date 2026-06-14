@@ -30,7 +30,7 @@ public class ReadFloat32 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readFloat32"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readFloat32");
+        return hydra.lib.Literals.readFloat32().name;
     }
 
     /**

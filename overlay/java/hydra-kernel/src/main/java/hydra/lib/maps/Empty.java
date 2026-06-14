@@ -27,7 +27,7 @@ public class Empty extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.empty");
+        return hydra.lib.Maps.empty().name;
     }
 
     /**

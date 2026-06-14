@@ -25,7 +25,7 @@ public class ToUpper extends PrimitiveFunction {
      * @return the name "hydra.lib.chars.toUpper"
      */
     public Name name() {
-        return new Name("hydra.lib.chars.toUpper");
+        return hydra.lib.Chars.toUpper().name;
     }
 
     /**

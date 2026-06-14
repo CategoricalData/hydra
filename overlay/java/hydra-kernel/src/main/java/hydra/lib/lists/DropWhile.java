@@ -26,7 +26,7 @@ import hydra.util.Either;
  */
 public class DropWhile extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.dropWhile");
+        return hydra.lib.Lists.dropWhile().name;
     }
 
     @Override

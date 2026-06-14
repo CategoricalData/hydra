@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Foldr extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.foldr");
+        return hydra.lib.Lists.foldr().name;
     }
 
     @Override

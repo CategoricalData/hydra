@@ -27,7 +27,7 @@ public class BigintToUint8 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.bigintToUint8"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.bigintToUint8");
+        return hydra.lib.Literals.bigintToUint8().name;
     }
 
     /**

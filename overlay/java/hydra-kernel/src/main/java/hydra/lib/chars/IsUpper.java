@@ -26,7 +26,7 @@ public class IsUpper extends PrimitiveFunction {
      * @return the name "hydra.lib.chars.isUpper"
      */
     public Name name() {
-        return new Name("hydra.lib.chars.isUpper");
+        return hydra.lib.Chars.isUpper().name;
     }
 
     /**

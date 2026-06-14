@@ -27,7 +27,7 @@ public class Second extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.pairs.second");
+        return hydra.lib.Pairs.second().name;
     }
 
     /**

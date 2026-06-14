@@ -26,7 +26,7 @@ public class Null extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.null"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.null");
+        return hydra.lib.Strings.null_().name;
     }
 
     /**

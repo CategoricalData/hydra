@@ -31,7 +31,7 @@ public class Filter extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.filter");
+        return hydra.lib.Maps.filter().name;
     }
 
     /**

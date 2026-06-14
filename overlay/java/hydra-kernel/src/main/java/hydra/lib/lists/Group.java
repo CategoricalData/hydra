@@ -26,7 +26,7 @@ import hydra.util.Either;
  */
 public class Group extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.group");
+        return hydra.lib.Lists.group().name;
     }
 
     @Override

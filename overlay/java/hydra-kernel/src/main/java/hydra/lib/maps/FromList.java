@@ -31,7 +31,7 @@ public class FromList extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.fromList");
+        return hydra.lib.Maps.fromList().name;
     }
 
     /**

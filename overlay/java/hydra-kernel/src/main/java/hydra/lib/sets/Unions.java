@@ -31,7 +31,7 @@ public class Unions extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.unions"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.unions");
+        return hydra.lib.Sets.unions().name;
     }
 
     /**

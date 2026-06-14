@@ -26,7 +26,7 @@ public class Acos extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.acos");
+        return hydra.lib.Math_.acos().name;
     }
 
     /**

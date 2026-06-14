@@ -26,7 +26,7 @@ public class Max extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.max");
+        return hydra.lib.Math_.max().name;
     }
 
     /**

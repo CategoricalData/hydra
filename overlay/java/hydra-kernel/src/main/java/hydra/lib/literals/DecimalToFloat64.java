@@ -27,7 +27,7 @@ public class DecimalToFloat64 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.decimalToFloat64"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.decimalToFloat64");
+        return hydra.lib.Literals.decimalToFloat64().name;
     }
 
     /**

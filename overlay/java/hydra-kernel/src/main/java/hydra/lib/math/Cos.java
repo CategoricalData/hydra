@@ -26,7 +26,7 @@ public class Cos extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.cos");
+        return hydra.lib.Math_.cos().name;
     }
 
     /**

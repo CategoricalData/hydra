@@ -26,7 +26,7 @@ public class IsAlphaNum extends PrimitiveFunction {
      * @return the name "hydra.lib.chars.isAlphaNum"
      */
     public Name name() {
-        return new Name("hydra.lib.chars.isAlphaNum");
+        return hydra.lib.Chars.isAlphaNum().name;
     }
 
     /**

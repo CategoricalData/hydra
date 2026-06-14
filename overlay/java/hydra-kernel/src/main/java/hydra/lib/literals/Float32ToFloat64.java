@@ -22,7 +22,7 @@ import hydra.util.Either;
  */
 public class Float32ToFloat64 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.literals.float32ToFloat64");
+        return hydra.lib.Literals.float32ToFloat64().name;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Lines extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.lines"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.lines");
+        return hydra.lib.Strings.lines().name;
     }
 
     /**

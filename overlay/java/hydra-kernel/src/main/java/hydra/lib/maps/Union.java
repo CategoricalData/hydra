@@ -29,7 +29,7 @@ public class Union extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.union");
+        return hydra.lib.Maps.union().name;
     }
 
     /**

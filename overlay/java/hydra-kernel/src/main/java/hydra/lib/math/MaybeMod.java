@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class MaybeMod extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.maybeMod");
+        return hydra.lib.Math_.maybeMod().name;
     }
 
     @Override

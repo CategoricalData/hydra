@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class Compose extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.optionals.compose");
+        return hydra.lib.Optionals.compose().name;
     }
 
     @Override

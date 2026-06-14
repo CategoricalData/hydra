@@ -32,7 +32,7 @@ public class FromList extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.fromList"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.fromList");
+        return hydra.lib.Sets.fromList().name;
     }
 
     /**

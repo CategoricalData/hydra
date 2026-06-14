@@ -25,7 +25,7 @@ public class Or extends PrimitiveFunction {
      * @return the name "hydra.lib.logic.or"
      */
     public Name name() {
-        return new Name("hydra.lib.logic.or");
+        return hydra.lib.Logic.or().name;
     }
 
     /**

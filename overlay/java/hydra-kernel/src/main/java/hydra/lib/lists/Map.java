@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class Map extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.map");
+        return hydra.lib.Lists.map().name;
     }
 
     @Override

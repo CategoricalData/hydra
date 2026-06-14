@@ -26,7 +26,7 @@ public class LogBase extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.logBase");
+        return hydra.lib.Math_.logBase().name;
     }
 
     /**

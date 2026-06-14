@@ -27,7 +27,7 @@ import hydra.util.Either;
  */
 public class Partition extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.partition");
+        return hydra.lib.Lists.partition().name;
     }
 
     @Override

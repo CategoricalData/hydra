@@ -25,7 +25,7 @@ public class Pi extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.pi");
+        return hydra.lib.Math_.pi().name;
     }
 
     /**

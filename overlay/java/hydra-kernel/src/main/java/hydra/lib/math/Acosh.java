@@ -26,7 +26,7 @@ public class Acosh extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.acosh");
+        return hydra.lib.Math_.acosh().name;
     }
 
     /**

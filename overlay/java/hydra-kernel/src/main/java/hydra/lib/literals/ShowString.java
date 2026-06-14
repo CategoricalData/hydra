@@ -26,7 +26,7 @@ public class ShowString extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showString"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showString");
+        return hydra.lib.Literals.showString().name;
     }
 
     /**

@@ -29,7 +29,7 @@ public class Intersection extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.intersection"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.intersection");
+        return hydra.lib.Sets.intersection().name;
     }
 
     /**
