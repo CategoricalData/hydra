@@ -49,6 +49,8 @@ case "$TARGET" in
     haskell)                               CODER_CHECK="$HYDRA_ROOT/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/haskell/coder.lisp" ;;
     java)                                  CODER_CHECK="$HYDRA_ROOT/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/java/coder.lisp" ;;
     python)                                CODER_CHECK="$HYDRA_ROOT/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/python/coder.lisp" ;;
+    scala)                                 CODER_CHECK="$HYDRA_ROOT/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/scala/coder.lisp" ;;
+    typescript)                            CODER_CHECK="$HYDRA_ROOT/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/type_script/coder.lisp" ;;
     clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/lisp/coder.lisp" ;;
 esac
 
