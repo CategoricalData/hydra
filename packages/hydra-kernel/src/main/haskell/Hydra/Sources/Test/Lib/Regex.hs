@@ -17,7 +17,8 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Regex as DefRegex
 
 
 ns :: ModuleName
@@ -71,7 +72,7 @@ allTests = define "allTests" $
         test2 "quantifier with optional" "ab?c" "abc" True]
         where
           test2 name pat input result =
-            primCase name _regex_matches [string pat, string input] (boolean result)
+            primCase name (Prims.primName DefRegex.matches) [string pat, string input] (boolean result)
 
       regexFind = subgroup "find" [
         test2 "simple find" "[0-9]+" "abc123def" (Just "123"),
@@ -81,7 +82,7 @@ allTests = define "allTests" $
         test2 "full match" ".*" "hello" (Just "hello")]
         where
           test2 name pat input result =
-            primCase name _regex_find [string pat, string input] (Core.termOptional $ optStr result)
+            primCase name (Prims.primName DefRegex.find) [string pat, string input] (Core.termOptional $ optStr result)
           optStr Nothing = nothing
           optStr (Just s) = just (string s)
 
@@ -92,7 +93,7 @@ allTests = define "allTests" $
         test2 "single match" "hello" "say hello world" ["hello"]]
         where
           test2 name pat input result =
-            primCase name _regex_findAll [string pat, string input] (list (string <$> result))
+            primCase name (Prims.primName DefRegex.findAll) [string pat, string input] (list (string <$> result))
 
       regexReplace = subgroup "replace" [
         test3 "basic replace" "[0-9]+" "X" "abc123def456" "abcXdef456",
@@ -101,7 +102,7 @@ allTests = define "allTests" $
         test3 "empty replacement" "[0-9]+" "" "abc123def" "abcdef"]
         where
           test3 name pat repl input result =
-            primCase name _regex_replace [string pat, string repl, string input] (string result)
+            primCase name (Prims.primName DefRegex.replace) [string pat, string repl, string input] (string result)
 
       regexReplaceAll = subgroup "replaceAll" [
         test3 "replace all digits" "[0-9]+" "X" "a1b2c3" "aXbXcX",
@@ -110,7 +111,7 @@ allTests = define "allTests" $
         test3 "empty replacement" "[0-9]+" "" "a1b2c3" "abc"]
         where
           test3 name pat repl input result =
-            primCase name _regex_replaceAll [string pat, string repl, string input] (string result)
+            primCase name (Prims.primName DefRegex.replaceAll) [string pat, string repl, string input] (string result)
 
       regexSplit = subgroup "split" [
         test2 "split on comma" "," "a,b,c" ["a", "b", "c"],
@@ -120,4 +121,4 @@ allTests = define "allTests" $
         test2 "trailing delimiter" "," "a,b," ["a", "b", ""]]
         where
           test2 name pat input result =
-            primCase name _regex_split [string pat, string input] (list (string <$> result))
+            primCase name (Prims.primName DefRegex.split) [string pat, string input] (list (string <$> result))

@@ -2,14 +2,14 @@
 
 module Hydra.Dsl.Tests (
     module Hydra.Testing,
-    module Hydra.Sources.Libraries,
+    module Hydra.Dsl.Libraries,
     module Hydra.Dsl.Terms,
     module Hydra.Dsl.Tests,
 ) where
 
 import Hydra.Core
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 import Hydra.Dsl.Terms
 
 import qualified Data.List as L

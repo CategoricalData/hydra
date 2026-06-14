@@ -14,7 +14,6 @@ import Hydra.Kernel hiding (
   moduleToJson, moduleToSourceModule, modulesToGraph,
   moduleDepsTransitive, moduleNameToPath,
   transitiveDeps)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast

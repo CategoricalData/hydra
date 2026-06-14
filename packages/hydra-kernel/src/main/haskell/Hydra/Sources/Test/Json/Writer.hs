@@ -22,7 +22,6 @@ import qualified Data.Scientific              as Sci
 -- Additional imports specific to this module
 import Hydra.Json.Model (Value)
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Json.Model as Json
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 
