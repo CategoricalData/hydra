@@ -32,7 +32,7 @@ Hydra 0.16 publishes one Maven artifact per package. Pick the ones you need; coo
 | `hydra-rdf` | RDF model + serdes. |
 | `hydra-rdf4j` | Binding to the rdf4j library. |
 | `hydra-neo4j` | Cypher and openGQL parsers via ANTLR. |
-| `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-go` | Per-language coder packages. Depend on these if your code needs to generate code in that target. |
+| `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages, covering all nine official targets (the four Lisp dialects share `hydra-lisp`). Depend on these if your code needs to generate code in that target. First published as a complete set with 0.16.1. (`hydra-go` is a head bud — generated but not yet published.) |
 
 ### Gradle
 
