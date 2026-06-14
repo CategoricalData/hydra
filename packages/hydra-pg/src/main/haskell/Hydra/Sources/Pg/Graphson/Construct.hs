@@ -5,7 +5,6 @@ import Hydra.Kernel hiding (
   aggregateMap, adjacentEdgeToGraphson, edgePropertyToGraphson,
   graphsonVertexToJsonCoder, pgVertexWithAdjacentEdgesToGraphsonVertex,
   pgVertexWithAdjacentEdgesToJson, vertexPropertyToGraphson)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations

@@ -3,7 +3,6 @@ module Hydra.Sources.Json.Decoding where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
@@ -83,6 +82,7 @@ import qualified Data.Maybe                                as Y
 -- Additional imports
 import Hydra.Json.Model
 import qualified Hydra.Sources.Json.Model as JsonModel
+import qualified Hydra.Lib.Optionals as DefOptionals
 
 
 ns :: ModuleName
@@ -125,7 +125,7 @@ decodeField  = define "Field" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Eithers.bind
       (decodeOptionalField @@ var "decodeValue" @@ var "name" @@ var "m")
-      (lambda "mf" $ primitive _optionals_cases
+      (lambda "mf" $ primitive (Prims.primName DefOptionals.cases)
         @@ var "mf"
         @@ (left $ Strings.cat2 (string "missing field: ") (var "name"))
         @@ (lambda "f" $ right $ var "f"))
@@ -146,7 +146,7 @@ decodeOptionalField :: TypedTermDefinition ((Value -> Either String a) -> String
 decodeOptionalField  = define "OptionalField" $
   doc "Decode an optional field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    primitive _optionals_cases
+    primitive (Prims.primName DefOptionals.cases)
         @@ (Maps.lookup (var "name") (var "m"))
         @@ (right nothing)
         @@ (lambda "v" (Eithers.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v")))

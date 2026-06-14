@@ -14,6 +14,8 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Math as DefMath
 
 
 ns :: ModuleName
@@ -211,5 +213,5 @@ testGroupForSystemF = define "testGroupForSystemF" $
   where
     -- Placeholders for the primitives in @wisnesky's test cases; they are not necessarily the same functions,
     -- but they have the same types.
-    primPred = primitive _math_negate
-    primSucc = primitive _math_negate
+    primPred = primitive (Prims.primName DefMath.negate)
+    primSucc = primitive (Prims.primName DefMath.negate)

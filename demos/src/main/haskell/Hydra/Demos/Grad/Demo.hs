@@ -14,7 +14,7 @@ import qualified Hydra.Differentiation as Diff
 import qualified Hydra.Variables as Vars
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
-import qualified Hydra.Sources.Libraries as Lib
+import qualified Hydra.Dsl.Libraries as Lib
 import qualified Hydra.Haskell.Lib.Math as HMath
 
 import Control.Monad (when)

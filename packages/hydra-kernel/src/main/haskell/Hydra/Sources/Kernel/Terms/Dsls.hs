@@ -5,7 +5,6 @@ module Hydra.Sources.Kernel.Terms.Dsls where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
@@ -38,6 +37,9 @@ import           Prelude hiding ((++))
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
 import qualified Data.Set                    as S
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Optionals as DefOptionals
 
 
 ns :: ModuleName
@@ -254,7 +256,7 @@ dslModule = define "dslModule" $
             (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
             (Lists.concat2
               (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-              (primitive _lists_map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+              (primitive (Prims.primName DefLists.map) @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b")
             nothing
@@ -305,9 +307,9 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-    Eithers.map (primitive _optionals_cat) $
+    Eithers.map (primitive (Prims.primName DefOptionals.cat)) $
       Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
-        primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
+        primitive (Prims.primName DefLists.filter) @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TypedTerm, TypedBinding) since they are meta-infrastructure.
