@@ -22,7 +22,6 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Data.Map as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 
 
 ns :: ModuleName

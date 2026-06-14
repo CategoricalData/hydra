@@ -14,7 +14,6 @@ import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
-import Hydra.Sources.Libraries
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Digest as Digest
 import qualified Hydra.Dsls as Dsls

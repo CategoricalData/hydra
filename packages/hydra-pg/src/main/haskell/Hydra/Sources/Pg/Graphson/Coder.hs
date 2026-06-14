@@ -5,7 +5,6 @@ import Hydra.Kernel hiding (
   adjacentEdgeToJson, doubleValueToJson, edgeMapToJson, edgePropertyMapToJson,
   floatValueToJson, mapToJson, toJsonObject, typedValueToJson, valueToJson,
   vertexPropertyMapToJson, vertexPropertyValueToJson, vertexToJson)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations

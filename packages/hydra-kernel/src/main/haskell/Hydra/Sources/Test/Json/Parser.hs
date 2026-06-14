@@ -21,7 +21,6 @@ import qualified Data.Scientific              as Sci
 import Hydra.Json.Model (Value)
 import Hydra.Parsing (ParseResult)
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Json.Model as Json
 import qualified Hydra.Dsl.Parsing as Parsing
 import qualified Hydra.Sources.Kernel.Terms.Parsers as Parsers

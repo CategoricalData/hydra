@@ -14,8 +14,9 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Pairs as DefPairs
 
-import Hydra.Sources.Libraries
 
 
 ns :: ModuleName
@@ -74,10 +75,10 @@ testGroupForProjections = define "testGroupForProjections" $
 
     subgroup "Pair projections" [
       expectPoly 1 [tag_disabledForMinimalInference]
-        (primitive _pairs_first)
+        (primitive (Prims.primName DefPairs.first))
         ["t0", "t1"] (T.function (T.pair (T.var "t0") (T.var "t1")) (T.var "t0")),
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive _pairs_second @@ pair (int32 42) (string "foo"))
+        (primitive (Prims.primName DefPairs.second) @@ pair (int32 42) (string "foo"))
         T.string]]
 
 testGroupForRecords :: TypedTermDefinition TestGroup

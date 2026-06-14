@@ -5,7 +5,7 @@
 module Hydra.Test.TestEnv (testGraph, testContext) where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries (standardLibraries)
+import Hydra.Dsl.Libraries (standardLibraries)
 import Hydra.Json.Bootstrap (typesByName)
 import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants

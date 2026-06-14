@@ -6,7 +6,6 @@ Test.Hspec.hspec Hydra.Reference.AlgorithmWSpec.spec
 module Hydra.Reference.AlgorithmWSpec where
 
 import Hydra.Kernel
-import Hydra.Sources.Libraries
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Extract.Core as ExtractCore

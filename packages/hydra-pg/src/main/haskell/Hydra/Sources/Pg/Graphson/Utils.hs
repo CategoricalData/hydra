@@ -4,7 +4,6 @@ module Hydra.Sources.Pg.Graphson.Utils where
 import Hydra.Kernel hiding (
   elementsToVerticesWithAdjacentEdges, encodeStringValue, encodeTermValue,
   pgElementsToGraphson)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
