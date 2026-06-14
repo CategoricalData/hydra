@@ -10,7 +10,6 @@ import Hydra.Kernel hiding (
   prepareFloatType, prepareIntegerType, prepareLiteralType, prepareType, prepareSame,
   pushTypeAppsInward, schemaGraphToDefinitions,
   simpleLanguageAdapter, termAlternatives, typeAlternatives)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations

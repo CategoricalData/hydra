@@ -78,7 +78,7 @@ primNoDef localName description s comments =
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
--- Signatures (derived from Hydra.Sources.Libraries primN declarations).
+-- Signatures (derived from Hydra.Dsl.Libraries primN declarations).
 
 -- compare : forall x. ordering => x -> x -> hydra.util.Comparison
 compareSig :: TermSignature

@@ -8,7 +8,7 @@ module Hydra.Sources.Coq.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers

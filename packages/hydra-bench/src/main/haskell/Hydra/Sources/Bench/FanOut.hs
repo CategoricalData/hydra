@@ -23,7 +23,7 @@ module Hydra.Sources.Bench.FanOut where
 
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms

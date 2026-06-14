@@ -16,6 +16,15 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Literals as DefLiterals
+import qualified Hydra.Lib.Maps as DefMaps
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Lib.Sets as DefSets
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -288,7 +297,7 @@ higherOrderRecordProjectionsTests :: TypedTermDefinition TestGroup
 higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
   subgroup "Higher-order record projections" [
   checkTest "map projection over list of records" []
-    (primitive _lists_map @@ (project (TestTypes.testTypePersonName) (name "firstName")) @@
+    (primitive (Prims.primName DefLists.map) @@ (project (TestTypes.testTypePersonName) (name "firstName")) @@
      list [record (TestTypes.testTypePersonName) [
              "firstName">: (string "Alice"),
              "lastName">: (string "Smith"),
@@ -297,7 +306,7 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
              "firstName">: (string "Bob"),
              "lastName">: (string "Jones"),
              "age">: (int32 25)]])
-    (tyapps (primitive _lists_map) [Core.typeVariable $ TestTypes.testTypePersonName, T.string] @@ (project (TestTypes.testTypePersonName) (name "firstName")) @@
+    (tyapps (primitive (Prims.primName DefLists.map)) [Core.typeVariable $ TestTypes.testTypePersonName, T.string] @@ (project (TestTypes.testTypePersonName) (name "firstName")) @@
      list [record (TestTypes.testTypePersonName) [
              "firstName">: (string "Alice"),
              "lastName">: (string "Smith"),
@@ -308,14 +317,14 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
              "age">: (int32 25)]])
     (T.list T.string),
   checkTest "map polymorphic projection" []
-    (primitive _lists_map @@ (project (TestTypes.testTypeLatLonPolyName) (name "lat")) @@
+    (primitive (Prims.primName DefLists.map) @@ (project (TestTypes.testTypeLatLonPolyName) (name "lat")) @@
      list [record (TestTypes.testTypeLatLonPolyName) [
              "lat">: (int32 40),
              "lon">: (int32 (-74))],
            record (TestTypes.testTypeLatLonPolyName) [
              "lat">: (int32 34),
              "lon">: (int32 (-118))]])
-    (tyapps (primitive _lists_map) [T.apply (Core.typeVariable $ TestTypes.testTypeLatLonPolyName) T.int32, T.int32]
+    (tyapps (primitive (Prims.primName DefLists.map)) [T.apply (Core.typeVariable $ TestTypes.testTypeLatLonPolyName) T.int32, T.int32]
       @@ (tyapp (project (TestTypes.testTypeLatLonPolyName) (name "lat")) T.int32) @@
      list [tyapp (record (TestTypes.testTypeLatLonPolyName) [
              "lat">: (int32 40),
@@ -325,9 +334,9 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
              "lon">: (int32 (-118))]) T.int32])
     (T.list T.int32),
   checkTest "filter using projection" []
-    (primitive _lists_filter @@
+    (primitive (Prims.primName DefLists.filter) @@
      (lambda "person" $
-      primitive _equality_gt @@
+      primitive (Prims.primName DefEquality.gt) @@
       (project (TestTypes.testTypePersonName) (name "age") @@ var "person") @@
       int32 30) @@
      list [record (TestTypes.testTypePersonName) [
@@ -338,9 +347,9 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
              "firstName">: (string "Bob"),
              "lastName">: (string "Jones"),
              "age">: (int32 25)]])
-    (tyapp (primitive _lists_filter) (Core.typeVariable $ TestTypes.testTypePersonName) @@
+    (tyapp (primitive (Prims.primName DefLists.filter)) (Core.typeVariable $ TestTypes.testTypePersonName) @@
      (lambdaTyped "person" (Core.typeVariable $ TestTypes.testTypePersonName) $
-      tyapp (primitive _equality_gt) T.int32 @@
+      tyapp (primitive (Prims.primName DefEquality.gt)) T.int32 @@
       (project (TestTypes.testTypePersonName) (name "age") @@ var "person") @@
       int32 30) @@
      list [record (TestTypes.testTypePersonName) [
@@ -379,7 +388,7 @@ multiParameterPolymorphicProjectionsTests = define "multiParameterPolymorphicPro
     (lambda "triple" $ lambda "key" $
       match (TestTypes.testTypePersonOrSomethingName) nothing [
         "person">: lambda "p" $ Core.termOptional nothing,
-        "other">: lambda "m" $ primitive _maps_lookup @@ var "key" @@ var "m"] @@
+        "other">: lambda "m" $ primitive (Prims.primName DefMaps.lookup) @@ var "key" @@ var "m"] @@
       (project (TestTypes.testTypeTripleName) (name "second") @@ var "triple"))
     (tylams ["t0", "t1", "t2", "t3"] $
       lambdaTyped "triple"
@@ -391,7 +400,7 @@ multiParameterPolymorphicProjectionsTests = define "multiParameterPolymorphicPro
       tyapp (match (TestTypes.testTypePersonOrSomethingName) nothing [
         "person">: lambdaTyped "p" (Core.typeVariable $ TestTypes.testTypePersonName) (tyapp (Core.termOptional nothing) (T.var "t2")),
         "other">: lambdaTyped "m" (T.map (T.var "t1") (T.var "t2")) $
-          tyapps (primitive _maps_lookup) [T.var "t1", T.var "t2"] @@ var "key" @@ var "m"]) (T.map (T.var "t1") (T.var "t2")) @@
+          tyapps (primitive (Prims.primName DefMaps.lookup)) [T.var "t1", T.var "t2"] @@ var "key" @@ var "m"]) (T.map (T.var "t1") (T.var "t2")) @@
       (tyapps (project (TestTypes.testTypeTripleName) (name "second"))
         [T.var "t0",
          T.apply (Core.typeVariable $ TestTypes.testTypePersonOrSomethingName) (T.map (T.var "t1") (T.var "t2")),
@@ -546,20 +555,20 @@ recordProjectionsWithMutualRecursionTests = define "recordProjectionsWithMutualR
       (T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")))),
   checkTest "chained projections across mutual recursion" []
     (lambda "listA" $
-      primitive _optionals_cases @@
+      primitive (Prims.primName DefOptionals.cases) @@
       (project (TestTypes.testTypeBuddyListAName) (name "tail") @@ var "listA") @@
       Core.termOptional nothing @@
       (lambda "listB" $
-        primitive _optionals_cases @@
+        primitive (Prims.primName DefOptionals.cases) @@
         (project (TestTypes.testTypeBuddyListBName) (name "tail") @@ var "listB") @@
         Core.termOptional nothing @@
         (project (TestTypes.testTypeBuddyListAName) (name "tail"))))
     (tylam "t0" $ lambdaTyped "listA" (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")) $
-      tyapps (primitive _optionals_cases) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
+      tyapps (primitive (Prims.primName DefOptionals.cases)) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
       (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0") @@ var "listA") @@
       tyapp (Core.termOptional nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
       (lambdaTyped "listB" (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) $
-        tyapps (primitive _optionals_cases) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
+        tyapps (primitive (Prims.primName DefOptionals.cases)) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
         (tyapp (project (TestTypes.testTypeBuddyListBName) (name "tail")) (T.var "t0") @@ var "listB") @@
         tyapp (Core.termOptional nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
         (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0"))))
@@ -593,12 +602,12 @@ recursiveRecordProjectionsTests = define "recursiveRecordProjectionsTests" $
   subgroup "Recursive record projections" [
   checkTest "nested projection from recursive record" []
     (lambda "intList" $
-     primitive _optionals_cases @@
+     primitive (Prims.primName DefOptionals.cases) @@
      (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList") @@
      int32 0 @@
      (project (TestTypes.testTypeIntListName) (name "head")))
     (lambdaTyped "intList" (Core.typeVariable $ TestTypes.testTypeIntListName) $
-     tyapps (primitive _optionals_cases) [Core.typeVariable $ TestTypes.testTypeIntListName, T.int32] @@
+     tyapps (primitive (Prims.primName DefOptionals.cases)) [Core.typeVariable $ TestTypes.testTypeIntListName, T.int32] @@
      (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList") @@
      int32 0 @@
      (project (TestTypes.testTypeIntListName) (name "head")))
@@ -797,14 +806,14 @@ higherOrderUnionEliminationsTests :: TypedTermDefinition TestGroup
 higherOrderUnionEliminationsTests = define "higherOrderUnionEliminationsTests" $
   subgroup "Higher-order union eliminations" [
   checkTest "map match over list" []
-    (primitive _lists_map @@
+    (primitive (Prims.primName DefLists.map) @@
      (match (TestTypes.testTypeComparisonName) nothing [
        "lessThan">: lambda "x" (string "less"),
        "equalTo">: lambda "x" (string "equal"),
        "greaterThan">: lambda "x" (string "greater")]) @@
      list [injectUnit (TestTypes.testTypeComparisonName) "lessThan",
            injectUnit (TestTypes.testTypeComparisonName) "equalTo"])
-    (tyapps (primitive _lists_map) [Core.typeVariable $ TestTypes.testTypeComparisonName, T.string] @@
+    (tyapps (primitive (Prims.primName DefLists.map)) [Core.typeVariable $ TestTypes.testTypeComparisonName, T.string] @@
      (match (TestTypes.testTypeComparisonName) nothing [
        "lessThan">: lambdaTyped "x" T.unit (string "less"),
        "equalTo">: lambdaTyped "x" T.unit (string "equal"),
@@ -814,14 +823,14 @@ higherOrderUnionEliminationsTests = define "higherOrderUnionEliminationsTests" $
     (T.list T.string),
   checkTest "compose match with other functions" []
     (lambda "comp" $
-     primitive _strings_length @@
+     primitive (Prims.primName DefStrings.length) @@
      (match (TestTypes.testTypeComparisonName) nothing [
        "lessThan">: lambda "x" (string "less"),
        "equalTo">: lambda "x" (string "equal"),
        "greaterThan">: lambda "x" (string "greater")] @@
       var "comp"))
     (lambdaTyped "comp" (Core.typeVariable $ TestTypes.testTypeComparisonName) $
-     primitive _strings_length @@
+     primitive (Prims.primName DefStrings.length) @@
      (match (TestTypes.testTypeComparisonName) nothing [
        "lessThan">: lambdaTyped "x" T.unit (string "less"),
        "equalTo">: lambdaTyped "x" T.unit (string "equal"),
@@ -831,12 +840,12 @@ higherOrderUnionEliminationsTests = define "higherOrderUnionEliminationsTests" $
   checkTest "match in lambda body" []
     (lambda "unionValue" $
      match (TestTypes.testTypeNumberName) nothing [
-       "int">: lambda "i" (primitive _math_add @@ var "i" @@ int32 1),
+       "int">: lambda "i" (primitive (Prims.primName DefMath.add) @@ var "i" @@ int32 1),
        "float">: lambda "f" (int32 0)] @@
      var "unionValue")
     (lambdaTyped "unionValue" (Core.typeVariable $ TestTypes.testTypeNumberName) $
      match (TestTypes.testTypeNumberName) nothing [
-       "int">: lambdaTyped "i" T.int32 (primitive _math_add @@ var "i" @@ int32 1),
+       "int">: lambdaTyped "i" T.int32 (primitive (Prims.primName DefMath.add) @@ var "i" @@ int32 1),
        "float">: lambdaTyped "f" T.float32 (int32 0)] @@
      var "unionValue")
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.int32)]
@@ -846,22 +855,22 @@ multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphic
   subgroup "Multi-parameter polymorphic case statements" [
   checkTest "case Either converting both to string" []
     (match (TestTypes.testTypeEitherName) nothing [
-      "left">: lambda "x" $ primitive _literals_showInt32 @@ var "x",
-      "right">: lambda "y" $ primitive _literals_showFloat32 @@ var "y"])
+      "left">: lambda "x" $ primitive (Prims.primName DefLiterals.showInt32) @@ var "x",
+      "right">: lambda "y" $ primitive (Prims.primName DefLiterals.showFloat32) @@ var "y"])
     (tyapps (match (TestTypes.testTypeEitherName) nothing [
-      "left">: lambdaTyped "x" T.int32 (primitive _literals_showInt32 @@ var "x"),
-      "right">: lambdaTyped "y" T.float32 (primitive _literals_showFloat32 @@ var "y")]) [T.int32, T.float32])
+      "left">: lambdaTyped "x" T.int32 (primitive (Prims.primName DefLiterals.showInt32) @@ var "x"),
+      "right">: lambdaTyped "y" T.float32 (primitive (Prims.primName DefLiterals.showFloat32) @@ var "y")]) [T.int32, T.float32])
     (T.function
       (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.float32])
       T.string),
   checkTest "case Either applied to injection" []
     (match (TestTypes.testTypeEitherName) nothing [
-      "left">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
-      "right">: lambda "s" $ primitive _strings_length @@ var "s"] @@
+      "left">: lambda "n" $ primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 1,
+      "right">: lambda "s" $ primitive (Prims.primName DefStrings.length) @@ var "s"] @@
      inject (TestTypes.testTypeEitherName) "left" (int32 42))
     (tyapps (match (TestTypes.testTypeEitherName) nothing [
-      "left">: lambdaTyped "n" T.int32 (primitive _math_add @@ var "n" @@ int32 1),
-      "right">: lambdaTyped "s" T.string (primitive _strings_length @@ var "s")]) [T.int32, T.string] @@
+      "left">: lambdaTyped "n" T.int32 (primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 1),
+      "right">: lambdaTyped "s" T.string (primitive (Prims.primName DefStrings.length) @@ var "s")]) [T.int32, T.string] @@
      tyapps (inject (TestTypes.testTypeEitherName) "left" (int32 42)) [T.int32, T.string])
     T.int32,
   checkTest "case Either with Triple and nested projections" []
@@ -907,8 +916,8 @@ multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphic
            "makeRight">: lambda "y" $ inject (TestTypes.testTypeEitherName) "right" (var "y")] $
       lambda "flag" $
         match (TestTypes.testTypeEitherName) nothing [
-          "left">: lambda "n" $ var "makeRight" @@ (primitive _math_add @@ var "n" @@ int32 10),
-          "right">: lambda "s" $ var "makeLeft" @@ (primitive _strings_length @@ var "s")] @@
+          "left">: lambda "n" $ var "makeRight" @@ (primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 10),
+          "right">: lambda "s" $ var "makeLeft" @@ (primitive (Prims.primName DefStrings.length) @@ var "s")] @@
         var "flag")
     (letsTyped [("makeLeft", tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (inject (TestTypes.testTypeEitherName) "left" (var "x")) [T.var "t0", T.var "t1"],
                  T.poly ["t0", "t1"] $ T.function (T.var "t0") (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.var "t0", T.var "t1"])),
@@ -916,8 +925,8 @@ multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphic
                  T.poly ["t0", "t1"] $ T.function (T.var "t0") (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.var "t1", T.var "t0"]))] $
       lambdaTyped "flag" (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.string]) $
         tyapps (match (TestTypes.testTypeEitherName) nothing [
-          "left">: lambdaTyped "n" T.int32 $ tyapps (var "makeRight") [T.int32, T.int32] @@ (primitive _math_add @@ var "n" @@ int32 10),
-          "right">: lambdaTyped "s" T.string $ tyapps (var "makeLeft") [T.int32, T.int32] @@ (primitive _strings_length @@ var "s")]) [T.int32, T.string] @@
+          "left">: lambdaTyped "n" T.int32 $ tyapps (var "makeRight") [T.int32, T.int32] @@ (primitive (Prims.primName DefMath.add) @@ var "n" @@ int32 10),
+          "right">: lambdaTyped "s" T.string $ tyapps (var "makeLeft") [T.int32, T.int32] @@ (primitive (Prims.primName DefStrings.length) @@ var "s")]) [T.int32, T.string] @@
         var "flag")
     (T.function (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.string]) (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.int32]))]
 
@@ -929,15 +938,15 @@ nestedUnionEliminationsTests = define "nestedUnionEliminationsTests" $
       "person">: lambda "p" (project (TestTypes.testTypePersonName) (name "firstName") @@ var "p"),
       "other">: lambda "x" (
         match (TestTypes.testTypeNumberName) nothing [
-          "int">: lambda "i" (primitive _literals_showInt32 @@ var "i"),
-          "float">: lambda "f" (primitive _literals_showFloat32 @@ var "f")] @@
+          "int">: lambda "i" (primitive (Prims.primName DefLiterals.showInt32) @@ var "i"),
+          "float">: lambda "f" (primitive (Prims.primName DefLiterals.showFloat32) @@ var "f")] @@
         var "x")])
     (tyapp (match (TestTypes.testTypePersonOrSomethingName) nothing [
       "person">: lambdaTyped "p" (Core.typeVariable $ TestTypes.testTypePersonName) (project (TestTypes.testTypePersonName) (name "firstName") @@ var "p"),
       "other">: lambdaTyped "x" (Core.typeVariable $ TestTypes.testTypeNumberName) (
         match (TestTypes.testTypeNumberName) nothing [
-          "int">: lambdaTyped "i" T.int32 (primitive _literals_showInt32 @@ var "i"),
-          "float">: lambdaTyped "f" T.float32 (primitive _literals_showFloat32 @@ var "f")] @@
+          "int">: lambdaTyped "i" T.int32 (primitive (Prims.primName DefLiterals.showInt32) @@ var "i"),
+          "float">: lambdaTyped "f" T.float32 (primitive (Prims.primName DefLiterals.showFloat32) @@ var "f")] @@
         var "x")]) (Core.typeVariable $ TestTypes.testTypeNumberName))
     (T.function (T.apply (Core.typeVariable $ TestTypes.testTypePersonOrSomethingName) (Core.typeVariable $ TestTypes.testTypeNumberName)) T.string),
   checkTest "match in tuple" []
@@ -970,14 +979,14 @@ recursiveUnionEliminationsTests = define "recursiveUnionEliminationsTests" $
     (match (TestTypes.testTypeHydraTypeName) nothing [
       "literal">: lambda "lit" (
         match (TestTypes.testTypeHydraLiteralTypeName) nothing [
-          "boolean">: lambda "b" (primitive _literals_showBoolean @@ var "b"),
+          "boolean">: lambda "b" (primitive (Prims.primName DefLiterals.showBoolean) @@ var "b"),
           "string">: lambda "s" (var "s")] @@
         var "lit"),
       "list">: lambda "nested" (string "list")])
     (match (TestTypes.testTypeHydraTypeName) nothing [
       "literal">: lambdaTyped "lit" (Core.typeVariable $ TestTypes.testTypeHydraLiteralTypeName) (
         match (TestTypes.testTypeHydraLiteralTypeName) nothing [
-          "boolean">: lambdaTyped "b" T.boolean (primitive _literals_showBoolean @@ var "b"),
+          "boolean">: lambdaTyped "b" T.boolean (primitive (Prims.primName DefLiterals.showBoolean) @@ var "b"),
           "string">: lambdaTyped "s" T.string (var "s")] @@
         var "lit"),
       "list">: lambdaTyped "nested" (Core.typeVariable $ TestTypes.testTypeHydraTypeName) (string "list")])
@@ -1114,28 +1123,28 @@ unionEliminationsWithDataTests = define "unionEliminationsWithDataTests" $
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.int32),
   checkTest "match Number converting to string" []
     (match (TestTypes.testTypeNumberName) nothing [
-      "int">: lambda "i" (primitive _literals_showInt32 @@ var "i"),
-      "float">: lambda "f" (primitive _literals_showFloat32 @@ var "f")])
+      "int">: lambda "i" (primitive (Prims.primName DefLiterals.showInt32) @@ var "i"),
+      "float">: lambda "f" (primitive (Prims.primName DefLiterals.showFloat32) @@ var "f")])
     (match (TestTypes.testTypeNumberName) nothing [
-      "int">: lambdaTyped "i" T.int32 (primitive _literals_showInt32 @@ var "i"),
-      "float">: lambdaTyped "f" T.float32 (primitive _literals_showFloat32 @@ var "f")])
+      "int">: lambdaTyped "i" T.int32 (primitive (Prims.primName DefLiterals.showInt32) @@ var "i"),
+      "float">: lambdaTyped "f" T.float32 (primitive (Prims.primName DefLiterals.showFloat32) @@ var "f")])
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.string),
   checkTest "match Number applied to int variant" []
     (match (TestTypes.testTypeNumberName) nothing [
-      "int">: lambda "i" (primitive _math_add @@ var "i" @@ int32 10),
+      "int">: lambda "i" (primitive (Prims.primName DefMath.add) @@ var "i" @@ int32 10),
       "float">: lambda "f" (int32 0)] @@
      inject (TestTypes.testTypeNumberName) "int" (int32 42))
     (match (TestTypes.testTypeNumberName) nothing [
-      "int">: lambdaTyped "i" T.int32 (primitive _math_add @@ var "i" @@ int32 10),
+      "int">: lambdaTyped "i" T.int32 (primitive (Prims.primName DefMath.add) @@ var "i" @@ int32 10),
       "float">: lambdaTyped "f" T.float32 (int32 0)] @@
      inject (TestTypes.testTypeNumberName) "int" (int32 42))
     T.int32,
   checkTest "match Timestamp with mixed data types" []
     (match (TestTypes.testTypeTimestampName) nothing [
-      "unixTimeMillis">: lambda "millis" (primitive _literals_showUint64 @@ var "millis"),
+      "unixTimeMillis">: lambda "millis" (primitive (Prims.primName DefLiterals.showUint64) @@ var "millis"),
       "date">: lambda "dateStr" (var "dateStr")])
     (match (TestTypes.testTypeTimestampName) nothing [
-      "unixTimeMillis">: lambdaTyped "millis" T.uint64 (primitive _literals_showUint64 @@ var "millis"),
+      "unixTimeMillis">: lambdaTyped "millis" T.uint64 (primitive (Prims.primName DefLiterals.showUint64) @@ var "millis"),
       "date">: lambdaTyped "dateStr" T.string (var "dateStr")])
     (T.function (Core.typeVariable $ TestTypes.testTypeTimestampName) T.string)]
 
@@ -1158,10 +1167,10 @@ unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests"
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.int32),
   checkTest "match UnionMonomorphic with default" []
     (match (TestTypes.testTypeUnionMonomorphicName) (just (string "fallback")) [
-      "bool">: lambda "b" (primitive _literals_showBoolean @@ var "b"),
+      "bool">: lambda "b" (primitive (Prims.primName DefLiterals.showBoolean) @@ var "b"),
       "string">: lambda "s" (var "s")])
     (match (TestTypes.testTypeUnionMonomorphicName) (just (string "fallback")) [
-      "bool">: lambdaTyped "b" T.boolean (primitive _literals_showBoolean @@ var "b"),
+      "bool">: lambdaTyped "b" T.boolean (primitive (Prims.primName DefLiterals.showBoolean) @@ var "b"),
       "string">: lambdaTyped "s" T.string (var "s")])
     (T.function (Core.typeVariable $ TestTypes.testTypeUnionMonomorphicName) T.string)]
 
@@ -1211,13 +1220,13 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
     (lets [
       "test">: (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
         (just $ string "other") [
-        "value">: lambda "i" $ primitive _literals_showInt32 @@ var "i"])] $
+        "value">: lambda "i" $ primitive (Prims.primName DefLiterals.showInt32) @@ var "i"])] $
       var "test")
     (letsTyped [
         ("test",
          tyapp (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
            (just $ string "other") [
-           "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32,
+           "value">: lambdaTyped "i" T.int32 $ primitive (Prims.primName DefLiterals.showInt32) @@ var "i"]) T.int32,
          T.mono $ T.function (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
       var "test")
     (T.function (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string),
@@ -1225,14 +1234,14 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
     (lets [
       "test">: (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
           (just $ string "other") [
-          "value">: lambda "i" $ primitive _literals_showInt32 @@ var "i"])
+          "value">: lambda "i" $ primitive (Prims.primName DefLiterals.showInt32) @@ var "i"])
         @@ (inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "value" $ int32 42)] $
       var "test")
     (letsTyped [
       ("test",
        tyapp (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
            (just $ string "other") [
-           "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32
+           "value">: lambdaTyped "i" T.int32 $ primitive (Prims.primName DefLiterals.showInt32) @@ var "i"]) T.int32
          @@ tyapp (inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "value" $ int32 42) T.int32,
        T.mono T.string)] $
       var "test")
@@ -1241,7 +1250,7 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
     (lets [
       "test">: lambda "x" $ match (TestTypes.testTypeUnionPolymorphicRecursiveName)
           (just $ string "other") [
-          "value">: lambda "i" $ primitive _literals_showInt32 @@ var "i"]
+          "value">: lambda "i" $ primitive (Prims.primName DefLiterals.showInt32) @@ var "i"]
         @@ var "x"] $
       var "test")
     (letsTyped [
@@ -1249,7 +1258,7 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
        lambdaTyped "x" (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) $
          tyapp (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
              (just $ string "other") [
-             "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32
+             "value">: lambdaTyped "i" T.int32 $ primitive (Prims.primName DefLiterals.showInt32) @@ var "i"]) T.int32
            @@ var "x",
        T.mono $ T.function (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
       var "test")
@@ -1332,8 +1341,8 @@ multiParameterPolymorphicWrappersTests = define "multiParameterPolymorphicWrappe
       T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]),
   checkTest "symmetric triple with nested polymorphic types and foldl" []
     (lets ["sumList">: lambda "lst" $
-            primitive _lists_foldl @@
-            (lambda "acc" $ lambda "x" $ primitive _math_add @@ var "acc" @@ var "x") @@
+            primitive (Prims.primName DefLists.foldl) @@
+            (lambda "acc" $ lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "acc" @@ var "x") @@
             int32 0 @@
             var "lst"] $
       lambda "nums1" $ lambda "nums2" $
@@ -1344,8 +1353,8 @@ multiParameterPolymorphicWrappersTests = define "multiParameterPolymorphicWrappe
             "third">: (var "sumList" @@ var "nums2")])
     (letsTyped [("sumList",
                  lambdaTyped "lst" (T.list T.int32) $
-                   tyapps (primitive _lists_foldl) [T.int32, T.int32] @@
-                   (lambdaTyped "acc" T.int32 $ lambdaTyped "x" T.int32 $ primitive _math_add @@ var "acc" @@ var "x") @@
+                   tyapps (primitive (Prims.primName DefLists.foldl)) [T.int32, T.int32] @@
+                   (lambdaTyped "acc" T.int32 $ lambdaTyped "x" T.int32 $ primitive (Prims.primName DefMath.add) @@ var "acc" @@ var "x") @@
                    int32 0 @@
                    var "lst",
                  T.mono $ T.function (T.list T.int32) T.int32)] $
@@ -1445,15 +1454,15 @@ chainedUnwrappingTests = define "chainedUnwrappingTests" $
   subgroup "Chained unwrapping" [
   checkTest "unwrap then process" []
     (lambda "wrapped" $
-      primitive _strings_cat2 @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
+      primitive (Prims.primName DefStrings.cat2) @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
     (lambdaTyped "wrapped" (Core.typeVariable $ TestTypes.testTypeStringAliasName) $
-      primitive _strings_cat2 @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
+      primitive (Prims.primName DefStrings.cat2) @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
     (T.function (Core.typeVariable $ TestTypes.testTypeStringAliasName) T.string),
   checkTest "unwrap polymorphic then map" []
     (lambda "wrappedList" $
-      primitive _lists_map @@ (primitive _math_add @@ int32 1) @@ (unwrap (TestTypes.testTypePolymorphicWrapperName) @@ var "wrappedList"))
+      primitive (Prims.primName DefLists.map) @@ (primitive (Prims.primName DefMath.add) @@ int32 1) @@ (unwrap (TestTypes.testTypePolymorphicWrapperName) @@ var "wrappedList"))
     (lambdaTyped "wrappedList" (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) T.int32) $
-      (tyapps (primitive _lists_map) [T.int32, T.int32]) @@ (primitive _math_add @@ int32 1) @@ (tyapp (unwrap (TestTypes.testTypePolymorphicWrapperName)) T.int32 @@ var "wrappedList"))
+      (tyapps (primitive (Prims.primName DefLists.map)) [T.int32, T.int32]) @@ (primitive (Prims.primName DefMath.add) @@ int32 1) @@ (tyapp (unwrap (TestTypes.testTypePolymorphicWrapperName)) T.int32 @@ var "wrappedList"))
     (T.function (T.apply (Core.typeVariable $ TestTypes.testTypePolymorphicWrapperName) T.int32) (T.list T.int32))]
 
 monomorphicUnwrappingTests :: TypedTermDefinition TestGroup
@@ -1487,7 +1496,7 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
     (lets ["getEdge" >: lambda "st" $
             project (TestTypes.testTypeTripleName) (name "second") @@ (unwrap (TestTypes.testTypeSymmetricTripleName) @@ var "st")] $
       lambda "triples" $
-        primitive _sets_map @@ var "getEdge" @@ var "triples")
+        primitive (Prims.primName DefSets.map) @@ var "getEdge" @@ var "triples")
     (tylams ["t0", "t1"] $
       letsTyped [("getEdge",
                  tylams ["t2", "t3"] $
@@ -1498,7 +1507,7 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
                    (T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t2", T.var "t3"])
                    (T.var "t3"))] $
       lambdaTyped "triples" (T.set $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]) $
-        tyapps (primitive _sets_map) [T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"], T.var "t1"] @@
+        tyapps (primitive (Prims.primName DefSets.map)) [T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"], T.var "t1"] @@
         (tyapps (var "getEdge") [T.var "t0", T.var "t1"]) @@
         var "triples")
     (T.forAlls ["t0", "t1"] $
@@ -1508,14 +1517,14 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
 
   checkTest "unwrap with maybe to handle optional symmetric triple" []
     (lambda "mst" $
-      primitive _optionals_cases @@
+      primitive (Prims.primName DefOptionals.cases) @@
       var "mst" @@
       (Core.termOptional nothing) @@
       (lambda "st" $ Core.termOptional $
         just $ project (TestTypes.testTypeTripleName) (name "second") @@ (unwrap (TestTypes.testTypeSymmetricTripleName) @@ var "st")))
     (tylams ["t0", "t1"] $
       lambdaTyped "mst" (T.optional $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]) $
-      tyapps (primitive _optionals_cases)
+      tyapps (primitive (Prims.primName DefOptionals.cases))
         [T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"],
          T.optional (T.var "t1")] @@
       var "mst" @@

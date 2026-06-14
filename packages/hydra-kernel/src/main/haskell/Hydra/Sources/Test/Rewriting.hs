@@ -20,7 +20,6 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Coders        as Coders
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore

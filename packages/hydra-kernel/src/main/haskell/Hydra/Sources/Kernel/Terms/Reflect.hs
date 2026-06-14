@@ -7,7 +7,6 @@ import Hydra.Kernel hiding (
   integerTypeIsSigned, integerTypePrecision, integerTypes,
   integerValueType, literalType, literalTypeVariant, literalTypes, literalVariant, literalVariants,
   termVariant, termVariants, typeVariant, typeVariants)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast

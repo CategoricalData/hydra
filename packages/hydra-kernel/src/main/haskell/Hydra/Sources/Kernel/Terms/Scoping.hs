@@ -11,7 +11,6 @@ import Hydra.Kernel hiding (
   termSignatureToTypeScheme,
   typeSchemeToFType,
   typeSchemeToTermSignature)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths        as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
