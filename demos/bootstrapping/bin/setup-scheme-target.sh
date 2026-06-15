@@ -27,11 +27,13 @@ echo "Copying static resources for Scheme target..."
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/scheme"
 cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/hydra" "$OUTPUT_DIR/src/main/scheme/"
-# The src/main maps.scm and sets.scm use Guile-specific vhash which requires
-# (ice-9 vlist). For standalone targets, replace with the portable versions.
-echo "  Replacing vhash-based maps/sets with portable alist versions..."
-cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/lib/maps.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/maps.scm"
-cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/lib/sets.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/sets.scm"
+# maps.scm and sets.scm use Guile-specific vhash (ice-9 vlist). #473 Step 0 relocated the native lib
+# impls from hydra/lib/ to hydra/scheme/lib/, so these live there now (the whole-tree copy above already
+# brings them; this explicit copy is kept to mirror the historical intent and guard against partial
+# trees). Source AND dest are the relocated hydra/scheme/lib/ path.
+echo "  Ensuring vhash-based maps/sets present (relocated to hydra/scheme/lib by #473)..."
+cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/scheme/lib/maps.scm" "$OUTPUT_DIR/src/main/scheme/hydra/scheme/lib/maps.scm"
+cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/scheme/lib/sets.scm" "$OUTPUT_DIR/src/main/scheme/hydra/scheme/lib/sets.scm"
 # Copy bundled SRFI implementations (e.g., SRFI-151 for bitwise ops)
 if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" ]; then
     cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" "$OUTPUT_DIR/src/main/scheme/"

@@ -105,13 +105,16 @@ def _redirect_lib_calls(target, lang_dir):
     for dirpath, _dirs, files in os.walk(lang_dir):
         for fn in files:
             p = os.path.join(dirpath, fn)
-            # The primitive REGISTRY (hand-written overlay) deliberately imports BOTH the relocated
-            # impl (`from hydra.<lang>.lib import chars`) and the def-module (`from hydra.lib import
-            # chars as def_chars`) — it derives names from `def_chars.X.name`. Redirecting its
-            # def-module import would point `def_chars` at the impl module (a function with no .name),
-            # breaking name derivation. The Haskell driver never transforms this file because it is
-            # overlay-copied, not generated; mirror that by skipping it here.
-            if p.replace(os.sep, "/").endswith("hydra/sources/libraries.py"):
+            p_slash = p.replace(os.sep, "/")
+            # Skip the lib-pass def-module dir (hydra/lib/): those modules must keep their canonical
+            # hydra.lib.* paths (redirecting them would relocate the def-modules onto the impls — see the
+            # Scala self-host case). Also skip the hand-written registry overlay
+            # (hydra/sources/libraries.py), which deliberately imports BOTH the relocated impl
+            # (`from hydra.<lang>.lib import chars`) and the def-module (`from hydra.lib import chars as
+            # def_chars`, for `def_chars.X.name` derivation); redirecting its def-module import would
+            # point def_chars at the impl module (no .name). The Haskell driver keeps both canonical by
+            # never transforming them (lib pass runs with no redirect; registry is overlay-copied).
+            if "/hydra/lib/" in p_slash or p_slash.endswith("hydra/sources/libraries.py"):
                 continue
             with open(p, "r", encoding="utf-8") as fh:
                 s = fh.read()
