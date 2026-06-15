@@ -1,9 +1,12 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 -- | A domain-specific language for constructing Hydra terms in Haskell.
 module Hydra.Dsl.Terms where
 
 import Hydra.Constants
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Packaging (PrimitiveDefinition, primitiveDefinitionName)
 import Hydra.Util
 import Hydra.Dsl.Meta.Common
 import qualified Hydra.Dsl.Literals as Literals
@@ -251,10 +254,24 @@ pair :: Term -> Term -> Term
 pair a b = TermPair (a, b)
 
 -- | Create a reference to a primitive function.
+-- | Things that name a primitive. Lets the term/DSL helpers take a generated
+-- 'PrimitiveDefinition' directly (@primitive DefStrings.toUpper@) — keeping the def-modules the
+-- single source of truth for primitive names (#473) — while still accepting a raw 'Name'.
+-- Defined here (the lowest DSL module) so 'Hydra.Dsl.Prims', 'Hydra.Dsl.Meta.Terms', and
+-- 'Hydra.Dsl.Meta.Phantoms' can all share one class without an import cycle.
+class ToPrimName a where
+  toPrimName :: a -> Name
+
+instance ToPrimName Name where
+  toPrimName = id
+
+instance ToPrimName PrimitiveDefinition where
+  toPrimName = primitiveDefinitionName
+
 -- Uses TermVariable; the name resolves via graphPrimitives fallthrough.
--- Example: primitive (Name "hydra.lib.strings.length")
-primitive :: Name -> Term
-primitive = TermVariable
+-- Example: primitive DefStrings.length
+primitive :: ToPrimName n => n -> Term
+primitive = TermVariable . toPrimName
 
 -- | Create a field projection function
 -- Example: project (Name "Person") (Name "firstName")

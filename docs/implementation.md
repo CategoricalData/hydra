@@ -388,7 +388,7 @@ Write programs that build programs (meta-programming):
 buildAddFunction :: TypedTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
-    primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y"
+    primitive DefMath.add @@ var "x" @@ var "y"
 
 -- Can inspect and transform this representation
 ```
@@ -710,17 +710,19 @@ Per host, two things are needed beyond the kernel metadata:
 
    ```haskell
    hydraLibMath :: Library
-   hydraLibMath = standardLibrary (ModuleName "hydra.lib.math") [
-     prim2 (Prims.primName DefMath.add) Math.add [] int32 int32 int32,
+   hydraLibMath = standardLibrary [
+     prim2 DefMath.add Math.add [] int32 int32 int32,
      ...]
    ```
 
    The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the host's
-   native `implementation` with a name and signature. The **name is derived from the
-   generated `PrimitiveDefinition`** (`Prims.primName DefMath.add`, where `DefMath` is the
-   generated `Hydra.Lib.Math` def-module) — the single source of truth (#473); the
-   argument-type info passed to the helper is a host-side repetition the registry needs in
-   native type-coder form, not the source of truth for the name.
+   native `implementation` with a signature and the generated `PrimitiveDefinition`
+   (`DefMath.add`, where `DefMath` is the generated `Hydra.Lib.Math` def-module) — the
+   single source of truth for the name (#473), taken via the `ToPrimName` class.
+   `standardLibrary` derives the library's module name from its first primitive, so it
+   needs no `ModuleName` argument. The argument-type info passed to the helper is a
+   host-side repetition the registry needs in native type-coder form, not the source of
+   truth for the name.
 
    Every other host has an analogous registry that likewise derives names from the generated
    `hydra.lib.*` def-modules: `overlay/{java,python}/.../lib/Libraries.{java,py}` and

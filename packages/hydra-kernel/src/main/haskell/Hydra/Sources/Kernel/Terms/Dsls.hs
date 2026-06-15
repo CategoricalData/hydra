@@ -256,7 +256,7 @@ dslModule = define "dslModule" $
             (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
             (Lists.concat2
               (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-              (primitive (Prims.primName DefLists.map) @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+              (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b")
             nothing
@@ -307,9 +307,9 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-    Eithers.map (primitive (Prims.primName DefOptionals.cat)) $
+    Eithers.map (primitive DefOptionals.cat) $
       Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
-        primitive (Prims.primName DefLists.filter) @@ Annotations.isNativeType @@ var "bindings"
+        primitive DefLists.filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TypedTerm, TypedBinding) since they are meta-infrastructure.

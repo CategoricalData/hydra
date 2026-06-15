@@ -91,7 +91,7 @@ define = definitionInModule module_
 capitalize :: TypedTermDefinition (String -> String)
 capitalize = define "capitalize" $
   doc "Capitalize the first letter of a string" $
-  mapFirstLetter @@ primitive (Prims.primName DefStrings.toUpper)
+  mapFirstLetter @@ primitive DefStrings.toUpper
 
 convertCase :: TypedTermDefinition (CaseConvention -> CaseConvention -> String -> String)
 convertCase = define "convertCase" $
@@ -106,7 +106,7 @@ convertCase = define "convertCase" $
               Lists.cons (Lists.cons (var "c") (Pairs.first $ var "uc"))
                 (Pairs.second $ var "uc"))
               (Lists.uncons $ var "acc"))]
-        $ Lists.map (primitive (Prims.primName DefStrings.fromList)) $ Lists.foldl (var "splitOnUppercase") emptyParts
+        $ Lists.map (primitive DefStrings.fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
           $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
       "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
       $ (match _CaseConvention Nothing [
@@ -115,10 +115,10 @@ convertCase = define "convertCase" $
         _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
         _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from"]
     $ (match _CaseConvention Nothing [
-      _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.cat (Lists.map (capitalize <.> primitive (Prims.primName DefStrings.toLower)) $ var "parts")),
-      _CaseConvention_pascal>>: constant $ Strings.cat (Lists.map (capitalize <.> primitive (Prims.primName DefStrings.toLower)) $ var "parts"),
-      _CaseConvention_lowerSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive (Prims.primName DefStrings.toLower)) $ var "parts"),
-      _CaseConvention_upperSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive (Prims.primName DefStrings.toUpper)) $ var "parts")
+      _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.cat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts")),
+      _CaseConvention_pascal>>: constant $ Strings.cat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts"),
+      _CaseConvention_lowerSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive DefStrings.toLower) $ var "parts"),
+      _CaseConvention_upperSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive DefStrings.toUpper) $ var "parts")
       ]) @@ var "to"
   where
     emptyParts = list [list ([] :: [TypedTerm Char])]
@@ -149,7 +149,7 @@ convertCasePascalToUpperSnake = define "convertCasePascalToUpperSnake" $
 decapitalize :: TypedTermDefinition (String -> String)
 decapitalize = define "decapitalize" $
   doc "Decapitalize the first letter of a string" $
-  mapFirstLetter @@ primitive (Prims.primName DefStrings.toLower)
+  mapFirstLetter @@ primitive DefStrings.toLower
 
 escapeWithUnderscore :: TypedTermDefinition (S.Set String -> String -> String)
 escapeWithUnderscore = define "escapeWithUnderscore" $

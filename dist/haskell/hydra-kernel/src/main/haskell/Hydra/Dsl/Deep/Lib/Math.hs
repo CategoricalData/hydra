@@ -9,23 +9,24 @@ module Hydra.Dsl.Deep.Lib.Math where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Phantoms (encodedName)
+import Hydra.Dsl.Terms (ToPrimName(..))
 import qualified Hydra.Dsl.Prims as Prims
 import qualified Hydra.Lib.Math as DefMath
 
 
 -- | Apply a unary math primitive to a deep term
-apply1 :: Name -> TypedTerm Term -> TypedTerm Term
-apply1 name arg = Core.termApplication $ Core.application (Core.termVariable $ encodedName name) arg
+apply1 :: ToPrimName n => n -> TypedTerm Term -> TypedTerm Term
+apply1 n arg = Core.termApplication $ Core.application (Core.termVariable $ encodedName $ toPrimName n) arg
 
 -- | Apply a binary math primitive to two deep terms
-apply2 :: Name -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-apply2 name a b = Core.termApplication $ Core.application
-  (Core.termApplication $ Core.application (Core.termVariable $ encodedName name) a)
+apply2 :: ToPrimName n => n -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
+apply2 n a b = Core.termApplication $ Core.application
+  (Core.termApplication $ Core.application (Core.termVariable $ encodedName $ toPrimName n) a)
   b
 
 -- | Reference a math primitive as a deep term (for use as a first-class value)
-ref :: Name -> TypedTerm Term
-ref name = Core.termVariable $ encodedName name
+ref :: ToPrimName n => n -> TypedTerm Term
+ref = Core.termVariable . encodedName . toPrimName
 
 
 -- Unary functions

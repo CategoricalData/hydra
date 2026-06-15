@@ -350,9 +350,9 @@ pair t1 t2 = Core.termPair $ Phantoms.pair t1 t2
 
 -- | Create a term-encoded reference to a primitive function.
 -- Uses termVariable; the name resolves via graphPrimitives fallthrough.
--- Example: primitive (Name "hydra.lib.strings.length")
-primitive :: Name -> TypedTerm Term
-primitive = Core.termVariable . TypedTerm . EncodeCore.name
+-- Example: primitive DefStrings.length
+primitive :: Terms.ToPrimName n => n -> TypedTerm Term
+primitive = Core.termVariable . TypedTerm . EncodeCore.name . Terms.toPrimName
 
 -- | Create a term-encoded field projection function
 -- Example: project (name "Person") (name "firstName")

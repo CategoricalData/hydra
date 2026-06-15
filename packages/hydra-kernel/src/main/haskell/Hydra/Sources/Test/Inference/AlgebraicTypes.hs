@@ -67,26 +67,26 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     subgroup "maps.map applied to a function" [
       -- maps.map (partially applied): maps.map negate => map<k, int32> -> map<k, int32>
       expectPolyConstrained 1 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefMath.negate))
+        (primitive DefMaps.map @@ primitive DefMath.negate)
         ["t0"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") T.int32) (T.map (T.var "t0") T.int32)),
       -- maps.map with a lambda
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefMaps.map) @@ lambda "x" (list [var "x"]))
+        (primitive DefMaps.map @@ lambda "x" (list [var "x"]))
         ["t0", "t1"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1"))),
       -- maps.map with sets.fromList: transforms map values from lists to sets
       expectPolyConstrained 3 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefSets.fromList))
+        (primitive DefMaps.map @@ primitive DefSets.fromList)
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1")))],
 
     -- Applying sets.map to cross-collection functions
     subgroup "sets.map applied to a function" [
       -- sets.map negate => set<int32> -> set<int32>
       expectMono 1 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefSets.map) @@ primitive (Prims.primName DefMath.negate))
+        (primitive DefSets.map @@ primitive DefMath.negate)
         (T.function (T.set T.int32) (T.set T.int32)),
       -- sets.map with lists.length: set<list<t>> -> set<int32>
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefSets.map) @@ primitive (Prims.primName DefLists.length))
+        (primitive DefSets.map @@ primitive DefLists.length)
         ["t0"] [("t0", ["ordering"])] (T.function (T.set $ T.list $ T.var "t0") (T.set T.int32))],
 
     -- Composing collection primitives in let bindings
@@ -94,13 +94,13 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
       -- let f = maps.map sets.fromList in f
       expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (lets [
-          "f">: primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefSets.fromList)]
+          "f">: primitive DefMaps.map @@ primitive DefSets.fromList]
           $ var "f")
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1"))),
       -- let f = maps.map sets.fromList; g = f (map literal) in g
       expectMono 2 [tag_disabledForMinimalInference]
         (lets [
-          "f">: primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefSets.fromList),
+          "f">: primitive DefMaps.map @@ primitive DefSets.fromList,
           "g">: var "f" @@ mapTerm [(string "a", list [int32 1, int32 2])]]
           $ var "g")
         (T.map T.string (T.set T.int32))],
@@ -109,26 +109,26 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     subgroup "Map operations in lambdas" [
       -- \m. maps.map lists.length m  =>  map<k, list<t>> -> map<k, int32>
       expectPolyConstrained 1 [tag_disabledForMinimalInference]
-        (lambda "m" $ primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefLists.length) @@ var "m")
+        (lambda "m" $ primitive DefMaps.map @@ primitive DefLists.length @@ var "m")
         ["t0", "t1"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") T.int32)),
       -- \f. \m. maps.map f m  =>  (v1 -> v2) -> map<k, v1> -> map<k, v2>
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
-        (lambda "f" $ lambda "m" $ primitive (Prims.primName DefMaps.map) @@ var "f" @@ var "m")
+        (lambda "f" $ lambda "m" $ primitive DefMaps.map @@ var "f" @@ var "m")
         ["t0", "t1", "t2"] [("t2", ["ordering"])] (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.map (T.var "t2") (T.var "t0"), T.map (T.var "t2") (T.var "t1")])],
 
     -- Fully applied collection conversions
     subgroup "Fully applied collection conversions" [
       -- sets.fromList [1, 2, 3]  =>  set<int32>
       expectMono 1 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefSets.fromList) @@ list (int32 <$> [1, 2, 3]))
+        (primitive DefSets.fromList @@ list (int32 <$> [1, 2, 3]))
         (T.set T.int32),
       -- maps.map negate (maps.fromList [(1, 2)])  =>  map<int32, int32>
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefMath.negate) @@ (primitive (Prims.primName DefMaps.fromList) @@ list [pair (int32 1) (int32 2)]))
+        (primitive DefMaps.map @@ primitive DefMath.negate @@ (primitive DefMaps.fromList @@ list [pair (int32 1) (int32 2)]))
         (T.map T.int32 T.int32),
       -- maps.map sets.fromList (maps.fromList [("a", [1, 2])])  =>  map<string, set<int32>>
       expectMono 3 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefMaps.map) @@ primitive (Prims.primName DefSets.fromList) @@ (primitive (Prims.primName DefMaps.fromList) @@ list [pair (string "a") (list [int32 1, int32 2])]))
+        (primitive DefMaps.map @@ primitive DefSets.fromList @@ (primitive DefMaps.fromList @@ list [pair (string "a") (list [int32 1, int32 2])]))
         (T.map T.string (T.set T.int32))]]
 
 testGroupForEithers :: TypedTermDefinition TestGroup
@@ -201,22 +201,22 @@ testGroupForFolds = define "testGroupForFolds" $
       -- eliminator in a lambda over the optional, since cases takes the scrutinee first and
       -- cannot be partially applied to (def, f) while leaving the optional open.
       expectMono 1 [tag_disabledForMinimalInference]
-        (lambda "m" $ primitive (Prims.primName DefOptionals.cases) @@ (var "m") @@ (int32 42) @@ (primitive (Prims.primName DefMath.negate)))
+        (lambda "m" $ primitive DefOptionals.cases @@ (var "m") @@ (int32 42) @@ (primitive DefMath.negate))
         (T.function (T.optional T.int32) T.int32),
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefOptionals.cases) @@ (optional (just $ int32 137)) @@ (int32 42) @@ (primitive (Prims.primName DefMath.negate)))
+        (primitive DefOptionals.cases @@ (optional (just $ int32 137)) @@ (int32 42) @@ (primitive DefMath.negate))
         T.int32,
       expectMono 3 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefOptionals.cases) @@ optional nothing @@ (int32 42) @@ (primitive (Prims.primName DefMath.negate)))
+        (primitive DefOptionals.cases @@ optional nothing @@ (int32 42) @@ (primitive DefMath.negate))
         T.int32,
       expectPoly 4 [tag_disabledForMinimalInference]
-        (lambda "x" $ primitive (Prims.primName DefOptionals.cases) @@ (var "x") @@ (var "x") @@ (primitive (Prims.primName DefOptionals.pure)))
+        (lambda "x" $ primitive DefOptionals.cases @@ (var "x") @@ (var "x") @@ (primitive DefOptionals.pure))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
       expectPoly 5 [tag_disabledForMinimalInference]
-        (lambda "m" $ primitive (Prims.primName DefOptionals.cases) @@ (var "m") @@ (list []) @@ (lambda "x" $ list [var "x"]))
+        (lambda "m" $ primitive DefOptionals.cases @@ (var "m") @@ (list []) @@ (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))]]
   where
-    foldAdd = primitive (Prims.primName DefLists.foldl) @@ primitive (Prims.primName DefMath.add)
+    foldAdd = primitive DefLists.foldl @@ primitive DefMath.add
 
 testGroupForLists :: TypedTermDefinition TestGroup
 testGroupForLists = define "testGroupForLists" $

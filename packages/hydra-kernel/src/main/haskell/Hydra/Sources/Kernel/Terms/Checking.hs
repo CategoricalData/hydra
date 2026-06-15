@@ -807,7 +807,7 @@ typeOfTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either E
 typeOfTerm = define "typeOfTerm" $
   doc "Check the type of a term" $
   "cx" ~> "g" ~> "term" ~>
-  Eithers.map (primitive (Prims.primName DefPairs.first))
+  Eithers.map (primitive DefPairs.first)
     (typeOf @@ var "cx" @@ var "g" @@ list ([] :: [TypedTerm Type]) @@ var "term")
 
 typeOfTypeApplication :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either Error (Type, InferenceContext))

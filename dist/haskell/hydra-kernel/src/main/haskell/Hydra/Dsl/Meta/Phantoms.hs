@@ -343,23 +343,23 @@ pair l r = TypedTerm $ Terms.pair (unTypedTerm $ asTerm l) (unTypedTerm $ asTerm
 
 -- | Primitive function by name
 -- Example: primitive (Name "hydra.lib.strings.length")
-primitive :: Name -> TypedTerm a
+primitive :: Terms.ToPrimName n => n -> TypedTerm a
 primitive = TypedTerm . Terms.primitive
 
 -- | Apply a primitive function to one argument
--- Example: primitive1 (Prims.primName DefMath.abs) (int32 (-5))
-primitive1 :: Name -> TypedTerm a -> TypedTerm b
-primitive1 primName (TypedTerm a) = TypedTerm $ Terms.primitive primName Terms.@@ a
+-- Example: primitive1 DefMath.abs (int32 (-5))
+primitive1 :: Terms.ToPrimName n => n -> TypedTerm a -> TypedTerm b
+primitive1 n (TypedTerm a) = TypedTerm $ Terms.primitive n Terms.@@ a
 
 -- | Apply a primitive function to two arguments
--- Example: primitive2 (Prims.primName DefMath.add) (int32 2) (int32 3)
-primitive2 :: Name -> TypedTerm a -> TypedTerm b -> TypedTerm c
-primitive2 primName (TypedTerm a) (TypedTerm b) = TypedTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b
+-- Example: primitive2 DefMath.add (int32 2) (int32 3)
+primitive2 :: Terms.ToPrimName n => n -> TypedTerm a -> TypedTerm b -> TypedTerm c
+primitive2 n (TypedTerm a) (TypedTerm b) = TypedTerm $ Terms.primitive n Terms.@@ a Terms.@@ b
 
 -- | Apply a primitive function to three arguments
--- Example: primitive3 _string_replace (string "hello") (string "e") (string "a")
-primitive3 :: Name -> TypedTerm a -> TypedTerm b -> TypedTerm c -> TypedTerm d
-primitive3 primName (TypedTerm a) (TypedTerm b) (TypedTerm c) = TypedTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b Terms.@@ c
+-- Example: primitive3 DefStrings.replace (string "hello") (string "e") (string "a")
+primitive3 :: Terms.ToPrimName n => n -> TypedTerm a -> TypedTerm b -> TypedTerm c -> TypedTerm d
+primitive3 n (TypedTerm a) (TypedTerm b) (TypedTerm c) = TypedTerm $ Terms.primitive n Terms.@@ a Terms.@@ b Terms.@@ c
 
 -- | Extract a field from a record
 -- Example: project (Name "Person") (Name "name")

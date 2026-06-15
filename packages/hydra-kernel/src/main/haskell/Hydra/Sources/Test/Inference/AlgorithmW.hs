@@ -213,5 +213,5 @@ testGroupForSystemF = define "testGroupForSystemF" $
   where
     -- Placeholders for the primitives in @wisnesky's test cases; they are not necessarily the same functions,
     -- but they have the same types.
-    primPred = primitive (Prims.primName DefMath.negate)
-    primSucc = primitive (Prims.primName DefMath.negate)
+    primPred = primitive DefMath.negate
+    primSucc = primitive DefMath.negate

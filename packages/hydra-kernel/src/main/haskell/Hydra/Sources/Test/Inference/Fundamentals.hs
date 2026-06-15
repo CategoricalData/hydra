@@ -69,15 +69,15 @@ testGroupForLambdas = define "testGroupForLambdas" $
 
     subgroup "Nested lambdas" [
       expectMono 1 []
-        (lambda "x" $ lambda "y" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y")
+        (lambda "x" $ lambda "y" $ primitive DefMath.add @@ var "x" @@ var "y")
         (T.functionMany [T.int32, T.int32, T.int32]),
       expectMono 2 []
-        (lambda "x" $ list [lambda "y" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y"])
+        (lambda "x" $ list [lambda "y" $ primitive DefMath.add @@ var "x" @@ var "y"])
         (T.function T.int32 $ T.list $ T.function T.int32 T.int32)],
 
     subgroup "Nested lambdas with shadowing" [
       expectPoly 1 []
-        (lambda "x" $ lambda "x" $ primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 42)
+        (lambda "x" $ lambda "x" $ primitive DefMath.add @@ var "x" @@ int32 42)
         ["t0"] (T.function (T.var "t0") (T.function T.int32 T.int32))]]
 
 testGroupForLet :: TypedTermDefinition TestGroup
@@ -163,8 +163,8 @@ testGroupForLet = define "testGroupForLet" $
       -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
       expectMono 2 []
         (lets [
-            "square">: lambda "z" $ primitive (Prims.primName DefMath.mul) @@ var "z" @@ var "z"] $
-          lambdas ["f", "x", "y"] $ primitive (Prims.primName DefLogic.ifElse)
+            "square">: lambda "z" $ primitive DefMath.mul @@ var "z" @@ var "z"] $
+          lambdas ["f", "x", "y"] $ primitive DefLogic.ifElse
               @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
               @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
               @@ (var "f" @@ var "x" @@ var "y"))
@@ -198,7 +198,7 @@ testGroupForLet = define "testGroupForLet" $
       expectPoly 8 [tag_disabled]
         (lets [
           "singleton">: lambda "x" $ list [var "x"],
-          "f">: lambda "x" $ lambda "y" $ primitive (Prims.primName DefLists.cons)
+          "f">: lambda "x" $ lambda "y" $ primitive DefLists.cons
             @@ (pair (var "singleton" @@ var "x") (var "singleton" @@ var "y"))
             @@ (var "g" @@ var "x" @@ var "y"),
           "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
@@ -277,30 +277,30 @@ testGroupForLet = define "testGroupForLet" $
       expectMono 1 []
         (lets [
           "id">: lambda "x" $ var "x",
-          "f">: primitive (Prims.primName DefStrings.length) @@ var "g",
-          "g">: primitive (Prims.primName DefStrings.fromList) @@ list [var "f"]]
+          "f">: primitive DefStrings.length @@ var "g",
+          "g">: primitive DefStrings.fromList @@ list [var "f"]]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
       expectMono 2 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
-          "f">: var "id" @@ (primitive (Prims.primName DefStrings.length) @@ var "g"),
-          "g">: var "id" @@ (primitive (Prims.primName DefStrings.fromList) @@ list [var "f"])]
+          "f">: var "id" @@ (primitive DefStrings.length @@ var "g"),
+          "g">: var "id" @@ (primitive DefStrings.fromList @@ list [var "f"])]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
       expectMono 3 [tag_disabledForMinimalInference]
         (lets [
-          "f">: var "id" @@ (primitive (Prims.primName DefStrings.length) @@ var "g"),
+          "f">: var "id" @@ (primitive DefStrings.length @@ var "g"),
           "id">: lambda "x" $ var "x",
-          "g">: var "id" @@ (primitive (Prims.primName DefStrings.fromList) @@ list [var "f"])]
+          "g">: var "id" @@ (primitive DefStrings.fromList @@ list [var "f"])]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string)],
 
     subgroup "Recursion involving polymorphic functions" [ -- Note: not 'polymorphic recursion' per se
       expectPoly 1 []
         (lets [
-          "f">: lambda "b" $ lambda "x" $ primitive (Prims.primName DefLogic.ifElse) @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
-          "g">: lambda "b" $ lambda "x" $ primitive (Prims.primName DefLogic.ifElse) @@ var "b" @@ (var "f" @@ var "b" @@ var "x") @@ list [list [var "x"]]]
+          "f">: lambda "b" $ lambda "x" $ primitive DefLogic.ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
+          "g">: lambda "b" $ lambda "x" $ primitive DefLogic.ifElse @@ var "b" @@ (var "f" @@ var "b" @@ var "x") @@ list [list [var "x"]]]
           $ var "f")
         ["t0"] (T.functionMany [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"]),
 
@@ -343,7 +343,7 @@ testGroupForLet = define "testGroupForLet" $
       expectPoly 1 []
         (lambda "g" $ lambda "val" $
           lets ["r">: var "g" @@ var "val"] $
-            var "g" @@ (primitive (Prims.primName DefPairs.first) @@ var "r"))
+            var "g" @@ (primitive DefPairs.first @@ var "r"))
         ["t0", "t1"] (T.function
           (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))
           (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))),
@@ -357,7 +357,7 @@ testGroupForLet = define "testGroupForLet" $
         (lets [
           "helper">: lambda "g" $ lambda "val" $ var "g" @@ var "val",
           "f">: lambda "g" $ lambda "val" $
-            var "g" @@ (primitive (Prims.primName DefPairs.first) @@ (var "helper" @@ var "g" @@ var "val"))] $
+            var "g" @@ (primitive DefPairs.first @@ (var "helper" @@ var "g" @@ var "val"))] $
           var "f")
         ["t0", "t1"] (T.function
           (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))
@@ -373,7 +373,7 @@ testGroupForLet = define "testGroupForLet" $
         (lets [
           "forField">: lambda "rec" $ lambda "val" $ lambda "x" $
             lets ["r">: var "rec" @@ var "val" @@ var "x"] $
-              pair (primitive (Prims.primName DefPairs.first) @@ var "r") (var "x"),
+              pair (primitive DefPairs.first @@ var "r") (var "x"),
           "main">: lambda "rec" $ lambda "val" $ lambda "x" $
             var "forField" @@ var "rec" @@ var "val" @@ var "x"] $
           var "main")
@@ -395,7 +395,7 @@ testGroupForLet = define "testGroupForLet" $
         (lets [
           "helper">: lambda "f" $ lambda "val" $ var "f" @@ var "val",
           "main">: lambda "f" $ lambda "val" $ lambda "b" $
-            primitive (Prims.primName DefLogic.ifElse) @@ var "b"
+            primitive DefLogic.ifElse @@ var "b"
               @@ (var "helper" @@ var "f" @@ var "val")
               @@ (pair (var "val") (int32 0))] $
           var "main")
@@ -418,9 +418,9 @@ testGroupForLet = define "testGroupForLet" $
         (lets [
           "forField">: lambda "rec" $ lambda "val" $
             lets ["r">: var "rec" @@ var "val"] $
-              pair (primitive (Prims.primName DefPairs.first) @@ var "r") (primitive (Prims.primName DefPairs.second) @@ var "r"),
+              pair (primitive DefPairs.first @@ var "r") (primitive DefPairs.second @@ var "r"),
           "main">: lambda "rec" $ lambda "val" $ lambda "b" $
-            primitive (Prims.primName DefLogic.ifElse) @@ var "b"
+            primitive DefLogic.ifElse @@ var "b"
               @@ (var "forField" @@ var "rec" @@ var "val")
               @@ (pair (var "val") (int32 0))] $
           var "main")
@@ -442,7 +442,7 @@ testGroupForLet = define "testGroupForLet" $
         (lets [
           "rcases">: lambda "forFields" $ lambda "val" $ var "forFields" @@ var "val",
           "r">: lambda "forFields" $ lambda "val" $ lambda "b" $
-            primitive (Prims.primName DefLogic.ifElse) @@ var "b"
+            primitive DefLogic.ifElse @@ var "b"
               @@ (var "rcases" @@ var "forFields" @@ var "val")
               @@ (pair (var "val") (int32 0))] $
           var "r")
@@ -452,8 +452,8 @@ testGroupForLet = define "testGroupForLet" $
           T.boolean,
           T.pair (T.var "t0") T.int32])]]
   where
-    s = primitive (Prims.primName DefMath.negate)
-    p = primitive (Prims.primName DefMath.negate)
+    s = primitive DefMath.negate
+    p = primitive DefMath.negate
 
 testGroupForLiterals :: TypedTermDefinition TestGroup
 testGroupForLiterals = define "testGroupForLiterals" $
@@ -509,23 +509,23 @@ testGroupForPathologicalTerms = define "testGroupForPathologicalTerms" $
     subgroup "Infinite lists" [
       expectMono 1 []
         (lets [
-          "self">: primitive (Prims.primName DefLists.cons) @@ int32 42 @@ var "self"]
+          "self">: primitive DefLists.cons @@ int32 42 @@ var "self"]
           $ var "self")
         (T.list T.int32),
       expectPoly 2  []
         (lambda "x" $ lets [
-          "self">: primitive (Prims.primName DefLists.cons) @@ var "x" @@ var "self"]
+          "self">: primitive DefLists.cons @@ var "x" @@ var "self"]
           $ var "self")
         ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
       expectPoly 3  [tag_disabled]
         (lets [
-          "self">: lambda "e" $ primitive (Prims.primName DefLists.cons) @@ var "e" @@ (var "self" @@ var "e")]
+          "self">: lambda "e" $ primitive DefLists.cons @@ var "e" @@ (var "self" @@ var "e")]
           $ lambda "x" $ var "self" @@ var "x")
         ["t0"] (T.function (T.var "t0") (T.var "t0")),
       expectMono 4  []
         (lets [
-          "build">: lambda "x" $ primitive (Prims.primName DefLists.cons) @@ var "x" @@ (var "build" @@
-            (primitive (Prims.primName DefMath.add) @@ var "x" @@ int32 1))]
+          "build">: lambda "x" $ primitive DefLists.cons @@ var "x" @@ (var "build" @@
+            (primitive DefMath.add @@ var "x" @@ int32 1))]
           $ var "build" @@ int32 0)
         (T.list T.int32)]]
 
@@ -568,23 +568,23 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
 
     subgroup "Primitives and application" [
       expectMono 1 []
-        (primitive (Prims.primName DefLists.concat) @@ list [list [int32 42], list []])
+        (primitive DefLists.concat @@ list [list [int32 42], list []])
         (T.list T.int32)],
 
     subgroup "Lambdas and primitives" [
       expectMono 1 []
-        (primitive (Prims.primName DefMath.add))
+        (primitive DefMath.add)
         (T.functionMany [T.int32, T.int32, T.int32]),
       expectMono 2 []
-        (lambda "x" (primitive (Prims.primName DefMath.add) @@ var "x"))
+        (lambda "x" (primitive DefMath.add @@ var "x"))
         (T.functionMany [T.int32, T.int32, T.int32]),
       expectMono 3 []
-        (lambda "x" (primitive (Prims.primName DefMath.add) @@ var "x" @@ var "x"))
+        (lambda "x" (primitive DefMath.add @@ var "x" @@ var "x"))
         (T.function T.int32 T.int32)],
 
     subgroup "Mixed expressions with lambdas, constants, and primitive functions" [
       expectMono 1 []
-        (lambda "x" $ (primitive (Prims.primName DefMath.sub) @@ (primitive (Prims.primName DefMath.add) @@ var "x" @@ var "x") @@ int32 1))
+        (lambda "x" $ (primitive DefMath.sub @@ (primitive DefMath.add @@ var "x" @@ var "x") @@ int32 1))
         (T.function T.int32 T.int32)],
 
     subgroup "Application terms" [
@@ -592,7 +592,7 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
         ((lambda "x" $ var "x") @@ string "foo")
         T.string,
       expectMono 2 []
-        (lambda "x" $ primitive (Prims.primName DefMath.sub) @@ (primitive (Prims.primName DefMath.add) @@ var "x" @@ var "x") @@ int32 1)
+        (lambda "x" $ primitive DefMath.sub @@ (primitive DefMath.add @@ var "x" @@ var "x") @@ int32 1)
         (T.function T.int32 T.int32)],
 
     -- Phantom type variables: positions in a polymorphic primitive's type
@@ -606,24 +606,24 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
       -- isLeft applied to a Left pins only the left type arg; the right
       -- type arg is phantom. Result type: Bool (monomorphic).
       expectMono 1 []
-        (primitive (Prims.primName DefEithers.isLeft) @@ left (int32 42))
+        (primitive DefEithers.isLeft @@ left (int32 42))
         T.boolean,
       -- isLeft applied to a Right pins only the right type arg; the left
       -- type arg is phantom. Result type: Bool (monomorphic).
       expectMono 2 []
-        (primitive (Prims.primName DefEithers.isLeft) @@ right (string "x"))
+        (primitive DefEithers.isLeft @@ right (string "x"))
         T.boolean,
       -- A list of expressions with independent phantom vars: still
       -- monomorphic List Bool, not forall t0 t1. List Bool.
       expectMono 3 []
         (list [
-          primitive (Prims.primName DefEithers.isLeft) @@ left (int32 42),
-          primitive (Prims.primName DefEithers.isLeft) @@ left (int32 137)])
+          primitive DefEithers.isLeft @@ left (int32 42),
+          primitive DefEithers.isLeft @@ left (int32 137)])
         (T.list T.boolean),
       -- Control: the bare primitive (no application) must stay polymorphic.
       -- This is the genuine forall case and must not be disturbed by the fix.
       expectPoly 4 []
-        (primitive (Prims.primName DefEithers.isLeft))
+        (primitive DefEithers.isLeft)
         ["t0", "t1"] (T.function (T.either_ (T.var "t0") (T.var "t1")) T.boolean)]]
 
 testGroupForPrimitives :: TypedTermDefinition TestGroup
@@ -632,36 +632,36 @@ testGroupForPrimitives = define "testGroupForPrimitives" $
 
     subgroup "Monomorphic primitive functions" [
       expectMono 1 []
-        (primitive $ (Prims.primName DefStrings.length))
+        (primitive $ DefStrings.length)
         (T.function T.string T.int32),
       expectMono 2 []
-        (primitive (Prims.primName DefMath.sub))
+        (primitive DefMath.sub)
         (T.functionMany [T.int32, T.int32, T.int32])],
 
     subgroup "Polymorphic primitive functions" [
       expectPoly 1 []
-        (lambda "el" (primitive (Prims.primName DefLists.length) @@ (list [var "el"])))
+        (lambda "el" (primitive DefLists.length @@ (list [var "el"])))
         ["t0"] (T.function (T.var "t0") T.int32),
       expectMono 2 []
-        (lambda "el" (primitive (Prims.primName DefLists.length) @@ (list [int32 42, var "el"])))
+        (lambda "el" (primitive DefLists.length @@ (list [int32 42, var "el"])))
         (T.function T.int32 T.int32),
       expectPoly 3 []
-        (primitive (Prims.primName DefLists.concat))
+        (primitive DefLists.concat)
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") (T.list $ T.var "t0")),
       expectPoly 4 []
-        (lambda "lists" (primitive (Prims.primName DefLists.concat) @@ var "lists"))
+        (lambda "lists" (primitive DefLists.concat @@ var "lists"))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") (T.list $ T.var "t0")),
       expectPoly 5 []
-        (lambda "lists" (primitive (Prims.primName DefLists.length) @@ (primitive (Prims.primName DefLists.concat) @@ var "lists")))
+        (lambda "lists" (primitive DefLists.length @@ (primitive DefLists.concat @@ var "lists")))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") T.int32),
       expectPoly 6 []
-        (lambda "list" (primitive (Prims.primName DefLists.length) @@ (primitive (Prims.primName DefLists.concat) @@ list [var "list", list []])))
+        (lambda "list" (primitive DefLists.length @@ (primitive DefLists.concat @@ list [var "list", list []])))
         ["t0"] (T.function (T.list $ T.var "t0") T.int32),
       expectPoly 7 []
-        (lambda "list" (primitive (Prims.primName DefMath.add)
+        (lambda "list" (primitive DefMath.add
           @@ int32 1
-          @@ (primitive (Prims.primName DefLists.length) @@ (primitive (Prims.primName DefLists.concat) @@ list [var "list", list []]))))
+          @@ (primitive DefLists.length @@ (primitive DefLists.concat @@ list [var "list", list []]))))
         ["t0"] (T.function (T.list $ T.var "t0") T.int32),
       expectPoly 8 []
-        (lambda "lists" (primitive (Prims.primName DefLists.length) @@ (primitive (Prims.primName DefLists.concat) @@ var "lists")))
+        (lambda "lists" (primitive DefLists.length @@ (primitive DefLists.concat @@ var "lists")))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") T.int32)]]
