@@ -178,9 +178,17 @@ encodeEitherType :: TypedTermDefinition (EitherType -> Term)
 encodeEitherType = define "encodeEitherType" $
   doc "Generate an encoder for an Either type" $
   "et" ~>
-    DeepCore.lambda "e" $
+    -- eithers.bimap : forall x,y,z,w. (x->z)->(y->w)->either<x,y>->either<z,w>;
+    -- x=left, y=right, z=w=Term. Input domain: either<left,right>. (#476)
+    MetaTerms.lambdaTyped "e" (Core.typeEither $ Core.eitherType
+        (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
+        (encoderFullResultType @@ Core.eitherTypeRight (var "et"))) $
       DeepCore.injection _Term (DeepCore.field _Term_either
-        (DeepCore.primitiveEncoded _eithers_bimap
+        (MetaTerms.tyapps (DeepCore.primitiveEncoded _eithers_bimap)
+          [encoderFullResultType @@ Core.eitherTypeLeft (var "et"),
+           encoderFullResultType @@ Core.eitherTypeRight (var "et"),
+           Core.typeVariable (Core.nameLift _Term),
+           Core.typeVariable (Core.nameLift _Term)]
           @@@ (encodeType @@ Core.eitherTypeLeft (var "et"))
           @@@ (encodeType @@ Core.eitherTypeRight (var "et"))
           @@@ DeepCore.var "e"))
@@ -194,9 +202,10 @@ encodeFieldValue :: TypedTermDefinition (Name -> Name -> Type -> Term)
 encodeFieldValue = define "encodeFieldValue" $
   doc "Generate the encoder for a field's value" $
   "typeName" ~> "fieldName" ~> "fieldType" ~>
-    -- Create a lambda that encodes the value and wraps in Term.union with injection
+    -- Create a lambda that encodes the value and wraps in Term.union with injection.
+    -- Domain = the field's (encoder-input) type. (#476)
     -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
-    DeepCore.lambda "y" $
+    MetaTerms.lambdaTyped "y" (encoderFullResultType @@ var "fieldType") $
       -- Build Term.union containing an encoded Injection with the encoded value
       DeepCore.injection _Term (DeepCore.field _Term_inject
         (encodeInjection @@ var "typeName" @@ var "fieldName"
@@ -282,9 +291,13 @@ encodeListType :: TypedTermDefinition (Type -> Term)
 encodeListType = define "encodeListType" $
   doc "Generate an encoder for a list type" $
   "elemType" ~>
-    DeepCore.lambda "xs" $
+    -- The encoder takes a list of source elements (list<elemType>) and produces a Term.
+    MetaTerms.lambdaTyped "xs" (Core.typeList (encoderFullResultType @@ var "elemType")) $
       DeepCore.injection _Term (DeepCore.field _Term_list
-        (DeepCore.primitiveEncoded _lists_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "xs"))
+        -- lists.map : forall x,y. (x->y) -> list<x> -> list<y>; x = source elem type, y = Term. (#476)
+        (MetaTerms.tyapps (DeepCore.primitiveEncoded _lists_map)
+          [encoderFullResultType @@ var "elemType", Core.typeVariable (Core.nameLift _Term)]
+          @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "xs"))
 
 -- | Generate an encoder for a map type
 -- Encodes each key/value pair and wraps in Term.map
@@ -295,24 +308,29 @@ encodeListType = define "encodeListType" $
 encodeLiteralType :: TypedTermDefinition (LiteralType -> Term)
 encodeLiteralType = define "encodeLiteralType" $
   doc "Generate an encoder for a literal type" $
+  -- The literal encoder's input is the native literal value; its domain is the
+  -- corresponding literal type (e.g. binary -> literal<binary>, string -> literal<string>,
+  -- integer<intType> -> literal<integer<intType>>). (#476)
   match _LiteralType (Just identityEncoder) [
     _LiteralType_binary>>: constant $
-      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_binary (DeepCore.var "x")),
+      litLam (Core.literalTypeBinary) $ \x -> termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_binary x),
     _LiteralType_boolean>>: constant $
-      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_boolean (DeepCore.var "x")),
+      litLam (Core.literalTypeBoolean) $ \x -> termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_boolean x),
     _LiteralType_decimal>>: constant $
-      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_decimal (DeepCore.var "x")),
+      litLam (Core.literalTypeDecimal) $ \x -> termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_decimal x),
     _LiteralType_string>>: constant $
-      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_string (DeepCore.var "x")),
+      litLam (Core.literalTypeString) $ \x -> termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_string x),
     -- For integer types, wrap in Term.literal.integer with the specific integer variant
     _LiteralType_integer>>: "intType" ~>
-      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal
-        (DeepCore.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ DeepCore.var "x")),
+      litLam (Core.literalTypeInteger (var "intType")) $ \x -> termLiteral $ DeepCore.injection _Literal
+        (DeepCore.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ x)),
     -- For float types, wrap in Term.literal.float with the specific float variant
     _LiteralType_float>>: "floatType" ~>
-      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal
-        (DeepCore.field _Literal_float (encodeFloatValue @@ var "floatType" @@ DeepCore.var "x"))]
+      litLam (Core.literalTypeFloat (var "floatType")) $ \x -> termLiteral $ DeepCore.injection _Literal
+        (DeepCore.field _Literal_float (encodeFloatValue @@ var "floatType" @@ x))]
   where
+    -- Build a typed lambda over the native literal value: domain = literal<lt>.
+    litLam lt mk = MetaTerms.lambdaTyped "x" (Core.typeLiteral lt) (mk (DeepCore.var "x"))
     -- Helper to wrap a Literal value in Term.literal
     termLiteral lit = DeepCore.injection _Term (DeepCore.field _Term_literal lit)
     -- Default: identity (should not be reached for well-formed types)
@@ -326,9 +344,17 @@ encodeMapType :: TypedTermDefinition (MapType -> Term)
 encodeMapType = define "encodeMapType" $
   doc "Generate an encoder for a map type" $
   "mt" ~>
-    DeepCore.lambda "m" $
+    -- maps.bimap : forall k1,k2,v1,v2. (k1->k2)->(v1->v2)->map<k1,v1>->map<k2,v2>;
+    -- k1=key, v1=val, k2=v2=Term (note forall order k1,k2,v1,v2). (#476)
+    MetaTerms.lambdaTyped "m" (Core.typeMap $ Core.mapType
+        (encoderFullResultType @@ Core.mapTypeKeys (var "mt"))
+        (encoderFullResultType @@ Core.mapTypeValues (var "mt"))) $
       DeepCore.injection _Term (DeepCore.field _Term_map
-        (DeepCore.primitiveEncoded _maps_bimap
+        (MetaTerms.tyapps (DeepCore.primitiveEncoded _maps_bimap)
+          [encoderFullResultType @@ Core.mapTypeKeys (var "mt"),
+           Core.typeVariable (Core.nameLift _Term),
+           encoderFullResultType @@ Core.mapTypeValues (var "mt"),
+           Core.typeVariable (Core.nameLift _Term)]
           @@@ (encodeType @@ Core.mapTypeKeys (var "mt"))
           @@@ (encodeType @@ Core.mapTypeValues (var "mt"))
           @@@ DeepCore.var "m"))
@@ -400,9 +426,12 @@ encodeModuleName = define "encodeModuleName" $
 encodeOptionalType :: TypedTermDefinition (Type -> Term)
 encodeOptionalType = define "encodeOptionalType" $
   doc "Generate an encoder for a Maybe type" $
-  "elemType" ~> DeepCore.lambda "opt" $
+  -- optionals.map : forall x,y. (x->y)->optional<x>->optional<y>; x=elem, y=Term. (#476)
+  "elemType" ~> MetaTerms.lambdaTyped "opt" (Core.typeOptional (encoderFullResultType @@ var "elemType")) $
     DeepCore.injection _Term (DeepCore.field _Term_optional
-      (DeepCore.primitiveEncoded _optionals_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
+      (MetaTerms.tyapps (DeepCore.primitiveEncoded _optionals_map)
+        [encoderFullResultType @@ var "elemType", Core.typeVariable (Core.nameLift _Term)]
+        @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
 
 -- | Generate an encoder for a pair type
 -- Encodes both elements and wraps in Term.pair
@@ -411,7 +440,15 @@ encodeOptionalType = define "encodeOptionalType" $
 encodePairType :: TypedTermDefinition (PairType -> Term)
 encodePairType = define "encodePairType" $
   doc "Generate an encoder for a pair type" $
-  "pt" ~> DeepCore.lambda "p" $ DeepCore.injection _Term $ DeepCore.field _Term_pair $ DeepCore.primitiveEncoded _pairs_bimap
+  -- pairs.bimap : forall a,b,c,d. (a->c)->(b->d)->(a,b)->(c,d); a=first, b=second, c=d=Term. (#476)
+  "pt" ~> MetaTerms.lambdaTyped "p" (Core.typePair $ Core.pairType
+      (encoderFullResultType @@ Core.pairTypeFirst (var "pt"))
+      (encoderFullResultType @@ Core.pairTypeSecond (var "pt"))) $
+    DeepCore.injection _Term $ DeepCore.field _Term_pair $ MetaTerms.tyapps (DeepCore.primitiveEncoded _pairs_bimap)
+      [encoderFullResultType @@ Core.pairTypeFirst (var "pt"),
+       encoderFullResultType @@ Core.pairTypeSecond (var "pt"),
+       Core.typeVariable (Core.nameLift _Term),
+       Core.typeVariable (Core.nameLift _Term)]
     @@@ (encodeType @@ Core.pairTypeFirst (var "pt"))
     @@@ (encodeType @@ Core.pairTypeSecond (var "pt"))
     @@@ DeepCore.var "p"
@@ -430,7 +467,8 @@ encodeRecordTypeNamed :: TypedTermDefinition (Name -> [FieldType] -> Term)
 encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
   doc "Generate an encoder for a record type with the given element name" $
   "ename" ~> "rt" ~>
-    DeepCore.lambda "x" $
+    -- The record encoder takes a value of the nominal record type. (#476)
+    MetaTerms.lambdaTyped "x" (Core.typeVariable (var "ename")) $
       DeepCore.injection _Term (DeepCore.field _Term_record
         (DeepCore.record _Record [
           DeepCore.field _Record_typeName (encodeName @@ var "ename"),
@@ -454,9 +492,12 @@ encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
 encodeSetType :: TypedTermDefinition (Type -> Term)
 encodeSetType = define "encodeSetType" $
   doc "Generate an encoder for a set type" $
-  "elemType" ~> DeepCore.lambda "s" $
+  -- sets.map : forall x,y. (x->y)->set<x>->set<y>; x=elem, y=Term. (#476)
+  "elemType" ~> MetaTerms.lambdaTyped "s" (Core.typeSet (encoderFullResultType @@ var "elemType")) $
     DeepCore.injection _Term (DeepCore.field _Term_set
-      (DeepCore.primitiveEncoded _sets_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "s"))
+      (MetaTerms.tyapps (DeepCore.primitiveEncoded _sets_map)
+        [encoderFullResultType @@ var "elemType", Core.typeVariable (Core.nameLift _Term)]
+        @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "s"))
 
 -- | Generate an encoder term for a given Type (without element name context)
 encodeType :: TypedTermDefinition (Type -> Term)
@@ -492,9 +533,9 @@ encodeType = define "encodeType" $
     _Type_wrap>>: "wt" ~>
       encodeWrappedType @@ var "wt",
     _Type_unit>>: constant $
-      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
+      MetaTerms.lambdaTyped "_" Core.typeUnit $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_void>>: constant $
-      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
+      MetaTerms.lambdaTyped "_" Core.typeUnit $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_variable>>: "typeName" ~>
       Core.termVariable (encodeBindingName @@ var "typeName")]
   where
@@ -537,9 +578,9 @@ encodeTypeNamed = define "encodeTypeNamed" $
     _Type_wrap>>: "wt" ~>
       encodeWrappedTypeNamed @@ var "ename" @@ var "wt",
     _Type_unit>>: constant $
-      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
+      MetaTerms.lambdaTyped "_" Core.typeUnit $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_void>>: constant $
-      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
+      MetaTerms.lambdaTyped "_" Core.typeUnit $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_variable>>: "typeName" ~>
       Core.termVariable (encodeBindingName @@ var "typeName")]
   where
@@ -584,7 +625,8 @@ encodeWrappedTypeNamed :: TypedTermDefinition (Name -> Type -> Term)
 encodeWrappedTypeNamed = define "encodeWrappedTypeNamed" $
   doc "Generate an encoder for a wrapped type with the given element name" $
   "ename" ~> "wt" ~>
-    DeepCore.lambda "x" $
+    -- The wrapper encoder takes a value of the nominal wrapper type. (#476)
+    MetaTerms.lambdaTyped "x" (Core.typeVariable (var "ename")) $
       DeepCore.injection _Term (DeepCore.field _Term_wrap
         (DeepCore.record _WrappedTerm [
           DeepCore.field _WrappedTerm_typeName (encodeName @@ var "ename"),
@@ -721,8 +763,10 @@ encoderFullResultType = define "encoderFullResultType" $
         (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
     _Type_list>>: "elemType" ~>
       Core.typeList (encoderFullResultType @@ var "elemType"),
-    _Type_literal>>: "_" ~>
-      Core.typeVariable (Core.nameLift _Literal),
+    -- A literal type's encoder input is that specific literal type (e.g. literal<string>),
+    -- NOT the generic Literal — inference preserves the variant. (#476)
+    _Type_literal>>: "lt" ~>
+      Core.typeLiteral (var "lt"),
     _Type_map>>: "mt" ~>
       Core.typeMap $ Core.mapType
         (encoderFullResultType @@ Core.mapTypeKeys (var "mt"))
@@ -741,7 +785,12 @@ encoderFullResultType = define "encoderFullResultType" $
     _Type_variable>>: "name" ~>
       Core.typeVariable (var "name"),
     _Type_void>>: constant Core.typeVoid,
-    _Type_wrap>>: constant (Core.typeVariable (Core.nameLift _Term))]
+    -- A wrapper (newtype) is value-transparent: a wrapper nested inside a
+    -- container (e.g. list<Vertex>) is encoded from its unwrapped body, matching
+    -- what inference resolves. TypeWrap carries a bare Type, so `wt` IS the
+    -- body. Mirrors the _Type_list arm. (#476)
+    _Type_wrap>>: "wt" ~>
+      encoderFullResultType @@ var "wt"]
 
 -- | Get full result type for encoder input, with element name for nominal types
 -- | Get full result type for encoder input, with element name for nominal types
@@ -766,8 +815,9 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
         (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
     _Type_list>>: "elemType" ~>
       Core.typeList (encoderFullResultType @@ var "elemType"),
-    _Type_literal>>: "_" ~>
-      Core.typeVariable (Core.nameLift _Literal),
+    -- specific literal type (e.g. literal<string>), not generic Literal. (#476)
+    _Type_literal>>: "lt" ~>
+      Core.typeLiteral (var "lt"),
     _Type_map>>: "mt" ~>
       Core.typeMap $ Core.mapType
         (encoderFullResultType @@ Core.mapTypeKeys (var "mt"))
