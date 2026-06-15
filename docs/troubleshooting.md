@@ -65,7 +65,7 @@ Evaluation tests call `Reduction.reduceTerm` and assert the result matches expec
 
 When a primitive test fails in Java, the call chain is:
 
-1. Test defines a term using `primitive (Prims.primName DefLists.xxx) @@ arg1 @@ arg2`
+1. Test defines a term using `primitive DefLists.xxx @@ arg1 @@ arg2`
 2. `Reduction.reduceTerm` reduces the term
 3. The reducer looks up the primitive in the graph by name
 4. It calls `prim.implementation.apply(reducedArgs)`

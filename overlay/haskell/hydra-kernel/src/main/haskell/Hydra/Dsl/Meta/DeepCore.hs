@@ -6,6 +6,7 @@
 module Hydra.Dsl.Meta.DeepCore where
 
 import Hydra.Kernel
+import Hydra.Dsl.Terms (ToPrimName(..))
 import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Meta.Phantoms as P
 
@@ -67,14 +68,14 @@ lambdaTyped name domain body = Core.termLambda $ Core.lambda name domain body
 
 -- | Create a reference to a primitive function.
 -- Uses termVariable; the name resolves via graphPrimitives fallthrough.
-primitive :: Name -> TypedTerm Term
-primitive name = Core.termVariable $ Core.nameLift name
+primitive :: ToPrimName n => n -> TypedTerm Term
+primitive = Core.termVariable . Core.nameLift . toPrimName
 
 -- TODO: this is probably equivalent to `primitive`.
 -- | Create a reference to a primitive function using encodedName
 -- (for primitives that need namespace encoding)
-primitiveEncoded :: Name -> TypedTerm Term
-primitiveEncoded name = Core.termVariable $ P.encodedName name
+primitiveEncoded :: ToPrimName n => n -> TypedTerm Term
+primitiveEncoded = Core.termVariable . P.encodedName . toPrimName
 
 --------------------------------------------------------------------------------
 -- Projections and eliminations

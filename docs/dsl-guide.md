@@ -529,7 +529,7 @@ produce (var "result")
 
 ```haskell
 -- Call a primitive function
-primitive2 (Prims.primName DefMath.add) (int32 2) (int32 3)
+primitive2 DefMath.add (int32 2) (int32 3)
 
 -- Common primitives are wrapped for convenience
 import Hydra.Dsl.Meta.Lib.Math as Math
@@ -829,7 +829,7 @@ add = lambdas ["x", "y"] (
 
 -- Phantom-typed DSL
 add = "x" ~> "y" ~>
-  primitive2 (Prims.primName DefMath.add) (var "x") (var "y")
+  primitive2 DefMath.add (var "x") (var "y")
 
 -- Or using library functions
 import Hydra.Dsl.Meta.Lib.Math as Math

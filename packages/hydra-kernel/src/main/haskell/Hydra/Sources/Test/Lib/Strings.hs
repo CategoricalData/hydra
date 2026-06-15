@@ -182,7 +182,7 @@ allTests = define "allTests" $
         test "negative index" (-1) "hello" Nothing,
         test "empty string" 0 "" Nothing]
         where
-          test name idx s result = primCase name (Prims.primName DefStrings.maybeCharAt) [int32 idx, string s] (optionalInt32 result)
+          test name idx s result = primCase name DefStrings.maybeCharAt [int32 idx, string s] (optionalInt32 result)
           optionalInt32 Nothing = Core.termOptional nothing
           optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 

@@ -34,6 +34,102 @@ from hydra.generation import (
 # --include-coders is set.
 _CODER_PACKAGES = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
 
+# The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473).
+_LIB_SUBS = ["chars", "eithers", "equality", "lists", "literals", "logic", "maps",
+             "math", "optionals", "pairs", "regex", "sets", "strings"]
+
+# Lisp dialect arg -> (coder dialect name, file extension). Module-level so the #473 lib pass can
+# reach it as well as main().
+_lisp_dialects = {
+    "clojure": ("clojure", "clj"),
+    "scheme": ("scheme", "scm"),
+    "common-lisp": ("common_lisp", "lisp"),
+    "emacs-lisp": ("emacs_lisp", "el"),
+}
+
+
+def _is_lib_module(m):
+    return m.name.value.startswith("hydra.lib.")
+
+
+def _run_lib_pass(target, lang_dir, all_main_mods, mods_to_generate):
+    """#473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
+
+    Mirrors genForDirLib in bootstrap-from-json/Main.hs. The lib modules are filtered from
+    mods_to_generate and lowered; the universe lowers ONLY the lib modules so a lib
+    default-implementation referencing another primitive resolves to the primitive, not a lowered
+    binding.
+    """
+    import hydra.codegen
+    from hydra.generation import (write_java, write_python, write_scala,
+                                  write_typescript, write_lisp_dialect)
+
+    lib_mods = [hydra.codegen.lower_primitive_definitions(m)
+                for m in mods_to_generate if _is_lib_module(m)]
+    if not lib_mods:
+        return
+    lib_universe = [hydra.codegen.lower_primitive_definitions(m) if _is_lib_module(m) else m
+                    for m in all_main_mods]
+
+    print(f"Lib pass: emitting {len(lib_mods)} hydra.lib.* definition modules to {target}...",
+          flush=True)
+    if target == "java":
+        write_java(lang_dir, lib_universe, lib_mods)
+    elif target == "python":
+        write_python(lang_dir, lib_universe, lib_mods)
+    elif target == "scala":
+        write_scala(lang_dir, lib_universe, lib_mods)
+    elif target == "typescript":
+        write_typescript(lang_dir, lib_universe, lib_mods)
+    elif target in _lisp_dialects:
+        dialect_name, ext = _lisp_dialects[target]
+        write_lisp_dialect(lang_dir, dialect_name, ext, lib_universe, lib_mods)
+
+
+def _redirect_lib_calls(target, lang_dir):
+    """#473 redirect: rewrite generated CONSUMER call-sites hydra.lib.<sub>.<fn> ->
+    hydra.<lang>.lib.<sub>.<fn> so they resolve to the relocated native impls.
+
+    Primitive NAME occurrences inside string literals (canonical "hydra.lib..." names) must stay
+    canonical, so quote-prefixed occurrences are protected by an improbable sentinel, the rest
+    redirected, then restored. No-op for Java (def-modules are capitalized classes that don't
+    collide with lowercase impl subpackages). Mirrors redirectFor in bootstrap-from-json/Main.hs for
+    the dotted languages (Python/Scala/Clojure).
+    """
+    lang_seg = {"python": "python", "scala": "scala", "clojure": "clojure"}.get(target)
+    if lang_seg is None:
+        return  # java + others: no dotted-path redirect needed here
+    sentinel = "@@HYDRA_LIB_NAME@@"  # improbable token; never appears in generated source
+    if not os.path.isdir(lang_dir):
+        return
+    for dirpath, _dirs, files in os.walk(lang_dir):
+        for fn in files:
+            p = os.path.join(dirpath, fn)
+            # The primitive REGISTRY (hand-written overlay) deliberately imports BOTH the relocated
+            # impl (`from hydra.<lang>.lib import chars`) and the def-module (`from hydra.lib import
+            # chars as def_chars`) — it derives names from `def_chars.X.name`. Redirecting its
+            # def-module import would point `def_chars` at the impl module (a function with no .name),
+            # breaking name derivation. The Haskell driver never transforms this file because it is
+            # overlay-copied, not generated; mirror that by skipping it here.
+            if p.replace(os.sep, "/").endswith("hydra/sources/libraries.py"):
+                continue
+            with open(p, "r", encoding="utf-8") as fh:
+                s = fh.read()
+            if "hydra.lib." not in s:
+                continue
+            out = s.replace('"hydra.lib.', '"' + sentinel)  # protect quoted primitive-NAME strings
+            for sub in _LIB_SUBS:
+                old = "hydra.lib." + sub
+                new = "hydra." + lang_seg + ".lib." + sub
+                out = out.replace(old + ".", new + ".")
+                out = out.replace(old + "\n", new + "\n")
+                out = out.replace(old + " ", new + " ")
+                out = out.replace("hydra.lib import " + sub, "hydra." + lang_seg + ".lib import " + sub)
+            out = out.replace(sentinel, "hydra.lib.")
+            if out != s:
+                with open(p, "w", encoding="utf-8") as fh:
+                    fh.write(out)
+
 
 def _format_time(seconds):
     """Format elapsed time for display."""
@@ -214,13 +310,6 @@ def main():
 
     step_start = time.time()
 
-    _lisp_dialects = {
-        "clojure": ("clojure", "clj"),
-        "scheme": ("scheme", "scm"),
-        "common-lisp": ("common_lisp", "lisp"),
-        "emacs-lisp": ("emacs_lisp", "el"),
-    }
-
     if args.target == "haskell":
         write_haskell(os.path.join(out_main, "haskell"), all_main_mods, mods_to_generate)
     elif args.target == "java":
@@ -237,6 +326,23 @@ def main():
         dialect_name, _ext = _lisp_dialects[args.target]
         write_lisp_dialect(os.path.join(out_main, args.target), dialect_name, _ext,
                            all_main_mods, mods_to_generate)
+
+    # #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
+    # hydra.<lang>.lib.* (the analog of Haskell's Hydra.Haskell.Lib.*), so hydra.lib.* is free for
+    # the generated PrimitiveDefinition def-modules. Mirrors the Haskell driver's twoPassLib logic in
+    # bootstrap-from-json/Main.hs: when the Python host generates a target that consumes def-modules
+    # (everything except haskell, which uses the registry), it must (1) emit the hydra.lib.* def-modules
+    # from their LOWERED form (lib pass), and (2) redirect generated CONSUMER call-sites
+    # hydra.lib.<sub>.<fn> -> hydra.<lang>.lib.<sub>.<fn> so they resolve to the relocated impls.
+    # Without this, self-host (python-to-python, python-to-java, ...) emits impls/consumers that
+    # reference the def-module namespace as if callable -> "PrimitiveDefinition object is not callable"
+    # / "cannot find symbol". See project_473_self_host_lib_pass_gap.
+    # Lib pass emits the hydra.lib.* def-modules now (alongside the main pass output). The redirect,
+    # however, must run LAST — after the test + ext-for-tests passes below also write into
+    # out_main/<target> — so every generated consumer file (whichever pass produced it) gets its
+    # hydra.lib.* impl call-sites redirected. Running it here would miss files written later.
+    if args.target != "haskell":
+        _run_lib_pass(args.target, os.path.join(out_main, args.target), all_main_mods, mods_to_generate)
 
     step_time = time.time() - step_start
 
@@ -342,6 +448,14 @@ def main():
         print(f"  Generated {test_file_count} test files.", flush=True)
         print(f"  Time: {_format_time(step_time)}", flush=True)
         print(flush=True)
+
+    # #473 redirect — run LAST, over every generated dir (main + test), so consumer call-sites
+    # written by any pass (main, lib, test, ext-for-tests) have their hydra.lib.* impl references
+    # rewritten to hydra.<lang>.lib.*. See the lib-pass note above and project_473_self_host_lib_pass_gap.
+    if args.target != "haskell":
+        _redirect_lib_calls(args.target, os.path.join(out_main, args.target))
+        if args.include_tests:
+            _redirect_lib_calls(args.target, os.path.join(out_dir, "src/test", args.target))
 
     total_time = time.time() - total_start
 

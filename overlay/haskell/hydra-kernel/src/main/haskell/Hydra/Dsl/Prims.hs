@@ -15,6 +15,7 @@ import qualified Hydra.Typing as Typing
 import qualified Hydra.Errors as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Terms (ToPrimName(..))
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Show.Core as ShowCore
 
@@ -86,6 +87,10 @@ decimal = TermCoder Types.decimal encode decode
 -- @primName Math.acos@) instead of hand-maintained name constants.
 primName :: PrimitiveDefinition -> Name
 primName = primitiveDefinitionName
+
+-- 'ToPrimName' (used by prim0/prim1/prim2/prim3 below to accept a generated PrimitiveDefinition
+-- directly, e.g. @prim2 DefMath.add ...@) is defined in 'Hydra.Dsl.Terms' to avoid an import cycle
+-- and re-exported here for the registry/DSL modules.
 
 -- | Synthesize a minimal PrimitiveDefinition from a name and TypeScheme.
 -- Used by the prim0/prim1/prim2/prim3 helpers to bridge the kernel-shape change
@@ -303,15 +308,17 @@ pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType
       yTerm <- termCoderDecode yCoder cx y
       return $ Terms.pair xTerm yTerm
 
-prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
-prim0 name value vars output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim0 :: ToPrimName n => n -> x -> [TypeVar] -> TermCoder x -> Primitive
+prim0 n value vars output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
+    name = toPrimName n
     typ = buildTypeScheme vars $ termCoderType output
     impl _g _args = termCoderDecode output primCx value
 
-prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
-prim1 name compute vars input1 output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim1 :: ToPrimName n => n -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
+prim1 n compute vars input1 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
+    name = toPrimName n
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType output]
@@ -320,9 +327,10 @@ prim1 name compute vars input1 output = Primitive (defaultPrimitiveDefinition na
       arg1 <- termCoderEncode input1 primCx g (args !! 0)
       termCoderDecode output primCx $ compute arg1
 
-prim2 :: Name -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim2 name compute vars input1 input2 output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim2 :: ToPrimName n => n -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2 n compute vars input1 input2 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
+    name = toPrimName n
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType input2,
@@ -333,9 +341,10 @@ prim2 name compute vars input1 input2 output = Primitive (defaultPrimitiveDefini
       arg2 <- termCoderEncode input2 primCx g (args !! 1)
       termCoderDecode output primCx $ compute arg1 arg2
 
-prim3 :: Name -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim3 name compute vars input1 input2 input3 output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim3 :: ToPrimName n => n -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim3 n compute vars input1 input2 input3 output = Primitive (defaultPrimitiveDefinition name typ) impl
   where
+    name = toPrimName n
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType input2,
