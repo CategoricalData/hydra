@@ -22,6 +22,71 @@
                 secs (/ (mod millis 60000) 1000.0)]
             (format "%dm %.1fs" mins secs))))
 
+;; #473 Step 0 — lib pass + redirect (mirrors the Java/Python/Scala host drivers +
+;; bootstrap-from-json/Main.hs). hydra.lib.* primitive IMPLEMENTATIONS were relocated to
+;; hydra.<lang>.lib.*; hydra.lib.* is free for the generated PrimitiveDefinition def-modules. A host
+;; generating a def-module-consuming target (everything except haskell) must emit the hydra.lib.*
+;; def-modules (lib pass) and redirect generated consumer call-sites to hydra.<lang>.lib.* (redirect).
+;; See project_473_self_host_lib_pass_gap.
+(def ^:private lib-subs
+  ["chars" "eithers" "equality" "lists" "literals" "logic" "maps"
+   "math" "optionals" "pairs" "regex" "sets" "strings"])
+
+(defn- lib-module? [m]
+  (let [ns (:name m)] (.startsWith ^String (if (string? ns) ns (:value ns)) "hydra.lib.")))
+
+(defn- run-lib-pass
+  "Emit the hydra.lib.* def-modules from their LOWERED form using the same coder. Mirrors
+   genForDirLib: lib modules lowered; universe lowers ONLY lib modules."
+  [gen-sources coder-info do-infer out-main all-main-mods mods-to-generate]
+  ;; The lowering fn is a generated kernel var globalized into clojure.core (same resolution as `rc`).
+  (let [lower @(ns-resolve 'clojure.core 'hydra_codegen_lower_primitive_definitions)
+        lib-mods (mapv lower (filterv lib-module? mods-to-generate))]
+    (when (seq lib-mods)
+      (let [lib-universe (mapv #(if (lib-module? %) (lower %) %) all-main-mods)]
+        (println (str "Lib pass: emitting " (count lib-mods) " hydra.lib.* definition modules..."))
+        (gen-sources (:coder coder-info) (:language coder-info) do-infer
+                     out-main lib-universe lib-mods)))))
+
+;; The Clojure coder emits consumer `(:require [hydra.lib.<sub> :refer :all])` and flat call sites
+;; `hydra_lib_<sub>_<fn>` (resolved via that :refer). The relocation is driver-side: rewrite the require
+;; namespace hydra.lib.<sub> -> hydra.clojure.lib.<sub> (the relocated impls). The flat call identifiers
+;; stay (resolved via the relocated :refer :all). Def-modules at hydra/lib/ keep canonical hydra.lib.*.
+(defn- all-files-under [^java.io.File dir]
+  (if (.isDirectory dir)
+    (mapcat (fn [^java.io.File f] (all-files-under f)) (.listFiles dir))
+    [dir]))
+
+(defn- lib-def-file?
+  "Files under hydra/lib/ are the lib-pass def-modules (must keep canonical hydra.lib.*) or the
+   hand-written registry; never redirect these."
+  [^java.io.File f]
+  (.contains (.replace (.getPath f) java.io.File/separatorChar \/) "/hydra/lib/"))
+
+(defn- redirect-dotted
+  "Rewrite consumer require namespaces hydra.lib.<sub> -> hydra.clojure.lib.<sub>, protecting quoted
+   primitive-NAME strings (\"hydra.lib...\")."
+  [^String s]
+  (let [sentinel "@@HYDRA_LIB_NAME@@"
+        protected (.replace s "\"hydra.lib." (str "\"" sentinel))
+        rewritten (reduce (fn [^String acc sub]
+                            (.replace acc (str "hydra.lib." sub) (str "hydra.clojure.lib." sub)))
+                          protected
+                          lib-subs)]
+    (.replace rewritten sentinel "hydra.lib.")))
+
+(defn- redirect-lib-calls
+  "#473 redirect over a generated dir (Clojure self-host only)."
+  [lang-dir]
+  (let [dir (java.io.File. ^String lang-dir)]
+    (when (.isDirectory dir)
+      (doseq [^java.io.File f (all-files-under dir)]
+        (when-not (lib-def-file? f)
+          (let [s (slurp f)]
+            (when (.contains s "hydra.lib.")
+              (let [out (redirect-dotted s)]
+                (when (not= out s) (spit f out))))))))))
+
 (defn- parse-args [args]
   (loop [args (seq args)
          opts {:target nil
@@ -258,6 +323,10 @@
                 (println)
                 (flush)
 
+                ;; #473 lib pass: emit the hydra.lib.* def-modules now (redirect runs LAST, below).
+                (when (not= target "haskell")
+                  (run-lib-pass gen-sources coder-info do-infer out-main all-main-mods mods-to-generate))
+
                 ;; Optionally generate test modules
                 (let [test-file-count
                       (if (:include-tests opts)
@@ -293,6 +362,12 @@
                             (flush)
                             count))
                         0)
+                      ;; #473 redirect — run LAST over every generated dir (main + test) so consumer
+                      ;; require namespaces hydra.lib.* are rewritten to hydra.clojure.lib.*.
+                      _ (when (= target "clojure")
+                          (redirect-lib-calls (str out-dir "/src/main/" (:subdir coder-info)))
+                          (when (:include-tests opts)
+                            (redirect-lib-calls (str out-dir "/src/test/" (:subdir coder-info)))))
                       total-time (- (System/currentTimeMillis) total-start)]
 
                   (println "==========================================")
