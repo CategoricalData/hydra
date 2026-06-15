@@ -159,9 +159,12 @@ A primitive's name is declared once, in its kernel `PrimitiveDefinition`. From t
    the native implementations live alongside at `hydra.<lang>.lib.<sub>` (mirroring Haskell's
    `Hydra.Haskell.Lib.*`).
 2. Every host's primitive registry **derives** each name from that def-module rather than hand-writing a
-   string — e.g. Haskell `Prims.primName DefChars.isAlphaNum`, Python `def_chars.is_alpha_num.name`,
-   Scala `hydra.lib.chars.isAlphaNum.name`, Java `hydra.lib.Chars.isAlphaNum().name`, and the lisp dialects
-   via a `prim-name` accessor over the loaded def var.
+   string. In Haskell this is fully implicit: the DSL builders (`primitive`, `primN`, `primCase`,
+   `standardLibrary`) accept a `PrimitiveDefinition` directly via the `ToPrimName` class, so you write
+   `prim1 DefChars.isAlphaNum ...` and `primitive1 DefChars.toLower` with no explicit name accessor. Other
+   hosts derive the name with a `.name`/`prim-name` accessor over the loaded def — Python
+   `def_chars.is_alpha_num.name`, Scala `hydra.lib.chars.isAlphaNum.name`, Java
+   `hydra.lib.Chars.isAlphaNum().name`, and the lisp dialects via `prim-name`.
 
 The upshot: there is exactly one place a primitive name is written down (the kernel `PrimitiveDefinition`),
 and a rename there propagates to all hosts through regeneration.
@@ -307,17 +310,18 @@ Then register it in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib
 
 ```haskell
 hydraLibChars :: Library
-hydraLibChars = standardLibrary (ModuleName "hydra.lib.chars") [
-  prim1 (Prims.primName DefChars.isAlphaNum) Chars.isAlphaNum [] int32 boolean,
+hydraLibChars = standardLibrary [
+  prim1 DefChars.isAlphaNum Chars.isAlphaNum [] int32 boolean,
   ...]
 ```
 
-The `prim1` / `prim2` / `prim3` helpers bind a primitive name to a native
-implementation. The name is **derived from the generated `PrimitiveDefinition`** via
-`Prims.primName DefChars.isAlphaNum` (where `DefChars` is the generated
-`Hydra.Lib.Chars` def-module) — the single source of truth. The type information
-passed to them is a sanity-check repetition the host registry needs in native form,
-not the source of truth for the name.
+The `prim1` / `prim2` / `prim3` helpers bind a primitive to a native implementation. They take the
+generated `PrimitiveDefinition` directly (`DefChars.isAlphaNum`, where `DefChars` is the generated
+`Hydra.Lib.Chars` def-module) — the single source of truth for the name. `standardLibrary` derives the
+library's module name from the first primitive, so it needs no `ModuleName` argument. The type information
+passed to `primN` is a sanity-check repetition the host registry needs in native form, not the source of
+truth for the name. (Under the hood, `primN`/`primitive`/`standardLibrary` accept a `PrimitiveDefinition`
+through the `ToPrimName` class; passing a bare `Name` still works for the rare site that has only a name.)
 
 #### Per-parameter signature metadata (e.g. laziness)
 
@@ -396,8 +400,8 @@ sensible implementation would have to reference itself.
 
 Host-side registrations are unchanged regardless of which kind of
 default is used: each primitive is bound with `prim1` / `prim2` /
-`prim3`, deriving its name from the generated `PrimitiveDefinition`
-(`Prims.primName DefChars.isAlphaNum`).
+`prim3`, passing the generated `PrimitiveDefinition` directly
+(`prim1 DefChars.isAlphaNum ...`) so the name comes from that single source.
 
 #### Java
 
@@ -535,10 +539,10 @@ import qualified Hydra.Dsl.Prims as Prims
 import qualified Hydra.Lib.Chars as DefChars
 
 isAlphaNum :: TypedTerm Int -> TypedTerm Bool
-isAlphaNum = primitive1 (Prims.primName DefChars.isAlphaNum)
+isAlphaNum = primitive1 DefChars.isAlphaNum
 
 toLower :: TypedTerm Int -> TypedTerm Int
-toLower = primitive1 (Prims.primName DefChars.toLower)
+toLower = primitive1 DefChars.toLower
 ```
 
 These wrappers are what Hydra source modules (kernel and per-host DSL)
@@ -549,8 +553,8 @@ signature.
 **Guidelines:**
 - Use phantom types (`TypedTerm`) for type safety.
 - Use `primitive1` for unary, `primitive2` for binary, `primitive3` for ternary.
-- Derive the primitive name from its generated `PrimitiveDefinition` with
-  `Prims.primName DefChars.isAlphaNum` (import the def-module as `Hydra.Lib.Chars`).
+- Pass the generated `PrimitiveDefinition` directly — `primitive1 DefChars.isAlphaNum`
+  (import the def-module as `Hydra.Lib.Chars`); the name is taken from it via `ToPrimName`.
 
 ### 5. Add common test cases
 
@@ -564,7 +568,7 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
   test "digit"            (ord '5') true,
   test "space"            (ord ' ') false]
   where
-    test name x result = primCase name (Prims.primName DefChars.isAlphaNum) [int32 x] result
+    test name x result = primCase name DefChars.isAlphaNum [int32 x] result
 ```
 
 Then add the test group to `allTests` in the same file.
@@ -610,7 +614,7 @@ When adding a new primitive function:
   - [ ] **(If applicable)** Default implementation as a `TypedTermDefinition`
 - [ ] **Haskell**
   - [ ] Native implementation in `Hydra.Haskell.Lib.<Library>`
-  - [ ] Registration via `primN (Prims.primName Def<Library>.<fn>) ...` in `Hydra.Dsl.Libraries`
+  - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Dsl.Libraries`
   - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
 - [ ] **Java**
   - [ ] `PrimitiveFunction` class in `hydra.lib.<library>` (its `name()` returns `hydra.lib.<Lib>.<fn>().name`)

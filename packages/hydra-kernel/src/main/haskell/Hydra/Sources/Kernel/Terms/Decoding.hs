@@ -140,7 +140,7 @@ formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 -- when a lambda body is a case application and generating a proper function with match statement.
 deannotateAndMatch :: TypedTerm (Maybe Term) -> [TypedTerm CaseAlternative] -> TypedTerm Term
 deannotateAndMatch dflt cses = DeepCore.lambda "cx" $ DeepCore.lambda "raw" $
-  DeepCore.primitive (Prims.primName DefEithers.either)
+  DeepCore.primitive DefEithers.either
     -- If Left (decoding error), propagate it
     @@@ (DeepCore.lambda "err" $ DeepCore.left $ DeepCore.var "err")
     -- If Right (stripped term), do the case match
@@ -486,7 +486,7 @@ decodeModule = define "decodeModule" $
         -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
         --    If type A references type B, the decoder for A needs to call the decoder for B.
         -- 3. The original module's namespace (the schema being decoded) and hydra.util
-        "allDecodedDeps" <~ (primitive (Prims.primName DefLists.nub) @@ (Lists.map decodeModuleName (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
+        "allDecodedDeps" <~ (primitive DefLists.nub @@ (Lists.map decodeModuleName (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (decodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Packaging.entityMetadata
@@ -563,7 +563,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   "decodeBody" <~ (
     Lists.foldl
       ("acc" ~> "ft" ~>
-        DeepCore.primitive (Prims.primName DefEithers.bind)
+        DeepCore.primitive DefEithers.bind
           @@@ (var "decodeFieldTerm" @@ var "ft")
           @@@ (var "toFieldLambda" @@ var "ft" @@ var "acc"))
       -- Base case: Right with the decoded record value
@@ -674,7 +674,7 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
   "toVariantPair" <~ ("ft" ~>
     DeepCore.pair
       (DeepCore.wrap _Name $ DeepCore.string $ Core.unName $ Core.fieldTypeName $ var "ft")
-      (DeepCore.lambda "input" $ DeepCore.primitive (Prims.primName DefEithers.map)
+      (DeepCore.lambda "input" $ DeepCore.primitive DefEithers.map
         @@@ (DeepCore.lambda "t" $ Core.termInject $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DeepCore.var "t")
         @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DeepCore.var "cx" @@@ DeepCore.var "input"))) $
   deannotateAndMatch
@@ -683,13 +683,13 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
       ("field", DeepCore.project _Injection _Injection_field @@@ DeepCore.var "inj"),
       ("fname", DeepCore.project _Field _Field_name @@@ DeepCore.var "field"),
       ("fterm", DeepCore.project _Field _Field_term @@@ DeepCore.var "field"),
-      ("variantMap", DeepCore.primitive (Prims.primName DefMaps.fromList)
+      ("variantMap", DeepCore.primitive DefMaps.fromList
         @@@ (DeepCore.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
-      DeepCore.primitive (Prims.primName DefOptionals.cases)
-        @@@ (DeepCore.primitive (Prims.primName DefMaps.lookup)
+      DeepCore.primitive DefOptionals.cases
+        @@@ (DeepCore.primitive DefMaps.lookup
           @@@ DeepCore.var "fname"
           @@@ DeepCore.var "variantMap")
-        @@@ (DeepCore.left $ DeepCore.wrap _DecodingError $ DeepCore.primitive (Prims.primName DefStrings.cat)
+        @@@ (DeepCore.left $ DeepCore.wrap _DecodingError $ DeepCore.primitive DefStrings.cat
           @@@ (DeepCore.list $ list [
             DeepCore.string $ string "no such field ",
             DeepCore.unwrap _Name @@@ DeepCore.var "fname",
@@ -720,7 +720,7 @@ decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
   deannotateAndMatch
     (just $ leftError (string "expected wrapped type")) [
     DeepCore.caseAlternative _Term_wrap $ DeepCore.lambda "wrappedTerm" $
-      DeepCore.primitive (Prims.primName DefEithers.map)
+      DeepCore.primitive DefEithers.map
         @@@ (DeepCore.lambda "b" $ DeepCore.wrapDynamic (var "ename") (DeepCore.var "b"))
         @@@ (var "bodyDecoder" @@@ DeepCore.var "cx"
           @@@ (DeepCore.project _WrappedTerm _WrappedTerm_body @@@ DeepCore.var "wrappedTerm"))]
@@ -948,9 +948,9 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-  Eithers.map (primitive (Prims.primName DefOptionals.cat)) $
+  Eithers.map (primitive DefOptionals.cat) $
     Eithers.mapList (isDecodableBinding @@ var "cx" @@ var "graph") $
-      primitive (Prims.primName DefLists.filter) @@ Annotations.isNativeType @@ var "bindings"
+      primitive DefLists.filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise

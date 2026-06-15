@@ -66,7 +66,7 @@ equalityCompare = subgroup "compare" [
   test "equal" 5 5 "equalTo",
   test "greater than" 5 3 "greaterThan"]
   where
-    test testName x y resultField = primCase testName (Prims.primName DefEquality.compare) [int32 x, int32 y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefEquality.compare [int32 x, int32 y] (injectUnit (name "hydra.util.Comparison") resultField)
 
 -- Tests for ordering with float values
 equalityCompareFloats :: TypedTerm TestGroup
@@ -76,7 +76,7 @@ equalityCompareFloats = subgroup "compare floats" [
   test "greater than" 5.0 3.0 "greaterThan",
   test "negative vs positive" (-1.0) 1.0 "lessThan"]
   where
-    test testName x y resultField = primCase testName (Prims.primName DefEquality.compare) [float64 x, float64 y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefEquality.compare [float64 x, float64 y] (injectUnit (name "hydra.util.Comparison") resultField)
 
 -- Tests for ordering with string values
 equalityCompareStrings :: TypedTerm TestGroup
@@ -87,14 +87,14 @@ equalityCompareStrings = subgroup "compare strings" [
   test "empty vs non-empty" "" "a" "lessThan",
   test "prefix vs longer" "ab" "abc" "lessThan"]
   where
-    test testName x y resultField = primCase testName (Prims.primName DefEquality.compare) [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefEquality.compare [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
 
 equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
   test "equal integers" 5 5 true,
   test "unequal integers" 5 3 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.equal) [int32 x, int32 y] result
+    test name x y result = primCase name DefEquality.equal [int32 x, int32 y] result
 
 equalityGt :: TypedTerm TestGroup
 equalityGt = subgroup "gt" [
@@ -102,7 +102,7 @@ equalityGt = subgroup "gt" [
   test "equal" 5 5 false,
   test "less" 3 5 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.gt) [int32 x, int32 y] result
+    test name x y result = primCase name DefEquality.gt [int32 x, int32 y] result
 
 equalityGtFloats :: TypedTerm TestGroup
 equalityGtFloats = subgroup "gt floats" [
@@ -110,7 +110,7 @@ equalityGtFloats = subgroup "gt floats" [
   test "equal" 3.14 3.14 false,
   test "less" 1.5 2.5 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.gt) [float64 x, float64 y] result
+    test name x y result = primCase name DefEquality.gt [float64 x, float64 y] result
 
 equalityGtStrings :: TypedTerm TestGroup
 equalityGtStrings = subgroup "gt strings" [
@@ -118,7 +118,7 @@ equalityGtStrings = subgroup "gt strings" [
   test "equal" "hello" "hello" false,
   test "less" "apple" "banana" false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.gt) [string x, string y] result
+    test name x y result = primCase name DefEquality.gt [string x, string y] result
 
 equalityGte :: TypedTerm TestGroup
 equalityGte = subgroup "gte" [
@@ -126,13 +126,13 @@ equalityGte = subgroup "gte" [
   test "equal" 5 5 true,
   test "less" 3 5 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.gte) [int32 x, int32 y] result
+    test name x y result = primCase name DefEquality.gte [int32 x, int32 y] result
 
 equalityIdentity :: TypedTerm TestGroup
 equalityIdentity = subgroup "identity" [
   test "integer" 42 42]
   where
-    test name x result = primCase name (Prims.primName DefEquality.identity) [int32 x] (int32 result)
+    test name x result = primCase name DefEquality.identity [int32 x] (int32 result)
 
 equalityLt :: TypedTerm TestGroup
 equalityLt = subgroup "lt" [
@@ -140,7 +140,7 @@ equalityLt = subgroup "lt" [
   test "equal" 5 5 false,
   test "greater" 5 3 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.lt) [int32 x, int32 y] result
+    test name x y result = primCase name DefEquality.lt [int32 x, int32 y] result
 
 equalityLtFloats :: TypedTerm TestGroup
 equalityLtFloats = subgroup "lt floats" [
@@ -148,7 +148,7 @@ equalityLtFloats = subgroup "lt floats" [
   test "equal" 3.14 3.14 false,
   test "greater" 5.0 3.0 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.lt) [float64 x, float64 y] result
+    test name x y result = primCase name DefEquality.lt [float64 x, float64 y] result
 
 equalityLtStrings :: TypedTerm TestGroup
 equalityLtStrings = subgroup "lt strings" [
@@ -156,7 +156,7 @@ equalityLtStrings = subgroup "lt strings" [
   test "equal" "hello" "hello" false,
   test "greater" "zebra" "apple" false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.lt) [string x, string y] result
+    test name x y result = primCase name DefEquality.lt [string x, string y] result
 
 equalityLte :: TypedTerm TestGroup
 equalityLte = subgroup "lte" [
@@ -164,7 +164,7 @@ equalityLte = subgroup "lte" [
   test "equal" 5 5 true,
   test "greater" 5 3 false]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.lte) [int32 x, int32 y] result
+    test name x y result = primCase name DefEquality.lte [int32 x, int32 y] result
 
 equalityMax :: TypedTerm TestGroup
 equalityMax = subgroup "max" [
@@ -172,7 +172,7 @@ equalityMax = subgroup "max" [
   test "second greater" 3 5 5,
   test "equal" 5 5 5]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.max) [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefEquality.max [int32 x, int32 y] (int32 result)
 
 equalityMaxStrings :: TypedTerm TestGroup
 equalityMaxStrings = subgroup "max strings" [
@@ -180,7 +180,7 @@ equalityMaxStrings = subgroup "max strings" [
   test "second greater" "apple" "zebra" "zebra",
   test "equal" "hello" "hello" "hello"]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.max) [string x, string y] (string result)
+    test name x y result = primCase name DefEquality.max [string x, string y] (string result)
 
 equalityMin :: TypedTerm TestGroup
 equalityMin = subgroup "min" [
@@ -188,7 +188,7 @@ equalityMin = subgroup "min" [
   test "second less" 5 3 3,
   test "equal" 5 5 5]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.min) [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefEquality.min [int32 x, int32 y] (int32 result)
 
 equalityMinStrings :: TypedTerm TestGroup
 equalityMinStrings = subgroup "min strings" [
@@ -196,4 +196,4 @@ equalityMinStrings = subgroup "min strings" [
   test "second less" "zebra" "apple" "apple",
   test "equal" "hello" "hello" "hello"]
   where
-    test name x y result = primCase name (Prims.primName DefEquality.min) [string x, string y] (string result)
+    test name x y result = primCase name DefEquality.min [string x, string y] (string result)

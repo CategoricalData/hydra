@@ -14,27 +14,27 @@ import qualified Hydra.Lib.Logic as DefLogic
 
 -- | Compute the logical AND of two boolean values.
 and :: TypedTerm Bool -> TypedTerm Bool -> TypedTerm Bool
-and = primitive2 (Prims.primName DefLogic.and)
+and = primitive2 DefLogic.and
 
 -- | Compute a conditional expression.
 ifElse :: (AsTerm c Bool, AsTerm t a, AsTerm e a) => c -> t -> e -> TypedTerm a
-ifElse cond t e = primitive3 (Prims.primName DefLogic.ifElse) (asTerm cond) (asTerm t) (asTerm e)
+ifElse cond t e = primitive3 DefLogic.ifElse (asTerm cond) (asTerm t) (asTerm e)
 
 -- | Compute the logical NOT of a boolean value.
 not :: TypedTerm Bool -> TypedTerm Bool
-not = primitive1 (Prims.primName DefLogic.not)
+not = primitive1 DefLogic.not
 
 -- | Compute the logical OR of two boolean values.
 or :: TypedTerm Bool -> TypedTerm Bool -> TypedTerm Bool
-or = primitive2 (Prims.primName DefLogic.or)
+or = primitive2 DefLogic.or
 
 ----------------------------------------
 -- Helpers which are not primitives
 
 -- | Fold a list of booleans with logical AND, returning True for an empty list.
 ands :: TypedTerm [Bool] -> TypedTerm Bool
-ands terms = fold (primitive (Prims.primName DefLogic.and)) @@ true @@ terms
+ands terms = fold (primitive DefLogic.and) @@ true @@ terms
 
 -- | Fold a list of booleans with logical OR, returning False for an empty list.
 ors :: TypedTerm [Bool] -> TypedTerm Bool
-ors terms = fold (primitive (Prims.primName DefLogic.or)) @@ false @@ terms
+ors terms = fold (primitive DefLogic.or) @@ false @@ terms

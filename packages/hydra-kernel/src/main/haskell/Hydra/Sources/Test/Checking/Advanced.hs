@@ -75,16 +75,16 @@ annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
         "age">: annotated (int32 30) mapTermEmpty])
       (Core.typeVariable TestTypes.testTypePersonName),
     checkTest "annotated function in application" []
-      (lets ["add">: annotated (primitive (Prims.primName DefMath.add)) mapTermEmpty] $
+      (lets ["add">: annotated (primitive DefMath.add) mapTermEmpty] $
         var "add" @@ annotated (int32 10) mapTermEmpty @@ annotated (int32 20) mapTermEmpty)
-      (letsTyped [("add", annotated (primitive (Prims.primName DefMath.add)) mapTermEmpty, T.mono $ T.function T.int32 (T.function T.int32 T.int32))] $
+      (letsTyped [("add", annotated (primitive DefMath.add) mapTermEmpty, T.mono $ T.function T.int32 (T.function T.int32 T.int32))] $
         var "add" @@ (annotated (int32 10) mapTermEmpty) @@ (annotated (int32 20) mapTermEmpty))
       T.int32]
 
 --    expectTermWithType "annotated function in application"
---      (lets ["add">: annotated (primitive (Prims.primName DefMath.add)) M.empty] $
+--      (lets ["add">: annotated (primitive DefMath.add) M.empty] $
 --            var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
---      (letsTyped [("add", annotated (primitive (Prims.primName DefMath.add)) M.empty, Types.mono $ Types.function Types.int32 (Types.function Types.int32 Types.int32))] $
+--      (letsTyped [("add", annotated (primitive DefMath.add) M.empty, Types.mono $ Types.function Types.int32 (Types.function Types.int32 Types.int32))] $
 --        var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
 --      Types.int32
 
