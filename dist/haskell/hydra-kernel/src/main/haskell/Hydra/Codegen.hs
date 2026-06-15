@@ -265,7 +265,8 @@ generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsTo
                           Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))}
               allBindings = Lexical.graphToBindings g1
               refreshedMods = Lists.map (\m -> refreshModule allBindings m) termModulesToGenerate
-              dedupDefs = \defs -> Maps.elems (Maps.fromList (Lists.map (\d -> (Packaging.termDefinitionName d, d)) defs))
+              dedupDefs =
+                      \defs -> Lists.sortOn (\d -> Packaging.termDefinitionName d) (Maps.elems (Maps.fromList (Lists.map (\d -> (Packaging.termDefinitionName d, d)) defs)))
               dedupedDefLists = Lists.map dedupDefs defLists
           in (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\p ->
             let mod = Pairs.first p
