@@ -38,6 +38,13 @@
             "body": {
               "lambda": {
                 "parameter": "env",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "env"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",

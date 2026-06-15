@@ -339,6 +339,7 @@
             "body": {
               "lambda": {
                 "parameter": "n",
+                "domain": {"function": {"domain": {"variable": "n"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",

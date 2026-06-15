@@ -140,7 +140,13 @@ decodeForallType :: Core.ForallType -> Core.Term
 decodeForallType ft =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (decodeBindingName (Core.forallTypeParameter ft)),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+          Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+            Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+            Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter ft))}))}))}))),
       Core.lambdaBody = (decodeType (Core.forallTypeBody ft))})
 -- | Generate a decoder for a list type
 decodeListType :: Core.Type -> Core.Term
@@ -1724,7 +1730,13 @@ decodeTypeNamed ename typ =
       Core.TypeEither v0 -> decodeEitherType v0
       Core.TypeForall v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (decodeBindingName (Core.forallTypeParameter v0)),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+            Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+              Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+              Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter v0))}))}))}))),
         Core.lambdaBody = (decodeTypeNamed ename (Core.forallTypeBody v0))})
       Core.TypeList v0 -> decodeListType v0
       Core.TypeLiteral v0 -> decodeLiteralType v0

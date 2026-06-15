@@ -100,6 +100,7 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "cases": {
                     "typeName": "hydra.parsing.ParseResult",
@@ -185,6 +186,7 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",

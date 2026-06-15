@@ -23,6 +23,7 @@
             "body": {
               "lambda": {
                 "parameter": "env",
+                "domain": {"function": {"domain": {"variable": "env"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",
