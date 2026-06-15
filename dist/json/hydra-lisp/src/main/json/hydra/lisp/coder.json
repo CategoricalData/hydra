@@ -2503,7 +2503,7 @@
                                                                 "right": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {"function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}, "argument": {"list": [{"literal": {"string": "v"}}]}}},
+                                                                      "application": {"function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}, "argument": {"list": [{"literal": {"string": "__rec"}}]}}},
                                                                     "argument": {
                                                                       "inject": {
                                                                         "typeName": "hydra.lisp.syntax.Expression",
@@ -2517,7 +2517,7 @@
                                                                                 {"name": "field", "term": {"wrap": {"typeName": "hydra.lisp.syntax.Symbol", "body": {"variable": "fname"}}}},
                                                                                 {
                                                                                   "name": "target",
-                                                                                  "term": {"application": {"function": {"variable": "hydra.lisp.coder.lispVar"}, "argument": {"literal": {"string": "v"}}}}}]}}}}}}}}},
+                                                                                  "term": {"application": {"function": {"variable": "hydra.lisp.coder.lispVar"}, "argument": {"literal": {"string": "__rec"}}}}}]}}}}}}}}},
                                                             "type": {"variable": "t1"}}},
                                                         "type": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                                                 "argument": {
@@ -5313,8 +5313,8 @@
                                                         "right": {
                                                           "application": {
                                                             "function": {
-                                                              "application": {"function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}, "argument": {"list": [{"literal": {"string": "v"}}]}}},
-                                                            "argument": {"application": {"function": {"variable": "hydra.lisp.coder.lispVar"}, "argument": {"literal": {"string": "v"}}}}}}}},
+                                                              "application": {"function": {"variable": "hydra.lisp.coder.lispLambdaExpr"}, "argument": {"list": [{"literal": {"string": "__rec"}}]}}},
+                                                            "argument": {"application": {"function": {"variable": "hydra.lisp.coder.lispVar"}, "argument": {"literal": {"string": "__rec"}}}}}}}},
                                                     "type": {"variable": "t1"}}},
                                                 "type": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                                         "argument": {
