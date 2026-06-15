@@ -161,9 +161,22 @@ main = do
       isNativeDslWrapper m =
         let ns = Packaging.unModuleName (Kernel.moduleName m)
         in L.isPrefixOf "hydra.dsl.java." ns || L.isPrefixOf "hydra.dsl.python." ns
+      -- Derived encode/decode modules (hydra.encode.*, hydra.decode.*) are compiled
+      -- into mainModules and so reach this universe, but they are DERIVED: the
+      -- synthesizer is authoritative for their in-term annotations and the derived
+      -- pass below re-emits them with doInfer=False. They must NOT be re-inferred
+      -- by this main (doInfer=True) pass — inference's occurs-check rejects the
+      -- saturated nominal self-applications in polymorphic decoder signatures (e.g.
+      -- hydra.decode.parsing.parseResult : ParseResult @ a). They are loaded only to
+      -- seed the inference universe for the hand-written modules. Exclude them here;
+      -- the derived pass is their sole writer. (#476)
+      isDerivedEncodeDecode m =
+        let ns = Packaging.unModuleName (Kernel.moduleName m)
+        in L.isPrefixOf "hydra.encode." ns || L.isPrefixOf "hydra.decode." ns
+      isDerived m = isNativeDslWrapper m || isDerivedEncodeDecode m
       writeUniverse
-        | includeJavaPython = filter (not . isNativeDslWrapper) universe
-        | otherwise         = filter (\m -> not (isNativeOwned m) && not (isNativeDslWrapper m)) universe
+        | includeJavaPython = filter (not . isDerived) universe
+        | otherwise         = filter (\m -> not (isNativeOwned m) && not (isDerived m)) universe
       excluded = length universe - length writeUniverse
 
   putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."

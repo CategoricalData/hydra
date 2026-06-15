@@ -56,21 +56,18 @@
       "term": {
         "name": "hydra.encode.errors.emptyListError",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"unit": {}}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
-                "body": {
-                  "lambda": {
-                    "parameter": "_",
-                    "domain": {"variable": "t0"},
-                    "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
-                "annotation": {
-                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.errors.EmptyListError"}}}]}}}}}}},
+              "lambda": {
+                "parameter": "_",
+                "domain": {"unit": {}},
+                "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.errors.EmptyListError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.errors.error",
@@ -561,11 +558,7 @@
                                             {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "emptyList"}}}}},
                                             {
                                               "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "function": {
-                                                    "typeApplication": {"body": {"variable": "hydra.encode.errors.emptyListError"}, "type": {"variable": "hydra.errors.EmptyListError"}}},
-                                                  "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                                              "term": {"application": {"function": {"variable": "hydra.encode.errors.emptyListError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "multipleBindings",
                     "handler": {
@@ -705,13 +698,7 @@
                                             {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "notEnoughCases"}}}}},
                                             {
                                               "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {"variable": "hydra.encode.errors.notEnoughCasesError"},
-                                                      "type": {"variable": "hydra.errors.NotEnoughCasesError"}}},
-                                                  "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                                              "term": {"application": {"function": {"variable": "hydra.encode.errors.notEnoughCasesError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "unexpectedShape",
                     "handler": {
@@ -1074,21 +1061,18 @@
       "term": {
         "name": "hydra.encode.errors.notEnoughCasesError",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"unit": {}}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
-                "body": {
-                  "lambda": {
-                    "parameter": "_",
-                    "domain": {"variable": "t0"},
-                    "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
-                "annotation": {
-                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.errors.NotEnoughCasesError"}}}]}}}}}}},
+              "lambda": {
+                "parameter": "_",
+                "domain": {"unit": {}},
+                "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.errors.NotEnoughCasesError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.errors.otherError",
