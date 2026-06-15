@@ -102,6 +102,9 @@
 ;; etc. would be undefined when those library bodies run. CI's normal R7RS
 ;; load path picks up the imports from each library's own import block.
 (use-modules (ice-9 vlist))
+;; #473 redirect helpers: directory walk + whole-file read (Guile-specific; the driver already runs
+;; under Guile — see usage banner + (ice-9 vlist) above).
+(use-modules (ice-9 ftw) (ice-9 textual-ports))
 ;; Load the JSON reader
 (load (string-append *script-dir* "json-reader.scm"))
 
@@ -201,9 +204,10 @@
 (force-output (current-output-port))
 ;; Load bytevector compatibility shim (provides snap-to-float32)
 (hydra-load-native-lib (string-append *script-dir* "../scheme/bytevector.sld"))
+;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/.
 (for-each
   (lambda (f)
-    (hydra-load-native-lib (string-append *script-dir* "lib/" f)))
+    (hydra-load-native-lib (string-append *script-dir* "scheme/lib/" f)))
   '("equality.scm" "maps.scm" "sets.scm" "lists.scm" "strings.scm"
     "logic.scm" "math.scm" "chars.scm" "eithers.scm" "literals.scm"
     "optionals.scm" "pairs.scm" "regex.scm"))
@@ -278,6 +282,14 @@
 (display "  Loading prims...\n")
 (force-output (current-output-port))
 (hydra-load-native-lib (string-append *script-dir* "prims.scm"))
+;; #473 KNOWN GAP (scheme-host self-host): the registry (libraries.scm) imports the generated
+;; hydra.lib.* PrimitiveDefinition def-modules under a `def:` prefix. Flat-preloading those def-modules
+;; pollutes the global namespace — their exported hydra_lib_<sub>_<fn> symbols (PrimitiveDefinition DATA)
+;; shadow the host kernel's impl calls of the same flat name ("Wrong type to apply: PrimitiveDefinition").
+;; The correct fix is to make the (hydra lib <sub>) def-modules resolvable as R7RS libraries via Guile's
+;; %load-path (so only the registry's `def:`-prefixed import sees them), not a flat global load. Deferred;
+;; scheme-host self-host is validated only up to gen (the driver lib pass + redirect are unit-tested and
+;; the relocated-path loaders are fixed). See project_473_self_host_lib_pass_gap / the plan doc.
 (hydra-load-native-lib (string-append *script-dir* "lib/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
@@ -561,6 +573,109 @@
           files)
         (length files))))
 
+;; #473 Step 0 — lib pass + redirect (mirrors the Java/Python/Scala/Clojure host drivers +
+;; bootstrap-from-json/Main.hs). hydra.lib.* primitive IMPLEMENTATIONS were relocated to
+;; (hydra scheme lib <sub>); (hydra lib <sub>) is free for the generated PrimitiveDefinition
+;; def-modules. The Scheme host must (1) emit the (hydra lib <sub>) def-modules from their LOWERED form
+;; (lib pass), and (2) redirect generated consumer imports (hydra lib <sub>) -> (hydra scheme lib <sub>)
+;; so they resolve to the relocated impls. Flat call identifiers hydra_lib_<sub>_<fn> stay (resolved via
+;; the relocated import's export). See project_473_self_host_lib_pass_gap.
+(define lib-subs
+  '("chars" "eithers" "equality" "lists" "literals" "logic" "maps"
+    "math" "optionals" "pairs" "regex" "sets" "strings"))
+
+(define (lib-module? m)
+  (let* ((mn (hydra_packaging_module-name m))
+         (ns (if (string? mn) mn (hydra_packaging_module_name-value mn))))
+    (and (>= (string-length ns) 10)
+         (string=? (substring ns 0 10) "hydra.lib."))))
+
+;; Emit the (hydra lib <sub>) def-modules from their LOWERED form. Lib modules lowered; universe lowers
+;; ONLY lib modules (so a lib default-implementation referencing another primitive resolves to it).
+(define (run-lib-pass coder language flags out-main all-mods mods-to-generate)
+  (let ((lib-mods (map hydra_codegen_lower_primitive_definitions
+                       (filter lib-module? mods-to-generate))))
+    (when (not (null? lib-mods))
+      (let ((lib-universe (map (lambda (m)
+                                 (if (lib-module? m)
+                                     (hydra_codegen_lower_primitive_definitions m)
+                                     m))
+                               all-mods)))
+        (display (string-append "Lib pass: emitting "
+                                (number->string (length lib-mods))
+                                " (hydra lib *) definition modules\n"))
+        (force-output (current-output-port))
+        (generate-sources coder language flags out-main lib-universe lib-mods)))))
+
+;; string-replace-all: replace every occurrence of `from` with `to` in `s`.
+(define (string-replace-all s from to)
+  (let ((flen (string-length from))
+        (slen (string-length s)))
+    (let loop ((i 0) (acc ""))
+      (cond
+        ((> (+ i flen) slen) (string-append acc (substring s i slen)))
+        ((string=? (substring s i (+ i flen)) from)
+         (loop (+ i flen) (string-append acc to)))
+        (else (loop (+ i 1) (string-append acc (substring s i (+ i 1)))))))))
+
+;; Rewrite (hydra lib <sub>) -> (hydra scheme lib <sub>) in a consumer file. Primitive NAME strings are
+;; dotted "hydra.lib..." (untouched by this space-form rewrite), so no protect/restore is needed.
+(define (redirect-scheme s)
+  (let loop ((subs lib-subs) (acc s))
+    (if (null? subs)
+        acc
+        (loop (cdr subs)
+              (string-replace-all acc
+                                  (string-append "(hydra lib " (car subs) ")")
+                                  (string-append "(hydra scheme lib " (car subs) ")"))))))
+
+;; Files under hydra/lib/ are the lib-pass def-modules (must keep (hydra lib *)) and the hand-written
+;; registry; never redirect these.
+(define (lib-def-path? path)
+  (let ((needle "/hydra/lib/")
+        (plen (string-length path))
+        (nlen 11))
+    (let loop ((i 0))
+      (cond
+        ((> (+ i nlen) plen) #f)
+        ((string=? (substring path i (+ i nlen)) needle) #t)
+        (else (loop (+ i 1)))))))
+
+;; Read an entire file as a string (Guile (ice-9 textual-ports)).
+(define (read-file-content path)
+  (call-with-input-file path (lambda (port) (get-string-all port))))
+
+;; Does string s contain substring sub?
+(define (string-contains-substr? s sub)
+  (let ((slen (string-length s)) (blen (string-length sub)))
+    (let loop ((i 0))
+      (cond
+        ((> (+ i blen) slen) #f)
+        ((string=? (substring s i (+ i blen)) sub) #t)
+        (else (loop (+ i 1)))))))
+
+;; Recursively list regular files under dir (Guile (ice-9 ftw)).
+(define (list-files-recursive dir)
+  (let ((acc '()))
+    (when (file-exists? dir)
+      (ftw dir
+           (lambda (filename statinfo flag)
+             (when (eq? flag 'regular) (set! acc (cons filename acc)))
+             #t)))
+    acc))
+
+;; #473 redirect over a generated dir: rewrite consumer imports to the relocated impl library.
+(define (redirect-lib-calls lang-dir)
+  (for-each
+    (lambda (path)
+      (when (not (lib-def-path? path))
+        (let ((s (read-file-content path)))
+          (when (and s (string-contains-substr? s "(hydra lib "))
+            (let ((out (redirect-scheme s)))
+              (when (not (string=? out s))
+                (write-file-content path out)))))))
+    (list-files-recursive lang-dir)))
+
 ;; ============================================================================
 ;; Main
 ;; ============================================================================
@@ -613,6 +728,10 @@
           (display (string-append "  Generated " (number->string file-count) " files.\n"))
           (display (string-append "  Time: " (number->string (/ (round (* main-elapsed 10)) 10)) "s\n"))
           (force-output (current-output-port))
+
+          ;; #473 lib pass: emit the (hydra lib *) def-modules now (redirect runs LAST, below).
+          (when (not (string=? *target* "haskell"))
+            (run-lib-pass coder language flags out-main all-mods mods-to-generate))
 
           ;; Tests
           (let ((test-count 0))
@@ -674,6 +793,13 @@
                                           " test files.\n"))
                   (display (string-append "  Time: " (number->string (/ (round (* test-elapsed 10)) 10)) "s\n"))
                   (force-output (current-output-port)))))
+
+            ;; #473 redirect — run LAST over every generated dir (main + test) so consumer imports
+            ;; (hydra lib *) are rewritten to (hydra scheme lib *). Skips hydra/lib/ def-modules.
+            (when (not (string=? *target* "haskell"))
+              (redirect-lib-calls (string-append *output-base* "/scheme-to-" *target* "/src/main/" subdir))
+              (when *include-tests*
+                (redirect-lib-calls (string-append *output-base* "/scheme-to-" *target* "/src/test/" subdir))))
 
             (display "\n==========================================\n")
             (if (> test-count 0)
